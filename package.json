@@ -23,6 +23,7 @@
     "eslint-config-next": "15.0.2",
     "eslint-config-prettier": "^9.1.0",
     "prettier": "^3.3.3",
+    "sass": "^1.80.6",
     "supabase": "^1.215.0",
     "typescript": "^5"
   }

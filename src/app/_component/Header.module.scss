@@ -1,0 +1,48 @@
+.header {
+  padding: 1rem 2rem;
+  width: 100%;
+  height: 70px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 4rem;
+}
+
+.logo {
+  flex: 1;
+}
+
+.nav {
+  ul {
+    display: flex;
+    gap: 1rem;
+    font-size: 1.2rem;
+    font-weight: 600;
+
+    li > a {
+      padding: 1rem 0.5rem;
+    }
+  }
+}
+
+.auth {
+  ul {
+    display: flex;
+
+    li {
+      position: relative;
+      padding: 0.5rem 1rem;
+
+      &:not(:last-child)::after {
+        content: '';
+        position: absolute;
+        top: 50%;
+        right: 0;
+        width: 1px;
+        height: 30%;
+        background-color: #ccc;
+        transform: translateY(-50%);
+      }
+    }
+  }
+}
