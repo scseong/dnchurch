@@ -6,6 +6,7 @@
   justify-content: space-between;
   align-items: center;
   gap: 4rem;
+  border-bottom: 0.1rem solid #eee;
 }
 
 .logo {
@@ -21,6 +22,11 @@
 
     li > a {
       padding: 1rem 0.5rem;
+      transition: all var(--text-hover-delay);
+
+      &:hover {
+        color: var(--text-hover);
+      }
     }
   }
 }

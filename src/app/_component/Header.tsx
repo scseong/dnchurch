@@ -7,7 +7,8 @@ export default function Header() {
       <div className={styles.logo}>
         <h1>
           <Link href="/">
-            <img src="" alt="대구동남교회" />
+            {/* TODO: 로고 이미지로 대체 */}
+            대구동남교회
           </Link>
         </h1>
       </div>
@@ -30,6 +31,7 @@ export default function Header() {
       <div className={styles.auth}>
         <ul>
           <li>
+            {/* TODO: 모달로 구현 */}
             <Link href="/login">로그인</Link>
           </li>
           <li>회원가입</li>

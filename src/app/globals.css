@@ -1,6 +1,21 @@
 :root {
   --background: #ffffff;
   --foreground: #171717;
+
+  /* Colors */
+  --color-dark-blue: #03045e;
+  --color-blue: #023e8a;
+  --color-light-blue: #0077b6;
+  --color-cyan: #0096c7;
+  --color-bright-cyan: #00b4d8;
+  --color-pale-cyan: #48cae4;
+  --color-sky-blue: #90e0ef;
+  --color-light-sky-blue: #ade8f4;
+  --color-very-light-sky-blue: #caf0f8;
+
+  /* Text */
+  --text-hover: var(--color-light-blue);
+  --text-hover-delay: 0.2s;
 }
 
 html,
