@@ -1,32 +1,58 @@
-import type { Metadata } from "next";
-import localFont from "next/font/local";
-import "./globals.css";
-
-const geistSans = localFont({
-  src: "./fonts/GeistVF.woff",
-  variable: "--font-geist-sans",
-  weight: "100 900",
-});
-const geistMono = localFont({
-  src: "./fonts/GeistMonoVF.woff",
-  variable: "--font-geist-mono",
-  weight: "100 900",
-});
+import Header from './_component/Header';
+import Footer from './_component/Footer';
+import localFont from 'next/font/local';
+import type { Metadata } from 'next';
+import './globals.css';
 
 export const metadata: Metadata = {
-  title: "동남교회",
-  description: "서로서로 세워가는 교회, 동남교회",
+  title: '동남교회',
+  description: '서로서로 세워가는 교회, 동남교회'
 };
 
+const myFont = localFont({
+  src: [
+    {
+      path: './fonts/NotoSansKR-Light.woff2',
+      weight: '300',
+      style: 'normal'
+    },
+    {
+      path: './fonts/NotoSansKR-Regular.woff2',
+      weight: '400',
+      style: 'normal'
+    },
+    {
+      path: './fonts/NotoSansKR-Medium.woff2',
+      weight: '500',
+      style: 'normal'
+    },
+    {
+      path: './fonts/NotoSansKR-SemiBold.woff2',
+      weight: '600',
+      style: 'normal'
+    },
+    {
+      path: './fonts/NotoSansKR-Bold.woff2',
+      weight: '700',
+      style: 'normal'
+    }
+  ],
+  variable: '--font-notosans'
+});
+
 export default function RootLayout({
-  children,
+  children
 }: Readonly<{
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="ko" suppressHydrationWarning>
-      <body className={`${geistSans.variable} ${geistMono.variable}`}>
-        {children}
+    <html lang="ko" className={myFont.variable}>
+      <body>
+        <div id="root">
+          <Header />
+          <main id="main">{children}</main>
+          <Footer />
+        </div>
       </body>
     </html>
   );
