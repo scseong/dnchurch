@@ -1,0 +1,14 @@
+.footer_wrap {
+  margin: 0 auto;
+  padding: 2rem 1rem;
+  max-width: var(--max-width);
+
+  address {
+    font-style: normal;
+  }
+
+  & > p:first-child,
+  address {
+    margin-bottom: 0.5rem;
+  }
+}
