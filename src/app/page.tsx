@@ -1,3 +1,5 @@
+import Banner from './_component/Banner';
+
 export default async function Home() {
-  return <div>Home</div>;
+  return <Banner />;
 }
