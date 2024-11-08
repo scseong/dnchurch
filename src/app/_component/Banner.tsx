@@ -23,9 +23,5 @@ export default async function Banner() {
     }
   ];
 
-  return (
-    <div>
-      <ImageSlider homeBanners={data} />
-    </div>
-  );
+  return <ImageSlider homeBanners={data} />;
 }

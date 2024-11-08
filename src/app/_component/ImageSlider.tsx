@@ -2,7 +2,13 @@
 import Slider, { Settings } from 'react-slick';
 import styles from './ImageSlider.module.scss';
 import { Tables } from '@/shared/types/database.types';
-import { PiArrowCircleLeftThin, PiArrowCircleRightThin } from 'react-icons/pi';
+import {
+  PiArrowCircleLeftThin,
+  PiArrowCircleRightThin,
+  PiArrowCircleRightFill,
+  PiArrowCircleLeftFill
+} from 'react-icons/pi';
+import { useState } from 'react';
 
 type ImageSliderProp = {
   homeBanners: Tables<'home_banner'>[];
@@ -29,14 +35,11 @@ const ImageSlider = ({ homeBanners }: ImageSliderProp) => {
   };
 
   const multiConfig: Settings = {
-    dots: false,
     infinite: true,
-    arrows: true,
-    draggable: true,
     slidesToShow: 1,
     slidesToScroll: 1,
     autoplay: true,
-    speed: 500,
+    speed: 600,
     autoplaySpeed: 6000,
     fade: true,
     cssEase: 'ease-in-out',
@@ -69,6 +72,7 @@ const ImageSlider = ({ homeBanners }: ImageSliderProp) => {
 };
 
 const PrevArrow = (props: ArrowProps) => {
+  const [isHovered, setIsHovered] = useState(false);
   const { className, style, onClick, options } = props;
 
   return (
@@ -76,13 +80,17 @@ const PrevArrow = (props: ArrowProps) => {
       className={`${className} ${styles.slider_arrow}`}
       style={{ ...style, ...options, left: '3rem' }}
       onClick={onClick}
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
     >
-      <PiArrowCircleLeftThin />
+      {isHovered && <PiArrowCircleLeftFill />}
+      {!isHovered && <PiArrowCircleLeftThin />}
     </div>
   );
 };
 
 const NextArrow = (props: ArrowProps) => {
+  const [isHovered, setIsHovered] = useState(false);
   const { className, style, onClick, options } = props;
 
   return (
@@ -90,8 +98,11 @@ const NextArrow = (props: ArrowProps) => {
       className={`${className} ${styles.slider_arrow}`}
       style={{ ...style, ...options, right: '3rem' }}
       onClick={onClick}
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
     >
-      <PiArrowCircleRightThin />
+      {isHovered && <PiArrowCircleRightFill />}
+      {!isHovered && <PiArrowCircleRightThin />}
     </div>
   );
 };
