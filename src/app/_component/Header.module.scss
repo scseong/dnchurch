@@ -4,6 +4,7 @@
   width: 100%;
   border-bottom: 0.1rem solid var(--dividing-line-color);
   background: var(--background);
+  z-index: 9999;
 }
 
 .header_wrap {
