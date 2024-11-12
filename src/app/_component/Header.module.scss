@@ -1,52 +1,104 @@
+@import '../mixins';
+
 .header {
   position: fixed;
   top: 0;
-  width: 100%;
-  border-bottom: 0.1rem solid var(--dividing-line-color);
-  background: var(--background);
-  z-index: 9999;
+  right: 0;
+  left: 0;
+  background: white;
+  z-index: 99;
+
+  @include respond($mobile) {
+    width: 100%;
+  }
 }
 
 .header_wrap {
   padding: 1rem;
-  max-width: var(--max-width);
-  height: var(--header-height);
+  margin: 0 auto;
+  position: relative;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  gap: 4rem;
-  margin: 0 auto;
+  max-width: var(--max-width);
+  height: var(--header-height);
+  background-color: inherit;
+  box-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;
+  z-index: 99;
+
+  @include respond($mobile) {
+    padding: 0;
+    flex-direction: column;
+    gap: 0;
+    height: auto;
+  }
 }
 
 .logo {
-  flex: 1;
+  flex: 0 0 auto;
+
+  @include respond($mobile) {
+    height: 50px; /* TODO: 변수화 */
+    line-height: 50px;
+
+    h1 {
+      font-size: 1.2rem;
+    }
+  }
 }
 
 .nav {
+  flex: 1;
+  width: 100%;
+  z-index: 99;
+
+  @include respond($mobile) {
+    display: none;
+
+    & > ul {
+      flex-direction: column;
+      gap: 0 !important;
+    }
+  }
+
   ul {
     display: flex;
+    justify-content: center;
     gap: 1rem;
     font-size: 1.2rem;
     font-weight: 500;
 
     li > a {
-      padding: 1rem 0.5rem;
-      transition: all var(--text-hover-delay);
+      display: inline-block;
+      padding: 0.5rem;
+      width: 100%;
+      transition: color var(--text-hover-delay);
 
       &:hover {
         color: var(--text-hover);
+      }
+
+      @include respond($mobile) {
+        text-align: center;
+        font-size: 0.8rem;
       }
     }
   }
 }
 
 .auth {
+  flex: 0 0 auto;
+
+  @include respond($mobile) {
+    display: none;
+  }
+
   ul {
     display: flex;
 
     li {
       position: relative;
-      padding: 0.5rem 1rem;
+      padding: 0.5rem;
 
       &:not(:last-child)::after {
         content: '';
@@ -58,6 +110,39 @@
         background-color: #ccc;
         transform: translateY(-50%);
       }
+
+      @include respond($mobile) {
+        font-size: 0.8rem;
+      }
     }
   }
+}
+
+.toggle {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  display: none;
+
+  @include respond($mobile) {
+    display: inherit;
+
+    button {
+      display: inherit;
+    }
+  }
+}
+
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 90;
+}
+
+.visible {
+  display: block !important;
 }
