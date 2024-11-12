@@ -52,17 +52,21 @@
   width: 100%;
   z-index: 99;
 
+  @include respond($mobile) {
+    display: none;
+
+    & > ul {
+      flex-direction: column;
+      gap: 0 !important;
+    }
+  }
+
   ul {
     display: flex;
     justify-content: center;
     gap: 1rem;
     font-size: 1.2rem;
     font-weight: 500;
-
-    @include respond($mobile) {
-      flex-direction: column;
-      gap: 0;
-    }
 
     li > a {
       display: inline-block;
@@ -84,6 +88,10 @@
 
 .auth {
   flex: 0 0 auto;
+
+  @include respond($mobile) {
+    display: none;
+  }
 
   ul {
     display: flex;
@@ -133,4 +141,8 @@
   bottom: 0;
   background-color: rgba(0, 0, 0, 0.5);
   z-index: 90;
+}
+
+.visible {
+  display: block !important;
 }

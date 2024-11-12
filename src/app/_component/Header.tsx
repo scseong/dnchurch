@@ -42,35 +42,31 @@ export default function Header() {
             </Link>
           </h1>
         </div>
-        {isNavVisible && (
-          <>
-            <nav className={styles.nav} ref={navRef}>
-              <ul>
-                <li>
-                  <Link href="/about">교회소개</Link>
-                </li>
-                <li>
-                  <Link href="/news">교회소식</Link>
-                </li>
-                <li>
-                  <Link href="/fellowship">교제</Link>
-                </li>
-                <li>
-                  <Link href="/gallery">동남앨범</Link>
-                </li>
-              </ul>
-            </nav>
-            <div className={styles.auth}>
-              <ul>
-                <li>
-                  {/* TODO: 모달로 구현 */}
-                  <Link href="/login">로그인</Link>
-                </li>
-                <li>회원가입</li>
-              </ul>
-            </div>
-          </>
-        )}
+        <nav className={`${styles.nav} ${isNavVisible ? styles.visible : ''}`} ref={navRef}>
+          <ul>
+            <li>
+              <Link href="/about">교회소개</Link>
+            </li>
+            <li>
+              <Link href="/news">교회소식</Link>
+            </li>
+            <li>
+              <Link href="/fellowship">교제</Link>
+            </li>
+            <li>
+              <Link href="/gallery">동남앨범</Link>
+            </li>
+          </ul>
+        </nav>
+        <div className={`${styles.auth} ${isNavVisible ? styles.visible : ''}`}>
+          <ul>
+            <li>
+              {/* TODO: 모달로 구현 */}
+              <Link href="/login">로그인</Link>
+            </li>
+            <li>회원가입</li>
+          </ul>
+        </div>
         <div className={styles.toggle}>
           <button onClick={toggleNav} aria-label="Toggle Navigation">
             <GiHamburgerMenu size="1rem" />
