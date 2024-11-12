@@ -23,7 +23,8 @@
   max-width: var(--max-width);
   height: var(--header-height);
   background-color: inherit;
-  box-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;
+  box-shadow: 0px 1px 0px rgba(0, 0, 0, 0.15);
+
   z-index: 99;
 
   @include respond($mobile) {
