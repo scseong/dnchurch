@@ -65,14 +65,34 @@ button {
   flex: 1;
 }
 
+@media screen and (max-width: 600px) {
+  #main {
+    padding-top: 50px;
+  }
+}
+
 #main > div {
   margin: 0 auto;
   max-width: 90rem;
-  height: 100%;
 }
 
 #footer {
   width: 100%;
   background: var(--footer-background);
   border-top: 0.1rem solid var(--dividing-line-color);
+}
+
+/* ===== Scrollbar CSS ===== */
+/* Firefox */
+* {
+  scrollbar-width: none;
+}
+
+/* Chrome, Edge, and Safari */
+*::-webkit-scrollbar {
+  width: 0px;
+}
+
+*::-webkit-scrollbar-track {
+  background: #ffffff;
 }
