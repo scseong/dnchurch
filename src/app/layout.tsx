@@ -3,8 +3,10 @@ import Footer from './_component/Footer';
 import localFont from 'next/font/local';
 import type { Metadata } from 'next';
 import './globals.css';
-import 'slick-carousel/slick/slick.css';
-import 'slick-carousel/slick/slick-theme.css';
+import 'swiper/css';
+import 'swiper/css/autoplay';
+import 'swiper/css/effect-fade';
+import 'swiper/css/pagination';
 
 export const metadata: Metadata = {
   title: '동남교회',

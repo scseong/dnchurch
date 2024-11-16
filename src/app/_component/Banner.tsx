@@ -1,8 +1,9 @@
-import ImageSlider from './ImageSlider';
+import BannerClient from './BannerClient';
+import { Tables } from '@/shared/types/database.types';
 
 export default async function Banner() {
   // TODO: supabase API 연결
-  const data = [
+  const data: Tables<'home_banner'>[] = [
     {
       id: 1,
       title: '서로서로 세워가는 교회',
@@ -23,5 +24,5 @@ export default async function Banner() {
     }
   ];
 
-  return <ImageSlider homeBanners={data} />;
+  return <BannerClient data={data} />;
 }

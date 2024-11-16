@@ -4,10 +4,12 @@ import { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import styles from './Header.module.scss';
 import { GiHamburgerMenu } from 'react-icons/gi';
+import { usePathname } from 'next/navigation';
 
 export default function Header() {
   const [isNavVisible, setNavVisible] = useState(false);
   const navRef = useRef<HTMLDivElement>(null);
+  const pathname = usePathname();
 
   const toggleNav = () => {
     setNavVisible((prev) => !prev);
@@ -30,6 +32,10 @@ export default function Header() {
       document.removeEventListener('click', handleClickOutside);
     };
   }, [isNavVisible]);
+
+  useEffect(() => {
+    setNavVisible(false);
+  }, [pathname]);
 
   return (
     <header className={styles.header}>
