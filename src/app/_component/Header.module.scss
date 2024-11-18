@@ -74,8 +74,10 @@
       width: 100%;
       transition: color var(--text-hover-delay);
 
-      &:hover {
-        color: var(--text-hover);
+      @media (hover: hover) and (pointer: fine) {
+        &:hover {
+          color: var(--text-hover);
+        }
       }
 
       @include respond($mobile) {

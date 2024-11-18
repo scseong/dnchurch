@@ -86,6 +86,7 @@ button {
 /* Firefox */
 * {
   scrollbar-width: none;
+  -webkit-tap-highlight-color: transparent;
 }
 
 /* Chrome, Edge, and Safari */
