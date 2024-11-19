@@ -66,6 +66,10 @@ button {
 }
 
 @media screen and (max-width: 600px) {
+  body {
+    font-size: 14px;
+  }
+
   #main {
     padding-top: 50px;
   }
