@@ -1,0 +1,20 @@
+$mobile: 480px;
+$tablet: 768px;
+$desktop: 1024px;
+
+$background: #ffffff;
+$foreground: #171717;
+
+$primary-color: #f68b28;
+$secendary-color: #bf1e2dff;
+$dividing-line-color: #ddd;
+
+/* Text */
+$text-color: #171717;
+$text-hover: $primary-color;
+$text-hover-delay: 0.2s;
+
+/* Size */
+$max-width: 90rem;
+$header-height: 5rem;
+$responsive-header-height: 50px;

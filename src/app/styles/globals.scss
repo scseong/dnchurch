@@ -1,31 +1,18 @@
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-
-  /* Colors */
-  --primary-color: #f68b28;
-  --secendary-color: #bf1e2dff;
-  --dividing-line-color: #ddd;
-
-  /* Text */
-  --text-color: #171717;
-  --text-hover: var(--primary-color);
-  --text-hover-delay: 0.2s;
-
-  /* Size */
-  --max-width: 90rem;
-  --header-height: 5rem;
-}
-
 html,
 body {
+  font-size: 16px;
   height: 100%;
   overflow-x: hidden;
+  -webkit-text-size-adjust: none;
+  -ms-text-size-adjust: none;
+  -moz-text-size-adjust: none;
+  -o-text-size-adjust: none;
 }
 
 body {
-  color: var(--text-color);
-  background: var(--background);
+  font-size: calc(1rem + 0.25vw);
+  color: $text-color;
+  background: $background;
   font-family: var(--font-notosans);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -61,12 +48,12 @@ button {
 }
 
 #main {
-  padding-top: var(--header-height);
+  padding-top: $header-height;
   flex: 1;
 }
 
 @media screen and (max-width: 600px) {
-  body {
+  html {
     font-size: 14px;
   }
 
@@ -75,29 +62,25 @@ button {
   }
 }
 
-#main > div {
+#main > div,
+#main > section {
   margin: 0 auto;
   max-width: 90rem;
 }
 
 #footer {
   width: 100%;
-  background: var(--footer-background);
-  border-top: 0.1rem solid var(--dividing-line-color);
+  border-top: 0.1rem solid $dividing-line-color;
 }
 
 /* ===== Scrollbar CSS ===== */
-/* Firefox */
 * {
   scrollbar-width: none;
   -webkit-tap-highlight-color: transparent;
 }
-
-/* Chrome, Edge, and Safari */
 *::-webkit-scrollbar {
   width: 0px;
 }
-
 *::-webkit-scrollbar-track {
   background: #ffffff;
 }

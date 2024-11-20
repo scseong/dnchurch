@@ -2,7 +2,7 @@ import Header from './_component/Header';
 import Footer from './_component/Footer';
 import localFont from 'next/font/local';
 import type { Metadata } from 'next';
-import './globals.css';
+import '../app/styles/globals.scss';
 import 'swiper/css';
 import 'swiper/css/autoplay';
 import 'swiper/css/effect-fade';
