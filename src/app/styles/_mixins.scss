@@ -1,0 +1,13 @@
+@mixin respond-fonts($width, $font-size) {
+  @media screen and (min-width: $width) {
+    html {
+      font-size: $font-size;
+    }
+  }
+}
+
+@mixin respond($size) {
+  @media screen and (max-width: $size) {
+    @content;
+  }
+}

@@ -1,0 +1,97 @@
+html {
+  font-size: 2.777778vw;
+}
+
+body {
+  background: $background;
+  font-family: var(--font-notosans);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  font-size: calc(1rem + 0.25vw);
+  color: $text-color;
+  overflow-x: hidden;
+  -webkit-text-size-adjust: none;
+  -ms-text-size-adjust: none;
+  -moz-text-size-adjust: none;
+  -o-text-size-adjust: none;
+}
+
+* {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+ul,
+li {
+  list-style: none;
+}
+
+button {
+  border: none;
+  background: none;
+  cursor: pointer;
+}
+
+#root {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+#main {
+  padding-top: $header-height;
+  flex: 1;
+}
+
+@media screen and (max-width: $breakpoint-md) {
+  #main {
+    padding-top: $mobile-header-height;
+  }
+}
+
+#main > div,
+#main > section {
+  margin: 0 auto;
+  max-width: $max-width;
+}
+
+#footer {
+  width: 100%;
+  border-top: 0.1rem solid $dividing-line-color;
+}
+
+/* ===== Scrollbar CSS ===== */
+* {
+  scrollbar-width: none;
+  -webkit-tap-highlight-color: transparent;
+}
+*::-webkit-scrollbar {
+  width: 0px;
+}
+*::-webkit-scrollbar-track {
+  background: #ffffff;
+}
+
+/*! ****************************************
+ * $breakpoint-xs: 360px 
+ * $breakpoint-sm: 480px 
+ * $breakpoint-md: 600px 
+ * $breakpoint-lg: 768px 
+ * $breakpoint-xl: 1024px
+ * $breakpoint-xxl: 1336px
+ * $breakpoint-xxxl: 1920px
+ * **************************************** */
+
+@include respond-fonts($breakpoint-xs, 2.778vw);
+@include respond-fonts($breakpoint-sm, 2.083vw);
+@include respond-fonts($breakpoint-md, 1.667vw);
+@include respond-fonts($breakpoint-lg, 1.302vw);
+@include respond-fonts($breakpoint-xl, 0.977vw);
+@include respond-fonts($breakpoint-xxl, 0.749vw);
+@include respond-fonts($breakpoint-xxxl, 0.521vw);

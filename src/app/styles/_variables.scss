@@ -1,0 +1,26 @@
+/* Colors */
+$background: #ffffff;
+$foreground: #171717;
+
+$primary-color: #f68b28;
+$secendary-color: #bf1e2dff;
+$dividing-line-color: #ddd;
+
+/* Text */
+$text-color: #171717;
+$text-hover: $primary-color;
+$text-hover-delay: 0.2s;
+
+/* Size */
+$max-width: 120rem;
+$header-height: 5rem;
+$mobile-header-height: 4rem;
+
+/* Break Point */
+$breakpoint-xs: 361px; // Extra small devices (small phones)
+$breakpoint-sm: 481px; // Small devices (phones)
+$breakpoint-md: 601px; // Medium devices (tablets)
+$breakpoint-lg: 769px; // Large devices (small desktops)
+$breakpoint-xl: 1025px; // Extra large devices (desktops)
+$breakpoint-xxl: 1337px; // Extra extra large devices (large desktops)
+$breakpoint-xxxl: 1921px; // Extra extra extra large devices (large screens)

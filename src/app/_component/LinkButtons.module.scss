@@ -1,0 +1,72 @@
+$button_size: 9rem;
+$button_tablet_size: 8rem;
+$button_mobile_size: 7.2rem;
+
+.quick_menu {
+  padding: 2rem 1rem;
+  display: grid;
+  grid-template-columns: repeat(6, $button_size);
+  grid-gap: 3rem;
+  justify-content: center;
+  place-items: center;
+
+  @include respond($breakpoint-xl) {
+    grid-template-columns: repeat(6, $button_tablet_size);
+    grid-gap: 2rem;
+  }
+
+  @include respond($breakpoint-md) {
+    padding: 0;
+    grid-template-columns: repeat(3, $button_mobile_size);
+  }
+}
+
+.menu_item {
+  text-align: center;
+
+  a {
+    display: block;
+  }
+
+  div {
+    margin-bottom: 0.6rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: $button_size;
+    height: $button_size;
+    background-color: #fff5ec;
+    border-radius: 50%;
+
+    svg {
+      font-size: 3rem;
+      mix-blend-mode: hard-light;
+    }
+  }
+
+  span {
+    font-size: 1.4rem;
+  }
+
+  @include respond($breakpoint-xl) {
+    div {
+      width: $button_tablet_size;
+      height: $button_tablet_size;
+    }
+
+    span {
+      font-size: 1.2rem;
+    }
+  }
+
+  @include respond($breakpoint-md) {
+    div {
+      width: $button_mobile_size;
+      height: $button_mobile_size;
+    }
+
+    span {
+      font-size: 1.1rem;
+    }
+  }
+}
