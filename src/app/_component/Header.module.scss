@@ -85,10 +85,10 @@
 }
 
 .auth {
-  margin-bottom: 0.6rem;
   flex: 0 0 auto;
 
   @include respond($breakpoint-md) {
+    margin-bottom: 0.6rem;
     display: none;
   }
 
