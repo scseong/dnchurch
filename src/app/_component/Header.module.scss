@@ -5,10 +5,6 @@
   left: 0;
   background: white;
   z-index: 99;
-
-  @include respond($mobile) {
-    width: 100%;
-  }
 }
 
 .header_wrap {
@@ -18,13 +14,14 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
+  gap: 6rem;
   max-width: $max-width;
   height: $header-height;
   background-color: inherit;
-  box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.1);
+  box-shadow: 0 2px 2px -2px rgba(0, 0, 0, 0.1);
   z-index: 99;
 
-  @include respond($mobile) {
+  @include respond($breakpoint-md) {
     padding: 0;
     flex-direction: column;
     gap: 0;
@@ -34,9 +31,14 @@
 
 .logo {
   flex: 0 0 auto;
-  @include respond($mobile) {
-    height: 50px; /* TODO: 변수화 */
-    line-height: 50px;
+
+  h1 {
+    font-size: 1.6rem;
+  }
+
+  @include respond($breakpoint-md) {
+    height: $mobile-header-height;
+    line-height: $mobile-header-height;
 
     h1 {
       font-size: 1.2rem;
@@ -45,12 +47,13 @@
 }
 
 .nav {
-  flex: 1;
-  width: 100%;
+  margin-left: auto;
   z-index: 99;
 
-  @include respond($mobile) {
+  @include respond($breakpoint-md) {
     display: none;
+    width: 100%;
+    margin-left: 0;
 
     & > ul {
       flex-direction: column;
@@ -77,7 +80,7 @@
         }
       }
 
-      @include respond($mobile) {
+      @include respond($breakpoint-md) {
         text-align: center;
         font-size: 0.8rem;
       }
@@ -88,7 +91,7 @@
 .auth {
   flex: 0 0 auto;
 
-  @include respond($mobile) {
+  @include respond($breakpoint-md) {
     display: none;
   }
 
@@ -110,7 +113,7 @@
         transform: translateY(-50%);
       }
 
-      @include respond($mobile) {
+      @include respond($breakpoint-md) {
         font-size: 0.8rem;
       }
     }
@@ -119,11 +122,11 @@
 
 .toggle {
   position: absolute;
-  top: calc($responsive-header-height / 2 - 0.5rem);
+  top: calc($mobile-header-height / 2 - 0.5rem);
   right: 1rem;
   display: none;
 
-  @include respond($mobile) {
+  @include respond($breakpoint-md) {
     display: inherit;
 
     button {

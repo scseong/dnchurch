@@ -3,11 +3,11 @@
 
   img {
     width: 100%;
-    height: 400px;
+    height: 40rem;
     object-fit: cover;
 
-    @include respond($mobile) {
-      height: 250px;
+    @include respond($breakpoint-md) {
+      height: 25rem;
     }
   }
 

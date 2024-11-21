@@ -8,8 +8,7 @@ import { Tables } from '@/shared/types/database.types';
 export default function BannerClient({ data }: BannerClientProps) {
   const options: SwiperOptions = {
     autoplay: {
-      delay: 6000,
-      disableOnInteraction: false
+      delay: 6000
     },
     effect: 'fade',
     loop: true,
