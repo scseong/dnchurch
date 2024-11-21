@@ -39,10 +39,6 @@
   @include respond($breakpoint-md) {
     height: $mobile-header-height;
     line-height: $mobile-header-height;
-
-    h1 {
-      font-size: 1.2rem;
-    }
   }
 }
 
@@ -55,7 +51,7 @@
     width: 100%;
     margin-left: 0;
 
-    & > ul {
+    ul {
       flex-direction: column;
       gap: 0 !important;
     }
@@ -82,13 +78,14 @@
 
       @include respond($breakpoint-md) {
         text-align: center;
-        font-size: 0.8rem;
+        font-size: 1.2rem;
       }
     }
   }
 }
 
 .auth {
+  margin-bottom: 0.6rem;
   flex: 0 0 auto;
 
   @include respond($breakpoint-md) {
@@ -101,6 +98,7 @@
     li {
       position: relative;
       padding: 0.5rem;
+      font-weight: 500;
 
       &:not(:last-child)::after {
         content: '';
@@ -114,17 +112,24 @@
       }
 
       @include respond($breakpoint-md) {
-        font-size: 0.8rem;
+        font-size: 1.2rem;
       }
     }
   }
 }
 
+$button-size: 1.2rem;
+
 .toggle {
   position: absolute;
-  top: calc($mobile-header-height / 2 - 0.5rem);
+  top: calc(($mobile-header-height - $button-size) / 2);
   right: 1rem;
   display: none;
+
+  svg {
+    width: $button-size;
+    height: $button-size;
+  }
 
   @include respond($breakpoint-md) {
     display: inherit;

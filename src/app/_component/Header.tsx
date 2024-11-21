@@ -75,7 +75,7 @@ export default function Header() {
         </div>
         <div className={styles.toggle}>
           <button onClick={toggleNav} aria-label="Toggle Navigation">
-            <GiHamburgerMenu size="1rem" />
+            <GiHamburgerMenu />
           </button>
         </div>
       </div>

@@ -4,7 +4,7 @@
 
   h3 {
     margin-bottom: 1.4rem;
-    font-size: 2.2rem;
+    font-size: 2.4rem;
 
     span {
       text-emphasis: '🩷';
@@ -22,20 +22,17 @@
     }
   }
 
-  // @include respond($breakpoint-md) {
-  //   padding: 1.4rem 1rem;
+  @include respond($breakpoint-md) {
+    h3 {
+      font-size: 1.6rem;
+    }
+    p {
+      font-size: 1.2rem;
+      line-height: 1.6;
 
-  //   h3 {
-  //     margin-bottom: 0.8rem;
-  //     font-size: 1.2rem;
-  //   }
-  //   p {
-  //     font-size: 1rem;
-  //     line-height: 1.4;
-
-  //     span {
-  //       font-size: 0.8rem;
-  //     }
-  //   }
-  // }
+      span {
+        font-size: 1rem;
+      }
+    }
+  }
 }
