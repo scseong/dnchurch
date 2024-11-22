@@ -1,12 +1,12 @@
-import Header from './_component/Header';
-import Footer from './_component/Footer';
+import { Header, Footer } from './_component';
 import localFont from 'next/font/local';
 import type { Metadata } from 'next';
 import '../app/styles/globals.scss';
-import 'swiper/css';
-import 'swiper/css/autoplay';
-import 'swiper/css/effect-fade';
-import 'swiper/css/pagination';
+import 'swiper/scss';
+import 'swiper/scss/autoplay';
+import 'swiper/scss/free-mode';
+import 'swiper/scss/effect-fade';
+import 'swiper/scss/pagination';
 
 export const metadata: Metadata = {
   title: '동남교회',

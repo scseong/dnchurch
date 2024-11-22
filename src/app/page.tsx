@@ -1,4 +1,4 @@
-import { Banner, GalleryCarousel, Greeting, LinkButtons } from './_component';
+import { Banner, Greeting, HomeGallery, LinkButtons } from './_component';
 
 export default async function Home() {
   return (
@@ -6,7 +6,7 @@ export default async function Home() {
       <Banner />
       <Greeting />
       <LinkButtons />
-      <GalleryCarousel />
+      <HomeGallery />
     </>
   );
 }
