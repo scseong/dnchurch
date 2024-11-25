@@ -3,7 +3,7 @@ $button_tablet_size: 8rem;
 $button_mobile_size: 7.2rem;
 
 .quick_menu {
-  padding: 2rem 1rem 3rem 1rem;
+  padding: 0 1rem 3rem 1rem;
   display: grid;
   grid-template-columns: repeat(6, $button_size);
   grid-gap: 3rem;

@@ -13,13 +13,12 @@ export default function HomeGalleryClient({ data }: HomeGalleryClientProps) {
     },
     freeMode: true,
     loop: true,
+    loopAdditionalSlides: 1,
     speed: 8e3,
     slidesPerView: 'auto',
     observer: true,
     observeParents: true,
-    touchEventsTarget: 'container',
-    modules: [Autoplay, FreeMode],
-    passiveListeners: false
+    modules: [Autoplay, FreeMode]
   };
 
   return <HomeGalleryCarousel options={options} data={data} />;

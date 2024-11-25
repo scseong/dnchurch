@@ -8,13 +8,16 @@ import { Tables } from '@/shared/types/database.types';
 export default function BannerClient({ data }: BannerClientProps) {
   const options: SwiperOptions = {
     autoplay: {
-      delay: 6000
+      delay: 6000,
+      disableOnInteraction: false
     },
     effect: 'fade',
     loop: true,
+    loopAdditionalSlides: 1,
+    observer: true,
+    observeParents: true,
     modules: [Autoplay, EffectFade, Pagination],
-    pagination: { clickable: true },
-    passiveListeners: false
+    pagination: { clickable: true }
   };
 
   return <HomeSwiper bannerData={data} options={options} />;
