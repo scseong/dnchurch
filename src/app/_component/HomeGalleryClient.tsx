@@ -18,7 +18,8 @@ export default function HomeGalleryClient({ data }: HomeGalleryClientProps) {
     observer: true,
     observeParents: true,
     touchEventsTarget: 'container',
-    modules: [Autoplay, FreeMode]
+    modules: [Autoplay, FreeMode],
+    passiveListeners: false
   };
 
   return <HomeGalleryCarousel options={options} data={data} />;

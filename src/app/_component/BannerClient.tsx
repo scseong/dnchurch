@@ -13,7 +13,8 @@ export default function BannerClient({ data }: BannerClientProps) {
     effect: 'fade',
     loop: true,
     modules: [Autoplay, EffectFade, Pagination],
-    pagination: { clickable: true }
+    pagination: { clickable: true },
+    passiveListeners: false
   };
 
   return <HomeSwiper bannerData={data} options={options} />;
