@@ -13,6 +13,7 @@ async function fetchCats() {
 }
 
 export default async function HomeGallery() {
+  /* TODO: 갤러리 API 변경 */
   const data = await fetchCats();
 
   return (
