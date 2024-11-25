@@ -13,7 +13,6 @@ export default function BannerClient({ data }: BannerClientProps) {
     },
     effect: 'fade',
     loop: true,
-    loopAdditionalSlides: 1,
     observer: true,
     observeParents: true,
     modules: [Autoplay, EffectFade, Pagination],
