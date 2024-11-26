@@ -11,6 +11,7 @@ export default function BannerClient({ data }: BannerClientProps) {
       delay: 5000,
       disableOnInteraction: false
     },
+    autoHeight: true,
     effect: 'fade',
     fadeEffect: {
       crossFade: true
