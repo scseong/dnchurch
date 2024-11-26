@@ -15,7 +15,9 @@ export default function HomeSwiper({ bannerData, options }: SwiperProps) {
     <Swiper {...options} className={styles.swiper}>
       {bannerData.map((banner) => (
         <SwiperSlide key={banner.id}>
-          <img src={banner.image_url} alt={banner.title} />
+          <div className="swiper-slide-transform">
+            <img src={banner.image_url} alt={banner.title} />
+          </div>
         </SwiperSlide>
       ))}
     </Swiper>

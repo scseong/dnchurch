@@ -11,13 +11,14 @@ export default function HomeGalleryClient({ data }: HomeGalleryClientProps) {
       delay: 1,
       disableOnInteraction: false
     },
+    autoHeight: true,
     freeMode: true,
     loop: true,
+    loopAdditionalSlides: 3,
     speed: 8e3,
     slidesPerView: 'auto',
     observer: true,
     observeParents: true,
-    touchEventsTarget: 'container',
     modules: [Autoplay, FreeMode]
   };
 

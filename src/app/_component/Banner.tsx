@@ -19,7 +19,7 @@ export default async function Banner() {
       description: null,
       order: 2,
       image_url:
-        'https://ndimreqwgdiwtjonjjzq.supabase.co/storage/v1/object/sign/home_banner/anti.jpg?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1cmwiOiJob21lX2Jhbm5lci9hbnRpLmpwZyIsImlhdCI6MTczMDk5NjAzMSwiZXhwIjoxNzYyNTMyMDMxfQ.ytJtbJQETOAtt3VCgHjCbytGFAbGPksYRAb-nKSN2O8&t=2024-11-07T16%3A13%3A51.617Z',
+        'https://ndimreqwgdiwtjonjjzq.supabase.co/storage/v1/object/sign/home_banner/church.jpg?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1cmwiOiJob21lX2Jhbm5lci9jaHVyY2guanBnIiwiaWF0IjoxNzMyNjEwNjIwLCJleHAiOjE3NjQxNDY2MjB9.IJ5PfVONthOoKrtyt9Mbr6DodzWCyeb7Ej_OiqLxAkg&t=2024-11-26T08%3A43%3A40.327Z',
       year: 2024
     }
   ];
