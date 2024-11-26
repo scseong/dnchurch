@@ -7,6 +7,7 @@ import 'swiper/scss/autoplay';
 import 'swiper/scss/free-mode';
 import 'swiper/scss/effect-fade';
 import 'swiper/scss/pagination';
+import 'swiper/scss/parallax';
 
 export const metadata: Metadata = {
   title: '동남교회',
