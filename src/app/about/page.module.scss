@@ -1,0 +1,95 @@
+.about {
+  padding: 3rem 2rem;
+
+  h2 {
+    margin-bottom: 1rem;
+    font-size: 3.6rem;
+  }
+
+  @include respond($breakpoint-md) {
+    padding: 0;
+
+    h2 {
+      display: none;
+    }
+  }
+}
+
+.banner {
+  position: relative;
+  height: 30rem;
+
+  .banner_info {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+    color: #eee;
+
+    h3 {
+      font-size: 2.4rem;
+    }
+
+    ul {
+      margin-top: 1rem;
+
+      li {
+        font-size: 1.6rem;
+        font-weight: 400;
+        line-height: 1.6;
+      }
+    }
+  }
+
+  .banner_bg {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-image: url('../../../public/images/aboutBanner.jpg'); // 배경 이미지 경로
+    background-size: 100% 100%;
+    z-index: -1;
+
+    &:after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.5);
+      z-index: 2;
+    }
+  }
+}
+
+.greeting {
+  padding: 4rem 2rem;
+  background-color: #f8f8f8;
+  text-align: center;
+
+  h3 {
+    font-size: 2.2rem;
+  }
+
+  p {
+    margin-top: 2rem;
+    font-size: 1.2rem;
+    line-height: 2;
+  }
+
+  @include respond($breakpoint-md) {
+    h3 {
+      font-size: 1.8rem;
+    }
+
+    p {
+      margin-top: 1.6rem;
+      font-size: 1.1rem;
+      line-height: 1.8;
+    }
+  }
+}
