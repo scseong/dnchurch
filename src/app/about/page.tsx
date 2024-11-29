@@ -1,5 +1,6 @@
 import { MdOutlineEmail, MdOutlineCall } from 'react-icons/md';
 import styles from './page.module.scss';
+import WorshipSchedule from './_component/WorshipSchedule';
 
 export default function About() {
   const servingInfo = [
@@ -74,6 +75,10 @@ export default function About() {
             </article>
           ))}
         </div>
+      </section>
+      <section className={styles.wrap}>
+        <h3 id="worship_info">예배안내</h3>
+        <WorshipSchedule />
       </section>
     </section>
   );

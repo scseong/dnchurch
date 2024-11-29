@@ -92,7 +92,6 @@
 
 .serving_people {
   & > div {
-    margin-top: 2rem;
     display: flex;
     align-items: center;
     justify-content: space-around;
@@ -173,14 +172,12 @@
   }
 }
 
-.worship_info {
-}
-
 /* Section Wrap */
 .wrap {
   padding: 3rem 0;
 
   h3 {
+    margin-bottom: 2rem;
     position: relative;
     font-size: 3rem;
 
