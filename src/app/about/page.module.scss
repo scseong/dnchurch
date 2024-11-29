@@ -1,0 +1,188 @@
+.about {
+  padding: 3rem 2rem;
+
+  h2 {
+    margin-bottom: 1rem;
+    font-size: 3.6rem;
+  }
+
+  @include respond($breakpoint-md) {
+    padding: 0;
+
+    h2 {
+      display: none;
+    }
+  }
+}
+
+.banner {
+  position: relative;
+  height: 30rem;
+
+  .banner_info {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+    color: #eee;
+
+    h3 {
+      font-size: 2.4rem;
+    }
+
+    ul {
+      margin-top: 1rem;
+
+      li {
+        font-size: 1.6rem;
+        font-weight: 400;
+        line-height: 1.6;
+      }
+    }
+  }
+
+  .banner_bg {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-image: url('../../../public/images/aboutBanner.jpg'); // 배경 이미지 경로
+    background-size: 100% 100%;
+    z-index: -1;
+
+    &:after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.5);
+      z-index: 2;
+    }
+  }
+}
+
+.greeting {
+  padding: 4rem 2rem;
+  background-color: #f8f8f8;
+  text-align: center;
+
+  h3 {
+    font-size: 2.2rem;
+  }
+
+  p {
+    margin-top: 2rem;
+    font-size: 1.4rem;
+    line-height: 2;
+  }
+
+  @include respond($breakpoint-md) {
+    p {
+      margin-top: 1.6rem;
+      font-size: 1.2rem;
+      line-height: 1.8;
+    }
+  }
+}
+
+.serving_people {
+  padding: 3rem 0;
+
+  h3 {
+    font-size: 3rem;
+  }
+
+  @include respond($breakpoint-md) {
+    padding: 3rem 2rem;
+
+    h3 {
+      font-size: 2.2rem;
+    }
+  }
+
+  & > div {
+    margin-top: 3rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+  }
+
+  .profile {
+    display: flex;
+    align-items: center;
+    gap: clamp(1rem, 2vw, 1.5rem);
+
+    @include respond($breakpoint-md) {
+      flex-direction: column;
+    }
+
+    .profile_photo {
+      max-width: 50%;
+      height: auto;
+
+      @include respond($breakpoint-md) {
+        max-width: 75%;
+      }
+
+      img {
+        width: 100%;
+        height: 100%;
+        border-radius: 50%;
+      }
+    }
+
+    .profile_info {
+      h4 {
+        font-size: 2.2rem;
+
+        @include respond($breakpoint-xl) {
+          font-size: 1.8rem;
+        }
+
+        @include respond($breakpoint-md) {
+          text-align: center;
+        }
+      }
+
+      address {
+        margin-top: 1rem;
+
+        @include respond($breakpoint-xl) {
+          margin-top: 0.6rem;
+        }
+
+        p {
+          display: flex;
+          align-items: center;
+          font-size: 1.4rem;
+          line-height: 1.8;
+          font-style: normal;
+
+          @include respond($breakpoint-xl) {
+            margin-right: 0.6rem;
+            font-size: 1.2rem;
+          }
+
+          svg {
+            margin-right: 0.6rem;
+            font-size: 2rem;
+
+            @include respond($breakpoint-md) {
+              margin-right: 0.4rem;
+              font-size: 1.6rem;
+            }
+          }
+
+          &:first-child svg {
+            transform: translateY(2px);
+          }
+        }
+      }
+    }
+  }
+}
