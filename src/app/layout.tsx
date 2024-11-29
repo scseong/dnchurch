@@ -1,3 +1,4 @@
+import Script from 'next/script';
 import { Header, Footer } from './_component';
 import localFont from 'next/font/local';
 import type { Metadata } from 'next';
@@ -53,6 +54,10 @@ export default function RootLayout({
   return (
     <html lang="ko" className={myFont.variable}>
       <body>
+        <Script
+          src={`//dapi.kakao.com/v2/maps/sdk.js?appkey=${process.env.NEXT_PUBLIC_KAKAO_API_KEY}&libraries=services,clusterer&autoload=false`}
+          strategy="beforeInteractive"
+        />
         <div id="root">
           <Header />
           <main id="main">{children}</main>
