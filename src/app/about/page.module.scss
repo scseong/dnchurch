@@ -91,22 +91,8 @@
 }
 
 .serving_people {
-  padding: 3rem 0;
-
-  h3 {
-    font-size: 3rem;
-  }
-
-  @include respond($breakpoint-md) {
-    padding: 3rem 2rem;
-
-    h3 {
-      font-size: 2.2rem;
-    }
-  }
-
   & > div {
-    margin-top: 3rem;
+    margin-top: 2rem;
     display: flex;
     align-items: center;
     justify-content: space-around;
@@ -182,6 +168,43 @@
             transform: translateY(2px);
           }
         }
+      }
+    }
+  }
+}
+
+.worship_info {
+}
+
+/* Section Wrap */
+.wrap {
+  padding: 3rem 0;
+
+  h3 {
+    position: relative;
+    font-size: 3rem;
+
+    @include respond($breakpoint-xl) {
+      font-size: 2.2rem;
+    }
+  }
+
+  @include respond($breakpoint-md) {
+    padding: 3rem 2rem;
+
+    h3 {
+      text-align: center;
+
+      &:after {
+        content: '';
+        position: absolute;
+        left: 50%;
+        bottom: -0.6rem;
+        margin: 0 auto;
+        width: 5rem;
+        height: 0.2rem;
+        background-color: $primary-color;
+        transform: translateX(-50%);
       }
     }
   }

@@ -48,7 +48,7 @@ export default function About() {
           <br />그 사랑을 경험하도록 힘씁니다.
         </p>
       </section>
-      <section className={styles.serving_people}>
+      <section className={`${styles.serving_people} ${styles.wrap}`}>
         <h3>섬기는 이</h3>
         <div>
           {servingInfo.map((info) => (
