@@ -1,6 +1,7 @@
 import { MdOutlineEmail, MdOutlineCall } from 'react-icons/md';
 import styles from './page.module.scss';
 import WorshipSchedule from './_component/WorshipSchedule';
+import LocationMap from './_component/LocationMap';
 
 export default function About() {
   const servingInfo = [
@@ -79,6 +80,10 @@ export default function About() {
       <section className={styles.wrap}>
         <h3 id="worship_info">예배안내</h3>
         <WorshipSchedule />
+      </section>
+      <section className={styles.wrap}>
+        <h3>오시는 길</h3>
+        <LocationMap lat={35.85262832577055} lng={128.53467835707838} width="100%" height="30rem" />
       </section>
     </section>
   );

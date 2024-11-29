@@ -1,6 +1,6 @@
 .table {
   width: 100%;
-  border: 1px solid #dddddd;
+  border: 1px solid #ddd;
   border-collapse: collapse;
 
   &:first-child {
@@ -10,7 +10,7 @@
   th {
     padding: 0.8rem 1rem;
     background-color: $primary-color;
-    color: #fff;
+    color: #f8f8f8;
     text-align: center;
     font-size: 1.6rem;
     font-weight: 700;
