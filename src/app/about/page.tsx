@@ -1,4 +1,4 @@
-import { MdOutlineEmail, MdOutlineCall } from 'react-icons/md';
+import { MdOutlineEmail, MdOutlineCall, MdLocationOn, MdDirectionsBus } from 'react-icons/md';
 import styles from './page.module.scss';
 import WorshipSchedule from './_component/WorshipSchedule';
 import LocationMap from './_component/LocationMap';
@@ -83,7 +83,39 @@ export default function About() {
       </section>
       <section className={styles.wrap}>
         <h3>오시는 길</h3>
-        <LocationMap lat={35.85262832577055} lng={128.53467835707838} width="100%" height="30rem" />
+        <div className={styles.directions}>
+          <LocationMap
+            lat={35.85262832577055}
+            lng={128.53467835707838}
+            width="60%"
+            height="30rem"
+          />
+          <div className={styles.directions_info}>
+            <div className={styles.container}>
+              <div className={styles.icon}>
+                <MdLocationOn />
+              </div>
+              <div className={styles.info}>
+                <h4>주소</h4>
+                <p>대구광역시 달서구 달구벌대로307길 58 (죽전동)</p>
+              </div>
+            </div>
+            <div className={styles.container}>
+              <div className={styles.icon}>
+                <MdDirectionsBus />
+              </div>
+              <div className={styles.info}>
+                <h4>대중교통</h4>
+                <p>
+                  <span>지하철</span> 2호선 죽전역 1번 출구
+                </p>
+                <p>
+                  <span>버스</span> 405, 425, 503, 509, 527, 달서5, 성서2, 250
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
       </section>
     </section>
   );

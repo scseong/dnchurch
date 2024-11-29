@@ -206,3 +206,99 @@
     }
   }
 }
+
+.directions {
+  display: flex;
+
+  @include respond($breakpoint-lg) {
+    flex-direction: column;
+  }
+
+  & > div:first-child {
+    display: inline-flex;
+  }
+
+  @include respond($breakpoint-lg) {
+    & > div {
+      width: 100% !important;
+    }
+  }
+
+  .directions_info {
+    padding: 0 2rem;
+    display: inline-flex;
+    flex-direction: column;
+    gap: 2rem;
+    width: 40%;
+
+    @include respond($breakpoint-lg) {
+      padding: 2rem 0;
+      flex-direction: row;
+      justify-content: space-between;
+    }
+
+    @include respond($breakpoint-md) {
+      flex-direction: column;
+    }
+
+    .container {
+      display: flex;
+
+      .icon {
+        margin-right: 0.8em;
+        position: relative;
+
+        svg {
+          font-size: 2.8rem;
+          color: $primary-color;
+        }
+
+        &::after {
+          content: '';
+          position: absolute;
+          top: calc(2.8rem / 2);
+          left: 0;
+          width: 2.8rem;
+          height: calc(2.8rem / 2);
+          border-radius: 50%;
+          background-color: #fde5cf;
+          z-index: -1;
+        }
+      }
+
+      .info {
+        h4 {
+          margin-bottom: 0.4rem;
+          font-size: 1.6rem;
+
+          @include respond($breakpoint-lg) {
+            font-size: 1.3rem;
+          }
+        }
+
+        p {
+          position: relative;
+          font-size: 1.4rem;
+          line-height: 1.6;
+          word-break: keep-all;
+
+          @include respond($breakpoint-lg) {
+            font-size: 1.2rem;
+          }
+
+          &:has(span) {
+            padding-left: 5rem;
+
+            span {
+              position: absolute;
+              left: 0;
+              display: inline-block;
+              width: 5rem;
+              font-weight: 500;
+            }
+          }
+        }
+      }
+    }
+  }
+}
