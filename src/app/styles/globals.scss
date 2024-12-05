@@ -22,10 +22,11 @@ body {
   box-sizing: border-box;
   padding: 0;
   margin: 0;
+  font-family: var(--font-notosans);
+  color: inherit;
 }
 
 a {
-  color: inherit;
   text-decoration: none;
 }
 

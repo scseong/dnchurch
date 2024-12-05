@@ -2,6 +2,7 @@ import Script from 'next/script';
 import { Header, Footer } from './_component';
 import localFont from 'next/font/local';
 import type { Metadata } from 'next';
+import { getCurrnetUser } from '@/apis/user';
 import '../app/styles/globals.scss';
 import 'swiper/scss';
 import 'swiper/scss/autoplay';
@@ -46,11 +47,13 @@ const myFont = localFont({
   variable: '--font-notosans'
 });
 
-export default function RootLayout({
+export default async function RootLayout({
   children
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const user = await getCurrnetUser();
+
   return (
     <html lang="ko" className={myFont.variable}>
       <body>
@@ -59,7 +62,7 @@ export default function RootLayout({
           strategy="beforeInteractive"
         />
         <div id="root">
-          <Header />
+          <Header user={user} />
           <main id="main">{children}</main>
           <Footer />
         </div>

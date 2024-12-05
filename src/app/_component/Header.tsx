@@ -5,11 +5,36 @@ import Link from 'next/link';
 import styles from './Header.module.scss';
 import { GiHamburgerMenu } from 'react-icons/gi';
 import { usePathname } from 'next/navigation';
+import { User } from '@supabase/supabase-js';
+import { signOut } from '@/apis/auth';
 
-export default function Header() {
+type HeaderProps = {
+  user?: User | UserWithCustomMetadata | null;
+};
+
+type UserWithCustomMetadata = Omit<User, 'user_metadata'> & {
+  user_metadata: UserMetadata;
+};
+
+export type UserMetadata = {
+  avatar_url: string;
+  email: string;
+  email_verified: boolean;
+  full_name: string;
+  iss: string;
+  name: string;
+  phone_verified: boolean;
+  preferred_username: string;
+  provider_id: string;
+  sub: string;
+  user_name: string;
+};
+
+export default function Header({ user }: HeaderProps) {
   const [isNavVisible, setNavVisible] = useState(false);
   const navRef = useRef<HTMLDivElement>(null);
   const pathname = usePathname();
+  const isLoggedIn = !!user?.email;
 
   const toggleNav = () => {
     setNavVisible((prev) => !prev);
@@ -65,13 +90,9 @@ export default function Header() {
           </ul>
         </nav>
         <div className={`${styles.auth} ${isNavVisible ? styles.visible : ''}`}>
-          <ul>
-            <li>
-              {/* TODO: 모달로 구현 */}
-              <Link href="/login">로그인</Link>
-            </li>
-            <li>회원가입</li>
-          </ul>
+          {/* TODO: 모달로 구현 */}
+          {!isLoggedIn && <Link href="/login">로그인</Link>}
+          {isLoggedIn && <button onClick={signOut}>로그아웃</button>}
         </div>
         <div className={styles.toggle}>
           <button onClick={toggleNav} aria-label="Toggle Navigation">
