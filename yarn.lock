@@ -905,7 +905,16 @@ cookie@^0.6.0:
   resolved "https://registry.yarnpkg.com/cookie/-/cookie-0.6.0.tgz#2798b04b071b0ecbff0dbb62a505a8efa4e19051"
   integrity sha512-U71cyTamuh1CRNCfpGY6to28lxvNwPG4Guz/EVjgf3Jmzv0vlDp1atT9eS5dDjMYHucpHbWns6Lwf3BKz6svdw==
 
-cross-spawn@^7.0.0, cross-spawn@^7.0.2:
+cross-spawn@^7.0.0:
+  version "7.0.6"
+  resolved "https://registry.yarnpkg.com/cross-spawn/-/cross-spawn-7.0.6.tgz#8a58fe78f00dcd70c370451759dfbfaf03e8ee9f"
+  integrity sha512-uV2QOWP2nWzsy2aMp8aRibhi9dlzF5Hgh5SHaB9OiTGEyDTiJJyx0uy51QXdyWbtAHNua4XJzUKca3OzKUd3vA==
+  dependencies:
+    path-key "^3.1.0"
+    shebang-command "^2.0.0"
+    which "^2.0.1"
+
+cross-spawn@^7.0.2:
   version "7.0.3"
   resolved "https://registry.yarnpkg.com/cross-spawn/-/cross-spawn-7.0.3.tgz#f73a85b9d5d41d045551c177e2882d4ac85728a6"
   integrity sha512-iRDPJKUPVEND7dHPO8rkbOnPpyDygcDFtWjpeWNCgy8WP2rXcxXL8TskReQl6OrB2G7+UJrags1q15Fudc7G6w==
@@ -2716,10 +2725,10 @@ styled-jsx@5.1.6:
   dependencies:
     client-only "0.0.1"
 
-supabase@^1.215.0:
-  version "1.215.0"
-  resolved "https://registry.yarnpkg.com/supabase/-/supabase-1.215.0.tgz#181550bf96608eba6a5077f0025305635514e556"
-  integrity sha512-ITHqEnDl3F/b44AYdBUSzinqZhmGxrx205Yt2HfyaVTd5W/JppF3/naqVPIdRiUZBBLKkvfQO/wUk48W8SoVxw==
+supabase@^2.0.0:
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/supabase/-/supabase-2.0.0.tgz#eb722246192f8f9efbda71eb76f204f35d1b7d38"
+  integrity sha512-2Z42hoKgmjMjFMo3pVdVvV8nIDly/ac/v4ZcHSdDJohf+2Y+/OJ1sHGoIvm6v3N4dAGKe3SCovS3+HYFGL1L7w==
   dependencies:
     bin-links "^5.0.0"
     https-proxy-agent "^7.0.2"
