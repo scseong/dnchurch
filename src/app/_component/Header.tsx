@@ -8,6 +8,7 @@ import { usePathname } from 'next/navigation';
 import { User } from '@supabase/supabase-js';
 import { sitemap } from '@/shared/constants/sitemap';
 import UserProfile from './user/UserProfile';
+import ModalOverlay from './common/ModalOverlay';
 
 type HeaderProps = {
   user?: User | UserWithCustomMetadata | null;
@@ -48,24 +49,12 @@ export default function Header({ user }: HeaderProps) {
   };
 
   useEffect(() => {
-    if (isNavVisible) {
-      document.addEventListener('click', handleClickOutside);
-    } else {
-      document.removeEventListener('click', handleClickOutside);
-    }
-
-    return () => {
-      document.removeEventListener('click', handleClickOutside);
-    };
-  }, [isNavVisible]);
-
-  useEffect(() => {
     setNavVisible(false);
   }, [pathname]);
 
   return (
     <header className={styles.header}>
-      <div className={styles.header_wrap}>
+      <div className={styles.header_wrap} ref={navRef}>
         <div className={styles.logo}>
           <h1>
             <Link href="/">
@@ -74,7 +63,7 @@ export default function Header({ user }: HeaderProps) {
             </Link>
           </h1>
         </div>
-        <nav className={`${styles.nav} ${isNavVisible ? styles.visible : ''}`} ref={navRef}>
+        <nav className={`${styles.nav} ${isNavVisible ? styles.visible : ''}`}>
           <ul>
             {sitemap
               .filter((item) => item.show)
@@ -102,7 +91,7 @@ export default function Header({ user }: HeaderProps) {
           </button>
         </div>
       </div>
-      {isNavVisible && <div className={styles.overlay} />}
+      <ModalOverlay isVisible={isNavVisible} handleClickOutside={handleClickOutside} />
     </header>
   );
 }

@@ -70,6 +70,16 @@ button {
   border-top: 0.1rem solid $dividing-line-color;
 }
 
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 90;
+}
+
 /* ===== Scrollbar CSS ===== */
 * {
   scrollbar-width: none;
