@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useRef } from 'react';
+import { useEffect } from 'react';
 import Link from 'next/link';
 import styles from './Header.module.scss';
 import { GiHamburgerMenu } from 'react-icons/gi';
@@ -9,6 +9,7 @@ import { User } from '@supabase/supabase-js';
 import { sitemap } from '@/shared/constants/sitemap';
 import UserProfile from './user/UserProfile';
 import ModalOverlay from './common/ModalOverlay';
+import useModal from '../hooks/useModal';
 
 type HeaderProps = {
   user?: User | UserWithCustomMetadata | null;
@@ -33,28 +34,17 @@ export type UserMetadata = {
 };
 
 export default function Header({ user }: HeaderProps) {
-  const [isNavVisible, setNavVisible] = useState(false);
-  const navRef = useRef<HTMLDivElement>(null);
+  const { isVisible: isNavVisible, ref, handleToggle, setVisible } = useModal();
   const pathname = usePathname();
   const isLoggedIn = !!user?.email;
 
-  const toggleNav = () => {
-    setNavVisible((prev) => !prev);
-  };
-
-  const handleClickOutside = (event: MouseEvent | PointerEvent) => {
-    if (navRef.current && !navRef.current.contains(event.target as Node)) {
-      setNavVisible(false);
-    }
-  };
-
   useEffect(() => {
-    setNavVisible(false);
-  }, [pathname]);
+    setVisible(false);
+  }, [setVisible, pathname]);
 
   return (
     <header className={styles.header}>
-      <div className={styles.header_wrap} ref={navRef}>
+      <div className={styles.header_wrap} ref={ref}>
         <div className={styles.logo}>
           <h1>
             <Link href="/">
@@ -86,12 +76,12 @@ export default function Header({ user }: HeaderProps) {
           )}
         </div>
         <div className={styles.toggle}>
-          <button onClick={toggleNav} aria-label="Toggle Navigation">
+          <button onClick={handleToggle} aria-label="Toggle Navigation">
             <GiHamburgerMenu />
           </button>
         </div>
       </div>
-      <ModalOverlay isVisible={isNavVisible} handleClickOutside={handleClickOutside} />
+      <ModalOverlay isVisible={isNavVisible} />
     </header>
   );
 }

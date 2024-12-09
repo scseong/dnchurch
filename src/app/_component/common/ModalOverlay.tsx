@@ -1,22 +1,12 @@
-import { useEffect } from 'react';
-
 type ModalOverlayProps = {
   isVisible: boolean;
-  handleClickOutside: (event: MouseEvent | PointerEvent) => void;
+  isDark?: boolean;
 };
 
-export default function ModalOverlay({ isVisible, handleClickOutside }: ModalOverlayProps) {
-  useEffect(() => {
-    if (isVisible) {
-      document.addEventListener('click', handleClickOutside);
-    } else {
-      document.removeEventListener('click', handleClickOutside);
-    }
+export default function ModalOverlay({ isVisible, isDark = true }: ModalOverlayProps) {
+  if (!isVisible) {
+    return null;
+  }
 
-    return () => {
-      document.removeEventListener('click', handleClickOutside);
-    };
-  }, [handleClickOutside, isVisible]);
-
-  return isVisible ? <div className="overlay" /> : null;
+  return <div className={`${isDark ? 'overlay' : 'overlay-light'}`} />;
 }
