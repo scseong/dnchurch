@@ -6,7 +6,8 @@ import styles from './Header.module.scss';
 import { GiHamburgerMenu } from 'react-icons/gi';
 import { usePathname } from 'next/navigation';
 import { User } from '@supabase/supabase-js';
-import { signOut } from '@/apis/auth';
+import { sitemap } from '@/shared/constants/sitemap';
+import UserProfile from './user/UserProfile';
 
 type HeaderProps = {
   user?: User | UserWithCustomMetadata | null;
@@ -75,24 +76,25 @@ export default function Header({ user }: HeaderProps) {
         </div>
         <nav className={`${styles.nav} ${isNavVisible ? styles.visible : ''}`} ref={navRef}>
           <ul>
-            <li>
-              <Link href="/about">교회소개</Link>
-            </li>
-            <li>
-              <Link href="/news">교회소식</Link>
-            </li>
-            <li>
-              <Link href="/fellowship">교제</Link>
-            </li>
-            <li>
-              <Link href="/gallery">동남앨범</Link>
-            </li>
+            {sitemap
+              .filter((item) => item.show)
+              .map((item, index) => (
+                <li key={index}>
+                  <Link href={item.path}>{item.label}</Link>
+                </li>
+              ))}
           </ul>
         </nav>
         <div className={`${styles.auth} ${isNavVisible ? styles.visible : ''}`}>
           {/* TODO: 모달로 구현 */}
           {!isLoggedIn && <Link href="/login">로그인</Link>}
-          {isLoggedIn && <button onClick={signOut}>로그아웃</button>}
+          {isLoggedIn && (
+            <UserProfile
+              avatarUrl={user.user_metadata.avatar_url}
+              name={user.user_metadata.name}
+              username={user.user_metadata.user_name}
+            />
+          )}
         </div>
         <div className={styles.toggle}>
           <button onClick={toggleNav} aria-label="Toggle Navigation">
