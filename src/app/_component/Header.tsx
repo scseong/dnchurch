@@ -1,45 +1,58 @@
 'use client';
 
-import { useState, useEffect, useRef } from 'react';
+import { useEffect } from 'react';
 import Link from 'next/link';
 import styles from './Header.module.scss';
 import { GiHamburgerMenu } from 'react-icons/gi';
 import { usePathname } from 'next/navigation';
+import { User } from '@supabase/supabase-js';
+import { sitemap } from '@/shared/constants/sitemap';
+import UserProfile from './user/UserProfile';
+import ModalOverlay from './common/ModalOverlay';
+import useModal from '../hooks/useModal';
+import UserProfileModal from './user/UserProfileModal';
 
-export default function Header() {
-  const [isNavVisible, setNavVisible] = useState(false);
-  const navRef = useRef<HTMLDivElement>(null);
+type HeaderProps = {
+  user?: User | UserWithCustomMetadata | null;
+};
+
+type UserWithCustomMetadata = Omit<User, 'user_metadata'> & {
+  user_metadata: UserMetadata;
+};
+
+export type UserMetadata = {
+  avatar_url: string;
+  email: string;
+  email_verified: boolean;
+  full_name: string;
+  iss: string;
+  name: string;
+  phone_verified: boolean;
+  preferred_username: string;
+  provider_id: string;
+  sub: string;
+  user_name: string;
+};
+
+export default function Header({ user }: HeaderProps) {
+  const { isVisible: isNavVisible, ref, handleToggle, setVisible } = useModal();
+  const {
+    isVisible: isProfileVisible,
+    ref: profileRef,
+    handleToggle: handleProfileToggle,
+    setVisible: setProfileVisible
+  } = useModal();
   const pathname = usePathname();
-
-  const toggleNav = () => {
-    setNavVisible((prev) => !prev);
-  };
-
-  const handleClickOutside = (event: MouseEvent | PointerEvent) => {
-    if (navRef.current && !navRef.current.contains(event.target as Node)) {
-      setNavVisible(false);
-    }
-  };
+  const isLoggedIn = !!user?.email;
 
   useEffect(() => {
-    if (isNavVisible) {
-      document.addEventListener('click', handleClickOutside);
-    } else {
-      document.removeEventListener('click', handleClickOutside);
-    }
-
-    return () => {
-      document.removeEventListener('click', handleClickOutside);
-    };
-  }, [isNavVisible]);
-
-  useEffect(() => {
-    setNavVisible(false);
-  }, [pathname]);
+    setVisible(false);
+    setProfileVisible(false);
+  }, [setVisible, setProfileVisible, pathname]);
 
   return (
     <header className={styles.header}>
-      <div className={styles.header_wrap}>
+      <div className={styles.header_wrap} ref={ref}>
         <div className={styles.logo}>
           <h1>
             <Link href="/">
@@ -48,38 +61,45 @@ export default function Header() {
             </Link>
           </h1>
         </div>
-        <nav className={`${styles.nav} ${isNavVisible ? styles.visible : ''}`} ref={navRef}>
+        <nav className={`${styles.nav} ${isNavVisible ? styles.visible : ''}`}>
           <ul>
-            <li>
-              <Link href="/about">교회소개</Link>
-            </li>
-            <li>
-              <Link href="/news">교회소식</Link>
-            </li>
-            <li>
-              <Link href="/fellowship">교제</Link>
-            </li>
-            <li>
-              <Link href="/gallery">동남앨범</Link>
-            </li>
+            {sitemap
+              .filter((item) => item.show)
+              .map((item, index) => (
+                <li key={index}>
+                  <Link href={item.path}>{item.label}</Link>
+                </li>
+              ))}
           </ul>
         </nav>
         <div className={`${styles.auth} ${isNavVisible ? styles.visible : ''}`}>
-          <ul>
-            <li>
-              {/* TODO: 모달로 구현 */}
-              <Link href="/login">로그인</Link>
-            </li>
-            <li>회원가입</li>
-          </ul>
+          {/* TODO: 모달로 구현 */}
+          {!isLoggedIn && <Link href="/login">로그인</Link>}
+          {isLoggedIn && (
+            <div className={styles.profile} ref={profileRef}>
+              <UserProfile
+                avatarUrl={user.user_metadata.avatar_url}
+                name={user.user_metadata.name}
+                username={user.user_metadata.user_name}
+                handleClick={handleProfileToggle}
+              />
+              <UserProfileModal
+                avatarUrl={user.user_metadata.avatar_url}
+                name={user.user_metadata.name}
+                username={user.user_metadata.user_name}
+                id={user.id}
+                isVisible={isProfileVisible}
+              />
+            </div>
+          )}
         </div>
         <div className={styles.toggle}>
-          <button onClick={toggleNav} aria-label="Toggle Navigation">
+          <button onClick={handleToggle} aria-label="Toggle Navigation">
             <GiHamburgerMenu />
           </button>
         </div>
       </div>
-      {isNavVisible && <div className={styles.overlay} />}
+      <ModalOverlay isVisible={isNavVisible} />
     </header>
   );
 }

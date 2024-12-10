@@ -1,0 +1,70 @@
+.login {
+  padding: 7rem 2rem 2rem;
+  max-width: 120rem;
+
+  .wrap {
+    margin: 0 auto;
+    max-width: 40rem;
+    text-align: center;
+  }
+
+  .header {
+    margin-bottom: 6rem;
+    position: relative;
+
+    h2 {
+      margin-bottom: 0.4rem;
+      font-size: 3rem;
+
+      @include respond($breakpoint-md) {
+        font-size: 2.4rem;
+      }
+
+      span {
+        @include blind;
+      }
+    }
+
+    p {
+      font-size: 1.4rem;
+      color: #858585;
+    }
+  }
+
+  .divide {
+    position: relative;
+
+    .divide_line {
+      position: absolute;
+      width: 100%;
+      height: 1px;
+      left: 50%;
+      top: 50%;
+      background-color: #ebebeb;
+      z-index: -1;
+      transform: translate(-50%, -50%);
+    }
+
+    .caption {
+      padding: 0 8px;
+      display: inline-block;
+      background-color: #fff;
+      font-size: 1.4rem;
+      color: #858585;
+    }
+  }
+
+  .btn_group {
+    margin-top: 1rem;
+    width: 100%;
+
+    button {
+      width: 100%;
+
+      img {
+        width: 100%;
+        height: 100%;
+      }
+    }
+  }
+}

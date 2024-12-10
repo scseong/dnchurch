@@ -1,4 +1,4 @@
-import { supabase } from '@/shared/client/supabase';
+import { supabase } from '@/shared/supabase/client';
 
 export const getHomeBanner = async () => {
   const { data: home_banner, error } = await supabase.from('home_banner').select('*');

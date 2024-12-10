@@ -6,7 +6,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "generate:types": "supabase gen types typescript --project-id ndimreqwgdiwtjonjjzq --schema public > src/shared/types/database.types.ts"
   },
   "dependencies": {
     "@supabase/ssr": "^0.5.1",
@@ -28,7 +29,7 @@
     "eslint-config-prettier": "^9.1.0",
     "prettier": "^3.3.3",
     "sass": "^1.80.6",
-    "supabase": "^1.215.0",
+    "supabase": "^2.0.0",
     "typescript": "^5"
   }
 }

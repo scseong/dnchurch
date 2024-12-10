@@ -1,8 +1,10 @@
 html {
+  height: 100%;
   font-size: 2.777778vw;
 }
 
 body {
+  min-height: 100vh;
   background: $background;
   font-family: var(--font-notosans);
   -webkit-font-smoothing: antialiased;
@@ -20,10 +22,11 @@ body {
   box-sizing: border-box;
   padding: 0;
   margin: 0;
+  font-family: var(--font-notosans);
+  color: inherit;
 }
 
 a {
-  color: inherit;
   text-decoration: none;
 }
 
@@ -42,17 +45,12 @@ button {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  min-height: 100vh;
 }
 
 #main {
   padding-top: $header-height;
   flex: 1;
-}
-
-@media screen and (max-width: $breakpoint-md) {
-  #main {
-    padding-top: $mobile-header-height;
-  }
 }
 
 #main > div,
@@ -64,6 +62,16 @@ button {
 #footer {
   width: 100%;
   border-top: 0.1rem solid $dividing-line-color;
+}
+
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 90;
 }
 
 /* ===== Scrollbar CSS ===== */

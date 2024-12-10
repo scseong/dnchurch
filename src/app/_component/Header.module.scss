@@ -37,8 +37,8 @@
   }
 
   @include respond($breakpoint-md) {
-    height: $mobile-header-height;
-    line-height: $mobile-header-height;
+    height: $header-height;
+    line-height: $header-height;
   }
 }
 
@@ -60,8 +60,8 @@
   ul {
     display: flex;
     justify-content: center;
-    gap: 1rem;
-    font-size: 1.2rem;
+    gap: 2.4rem;
+    font-size: 1.4rem;
     font-weight: 500;
 
     li > a {
@@ -86,43 +86,37 @@
 
 .auth {
   flex: 0 0 auto;
+  transition: color $text-hover-delay;
+
+  & > a {
+    padding: 0.5rem;
+    font-size: 1.2rem;
+    font-weight: 500;
+
+    @media (hover: hover) and (pointer: fine) {
+      &:hover {
+        color: $text-hover;
+      }
+    }
+  }
 
   @include respond($breakpoint-md) {
     margin-bottom: 0.6rem;
     display: none;
   }
 
-  ul {
-    display: flex;
-
-    li {
-      position: relative;
-      padding: 0.5rem;
-      font-weight: 500;
-
-      &:not(:last-child)::after {
-        content: '';
-        position: absolute;
-        top: 50%;
-        right: 0;
-        width: 1px;
-        height: 30%;
-        background-color: #ccc;
-        transform: translateY(-50%);
-      }
-
-      @include respond($breakpoint-md) {
-        font-size: 1.2rem;
-      }
+  .profile {
+    & > div:first-child {
+      cursor: pointer;
     }
   }
 }
 
-$button-size: 1.2rem;
+$button-size: 1.6rem;
 
 .toggle {
   position: absolute;
-  top: calc(($mobile-header-height - $button-size) / 2);
+  top: calc(($header-height - $button-size) / 2);
   right: 1rem;
   display: none;
 
@@ -138,16 +132,6 @@ $button-size: 1.2rem;
       display: inherit;
     }
   }
-}
-
-.overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-color: rgba(0, 0, 0, 0.5);
-  z-index: 90;
 }
 
 .visible {
