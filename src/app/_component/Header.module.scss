@@ -37,8 +37,8 @@
   }
 
   @include respond($breakpoint-md) {
-    height: $mobile-header-height;
-    line-height: $mobile-header-height;
+    height: $header-height;
+    line-height: $header-height;
   }
 }
 
@@ -61,7 +61,7 @@
     display: flex;
     justify-content: center;
     gap: 2.4rem;
-    font-size: 1.2rem;
+    font-size: 1.4rem;
     font-weight: 500;
 
     li > a {
@@ -88,16 +88,15 @@
   flex: 0 0 auto;
   transition: color $text-hover-delay;
 
-  button,
-  a {
-    padding: 1rem;
+  & > a {
+    padding: 0.5rem;
     font-size: 1.2rem;
     font-weight: 500;
-  }
 
-  @media (hover: hover) and (pointer: fine) {
-    &:hover {
-      color: $text-hover;
+    @media (hover: hover) and (pointer: fine) {
+      &:hover {
+        color: $text-hover;
+      }
     }
   }
 
@@ -105,13 +104,19 @@
     margin-bottom: 0.6rem;
     display: none;
   }
+
+  .profile {
+    & > div:first-child {
+      cursor: pointer;
+    }
+  }
 }
 
 $button-size: 1.6rem;
 
 .toggle {
   position: absolute;
-  top: calc(($mobile-header-height - $button-size) / 2);
+  top: calc(($header-height - $button-size) / 2);
   right: 1rem;
   display: none;
 

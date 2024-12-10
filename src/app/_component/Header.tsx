@@ -10,6 +10,7 @@ import { sitemap } from '@/shared/constants/sitemap';
 import UserProfile from './user/UserProfile';
 import ModalOverlay from './common/ModalOverlay';
 import useModal from '../hooks/useModal';
+import UserProfileModal from './user/UserProfileModal';
 
 type HeaderProps = {
   user?: User | UserWithCustomMetadata | null;
@@ -35,12 +36,19 @@ export type UserMetadata = {
 
 export default function Header({ user }: HeaderProps) {
   const { isVisible: isNavVisible, ref, handleToggle, setVisible } = useModal();
+  const {
+    isVisible: isProfileVisible,
+    ref: profileRef,
+    handleToggle: handleProfileToggle,
+    setVisible: setProfileVisible
+  } = useModal();
   const pathname = usePathname();
   const isLoggedIn = !!user?.email;
 
   useEffect(() => {
     setVisible(false);
-  }, [setVisible, pathname]);
+    setProfileVisible(false);
+  }, [setVisible, setProfileVisible, pathname]);
 
   return (
     <header className={styles.header}>
@@ -68,11 +76,21 @@ export default function Header({ user }: HeaderProps) {
           {/* TODO: 모달로 구현 */}
           {!isLoggedIn && <Link href="/login">로그인</Link>}
           {isLoggedIn && (
-            <UserProfile
-              avatarUrl={user.user_metadata.avatar_url}
-              name={user.user_metadata.name}
-              username={user.user_metadata.user_name}
-            />
+            <div className={styles.profile} ref={profileRef}>
+              <UserProfile
+                avatarUrl={user.user_metadata.avatar_url}
+                name={user.user_metadata.name}
+                username={user.user_metadata.user_name}
+                handleClick={handleProfileToggle}
+              />
+              <UserProfileModal
+                avatarUrl={user.user_metadata.avatar_url}
+                name={user.user_metadata.name}
+                username={user.user_metadata.user_name}
+                id={user.id}
+                isVisible={isProfileVisible}
+              />
+            </div>
           )}
         </div>
         <div className={styles.toggle}>

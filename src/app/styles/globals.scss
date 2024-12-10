@@ -53,12 +53,6 @@ button {
   flex: 1;
 }
 
-@media screen and (max-width: $breakpoint-md) {
-  #main {
-    padding-top: $mobile-header-height;
-  }
-}
-
 #main > div,
 #main > section {
   margin: 0 auto;

@@ -13,11 +13,15 @@
 
   .info {
     margin-left: 1rem;
-    font-size: 1.2rem;
+    font-size: 1.1rem;
+    line-height: 1.2;
 
     span {
       display: block;
-      line-height: 1.2;
+
+      &:first-child {
+        font-weight: 500;
+      }
     }
 
     .name {
