@@ -4,6 +4,7 @@ type UserProfileProps = {
   avatarUrl: string;
   name?: string;
   username?: string;
+  fontSize?: string;
   imageSize?: string;
   showInfo?: boolean;
   handleClick?: (event: React.MouseEvent<HTMLDivElement | HTMLButtonElement, MouseEvent>) => void;
@@ -14,6 +15,7 @@ export default function UserProfile({
   name,
   username,
   imageSize = '3.6rem',
+  fontSize = '1.2rem',
   showInfo = false,
   handleClick
 }: UserProfileProps) {
@@ -23,7 +25,7 @@ export default function UserProfile({
         <img src={avatarUrl} alt={`${name}님의 프로필 이미지`} />
       </div>
       {showInfo && (
-        <div className={styles.info}>
+        <div className={styles.info} style={{ fontSize }}>
           <span>@{username}</span>
           <span className={styles.name}>{name}</span>
         </div>
