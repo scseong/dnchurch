@@ -1,8 +1,8 @@
 import Script from 'next/script';
 import { Header, Footer } from './_component';
+import SessionContextProvider from '@/context/SessionContextProvider';
 import localFont from 'next/font/local';
 import type { Metadata } from 'next';
-import { getCurrnetUser } from '@/apis/user';
 import '../app/styles/globals.scss';
 import 'swiper/scss';
 import 'swiper/scss/autoplay';
@@ -52,8 +52,6 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const user = await getCurrnetUser();
-
   return (
     <html lang="ko" className={myFont.variable}>
       <body>
@@ -62,8 +60,10 @@ export default async function RootLayout({
           strategy="beforeInteractive"
         />
         <div id="root">
-          <Header user={user} />
-          <main id="main">{children}</main>
+          <SessionContextProvider>
+            <Header />
+            <main id="main">{children}</main>
+          </SessionContextProvider>
           <Footer />
         </div>
       </body>
