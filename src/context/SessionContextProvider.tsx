@@ -4,6 +4,7 @@ import { createContext, PropsWithChildren, useEffect, useState, useContext, useM
 import { supabase } from '@/shared/supabase/client';
 import { AuthError } from '@supabase/supabase-js';
 import { ProfileType } from '@/shared/types/types';
+import { getProfileById, getUserInfo } from '@/apis/user';
 
 const SessionContext = createContext<{
   profile: ProfileType | null;
@@ -19,10 +20,7 @@ function SessionContextProvider({ children }: PropsWithChildren) {
 
   useEffect(() => {
     const getUserProfile = async () => {
-      const {
-        data: { user },
-        error
-      } = await supabase.auth.getUser();
+      const { user, error } = await getUserInfo();
 
       if (error) {
         setError(error);
@@ -30,12 +28,7 @@ function SessionContextProvider({ children }: PropsWithChildren) {
       }
 
       if (user) {
-        const { data: profile } = await supabase
-          .from('profiles')
-          .select('*')
-          .eq('id', user.id)
-          .single();
-
+        const profile = await getProfileById(user.id);
         setProfile(profile);
       }
     };
