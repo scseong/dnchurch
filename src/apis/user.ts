@@ -1,9 +1,7 @@
-import { createServerSideClient } from '@/shared/supabase/server';
-import { UserProps } from '@/shared/types/types';
+import { supabase } from '@/shared/supabase/client';
 
-export const getCurrnetUser = async (): Promise<UserProps> => {
-  const supabase = await createServerSideClient();
-  const user = await supabase.auth.getUser();
+export const getProfileById = async (userId = '') => {
+  const { data: profile, error } = await supabase.from('profiles').select('*').eq('id', userId);
 
-  return user.data.user as UserProps;
+  return profile?.[0];
 };

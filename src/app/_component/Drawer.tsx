@@ -4,17 +4,17 @@ import UserProfile from './user/UserProfile';
 import IconContainer from './common/IconContainer';
 import { signOut } from '@/apis/auth';
 import { sitemap } from '@/shared/constants/sitemap';
-import { UserProps } from '@/shared/types/types';
+import { ProfileType } from '@/shared/types/types';
 import styles from './Drawer.module.scss';
 
 type DrawerProps = {
   isOpen: boolean;
   onClose: () => void;
-  user: UserProps;
+  user: ProfileType | null;
 };
 
 export default function Drawer({ isOpen, onClose, user }: DrawerProps) {
-  const { avatar_url = '', user_name = '', name = '' } = user?.user_metadata ?? {};
+  const { avatar_url = '', user_name = '', name = '' } = user ?? {};
 
   return (
     <aside className={`${styles.drawer} ${isOpen ? styles.animate : styles.hidden}`}>

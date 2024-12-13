@@ -2,23 +2,19 @@
 
 import { useEffect } from 'react';
 import Link from 'next/link';
-import styles from './Header.module.scss';
-import { GiHamburgerMenu } from 'react-icons/gi';
 import { usePathname } from 'next/navigation';
-import { sitemap } from '@/shared/constants/sitemap';
-import UserProfile from './user/UserProfile';
-import ModalOverlay from './common/ModalOverlay';
-import useModal from '../hooks/useModal';
-import UserProfileModal from './user/UserProfileModal';
-import useIsMobile from '../hooks/useIsMobile';
+import { GiHamburgerMenu } from 'react-icons/gi';
 import Drawer from './Drawer';
-import { UserProps } from '@/shared/types/types';
+import ModalOverlay from './common/ModalOverlay';
+import UserProfile from './user/UserProfile';
+import UserProfileModal from './user/UserProfileModal';
+import { useProfile } from '@/context/SessionContextProvider';
+import useModal from '../hooks/useModal';
+import useIsMobile from '../hooks/useIsMobile';
+import { sitemap } from '@/shared/constants/sitemap';
+import styles from './Header.module.scss';
 
-type HeaderProps = {
-  user: UserProps;
-};
-
-export default function Header({ user }: HeaderProps) {
+export default function Header() {
   const isMobile = useIsMobile();
   const { isVisible: isNavVisible, ref, handleToggle, setVisible } = useModal();
   const {
@@ -28,7 +24,7 @@ export default function Header({ user }: HeaderProps) {
     setVisible: setProfileVisible
   } = useModal();
   const pathname = usePathname();
-  const isLoggedIn = !!user?.email;
+  const user = useProfile();
 
   useEffect(() => {
     setVisible(false);
@@ -62,19 +58,19 @@ export default function Header({ user }: HeaderProps) {
         {/* <div className={`${styles.auth} ${isNavVisible ? styles.visible : ''}`}> */}
         <div className={`${styles.auth}`}>
           {/* TODO: 모달로 구현 */}
-          {!isLoggedIn && <Link href="/login">로그인</Link>}
-          {isLoggedIn && (
+          {!user && <Link href="/login">로그인</Link>}
+          {user && (
             <div className={styles.profile} ref={profileRef}>
               <UserProfile
-                avatarUrl={user.user_metadata.avatar_url}
-                name={user.user_metadata.name}
-                username={user.user_metadata.user_name}
+                avatarUrl={user.avatar_url}
+                name={user.name}
+                username={user.user_name}
                 handleClick={handleProfileToggle}
               />
               <UserProfileModal
-                avatarUrl={user.user_metadata.avatar_url}
-                name={user.user_metadata.name}
-                username={user.user_metadata.user_name}
+                avatarUrl={user.avatar_url}
+                name={user.name}
+                username={user.user_name}
                 id={user.id}
                 isVisible={isProfileVisible}
               />

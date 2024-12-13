@@ -1,4 +1,5 @@
 import { User } from '@supabase/supabase-js';
+import { Tables } from './database.types';
 
 export type UserProps = UserWithCustomMetadata | null;
 
@@ -19,3 +20,5 @@ export type UserMetadata = {
   sub: string;
   user_name: string;
 };
+
+export type ProfileType = Tables<'profiles'>;
