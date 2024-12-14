@@ -22,3 +22,4 @@ export type UserMetadata = {
 };
 
 export type ProfileType = Tables<'profiles'>;
+export type BulletinType = Tables<'bulletin'>;
