@@ -1,7 +1,12 @@
 import BulletinTable from './_component/BulletinTable';
-import { BulletinType } from '@/shared/types/types';
+import { BulletinType, SearchParams } from '@/shared/types/types';
+import styles from './page.module.scss';
+import Link from 'next/link';
 
-export default function Bulletin() {
+export default async function Bulletin({ searchParams }: SearchParams) {
+  const { page = 1, year } = await searchParams;
+  console.log(page, year);
+
   const bulletin: BulletinType[] = [
     {
       id: 1,
@@ -38,10 +43,29 @@ export default function Bulletin() {
     }
   ];
 
+  const latestBulletin = bulletin[0];
+
   return (
-    <section>
+    <section className={styles.bulletin}>
       <h2>주보</h2>
-      <BulletinTable data={bulletin} />
+      <div className={styles.wrap}>
+        <section className={styles.latest_bulletin}>
+          <div className={styles.notification}>
+            <h3>이 주의 주보</h3>
+            <p>{latestBulletin.title}</p>
+          </div>
+          <div className={styles.images_wrap}>
+            {latestBulletin.image_url.map((url, idx) => (
+              <Link href={url} target="_blank">
+                <img src={url} alt={`${latestBulletin.title} - ${idx + 1}`} />
+              </Link>
+            ))}
+          </div>
+        </section>
+        <section className={styles.table}>
+          <BulletinTable data={bulletin} />
+        </section>
+      </div>
     </section>
   );
 }

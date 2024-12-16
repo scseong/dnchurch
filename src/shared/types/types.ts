@@ -23,3 +23,7 @@ export type UserMetadata = {
 
 export type ProfileType = Tables<'profiles'>;
 export type BulletinType = Tables<'bulletin'>;
+
+export type SearchParams = {
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
+};

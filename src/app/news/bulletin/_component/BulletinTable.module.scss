@@ -1,13 +1,29 @@
 .table {
+  width: 100%;
   border-collapse: collapse;
-
-  th {
-    background-color: #fff5ec;
-  }
 
   th,
   td {
     padding: 1rem;
-    border: 1px solid #fcd8b7;
+  }
+
+  th:first-child,
+  td:first-child {
+    width: 15%;
+  }
+
+  tr {
+    border-top: 1px solid #fcd8b7;
+    border-bottom: 1px solid #fcd8b7;
+  }
+
+  th {
+    background-color: #fff5ec;
+    text-align: center;
+  }
+
+  td:first-child {
+    text-align: center;
+    color: #666;
   }
 }
