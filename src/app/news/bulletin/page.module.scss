@@ -60,6 +60,15 @@
       width: 100%;
     }
   }
+
+  .share {
+    padding: 1rem 0;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 0.4rem;
+    font-size: 1.1rem;
+  }
 }
 
 .table {

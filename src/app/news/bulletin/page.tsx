@@ -1,11 +1,17 @@
 import BulletinTable from './_component/BulletinTable';
 import { BulletinType, SearchParams } from '@/shared/types/types';
-import styles from './page.module.scss';
 import Link from 'next/link';
+import type { Metadata } from 'next';
+import { IoMdShare } from 'react-icons/io';
+import KakaoShareBtn from '@/app/_component/common/KakaoShare';
+import styles from './page.module.scss';
 
+export const metadata: Metadata = {
+  title: '주보 - 대구동남교회',
+  description: '이번 주 교회 주보에서 예배 일정과 소식을 읽어보세요.'
+};
 export default async function Bulletin({ searchParams }: SearchParams) {
   const { page = 1, year } = await searchParams;
-  console.log(page, year);
 
   const bulletin: BulletinType[] = [
     {
@@ -60,6 +66,10 @@ export default async function Bulletin({ searchParams }: SearchParams) {
                 <img src={url} alt={`${latestBulletin.title} - ${idx + 1}`} />
               </Link>
             ))}
+          </div>
+          <div className={styles.share}>
+            <IoMdShare size="1.2rem" />
+            <KakaoShareBtn title="주보 - 대구동남교회" description={latestBulletin.title} />
           </div>
         </section>
         <section className={styles.table}>
