@@ -1,5 +1,5 @@
 import { supabase } from '@/shared/supabase/client';
-import { BulletinType, SearchParams } from '@/shared/types/types';
+import { BulletinType } from '@/shared/types/types';
 import { convertYearToTimestamptz } from '@/shared/util/time';
 
 const ITEM_PER_PAGE = 10;
@@ -10,8 +10,6 @@ export const getLatestBulletin = async () => {
     .select('*')
     .order('id', { ascending: false })
     .limit(1);
-
-  console.log('getLatestBulletin called');
 
   return { latestBulletin: bulletin ? bulletin[0] : null };
 };
@@ -28,8 +26,6 @@ export const getBulletin = async () => {
     .order('created_at', { ascending: false });
 
   if (error) console.error(error);
-
-  console.log('getBulletin called');
 
   return { bulletins, count };
 };
@@ -55,8 +51,6 @@ export const getBulletinByYearAndPage = async (page = '1', year = '2024') => {
 
   if (error) console.error(error);
 
-  console.log('getBulletinByYearAndPage called');
-
   return { bulletins, count };
 };
 
@@ -78,8 +72,6 @@ export const getBulletinByYear = async (year = '2024') => {
 
   if (error) console.error(error);
 
-  console.log('getBulletinByYear called');
-
   return { bulletins, count };
 };
 
@@ -98,9 +90,6 @@ export const getBulletinByPage = async (page = '1') => {
     .order('created_at', { ascending: false });
 
   if (error) console.error(error);
-
-  console.log('getBulletinByPage called');
-  console.log('bulletins >> ', bulletins);
 
   return { bulletins, count };
 };
@@ -134,8 +123,6 @@ export const getQueryFunction = ({
   [key: string]: string | undefined;
 }): BulletinRuternType => {
   const flag = createFlag({ page, year });
-
-  console.log('getQueryFunction called');
 
   switch (flag) {
     case Flag.BOTH:
