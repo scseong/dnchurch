@@ -3,7 +3,6 @@ import Link from 'next/link';
 import type { Metadata } from 'next';
 import { IoMdShare } from 'react-icons/io';
 import KakaoShareBtn from '@/app/_component/common/KakaoShare';
-import BulletinYearFilter from './_component/BulletinYearFilter';
 import { getLatestBulletin, getQueryFunction } from '@/apis/bulletin';
 import styles from './page.module.scss';
 
@@ -24,6 +23,7 @@ export default async function Bulletin({ searchParams }: BulletinProps) {
     getQueryFunction({ page: currentPage, year })
   ]);
 
+  // TODO: 조건부 렌더링
   if (!latestBulletin) return <div>...Loading</div>;
   if (!bulletins) return <div>...Loading</div>;
 
@@ -54,7 +54,6 @@ export default async function Bulletin({ searchParams }: BulletinProps) {
           </div>
         </section>
         <section className={styles.table}>
-          {/* <BulletinYearFilter /> */}
           <BulletinTable bulletins={bulletins} count={count ?? 0} currentPage={currentPage} />
         </section>
       </div>
