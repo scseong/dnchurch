@@ -9,8 +9,8 @@ import ModalOverlay from './common/ModalOverlay';
 import UserProfile from './user/UserProfile';
 import UserProfileModal from './user/UserProfileModal';
 import { useProfile } from '@/context/SessionContextProvider';
-import useModal from '../hooks/useModal';
-import useIsMobile from '../hooks/useIsMobile';
+import useModal from '@/hooks/useModal';
+import useIsMobile from '@/hooks/useIsMobile';
 import { sitemap } from '@/shared/constants/sitemap';
 import styles from './Header.module.scss';
 

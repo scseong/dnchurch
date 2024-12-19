@@ -27,7 +27,7 @@
   flex: 1 50%;
 
   .notification {
-    padding: 3rem 0;
+    padding: 2rem 0;
     margin-bottom: 3rem;
     width: 100%;
     background-color: #fff5ec;
@@ -67,7 +67,10 @@
     justify-content: flex-end;
     align-items: center;
     gap: 0.4rem;
-    font-size: 1.1rem;
+
+    button {
+      font-size: 1.3rem;
+    }
   }
 }
 

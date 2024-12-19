@@ -22,7 +22,7 @@ export default function useQueryParams() {
     return value;
   };
 
-  const createQueryString = (name: string, value: string | number | boolean) => {
+  const createPageURL = (name: string, value: string | number | boolean) => {
     const query = new URLSearchParams(queryParam.toString());
     query.set(name, String(value));
     return `?${query.toString()}`;
@@ -32,6 +32,6 @@ export default function useQueryParams() {
     queryParam,
     setQueryParam,
     getQueryParam,
-    createQueryString
+    createPageURL
   };
 }

@@ -48,14 +48,5 @@ export default function KakaoShareBtn({
     });
   };
 
-  return (
-    <button onClick={handleClick}>
-      {/* <img
-        src="/images/icon-kakaotalk.png"
-        alt="카카오톡 공유하기"
-        style={{ width: '100%', height: '100%', borderRadius: '50%', objectFit: 'contain' }}
-      /> */}
-      공유하기
-    </button>
-  );
+  return <button onClick={handleClick}>공유하기</button>;
 }
