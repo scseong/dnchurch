@@ -2,6 +2,7 @@ import Script from 'next/script';
 import { Header, Footer } from './_component';
 import SessionContextProvider from '@/context/SessionContextProvider';
 import localFont from 'next/font/local';
+import KakaoScript from './_component/lib/KakaoScript';
 import type { Metadata } from 'next';
 import '../app/styles/globals.scss';
 import 'swiper/scss';
@@ -47,6 +48,8 @@ const myFont = localFont({
   variable: '--font-notosans'
 });
 
+const API_KEY = `//dapi.kakao.com/v2/maps/sdk.js?appkey=${process.env.NEXT_PUBLIC_KAKAO_API_KEY}&libraries=services,clusterer&autoload=false`;
+
 export default async function RootLayout({
   children
 }: Readonly<{
@@ -55,10 +58,8 @@ export default async function RootLayout({
   return (
     <html lang="ko" className={myFont.variable}>
       <body>
-        <Script
-          src={`//dapi.kakao.com/v2/maps/sdk.js?appkey=${process.env.NEXT_PUBLIC_KAKAO_API_KEY}&libraries=services,clusterer&autoload=false`}
-          strategy="beforeInteractive"
-        />
+        <Script src={API_KEY} strategy="beforeInteractive" />
+        <KakaoScript />
         <div id="root">
           <SessionContextProvider>
             <Header />
