@@ -4,7 +4,6 @@
   h2 {
     margin-bottom: 1rem;
     font-size: 3.6rem;
-    font-weight: 00;
     text-align: center;
 
     @include respond($breakpoint-md) {

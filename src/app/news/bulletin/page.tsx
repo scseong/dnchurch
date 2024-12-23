@@ -3,7 +3,7 @@ import Link from 'next/link';
 import type { Metadata } from 'next';
 import { IoMdShare } from 'react-icons/io';
 import KakaoShareBtn from '@/app/_component/common/KakaoShare';
-import { getLatestBulletin, getQueryFunction } from '@/apis/bulletin';
+import { getLatestBulletin, getQueryFunction } from '@/actions/bulletin/bulletin.action';
 import styles from './page.module.scss';
 
 export const metadata: Metadata = {

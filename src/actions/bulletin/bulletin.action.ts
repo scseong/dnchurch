@@ -1,9 +1,13 @@
+'use server';
+
 import { ITEM_PER_PAGE } from '@/shared/constants/bulletin';
-import { supabase } from '@/shared/supabase/client';
+import { createServerSideClient } from '@/shared/supabase/server';
 import { BulletinType } from '@/shared/types/types';
 import { convertYearToTimestamptz } from '@/shared/util/time';
 
 export const getLatestBulletin = async () => {
+  const supabase = await createServerSideClient();
+
   const { data: bulletin } = await supabase
     .from('bulletin')
     .select('*')
@@ -14,6 +18,8 @@ export const getLatestBulletin = async () => {
 };
 
 export const getBulletin = async () => {
+  const supabase = await createServerSideClient();
+
   const {
     data: bulletins,
     count,
@@ -30,6 +36,8 @@ export const getBulletin = async () => {
 };
 
 export const getBulletinByYearAndPage = async (page = '1', year = '2024') => {
+  const supabase = await createServerSideClient();
+
   const startDateTime = convertYearToTimestamptz(year);
   const endDateTime = convertYearToTimestamptz(Number(year) + 1);
 
@@ -54,6 +62,8 @@ export const getBulletinByYearAndPage = async (page = '1', year = '2024') => {
 };
 
 export const getBulletinByYear = async (year = '2024') => {
+  const supabase = await createServerSideClient();
+
   const startDateTime = convertYearToTimestamptz(year);
   const endDateTime = convertYearToTimestamptz(Number(year) + 1);
 
@@ -75,6 +85,8 @@ export const getBulletinByYear = async (year = '2024') => {
 };
 
 export const getBulletinByPage = async (page = '1') => {
+  const supabase = await createServerSideClient();
+
   const from = (Number(page) - 1) * ITEM_PER_PAGE;
   const to = from + ITEM_PER_PAGE - 1;
 
@@ -115,7 +127,7 @@ const createFlag = ({ year, page }: { page?: string; year?: string }) => {
   }
 };
 
-export const getQueryFunction = ({
+export const getQueryFunction = async ({
   page,
   year
 }: {
