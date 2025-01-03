@@ -5,6 +5,7 @@ import { IoMdShare } from 'react-icons/io';
 import KakaoShareBtn from '@/app/_component/common/KakaoShare';
 import { getLatestBulletin, getQueryFunction } from '@/actions/bulletin/bulletin.action';
 import styles from './page.module.scss';
+import BulletinYearFilter from './_component/BulletinYearFilter';
 
 export const metadata: Metadata = {
   title: '주보 - 대구동남교회',
@@ -43,6 +44,7 @@ export default async function Bulletin({ searchParams }: BulletinProps) {
               </Link>
             ))}
             {!latestBulletin && (
+              // TODO: API 호출 실패 시 UI
               <Link href="#">
                 <img src="" />
               </Link>
@@ -54,6 +56,7 @@ export default async function Bulletin({ searchParams }: BulletinProps) {
           </div>
         </section>
         <section className={styles.table}>
+          <BulletinYearFilter currentYearParam={year} />
           <BulletinTable bulletins={bulletins} count={count ?? 0} currentPage={currentPage} />
         </section>
       </div>

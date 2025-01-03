@@ -1,12 +1,25 @@
-.filter {
-  margin-bottom: 1%;
+.yearList {
+  margin-bottom: 1rem;
+  width: 100%;
   display: flex;
-  border: 1px solid #fff5ec;
-  border-collapse: collapse;
 
   li {
-    padding: 1rem;
-    display: block;
-    border: 1px solid #fff5ec;
+    margin-right: 1px;
+    min-width: 5rem;
+    background-color: #fff5ec;
+
+    a {
+      padding: 0.8rem;
+      display: block;
+      width: 100%;
+      height: 100%;
+      border-bottom: 2px solid transparent;
+      text-align: center;
+    }
+
+    .active {
+      font-weight: 600;
+      border-bottom: 2px solid $primary-color;
+    }
   }
 }
