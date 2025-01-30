@@ -6,6 +6,7 @@ import KakaoShareBtn from '@/app/_component/common/KakaoShare';
 import { getLatestBulletin, getQueryFunction } from '@/actions/bulletin/bulletin.action';
 import styles from './page.module.scss';
 import BulletinYearFilter from './_component/BulletinYearFilter';
+import CreateBulletinButton from './create/_component/CreateBulletinButton';
 
 export const metadata: Metadata = {
   title: '주보 - 대구동남교회',
@@ -58,6 +59,7 @@ export default async function Bulletin({ searchParams }: BulletinProps) {
         <section className={styles.table}>
           <BulletinYearFilter currentYearParam={year} />
           <BulletinTable bulletins={bulletins} count={count ?? 0} currentPage={currentPage} />
+          <CreateBulletinButton />
         </section>
       </div>
     </section>
