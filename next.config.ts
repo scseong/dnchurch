@@ -1,6 +1,12 @@
 import type { NextConfig } from 'next';
 
 const nextConfig: NextConfig = {
+  // TODO: 이미지 최적화
+  experimental: {
+    serverActions: {
+      bodySizeLimit: '2mb'
+    }
+  },
   logging: {
     fetches: {
       fullUrl: true

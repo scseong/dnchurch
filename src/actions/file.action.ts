@@ -1,6 +1,7 @@
 import { createServerSideClient } from '@/shared/supabase/server';
 import { generateFileName } from '@/shared/util/file';
 
+export type UploadFileApiResponse = Awaited<ReturnType<typeof uploadFileAction>>;
 export const uploadFileAction = async (file: File) => {
   const filename = generateFileName(file.name);
 

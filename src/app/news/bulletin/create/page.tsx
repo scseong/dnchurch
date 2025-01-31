@@ -6,8 +6,7 @@ import { useProfile } from '@/context/SessionContextProvider';
 
 export default function Page() {
   const user = useProfile();
-  const [state, formAction, isPending] = useActionState(createBulletinAction, null);
-  console.log('state >> ', state);
+  const [, formAction, isPending] = useActionState(createBulletinAction, null);
 
   if (!user) return;
 
