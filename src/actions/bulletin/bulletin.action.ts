@@ -4,6 +4,7 @@ import { ITEM_PER_PAGE } from '@/shared/constants/bulletin';
 import { createServerSideClient } from '@/shared/supabase/server';
 import { BulletinType } from '@/shared/types/types';
 import { convertYearToTimestamptz } from '@/shared/util/time';
+import { uploadFileAction } from '../file.action';
 
 export const getLatestBulletin = async () => {
   const supabase = await createServerSideClient();
@@ -146,6 +147,51 @@ export const getQueryFunction = async ({
     default:
       return getBulletin();
   }
+};
+
+export const createBulletinAction = async (_: unknown, formData: FormData) => {
+  // const supabase = await createServerSideClient();
+
+  const title = formData.get('title')?.toString();
+  const image_url = formData.getAll('image_url') as File[];
+  const user_id = formData.get('user_id')?.toString();
+
+  if (!title || !image_url || !user_id)
+    return {
+      status: false,
+      error: '모든 항목을 작성해주세요.'
+    };
+
+  const uploadPromises = image_url.map((file) => uploadFileAction(file));
+  const uploadResults = await Promise.all(uploadPromises);
+
+  console.log(uploadResults);
+
+  // try {
+  //   const { error } = await supabase
+  //     .from('bulletin')
+  //     .insert({
+  //       title,
+  //       image_url,
+  //       user_id
+  //     })
+  //     .select();
+
+  //   if (error) {
+  //     throw new Error(error.message);
+  //   }
+
+  //   return {
+  //     status: true,
+  //     error: ''
+  //   };
+  // } catch (err) {
+  //   console.error(err);
+  //   return {
+  //     status: false,
+  //     error: `주보 생성에 실패했습니다: ${err}`
+  //   };
+  // }
 };
 
 type BulletinRuternType = Promise<{
