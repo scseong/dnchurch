@@ -22,7 +22,7 @@ export const getBulletin = async () => {
     .from('bulletin')
     .select('*', { count: 'exact' })
     .range(0, 9)
-    .order('created_at', { ascending: false });
+    .order('id', { ascending: false });
 
   if (error) console.error(error);
 
@@ -46,7 +46,7 @@ export const getBulletinByYearAndPage = async (page = '1', year = '2024') => {
     .gte('created_at', startDateTime)
     .lte('created_at', endDateTime)
     .range(from, to)
-    .order('created_at', { ascending: false });
+    .order('id', { ascending: false });
 
   if (error) console.error(error);
 
@@ -67,7 +67,7 @@ export const getBulletinByYear = async (year = '2024') => {
     .gte('created_at', startDateTime)
     .lte('created_at', endDateTime)
     .range(0, 9)
-    .order('created_at', { ascending: false });
+    .order('id', { ascending: false });
 
   if (error) console.error(error);
 
@@ -86,7 +86,7 @@ export const getBulletinByPage = async (page = '1') => {
     .from('bulletin')
     .select('*', { count: 'exact' })
     .range(from, to)
-    .order('created_at', { ascending: false });
+    .order('id', { ascending: false });
 
   if (error) console.error(error);
 

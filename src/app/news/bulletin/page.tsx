@@ -1,12 +1,12 @@
-import BulletinTable from './_component/BulletinTable';
 import Link from 'next/link';
 import type { Metadata } from 'next';
 import { IoMdShare } from 'react-icons/io';
-import KakaoShareBtn from '@/app/_component/common/KakaoShare';
-import { getLatestBulletin, getQueryFunction } from '@/actions/bulletin/bulletin.action';
-import styles from './page.module.scss';
+import BulletinTable from './_component/BulletinTable';
 import BulletinYearFilter from './_component/BulletinYearFilter';
+import KakaoShareBtn from '@/app/_component/common/KakaoShare';
 import CreateBulletinButton from './create/_component/CreateBulletinButton';
+import { getLatestBulletin, getQueryFunction } from '@/apis/bulletin';
+import styles from './page.module.scss';
 
 export const metadata: Metadata = {
   title: '주보 - 대구동남교회',
