@@ -1,10 +1,21 @@
 import type { NextConfig } from 'next';
 
 const nextConfig: NextConfig = {
-  /* config options here */
+  // TODO: 이미지 최적화
+  experimental: {
+    serverActions: {
+      bodySizeLimit: '2mb'
+    }
+  },
+  logging: {
+    fetches: {
+      fullUrl: true
+    }
+  },
   sassOptions: {
     additionalData: `@use "src/app/styles/_variables.scss" as *; @use "src/app/styles/_mixins.scss" as *;`,
-    silenceDeprecations: ['legacy-js-api']
+    silenceDeprecations: ['legacy-js-api'],
+    quietDeps: true
   }
 };
 
