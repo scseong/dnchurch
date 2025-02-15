@@ -17,4 +17,9 @@
       display: block;
     }
   }
+
+  .isActive {
+    font-weight: 500;
+    color: $primary-color;
+  }
 }
