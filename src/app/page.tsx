@@ -1,4 +1,4 @@
-import { Banner, Greeting, HomeGallery, LinkButtons } from './_component';
+import { Banner, Greeting, HomeGallery, LinkButtons } from './_component/home';
 
 export default async function Home() {
   return (
