@@ -13,9 +13,10 @@ export const sitemap = [
     label: '교회소개',
     icon: PiChurch,
     subPath: [
-      { path: '/about/#serving_people', label: '섬기는 이' },
-      { path: '/about/#worship_info', label: '예배안내' },
-      { path: '/about/#directions', label: '오시는 길' }
+      { path: '/about/vision', label: '교회의 비전' },
+      { path: '/about/serving-people', label: '섬기는 이' },
+      { path: '/about/worship', label: '예배안내' },
+      { path: '/about/directions', label: '오시는 길' }
     ],
     show: true
   },
@@ -24,8 +25,9 @@ export const sitemap = [
     label: '교회소식',
     icon: PiNewspaperClipping,
     subPath: [
+      { path: '/news/bulletin', label: '주보' },
       { path: '/news/announcement', label: '공지사항' },
-      { path: '/news/bulletin', label: '주보' }
+      { path: '/news/family-worship', label: '가정예배순서지' }
     ],
     show: true
   },

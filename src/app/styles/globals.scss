@@ -54,7 +54,8 @@ button {
 }
 
 #main > div,
-#main > section {
+#main > section,
+#main > nav {
   margin: 0 auto;
   max-width: $max-width;
 }

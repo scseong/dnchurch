@@ -23,18 +23,6 @@ export default function About() {
 
   return (
     <section className={styles.about}>
-      <h2>교회소개</h2>
-      <section className={styles.banner}>
-        <div className={styles.banner_info}>
-          <h3>서로서로 세워가는 교회</h3>
-          <ul>
-            <li>1. 예배로</li>
-            <li>2. 믿음과 행함으로</li>
-            <li>3. 전도로</li>
-          </ul>
-        </div>
-        <div className={styles.banner_bg}></div>
-      </section>
       <section className={styles.greeting}>
         <h3>
           동남교회에

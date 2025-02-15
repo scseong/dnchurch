@@ -1,20 +1,3 @@
-.about {
-  padding: 3rem 2rem;
-
-  h2 {
-    margin-bottom: 1rem;
-    font-size: 3.6rem;
-  }
-
-  @include respond($breakpoint-md) {
-    padding: 0;
-
-    h2 {
-      display: none;
-    }
-  }
-}
-
 .banner {
   position: relative;
   height: 30rem;
