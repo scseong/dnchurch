@@ -1,5 +1,5 @@
 import Script from 'next/script';
-import { Header, Footer } from './_component';
+import { Footer, Header } from './_component/layout';
 import SessionContextProvider from '@/context/SessionContextProvider';
 import localFont from 'next/font/local';
 import KakaoScript from './_component/lib/KakaoScript';

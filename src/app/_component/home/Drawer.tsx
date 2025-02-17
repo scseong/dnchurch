@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import { IoMdClose, IoIosArrowForward } from 'react-icons/io';
-import UserProfile from './user/UserProfile';
-import IconContainer from './common/IconContainer';
+import UserProfile from '../user/UserProfile';
+import IconContainer from '../common/IconContainer';
 import { signOut } from '@/apis/auth';
 import { sitemap } from '@/shared/constants/sitemap';
 import { ProfileType } from '@/shared/types/types';

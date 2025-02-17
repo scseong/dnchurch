@@ -1,0 +1,25 @@
+.subnav {
+  ul {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 2rem;
+    height: 4rem;
+    background-color: $background-dark;
+  }
+
+  li {
+    font-size: 1.2rem;
+    color: white;
+
+    a {
+      padding: 0.4rem;
+      display: block;
+    }
+  }
+
+  .isActive {
+    font-weight: 500;
+    color: $primary-color;
+  }
+}
