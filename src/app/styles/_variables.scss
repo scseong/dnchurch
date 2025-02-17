@@ -9,12 +9,17 @@ $dividing-line-color: #ddd;
 
 /* Text */
 $text-color: #171717;
+$text-color-light: #333;
 $text-hover: $primary-color;
 $text-hover-delay: 0.2s;
 
 /* Size */
 $max-width: 120rem;
 $header-height: 6rem;
+$font-size-h2: 3.6rem;
+$font-size-h3: 2.8rem;
+$font-size-basic: 1.6rem;
+$font-size-basic-line: 2.6rem;
 
 /* Break Point */
 $breakpoint-xs: 361px; // Extra small devices (small phones)
