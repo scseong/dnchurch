@@ -5,6 +5,10 @@ $p_margin_bottom: 2rem;
 .wrap {
   display: flex;
   gap: 2rem;
+
+  @include respond($breakpoint-xl) {
+    flex-direction: column;
+  }
 }
 .vision_text {
   flex: 2;
@@ -34,6 +38,7 @@ $p_margin_bottom: 2rem;
 
 .image_wrap {
   flex: 1;
+
   padding-top: calc($greeting_text_size + $greeting_text_margin_bottom);
   overflow: hidden;
 
@@ -42,5 +47,9 @@ $p_margin_bottom: 2rem;
     height: 100%;
     object-fit: cover;
     border-radius: 1rem;
+  }
+
+  @include respond($breakpoint-xl) {
+    padding-top: 0;
   }
 }

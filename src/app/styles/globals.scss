@@ -97,8 +97,8 @@ button {
  * $breakpoint-xxxl: 1920px
  * **************************************** */
 
-@include respond-fonts($breakpoint-xs, 2.778vw);
-@include respond-fonts($breakpoint-sm, 2.083vw);
+@include respond-fonts($breakpoint-xs, 2.333vw);
+@include respond-fonts($breakpoint-sm, 2vw);
 @include respond-fonts($breakpoint-md, 1.667vw);
 @include respond-fonts($breakpoint-lg, 1.302vw);
 @include respond-fonts($breakpoint-xl, 0.977vw);

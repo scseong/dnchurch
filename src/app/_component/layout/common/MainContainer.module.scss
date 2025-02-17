@@ -4,6 +4,10 @@
   .title {
     margin-bottom: 8rem;
     text-align: center;
+
+    @include respond($breakpoint-md) {
+      margin-bottom: 6rem;
+    }
   }
 
   h3 {
