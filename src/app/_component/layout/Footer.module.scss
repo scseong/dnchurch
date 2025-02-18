@@ -1,14 +1,46 @@
-.footer_wrap {
+.container {
   margin: 0 auto;
-  padding: 2rem;
-  max-width: $max-width;
+  padding: 5rem 2rem;
+  display: flex;
+  justify-content: center;
+  gap: 1.6rem;
+  background-color: $background-dark;
+  color: white;
 
-  address {
-    font-style: normal;
+  @include respond($breakpoint-md) {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+
+    p {
+      margin-bottom: 0.2rem;
+    }
   }
 
-  & > p:first-child,
-  address {
-    margin-bottom: 0.5rem;
+  .logo {
+    display: inline-block;
+    font-size: 2rem;
+    font-weight: bold;
+  }
+
+  .info {
+    font-size: 1.1rem;
+
+    address {
+      margin-bottom: 0.2rem;
+      font-style: normal;
+
+      & > p:first-child {
+        margin-right: 1rem;
+      }
+    }
+
+    p {
+      display: inline-block;
+    }
+
+    & > div {
+      color: #ccc;
+    }
   }
 }
