@@ -53,13 +53,6 @@ button {
   flex: 1;
 }
 
-#main > div,
-#main > section,
-#main > nav {
-  margin: 0 auto;
-  max-width: $max-width;
-}
-
 #footer {
   width: 100%;
   border-top: 0.1rem solid $dividing-line-color;
