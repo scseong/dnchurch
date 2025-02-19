@@ -1,0 +1,33 @@
+.container {
+  padding: 5rem 3rem 10rem;
+  margin: 0 auto;
+  max-width: $max-width;
+
+  .title {
+    margin-bottom: 8rem;
+    text-align: center;
+
+    @include respond($breakpoint-md) {
+      margin-bottom: 6rem;
+    }
+  }
+
+  h3 {
+    display: inline-block;
+    position: relative;
+    font-size: $font-size-h3;
+    font-weight: bold;
+
+    &::after {
+      content: '';
+      position: absolute;
+      left: 50%;
+      bottom: -1rem;
+      margin: 0 auto;
+      width: 50%;
+      height: 0.28rem;
+      background-color: #f68b28;
+      transform: translateX(-50%);
+    }
+  }
+}

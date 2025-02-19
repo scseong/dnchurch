@@ -1,0 +1,96 @@
+$svg_size: 4rem;
+$svg_mobile_size: 3rem;
+
+.directions_info {
+  margin-top: 3rem;
+  display: flex;
+  gap: 5rem;
+
+  @include respond($breakpoint-xl) {
+    justify-content: space-between;
+    gap: 2rem;
+  }
+
+  @include respond($breakpoint-lg) {
+    margin-top: 2rem;
+    padding: 0;
+    flex-direction: column;
+  }
+
+  .container {
+    display: flex;
+
+    .icon {
+      margin-right: 0.8em;
+      position: relative;
+
+      svg {
+        font-size: $svg_size;
+        color: $primary-color;
+      }
+
+      &::after {
+        content: '';
+        position: absolute;
+        top: calc($svg_size / 2);
+        left: 0;
+        width: $svg_size;
+        height: calc($svg_size / 2);
+        border-radius: 50%;
+        background-color: #fde5cf;
+        z-index: -1;
+      }
+
+      @include respond($breakpoint-lg) {
+        svg {
+          font-size: $svg_mobile_size;
+        }
+
+        &::after {
+          top: calc($svg_mobile_size / 2);
+          width: $svg_mobile_size;
+          height: calc($svg_mobile_size / 2);
+        }
+      }
+    }
+
+    .info {
+      h4 {
+        margin-bottom: 0.4rem;
+        font-size: 2rem;
+
+        @include respond($breakpoint-lg) {
+          font-size: 1.6rem;
+        }
+      }
+
+      p {
+        position: relative;
+        font-size: 1.4rem;
+        line-height: 1.6;
+        word-break: keep-all;
+
+        @include respond($breakpoint-lg) {
+          font-size: 1.2rem;
+        }
+
+        &:has(mark) {
+          padding-left: 6rem;
+
+          mark {
+            position: absolute;
+            left: 0;
+            display: inline-block;
+            width: 6rem;
+            font-weight: 500;
+            background-color: transparent;
+          }
+        }
+
+        strong {
+          font-weight: 500;
+        }
+      }
+    }
+  }
+}

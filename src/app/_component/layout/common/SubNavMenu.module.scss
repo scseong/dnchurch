@@ -9,8 +9,12 @@
   }
 
   li {
-    font-size: 1.2rem;
+    font-size: 1.4rem;
     color: white;
+
+    &:hover {
+      color: $primary-color;
+    }
 
     a {
       padding: 0.4rem;

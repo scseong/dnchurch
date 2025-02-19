@@ -4,7 +4,7 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  height: 20rem;
+  height: 25rem;
   background-image: url('../../../../../public/images/dnchurch.png');
   background-size: cover;
 
@@ -21,7 +21,7 @@
 
   h2 {
     margin-bottom: 1rem;
-    font-size: 3.6rem;
+    font-size: $font-size-h2;
     font-weight: bold;
     color: white;
     z-index: 2;

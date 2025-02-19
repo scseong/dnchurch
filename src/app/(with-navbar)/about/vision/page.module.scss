@@ -1,0 +1,55 @@
+$greeting_text_size: 2.4rem;
+$greeting_text_margin_bottom: 3rem;
+$p_margin_bottom: 2rem;
+
+.wrap {
+  display: flex;
+  gap: 2rem;
+
+  @include respond($breakpoint-xl) {
+    flex-direction: column;
+  }
+}
+.vision_text {
+  flex: 2;
+
+  .greeting_text {
+    margin-bottom: $greeting_text_margin_bottom;
+    font-size: 2.2rem;
+    line-height: $greeting_text_size;
+    color: #231305;
+
+    strong {
+      font-weight: 600;
+    }
+  }
+
+  p {
+    margin-bottom: $p_margin_bottom;
+    font-size: $font-size-basic;
+    line-height: $font-size-basic-line;
+    color: $text-color-light;
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+}
+
+.image_wrap {
+  flex: 1;
+
+  padding-top: calc($greeting_text_size + $greeting_text_margin_bottom);
+  overflow: hidden;
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 1rem;
+  }
+
+  @include respond($breakpoint-xl) {
+    padding-top: 0;
+  }
+}
