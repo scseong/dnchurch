@@ -1,6 +1,5 @@
-$greeting_text_size: 2.4rem;
+$greeting_text_size: 2.1rem;
 $greeting_text_margin_bottom: 3rem;
-$p_margin_bottom: 2rem;
 
 .wrap {
   display: flex;
@@ -15,20 +14,21 @@ $p_margin_bottom: 2rem;
 
   .greeting_text {
     margin-bottom: $greeting_text_margin_bottom;
-    font-size: 2.2rem;
+    font-size: $greeting_text_size;
     line-height: $greeting_text_size;
-    color: #231305;
 
-    strong {
+    em {
       font-weight: 600;
+      font-style: normal;
     }
   }
 
   p {
-    margin-bottom: $p_margin_bottom;
+    margin-bottom: 2rem;
     font-size: $font-size-basic;
-    line-height: $font-size-basic-line;
+    line-height: $font-line-height;
     color: $text-color-light;
+    word-break: keep-all;
 
     &:last-child {
       margin-bottom: 0;
@@ -37,9 +37,8 @@ $p_margin_bottom: 2rem;
 }
 
 .image_wrap {
-  flex: 1;
-
   padding-top: calc($greeting_text_size + $greeting_text_margin_bottom);
+  flex: 1;
   overflow: hidden;
 
   img {

@@ -1,6 +1,18 @@
+import type { Metadata } from 'next';
 import MainContainer from '@/app/_component/layout/common/MainContainer';
 import WorshipSchedule from './_component/WorshipSchedule';
 import styles from './page.module.scss';
+
+export const metadata: Metadata = {
+  title: '예배안내 - 대구동남교회',
+  description:
+    '대구동남교회 예배안내 - 주일낮예배(11:00), 주일저녁예배(18:00), 새벽기도회(05:30), 수요기도회(19:00), 금요기도회(20:00)',
+  openGraph: {
+    title: '예배안내 - 대구동남교회',
+    description:
+      '대구동남교회 예배안내 - 주일낮예배(11:00), 주일저녁예배(18:00), 새벽기도회(05:30), 수요기도회(19:00), 금요기도회(20:00)'
+  }
+};
 
 export type ScheduleType = typeof churchData;
 const churchData = [

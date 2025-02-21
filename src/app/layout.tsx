@@ -13,8 +13,11 @@ import 'swiper/scss/pagination';
 import 'swiper/scss/parallax';
 
 export const metadata: Metadata = {
-  title: '동남교회',
-  description: '서로서로 세워가는 교회, 동남교회'
+  title: '대구동남교회',
+  openGraph: {
+    title: '대구동남교회',
+    description: '주님의 기도를 배우는 교회(성도), 동남교회'
+  }
 };
 
 const myFont = localFont({

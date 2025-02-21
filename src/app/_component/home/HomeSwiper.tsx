@@ -23,6 +23,3 @@ export default function HomeSwiper({ bannerData, options }: SwiperProps) {
     </Swiper>
   );
 }
-
-// {banner.title && <h2>{banner.title}</h2>}
-// {banner.description && <p>{banner.description}</p>}

@@ -14,13 +14,19 @@ $text-hover: $primary-color;
 $text-hover-delay: 0.2s;
 
 /* Size */
-$max-width: 1200px;
+$max-width: 100rem;
 $header-height: 6rem;
 $font-size-h2: 3.6rem;
 $font-size-h3: 2.8rem;
 $font-size-h4: 2.4rem;
+$font-size-h4-mobile: 2.1rem;
+$font-size-h5: 2rem;
+$font-size-h5-mobile: 1.7rem;
 $font-size-basic: 1.6rem;
 $font-size-basic-line: 2.6rem;
+$font-size-basic-mobile: 1.4rem;
+$font-size-basic-line-mobile: 2rem;
+$font-line-height: 1.67;
 
 /* Break Point */
 $breakpoint-xs: 361px; // Extra small devices (small phones)

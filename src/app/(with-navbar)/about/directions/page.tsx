@@ -1,7 +1,17 @@
+import type { Metadata } from 'next';
 import MainContainer from '@/app/_component/layout/common/MainContainer';
 import LocationMap from './_component/LocationMap';
 import styles from './page.module.scss';
 import { MdDirectionsBus, MdLocationOn } from 'react-icons/md';
+
+export const metadata: Metadata = {
+  title: '오시는 길 - 대구동남교회',
+  description: '대구동남교회에 오시는 방법을 안내합니다.',
+  openGraph: {
+    title: '오시는 길 - 대구동남교회',
+    description: '대구동남교회에 오시는 방법을 안내합니다.'
+  }
+};
 
 const location = {
   lat: 35.85262832577055,
@@ -36,13 +46,12 @@ export default function Directions() {
               </li>
               <li>
                 <p>
-                  <mark>버스</mark> 죽전네거리 405, 425, 509, 527, 달서5, 성서2, 250
+                  <mark>버스</mark> 죽전네거리 405 425 509 527 달서5 성서2 250
                 </p>
               </li>
-
               <li>
                 <p>
-                  <mark></mark> 죽전119안전센터앞 서구 1-1, 503
+                  <mark></mark> 죽전119안전센터앞 503 서구 1-1
                 </p>
               </li>
             </ul>
