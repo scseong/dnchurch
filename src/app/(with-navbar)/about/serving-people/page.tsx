@@ -1,6 +1,12 @@
+import type { Metadata } from 'next';
 import React from 'react';
 import MainContainer from '@/app/_component/layout/common/MainContainer';
 import styles from './page.module.scss';
+
+export const metadata: Metadata = {
+  title: '섬기는 이 - 대구동남교회',
+  description: '각 사역자들의 역할과 사역에 대한 정보를 확인해 보세요.'
+};
 
 const pastorProfile = [
   {
@@ -30,7 +36,7 @@ export default function ServingPeople() {
             <PastorProfile key={profile.name + idx} profile={profile} />
           ) : (
             <React.Fragment key={profile.name + idx}>
-              <div className={styles.divide} />
+              <hr className={styles.divide} />
               <PastorProfile profile={profile} />
             </React.Fragment>
           )

@@ -1,5 +1,11 @@
+import type { Metadata } from 'next';
 import MainContainer from '@/app/_component/layout/common/MainContainer';
 import styles from './page.module.scss';
+
+export const metadata: Metadata = {
+  title: '교회의 비전 - 대구동남교회',
+  description: '2025년 교회목표 - 주님의 기도를 배우는 교회(성도)'
+};
 
 export default function Vision() {
   return (
@@ -8,7 +14,7 @@ export default function Vision() {
         {/* TODO: 임시 내용을 실제 내용으로 변경  */}
         <div className={styles.vision_text}>
           <p className={styles.greeting_text}>
-            <strong>동남교회에 오신 것을 환영합니다.</strong>
+            <em>동남교회에 오신 것을 환영합니다.</em>
           </p>
           <p>
             동남교회는 1952년에 설립된 이후, 하나님의 사랑을 나누고 믿음의 공동체를 세우기 위해
