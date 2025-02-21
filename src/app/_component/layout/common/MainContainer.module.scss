@@ -6,8 +6,12 @@
   .title {
     margin-bottom: 8rem;
     text-align: center;
+  }
 
-    @include respond($breakpoint-md) {
+  @include respond($breakpoint-md) {
+    padding-bottom: 5rem;
+
+    .title {
       margin-bottom: 6rem;
     }
   }

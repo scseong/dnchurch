@@ -5,7 +5,11 @@ import styles from './page.module.scss';
 
 export const metadata: Metadata = {
   title: '섬기는 이 - 대구동남교회',
-  description: '각 사역자들의 역할과 사역에 대한 정보를 확인해 보세요.'
+  description: '각 사역자들의 역할과 사역에 대한 정보를 확인해 보세요.',
+  openGraph: {
+    title: '섬기는 이 - 대구동남교회',
+    description: '각 사역자들의 역할과 사역에 대한 정보를 확인해 보세요.'
+  }
 };
 
 const pastorProfile = [

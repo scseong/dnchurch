@@ -57,21 +57,22 @@ $svg_mobile_size: 3rem;
     .info {
       h4 {
         margin-bottom: 0.4rem;
-        font-size: 2rem;
+        font-size: $font-size-h5;
 
         @include respond($breakpoint-lg) {
-          font-size: 1.6rem;
+          font-size: $font-size-h5-mobile;
         }
       }
 
       p {
         position: relative;
-        font-size: 1.4rem;
-        line-height: 1.6;
+        font-size: $font-size-basic;
+        line-height: 2;
         word-break: keep-all;
 
         @include respond($breakpoint-lg) {
-          font-size: 1.2rem;
+          font-size: $font-size-basic-mobile;
+          line-height: $font-line-height;
         }
 
         &:has(mark) {
