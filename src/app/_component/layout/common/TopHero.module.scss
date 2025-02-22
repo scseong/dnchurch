@@ -23,6 +23,7 @@
     margin-bottom: 1rem;
     font-size: $font-size-h2;
     font-weight: bold;
+    line-height: 1;
     color: white;
     z-index: 2;
   }
@@ -32,5 +33,13 @@
     font-weight: 500;
     color: white;
     z-index: 2;
+  }
+
+  @include respond($breakpoint-md) {
+    height: 20rem;
+
+    h2 {
+      font-size: $font-size-h2-mobile;
+    }
   }
 }
