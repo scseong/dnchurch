@@ -12,7 +12,13 @@ export const createFetch =
   };
 
 // ServerActions, RouterHandler
-export const createServerSideClient = async (serverComponent = false) => {
+export const createServerSideClient = async ({
+  cache,
+  tag
+}: {
+  cache?: RequestCache;
+  tag?: string;
+}) => {
   const cookieStore = await cookies();
 
   return createServerClient<Database>(
@@ -22,19 +28,17 @@ export const createServerSideClient = async (serverComponent = false) => {
       global: {
         fetch: createFetch({
           next: {
-            revalidate: 300,
-            tags: ['users']
-          }
+            tags: [tag || 'supabase']
+          },
+          cache
         })
       },
       cookies: {
         get: (key) => cookieStore.get(key)?.value,
         set: (key, value, options) => {
-          if (serverComponent) return;
           cookieStore.set(key, value, options);
         },
         remove: (key, options) => {
-          if (serverComponent) return;
           cookieStore.set(key, '', options);
         }
       }
@@ -43,6 +47,6 @@ export const createServerSideClient = async (serverComponent = false) => {
 };
 
 // RSC
-export const createServerSideClientRSC = async () => {
-  return createServerSideClient(true);
-};
+// export const createServerSideClientRSC = async () => {
+//   return createServerSideClient(true);
+// };

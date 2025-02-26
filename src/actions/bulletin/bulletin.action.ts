@@ -21,7 +21,7 @@ export const createBulletinAction = async (_: unknown, formData: FormData) => {
   const imagefileUrls = getUrlsFromApiResponse(uploadResults);
 
   try {
-    const supabase = await createServerSideClient();
+    const supabase = await createServerSideClient({});
     const { error } = await supabase
       .from('bulletin')
       .insert({

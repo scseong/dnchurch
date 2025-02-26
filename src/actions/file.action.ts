@@ -12,7 +12,7 @@ export const uploadFileAction = async (file: File) => {
     };
 
   try {
-    const supabase = await createServerSideClient();
+    const supabase = await createServerSideClient({});
     const { data: uploadData } = await supabase.storage
       .from('bulletin')
       .upload(filename, file, { cacheControl: '3600', upsert: true });
