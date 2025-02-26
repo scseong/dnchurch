@@ -1,9 +1,10 @@
 import { ITEM_PER_PAGE } from '@/shared/constants/bulletin';
-import { supabase } from '@/shared/supabase/client';
+import { createServerSideClient } from '@/shared/supabase/server';
 import { BulletinType } from '@/shared/types/types';
 import { convertYearToTimestamptz } from '@/shared/util/time';
 
 export const getLatestBulletin = async () => {
+  const supabase = await createServerSideClient({ cache: 'force-cache', tag: 'last-bulletin' });
   const { data: bulletin } = await supabase
     .from('bulletin')
     .select('*')
@@ -14,6 +15,7 @@ export const getLatestBulletin = async () => {
 };
 
 export const getBulletin = async () => {
+  const supabase = await createServerSideClient({ cache: 'force-cache' });
   const {
     data: bulletins,
     count,
@@ -30,12 +32,12 @@ export const getBulletin = async () => {
 };
 
 export const getBulletinByYearAndPage = async (page = '1', year = '2024') => {
+  const supabase = await createServerSideClient({ cache: 'force-cache' });
   const startDateTime = convertYearToTimestamptz(year);
   const endDateTime = convertYearToTimestamptz(Number(year) + 1);
 
   const from = (Number(page) - 1) * ITEM_PER_PAGE;
   const to = from + ITEM_PER_PAGE - 1;
-
   const {
     data: bulletins,
     count,
@@ -54,6 +56,7 @@ export const getBulletinByYearAndPage = async (page = '1', year = '2024') => {
 };
 
 export const getBulletinByYear = async (year = '2024') => {
+  const supabase = await createServerSideClient({ cache: 'force-cache' });
   const startDateTime = convertYearToTimestamptz(year);
   const endDateTime = convertYearToTimestamptz(Number(year) + 1);
 
@@ -75,6 +78,7 @@ export const getBulletinByYear = async (year = '2024') => {
 };
 
 export const getBulletinByPage = async (page = '1') => {
+  const supabase = await createServerSideClient({ cache: 'force-cache' });
   const from = (Number(page) - 1) * ITEM_PER_PAGE;
   const to = from + ITEM_PER_PAGE - 1;
 
