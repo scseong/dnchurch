@@ -1,0 +1,28 @@
+.form {
+}
+
+.group {
+  margin-bottom: 1.6rem;
+
+  label {
+    margin-bottom: 1rem;
+    display: block;
+    width: 100%;
+    font-size: 2rem;
+    font-weight: 600;
+  }
+
+  input[type='text'] {
+    padding: 0.8rem 1rem;
+    width: 100%;
+    border: 1px solid #ccc;
+    border-radius: 0.4rem;
+    outline-color: #aaa;
+    font-size: 1.4rem;
+    line-height: $font-line-height;
+  }
+
+  input[type='text']::placeholder {
+    font-size: 1.4rem;
+  }
+}
