@@ -1,8 +1,8 @@
-import { ImageFile } from '../../create/page';
+import { ImageFileData } from '@/shared/types/types';
 import styles from './FilePreview.module.scss';
 
 type FilePreviewProps = {
-  files: ImageFile[];
+  files: ImageFileData[];
   onDelete: (id: number) => void;
 };
 

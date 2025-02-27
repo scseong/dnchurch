@@ -12,7 +12,7 @@ import styles from './page.module.scss';
 
 export default function Page() {
   const [selectedFile, setSelectedFile] = useState<ImageFileData[]>([]);
-  const [_, formAction, isPending] = useActionState(
+  const [actionState, formAction, isPending] = useActionState(
     createBulletinAction.bind(null, selectedFile),
     null
   );
@@ -42,6 +42,10 @@ export default function Page() {
 
   if (!user) return null;
 
+  if (actionState?.error) {
+    window.alert(actionState?.error);
+  }
+
   return (
     <MainContainer title="주보 추가하기">
       <form action={formAction} className={styles.form}>
@@ -51,6 +55,7 @@ export default function Page() {
             type="text"
             name="title"
             placeholder="제목을 입력해주세요 (2025년 1월 5일 첫째 주)"
+            defaultValue={(actionState?.payload?.get('title') || '') as string}
             required
           />
         </div>

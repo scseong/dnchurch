@@ -5,7 +5,7 @@ import { IoMdShare } from 'react-icons/io';
 import BulletinTable from './_component/BulletinTable';
 import BulletinYearFilter from './_component/BulletinYearFilter';
 import KakaoShareBtn from '@/app/_component/common/KakaoShare';
-import CreateBulletinButton from './create/_component/CreateBulletinButton';
+import CreateBulletinButton from './_component/create/CreateBulletinButton';
 import { getLatestBulletin, getQueryFunction } from '@/apis/bulletin';
 import styles from './page.module.scss';
 import { BulletinType } from '@/shared/types/types';

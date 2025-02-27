@@ -14,7 +14,6 @@ export default function FileUpload({
         accept="image/*"
         onChange={onChange}
         multiple
-        required
       />
       <span>이미지 가져오기</span>
     </div>
