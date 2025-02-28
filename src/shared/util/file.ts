@@ -1,6 +1,7 @@
 import { UploadFileApiResponse } from '@/actions/file.action';
 import { parseDateFromString } from './date';
 import type { ImageFileData } from '@/shared/types/types';
+import { createServerSideClient } from '../supabase/server';
 
 export function getFileExtension(fileName: string): string {
   const lastDotIndex = fileName.lastIndexOf('.');
@@ -46,7 +47,6 @@ export function convertFileToImageData(file: File): Promise<ImageFileData> {
         datetime: new Date(file.lastModified).toLocaleString('ko-KR')
       });
     };
-
     reader.readAsDataURL(file);
   });
 }

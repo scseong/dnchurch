@@ -10,6 +10,7 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   font-size: calc(1rem + 0.25vw);
+  letter-spacing: -0.05rem;
   color: $text-color;
   overflow-x: hidden;
   -webkit-text-size-adjust: none;

@@ -4,7 +4,7 @@ const nextConfig: NextConfig = {
   // TODO: 이미지 최적화
   experimental: {
     serverActions: {
-      bodySizeLimit: '2mb'
+      bodySizeLimit: '5mb'
     }
   },
   logging: {

@@ -11,9 +11,9 @@ import type { ImageFileData } from '@/shared/types/types';
 import styles from './page.module.scss';
 
 export default function Page() {
-  const [selectedFile, setSelectedFile] = useState<ImageFileData[]>([]);
+  const [selectedFiles, setSelectedFiles] = useState<ImageFileData[]>([]);
   const [actionState, formAction, isPending] = useActionState(
-    createBulletinAction.bind(null, selectedFile),
+    createBulletinAction.bind(null, selectedFiles),
     null
   );
   const user = useProfile();
@@ -30,13 +30,14 @@ export default function Page() {
 
     const imagePromises = Array.from(imageFiles).map(convertFileToImageData);
     const imageData = await Promise.all(imagePromises);
-    setSelectedFile((prev) => [...prev, ...imageData]);
+
+    setSelectedFiles((prev) => [...prev, ...imageData]);
   };
 
   const handleDeleteSelectedFile = (id: number) => {
     if (window.confirm('정말로 삭제하시겠습니까?')) {
-      const result = selectedFile.filter((data) => data.id !== id);
-      setSelectedFile(result);
+      const result = selectedFiles.filter((data) => data.id !== id);
+      setSelectedFiles(result);
     }
   };
 
@@ -63,9 +64,9 @@ export default function Page() {
           <label htmlFor="image_url">주보 이미지 업로드</label>
           <FileUpload onChange={handleInputChange} />
         </div>
-        <FilePreview files={selectedFile} onDelete={handleDeleteSelectedFile} />
+        <FilePreview files={selectedFiles} onDelete={handleDeleteSelectedFile} />
         <input name="user_id" value={user.id} hidden readOnly />
-        <button disabled={isPending}>생성</button>
+        <button disabled={isPending}>추가하기</button>
       </form>
     </MainContainer>
   );
