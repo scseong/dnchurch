@@ -1,12 +1,10 @@
 import { decode } from 'base64-arraybuffer';
 import { createServerSideClient } from '@/shared/supabase/server';
 import { ImageFileData } from '@/shared/types/types';
-import { generateFileName } from '@/shared/util/file';
 import { extractNumbersFromString } from '@/shared/util/format';
 
 export type UploadFileApiResponse = Awaited<ReturnType<typeof uploadFileAction>>;
 export const uploadFileAction = async (file: ImageFileData) => {
-  // TODO: 숫자만 추출
   const filename = extractNumbersFromString(file.filename);
   const fileimage = file.fileimage as string;
   const base64 = fileimage.split('base64,')[1];

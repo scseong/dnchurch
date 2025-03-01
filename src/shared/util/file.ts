@@ -1,20 +1,9 @@
 import { UploadFileApiResponse } from '@/actions/file.action';
-import { parseDateFromString } from './date';
 import type { ImageFileData } from '@/shared/types/types';
-import { createServerSideClient } from '../supabase/server';
 
 export function getFileExtension(fileName: string): string {
   const lastDotIndex = fileName.lastIndexOf('.');
   return fileName.substring(lastDotIndex + 1);
-}
-
-export function generateFileName(fileName: string) {
-  const date = parseDateFromString(fileName);
-  const extension = getFileExtension(fileName);
-
-  if (date && extension) return `${date}.${extension}`;
-
-  return null;
 }
 
 export function getUrlsFromApiResponse(response: UploadFileApiResponse[]) {
