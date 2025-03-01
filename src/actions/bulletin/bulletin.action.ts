@@ -1,6 +1,7 @@
 'use server';
 
 import { redirect, RedirectType } from 'next/navigation';
+import { revalidatePath } from 'next/cache';
 import { createServerSideClient } from '@/shared/supabase/server';
 import { uploadFileAction } from '../file.action';
 import { getUrlsFromApiResponse } from '@/shared/util/file';
@@ -47,6 +48,7 @@ export const createBulletinAction = async (
     };
   }
 
-  // TODO: Error Handling
+  revalidatePath('/news');
+  revalidatePath('/news/bulletin');
   redirect('/news/bulletin', RedirectType.push);
 };
