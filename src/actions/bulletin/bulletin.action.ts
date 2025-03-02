@@ -1,27 +1,33 @@
 'use server';
 
 import { redirect, RedirectType } from 'next/navigation';
+import { revalidatePath } from 'next/cache';
 import { createServerSideClient } from '@/shared/supabase/server';
 import { uploadFileAction } from '../file.action';
 import { getUrlsFromApiResponse } from '@/shared/util/file';
+import type { ImageFileData } from '@/shared/types/types';
 
-export const createBulletinAction = async (_: unknown, formData: FormData) => {
-  const title = formData.get('title')?.toString();
-  const image_url = formData.getAll('image_url') as File[];
+export const createBulletinAction = async (
+  selectedFiles: ImageFileData[],
+  state: { status: boolean; payload?: FormData; error?: string } | null | undefined,
+  formData: FormData
+) => {
+  const title = formData.get('title')?.toString().trim();
   const user_id = formData.get('user_id')?.toString();
 
-  if (!title || !image_url.length || !user_id)
+  if (!title || !selectedFiles.length || !user_id)
     return {
       status: false,
+      payload: formData,
       error: '모든 항목을 작성해주세요.'
     };
 
-  const uploadPromises = image_url.map((file) => uploadFileAction(file));
+  const uploadPromises = selectedFiles.map((file) => uploadFileAction(file));
   const uploadResults = await Promise.all(uploadPromises);
   const imagefileUrls = getUrlsFromApiResponse(uploadResults);
 
   try {
-    const supabase = await createServerSideClient();
+    const supabase = await createServerSideClient({});
     const { error } = await supabase
       .from('bulletin')
       .insert({
@@ -42,6 +48,7 @@ export const createBulletinAction = async (_: unknown, formData: FormData) => {
     };
   }
 
-  // TODO: Error Handling
+  revalidatePath('/news');
+  revalidatePath('/news/bulletin');
   redirect('/news/bulletin', RedirectType.push);
 };

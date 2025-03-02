@@ -4,7 +4,7 @@ import { createServerSideClient } from './shared/supabase/server';
 import { getUserAdminStatus } from './apis/user.action';
 
 export async function middleware(request: NextRequest) {
-  const supabase = await createServerSideClient();
+  const supabase = await createServerSideClient({});
 
   const {
     data: { user }

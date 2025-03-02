@@ -1,0 +1,28 @@
+.file_upload {
+  padding: 1.6rem;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 15rem;
+  border: 1px dashed #bbb;
+  background-color: #eee;
+  border-radius: 0.4rem;
+  font-size: 1.6rem;
+  overflow: hidden;
+
+  & > input[type='file'] {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    opacity: 0;
+    cursor: pointer;
+  }
+
+  span {
+    text-decoration: underline;
+    text-underline-offset: 0.2rem;
+  }
+}
