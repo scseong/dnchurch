@@ -36,6 +36,7 @@ export default async function BulletinDetail({ params }: { params: Promise<{ id:
         userName={profiles.user_name}
         createdAt={created_at}
         userId={user_id}
+        thumbnail={image_url[0]}
         id={id.toString()}
       />
       <BoardBody>

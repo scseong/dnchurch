@@ -1,7 +1,6 @@
 import Link from 'next/link';
 import type { Metadata } from 'next';
 import MainContainer from '@/app/_component/layout/common/MainContainer';
-import { IoMdShare } from 'react-icons/io';
 import BulletinTable from './_component/BulletinTable';
 import BulletinYearFilter from './_component/BulletinYearFilter';
 import KakaoShareBtn from '@/app/_component/common/KakaoShare';
@@ -65,7 +64,6 @@ function LatestBulletin({ latestBulletin }: { latestBulletin: BulletinType }) {
         ))}
       </div>
       <div className={styles.share}>
-        <IoMdShare size="1.2rem" />
         <KakaoShareBtn title="주보 - 대구동남교회" description={latestBulletin?.title ?? ''} />
       </div>
     </section>

@@ -1,5 +1,7 @@
 'use client';
 
+import { FiShare2 } from 'react-icons/fi';
+
 declare global {
   interface Window {
     Kakao: any;
@@ -8,16 +10,18 @@ declare global {
 
 type KakaoShareBtn = {
   title: string;
-  description: string;
+  description?: string;
   imageUrl?: string;
   link?: string;
+  size?: string;
 };
 
 export default function KakaoShareBtn({
   title,
   description,
   imageUrl = '/images/dnchurch.png',
-  link
+  link,
+  size
 }: KakaoShareBtn) {
   const handleClick = () => {
     const { Kakao, location } = window;
@@ -48,5 +52,9 @@ export default function KakaoShareBtn({
     });
   };
 
-  return <button onClick={handleClick}>공유하기</button>;
+  return (
+    <button onClick={handleClick}>
+      <FiShare2 size={size} />
+    </button>
+  );
 }

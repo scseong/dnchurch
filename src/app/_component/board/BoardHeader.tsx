@@ -1,7 +1,15 @@
 import { formattedDate } from '@/shared/util/date';
+import { FiTrash, FiEdit } from 'react-icons/fi';
 import styles from './BoardHeader.module.scss';
+import KakaoShareBtn from '../common/KakaoShare';
 
-export default function BoardHeader({ title, userName, createdAt, userId }: BoardHeaderProps) {
+export default async function BoardHeader({
+  title,
+  userName,
+  createdAt,
+  userId,
+  thumbnail
+}: BoardHeaderProps) {
   return (
     <div className={styles.header}>
       <div className={styles.title}>
@@ -22,11 +30,22 @@ export default function BoardHeader({ title, userName, createdAt, userId }: Boar
           <ul>
             {userId && (
               <>
-                <li>삭제</li>
-                <li>수정</li>
+                <li>
+                  <FiTrash />
+                </li>
+                <li>
+                  <FiEdit />
+                </li>
               </>
             )}
-            <li>공유</li>
+            <li>
+              <KakaoShareBtn
+                title={`${title} - 대구동남교회`}
+                imageUrl={thumbnail}
+                description=""
+                size="1.5rem"
+              />
+            </li>
           </ul>
         </div>
       </div>
@@ -35,8 +54,10 @@ export default function BoardHeader({ title, userName, createdAt, userId }: Boar
 }
 
 type BoardHeaderProps = {
+  id: string;
   title: string;
   userName: string;
   createdAt: string;
   userId: string;
+  thumbnail: string;
 };
