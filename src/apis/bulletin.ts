@@ -14,6 +14,17 @@ export const getLatestBulletin = async () => {
   return { latestBulletin: bulletin ? bulletin[0] : null };
 };
 
+export const getBulletinsById = async (id: string) => {
+  const supabase = await createServerSideClient({ cache: 'force-cache', tag: `bulletin-${id}` });
+  const { data: bulletin } = await supabase
+    .from('bulletin')
+    .select(`*, profiles ( user_name )`)
+    .eq('id', id)
+    .single();
+
+  return bulletin as BulletinWithUserName | null;
+};
+
 export const getBulletin = async () => {
   const supabase = await createServerSideClient({ cache: 'force-cache' });
   const {
@@ -144,3 +155,5 @@ type BulletinRuternType = Promise<{
   bulletins: BulletinType[] | null;
   count: number | null;
 }>;
+
+type BulletinWithUserName = BulletinType & { profiles: { user_name: string } };
