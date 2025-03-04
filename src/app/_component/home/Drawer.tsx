@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import { IoMdClose, IoIosArrowForward } from 'react-icons/io';
 import UserProfile from '../user/UserProfile';
-import IconContainer from '../common/IconContainer';
+import IconWrap from '../common/IconWrap';
 import { signOut } from '@/apis/auth';
 import { sitemap } from '@/shared/constants/sitemap';
 import { ProfileType } from '@/shared/types/types';
@@ -51,9 +51,7 @@ export default function Drawer({ isOpen, onClose, user }: DrawerProps) {
             .map((item) => (
               <li key={item.path}>
                 <Link href={item.path}>
-                  <IconContainer>
-                    <item.icon />
-                  </IconContainer>
+                  <IconWrap Icon={item.icon} />
                   <span>{item.label}</span>
                 </Link>
                 {item.subPath && item.subPath?.length > 0 && (

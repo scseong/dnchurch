@@ -1,6 +1,11 @@
 import { UploadFileApiResponse } from '@/actions/file.action';
 import type { ImageFileData } from '@/shared/types/types';
 
+export function getFilenameFromUrl(url: string) {
+  const urlParts = new URL(url).pathname.split('/');
+  return urlParts[urlParts.length - 1];
+}
+
 export function getFileExtension(fileName: string): string {
   const lastDotIndex = fileName.lastIndexOf('.');
   return fileName.substring(lastDotIndex + 1);
