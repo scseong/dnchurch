@@ -1,0 +1,54 @@
+.header {
+  padding-bottom: 1.6rem;
+  display: flex;
+  flex-direction: column;
+  border-bottom: 2px solid black;
+
+  .title {
+    h4 {
+      margin-bottom: 1rem;
+      font-size: $font-size-h4;
+      word-break: break-all;
+
+      @include respond($breakpoint-md) {
+        font-size: $font-size-h4-mobile;
+      }
+    }
+  }
+
+  .info {
+    display: flex;
+    justify-content: space-between;
+
+    .left,
+    .right {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    dl,
+    ul {
+      display: flex;
+      gap: 1rem;
+    }
+
+    dl:first-child {
+      margin-right: 2rem;
+    }
+
+    dd,
+    dt,
+    li {
+      font-size: $font-size-basic;
+
+      @include respond($breakpoint-md) {
+        font-size: $font-size-basic-mobile;
+      }
+    }
+
+    dt {
+      font-weight: 600;
+    }
+  }
+}
