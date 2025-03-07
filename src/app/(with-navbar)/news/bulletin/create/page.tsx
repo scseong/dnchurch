@@ -1,6 +1,6 @@
 'use client';
 
-import { useActionState, useState } from 'react';
+import { useActionState, useEffect, useState } from 'react';
 import { createBulletinAction } from '@/actions/bulletin/bulletin.action';
 import { useProfile } from '@/context/SessionContextProvider';
 import MainContainer from '@/app/_component/layout/common/MainContainer';
@@ -41,11 +41,13 @@ export default function Page() {
     }
   };
 
-  if (!user) return null;
+  useEffect(() => {
+    if (actionState?.error) {
+      window.alert(actionState?.error);
+    }
+  }, [actionState?.error]);
 
-  if (actionState?.error) {
-    window.alert(actionState?.error);
-  }
+  if (!user) return null;
 
   return (
     <MainContainer title="주보 추가하기">
