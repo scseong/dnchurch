@@ -26,3 +26,23 @@
     font-size: 1.4rem;
   }
 }
+
+.image_preview {
+  label {
+    margin-bottom: 0.6rem;
+    display: inline-block;
+    font-size: 1.6rem;
+    font-weight: 600;
+  }
+}
+
+.submit {
+  text-align: right;
+
+  .submit_btn {
+    padding: 0.8rem 1rem;
+    width: 10rem;
+    border: 1px solid black;
+    border-radius: 0.4rem;
+  }
+}
