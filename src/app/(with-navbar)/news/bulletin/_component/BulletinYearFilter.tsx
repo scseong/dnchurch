@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import styles from './BulletinYearFilter.module.scss';
 
-const START_YEAR = 2024;
+const START_YEAR = 2025;
 const currentYear = new Date().getFullYear();
 
 type BulletinYearFilterProps = {

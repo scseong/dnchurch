@@ -15,7 +15,6 @@
   dd {
     display: flex;
     align-items: center;
-    text-decoration: underline;
     font-size: 1.2rem;
     word-break: break-all;
 
@@ -23,6 +22,10 @@
       margin-right: 0.6rem;
       width: 1.5rem;
       height: 1.5rem;
+    }
+
+    a:hover {
+      @include link-hover-style;
     }
   }
 

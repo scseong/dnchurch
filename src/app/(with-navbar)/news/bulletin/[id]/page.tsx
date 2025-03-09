@@ -38,6 +38,8 @@ export default async function BulletinDetail({ params }: { params: Promise<{ id:
         userId={user_id}
         thumbnail={image_url[0]}
         id={id.toString()}
+        updateLink={`/news/bulletin/${id}/update`}
+        onDelete={() => null}
       />
       <BoardBody>
         {image_url.map((url) => (
