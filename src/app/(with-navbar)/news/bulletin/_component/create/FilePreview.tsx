@@ -3,7 +3,7 @@ import styles from './FilePreview.module.scss';
 
 type FilePreviewProps = {
   files: ImageFileData[];
-  onDelete: (id: number) => void;
+  onDelete?: (id: number) => void;
 };
 
 export default function FilePreview({ files, onDelete }: FilePreviewProps) {
@@ -25,9 +25,11 @@ export default function FilePreview({ files, onDelete }: FilePreviewProps) {
                 <span>크기 : {filesize}</span>
                 <span>수정한 날짜 : {datetime}</span>
               </p>
-              <button type="button" onClick={() => onDelete(id)}>
-                삭제
-              </button>
+              {onDelete && (
+                <button type="button" onClick={() => onDelete(id)}>
+                  삭제
+                </button>
+              )}
             </div>
           </div>
         );

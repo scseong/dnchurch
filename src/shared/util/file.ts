@@ -44,3 +44,15 @@ export function convertFileToImageData(file: File): Promise<ImageFileData> {
     reader.readAsDataURL(file);
   });
 }
+
+export const convertUrlToImageData = async (url: string) => {
+  const res = await fetch(url);
+  const data = await res.blob();
+  const lastModified = res.headers.get('last-modified')!;
+  const file = new File([data], getFilenameFromUrl(url), {
+    type: data.type,
+    lastModified: new Date(lastModified).getTime()
+  });
+
+  return convertFileToImageData(file);
+};

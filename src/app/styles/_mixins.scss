@@ -24,3 +24,8 @@
   white-space: nowrap;
   word-wrap: normal;
 }
+
+@mixin link-hover-style {
+  text-decoration: underline;
+  color: #1f5da9;
+}

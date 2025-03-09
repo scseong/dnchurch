@@ -17,7 +17,7 @@ export const createServerSideClient = async ({
   tag
 }: {
   cache?: RequestCache;
-  tag?: string;
+  tag?: string | string[];
 }) => {
   const cookieStore = await cookies();
 
@@ -28,7 +28,7 @@ export const createServerSideClient = async ({
       global: {
         fetch: createFetch({
           next: {
-            tags: [tag || 'supabase']
+            tags: [...(tag || 'supabase')]
           },
           cache
         })

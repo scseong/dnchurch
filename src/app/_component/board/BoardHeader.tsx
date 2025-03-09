@@ -1,14 +1,18 @@
-import { formattedDate } from '@/shared/util/date';
+import Link from 'next/link';
 import { FiTrash, FiEdit } from 'react-icons/fi';
-import styles from './BoardHeader.module.scss';
 import KakaoShareBtn from '../common/KakaoShare';
+import UserIdMatcher from '../auth/UserIdMatcher';
+import { formattedDate } from '@/shared/util/date';
+import styles from './BoardHeader.module.scss';
 
 export default async function BoardHeader({
   title,
   userName,
   createdAt,
   userId,
-  thumbnail
+  thumbnail,
+  updateLink = '/'
+  // onDelete
 }: BoardHeaderProps) {
   return (
     <div className={styles.header}>
@@ -30,12 +34,16 @@ export default async function BoardHeader({
           <ul>
             {userId && (
               <>
-                <li>
-                  <FiTrash />
-                </li>
-                <li>
-                  <FiEdit />
-                </li>
+                <UserIdMatcher userId={userId}>
+                  <li>
+                    <FiTrash />
+                  </li>
+                  <li>
+                    <Link href={updateLink}>
+                      <FiEdit />
+                    </Link>
+                  </li>
+                </UserIdMatcher>
               </>
             )}
             <li>
@@ -60,4 +68,6 @@ type BoardHeaderProps = {
   createdAt: string;
   userId: string;
   thumbnail: string;
+  updateLink: string;
+  onDelete: () => void;
 };
