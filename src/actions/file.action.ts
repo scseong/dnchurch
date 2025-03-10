@@ -13,8 +13,7 @@ export const uploadFileAction = async (file: ImageFileData) => {
   try {
     const supabase = await createServerSideClient({});
     const { data, error } = await supabase.storage.from('bulletin').upload(filename, buffer, {
-      contentType: file.filetype,
-      cacheControl: '3600'
+      contentType: file.filetype
     });
 
     if (error) {
@@ -46,7 +45,7 @@ export const updateFileAction = async (file: ImageFileData) => {
     const supabase = await createServerSideClient({});
     const { data, error } = await supabase.storage.from('bulletin').update(filename, buffer, {
       contentType: file.filetype,
-      cacheControl: '3600'
+      cacheControl: '0'
     });
 
     if (error) {
