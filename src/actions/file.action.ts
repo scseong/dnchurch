@@ -1,11 +1,11 @@
 import { decode } from 'base64-arraybuffer';
 import { createServerSideClient } from '@/shared/supabase/server';
 import { ImageFileData } from '@/shared/types/types';
-import { extractNumbersFromString } from '@/shared/util/format';
+import { convertFileNameToBase64 } from '@/shared/util/file';
 
 export type UploadFileApiResponse = Awaited<ReturnType<typeof uploadFileAction>>;
 export const uploadFileAction = async (file: ImageFileData) => {
-  const filename = extractNumbersFromString(file.filename);
+  const filename = convertFileNameToBase64(file.filename);
   const fileimage = file.fileimage as string;
   const base64 = fileimage.split('base64,')[1];
   const buffer = decode(base64);
@@ -36,7 +36,7 @@ export const uploadFileAction = async (file: ImageFileData) => {
 };
 
 export const updateFileAction = async (file: ImageFileData) => {
-  const filename = extractNumbersFromString(file.filename) + `?updated=${new Date().getTime()}`;
+  const filename = convertFileNameToBase64(file.filename) + `?updated=${new Date().getTime()}`;
   const fileimage = file.fileimage as string;
   const base64 = fileimage.split('base64,')[1];
   const buffer = decode(base64);

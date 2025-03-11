@@ -3,7 +3,7 @@ import { getBulletinsById } from '@/apis/bulletin';
 import MainContainer from '@/app/_component/layout/common/MainContainer';
 import { BoardHeader, BoardBody, BoardFooter, BoardListButton } from '@/app/_component/board';
 import styles from './page.module.scss';
-import { getFilenameFromUrl } from '@/shared/util/file';
+import { convertBase64ToFileName, getFilenameFromUrl } from '@/shared/util/file';
 import { getDownloadFilePath } from '@/apis/storage';
 
 export async function generateMetadata({ params }: { params: Promise<{ id: string }> }) {
@@ -31,8 +31,10 @@ export default async function BulletinDetail({ params }: { params: Promise<{ id:
 
   const { id, created_at, image_url, title, user_id, profiles } = bulletin;
   const files = image_url.map((url) => {
-    const filename = getFilenameFromUrl(url);
-    const downloadPath = getDownloadFilePath({ bucket: 'bulletin', path: filename });
+    const res = getFilenameFromUrl(url);
+    const filename = convertBase64ToFileName(res);
+    const downloadPath = getDownloadFilePath({ bucket: 'bulletin', path: res });
+
     return { filename, downloadPath };
   });
 

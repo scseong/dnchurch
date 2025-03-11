@@ -8,7 +8,11 @@ import FileUpload from '../../_component/create/FileUpload';
 import FilePreview from '../../_component/create/FilePreview';
 import { supabase } from '@/shared/supabase/client';
 import { updateBulletinAction } from '@/actions/bulletin/bulletin.action';
-import { convertFileToImageData, convertUrlToImageData } from '@/shared/util/file';
+import {
+  convertBase64ToFileName,
+  convertFileToImageData,
+  convertUrlToImageData
+} from '@/shared/util/file';
 import { BulletinWithUserName } from '@/apis/bulletin';
 import type { ImageFileData } from '@/shared/types/types';
 import styles from '../../create/page.module.scss';
@@ -66,7 +70,10 @@ export default function UpdateBulletin() {
 
       const imageFiles = data?.image_url.map(convertUrlToImageData);
       const imageData = await Promise.all(imageFiles);
-      setUploadedFiles(imageData);
+      const decodeedImageData = imageData.map((data) => {
+        return { ...data, filename: convertBase64ToFileName(data.filename) };
+      });
+      setUploadedFiles(decodeedImageData);
       setBulletin(data as unknown as BulletinWithUserName | null);
       setTitle(data.title);
     };
