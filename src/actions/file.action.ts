@@ -36,7 +36,7 @@ export const uploadFileAction = async (file: ImageFileData) => {
 };
 
 export const updateFileAction = async (file: ImageFileData) => {
-  const filename = extractNumbersFromString(file.filename);
+  const filename = extractNumbersFromString(file.filename) + `?updated=${new Date().getTime()}`;
   const fileimage = file.fileimage as string;
   const base64 = fileimage.split('base64,')[1];
   const buffer = decode(base64);
@@ -44,8 +44,7 @@ export const updateFileAction = async (file: ImageFileData) => {
   try {
     const supabase = await createServerSideClient({});
     const { data, error } = await supabase.storage.from('bulletin').update(filename, buffer, {
-      contentType: file.filetype,
-      cacheControl: '0'
+      contentType: file.filetype
     });
 
     if (error) {
@@ -55,7 +54,7 @@ export const updateFileAction = async (file: ImageFileData) => {
     return {
       status: true,
       data: {
-        url: `${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/${data?.fullPath}`
+        url: `${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/bulletin/${data?.path}`
       },
       error: ''
     };
