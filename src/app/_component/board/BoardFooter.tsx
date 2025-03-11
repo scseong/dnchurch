@@ -3,7 +3,14 @@ import { PiDownloadSimpleBold } from 'react-icons/pi';
 import IconWrap from '../common/IconWrap';
 import styles from './BoardFooter.module.scss';
 
-export default function BoardFooter({ files }: { files: string[] }) {
+export default function BoardFooter({
+  files
+}: {
+  files: {
+    filename: string;
+    downloadPath: string;
+  }[];
+}) {
   return (
     <div>
       <div className={styles.file_attachment}>
@@ -13,8 +20,8 @@ export default function BoardFooter({ files }: { files: string[] }) {
             {files.map((file, idx) => (
               <dd key={idx}>
                 <IconWrap Icon={PiDownloadSimpleBold} />
-                <Link href={file} download>
-                  {file}
+                <Link href={file.downloadPath} download>
+                  {file.filename}
                 </Link>
               </dd>
             ))}

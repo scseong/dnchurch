@@ -30,9 +30,11 @@ export default async function BulletinDetail({ params }: { params: Promise<{ id:
   if (!bulletin) notFound();
 
   const { id, created_at, image_url, title, user_id, profiles } = bulletin;
-  const files = image_url.map((url) =>
-    getDownloadFilePath({ bucket: 'bulletin', path: getFilenameFromUrl(url) })
-  );
+  const files = image_url.map((url) => {
+    const filename = getFilenameFromUrl(url);
+    const downloadPath = getDownloadFilePath({ bucket: 'bulletin', path: filename });
+    return { filename, downloadPath };
+  });
 
   return (
     <MainContainer title="주보">
