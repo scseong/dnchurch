@@ -3,6 +3,8 @@ import { getBulletinsById } from '@/apis/bulletin';
 import MainContainer from '@/app/_component/layout/common/MainContainer';
 import { BoardHeader, BoardBody, BoardFooter, BoardListButton } from '@/app/_component/board';
 import styles from './page.module.scss';
+import { getFilenameFromUrl } from '@/shared/util/file';
+import { getDownloadFilePath } from '@/apis/storage';
 
 export async function generateMetadata({ params }: { params: Promise<{ id: string }> }) {
   const { id: bulletinId } = await params;
@@ -28,6 +30,9 @@ export default async function BulletinDetail({ params }: { params: Promise<{ id:
   if (!bulletin) notFound();
 
   const { id, created_at, image_url, title, user_id, profiles } = bulletin;
+  const files = image_url.map((url) =>
+    getDownloadFilePath({ bucket: 'bulletin', path: getFilenameFromUrl(url) })
+  );
 
   return (
     <MainContainer title="주보">
@@ -48,7 +53,7 @@ export default async function BulletinDetail({ params }: { params: Promise<{ id:
           </div>
         ))}
       </BoardBody>
-      <BoardFooter files={image_url} />
+      <BoardFooter files={files} />
       <BoardListButton link="/news/bulletin" />
     </MainContainer>
   );
