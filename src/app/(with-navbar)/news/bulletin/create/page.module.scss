@@ -39,7 +39,8 @@
 .submit {
   text-align: right;
 
-  .submit_btn {
+  button,
+  a {
     padding: 0.8rem 1rem;
     width: 10rem;
     border: 1px solid black;

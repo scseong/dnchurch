@@ -68,7 +68,9 @@ export default function Page() {
         </div>
         <FilePreview files={selectedFiles} onDelete={handleDeleteSelectedFile} />
         <input name="user_id" value={user.id} hidden readOnly />
-        <button disabled={isPending}>추가하기</button>
+        <div className={styles.submit}>
+          <button disabled={isPending}>추가하기</button>
+        </div>
       </form>
     </MainContainer>
   );
