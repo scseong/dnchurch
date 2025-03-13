@@ -3,6 +3,7 @@
 import { useParams } from 'next/navigation';
 import { useActionState, useEffect, useState } from 'react';
 import { useProfile } from '@/context/SessionContextProvider';
+import useConfirmPageLeave from '@/hooks/useConfirmPageLeave';
 import MainContainer from '@/app/_component/layout/common/MainContainer';
 import FileUpload from '../../_component/create/FileUpload';
 import FilePreview from '../../_component/create/FilePreview';
@@ -16,10 +17,12 @@ import {
 import { BulletinWithUserName } from '@/apis/bulletin';
 import type { ImageFileData } from '@/shared/types/types';
 import styles from '../../create/page.module.scss';
+import Link from 'next/link';
 
 export default function UpdateBulletin() {
   const { id: bulletinId } = useParams<{ id: string }>();
   const user = useProfile();
+  const { handleBack } = useConfirmPageLeave(`/news/bulletin/${bulletinId}`);
 
   const [bulletin, setBulletin] = useState<BulletinWithUserName | null>(null);
   const [title, setTitle] = useState('');
@@ -120,6 +123,9 @@ export default function UpdateBulletin() {
         <input name="bulletin_id" value={bulletinId} hidden readOnly />
         <input name="is_disabled" type="checkbox" checked={isDisabled} hidden readOnly />
         <div className={styles.submit}>
+          <Link href={`/news/bulletin/${bulletinId}`} onClick={handleBack}>
+            취소하기
+          </Link>
           <button disabled={isPending} className={styles.submit_btn}>
             수정하기
           </button>
