@@ -2,6 +2,7 @@ import { decode } from 'base64-arraybuffer';
 import { createServerSideClient } from '@/shared/supabase/server';
 import { ImageFileData } from '@/shared/types/types';
 import { convertFileNameToBase64 } from '@/shared/util/file';
+import { BULLETIN_BUCKET } from '@/shared/constants/bulletin';
 
 export type UploadFileApiResponse = Awaited<ReturnType<typeof uploadFileAction>>;
 export const uploadFileAction = async (file: ImageFileData) => {
@@ -12,7 +13,7 @@ export const uploadFileAction = async (file: ImageFileData) => {
 
   try {
     const supabase = await createServerSideClient({});
-    const { data, error } = await supabase.storage.from('bulletin').upload(filename, buffer, {
+    const { data, error } = await supabase.storage.from(BULLETIN_BUCKET).upload(filename, buffer, {
       contentType: file.filetype
     });
 
@@ -43,7 +44,7 @@ export const updateFileAction = async (file: ImageFileData) => {
 
   try {
     const supabase = await createServerSideClient({});
-    const { data, error } = await supabase.storage.from('bulletin').update(filename, buffer, {
+    const { data, error } = await supabase.storage.from(BULLETIN_BUCKET).update(filename, buffer, {
       contentType: file.filetype
     });
 

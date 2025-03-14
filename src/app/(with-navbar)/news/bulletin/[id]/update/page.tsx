@@ -15,6 +15,7 @@ import {
   convertUrlToImageData
 } from '@/shared/util/file';
 import { BulletinWithUserName } from '@/apis/bulletin';
+import { BULLETIN_BUCKET } from '@/shared/constants/bulletin';
 import type { ImageFileData } from '@/shared/types/types';
 import styles from '../../create/page.module.scss';
 import Link from 'next/link';
@@ -60,7 +61,7 @@ export default function UpdateBulletin() {
   useEffect(() => {
     const fetchBulletin = async (id: string) => {
       const { data } = await supabase
-        .from('bulletin')
+        .from(BULLETIN_BUCKET)
         .select(`*, profiles ( user_name )`)
         .eq('id', id)
         .single();
