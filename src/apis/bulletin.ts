@@ -3,6 +3,23 @@ import { createServerSideClient } from '@/shared/supabase/server';
 import { BulletinType } from '@/shared/types/types';
 import { convertYearToTimestamptz } from '@/shared/util/time';
 
+export const getPrevAndNextBulletin = async (targetId: number) => {
+  const supabase = await createServerSideClient({
+    cache: 'force-cache',
+    tag: ['bulletin', 'prev-next']
+  });
+
+  const { data, error } = await supabase
+    .rpc('get_prev_and_next', {
+      target_id: targetId
+    })
+    .single();
+
+  if (error) console.error(error);
+
+  return data;
+};
+
 export const getLatestBulletin = async () => {
   const supabase = await createServerSideClient({
     cache: 'force-cache',

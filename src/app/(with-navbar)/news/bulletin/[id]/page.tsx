@@ -1,5 +1,5 @@
 import { notFound } from 'next/navigation';
-import { getBulletinsById } from '@/apis/bulletin';
+import { getBulletinsById, getPrevAndNextBulletin } from '@/apis/bulletin';
 import MainContainer from '@/app/_component/layout/common/MainContainer';
 import { BoardHeader, BoardBody, BoardFooter, BoardListButton } from '@/app/_component/board';
 import styles from './page.module.scss';
@@ -26,6 +26,7 @@ export async function generateMetadata({ params }: { params: Promise<{ id: strin
 export default async function BulletinDetail({ params }: { params: Promise<{ id: string }> }) {
   const { id: bulletinId } = await params;
   const bulletin = await getBulletinsById(bulletinId);
+  const prevNextBulletin = await getPrevAndNextBulletin(Number(bulletinId));
 
   if (!bulletin) notFound();
 
@@ -57,7 +58,7 @@ export default async function BulletinDetail({ params }: { params: Promise<{ id:
           </div>
         ))}
       </BoardBody>
-      <BoardFooter files={files} />
+      <BoardFooter files={files} prevNext={prevNextBulletin} />
       <BoardListButton link="/news/bulletin" />
     </MainContainer>
   );

@@ -55,7 +55,15 @@ export type Database = {
           updated_at?: string | null;
           user_id?: string;
         };
-        Relationships: [];
+        Relationships: [
+          {
+            foreignKeyName: 'bulletin_user_id_fkey1';
+            columns: ['user_id'];
+            isOneToOne: false;
+            referencedRelation: 'profiles';
+            referencedColumns: ['id'];
+          }
+        ];
       };
       home_banner: {
         Row: {
@@ -119,13 +127,28 @@ export type Database = {
       [_ in never]: never;
     };
     Functions: {
-      [_ in never]: never;
+      get_prev_and_next: {
+        Args: {
+          target_id: number;
+        };
+        Returns: {
+          prev_id: number;
+          prev_title: string;
+          next_id: number;
+          next_title: string;
+        }[];
+      };
     };
     Enums: {
       [_ in never]: never;
     };
     CompositeTypes: {
-      [_ in never]: never;
+      previous_next_type: {
+        previous_id: number | null;
+        previous_title: string | null;
+        next_id: number | null;
+        next_title: string | null;
+      };
     };
   };
 };
