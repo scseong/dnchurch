@@ -25,7 +25,34 @@
   word-wrap: normal;
 }
 
+@mixin back-button-style {
+  padding: 0 4rem;
+  min-width: 14rem;
+  min-height: 4rem;
+  border-radius: 0.4rem;
+  font-size: 1.4rem;
+  line-height: 4rem;
+}
+
+@mixin action-button-style {
+  padding: 0 4rem;
+  min-width: 14rem;
+  min-height: 4rem;
+  border-radius: 0.4rem;
+  font-size: 1.4rem;
+  line-height: 4rem;
+}
+
 @mixin link-hover-style {
   text-decoration: underline;
   color: #1f5da9;
+}
+
+@mixin button-hover-style($options) {
+  background-color: map-get($options, bg-color);
+  color: map-get($options, text-color);
+
+  &:hover {
+    background-color: map-get($options, bg-hover-color);
+  }
 }
