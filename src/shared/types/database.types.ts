@@ -179,6 +179,17 @@ export type Database = {
           next_title: string
         }[]
       }
+      get_prev_and_next_dev: {
+        Args: {
+          target_id: number
+        }
+        Returns: {
+          prev_id: number
+          prev_title: string
+          next_id: number
+          next_title: string
+        }[]
+      }
     }
     Enums: {
       [_ in never]: never

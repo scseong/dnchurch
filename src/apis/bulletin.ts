@@ -10,7 +10,7 @@ export const getPrevAndNextBulletin = async (targetId: number) => {
   });
 
   const { data, error } = await supabase
-    .rpc('get_prev_and_next', {
+    .rpc('get_prev_and_next_dev', {
       target_id: targetId
     })
     .single();
