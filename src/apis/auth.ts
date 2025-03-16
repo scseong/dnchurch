@@ -1,10 +1,12 @@
 import { supabase } from '@/shared/supabase/client';
 
-export async function signInWithKakao() {
+export async function signInWithKakao(nextUrl: string | null) {
   await supabase.auth.signInWithOAuth({
     provider: 'kakao',
     options: {
-      redirectTo: `${process.env.NEXT_PUBLIC_SITE_URL}/auth/callback`
+      redirectTo: nextUrl
+        ? `${process.env.NEXT_PUBLIC_SITE_URL}/auth/callback?next=${nextUrl}`
+        : `${process.env.NEXT_PUBLIC_SITE_URL}/auth/callback`
     }
   });
 }

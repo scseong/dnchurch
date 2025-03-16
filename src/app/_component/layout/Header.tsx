@@ -58,7 +58,9 @@ export default function Header() {
         {/* <div className={`${styles.auth} ${isNavVisible ? styles.visible : ''}`}> */}
         <div className={`${styles.auth}`}>
           {/* TODO: 모달로 구현 */}
-          {!user && <Link href="/login">로그인</Link>}
+          {!user && (
+            <Link href={{ pathname: '/login', query: { redirect: pathname } }}>로그인</Link>
+          )}
           {user && (
             <div className={styles.profile} ref={profileRef}>
               <UserProfile
@@ -81,7 +83,9 @@ export default function Header() {
           <button onClick={handleToggle} aria-label="Toggle Navigation">
             <GiHamburgerMenu />
           </button>
-          {isMobile && <Drawer isOpen={isNavVisible} onClose={handleToggle} user={user} />}
+          {isMobile && (
+            <Drawer isOpen={isNavVisible} onClose={handleToggle} user={user} pathname={pathname} />
+          )}
         </div>
       </div>
       <ModalOverlay isVisible={isNavVisible} />
