@@ -5,6 +5,7 @@ import { revalidatePath, revalidateTag } from 'next/cache';
 import { createServerSideClient } from '@/shared/supabase/server';
 import { updateFileAction, uploadFileAction } from '../file.action';
 import { getUrlsFromApiResponse } from '@/shared/util/file';
+import { BULLETIN_BUCKET } from '@/shared/constants/bulletin';
 import type { ImageFileData } from '@/shared/types/types';
 
 export const createBulletinAction = async (
@@ -29,7 +30,7 @@ export const createBulletinAction = async (
   try {
     const supabase = await createServerSideClient({});
     const { error } = await supabase
-      .from('bulletin')
+      .from(BULLETIN_BUCKET)
       .insert({
         title,
         image_url: imagefileUrls,
@@ -86,7 +87,7 @@ export const updateBulletinAction = async (
   try {
     const supabase = await createServerSideClient({});
     const { error } = await supabase
-      .from('bulletin')
+      .from(BULLETIN_BUCKET)
       .update({ ...updatedObject })
       .eq('id', Number(bulletinId))
       .select();

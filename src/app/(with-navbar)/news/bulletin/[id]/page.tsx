@@ -1,7 +1,10 @@
 import { notFound } from 'next/navigation';
-import { getBulletinsById } from '@/apis/bulletin';
+import { getBulletinsById, getPrevAndNextBulletin } from '@/apis/bulletin';
 import MainContainer from '@/app/_component/layout/common/MainContainer';
 import { BoardHeader, BoardBody, BoardFooter, BoardListButton } from '@/app/_component/board';
+import { convertBase64ToFileName, getFilenameFromUrl } from '@/shared/util/file';
+import { getDownloadFilePath } from '@/apis/storage';
+import { BULLETIN_BUCKET } from '@/shared/constants/bulletin';
 import styles from './page.module.scss';
 
 export async function generateMetadata({ params }: { params: Promise<{ id: string }> }) {
@@ -24,10 +27,18 @@ export async function generateMetadata({ params }: { params: Promise<{ id: strin
 export default async function BulletinDetail({ params }: { params: Promise<{ id: string }> }) {
   const { id: bulletinId } = await params;
   const bulletin = await getBulletinsById(bulletinId);
+  const prevNextBulletin = await getPrevAndNextBulletin(Number(bulletinId));
 
   if (!bulletin) notFound();
 
   const { id, created_at, image_url, title, user_id, profiles } = bulletin;
+  const files = image_url.map((url) => {
+    const res = getFilenameFromUrl(url);
+    const filename = convertBase64ToFileName(res);
+    const downloadPath = getDownloadFilePath({ bucket: BULLETIN_BUCKET, path: res });
+
+    return { filename, downloadPath };
+  });
 
   return (
     <MainContainer title="주보">
@@ -48,7 +59,7 @@ export default async function BulletinDetail({ params }: { params: Promise<{ id:
           </div>
         ))}
       </BoardBody>
-      <BoardFooter files={image_url} />
+      <BoardFooter files={files} prevNext={prevNextBulletin} />
       <BoardListButton link="/news/bulletin" />
     </MainContainer>
   );

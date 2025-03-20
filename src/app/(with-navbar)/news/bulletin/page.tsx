@@ -43,7 +43,6 @@ export default async function Bulletin({ searchParams }: BulletinProps) {
           count={count ?? 0}
           currentPage={currentPage}
         />
-        <CreateBulletinButton />
       </div>
     </MainContainer>
   );
@@ -85,6 +84,7 @@ function BulletinTableSection({
     <section className={styles.table}>
       <BulletinYearFilter currentYearParam={year} />
       <BulletinTable bulletins={bulletins} count={count ?? 0} currentPage={currentPage} />
+      <CreateBulletinButton />
     </section>
   );
 }

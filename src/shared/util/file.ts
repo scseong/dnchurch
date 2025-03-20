@@ -56,3 +56,20 @@ export const convertUrlToImageData = async (url: string) => {
 
   return convertFileToImageData(file);
 };
+
+function base64ToBytes(base64: string) {
+  const binString = atob(base64);
+  return Uint8Array.from(binString, (m) => m.codePointAt(0)!);
+}
+
+function bytesToBase64(bytes: Uint8Array) {
+  const binString = Array.from(bytes, (byte) => String.fromCodePoint(byte)).join('');
+  return btoa(binString);
+}
+
+export function convertFileNameToBase64(name: string) {
+  return bytesToBase64(new TextEncoder().encode(name));
+}
+export function convertBase64ToFileName(encoded: string) {
+  return new TextDecoder().decode(base64ToBytes(encoded));
+}

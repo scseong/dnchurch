@@ -3,19 +3,27 @@
 import { useParams } from 'next/navigation';
 import { useActionState, useEffect, useState } from 'react';
 import { useProfile } from '@/context/SessionContextProvider';
+import useConfirmPageLeave from '@/hooks/useConfirmPageLeave';
 import MainContainer from '@/app/_component/layout/common/MainContainer';
 import FileUpload from '../../_component/create/FileUpload';
 import FilePreview from '../../_component/create/FilePreview';
 import { supabase } from '@/shared/supabase/client';
 import { updateBulletinAction } from '@/actions/bulletin/bulletin.action';
-import { convertFileToImageData, convertUrlToImageData } from '@/shared/util/file';
+import {
+  convertBase64ToFileName,
+  convertFileToImageData,
+  convertUrlToImageData
+} from '@/shared/util/file';
 import { BulletinWithUserName } from '@/apis/bulletin';
+import { BULLETIN_BUCKET } from '@/shared/constants/bulletin';
 import type { ImageFileData } from '@/shared/types/types';
 import styles from '../../create/page.module.scss';
+import Link from 'next/link';
 
 export default function UpdateBulletin() {
   const { id: bulletinId } = useParams<{ id: string }>();
   const user = useProfile();
+  const { handleBack } = useConfirmPageLeave(`/news/bulletin/${bulletinId}`);
 
   const [bulletin, setBulletin] = useState<BulletinWithUserName | null>(null);
   const [title, setTitle] = useState('');
@@ -53,7 +61,7 @@ export default function UpdateBulletin() {
   useEffect(() => {
     const fetchBulletin = async (id: string) => {
       const { data } = await supabase
-        .from('bulletin')
+        .from(BULLETIN_BUCKET)
         .select(`*, profiles ( user_name )`)
         .eq('id', id)
         .single();
@@ -66,7 +74,10 @@ export default function UpdateBulletin() {
 
       const imageFiles = data?.image_url.map(convertUrlToImageData);
       const imageData = await Promise.all(imageFiles);
-      setUploadedFiles(imageData);
+      const decodeedImageData = imageData.map((data) => {
+        return { ...data, filename: convertBase64ToFileName(data.filename) };
+      });
+      setUploadedFiles(decodeedImageData);
       setBulletin(data as unknown as BulletinWithUserName | null);
       setTitle(data.title);
     };
@@ -113,6 +124,9 @@ export default function UpdateBulletin() {
         <input name="bulletin_id" value={bulletinId} hidden readOnly />
         <input name="is_disabled" type="checkbox" checked={isDisabled} hidden readOnly />
         <div className={styles.submit}>
+          <Link href={`/news/bulletin/${bulletinId}`} onClick={handleBack}>
+            취소하기
+          </Link>
           <button disabled={isPending} className={styles.submit_btn}>
             수정하기
           </button>

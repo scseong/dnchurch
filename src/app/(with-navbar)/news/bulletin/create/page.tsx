@@ -1,5 +1,6 @@
 'use client';
 
+import Link from 'next/link';
 import { useActionState, useEffect, useState } from 'react';
 import { createBulletinAction } from '@/actions/bulletin/bulletin.action';
 import { useProfile } from '@/context/SessionContextProvider';
@@ -9,6 +10,7 @@ import FileUpload from '../_component/create/FileUpload';
 import { convertFileToImageData } from '@/shared/util/file';
 import type { ImageFileData } from '@/shared/types/types';
 import styles from './page.module.scss';
+import useConfirmPageLeave from '@/hooks/useConfirmPageLeave';
 
 export default function Page() {
   const [selectedFiles, setSelectedFiles] = useState<ImageFileData[]>([]);
@@ -17,6 +19,7 @@ export default function Page() {
     null
   );
   const user = useProfile();
+  const { handleBack } = useConfirmPageLeave('/news/bulletin');
 
   const handleInputChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files === null) return;
@@ -68,7 +71,12 @@ export default function Page() {
         </div>
         <FilePreview files={selectedFiles} onDelete={handleDeleteSelectedFile} />
         <input name="user_id" value={user.id} hidden readOnly />
-        <button disabled={isPending}>추가하기</button>
+        <div className={styles.submit}>
+          <Link href="/news/bulletin" onClick={handleBack}>
+            취소하기
+          </Link>
+          <button disabled={isPending}>추가하기</button>
+        </div>
       </form>
     </MainContainer>
   );
