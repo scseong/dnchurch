@@ -1,11 +1,12 @@
+import { cache } from 'react';
 import { createServerSideClient } from '@/shared/supabase/server';
 import { UserProps } from '@/shared/types/types';
 
 export const getCurrentUser = async (): Promise<UserProps> => {
   const supabase = await createServerSideClient({});
-  const user = await supabase.auth.getUser();
+  const { data } = await supabase.auth.getUser();
 
-  return user.data.user as UserProps;
+  return data.user as UserProps;
 };
 
 export const getUserAdminStatus = async (userId: string | undefined): Promise<boolean> => {
