@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import styles from './SubNavMenu.module.scss';
+import { startsWith } from 'lodash-es';
 
 export default function SubNavMenu({
   subPaths,
@@ -21,11 +22,12 @@ export default function SubNavMenu({
           <li
             key={subItem.path}
             className={
-              pathname === subItem.path || (segment === pathname && idx === 0)
+              pathname.startsWith(subItem.path) || (segment === pathname && idx === 0)
                 ? styles.isActive
                 : styles.item
             }
           >
+            <p>{subItem.path}</p>
             <Link href={subItem.path}>{subItem.label}</Link>
           </li>
         ))}
