@@ -1,7 +1,6 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import styles from './SubNavMenu.module.scss';
-import { startsWith } from 'lodash-es';
 
 export default function SubNavMenu({
   subPaths,
