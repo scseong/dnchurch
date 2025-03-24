@@ -27,7 +27,6 @@ export default function SubNavMenu({
                 : styles.item
             }
           >
-            <p>{subItem.path}</p>
             <Link href={subItem.path}>{subItem.label}</Link>
           </li>
         ))}

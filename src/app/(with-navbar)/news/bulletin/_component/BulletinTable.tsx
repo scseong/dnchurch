@@ -44,9 +44,8 @@ export default function BulletinTable({ bulletins, count, currentPage }: Bulleti
     rowCount: count
   });
 
-  const ITEMS_PER_PAGE = !isMobile ? 10 : 5;
+  const ITEMS_PER_PAGE = 10;
   const totalPage = count ? Math.ceil(count / ITEMS_PER_PAGE) : 0;
-
   const currentGroup = Math.floor((parseInt(currentPage) - 1) / ITEMS_PER_PAGE);
   const startPage = currentGroup * ITEMS_PER_PAGE + 1;
   const endPage = Math.min(startPage + ITEMS_PER_PAGE - 1, totalPage);
