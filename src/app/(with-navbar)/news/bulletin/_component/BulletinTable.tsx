@@ -1,27 +1,26 @@
 'use client';
 
-import { BulletinType } from '@/shared/types/types';
+import Link from 'next/link';
 import {
   createColumnHelper,
   flexRender,
   getCoreRowModel,
   useReactTable
 } from '@tanstack/react-table';
-import styles from './BulletinTable.module.scss';
-import Link from 'next/link';
 import useQueryParams from '@/hooks/useQueryParams';
-import useIsMobile from '@/hooks/useIsMobile';
+import { ITEM_PER_PAGE } from '@/shared/constants/bulletin';
+import type { BulletinType } from '@/shared/types/types';
+import styles from './BulletinTable.module.scss';
 
 const columnHelper = createColumnHelper<BulletinType>();
 
 type BulletinTableProps = {
-  bulletins: BulletinType[];
+  bulletins: BulletinType[] | null;
   count: number;
   currentPage: string;
 };
 
 export default function BulletinTable({ bulletins, count, currentPage }: BulletinTableProps) {
-  const isMobile = useIsMobile();
   const { createPageURL } = useQueryParams();
   const columns = [
     columnHelper.accessor('id', {
@@ -37,19 +36,17 @@ export default function BulletinTable({ bulletins, count, currentPage }: Bulleti
   ];
 
   const table = useReactTable({
-    data: bulletins,
+    data: bulletins || [],
     columns,
     getCoreRowModel: getCoreRowModel(),
     manualPagination: true,
     rowCount: count
   });
 
-  const ITEMS_PER_PAGE = !isMobile ? 10 : 5;
-  const totalPage = count ? Math.ceil(count / ITEMS_PER_PAGE) : 0;
-
-  const currentGroup = Math.floor((parseInt(currentPage) - 1) / ITEMS_PER_PAGE);
-  const startPage = currentGroup * ITEMS_PER_PAGE + 1;
-  const endPage = Math.min(startPage + ITEMS_PER_PAGE - 1, totalPage);
+  const totalPage = count ? Math.ceil(count / ITEM_PER_PAGE) : 0;
+  const currentGroup = Math.floor((parseInt(currentPage) - 1) / ITEM_PER_PAGE);
+  const startPage = currentGroup * ITEM_PER_PAGE + 1;
+  const endPage = Math.min(startPage + ITEM_PER_PAGE - 1, totalPage);
 
   return (
     <>

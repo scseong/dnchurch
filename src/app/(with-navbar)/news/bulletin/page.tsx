@@ -24,14 +24,11 @@ type BulletinProps = {
 
 export default async function Bulletin({ searchParams }: BulletinProps) {
   const { page, year } = await searchParams;
-
   const currentPage = page || '1';
   const [{ latestBulletin }, { bulletins, count }] = await Promise.all([
     getLatestBulletin(),
     getQueryFunction({ page: currentPage, year })
   ]);
-
-  if (!latestBulletin || !bulletins) return <>Loading...</>;
 
   return (
     <MainContainer title="주보">
@@ -48,23 +45,31 @@ export default async function Bulletin({ searchParams }: BulletinProps) {
   );
 }
 
-function LatestBulletin({ latestBulletin }: { latestBulletin: BulletinType }) {
+function LatestBulletin({ latestBulletin }: { latestBulletin: BulletinType | null }) {
   return (
     <section className={styles.latest_bulletin}>
       <div className={styles.notification}>
         <h4>이 주의 주보</h4>
-        <p>{latestBulletin.title}</p>
+        <p>{latestBulletin?.title || ''}</p>
       </div>
       <div className={styles.images_wrap}>
-        {latestBulletin.image_url.map((url, idx) => (
-          <Link href={url} target="_blank" key={idx}>
-            <img src={url} alt={`${latestBulletin.title} - ${idx + 1}`} />
+        {latestBulletin?.image_url && latestBulletin.image_url.length > 0 ? (
+          latestBulletin.image_url.map((url, idx) => (
+            <Link href={url} target="_blank" key={idx}>
+              <img src={url} alt={`${latestBulletin.title} - ${idx + 1}`} />
+            </Link>
+          ))
+        ) : (
+          <Link href="#" scroll={false}>
+            <img src="/images/noimage.jpg" alt="No images" />
           </Link>
-        ))}
+        )}
       </div>
-      <div className={styles.share}>
-        <KakaoShareBtn title="주보 - 대구동남교회" description={latestBulletin?.title ?? ''} />
-      </div>
+      {latestBulletin && (
+        <div className={styles.share}>
+          <KakaoShareBtn title="주보 - 대구동남교회" description={latestBulletin?.title ?? ''} />
+        </div>
+      )}
     </section>
   );
 }
@@ -76,7 +81,7 @@ function BulletinTableSection({
   currentPage
 }: {
   year: string;
-  bulletins: BulletinType[];
+  bulletins: BulletinType[] | null;
   count: number;
   currentPage: string;
 }) {

@@ -1,6 +1,7 @@
+import { Suspense } from 'react';
 import KakaoLoginBtn from '../_component/auth/KakaoLoginBtn';
-import styles from './page.module.scss';
 import type { Metadata } from 'next';
+import styles from './page.module.scss';
 
 export const metadata: Metadata = {
   title: '로그인 - 대구동남교회',
@@ -23,7 +24,9 @@ export default async function Login() {
           <span className={styles.caption}>로그인/회원가입</span>
         </div>
         <div className={styles.btn_group}>
-          <KakaoLoginBtn />
+          <Suspense fallback={null}>
+            <KakaoLoginBtn />
+          </Suspense>
           {/* TODO: Naver, Google 중 소셜 로그인 추가 */}
         </div>
       </div>

@@ -10,9 +10,13 @@ export const getPrevAndNextBulletin = async (targetId: number) => {
   });
 
   const { data, error } = await supabase
-    .rpc('get_prev_and_next_dev', {
-      target_id: targetId
-    })
+    .rpc(
+      'get_prev_and_next_dev',
+      {
+        target_id: targetId
+      },
+      { get: true }
+    )
     .single();
 
   if (error) console.error(error);

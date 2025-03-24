@@ -21,7 +21,7 @@ export default function SubNavMenu({
           <li
             key={subItem.path}
             className={
-              pathname === subItem.path || (segment === pathname && idx === 0)
+              pathname.startsWith(subItem.path) || (segment === pathname && idx === 0)
                 ? styles.isActive
                 : styles.item
             }

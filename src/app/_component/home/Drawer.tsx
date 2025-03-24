@@ -11,9 +11,10 @@ type DrawerProps = {
   isOpen: boolean;
   onClose: () => void;
   user: ProfileType | null;
+  pathname: string;
 };
 
-export default function Drawer({ isOpen, onClose, user }: DrawerProps) {
+export default function Drawer({ isOpen, onClose, user, pathname }: DrawerProps) {
   const { avatar_url = '', user_name = '', name = '' } = user ?? {};
 
   return (
@@ -39,7 +40,10 @@ export default function Drawer({ isOpen, onClose, user }: DrawerProps) {
           </>
         )}
         {!user && (
-          <Link href="/login" className={styles.login_btn}>
+          <Link
+            href={{ pathname: '/login', query: { redirect: pathname } }}
+            className={styles.login_btn}
+          >
             로그인
           </Link>
         )}
