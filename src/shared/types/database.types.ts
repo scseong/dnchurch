@@ -133,6 +133,78 @@ export type Database = {
         }
         Relationships: []
       }
+      posts: {
+        Row: {
+          content: string
+          created_at: string | null
+          id: number
+          is_deleted: boolean
+          is_important: boolean
+          post_type: string
+          title: string
+          updated_at: string | null
+          user_id: string | null
+        }
+        Insert: {
+          content: string
+          created_at?: string | null
+          id?: number
+          is_deleted?: boolean
+          is_important?: boolean
+          post_type: string
+          title: string
+          updated_at?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          content?: string
+          created_at?: string | null
+          id?: number
+          is_deleted?: boolean
+          is_important?: boolean
+          post_type?: string
+          title?: string
+          updated_at?: string | null
+          user_id?: string | null
+        }
+        Relationships: []
+      }
+      posts_dev: {
+        Row: {
+          content: string
+          created_at: string | null
+          id: number
+          is_deleted: boolean
+          is_important: boolean
+          post_type: string
+          title: string
+          updated_at: string | null
+          user_id: string | null
+        }
+        Insert: {
+          content: string
+          created_at?: string | null
+          id?: number
+          is_deleted?: boolean
+          is_important?: boolean
+          post_type: string
+          title: string
+          updated_at?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          content?: string
+          created_at?: string | null
+          id?: number
+          is_deleted?: boolean
+          is_important?: boolean
+          post_type?: string
+          title?: string
+          updated_at?: string | null
+          user_id?: string | null
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
           avatar_url: string
