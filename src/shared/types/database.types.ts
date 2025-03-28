@@ -136,7 +136,7 @@ export type Database = {
       posts: {
         Row: {
           content: string
-          created_at: string | null
+          created_at: string
           id: number
           is_deleted: boolean
           is_important: boolean
@@ -147,7 +147,7 @@ export type Database = {
         }
         Insert: {
           content: string
-          created_at?: string | null
+          created_at?: string
           id?: number
           is_deleted?: boolean
           is_important?: boolean
@@ -158,7 +158,7 @@ export type Database = {
         }
         Update: {
           content?: string
-          created_at?: string | null
+          created_at?: string
           id?: number
           is_deleted?: boolean
           is_important?: boolean
@@ -167,12 +167,20 @@ export type Database = {
           updated_at?: string | null
           user_id?: string | null
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "posts_user_id_fkey1"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
       }
-      posts_dev: {
+      "posts-dev": {
         Row: {
           content: string
-          created_at: string | null
+          created_at: string
           id: number
           is_deleted: boolean
           is_important: boolean
@@ -183,7 +191,7 @@ export type Database = {
         }
         Insert: {
           content: string
-          created_at?: string | null
+          created_at?: string
           id?: number
           is_deleted?: boolean
           is_important?: boolean
@@ -194,7 +202,7 @@ export type Database = {
         }
         Update: {
           content?: string
-          created_at?: string | null
+          created_at?: string
           id?: number
           is_deleted?: boolean
           is_important?: boolean
@@ -203,7 +211,15 @@ export type Database = {
           updated_at?: string | null
           user_id?: string | null
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "posts_dev_user_id_fkey1"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       profiles: {
         Row: {
