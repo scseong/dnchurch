@@ -1,0 +1,149 @@
+.hero {
+  position: relative;
+  height: auto;
+}
+
+.intro {
+  padding: 2rem;
+  margin: 0 auto;
+  display: flex;
+  align-items: flex-start;
+  max-width: $max-width;
+
+  h2 {
+    flex-basis: 50%;
+    font-size: $font-size-h2;
+    font-weight: bold;
+    letter-spacing: -0.3rem;
+  }
+
+  div {
+    flex-basis: 50%;
+
+    p {
+      flex-basis: 50%;
+      font-size: 1.2rem;
+      letter-spacing: -0.1rem;
+      line-height: 1.4;
+      word-break: keep-all;
+
+      strong {
+        color: $text-color-light;
+      }
+    }
+  }
+
+  @include respond($breakpoint-lg) {
+    flex-direction: column;
+    align-items: flex-start;
+
+    h2 {
+      font-size: 2.8rem;
+    }
+
+    div {
+      margin-top: 1rem;
+      flex-direction: column;
+      gap: 0;
+      padding-right: 4rem;
+    }
+  }
+}
+
+.img_container {
+  position: relative;
+  padding: 0 2rem;
+  margin: 0 auto;
+  max-width: $max-width;
+
+  .img_wrap {
+    position: relative;
+    width: 100%;
+
+    &::before {
+      content: '';
+      position: absolute;
+      top: -1px;
+      left: -1px;
+      display: block;
+      width: 100%;
+      height: 100%;
+      z-index: 2;
+      border: 1px solid #eee;
+    }
+
+    img {
+      display: block;
+      width: 100%;
+      height: auto;
+      aspect-ratio: 7 / 3;
+
+      @include respond($breakpoint-md) {
+        aspect-ratio: 4 / 3;
+      }
+    }
+  }
+
+  .content_wrapper {
+    position: absolute;
+    bottom: 0;
+    background-color: #fff;
+    border-radius: 2rem 2rem 0 0;
+    z-index: 3;
+
+    @include respond($breakpoint-lg) {
+      position: relative;
+      width: 100%;
+      border: 1px solid #eee;
+      border-radius: 0;
+
+      dl > div {
+        padding: 1rem 0 !important;
+        flex-basis: 32%;
+        text-align: center;
+
+        &:last-child {
+          flex-basis: 36%;
+        }
+      }
+    }
+
+    dl {
+      display: flex;
+
+      div {
+        padding: 2rem 3rem;
+        position: relative;
+
+        &:not(:last-child) {
+          &::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            right: 0;
+            width: 1px;
+            height: 60%;
+            background-color: #eee;
+            transform: translateY(-50%);
+          }
+        }
+
+        dt {
+          font-weight: 600;
+        }
+
+        dd {
+          color: $text-color-light;
+
+          time:not(:last-child) {
+            margin-right: 0.6rem;
+          }
+
+          address {
+            font-style: normal;
+          }
+        }
+      }
+    }
+  }
+}
