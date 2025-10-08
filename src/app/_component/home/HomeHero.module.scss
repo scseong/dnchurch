@@ -1,3 +1,5 @@
+// TODO: CSS 변수 관리
+
 .hero {
   position: relative;
   height: auto;
@@ -7,7 +9,6 @@
   padding: 2rem;
   margin: 0 auto;
   display: flex;
-  align-items: flex-start;
   max-width: $max-width;
 
   h2 {
@@ -33,16 +34,18 @@
     }
   }
 
+  @include respond($breakpoint-xl) {
+    h2 {
+      font-size: 2.8rem;
+    }
+  }
+
   @include respond($breakpoint-lg) {
     flex-direction: column;
     align-items: flex-start;
 
-    h2 {
-      font-size: 2.8rem;
-    }
-
     div {
-      margin-top: 1rem;
+      margin-top: 0.6rem;
       flex-direction: column;
       gap: 0;
       padding-right: 4rem;
@@ -79,7 +82,7 @@
       aspect-ratio: 7 / 3;
 
       @include respond($breakpoint-md) {
-        aspect-ratio: 4 / 3;
+        aspect-ratio: 5 / 3;
       }
     }
   }
@@ -88,25 +91,9 @@
     position: absolute;
     bottom: 0;
     background-color: #fff;
+    border-bottom: 1px solid #eee;
     border-radius: 2rem 2rem 0 0;
     z-index: 3;
-
-    @include respond($breakpoint-lg) {
-      position: relative;
-      width: 100%;
-      border: 1px solid #eee;
-      border-radius: 0;
-
-      dl > div {
-        padding: 1rem 0 !important;
-        flex-basis: 32%;
-        text-align: center;
-
-        &:last-child {
-          flex-basis: 36%;
-        }
-      }
-    }
 
     dl {
       display: flex;
@@ -133,10 +120,10 @@
         }
 
         dd {
-          color: $text-color-light;
+          color: #555;
 
           time:not(:last-child) {
-            margin-right: 0.6rem;
+            margin-right: 0.5rem;
           }
 
           address {
@@ -145,5 +132,36 @@
         }
       }
     }
+
+    @include respond($breakpoint-xl) {
+      dl > div {
+        padding: 1.5rem 2.5rem !important;
+      }
+    }
+
+    @include respond($breakpoint-lg) {
+      position: relative;
+      width: 100%;
+      border: 1px solid #eee;
+      border-top: 0;
+      border-radius: 0;
+
+      dl > div {
+        padding: 1rem 0 1rem 1.5rem !important;
+        flex-basis: 32%;
+
+        &:last-child {
+          flex-basis: 36%;
+        }
+      }
+    }
+
+    @include respond($breakpoint-md) {
+      border-bottom-width: 2px;
+    }
+  }
+
+  @include respond($breakpoint-md) {
+    padding: 0 !important;
   }
 }

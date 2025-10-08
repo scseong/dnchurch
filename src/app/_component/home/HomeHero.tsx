@@ -23,7 +23,7 @@ export default function HomeHero() {
               <dt>주일예배</dt>
               <dd>
                 <time dateTime="일 11:00">일 11:00</time>
-                <time dateTime="일 19:00">일 19:00</time>
+                <time dateTime="일 18:00">일 18:00</time>
               </dd>
             </div>
             <div>
