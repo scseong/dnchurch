@@ -29,7 +29,7 @@
       word-break: keep-all;
 
       strong {
-        color: $text-color-light;
+        color: $color-text-secondary;
       }
     }
   }
@@ -99,7 +99,7 @@
       display: flex;
 
       div {
-        padding: 2rem 3rem;
+        padding: 1.5rem 3rem;
         position: relative;
 
         &:not(:last-child) {

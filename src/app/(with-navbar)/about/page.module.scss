@@ -183,7 +183,7 @@
         margin: 0 auto;
         width: 5rem;
         height: 0.2rem;
-        background-color: $primary-color;
+        background-color: $color-primary;
         transform: translateX(-50%);
       }
     }
@@ -233,7 +233,7 @@
 
         svg {
           font-size: 2.8rem;
-          color: $primary-color;
+          color: $color-primary;
         }
 
         &::after {
