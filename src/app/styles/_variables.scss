@@ -1,43 +1,6 @@
-/* Colors */
-$background: #ffffff;
-$background-dark: #231305;
-$foreground: #171717;
-
-$primary-color: #f68b28;
-$primary-hover-color: #e17f24;
-$secendary-color: #bf1e2dff;
-$dividing-line-color: #ddd;
-$button-color: #e5e7eb;
-$button-hover-color: #f3f4f6;
-$link-hover-color: #1f5da9;
-
-/* Text */
-$text-color: #171717;
-$text-color-light: #333;
-$text-hover: $primary-color;
-$text-hover-delay: 0.2s;
-
-/* Size */
-$max-width: 100rem;
-$header-height: 4rem;
-$font-size-h2: 3.6rem;
-$font-size-h2-mobile: 3.4rem;
-$font-size-h3: 2.8rem;
-$font-size-h4: 2.4rem;
-$font-size-h4-mobile: 2.1rem;
-$font-size-h5: 2rem;
-$font-size-h5-mobile: 1.7rem;
-$font-size-basic: 1.6rem;
-$font-size-basic-line: 2.6rem;
-$font-size-basic-mobile: 1.4rem;
-$font-size-basic-line-mobile: 2rem;
-$font-line-height: 1.67;
-
-/* Break Point */
-$breakpoint-xs: 361px; // Extra small devices (small phones)
-$breakpoint-sm: 481px; // Small devices (phones)
-$breakpoint-md: 601px; // Medium devices (tablets)
-$breakpoint-lg: 769px; // Large devices (small desktops)
-$breakpoint-xl: 1025px; // Extra large devices (desktops)
-$breakpoint-xxl: 1337px; // Extra extra large devices (large desktops)
-$breakpoint-xxxl: 1921px; // Extra extra extra large devices (large screens)
+@import 'tokens/breakpoint';
+@import 'tokens/color';
+@import 'tokens/effect';
+@import 'tokens/layout';
+@import 'tokens/spacing';
+@import 'tokens/typography';
