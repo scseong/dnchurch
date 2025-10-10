@@ -1,11 +1,11 @@
-import { Banner, HomeHero, Greeting, HomeGallery, LinkButtons } from './_component/home';
+import { Banner, HomeAbout, LinkButtons } from './_component/home';
 
 export default async function Home() {
   return (
     <>
-      <HomeHero />
+      <Banner />
       {/* <Banner /> */}
-      <Greeting />
+      <HomeAbout />
       <LinkButtons />
       {/* <HomeGallery /> */}
     </>

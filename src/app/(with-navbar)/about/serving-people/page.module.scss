@@ -17,16 +17,8 @@
 .title {
   margin-bottom: 3rem;
 
-  h4 {
-    font-size: $font-size-h4;
-  }
-
   @include respond($breakpoint-md) {
     margin-bottom: 1.4rem;
-
-    h4 {
-      font-size: $font-size-h4-mobile;
-    }
   }
 }
 
@@ -59,25 +51,15 @@ $image_max_width: 20rem;
 
       h5 {
         margin-bottom: 0.4rem;
-        font-size: $font-size-h5;
         color: $color-primary;
       }
 
       li {
-        font-size: $font-size-basic;
         color: $color-text-secondary;
       }
 
       @include respond($breakpoint-md) {
         margin-bottom: 1.2rem;
-
-        h5 {
-          font-size: $font-size-h5-mobile;
-        }
-
-        li {
-          font-size: $font-size-basic-mobile;
-        }
       }
     }
   }
