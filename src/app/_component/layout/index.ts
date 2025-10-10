@@ -1,4 +1,2 @@
-import Header from './Header';
-import Footer from './Footer';
-
-export { Header, Footer };
+export { default as Header } from './AppHeader';
+export { default as Footer } from './Footer';

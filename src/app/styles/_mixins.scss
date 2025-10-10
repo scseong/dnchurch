@@ -7,7 +7,7 @@
 }
 
 @mixin respond($width) {
-  @media screen and (min-width: $width) {
+  @media screen and (max-width: $width) {
     @content;
   }
 }
