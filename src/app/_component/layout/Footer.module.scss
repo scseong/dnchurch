@@ -4,7 +4,7 @@
   display: flex;
   justify-content: center;
   gap: 1.6rem;
-  background-color: $background-dark;
+  background-color: $color-bg-footer;
   color: white;
 
   @include respond($breakpoint-md) {

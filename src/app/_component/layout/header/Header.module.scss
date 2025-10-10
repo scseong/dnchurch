@@ -1,0 +1,69 @@
+.header {
+  position: sticky;
+  top: 0;
+  right: 0;
+  left: 0;
+  background: $color-bg-default;
+}
+
+.header_wrap {
+  padding: $spacing-md 0;
+  position: relative;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 6rem;
+  height: $header-height;
+  background-color: inherit;
+  box-shadow: 0 1px 20px 0 rgba(239, 227, 221, 0.35);
+}
+
+.logo {
+  flex: 0 0 auto;
+
+  h1 {
+    font-size: $font-size-default;
+
+    a {
+      font-weight: $font-weight-bold;
+    }
+  }
+}
+
+.nav {
+  margin-left: auto;
+  z-index: 99;
+
+  ul {
+    display: flex;
+    gap: 4rem;
+
+    li {
+      font-size: $font-size-default;
+    }
+  }
+
+  @include respond($breakpoint-md) {
+    max-height: 0;
+    opacity: 0;
+    overflow: hidden;
+  }
+}
+
+.toggle {
+  button {
+    display: inline-flex;
+  }
+  svg {
+    width: 1.6rem;
+    height: 1.6rem;
+  }
+}
+
+.visible {
+  display: block !important;
+}
+
+.invisible {
+  display: none !important;
+}

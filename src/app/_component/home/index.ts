@@ -1,7 +1,7 @@
-import Banner from './Banner';
-import HomeGallery from './HomeGallery';
-import GalleryCarousel from './HomeGalleryCarousel';
-import Greeting from './Greeting';
-import LinkButtons from './LinkButtons';
-
-export { Banner, HomeGallery, GalleryCarousel, Greeting, LinkButtons };
+export { default as Banner } from './Banner';
+export { default as HomeHero } from './HomeHero';
+export { default as HomeAbout } from './HomeAbout';
+export { default as HomeGallery } from './HomeGallery';
+export { default as GalleryCarousel } from './HomeGalleryCarousel';
+export { default as Greeting } from './Greeting';
+export { default as LinkButtons } from './LinkButtons';

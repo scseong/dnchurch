@@ -20,7 +20,7 @@ export const metadata: Metadata = {
   }
 };
 
-const myFont = localFont({
+const notoSans = localFont({
   src: [
     {
       path: './fonts/NotoSansKR-Light.woff2',
@@ -51,6 +51,27 @@ const myFont = localFont({
   variable: '--font-notosans'
 });
 
+const myeongjo = localFont({
+  src: [
+    {
+      path: '/fonts/NanumMyeongjo-Regular.woff2',
+      weight: '400',
+      style: 'normal'
+    },
+    {
+      path: '/fonts/NanumMyeongjo-Bold.woff2',
+      weight: '700',
+      style: 'normal'
+    },
+    {
+      path: '/fonts/NanumMyeongjo-Black.woff2',
+      weight: '800',
+      style: 'normal'
+    }
+  ],
+  variable: '--font-myeongjo'
+});
+
 const API_KEY = `//dapi.kakao.com/v2/maps/sdk.js?appkey=${process.env.NEXT_PUBLIC_KAKAO_API_KEY}&libraries=services,clusterer&autoload=false`;
 
 export default async function RootLayout({
@@ -59,7 +80,7 @@ export default async function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="ko" className={myFont.variable}>
+    <html lang="ko" className={`${myeongjo.variable} ${notoSans.variable}`}>
       <body>
         <Script src={API_KEY} strategy="beforeInteractive" />
         <KakaoScript />

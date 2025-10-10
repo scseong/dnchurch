@@ -40,10 +40,10 @@
     dd,
     dt,
     li {
-      font-size: $font-size-basic;
+      // font-size: $font-size-basic;
 
       @include respond($breakpoint-md) {
-        font-size: $font-size-basic-mobile;
+        // font-size: $font-size-basic-mobile;
       }
     }
 

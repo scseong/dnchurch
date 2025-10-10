@@ -6,9 +6,17 @@
   }
 }
 
-@mixin respond($size) {
-  @media screen and (max-width: $size) {
+@mixin respond($width) {
+  @media screen and (max-width: $width) {
     @content;
+  }
+}
+
+@mixin set-heading-fonts($sizes-map) {
+  @each $heading, $size in $sizes-map {
+    #{$heading} {
+      font-size: $size;
+    }
   }
 }
 
@@ -25,6 +33,7 @@
   word-wrap: normal;
 }
 
+// TODO: renew
 @mixin back-button-style {
   padding: 0 4rem;
   min-width: 14rem;
