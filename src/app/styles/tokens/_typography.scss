@@ -10,14 +10,16 @@ $line-height-base: 1.5;
 // Font Weight
 $font-weight-regular: 400;
 $font-weight-medium: 500;
+$font-weight-semibold: 600;
 $font-weight-bold: 700;
 
 // Letter Spacing
 $letter-spacing-base: -0.05rem;
 
 // Base Text Size
-$font-size-base: calc(1rem + 0.25vw);
-$font-size-default: 1.4rem;
+$font-size-body: calc(1rem + 0.25vw);
+$font-size-default: 1.6rem;
+$font-size-medium: 1.4rem;
 $font-size-large: 1.8rem;
 $font-size-small: 1.2rem;
 $font-size-caption: 1rem;
