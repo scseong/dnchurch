@@ -28,8 +28,31 @@ body {
   box-sizing: border-box;
 }
 
+input[type='text'],
+textarea,
+select {
+  font-size: $font-size-medium;
+}
+
+p,
+ul,
+ol,
+blockquote {
+  font-size: $font-size-default;
+}
+
+@include respond($breakpoint-md) {
+  p,
+  ul,
+  ol,
+  blockquote {
+    font-size: $font-size-medium;
+  }
+}
+
 a {
   text-decoration: none;
+  font-size: $font-size-medium;
 }
 
 ul,
@@ -40,6 +63,7 @@ li {
 button {
   border: none;
   background: none;
+  font-size: $font-size-medium;
   cursor: pointer;
 }
 
@@ -81,22 +105,11 @@ button {
   background: #ffffff;
 }
 
-/*! ****************************************
- * $breakpoint-sm: 480px 
- * $breakpoint-md: 600px 
- * $breakpoint-lg: 768px 
- * $breakpoint-xl: 1024px
- * $breakpoint-xxl: 1336px
- * $breakpoint-xxxl: 1920px
- * **************************************** */
-@include respond-fonts($breakpoint-sm, 2.083333vw);
-@include respond-fonts($breakpoint-md, 1.666666vw);
-@include respond-fonts($breakpoint-lg, 1.302083vw);
-@include respond-fonts($breakpoint-xl, 0.9765625vw);
-@include respond-fonts($breakpoint-xxl, 0.748502vw);
-@include respond-fonts($breakpoint-xxxl, 0.520833vw);
+@each $width, $vw-value in $responsive-font-vw-map {
+  @include respond-fonts($width, $vw-value);
+}
 
-@include set-heading-fonts($heading-sizes);
-@include respond($breakpoint-lg) {
-  @include set-heading-fonts($heading-sizes-mobile);
+@include set-heading-fonts($heading-sizes-mobile);
+@include respond-up($breakpoint-lg) {
+  @include set-heading-fonts($heading-sizes);
 }
