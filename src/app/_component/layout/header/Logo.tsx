@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import styles from './Header.module.scss';
+import styles from './index.module.scss';
 
 export default function Logo() {
   return (

@@ -5,10 +5,10 @@ import { usePathname } from 'next/navigation';
 import { useProfile } from '@/context/SessionContextProvider';
 import useIsMobile from '@/hooks/useIsMobile';
 import useModal from '@/hooks/useModal';
-import LayoutContainer from './common/LayoutContainer';
-import ModalOverlay from '@/app/_component/common/ModalOverlay';
-import { Logo, AuthSection, DesktopNav, MobileToggle } from './header';
-import styles from './header/Header.module.scss';
+import { LayoutContainer } from './common';
+import Modal from '../common/Modal';
+import { Logo, AuthSection, DesktopNav, MobileToggle, Drawer } from './header';
+import styles from './header/index.module.scss';
 
 export default function AppHeader() {
   const isMobile = useIsMobile();
@@ -48,17 +48,14 @@ export default function AppHeader() {
             isVisible={isProfileVisible}
             handleToggle={handleProfileToggle}
           />
-          <MobileToggle
-            ref={navRef}
-            user={user}
-            isMobile={isMobile}
-            isVisible={isNavVisible}
-            pathname={pathname}
-            handleToggle={handleNavToggle}
-          />
+          <MobileToggle ref={navRef} isMobile={isMobile} handleToggle={handleNavToggle} />
         </div>
-        <ModalOverlay isVisible={isNavVisible} />
       </LayoutContainer>
+      {isNavVisible && (
+        <Modal>
+          <Drawer isOpen={isNavVisible} onClose={handleNavToggle} user={user} pathname={pathname} />
+        </Modal>
+      )}
     </header>
   );
 }

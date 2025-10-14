@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import { sitemap } from '@/shared/constants/sitemap';
-import styles from './Header.module.scss';
+import styles from './index.module.scss';
 
 type Props = {
   isVisible: boolean;
