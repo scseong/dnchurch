@@ -9,6 +9,11 @@ export default function useModal() {
   };
 
   const handleClickOutside = (event: MouseEvent | PointerEvent) => {
+    const modalRoot = document.getElementById('modal-root');
+    if (modalRoot?.contains(event.target as Node)) {
+      return;
+    }
+
     if (ref.current && !ref.current.contains(event.target as Node)) {
       setVisible(false);
     }

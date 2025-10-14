@@ -2,6 +2,7 @@
 
 import { PropsWithChildren, useEffect, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
+import useScrollLock from '@/hooks/useScrollLock';
 import style from './Modal.module.scss';
 
 type Props = PropsWithChildren<{
@@ -11,6 +12,7 @@ type Props = PropsWithChildren<{
 export default function Modal({ children, onClose }: Props) {
   const [mounted, setMounted] = useState(false);
   const overlayRef = useRef<HTMLDivElement>(null);
+  useScrollLock();
 
   const handleOverlayClick = (e: React.MouseEvent<HTMLDivElement>) => {
     if (e.target === overlayRef.current) {
