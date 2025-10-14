@@ -52,7 +52,7 @@ export default function AppHeader() {
         </div>
       </LayoutContainer>
       {isNavVisible && (
-        <Modal>
+        <Modal onClose={handleNavToggle}>
           <Drawer isOpen={isNavVisible} onClose={handleNavToggle} user={user} pathname={pathname} />
         </Modal>
       )}

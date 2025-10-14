@@ -4,9 +4,19 @@ import { PropsWithChildren, useEffect, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 import style from './Modal.module.scss';
 
-export default function Modal({ children }: PropsWithChildren) {
+type Props = PropsWithChildren<{
+  onClose?: () => void;
+}>;
+
+export default function Modal({ children, onClose }: Props) {
   const [mounted, setMounted] = useState(false);
-  const overlayRef = useRef<HTMLDialogElement>(null);
+  const overlayRef = useRef<HTMLDivElement>(null);
+
+  const handleOverlayClick = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (e.target === overlayRef.current) {
+      onClose?.();
+    }
+  };
 
   useEffect(() => {
     setMounted(true);
@@ -15,9 +25,9 @@ export default function Modal({ children }: PropsWithChildren) {
   if (!mounted) return null;
 
   return createPortal(
-    <dialog className={style.modal} ref={overlayRef}>
+    <div className={style.modal} ref={overlayRef} onClick={handleOverlayClick}>
       {children}
-    </dialog>,
+    </div>,
     document.getElementById('modal-root') as HTMLElement
   );
 }
