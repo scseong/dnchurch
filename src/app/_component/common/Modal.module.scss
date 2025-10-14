@@ -1,0 +1,13 @@
+.modal {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: rgba(0, 0, 0, 0.6);
+  z-index: 9999;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
