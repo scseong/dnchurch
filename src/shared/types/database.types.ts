@@ -133,6 +133,94 @@ export type Database = {
         }
         Relationships: []
       }
+      posts: {
+        Row: {
+          content: string
+          created_at: string
+          id: number
+          is_deleted: boolean
+          is_important: boolean
+          post_type: string
+          title: string
+          updated_at: string | null
+          user_id: string | null
+        }
+        Insert: {
+          content: string
+          created_at?: string
+          id?: number
+          is_deleted?: boolean
+          is_important?: boolean
+          post_type: string
+          title: string
+          updated_at?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          content?: string
+          created_at?: string
+          id?: number
+          is_deleted?: boolean
+          is_important?: boolean
+          post_type?: string
+          title?: string
+          updated_at?: string | null
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "posts_user_id_fkey1"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      "posts-dev": {
+        Row: {
+          content: string
+          created_at: string
+          id: number
+          is_deleted: boolean
+          is_important: boolean
+          post_type: string
+          title: string
+          updated_at: string | null
+          user_id: string | null
+        }
+        Insert: {
+          content: string
+          created_at?: string
+          id?: number
+          is_deleted?: boolean
+          is_important?: boolean
+          post_type: string
+          title: string
+          updated_at?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          content?: string
+          created_at?: string
+          id?: number
+          is_deleted?: boolean
+          is_important?: boolean
+          post_type?: string
+          title?: string
+          updated_at?: string | null
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "posts_dev_user_id_fkey1"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       profiles: {
         Row: {
           avatar_url: string

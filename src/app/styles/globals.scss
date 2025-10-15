@@ -5,13 +5,14 @@ html {
 
 body {
   min-height: 100vh;
-  background: $background;
-  font-family: var(--font-notosans);
+  background: $color-bg-body;
+  font-family: $font-family-base;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  font-size: calc(1rem + 0.25vw);
-  letter-spacing: -0.05rem;
-  color: $text-color;
+  font-size: $font-size-body;
+  letter-spacing: $letter-spacing-base;
+  line-height: $line-height-base;
+  color: $color-text-default;
   overflow-x: hidden;
   -webkit-text-size-adjust: none;
   -ms-text-size-adjust: none;
@@ -20,15 +21,38 @@ body {
 }
 
 * {
-  box-sizing: border-box;
   padding: 0;
   margin: 0;
-  font-family: var(--font-notosans);
+  font-family: $font-family-base;
   color: inherit;
+  box-sizing: border-box;
+}
+
+input[type='text'],
+textarea,
+select {
+  font-size: $font-size-medium;
+}
+
+p,
+ul,
+ol,
+blockquote {
+  font-size: $font-size-default;
+}
+
+@include respond($breakpoint-md) {
+  p,
+  ul,
+  ol,
+  blockquote {
+    font-size: $font-size-medium;
+  }
 }
 
 a {
   text-decoration: none;
+  font-size: $font-size-medium;
 }
 
 ul,
@@ -39,6 +63,7 @@ li {
 button {
   border: none;
   background: none;
+  font-size: $font-size-medium;
   cursor: pointer;
 }
 
@@ -50,13 +75,12 @@ button {
 }
 
 #main {
-  padding-top: $header-height;
   flex: 1;
 }
 
 #footer {
   width: 100%;
-  border-top: 0.1rem solid $dividing-line-color;
+  border-top: 0.1rem solid $color-divide;
 }
 
 .overlay {
@@ -66,7 +90,7 @@ button {
   right: 0;
   bottom: 0;
   background-color: rgba(0, 0, 0, 0.5);
-  z-index: 99;
+  z-index: 9999;
 }
 
 /* ===== Scrollbar CSS ===== */
@@ -81,20 +105,11 @@ button {
   background: #ffffff;
 }
 
-/*! ****************************************
- * $breakpoint-xs: 360px 
- * $breakpoint-sm: 480px 
- * $breakpoint-md: 600px 
- * $breakpoint-lg: 768px 
- * $breakpoint-xl: 1024px
- * $breakpoint-xxl: 1336px
- * $breakpoint-xxxl: 1920px
- * **************************************** */
+@each $width, $vw-value in $responsive-font-vw-map {
+  @include respond-fonts($width, $vw-value);
+}
 
-@include respond-fonts($breakpoint-xs, 2.333vw);
-@include respond-fonts($breakpoint-sm, 2vw);
-@include respond-fonts($breakpoint-md, 1.667vw);
-@include respond-fonts($breakpoint-lg, 1.302vw);
-@include respond-fonts($breakpoint-xl, 0.977vw);
-@include respond-fonts($breakpoint-xxl, 0.749vw);
-@include respond-fonts($breakpoint-xxxl, 0.521vw);
+@include set-heading-fonts($heading-sizes-mobile);
+@include respond-up($breakpoint-lg) {
+  @include set-heading-fonts($heading-sizes);
+}

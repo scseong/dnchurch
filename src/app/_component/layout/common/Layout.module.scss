@@ -1,0 +1,9 @@
+.container {
+  margin: 0 auto;
+  padding: 0 $spacing-xl;
+  max-width: $max-width;
+
+  @include respond($breakpoint-md) {
+    padding: 0 $spacing-md;
+  }
+}

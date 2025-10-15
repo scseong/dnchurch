@@ -10,7 +10,7 @@ $drawer-width: 28rem;
   width: $drawer_width;
   height: 100%;
   background-color: white;
-  z-index: 100;
+  z-index: 10000;
   transition: right 325ms cubic-bezier(0, 0, 0.2, 1) 0ms;
 
   .top {
@@ -38,7 +38,7 @@ $drawer-width: 28rem;
       padding: 1rem 1.6rem;
       display: block;
       width: 100%;
-      background-color: $primary-color;
+      background-color: $color-primary;
       border-radius: 0.8rem;
       color: white;
       text-align: center;

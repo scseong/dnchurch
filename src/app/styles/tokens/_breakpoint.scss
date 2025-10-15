@@ -1,0 +1,18 @@
+$breakpoint-xs: 361px; // small phones
+$breakpoint-xs-mid: 421px; //
+$breakpoint-sm: 481px; // phones
+$breakpoint-md: 601px; // tablets
+$breakpoint-lg: 769px; // small desktops
+$breakpoint-xl: 1025px; // desktops
+$breakpoint-xxl: 1337px; // large desktops
+$breakpoint-xxxl: 1921px; // large screens
+
+$responsive-font-vw-map: (
+  $breakpoint-xs-mid: 2.3753vw,
+  $breakpoint-sm: 2.083333vw,
+  $breakpoint-md: 1.666666vw,
+  $breakpoint-lg: 1.302083vw,
+  $breakpoint-xl: 0.9765625vw,
+  $breakpoint-xxl: 0.748502vw,
+  $breakpoint-xxxl: 0.520833vw
+);

@@ -1,11 +1,6 @@
 .table {
   width: 100%;
   border-collapse: collapse;
-  font-size: $font-size-basic;
-
-  @include respond($breakpoint-lg) {
-    font-size: $font-size-basic-mobile;
-  }
 
   th {
     padding: 0.8rem 1rem;

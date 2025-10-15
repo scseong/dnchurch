@@ -15,11 +15,6 @@
     margin-bottom: 1.4rem;
     padding-left: 1.6rem;
     position: relative;
-    font-size: $font-size-h4;
-
-    @include respond($breakpoint-md) {
-      font-size: $font-size-h4-mobile;
-    }
   }
 
   h4::before {
@@ -29,7 +24,7 @@
     left: 0;
     width: 0.8rem;
     height: 0.8rem;
-    background-color: $primary-color;
+    background-color: $color-primary;
     border-radius: 50%;
     transform: translateY(-50%);
   }

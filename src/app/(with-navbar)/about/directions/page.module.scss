@@ -26,7 +26,7 @@ $svg_mobile_size: 3rem;
 
       svg {
         font-size: $svg_size;
-        color: $primary-color;
+        color: $color-primary;
       }
 
       &::after {
@@ -57,23 +57,12 @@ $svg_mobile_size: 3rem;
     .info {
       h4 {
         margin-bottom: 0.4rem;
-        font-size: $font-size-h5;
-
-        @include respond($breakpoint-lg) {
-          font-size: $font-size-h5-mobile;
-        }
       }
 
       p {
         position: relative;
-        font-size: $font-size-basic;
         line-height: 2;
         word-break: keep-all;
-
-        @include respond($breakpoint-lg) {
-          font-size: $font-size-basic-mobile;
-          line-height: $font-line-height;
-        }
 
         &:has(mark) {
           padding-left: 6rem;

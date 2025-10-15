@@ -1,0 +1,73 @@
+$desktop-gradient: linear-gradient(90deg, rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.1));
+$mobile-gradient: linear-gradient(180deg, rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5));
+$banner-image-url: 'https://ndimreqwgdiwtjonjjzq.supabase.co/storage/v1/object/public/home_banner/banner_wide.png';
+
+.banner {
+  --banner-gradient: #{$mobile-gradient};
+  padding: $spacing-xxxl 0;
+  background-image: var(--banner-gradient), url($banner-image-url);
+  background-position:
+    0 0,
+    40% top;
+  background-size: auto, cover;
+  background-repeat: repeat, no-repeat;
+  z-index: 1;
+
+  .content {
+    display: flex;
+    flex-direction: column;
+    gap: $spacing-xs;
+  }
+
+  h2 {
+    color: $color-white;
+    animation: slideUp 0.6s ease-out forwards;
+    opacity: 0;
+  }
+
+  p {
+    color: $color-white;
+    line-height: $line-height-wide;
+    animation: slideUp 0.6s ease-out forwards;
+    animation-delay: 0.2s;
+    opacity: 0;
+  }
+
+  .learn_more {
+    padding: $spacing-xs $spacing-lg;
+    margin-top: $spacing-nano;
+    display: inline-block;
+    width: fit-content;
+    background-color: $color-white;
+    border-radius: $border-radius-lg;
+    font-size: $font-size-small;
+    color: black;
+    opacity: 0;
+    animation: slideUp 0.6s ease-out forwards;
+    animation-delay: 0.4s;
+    transition: transform $transition-duration-normal $transition-easing-default;
+
+    &:hover {
+      transform: scale(1.1) !important;
+    }
+  }
+
+  @include respond-up($breakpoint-lg) {
+    --banner-gradient: #{$desktop-gradient};
+    padding: $spacing-layout 0;
+    background-position:
+      0 0,
+      0 10%;
+  }
+}
+
+@keyframes slideUp {
+  0% {
+    transform: translateY(100%);
+    opacity: 0;
+  }
+  100% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}

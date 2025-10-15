@@ -13,10 +13,10 @@
 
   :global(.swiper-pagination-bullet) {
     background-color: transparent !important;
-    border: 1.4px solid $primary-color;
+    border: 1.4px solid $color-primary;
   }
 
   :global(.swiper-pagination-bullet-active) {
-    background-color: $primary-color !important;
+    background-color: $color-primary !important;
   }
 }

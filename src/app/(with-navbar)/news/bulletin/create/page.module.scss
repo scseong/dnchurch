@@ -16,7 +16,6 @@
     border-radius: 0.4rem;
     outline-color: #aaa;
     font-size: 1.4rem;
-    line-height: $font-line-height;
   }
 
   input[type='text']::placeholder {
@@ -47,8 +46,8 @@
   button {
     @include button-hover-style(
       (
-        bg-color: $primary-color,
-        bg-hover-color: $primary-hover-color,
+        bg-color: $color-primary,
+        bg-hover-color: $color-primary-hover,
         text-color: white
       )
     );
@@ -60,8 +59,8 @@
 
     @include button-hover-style(
       (
-        bg-color: $button-color,
-        bg-hover-color: $button-hover-color,
+        // bg-color: $button-color,
+        // bg-hover-color: $button-hover-color,
         text-color: inherit
       )
     );

@@ -1,28 +1,30 @@
-import BannerClient from './BannerClient';
-import { Tables } from '@/shared/types/database.types';
+import Link from 'next/link';
+import LayoutContainer from '../layout/common/LayoutContainer';
+import styles from './Banner.module.scss';
 
 export default async function Banner() {
-  // TODO: supabase API 연결
-  const data: Tables<'home_banner'>[] = [
-    {
-      id: 1,
-      title: '서로서로 세워가는 교회',
-      description: '1. 예배로\n2. 믿음과 행함으로\n3. 전도로',
-      order: 1,
-      image_url:
-        'https://ndimreqwgdiwtjonjjzq.supabase.co/storage/v1/object/sign/home_banner/church-4911852_1920.jpg?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1cmwiOiJob21lX2Jhbm5lci9jaHVyY2gtNDkxMTg1Ml8xOTIwLmpwZyIsImlhdCI6MTczMDgyMzA0NiwiZXhwIjoxNzYyMzU5MDQ2fQ.m7XETfrk2JgqxLeM5uJ-UzISeMX3iNLDWOGng_4Ga-g&t=2024-11-05T16%3A10%3A46.164Z',
-      year: 2024
-    },
-    {
-      id: 2,
-      title: '차별금지법 반대 연합예배',
-      description: null,
-      order: 2,
-      image_url:
-        'https://ndimreqwgdiwtjonjjzq.supabase.co/storage/v1/object/sign/home_banner/church.jpg?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1cmwiOiJob21lX2Jhbm5lci9jaHVyY2guanBnIiwiaWF0IjoxNzMyNjEwNjIwLCJleHAiOjE3NjQxNDY2MjB9.IJ5PfVONthOoKrtyt9Mbr6DodzWCyeb7Ej_OiqLxAkg&t=2024-11-26T08%3A43%3A40.327Z',
-      year: 2024
-    }
-  ];
+  return (
+    <section>
+      <div className={styles.banner}>
+        <LayoutContainer>
+          <div className={styles.content}>
+            <h2>
+              동남교회에 오신 것을
+              <br />
+              환영합니다
+            </h2>
+            <p>
+              수고하고 무거운 짐진 당신을 주님의 사랑으로 초대합니다.
+              <br />
+              마음의 짐을 내려놓고 참된 안식을 누리세요.
+            </p>
 
-  return <BannerClient data={data} />;
+            <Link href="/about" className={styles.learn_more}>
+              자세히 보기
+            </Link>
+          </div>
+        </LayoutContainer>
+      </div>
+    </section>
+  );
 }
