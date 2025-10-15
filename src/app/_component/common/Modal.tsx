@@ -13,7 +13,7 @@ type Props = PropsWithChildren<{
 export default function Modal({ children, onClose, isVisible }: Props) {
   const [mounted, setMounted] = useState(false);
   const overlayRef = useRef<HTMLDivElement>(null);
-  useScrollLock();
+  useScrollLock(isVisible);
 
   const handleOverlayClick = (e: React.MouseEvent<HTMLDivElement>) => {
     if (e.target === overlayRef.current) {
