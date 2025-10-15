@@ -5,7 +5,7 @@ import IconWrap from '../../common/IconWrap';
 import { signOut } from '@/apis/auth';
 import { sitemap } from '@/shared/constants/sitemap';
 import { ProfileType } from '@/shared/types/types';
-import styles from './index.module.scss';
+import styles from './Drawer.module.scss';
 
 type DrawerProps = {
   isOpen: boolean;

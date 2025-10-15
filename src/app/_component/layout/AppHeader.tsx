@@ -51,11 +51,9 @@ export default function AppHeader() {
           <MobileToggle ref={navRef} isMobile={isMobile} handleToggle={handleNavToggle} />
         </div>
       </LayoutContainer>
-      {isNavVisible && (
-        <Modal onClose={handleNavToggle}>
-          <Drawer isOpen={isNavVisible} onClose={handleNavToggle} user={user} pathname={pathname} />
-        </Modal>
-      )}
+      <Modal isVisible={isNavVisible} onClose={handleNavToggle}>
+        <Drawer isOpen={isNavVisible} onClose={handleNavToggle} user={user} pathname={pathname} />
+      </Modal>
     </header>
   );
 }

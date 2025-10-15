@@ -7,9 +7,10 @@ import style from './Modal.module.scss';
 
 type Props = PropsWithChildren<{
   onClose?: () => void;
+  isVisible: boolean;
 }>;
 
-export default function Modal({ children, onClose }: Props) {
+export default function Modal({ children, onClose, isVisible }: Props) {
   const [mounted, setMounted] = useState(false);
   const overlayRef = useRef<HTMLDivElement>(null);
   useScrollLock();
@@ -27,7 +28,11 @@ export default function Modal({ children, onClose }: Props) {
   if (!mounted) return null;
 
   return createPortal(
-    <div className={style.modal} ref={overlayRef} onClick={handleOverlayClick}>
+    <div
+      className={`${style.modal} ${isVisible ? style.show : ''}`}
+      ref={overlayRef}
+      onClick={handleOverlayClick}
+    >
       {children}
     </div>,
     document.getElementById('modal-root') as HTMLElement

@@ -11,6 +11,7 @@ $banner-image-url: 'https://ndimreqwgdiwtjonjjzq.supabase.co/storage/v1/object/p
     40% top;
   background-size: auto, cover;
   background-repeat: repeat, no-repeat;
+  z-index: 1;
 
   .content {
     display: flex;
