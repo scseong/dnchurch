@@ -4,6 +4,7 @@
   right: 0;
   left: 0;
   background: $color-bg-default;
+  z-index: 9999;
 }
 
 .header_wrap {
@@ -30,27 +31,27 @@
   }
 }
 
-.nav {
-  margin-left: auto;
-  z-index: 99;
+.desktop_nav {
+  display: none;
 
-  ul {
-    display: flex;
-    gap: 4rem;
+  @include respond-up($breakpoint-md) {
+    margin-left: auto;
+    display: block;
 
-    li {
-      font-size: $font-size-default;
+    ul {
+      display: flex;
+      gap: 4rem;
+
+      li {
+        font-size: $font-size-default;
+      }
     }
-  }
-
-  @include respond($breakpoint-md) {
-    max-height: 0;
-    opacity: 0;
-    overflow: hidden;
   }
 }
 
 .toggle {
+  display: inline-flex;
+
   button {
     display: inline-flex;
   }
@@ -58,12 +59,16 @@
     width: 1.6rem;
     height: 1.6rem;
   }
+
+  @include respond-up($breakpoint-md) {
+    display: none;
+  }
 }
 
-.visible {
-  display: block !important;
-}
+.auth {
+  display: none;
 
-.invisible {
-  display: none !important;
+  @include respond-up($breakpoint-md) {
+    display: block;
+  }
 }
