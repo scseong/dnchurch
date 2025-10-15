@@ -75,9 +75,11 @@ const myeongjo = localFont({
 const API_KEY = `//dapi.kakao.com/v2/maps/sdk.js?appkey=${process.env.NEXT_PUBLIC_KAKAO_API_KEY}&libraries=services,clusterer&autoload=false`;
 
 export default async function RootLayout({
-  children
+  children,
+  modal
 }: Readonly<{
   children: React.ReactNode;
+  modal: React.ReactNode;
 }>) {
   return (
     <html lang="ko" className={`${myeongjo.variable} ${notoSans.variable}`}>
@@ -91,6 +93,8 @@ export default async function RootLayout({
           </SessionContextProvider>
           <Footer />
         </div>
+        {modal}
+        <div id="modal-root"></div>
       </body>
     </html>
   );

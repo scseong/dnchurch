@@ -6,6 +6,12 @@
   }
 }
 
+@mixin respond-up($width) {
+  @media screen and (min-width: $width) {
+    @content;
+  }
+}
+
 @mixin respond($width) {
   @media screen and (max-width: $width) {
     @content;

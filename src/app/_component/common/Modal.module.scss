@@ -1,0 +1,21 @@
+.modal {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: rgba(0, 0, 0, 0);
+  opacity: 0;
+  z-index: 9999;
+  visibility: hidden;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+.show {
+  opacity: 1;
+  background-color: rgba(0, 0, 0, 0.6);
+  visibility: visible;
+}

@@ -2,7 +2,7 @@ import Link from 'next/link';
 import UserProfile from '../../user/UserProfile';
 import UserProfileModal from '../../user/UserProfileModal';
 import { ProfileType } from '@/shared/types/types';
-import styles from './Header.module.scss';
+import styles from './index.module.scss';
 
 type Props = {
   ref: React.RefObject<HTMLDivElement>;
