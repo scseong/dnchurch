@@ -22,12 +22,9 @@
 .logo {
   flex: 0 0 auto;
 
-  h1 {
+  a {
     font-size: $font-size-default;
-
-    a {
-      font-weight: $font-weight-bold;
-    }
+    font-weight: $font-weight-bold;
   }
 }
 
