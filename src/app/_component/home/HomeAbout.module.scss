@@ -27,6 +27,7 @@
 .feature_container {
   display: flex;
   flex-direction: column;
+  align-items: center;
   gap: $spacing-xl;
 
   @include respond-up($breakpoint-md) {
@@ -34,13 +35,21 @@
   }
 
   .feature {
-    padding: 0 $spacing-lg;
+    padding: 0 $spacing-xl;
     display: flex;
     flex-direction: column;
     align-items: center;
     gap: $spacing-xs;
+    max-width: 90%;
+
+    @include respond-up($breakpoint-md) {
+      padding: 0;
+    }
 
     .icon {
+      position: relative;
+      margin-bottom: $spacing-xs;
+
       svg {
         width: 5rem;
         height: 5rem;
@@ -50,6 +59,7 @@
     p {
       font-size: $font-size-small;
       text-align: center;
+      word-break: keep-all;
     }
   }
 }
