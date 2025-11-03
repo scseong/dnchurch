@@ -1,8 +1,8 @@
 import { PiChurchLight } from 'react-icons/pi';
 import { PiHandHeartLight } from 'react-icons/pi';
 import { LiaBibleSolid } from 'react-icons/lia';
-import { LayoutContainer } from '../layout/common';
-import IconWrap from '../common/IconWrap';
+import { LayoutContainer } from '@/app/_component/layout/common';
+import IconWrap from '@/app/_component/common/IconWrap';
 import styles from './HomeAbout.module.scss';
 
 export default function HomeAbout() {

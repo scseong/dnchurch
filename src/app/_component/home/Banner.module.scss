@@ -4,7 +4,7 @@ $banner-image-url: 'https://ndimreqwgdiwtjonjjzq.supabase.co/storage/v1/object/p
 
 .banner {
   --banner-gradient: #{$mobile-gradient};
-  padding: $spacing-xxxl 0;
+  padding: $spacing-xxxxl 0;
   background-image: var(--banner-gradient), url($banner-image-url);
   background-position:
     0 0,

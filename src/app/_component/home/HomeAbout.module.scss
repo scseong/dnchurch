@@ -1,6 +1,5 @@
 .about {
   padding: $spacing-xxxl 0;
-  background-color: $color-bg-default;
 
   @include respond-up($breakpoint-md) {
     padding: $spacing-layout 0;
@@ -8,7 +7,7 @@
 }
 
 .title {
-  margin-bottom: $spacing-xl;
+  margin-bottom: $spacing-sm;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -21,7 +20,7 @@
   }
 
   h2 {
-    margin: $spacing-md 0;
+    margin-top: $spacing-sm;
   }
 }
 
@@ -29,29 +28,26 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: $spacing-md;
 
   @include respond-up($breakpoint-md) {
     flex-direction: row;
+    gap: $spacing-md;
   }
 
   .feature {
-    padding: $spacing-xl;
+    padding: $spacing-lg;
     display: flex;
     flex-direction: column;
     align-items: center;
     gap: $spacing-xs;
     max-width: 85%;
-    background-color: $color-white;
     border-radius: $border-radius-lg;
 
     @include respond-up($breakpoint-md) {
-      padding: $spacing-xl $spacing-xs;
+      padding: $spacing-xxl $spacing-xs;
     }
 
     .icon {
-      position: relative;
-
       svg {
         width: 5rem;
         height: 5rem;
@@ -59,8 +55,9 @@
     }
 
     p {
-      font-size: $font-size-small;
+      font-size: $font-size-medium;
       text-align: center;
+      line-height: $line-height-wide;
       word-break: keep-all;
     }
   }
