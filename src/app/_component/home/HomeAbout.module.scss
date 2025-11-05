@@ -7,10 +7,11 @@
 }
 
 .title {
-  margin-bottom: $spacing-sm;
+  margin-bottom: $spacing-lg;
   display: flex;
   flex-direction: column;
   align-items: center;
+  font-weight: $font-weight-medium;
 
   .caption {
     display: inline-block;
@@ -20,7 +21,7 @@
   }
 
   h2 {
-    margin-top: $spacing-sm;
+    margin-top: $spacing-xs;
   }
 }
 
@@ -48,6 +49,8 @@
     }
 
     .icon {
+      margin-bottom: $spacing-xs;
+
       svg {
         width: 5rem;
         height: 5rem;
@@ -58,7 +61,6 @@
       font-size: $font-size-medium;
       text-align: center;
       line-height: $line-height-wide;
-      word-break: keep-all;
     }
   }
 }

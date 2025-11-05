@@ -1,4 +1,5 @@
 export { default as Banner } from './Banner';
+export { default as AboutOurChurch } from './AboutOurChurch';
 export { default as HomeHero } from './HomeHero';
 export { default as HomeAbout } from './HomeAbout';
 export { default as HomeGallery } from './HomeGallery';

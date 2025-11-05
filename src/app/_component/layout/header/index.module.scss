@@ -3,12 +3,12 @@
   top: 0;
   right: 0;
   left: 0;
-  background: $color-bg-default;
+  background: $color-white;
   z-index: 9999;
 }
 
 .header_wrap {
-  padding: $spacing-md 0;
+  padding: $spacing-lg 0;
   position: relative;
   display: flex;
   justify-content: space-between;
@@ -53,8 +53,8 @@
     display: inline-flex;
   }
   svg {
-    width: 1.6rem;
-    height: 1.6rem;
+    width: 1.8rem;
+    height: 1.8rem;
   }
 
   @include respond-up($breakpoint-md) {

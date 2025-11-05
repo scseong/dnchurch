@@ -1,9 +1,11 @@
-import { supabase } from '@/shared/supabase/client';
+import { createServerSideClient } from '@/shared/supabase/server';
+import { STORAGE_NAME } from '@/shared/constants/supabase';
 
-export const getHomeBanner = async () => {
-  const { data: home_banner, error } = await supabase.from('home_banner').select('*');
+export const getStorageImageUrl = async (filename: string) => {
+  const supabase = await createServerSideClient({});
+  const {
+    data: { publicUrl: imageUrl }
+  } = supabase.storage.from(STORAGE_NAME.home).getPublicUrl(filename);
 
-  if (error) throw new Error(error.message);
-
-  return home_banner;
+  return imageUrl;
 };

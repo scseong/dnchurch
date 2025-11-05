@@ -1,6 +1,6 @@
 $desktop-gradient: linear-gradient(90deg, rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.1));
 $mobile-gradient: linear-gradient(180deg, rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.4));
-$banner-image-url: 'https://ndimreqwgdiwtjonjjzq.supabase.co/storage/v1/object/public/home_banner/banner_wide.png';
+$banner-image-url: 'https://ndimreqwgdiwtjonjjzq.supabase.co/storage/v1/object/public/homepage_assets/banner_wide.png';
 
 .banner {
   --banner-gradient: #{$mobile-gradient};
@@ -32,7 +32,7 @@ $banner-image-url: 'https://ndimreqwgdiwtjonjjzq.supabase.co/storage/v1/object/p
 
   .learn_more {
     padding: $spacing-xs $spacing-xl;
-    margin-top: $spacing-nano;
+    margin-top: $spacing-xs;
     display: inline-block;
     width: fit-content;
     background-color: $color-gray-100;

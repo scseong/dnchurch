@@ -62,7 +62,6 @@ $svg_mobile_size: 3rem;
       p {
         position: relative;
         line-height: 2;
-        word-break: keep-all;
 
         &:has(mark) {
           padding-left: 6rem;
