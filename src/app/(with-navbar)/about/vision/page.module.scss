@@ -26,7 +26,6 @@ $greeting_text_margin_bottom: 3rem;
   p {
     margin-bottom: 2rem;
     color: $color-text-secondary;
-    word-break: keep-all;
 
     &:last-child {
       margin-bottom: 0;

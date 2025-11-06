@@ -1,0 +1,68 @@
+.vision {
+  padding: $spacing-xxxl 0;
+  background-color: $color-bg-default;
+
+  @include respond-up($breakpoint-md) {
+    padding: $spacing-xxxl 0;
+  }
+}
+
+.title {
+  margin-bottom: $spacing-lg;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-weight: $font-weight-medium;
+
+  .caption {
+    display: inline-block;
+    font-size: $font-size-medium;
+    font-weight: $font-weight-semibold;
+    color: $color-primary;
+  }
+
+  h2 {
+    margin-top: $spacing-xs;
+  }
+}
+
+.feature_container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  @include respond-up($breakpoint-lg) {
+    flex-direction: row;
+    gap: $spacing-md;
+  }
+
+  .feature {
+    padding: $spacing-lg;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: $spacing-xs;
+    max-width: 90%;
+    border-radius: $border-radius-lg;
+
+    @include respond-up($breakpoint-md) {
+      padding: $spacing-xl $spacing-xs;
+      max-width: 58%;
+    }
+
+    .icon {
+      margin-bottom: $spacing-xs;
+
+      svg {
+        width: 6rem;
+        height: 6rem;
+      }
+    }
+
+    p {
+      font-size: $font-size-medium;
+      text-align: center;
+      line-height: $line-height-wide;
+    }
+  }
+}

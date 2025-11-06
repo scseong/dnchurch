@@ -3,11 +3,12 @@
   top: 0;
   right: 0;
   left: 0;
-  background: $color-bg-default;
+  background: $color-white;
+  z-index: 9999;
 }
 
 .header_wrap {
-  padding: $spacing-md 0;
+  padding: $spacing-lg 0;
   position: relative;
   display: flex;
   justify-content: space-between;
@@ -21,49 +22,50 @@
 .logo {
   flex: 0 0 auto;
 
-  h1 {
+  a {
     font-size: $font-size-default;
-
-    a {
-      font-weight: $font-weight-bold;
-    }
+    font-weight: $font-weight-bold;
   }
 }
 
-.nav {
-  margin-left: auto;
-  z-index: 99;
+.desktop_nav {
+  display: none;
 
-  ul {
-    display: flex;
-    gap: 4rem;
+  @include respond-up($breakpoint-md) {
+    margin-left: auto;
+    display: block;
 
-    li {
-      font-size: $font-size-default;
+    ul {
+      display: flex;
+      gap: 4rem;
+
+      li {
+        font-size: $font-size-default;
+      }
     }
-  }
-
-  @include respond($breakpoint-md) {
-    max-height: 0;
-    opacity: 0;
-    overflow: hidden;
   }
 }
 
 .toggle {
+  display: inline-flex;
+
   button {
     display: inline-flex;
   }
   svg {
-    width: 1.6rem;
-    height: 1.6rem;
+    width: 1.8rem;
+    height: 1.8rem;
+  }
+
+  @include respond-up($breakpoint-md) {
+    display: none;
   }
 }
 
-.visible {
-  display: block !important;
-}
+.auth {
+  display: none;
 
-.invisible {
-  display: none !important;
+  @include respond-up($breakpoint-md) {
+    display: block;
+  }
 }
