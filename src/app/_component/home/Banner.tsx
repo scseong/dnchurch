@@ -15,7 +15,7 @@ export default async function Banner() {
             </h1>
             <p>
               수고하고 무거운 짐진 당신을 주님의 사랑으로 초대합니다.&nbsp;
-              <br className="unvisible_mobile" />
+              <br className="hidden-on-mobile" />
               마음의 짐을 내려놓고 참된 안식을 누리세요.
             </p>
             <Link href="/about" className={styles.learn_more}>

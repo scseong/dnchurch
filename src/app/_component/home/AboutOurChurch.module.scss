@@ -28,7 +28,7 @@
   img {
     width: 100%;
     height: auto;
-    aspect-ratio: 3 / 2;
+    aspect-ratio: 5 / 3;
     border: 1px solid $color-border-card;
     border-radius: $border-radius-lg;
 
@@ -52,8 +52,8 @@
     margin-bottom: $spacing-xs;
     display: inline-block;
     font-size: $font-size-medium;
-    font-weight: 600;
-    color: #1a73bb;
+    font-weight: $font-weight-semibold;
+    color: $color-primary;
   }
 
   h2 {
@@ -84,7 +84,7 @@
     &:hover {
       font-weight: $font-weight-medium;
       text-decoration: underline;
-      transform: translateX(5px);
+      transform: translateX(0.5rem);
     }
   }
 }

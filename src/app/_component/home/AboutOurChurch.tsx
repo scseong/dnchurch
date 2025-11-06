@@ -13,7 +13,7 @@ export default async function AboutOurChurch() {
         <div className={styles.container}>
           <div className={styles.image_container}>
             <div className={styles.frame}>
-              <img src={churchImageUrl} alt="동남교회 이미지" />
+              <img src={churchImageUrl} alt="대구동남교회 예배당 전경" />
             </div>
           </div>
           <div className={styles.about_info}>

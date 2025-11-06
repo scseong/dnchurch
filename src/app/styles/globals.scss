@@ -102,7 +102,7 @@ button {
   z-index: 9999;
 }
 
-.unvisible_mobile {
+.hidden-on-mobile {
   display: none;
 
   @include respond-up($breakpoint-md) {
