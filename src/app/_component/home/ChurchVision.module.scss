@@ -1,8 +1,9 @@
-.about {
+.vision {
   padding: $spacing-xxxl 0;
+  background-color: $color-bg-default;
 
   @include respond-up($breakpoint-md) {
-    padding: $spacing-layout 0;
+    padding: $spacing-xxxl 0;
   }
 }
 
@@ -30,7 +31,7 @@
   flex-direction: column;
   align-items: center;
 
-  @include respond-up($breakpoint-md) {
+  @include respond-up($breakpoint-lg) {
     flex-direction: row;
     gap: $spacing-md;
   }
@@ -41,19 +42,20 @@
     flex-direction: column;
     align-items: center;
     gap: $spacing-xs;
-    max-width: 85%;
+    max-width: 90%;
     border-radius: $border-radius-lg;
 
     @include respond-up($breakpoint-md) {
-      padding: $spacing-xxl $spacing-xs;
+      padding: $spacing-xl $spacing-xs;
+      max-width: 58%;
     }
 
     .icon {
       margin-bottom: $spacing-xs;
 
       svg {
-        width: 5rem;
-        height: 5rem;
+        width: 6rem;
+        height: 6rem;
       }
     }
 

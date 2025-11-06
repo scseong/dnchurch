@@ -3,11 +3,11 @@ import { PiHandHeartLight } from 'react-icons/pi';
 import { LiaBibleSolid } from 'react-icons/lia';
 import { LayoutContainer } from '@/app/_component/layout/common';
 import IconWrap from '@/app/_component/common/IconWrap';
-import styles from './HomeAbout.module.scss';
+import styles from './ChurchVision.module.scss';
 
-export default function HomeAbout() {
+export default function ChurchVision() {
   return (
-    <section className={styles.about}>
+    <section className={styles.vision}>
       <LayoutContainer>
         <div className={styles.title}>
           <span className={styles.caption}>우리의 비전</span>
@@ -40,7 +40,7 @@ export default function HomeAbout() {
             </div>
             <h5>지역 사회 섬김</h5>
             <p>
-              우리 자신을 부인하는 내적 성결과 겸손을 바탕으로, 봉사와 선교를 통해 신앙과 윤리가
+              우리 자신을 부인하는 내적 성결과 겸손을 바탕으로 봉사와 선교를 통해 신앙과 윤리가
               일치된 삶을 실천합니다.
             </p>
           </div>
