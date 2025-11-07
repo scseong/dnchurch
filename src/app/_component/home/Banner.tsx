@@ -19,7 +19,7 @@ export default async function Banner() {
               마음의 짐을 내려놓고 참된 안식을 누리세요.
             </p>
             <Link href="/about" className={styles.learn_more}>
-              자세히 보기
+              처음 오셨나요?
             </Link>
           </div>
         </LayoutContainer>

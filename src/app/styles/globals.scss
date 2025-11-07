@@ -9,7 +9,6 @@ body {
   font-family: $font-family-base;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  font-size: $font-size-body;
   letter-spacing: $letter-spacing-base;
   line-height: $line-height-base;
   color: $color-text-default;
@@ -46,22 +45,13 @@ p,
 ul,
 ol,
 blockquote {
-  font-size: $font-size-default;
+  font-size: $font-size-medium;
   word-break: keep-all;
-}
-
-@include respond($breakpoint-md) {
-  p,
-  ul,
-  ol,
-  blockquote {
-    font-size: $font-size-medium;
-  }
 }
 
 a {
   text-decoration: none;
-  font-size: $font-size-medium;
+  font-size: $font-size-small;
 }
 
 ul,
@@ -72,7 +62,7 @@ li {
 button {
   border: none;
   background: none;
-  font-size: $font-size-medium;
+  font-size: $font-size-small;
   cursor: pointer;
 }
 
@@ -105,7 +95,7 @@ button {
 .hidden-on-mobile {
   display: none;
 
-  @include respond-up($breakpoint-md) {
+  @include respond-up($breakpoint-sm) {
     display: inline-block;
   }
 }

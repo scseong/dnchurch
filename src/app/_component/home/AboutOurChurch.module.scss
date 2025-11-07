@@ -20,8 +20,8 @@
 
   .frame {
     display: inline-flex;
+    align-items: center;
     position: relative;
-    background-color: $color-white;
     overflow: hidden;
   }
 
@@ -57,7 +57,7 @@
   }
 
   h2 {
-    margin-bottom: $spacing-md;
+    margin-bottom: $spacing-lg;
   }
 
   .about_content {
@@ -67,6 +67,7 @@
 
     p {
       letter-spacing: -0.05rem;
+      line-height: $line-height-wide;
 
       @include respond-up($breakpoint-md) {
         font-size: $font-size-medium;
