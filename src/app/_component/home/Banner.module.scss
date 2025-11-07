@@ -8,7 +8,7 @@ $banner-image-url: 'https://ndimreqwgdiwtjonjjzq.supabase.co/storage/v1/object/p
   background-image: var(--banner-gradient), url($banner-image-url);
   background-position:
     0 0,
-    40% top;
+    45% top;
   background-size: auto, cover;
   background-repeat: repeat, no-repeat;
   z-index: 1;
@@ -16,7 +16,7 @@ $banner-image-url: 'https://ndimreqwgdiwtjonjjzq.supabase.co/storage/v1/object/p
   .content {
     display: flex;
     flex-direction: column;
-    gap: $spacing-xs;
+    gap: $spacing-sm;
   }
 
   h1 {
@@ -31,7 +31,7 @@ $banner-image-url: 'https://ndimreqwgdiwtjonjjzq.supabase.co/storage/v1/object/p
   }
 
   .learn_more {
-    padding: $spacing-xs $spacing-xl;
+    padding: $spacing-sm $spacing-xl;
     margin-top: $spacing-xs;
     display: inline-block;
     width: fit-content;
@@ -47,12 +47,12 @@ $banner-image-url: 'https://ndimreqwgdiwtjonjjzq.supabase.co/storage/v1/object/p
     }
   }
 
-  @include respond-up($breakpoint-lg) {
+  @include respond-up($breakpoint-md) {
     --banner-gradient: #{$desktop-gradient};
     padding: $spacing-layout 0;
     background-position:
       0 0,
-      0 10%;
+      50% 10%;
   }
 }
 

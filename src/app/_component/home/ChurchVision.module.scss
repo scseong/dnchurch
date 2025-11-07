@@ -38,16 +38,15 @@
     flex-direction: column;
     align-items: center;
     gap: $spacing-xs;
-    max-width: 90%;
     border-radius: $border-radius-lg;
 
     h3 {
       font-size: $font-size-h5-mobile;
     }
 
-    @include respond-up($breakpoint-md) {
+    @include respond-up($breakpoint-sm) {
       padding: $spacing-xl $spacing-xs;
-      max-width: 58%;
+      max-width: 75%;
 
       h3 {
         font-size: $font-size-h5;

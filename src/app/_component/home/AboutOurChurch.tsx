@@ -18,7 +18,7 @@ export default async function AboutOurChurch() {
           </div>
           <div className={styles.about_info}>
             <span>바른 신학, 바른 교회, 바른 생활</span>
-            <h2>우리 교회를 소개합니다</h2>
+            <h2>동남교회를 소개합니다</h2>
             <div className={styles.about_content}>
               <p>
                 동남교회는 대한예수교장로회(합신) 교단 소속으로, 오직 성경만을 유일한 규칙으로 삼는
@@ -27,11 +27,11 @@ export default async function AboutOurChurch() {
               </p>
               <p>
                 바른 신학의 토대 위에서 바른 교회, 바른 생활의 정신을 실천합니다. 그리스도께서
-                모범을 보이신 것처럼, 모든 성도가 겸손한 섬김의 자세로 서로를 존중하며 사랑 안에서
+                모범을 보이신 것처럼 모든 성도가 겸손한 섬김의 자세로 서로를 존중하며 사랑 안에서
                 굳건히 연합하는 공동체를 지향합니다.
               </p>
             </div>
-            <Link href="/about">자세히 알아보기</Link>
+            <Link href="/about">교회소개 살펴보기</Link>
           </div>
         </div>
       </LayoutContainer>
