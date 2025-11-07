@@ -55,6 +55,7 @@ $color-bg-body: $color-white;
 $color-bg-default: $color-blue-50;
 $color-bg-footer: $color-black;
 $color-border-default: $color-gray-300;
+$color-border-card: $color-blue-300;
 $color-divide: $color-gray-300;
 
 // Text
@@ -62,7 +63,8 @@ $color-text-default: $color-gray-900;
 $color-text-secondary: $color-gray-700;
 $color-text-subtle: $color-gray-500;
 $color-text-link: $color-blue-700;
-$color-text-inverse: $color-white;
+$color-text-link-active: $color-blue-900;
+$color-text-inverse: $color-gray-50;
 
 // Status
 $color-status-success: $color-green-500;

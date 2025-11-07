@@ -4,7 +4,7 @@ import SessionContextProvider from '@/context/SessionContextProvider';
 import localFont from 'next/font/local';
 import KakaoScript from './_component/lib/KakaoScript';
 import type { Metadata } from 'next';
-import '../app/styles/globals.scss';
+import '@/app/styles/globals.scss';
 import 'swiper/scss';
 import 'swiper/scss/autoplay';
 import 'swiper/scss/free-mode';

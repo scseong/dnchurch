@@ -28,6 +28,14 @@ body {
   box-sizing: border-box;
 }
 
+h1,
+h2,
+h3,
+h4,
+h5 {
+  letter-spacing: $letter-spacing-heading;
+}
+
 input[type='text'],
 textarea,
 select {
@@ -39,6 +47,7 @@ ul,
 ol,
 blockquote {
   font-size: $font-size-default;
+  word-break: keep-all;
 }
 
 @include respond($breakpoint-md) {
@@ -91,6 +100,14 @@ button {
   bottom: 0;
   background-color: rgba(0, 0, 0, 0.5);
   z-index: 9999;
+}
+
+.hidden-on-mobile {
+  display: none;
+
+  @include respond-up($breakpoint-md) {
+    display: inline-block;
+  }
 }
 
 /* ===== Scrollbar CSS ===== */

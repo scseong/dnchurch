@@ -3,7 +3,6 @@
 import { useEffect } from 'react';
 import { usePathname } from 'next/navigation';
 import { useProfile } from '@/context/SessionContextProvider';
-import useIsMobile from '@/hooks/useIsMobile';
 import useModal from '@/hooks/useModal';
 import { LayoutContainer } from './common';
 import Modal from '../common/Modal';
@@ -11,7 +10,6 @@ import { Logo, AuthSection, DesktopNav, MobileToggle, Drawer } from './header';
 import styles from './header/index.module.scss';
 
 export default function AppHeader() {
-  const isMobile = useIsMobile();
   const user = useProfile();
   const pathname = usePathname();
 
@@ -39,8 +37,7 @@ export default function AppHeader() {
       <LayoutContainer>
         <div className={styles.header_wrap}>
           <Logo />
-          <DesktopNav isVisible={!isMobile} />
-          {/* TODO: FOUC 해결 */}
+          <DesktopNav />
           <AuthSection
             ref={profileRef}
             user={user}
@@ -48,7 +45,7 @@ export default function AppHeader() {
             isVisible={isProfileVisible}
             handleToggle={handleProfileToggle}
           />
-          <MobileToggle ref={navRef} isMobile={isMobile} handleToggle={handleNavToggle} />
+          <MobileToggle ref={navRef} handleToggle={handleNavToggle} />
         </div>
       </LayoutContainer>
       <Modal isVisible={isNavVisible} onClose={handleNavToggle}>

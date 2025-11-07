@@ -1,9 +1,9 @@
-import { IconType } from 'react-icons';
+import { IconType, IconBaseProps } from 'react-icons';
 
-export default function IconWrap({ Icon }: { Icon: IconType }) {
+export default function IconWrap({ Icon, svgProps }: { Icon: IconType; svgProps?: IconBaseProps }) {
   return (
     <i style={{ display: 'inline-flex' }}>
-      <Icon />
+      <Icon {...svgProps} />
     </i>
   );
 }
