@@ -13,7 +13,7 @@ const nextConfig: NextConfig = {
     }
   },
   sassOptions: {
-    additionalData: `@use "src/app/styles/_variables.scss" as *; @use "src/app/styles/_mixins.scss" as *;`,
+    additionalData: `@use "src/styles/_variables.scss" as *; @use "src/styles/_mixins.scss" as *;`,
     silenceDeprecations: ['legacy-js-api'],
     quietDeps: true
   }

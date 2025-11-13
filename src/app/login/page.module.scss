@@ -1,7 +1,6 @@
 .wrap {
   margin: $spacing-xxl auto 0;
-  max-width: 40rem;
-  text-align: center;
+  max-width: 35rem;
 }
 
 .header {
@@ -22,13 +21,13 @@
   }
 
   p {
-    font-size: $font-size-small;
     color: $color-text-subtle;
   }
 }
 
 .divide {
   position: relative;
+  text-align: center;
 
   .divide_line {
     position: absolute;
@@ -36,7 +35,7 @@
     height: 1px;
     left: 50%;
     top: 50%;
-    background-color: #ebebeb;
+    background-color: $color-border-default;
     z-index: -1;
     transform: translate(-50%, -50%);
   }
@@ -44,22 +43,25 @@
   .caption {
     padding: 0 $spacing-xs;
     display: inline-block;
-    background-color: #fff;
-    font-size: $font-size-caption;
+    background-color: $color-white;
+    font-size: $font-size-md;
     color: $color-text-subtle;
   }
 }
 
 .btn_group {
-  margin-top: 1rem;
-  width: 100%;
+  margin-top: $spacing-sm;
 
   button {
     width: 100%;
 
     img {
       width: 100%;
-      height: 100%;
+      height: 4.5rem;
     }
   }
+}
+
+.link_group {
+  font-size: $font-size-sm;
 }

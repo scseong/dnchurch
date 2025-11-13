@@ -2,9 +2,11 @@
 
 import { useState } from 'react';
 import { useForm, SubmitHandler } from 'react-hook-form';
+import Loader from '@/app/_component/common/Loader';
 import { signInWithPassword } from '@/apis/auth';
 import { EMAIL_REGEX, PASSWORD_REGEX } from '@/shared/util/regex';
 import { generateErrorMessage } from '@/shared/constants/error';
+import styles from './SignInForm.module.scss';
 
 type Inputs = {
   email: string;
@@ -16,11 +18,12 @@ export default function SignInForm() {
   const {
     register,
     handleSubmit,
-    formState: { errors }
-  } = useForm<Inputs>({ defaultValues: { email: '', password: '' }, mode: 'onChange' });
+    formState: { errors, isValid, isSubmitting }
+  } = useForm<Inputs>({ mode: 'onChange' });
 
   const onSubmit: SubmitHandler<Inputs> = async ({ email, password }) => {
     try {
+      setLogInError('');
       await signInWithPassword({ email, password });
     } catch (error) {
       const message = generateErrorMessage(error);
@@ -29,8 +32,8 @@ export default function SignInForm() {
   };
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)}>
-      <div>
+    <form onSubmit={handleSubmit(onSubmit)} className={styles.form}>
+      <div className={styles.input_group}>
         <label htmlFor="email">이메일</label>
         <input
           {...register('email', {
@@ -43,11 +46,13 @@ export default function SignInForm() {
           id="email"
           placeholder="이메일 입력"
         />
-        <div>
-          <p>{errors.email && errors.email.message}</p>
-        </div>
+        {errors.email && (
+          <div className={styles.alert_message}>
+            <p role="alert">{errors.email.message}</p>
+          </div>
+        )}
       </div>
-      <div>
+      <div className={styles.input_group}>
         <label htmlFor="password">비밀번호</label>
         <input
           {...register('password', {
@@ -61,16 +66,22 @@ export default function SignInForm() {
           type="password"
           placeholder="비밀번호 입력 (영문 숫자 포함 6자 이상)"
         />
-        <div>
-          <p>{errors.password && errors.password.message}</p>
-        </div>
+        {errors.password && (
+          <div className={styles.alert_message}>
+            <p role="alert">{errors.password.message}</p>
+          </div>
+        )}
       </div>
-      <div>
-        <button type="submit">이메일로 로그인</button>
-      </div>
+      <button
+        type="submit"
+        className={!isValid ? styles.disabled_button : styles.active_button}
+        disabled={!isValid || isSubmitting}
+      >
+        {isSubmitting ? <Loader /> : '이메일로 로그인'}
+      </button>
       {logInError && (
-        <div>
-          <p>{logInError}</p>
+        <div className={styles.alert_message}>
+          <p role="alert">{logInError}</p>
         </div>
       )}
     </form>

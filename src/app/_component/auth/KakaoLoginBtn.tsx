@@ -13,7 +13,7 @@ export default function KakaoLoginBtn() {
 
   return (
     <button onClick={handleClick}>
-      <img src="/images/kakao_login_large_wide.png" alt="카카오 로그인" />
+      <img src="/images/kakao_login_large_wide.png" alt="카카오 로그인 버튼" />
     </button>
   );
 }

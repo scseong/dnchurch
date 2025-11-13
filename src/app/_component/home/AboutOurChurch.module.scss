@@ -51,7 +51,7 @@
   & > span {
     margin-bottom: $spacing-xs;
     display: inline-block;
-    font-size: $font-size-medium;
+    font-size: $font-size-default;
     font-weight: $font-weight-semibold;
     color: $color-primary;
   }
@@ -68,12 +68,9 @@
     p {
       letter-spacing: -0.05rem;
       line-height: $line-height-wide;
-
-      @include respond-up($breakpoint-md) {
-        font-size: $font-size-medium;
-      }
     }
   }
+
   a {
     margin-top: $spacing-xs;
     width: fit-content;
