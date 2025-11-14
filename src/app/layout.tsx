@@ -1,16 +1,10 @@
 import Script from 'next/script';
+import type { Metadata } from 'next';
+import localFont from 'next/font/local';
 import { Footer, Header } from './_component/layout';
 import SessionContextProvider from '@/context/SessionContextProvider';
-import localFont from 'next/font/local';
 import KakaoScript from './_component/lib/KakaoScript';
-import type { Metadata } from 'next';
 import '@/app/styles/globals.scss';
-import 'swiper/scss';
-import 'swiper/scss/autoplay';
-import 'swiper/scss/free-mode';
-import 'swiper/scss/effect-fade';
-import 'swiper/scss/pagination';
-import 'swiper/scss/parallax';
 
 export const metadata: Metadata = {
   title: '대구동남교회',
