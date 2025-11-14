@@ -1,16 +1,10 @@
 import Script from 'next/script';
+import type { Metadata } from 'next';
+import localFont from 'next/font/local';
 import { Footer, Header } from './_component/layout';
 import SessionContextProvider from '@/context/SessionContextProvider';
-import localFont from 'next/font/local';
 import KakaoScript from './_component/lib/KakaoScript';
-import type { Metadata } from 'next';
 import '@/app/styles/globals.scss';
-import 'swiper/scss';
-import 'swiper/scss/autoplay';
-import 'swiper/scss/free-mode';
-import 'swiper/scss/effect-fade';
-import 'swiper/scss/pagination';
-import 'swiper/scss/parallax';
 
 export const metadata: Metadata = {
   title: '대구동남교회',
@@ -74,13 +68,7 @@ const myeongjo = localFont({
 
 const API_KEY = `//dapi.kakao.com/v2/maps/sdk.js?appkey=${process.env.NEXT_PUBLIC_KAKAO_API_KEY}&libraries=services,clusterer&autoload=false`;
 
-export default async function RootLayout({
-  children,
-  modal
-}: Readonly<{
-  children: React.ReactNode;
-  modal: React.ReactNode;
-}>) {
+export default async function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="ko" className={`${myeongjo.variable} ${notoSans.variable}`}>
       <body>
@@ -93,7 +81,6 @@ export default async function RootLayout({
           </SessionContextProvider>
           <Footer />
         </div>
-        {modal}
         <div id="modal-root"></div>
       </body>
     </html>
