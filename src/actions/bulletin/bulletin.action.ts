@@ -103,7 +103,7 @@ export const updateBulletinAction = async (
     };
   }
 
-  revalidateTag('bulletin');
+  revalidateTag('bulletin', 'max');
   revalidatePath('/news/bulletin');
   redirect(`/news/bulletin/${bulletinId}`, RedirectType.push);
 };
