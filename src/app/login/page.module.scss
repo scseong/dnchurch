@@ -26,6 +26,7 @@
 }
 
 .divide {
+  margin-top: $spacing-lg;
   position: relative;
   text-align: center;
 
@@ -63,5 +64,24 @@
 }
 
 .link_group {
-  font-size: $font-size-sm;
+  margin: $spacing-md 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  a {
+    font-size: $font-size-sm;
+    color: $color-text-secondary;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+
+  .divide {
+    margin: 0 $spacing-lg;
+    width: 1px;
+    height: $font-size-sm;
+    background-color: $color-border-default;
+  }
 }

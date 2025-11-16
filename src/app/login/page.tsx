@@ -27,8 +27,9 @@ export default function Login() {
           </div>
           <SignInForm />
           <div className={styles.link_group}>
-            <Link href="sign-up">회원가입</Link>
-            <Link href="forget-password">비밀번호 찾기</Link>
+            <Link href="/sign-up">회원가입</Link>
+            <div className={styles.divide}></div>
+            <Link href="/forget-password">비밀번호 찾기</Link>
           </div>
           <div className={styles.divide}>
             <span className={styles.divide_line} />

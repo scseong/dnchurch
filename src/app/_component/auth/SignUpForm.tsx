@@ -2,19 +2,20 @@
 
 import { useState } from 'react';
 import { useForm, SubmitHandler } from 'react-hook-form';
+import { signUp } from '@/apis/auth';
 import Loader from '@/app/_component/common/Loader';
-import { signInWithPassword } from '@/apis/auth';
-import { EMAIL_REGEX, PASSWORD_REGEX } from '@/shared/util/regex';
 import { generateErrorMessage } from '@/shared/constants/error';
-import styles from './SignInForm.module.scss';
+import { EMAIL_REGEX, PASSWORD_REGEX } from '@/shared/util/regex';
+import styles from './SignUpForm.module.scss';
 
 type Inputs = {
   email: string;
   password: string;
+  passwordConfirm: string;
 };
 
-export default function SignInForm() {
-  const [logInError, setLogInError] = useState('');
+export default function SignUpForm() {
+  const [signUpError, setSignUpError] = useState('');
   const {
     register,
     handleSubmit,
@@ -23,11 +24,11 @@ export default function SignInForm() {
 
   const onSubmit: SubmitHandler<Inputs> = async ({ email, password }) => {
     try {
-      setLogInError('');
-      await signInWithPassword({ email, password });
+      setSignUpError('');
+      await signUp({ email, password });
     } catch (error) {
       const message = generateErrorMessage(error);
-      setLogInError(message);
+      setSignUpError(message);
     }
   };
 
@@ -65,7 +66,8 @@ export default function SignInForm() {
           })}
           id="password"
           type="password"
-          autoComplete="current-password"
+          name="new-password"
+          autoComplete="new-password"
           placeholder="비밀번호 입력 (영문 숫자 포함 6자 이상)"
         />
         {errors.password && (
@@ -74,16 +76,37 @@ export default function SignInForm() {
           </div>
         )}
       </div>
+      <div className={styles.input_group}>
+        <label htmlFor="password-confirm">비밀번호 확인</label>
+        <input
+          {...register('passwordConfirm', {
+            required: '비밀번호를 입력해주세요.',
+            pattern: {
+              value: PASSWORD_REGEX,
+              message: '영문, 숫자 포함 6자 이상 입력해주세요.'
+            }
+          })}
+          id="password-confirm"
+          type="password"
+          autoComplete="current-password"
+          placeholder="비밀번호 입력 (영문 숫자 포함 6자 이상)"
+        />
+        {errors.passwordConfirm && (
+          <div className={styles.alert_message}>
+            <p role="alert">{errors.passwordConfirm.message}</p>
+          </div>
+        )}
+      </div>
       <button
         type="submit"
         className={!isValid ? styles.disabled_button : styles.active_button}
         disabled={!isValid || isSubmitting}
       >
-        {isSubmitting ? <Loader /> : '이메일로 로그인'}
+        {isSubmitting ? <Loader /> : '회원가입'}
       </button>
-      {logInError && (
+      {signUpError && (
         <div className={styles.alert_message}>
-          <p role="alert">{logInError}</p>
+          <p role="alert">{signUpError}</p>
         </div>
       )}
     </form>
