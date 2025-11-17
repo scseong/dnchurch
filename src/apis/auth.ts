@@ -39,3 +39,12 @@ export async function signOut() {
   await supabase.auth.signOut();
   window.location.reload();
 }
+
+export async function requestPasswordResetEmail(email: string) {
+  const { data, error } = await supabase.auth.resetPasswordForEmail(email, {
+    redirectTo: `${process.env.NEXT_PUBLIC_SITE_URL}/reset-password`
+  });
+
+  if (error) throw error;
+  return data;
+}
