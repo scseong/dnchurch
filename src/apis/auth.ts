@@ -3,10 +3,21 @@ import { supabase } from '@/shared/supabase/client';
 interface Credentials {
   email: string;
   password: string;
+  name: string;
+  username: string;
 }
 
-export async function signUp({ email, password }: Credentials) {
-  const { data, error } = await supabase.auth.signUp({ email, password });
+export async function signUp({ email, password, name, username }: Credentials) {
+  const { data, error } = await supabase.auth.signUp({
+    email,
+    password,
+    options: {
+      data: {
+        name,
+        user_name: username
+      }
+    }
+  });
 
   if (error) throw error;
 

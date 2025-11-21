@@ -41,12 +41,3 @@
   border: 1px solid $color-primary-active;
   color: $color-white;
 }
-
-.alert_message {
-  padding: $spacing-xxs;
-
-  p {
-    font-size: $font-size-md;
-    color: $color-status-danger;
-  }
-}

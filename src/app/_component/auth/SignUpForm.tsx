@@ -5,13 +5,16 @@ import { useForm, SubmitHandler } from 'react-hook-form';
 import { signUp } from '@/apis/auth';
 import Loader from '@/app/_component/common/Loader';
 import { generateErrorMessage } from '@/shared/constants/error';
-import { EMAIL_REGEX, PASSWORD_REGEX } from '@/shared/util/regex';
+import { EMAIL_REGEX, NAME_REGEX, PASSWORD_REGEX } from '@/shared/util/regex';
 import styles from './SignUpForm.module.scss';
+import FormErrorMessage from '@/app/_component/auth/FormErrorMessage';
 
 type Inputs = {
   email: string;
+  name: string;
+  username: string;
   password: string;
-  passwordConfirm: string;
+  confirmPassword: string;
 };
 
 export default function SignUpForm() {
@@ -19,13 +22,15 @@ export default function SignUpForm() {
   const {
     register,
     handleSubmit,
+    watch,
     formState: { errors, isValid, isSubmitting }
   } = useForm<Inputs>({ mode: 'onChange' });
+  const password = watch('password');
 
-  const onSubmit: SubmitHandler<Inputs> = async ({ email, password }) => {
+  const onSubmit: SubmitHandler<Inputs> = async ({ email, password, name, username }) => {
     try {
       setSignUpError('');
-      await signUp({ email, password });
+      await signUp({ email, password, name, username });
     } catch (error) {
       const message = generateErrorMessage(error);
       setSignUpError(message);
@@ -38,21 +43,17 @@ export default function SignUpForm() {
         <label htmlFor="email">이메일</label>
         <input
           {...register('email', {
-            required: '이메일을 입력해주세요',
+            required: '이메일 주소를 입력해주세요',
             pattern: {
               value: EMAIL_REGEX,
-              message: '유효한 이메일 형식이 아닙니다.'
+              message: '올바른 이메일 형식이 아닙니다.'
             }
           })}
           id="email"
           autoComplete="email"
-          placeholder="이메일 입력"
+          placeholder="example@service.com"
         />
-        {errors.email && (
-          <div className={styles.alert_message}>
-            <p role="alert">{errors.email.message}</p>
-          </div>
-        )}
+        {errors.email && <FormErrorMessage message={errors.email.message} />}
       </div>
       <div className={styles.input_group}>
         <label htmlFor="password">비밀번호</label>
@@ -61,41 +62,63 @@ export default function SignUpForm() {
             required: '비밀번호를 입력해주세요.',
             pattern: {
               value: PASSWORD_REGEX,
-              message: '영문, 숫자 포함 6자 이상 입력해주세요.'
+              message: '비밀번호는 영문, 숫자 포함 8자 이상이여야 합니다.'
             }
           })}
           id="password"
           type="password"
-          name="new-password"
+          name="password"
           autoComplete="new-password"
-          placeholder="비밀번호 입력 (영문 숫자 포함 6자 이상)"
+          placeholder="영문, 숫자 포함 6자 이상"
         />
-        {errors.password && (
-          <div className={styles.alert_message}>
-            <p role="alert">{errors.password.message}</p>
-          </div>
-        )}
+        {errors.password && <FormErrorMessage message={errors.password.message} />}
       </div>
       <div className={styles.input_group}>
-        <label htmlFor="password-confirm">비밀번호 확인</label>
+        <label htmlFor="confirm-password">비밀번호 확인</label>
         <input
-          {...register('passwordConfirm', {
-            required: '비밀번호를 입력해주세요.',
+          {...register('confirmPassword', {
+            required: '비밀번호 확인을 입력해주세요.',
+            validate: (value) => value === password || '두 비밀번호가 일치하지 않습니다.'
+          })}
+          id="confirm-password"
+          type="password"
+          autoComplete="new-password"
+          placeholder="비밀번호 재입력"
+        />
+        {errors.confirmPassword && <FormErrorMessage message={errors.confirmPassword.message} />}
+      </div>
+      <div className={styles.input_group}>
+        <label htmlFor="name">이름</label>
+        <input
+          {...register('name', {
+            required: '이름을 입력해주세요.',
             pattern: {
-              value: PASSWORD_REGEX,
-              message: '영문, 숫자 포함 6자 이상 입력해주세요.'
+              value: NAME_REGEX,
+              message: '한글 또는 영문으로만 입력해주세요.'
             }
           })}
-          id="password-confirm"
-          type="password"
-          autoComplete="current-password"
-          placeholder="비밀번호 입력 (영문 숫자 포함 6자 이상)"
+          id="name"
+          type="name"
+          placeholder="홍길동"
         />
-        {errors.passwordConfirm && (
-          <div className={styles.alert_message}>
-            <p role="alert">{errors.passwordConfirm.message}</p>
-          </div>
-        )}
+        {errors.name && <FormErrorMessage message={errors.name.message} />}
+      </div>
+      <div className={styles.input_group}>
+        <label htmlFor="username">프로필 이름 (닉네임)</label>
+        <input
+          {...register('username', {
+            required: '이름을 입력해주세요.',
+            maxLength: {
+              value: 10,
+              message: '10자 이내로 입력해주세요.'
+            }
+          })}
+          id="username"
+          type="username"
+          autoComplete="username"
+          placeholder="사용할 닉네임 10자 이내"
+        />
+        {errors.username && <FormErrorMessage message={errors.username.message} />}
       </div>
       <button
         type="submit"
@@ -104,11 +127,7 @@ export default function SignUpForm() {
       >
         {isSubmitting ? <Loader /> : '회원가입'}
       </button>
-      {signUpError && (
-        <div className={styles.alert_message}>
-          <p role="alert">{signUpError}</p>
-        </div>
-      )}
+      {signUpError && <FormErrorMessage message={signUpError} />}
     </form>
   );
 }
