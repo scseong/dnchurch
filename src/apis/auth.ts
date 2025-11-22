@@ -3,8 +3,8 @@ import { supabase } from '@/shared/supabase/client';
 interface Credentials {
   email: string;
   password: string;
-  name: string;
-  username: string;
+  name?: string;
+  username?: string;
 }
 
 export async function signUp({ email, password, name, username }: Credentials) {

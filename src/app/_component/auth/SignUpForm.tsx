@@ -1,13 +1,14 @@
 'use client';
 
+import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { signUp } from '@/apis/auth';
 import Loader from '@/app/_component/common/Loader';
+import FormAlertMessage from '@/app/_component/auth/FormAlertMessage';
 import { generateErrorMessage } from '@/shared/constants/error';
 import { EMAIL_REGEX, NAME_REGEX, PASSWORD_REGEX } from '@/shared/util/regex';
 import styles from './SignUpForm.module.scss';
-import FormErrorMessage from '@/app/_component/auth/FormErrorMessage';
 
 type Inputs = {
   email: string;
@@ -18,6 +19,7 @@ type Inputs = {
 };
 
 export default function SignUpForm() {
+  const router = useRouter();
   const [signUpError, setSignUpError] = useState('');
   const {
     register,
@@ -31,6 +33,7 @@ export default function SignUpForm() {
     try {
       setSignUpError('');
       await signUp({ email, password, name, username });
+      router.push('/');
     } catch (error) {
       const message = generateErrorMessage(error);
       setSignUpError(message);
@@ -53,7 +56,7 @@ export default function SignUpForm() {
           autoComplete="email"
           placeholder="example@service.com"
         />
-        {errors.email && <FormErrorMessage message={errors.email.message} />}
+        {errors.email && <FormAlertMessage type="error" message={errors.email.message} />}
       </div>
       <div className={styles.input_group}>
         <label htmlFor="password">비밀번호</label>
@@ -71,7 +74,7 @@ export default function SignUpForm() {
           autoComplete="new-password"
           placeholder="영문, 숫자 포함 6자 이상"
         />
-        {errors.password && <FormErrorMessage message={errors.password.message} />}
+        {errors.password && <FormAlertMessage type="error" message={errors.password.message} />}
       </div>
       <div className={styles.input_group}>
         <label htmlFor="confirm-password">비밀번호 확인</label>
@@ -85,7 +88,9 @@ export default function SignUpForm() {
           autoComplete="new-password"
           placeholder="비밀번호 재입력"
         />
-        {errors.confirmPassword && <FormErrorMessage message={errors.confirmPassword.message} />}
+        {errors.confirmPassword && (
+          <FormAlertMessage type="error" message={errors.confirmPassword.message} />
+        )}
       </div>
       <div className={styles.input_group}>
         <label htmlFor="name">이름</label>
@@ -101,7 +106,7 @@ export default function SignUpForm() {
           type="name"
           placeholder="홍길동"
         />
-        {errors.name && <FormErrorMessage message={errors.name.message} />}
+        {errors.name && <FormAlertMessage type="error" message={errors.name.message} />}
       </div>
       <div className={styles.input_group}>
         <label htmlFor="username">프로필 이름 (닉네임)</label>
@@ -118,7 +123,7 @@ export default function SignUpForm() {
           autoComplete="username"
           placeholder="사용할 닉네임 10자 이내"
         />
-        {errors.username && <FormErrorMessage message={errors.username.message} />}
+        {errors.username && <FormAlertMessage type="error" message={errors.username.message} />}
       </div>
       <button
         type="submit"
@@ -127,7 +132,7 @@ export default function SignUpForm() {
       >
         {isSubmitting ? <Loader /> : '회원가입'}
       </button>
-      {signUpError && <FormErrorMessage message={signUpError} />}
+      {signUpError && <FormAlertMessage type="error" message={signUpError} />}
     </form>
   );
 }

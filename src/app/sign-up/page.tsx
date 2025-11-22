@@ -24,7 +24,8 @@ export default function SignUpPage() {
           </div>
           <SignUpForm />
           <div className={styles.link_group}>
-            이미 가입하셨나요? <Link href="/login">로그인</Link>
+            <p>이미 계정이 있으신가요?</p>
+            <Link href="/login">로그인</Link>
           </div>
         </div>
       </LayoutContainer>

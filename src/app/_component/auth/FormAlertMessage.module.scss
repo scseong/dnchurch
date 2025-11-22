@@ -1,8 +1,13 @@
 .alert_message {
   padding: $spacing-xxs;
 
-  p {
+  .error {
     font-size: $font-size-md;
     color: $color-status-danger;
+  }
+
+  .success {
+    font-size: $font-size-md;
+    color: $color-status-success;
   }
 }

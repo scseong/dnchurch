@@ -70,12 +70,19 @@
   align-items: center;
 
   a {
-    font-size: $font-size-sm;
-    color: $color-text-secondary;
+    font-size: $font-size-md;
+    color: $color-text-subtle;
+    text-decoration: underline;
+    text-decoration-color: $color-text-subtle;
 
     &:hover {
-      text-decoration: underline;
+      color: $color-text-default;
     }
+  }
+
+  p {
+    margin-right: $spacing-xs;
+    color: $color-text-subtle;
   }
 
   .divide {

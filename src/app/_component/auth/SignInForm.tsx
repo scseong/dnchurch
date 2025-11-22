@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { useForm, SubmitHandler } from 'react-hook-form';
+import FormAlertMessage from '@/app/_component/auth/FormAlertMessage';
 import Loader from '@/app/_component/common/Loader';
 import { signInWithPassword } from '@/apis/auth';
 import { EMAIL_REGEX, PASSWORD_REGEX } from '@/shared/util/regex';
@@ -47,11 +48,7 @@ export default function SignInForm() {
           autoComplete="email"
           placeholder="이메일 입력"
         />
-        {errors.email && (
-          <div className={styles.alert_message}>
-            <p role="alert">{errors.email.message}</p>
-          </div>
-        )}
+        {errors.email && <FormAlertMessage type="error" message={errors.email.message} />}
       </div>
       <div className={styles.input_group}>
         <label htmlFor="password">비밀번호</label>
@@ -68,11 +65,7 @@ export default function SignInForm() {
           autoComplete="current-password"
           placeholder="비밀번호 입력 (영문 숫자 포함 6자 이상)"
         />
-        {errors.password && (
-          <div className={styles.alert_message}>
-            <p role="alert">{errors.password.message}</p>
-          </div>
-        )}
+        {errors.password && <FormAlertMessage type="error" message={errors.password.message} />}
       </div>
       <button
         type="submit"
@@ -81,11 +74,7 @@ export default function SignInForm() {
       >
         {isSubmitting ? <Loader /> : '이메일로 로그인'}
       </button>
-      {logInError && (
-        <div className={styles.alert_message}>
-          <p role="alert">{logInError}</p>
-        </div>
-      )}
+      {logInError && <FormAlertMessage type="error" message={logInError} />}
     </form>
   );
 }
