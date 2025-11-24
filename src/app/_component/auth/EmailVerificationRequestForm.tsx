@@ -25,17 +25,14 @@ export default function EmailVerificationRequestForm() {
     handleSubmit,
     formState: { errors, isValid, isSubmitting, isSubmitSuccessful }
   } = useForm<Inputs>({ mode: 'onChange' });
-  const { start, isFinished, isRunning, formattedRemain } = useTimer(() => {
-    setAlertType('error');
-    setAlertMessage('인증 유효기간이 만료되었습니다.');
-  });
+  const { start, isFinished, isRunning, formattedRemain } = useTimer();
 
   const getButtonContent = () => {
     if (isSubmitting) return <Loader />;
 
     if (isSubmitSuccessful) {
-      if (isRunning) return formattedRemain;
-      if (isFinished) return '인증 메일 요청하기';
+      if (isRunning) return `재요청 가능 시간: ${formattedRemain}`;
+      if (isFinished) return '인증 메일 재요청하기';
     }
 
     return '인증 메일 요청하기';
@@ -47,7 +44,7 @@ export default function EmailVerificationRequestForm() {
 
     try {
       await requestPasswordResetEmail(email);
-      setAlertMessage('인증 링크가 이메일로 발송되었습니다. 이메일을 확인해주세요.');
+      setAlertMessage('이메일을 확인해 주세요. 링크는 1시간 후에 만료됩니다.');
       setAlertType('success');
       start(EMAIL_VERIFICATION_TIME);
     } catch (error) {
@@ -75,8 +72,8 @@ export default function EmailVerificationRequestForm() {
         {errors.email && <FormAlertMessage type="error" message={errors.email.message} />}
       </div>
       <button
-        className={!isValid ? styles.disabled_button : styles.active_button}
-        disabled={!isValid || isSubmitting}
+        className={!isValid || isRunning ? styles.disabled_button : styles.active_button}
+        disabled={!isValid || isRunning}
       >
         {getButtonContent()}
       </button>
