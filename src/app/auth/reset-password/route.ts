@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { EMAIL_VERIFICATION_TIME } from '@/shared/constants/timer';
+import { EMAIL_OTP_EXPIRATION_SECONDS } from '@/shared/constants/timer';
 
 export async function GET(request: Request) {
   const { searchParams, origin } = new URL(request.url);
@@ -11,7 +11,7 @@ export async function GET(request: Request) {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
       sameSite: 'lax',
-      maxAge: EMAIL_VERIFICATION_TIME,
+      maxAge: EMAIL_OTP_EXPIRATION_SECONDS,
       path: '/'
     });
 

@@ -7,7 +7,7 @@ import FormAlertMessage from '@/app/_component/auth/FormAlertMessage';
 import Loader from '@/app/_component/common/Loader';
 import { requestPasswordResetEmail } from '@/apis/auth';
 import { generateErrorMessage } from '@/shared/constants/error';
-import { EMAIL_VERIFICATION_TIME } from '@/shared/constants/timer';
+import { EMAIL_RESEND_DELAY_SECONDS } from '@/shared/constants/timer';
 import { EMAIL_REGEX } from '@/shared/util/regex';
 import styles from './SignInForm.module.scss';
 
@@ -46,7 +46,7 @@ export default function EmailVerificationRequestForm() {
       await requestPasswordResetEmail(email);
       setAlertMessage('이메일을 확인해 주세요. 링크는 1시간 후에 만료됩니다.');
       setAlertType('success');
-      start(EMAIL_VERIFICATION_TIME);
+      start(EMAIL_RESEND_DELAY_SECONDS);
     } catch (error) {
       const message = generateErrorMessage(error);
       setAlertMessage(message);

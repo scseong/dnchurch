@@ -1,1 +1,2 @@
-export const EMAIL_VERIFICATION_TIME = 60 * 1;
+export const EMAIL_OTP_EXPIRATION_SECONDS = 60 * 60;
+export const EMAIL_RESEND_DELAY_SECONDS = 60 * 1;
