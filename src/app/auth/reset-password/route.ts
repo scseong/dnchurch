@@ -5,16 +5,12 @@ export async function GET(request: Request) {
   const code = searchParams.get('code');
 
   if (code) {
-    const cleanUrl = new URL('/reset-password', origin);
-
-    const response = NextResponse.redirect(cleanUrl.toString());
-
-    const oneMinuteInSeconds = 60;
+    const response = NextResponse.redirect(new URL('/reset-password', origin));
     response.cookies.set('reset_auth_code', code, {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
       sameSite: 'lax',
-      maxAge: oneMinuteInSeconds * 2,
+      maxAge: 60 * 5,
       path: '/'
     });
 

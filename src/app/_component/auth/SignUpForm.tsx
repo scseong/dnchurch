@@ -30,8 +30,9 @@ export default function SignUpForm() {
   const password = watch('password');
 
   const onSubmit: SubmitHandler<Inputs> = async ({ email, password, name, username }) => {
+    setSignUpError('');
+
     try {
-      setSignUpError('');
       await signUp({ email, password, name, username });
       router.push('/');
     } catch (error) {
