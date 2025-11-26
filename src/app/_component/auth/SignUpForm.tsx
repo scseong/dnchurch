@@ -54,7 +54,6 @@ export default function SignUpForm() {
             }
           })}
           id="email"
-          autoComplete="email"
           placeholder="example@service.com"
         />
         {errors.email && <FormAlertMessage type="error" message={errors.email.message} />}
@@ -72,7 +71,6 @@ export default function SignUpForm() {
           id="password"
           type="password"
           name="password"
-          autoComplete="new-password"
           placeholder="영문, 숫자 포함 6자 이상"
         />
         {errors.password && <FormAlertMessage type="error" message={errors.password.message} />}
@@ -86,7 +84,6 @@ export default function SignUpForm() {
           })}
           id="confirm-password"
           type="password"
-          autoComplete="new-password"
           placeholder="비밀번호 재입력"
         />
         {errors.confirmPassword && (
@@ -104,7 +101,6 @@ export default function SignUpForm() {
             }
           })}
           id="name"
-          type="name"
           placeholder="홍길동"
         />
         {errors.name && <FormAlertMessage type="error" message={errors.name.message} />}
@@ -113,21 +109,18 @@ export default function SignUpForm() {
         <label htmlFor="username">프로필 이름 (닉네임)</label>
         <input
           {...register('username', {
-            required: '이름을 입력해주세요.',
+            required: '프로필 이름을 입력해주세요.',
             maxLength: {
               value: 10,
               message: '10자 이내로 입력해주세요.'
             }
           })}
           id="username"
-          type="username"
-          autoComplete="username"
           placeholder="사용할 닉네임 10자 이내"
         />
         {errors.username && <FormAlertMessage type="error" message={errors.username.message} />}
       </div>
       <button
-        type="submit"
         className={!isValid ? styles.disabled_button : styles.active_button}
         disabled={!isValid || isSubmitting}
       >
