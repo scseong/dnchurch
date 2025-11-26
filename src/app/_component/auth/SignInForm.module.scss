@@ -1,0 +1,43 @@
+.input_group {
+  margin-bottom: $spacing-sm;
+
+  label {
+    @include blind;
+  }
+
+  input {
+    padding: $spacing-sm;
+    display: block;
+    width: 100%;
+    border: 1px solid $color-border-default;
+    border-radius: $border-radius-md;
+    outline: none;
+    transition: border 0.1s ease-in-out;
+
+    &:focus {
+      border: 1px solid $color-border-focus !important;
+    }
+  }
+}
+
+.disabled_button,
+.active_button {
+  padding: $spacing-sm;
+  width: 100%;
+  border: 1px solid $color-border-default;
+  border-radius: $border-radius-md;
+  font-size: $font-size-md;
+}
+
+.disabled_button {
+  background-color: $color-disabled-bg;
+  border: 1px solid $color-disabled-border;
+  color: $color-disabled-text;
+  cursor: not-allowed;
+}
+
+.active_button {
+  background-color: $color-primary-active;
+  border: 1px solid $color-primary-active;
+  color: $color-white;
+}

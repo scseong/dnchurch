@@ -4,7 +4,7 @@ import localFont from 'next/font/local';
 import { Footer, Header } from './_component/layout';
 import SessionContextProvider from '@/context/SessionContextProvider';
 import KakaoScript from './_component/lib/KakaoScript';
-import '@/app/styles/globals.scss';
+import '@/styles/globals.scss';
 
 export const metadata: Metadata = {
   title: '대구동남교회',
