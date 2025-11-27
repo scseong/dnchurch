@@ -14,6 +14,7 @@
     "@supabase/supabase-js": "^2.46.1",
     "@tanstack/react-table": "^8.20.6",
     "base64-arraybuffer": "^1.0.2",
+    "clsx": "^2.1.1",
     "dayjs": "^1.11.13",
     "lodash-es": "^4.17.21",
     "next": "^16.0.3",

@@ -1,25 +1,3 @@
-.input_group {
-  margin-bottom: $spacing-sm;
-
-  label {
-    @include blind;
-  }
-
-  input {
-    padding: $spacing-sm;
-    display: block;
-    width: 100%;
-    border: 1px solid $color-border-default;
-    border-radius: $border-radius-md;
-    outline: none;
-    transition: border 0.1s ease-in-out;
-
-    &:focus {
-      border: 1px solid $color-border-focus !important;
-    }
-  }
-}
-
 .disabled_button,
 .active_button {
   padding: $spacing-sm;
