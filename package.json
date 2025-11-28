@@ -10,8 +10,8 @@
     "generate:types": "supabase gen types typescript --project-id ndimreqwgdiwtjonjjzq --schema public > src/shared/types/database.types.ts"
   },
   "dependencies": {
-    "@supabase/ssr": "^0.5.1",
-    "@supabase/supabase-js": "^2.46.1",
+    "@supabase/ssr": "^0.8.0",
+    "@supabase/supabase-js": "^2.86.0",
     "@tanstack/react-table": "^8.20.6",
     "base64-arraybuffer": "^1.0.2",
     "clsx": "^2.1.1",
