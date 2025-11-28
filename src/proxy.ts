@@ -6,5 +6,5 @@ export async function proxy(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ['/login', '/news/bulletin/create', '/news/bulletin/:id*/update']
+  matcher: ['/login', '/sign-up', '/forget-password']
 };
