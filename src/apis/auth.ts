@@ -35,20 +35,23 @@ export async function signInWithPassword({ email, password }: Credentials) {
   return data;
 }
 
-export async function signInWithKakao(nextUrl: string | null) {
-  await supabase.auth.signInWithOAuth({
+export async function signInWithKakao() {
+  const searchParams = new URLSearchParams(window.location.search);
+  const redirectedFrom = searchParams.get('redirect') || '/';
+
+  const { data, error } = await supabase.auth.signInWithOAuth({
     provider: 'kakao',
     options: {
-      redirectTo: nextUrl
-        ? `${process.env.NEXT_PUBLIC_SITE_URL}/auth/callback?next=${nextUrl}`
-        : `${process.env.NEXT_PUBLIC_SITE_URL}/auth/callback`
+      redirectTo: `${window.location.origin}/auth/callback?next=${encodeURIComponent(redirectedFrom)}`
     }
   });
+
+  if (error) throw error;
+  return data;
 }
 
 export async function signOut() {
   await supabase.auth.signOut();
-  window.location.reload();
 }
 
 export async function requestPasswordResetEmail(email: string) {

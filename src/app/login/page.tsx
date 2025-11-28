@@ -1,6 +1,5 @@
 import Link from 'next/link';
 import type { Metadata } from 'next';
-import { Suspense } from 'react';
 import { LayoutContainer } from '@/app/_component/layout/common';
 import KakaoLoginBtn from '@/app/_component/auth/KakaoLoginBtn';
 import SignInForm from '@/app/_component/auth/SignInForm';
@@ -36,9 +35,7 @@ export default function Login() {
             <span className={styles.caption}>SNS 계정으로 로그인</span>
           </div>
           <div className={styles.btn_group}>
-            <Suspense fallback={null}>
-              <KakaoLoginBtn />
-            </Suspense>
+            <KakaoLoginBtn />
           </div>
         </div>
       </LayoutContainer>

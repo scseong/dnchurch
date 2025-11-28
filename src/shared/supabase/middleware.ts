@@ -27,18 +27,14 @@ export async function updateSession(request: NextRequest) {
     }
   );
 
+  const { data } = await supabase.auth.getClaims();
+  const user = data?.claims;
   const pathname = request.nextUrl.pathname;
 
-  const {
-    data: { user }
-  } = await supabase.auth.getUser();
+  const noAuthPages = ['/login', '/sign-up', '/forget-password'];
 
-  if (!user && !pathname.startsWith('/login')) {
-    return NextResponse.redirect(new URL(`/login?redirect=${pathname}`, request.nextUrl));
-  }
-
-  if (user && pathname.startsWith('/login')) {
-    return NextResponse.redirect(new URL('/', request.nextUrl));
+  if (user && noAuthPages.includes(pathname)) {
+    return NextResponse.redirect(new URL('/', request.url));
   }
 
   return supabaseResponse;
