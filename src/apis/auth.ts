@@ -35,14 +35,11 @@ export async function signInWithPassword({ email, password }: Credentials) {
   return data;
 }
 
-export async function signInWithKakao() {
-  const searchParams = new URLSearchParams(window.location.search);
-  const redirectedFrom = searchParams.get('redirect') || '/';
-
+export async function signInWithKakao(redirect = '/') {
   const { data, error } = await supabase.auth.signInWithOAuth({
     provider: 'kakao',
     options: {
-      redirectTo: `${window.location.origin}/auth/callback?next=${encodeURIComponent(redirectedFrom)}`
+      redirectTo: `${window.location.origin}/auth/callback?next=${redirect}`
     }
   });
 

@@ -1,11 +1,15 @@
 'use client';
 
+import { useSearchParams } from 'next/navigation';
 import { signInWithKakao } from '@/apis/auth';
 
 export default function KakaoLoginBtn() {
+  const params = useSearchParams();
+  const redirect = params.get('redirect') || '/';
+
   const handleKakaoLogin = async () => {
     try {
-      await signInWithKakao();
+      await signInWithKakao(redirect);
     } catch (error) {
       console.error('카카오 로그인 실패:', error);
     }
