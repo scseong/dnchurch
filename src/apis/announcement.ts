@@ -8,7 +8,7 @@ export type AnnouncementWithProfile = PostType & {
 };
 
 export const getAnnouncement = async () => {
-  const supabase = await createServerSideClient({ cache: 'force-cache', tag: 'announcement' });
+  const supabase = await createServerSideClient();
   const {
     data: posts,
     count,

@@ -4,6 +4,7 @@ import { EMAIL_OTP_EXPIRATION_SECONDS } from '@/shared/constants/timer';
 export async function GET(request: Request) {
   const { searchParams, origin } = new URL(request.url);
   const code = searchParams.get('code');
+
   if (code) {
     const response = NextResponse.redirect(new URL('/reset-password', origin));
     response.cookies.set('reset_auth_code', code, {
@@ -15,5 +16,6 @@ export async function GET(request: Request) {
     });
     return response;
   }
+
   return NextResponse.redirect(new URL('/login', origin));
 }
