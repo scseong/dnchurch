@@ -1,7 +1,6 @@
 'use client';
 
-import { useRouter } from 'next/navigation';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { signUp } from '@/apis/auth';
 import AuthSubmitBtn from '@/app/_component/auth/AuthSubmitBtn';
@@ -19,27 +18,33 @@ type Inputs = {
 };
 
 export default function SignUpForm() {
-  const router = useRouter();
   const [signUpError, setSignUpError] = useState('');
   const {
     register,
     handleSubmit,
     watch,
+    setError,
+    clearErrors,
     formState: { errors, isValid, isSubmitting }
   } = useForm<Inputs>({ mode: 'onChange' });
-  const password = watch('password');
+  const { password, confirmPassword } = watch();
 
   const onSubmit: SubmitHandler<Inputs> = async ({ email, password, name, username }) => {
     setSignUpError('');
 
     try {
       await signUp({ email, password, name, username });
-      router.push('/');
     } catch (error) {
       const message = generateErrorMessage(error);
       setSignUpError(message);
     }
   };
+
+  useEffect(() => {
+    if (password !== confirmPassword && confirmPassword) {
+      setError('confirmPassword', { message: '두 비밀번호가 일치하지 않습니다.' });
+    } else clearErrors('confirmPassword');
+  }, [password]);
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>

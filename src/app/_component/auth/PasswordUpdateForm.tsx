@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import AuthSubmitBtn from '@/app/_component/auth/AuthSubmitBtn';
 import FormAlertMessage from '@/app/_component/auth/FormAlertMessage';
@@ -20,9 +20,17 @@ export default function PasswordUpdateForm() {
     register,
     handleSubmit,
     watch,
+    setError: setFormError,
+    clearErrors,
     formState: { errors, isValid, isSubmitting }
   } = useForm<Inputs>({ mode: 'onChange' });
-  const password = watch('password');
+  const { password, confirmPassword } = watch();
+
+  useEffect(() => {
+    if (password !== confirmPassword && confirmPassword) {
+      setFormError('confirmPassword', { message: '두 비밀번호가 일치하지 않습니다.' });
+    } else clearErrors('confirmPassword');
+  }, [password]);
 
   const onSubmit: SubmitHandler<Inputs> = async ({ password }) => {
     setError('');
