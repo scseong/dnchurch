@@ -1,5 +1,6 @@
 'use client';
 
+import { useRouter } from 'next/navigation';
 import { useState, useEffect } from 'react';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import AuthSubmitBtn from '@/app/_component/auth/AuthSubmitBtn';
@@ -15,6 +16,7 @@ type Inputs = {
 };
 
 export default function PasswordUpdateForm() {
+  const router = useRouter();
   const [error, setError] = useState('');
   const {
     register,
@@ -36,8 +38,9 @@ export default function PasswordUpdateForm() {
     setError('');
 
     try {
-      const { error } = await updatePasswordAndSignOut(password);
+      const { error, redirectTo } = await updatePasswordAndSignOut(password);
       if (error) setError(error);
+      if (redirectTo) router.push(redirectTo);
     } catch (error) {
       const message = generateErrorMessage(error);
       setError(message);
