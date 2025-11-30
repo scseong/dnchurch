@@ -3,13 +3,13 @@
 import { useState } from 'react';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import useTimer from '@/hooks/useTimer';
+import AuthSubmitBtn from '@/app/_component/auth/AuthSubmitBtn';
 import FormAlertMessage from '@/app/_component/auth/FormAlertMessage';
-import Loader from '@/app/_component/common/Loader';
+import FormField from '@/app/_component/auth/FormField';
 import { requestPasswordResetEmail } from '@/apis/auth';
 import { generateErrorMessage } from '@/shared/constants/error';
 import { EMAIL_RESEND_DELAY_SECONDS } from '@/shared/constants/timer';
-import { EMAIL_REGEX } from '@/shared/util/regex';
-import styles from './SignInForm.module.scss';
+import { FORM_VALIDATIONS } from '@/shared/constants/validation';
 
 type Inputs = {
   email: string;
@@ -28,13 +28,10 @@ export default function EmailVerificationRequestForm() {
   const { start, isFinished, isRunning, formattedRemain } = useTimer();
 
   const getButtonContent = () => {
-    if (isSubmitting) return <Loader />;
-
     if (isSubmitSuccessful) {
       if (isRunning) return `재요청 가능 시간: ${formattedRemain}`;
       if (isFinished) return '인증 메일 재요청하기';
     }
-
     return '인증 메일 요청하기';
   };
 
@@ -56,27 +53,19 @@ export default function EmailVerificationRequestForm() {
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
-      <div className={styles.input_group}>
-        <input
-          {...register('email', {
-            required: '이메일을 입력해주세요',
-            pattern: {
-              value: EMAIL_REGEX,
-              message: '유효한 이메일 형식이 아닙니다.'
-            }
-          })}
-          id="email"
-          autoComplete="email"
-          placeholder="example@service.com"
-        />
-        {errors.email && <FormAlertMessage type="error" message={errors.email.message} />}
-      </div>
-      <button
-        className={!isValid || isRunning ? styles.disabled_button : styles.active_button}
-        disabled={!isValid || isRunning}
-      >
-        {getButtonContent()}
-      </button>
+      <FormField
+        id="email"
+        label="이메일"
+        placeholder="example@service.com"
+        register={register('email', FORM_VALIDATIONS.email)}
+        error={errors.email?.message}
+        blindLabel
+      />
+      <AuthSubmitBtn
+        isDisabled={!isValid || isRunning}
+        isSubmitting={isSubmitting}
+        label={getButtonContent()}
+      />
       {alertMessage && (
         <FormAlertMessage
           type={alertType === 'success' ? 'success' : 'error'}

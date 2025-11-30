@@ -14,7 +14,6 @@ export async function GET(request: Request) {
       maxAge: EMAIL_OTP_EXPIRATION_SECONDS,
       path: '/'
     });
-
     return response;
   }
 

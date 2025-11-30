@@ -12,7 +12,7 @@ export const uploadFileAction = async (file: ImageFileData) => {
   const buffer = decode(base64);
 
   try {
-    const supabase = await createServerSideClient({});
+    const supabase = await createServerSideClient();
     const { data, error } = await supabase.storage.from(BULLETIN_BUCKET).upload(filename, buffer, {
       contentType: file.filetype
     });
@@ -43,7 +43,7 @@ export const updateFileAction = async (file: ImageFileData) => {
   const buffer = decode(base64);
 
   try {
-    const supabase = await createServerSideClient({});
+    const supabase = await createServerSideClient();
     const { data, error } = await supabase.storage.from(BULLETIN_BUCKET).update(filename, buffer, {
       contentType: file.filetype
     });
