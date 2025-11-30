@@ -28,7 +28,7 @@ export const createBulletinAction = async (
   const imagefileUrls = getUrlsFromApiResponse(uploadResults);
 
   try {
-    const supabase = await createServerSideClient({});
+    const supabase = await createServerSideClient();
     const { error } = await supabase
       .from(BULLETIN_BUCKET)
       .insert({
@@ -85,7 +85,7 @@ export const updateBulletinAction = async (
   }
 
   try {
-    const supabase = await createServerSideClient({});
+    const supabase = await createServerSideClient();
     const { error } = await supabase
       .from(BULLETIN_BUCKET)
       .update({ ...updatedObject })
@@ -103,7 +103,7 @@ export const updateBulletinAction = async (
     };
   }
 
-  revalidateTag('bulletin');
+  revalidateTag('bulletin', 'max');
   revalidatePath('/news/bulletin');
   redirect(`/news/bulletin/${bulletinId}`, RedirectType.push);
 };

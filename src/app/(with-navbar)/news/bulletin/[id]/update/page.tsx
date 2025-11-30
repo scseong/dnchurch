@@ -63,7 +63,7 @@ export default function UpdateBulletin() {
       const { data } = await supabase
         .from(BULLETIN_BUCKET)
         .select(`*, profiles ( user_name )`)
-        .eq('id', id)
+        .eq('id', Number(id))
         .single();
 
       if (!data) {

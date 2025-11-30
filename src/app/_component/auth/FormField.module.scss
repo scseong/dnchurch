@@ -1,0 +1,41 @@
+.input_group {
+  margin-bottom: $spacing-sm;
+
+  .label {
+    margin-bottom: $spacing-xs;
+    display: block;
+    position: relative;
+  }
+
+  .label_blind {
+    @include blind;
+
+    &::after {
+      content: none !important;
+    }
+  }
+
+  .label_required {
+    &::after {
+      content: '*';
+      margin-left: 0.2rem;
+      position: absolute;
+      top: 0;
+      color: $color-red-500;
+    }
+  }
+
+  input {
+    padding: $spacing-sm;
+    display: block;
+    width: 100%;
+    border: 1px solid $color-border-default;
+    border-radius: $border-radius-md;
+    outline: none;
+    transition: border 0.1s ease-in-out;
+
+    &:focus {
+      border: 1px solid $color-border-focus !important;
+    }
+  }
+}

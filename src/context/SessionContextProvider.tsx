@@ -1,5 +1,6 @@
 'use client';
 
+import { useRouter } from 'next/navigation';
 import { createContext, PropsWithChildren, useEffect, useState, useContext, useMemo } from 'react';
 import { supabase } from '@/shared/supabase/client';
 import { AuthError } from '@supabase/supabase-js';
@@ -17,6 +18,7 @@ const SessionContext = createContext<{
 function SessionContextProvider({ children }: PropsWithChildren) {
   const [profile, setProfile] = useState<ProfileType | null>(null);
   const [error, setError] = useState<AuthError | null>(null);
+  const router = useRouter();
 
   useEffect(() => {
     const getUserProfile = async () => {
@@ -35,15 +37,19 @@ function SessionContextProvider({ children }: PropsWithChildren) {
 
     const {
       data: { subscription }
-    } = supabase.auth.onAuthStateChange(async (_event, session) => {
-      if (session) {
-        getUserProfile();
-      } else {
-        setProfile(null);
+    } = supabase.auth.onAuthStateChange(async (event, session) => {
+      if (event === 'SIGNED_IN' && session) {
+        const params = new URLSearchParams(window.location.search);
+        const redirectFrom = params.get('redirect') || '/';
+        router.push(decodeURIComponent(redirectFrom));
       }
-    });
+      if (event === 'SIGNED_OUT') {
+        router.refresh();
+      }
 
-    getUserProfile();
+      if (session) getUserProfile();
+      else setProfile(null);
+    });
 
     return () => {
       subscription?.unsubscribe();
@@ -52,15 +58,10 @@ function SessionContextProvider({ children }: PropsWithChildren) {
 
   const value = useMemo(() => {
     if (error) {
-      return {
-        profile,
-        error
-      };
+      return { profile, error };
     }
-    return {
-      profile,
-      error: null
-    };
+
+    return { profile, error: null };
   }, [profile, error]);
 
   return <SessionContext.Provider value={value}>{children}</SessionContext.Provider>;

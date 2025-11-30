@@ -35,23 +35,25 @@ h5 {
   letter-spacing: $letter-spacing-heading;
 }
 
-input[type='text'],
+input,
+input::placeholder,
 textarea,
 select {
-  font-size: $font-size-medium;
+  font-size: $font-size-md;
 }
 
 p,
+label,
 ul,
 ol,
 blockquote {
-  font-size: $font-size-medium;
+  font-size: $font-size-default;
   word-break: keep-all;
 }
 
 a {
   text-decoration: none;
-  font-size: $font-size-small;
+  font-size: $font-size-md;
 }
 
 ul,
@@ -62,7 +64,7 @@ li {
 button {
   border: none;
   background: none;
-  font-size: $font-size-small;
+  font-size: $font-size-md;
   cursor: pointer;
 }
 

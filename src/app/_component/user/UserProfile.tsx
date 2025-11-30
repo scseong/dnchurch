@@ -22,7 +22,7 @@ export default function UserProfile({
   return (
     <div className={styles.profile} onClick={handleClick}>
       <div className={styles.profile_image} style={{ width: imageSize, height: imageSize }}>
-        <img src={avatarUrl} alt={`${name}님의 프로필 이미지`} />
+        <img src={avatarUrl || '/images/default-avatar.jpg'} alt={`${name}님의 프로필 이미지`} />
       </div>
       {showInfo && (
         <div className={styles.info} style={{ fontSize }}>

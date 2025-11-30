@@ -10,17 +10,19 @@
     "generate:types": "supabase gen types typescript --project-id ndimreqwgdiwtjonjjzq --schema public > src/shared/types/database.types.ts"
   },
   "dependencies": {
-    "@supabase/ssr": "^0.5.1",
-    "@supabase/supabase-js": "^2.46.1",
+    "@supabase/ssr": "^0.8.0",
+    "@supabase/supabase-js": "^2.86.0",
     "@tanstack/react-table": "^8.20.6",
     "base64-arraybuffer": "^1.0.2",
+    "clsx": "^2.1.1",
     "dayjs": "^1.11.13",
     "lodash-es": "^4.17.21",
-    "next": "15.0.2",
-    "react": "19.0.0-rc-02c0e824-20241028",
-    "react-dom": "19.0.0-rc-02c0e824-20241028",
+    "next": "^16.0.3",
+    "react": "^19.2.0",
+    "react-dom": "^19.2.0",
+    "react-hook-form": "^7.66.0",
     "react-icons": "^5.3.0",
-    "react-kakao-maps-sdk": "^1.1.27",
+    "react-kakao-maps-sdk": "^1.2.0",
     "swiper": "^11.1.14"
   },
   "devDependencies": {
@@ -29,11 +31,11 @@
     "@types/react": "^18",
     "@types/react-dom": "^18",
     "@types/react-slick": "^0.23.13",
-    "eslint": "^8",
-    "eslint-config-next": "15.0.2",
+    "eslint": "^9.39.1",
+    "eslint-config-next": "^16.0.3",
     "eslint-config-prettier": "^9.1.0",
     "prettier": "^3.3.3",
-    "sass": "^1.80.6",
+    "sass": "^1.94.0",
     "supabase": "^2.0.0",
     "typescript": "^5"
   }

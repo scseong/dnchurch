@@ -1,70 +1,94 @@
-.login {
-  padding: 7rem 2rem 2rem;
-  max-width: 120rem;
+.wrap {
+  margin: $spacing-xxl auto;
+  max-width: 35rem;
+}
 
-  .wrap {
-    margin: 0 auto;
-    max-width: 40rem;
-    text-align: center;
+.header {
+  margin-bottom: $spacing-xl;
+  position: relative;
+
+  h1 {
+    margin-bottom: $spacing-xxs;
+    font-size: $font-size-h2-mobile;
+
+    @include respond-up($breakpoint-md) {
+      font-size: $font-size-h2;
+    }
+
+    span {
+      @include blind;
+    }
   }
 
-  .header {
-    margin-bottom: 6rem;
-    position: relative;
+  p {
+    color: $color-text-subtle;
+  }
+}
 
-    h2 {
-      margin-bottom: 0.4rem;
-      font-size: 3rem;
+.divide {
+  margin-top: $spacing-lg;
+  position: relative;
+  text-align: center;
 
-      @include respond($breakpoint-md) {
-        font-size: 2.4rem;
-      }
+  .divide_line {
+    position: absolute;
+    width: 100%;
+    height: 1px;
+    left: 50%;
+    top: 50%;
+    background-color: $color-border-default;
+    z-index: -1;
+    transform: translate(-50%, -50%);
+  }
 
-      span {
-        @include blind;
-      }
+  .caption {
+    padding: 0 $spacing-xs;
+    display: inline-block;
+    background-color: $color-white;
+    font-size: $font-size-md;
+    color: $color-text-subtle;
+  }
+}
+
+.btn_group {
+  margin-top: $spacing-sm;
+
+  button {
+    width: 100%;
+
+    img {
+      width: 100%;
+      height: 4.5rem;
     }
+  }
+}
 
-    p {
-      font-size: 1.4rem;
-      color: #858585;
+.link_group {
+  margin: $spacing-md 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  a {
+    font-size: $font-size-md;
+    color: $color-text-subtle;
+    text-decoration: underline;
+    text-decoration-color: $color-text-subtle;
+
+    &:hover {
+      color: $color-text-default;
     }
+  }
+
+  p {
+    margin-right: $spacing-xs;
+    color: $color-text-subtle;
   }
 
   .divide {
-    position: relative;
-
-    .divide_line {
-      position: absolute;
-      width: 100%;
-      height: 1px;
-      left: 50%;
-      top: 50%;
-      background-color: #ebebeb;
-      z-index: -1;
-      transform: translate(-50%, -50%);
-    }
-
-    .caption {
-      padding: 0 8px;
-      display: inline-block;
-      background-color: #fff;
-      font-size: 1.4rem;
-      color: #858585;
-    }
-  }
-
-  .btn_group {
-    margin-top: 1rem;
-    width: 100%;
-
-    button {
-      width: 100%;
-
-      img {
-        width: 100%;
-        height: 100%;
-      }
-    }
+    margin: 0 $spacing-lg;
+    width: 1px;
+    height: $font-size-sm;
+    background-color: $color-border-default;
   }
 }
