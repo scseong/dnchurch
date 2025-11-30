@@ -1,4 +1,5 @@
 import clsx from 'clsx';
+import { type UseFormRegisterReturn } from 'react-hook-form';
 import FormAlertMessage from '@/app/_component/auth/FormAlertMessage';
 import styles from './FormField.module.scss';
 
@@ -6,7 +7,7 @@ type Props = {
   id: string;
   label: string;
   type?: string;
-  register: any;
+  register: UseFormRegisterReturn;
   error?: string;
   placeholder?: string;
   blindLabel?: boolean;
