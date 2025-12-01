@@ -1,5 +1,6 @@
 import { Metadata } from 'next';
 import Link from 'next/link';
+import { Suspense } from 'react';
 import { LayoutContainer } from '@/app/_component/layout/common';
 import SignUpForm from '@/app/_component/auth/SignUpForm';
 import styles from '../login/page.module.scss';
@@ -22,7 +23,9 @@ export default function SignUpPage() {
               회원가입 후, 더욱 편리한 서비스를 이용해 보세요.
             </p>
           </div>
-          <SignUpForm />
+          <Suspense fallback={null}>
+            <SignUpForm />
+          </Suspense>
           <div className={styles.link_group}>
             <p>이미 계정이 있으신가요?</p>
             <Link href="/login">로그인</Link>

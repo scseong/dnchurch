@@ -1,5 +1,6 @@
 'use client';
 
+import { useSearchParams } from 'next/navigation';
 import { useState, useEffect } from 'react';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { signUp } from '@/apis/auth';
@@ -28,11 +29,14 @@ export default function SignUpForm() {
     formState: { errors, isValid, isSubmitting }
   } = useForm<Inputs>({ mode: 'onChange' });
   const { password, confirmPassword } = watch();
+  const searchParams = useSearchParams();
+  const redirect = searchParams.get('redirect') ?? '/';
 
   const onSubmit: SubmitHandler<Inputs> = async ({ email, password, name, username }) => {
     setSignUpError('');
 
     try {
+      localStorage.setItem('redirect_after_login', redirect);
       await signUp({ email, password, name, username });
     } catch (error) {
       const message = generateErrorMessage(error);
