@@ -16,9 +16,7 @@ export const getProfileById = async (userId = '') => {
     .eq('id', userId)
     .single();
 
-  if (error) {
-    throw new Error(error.message);
-  }
+  if (error) throw error;
 
   return profile;
 };

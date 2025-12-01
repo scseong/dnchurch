@@ -5,12 +5,14 @@ import { createContext, PropsWithChildren, useEffect, useState, useContext, useM
 import { supabase } from '@/shared/supabase/client';
 import { AuthError } from '@supabase/supabase-js';
 import { ProfileType } from '@/shared/types/types';
-import { getProfileById, getUserInfo } from '@/apis/user';
+import { getProfileById } from '@/apis/user';
 
 const SessionContext = createContext<{
+  isLoading: boolean;
   profile: ProfileType | null;
   error: AuthError | null;
 }>({
+  isLoading: true,
   profile: null,
   error: null
 });
@@ -18,51 +20,54 @@ const SessionContext = createContext<{
 function SessionContextProvider({ children }: PropsWithChildren) {
   const [profile, setProfile] = useState<ProfileType | null>(null);
   const [error, setError] = useState<AuthError | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
   const router = useRouter();
 
-  useEffect(() => {
-    const getUserProfile = async () => {
-      const { user, error } = await getUserInfo();
-
-      if (error) {
-        setError(error);
-        return;
-      }
-
-      if (user) {
-        const profile = await getProfileById(user.id);
+  const fetchProfile = useMemo(
+    () => async (userId: string) => {
+      setIsLoading(true);
+      try {
+        const profile = await getProfileById(userId);
         setProfile(profile);
+      } catch (error) {
+        console.error('Failed to fetch profile:', error);
+        setProfile(null);
+        setError(error as AuthError);
+      } finally {
+        setIsLoading(false);
       }
-    };
+    },
+    []
+  );
 
+  useEffect(() => {
     const {
       data: { subscription }
     } = supabase.auth.onAuthStateChange(async (event, session) => {
-      if (event === 'SIGNED_IN' && session) {
-        const params = new URLSearchParams(window.location.search);
-        const redirectFrom = params.get('redirect') || '/';
-        router.push(decodeURIComponent(redirectFrom));
-      }
-      if (event === 'SIGNED_OUT') {
+      if ((event === 'INITIAL_SESSION' || event === 'SIGNED_IN') && session) {
+        fetchProfile(session.user.id);
+      } else if (event === 'SIGNED_OUT') {
+        setIsLoading(true);
+        setProfile(null);
+        setError(null);
+        setIsLoading(false);
         router.refresh();
+      } else if (!session) {
+        setProfile(null);
+        setIsLoading(false);
       }
 
-      if (session) getUserProfile();
-      else setProfile(null);
+      if (event === 'INITIAL_SESSION' && !session) {
+        setIsLoading(false);
+      }
     });
 
-    return () => {
-      subscription?.unsubscribe();
-    };
-  }, []);
+    return () => subscription.unsubscribe();
+  }, [router, fetchProfile]);
 
   const value = useMemo(() => {
-    if (error) {
-      return { profile, error };
-    }
-
-    return { profile, error: null };
-  }, [profile, error]);
+    return { profile, isLoading, error };
+  }, [profile, isLoading, error]);
 
   return <SessionContext.Provider value={value}>{children}</SessionContext.Provider>;
 }
