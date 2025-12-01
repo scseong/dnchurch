@@ -9,6 +9,7 @@ import FormField from '@/app/_component/auth/FormField';
 import { signInWithPassword } from '@/apis/auth';
 import { FORM_VALIDATIONS } from '@/shared/constants/validation';
 import { generateErrorMessage } from '@/shared/constants/error';
+import { REDIRECT_AFTER_LOGIN_KEY } from '@/shared/constants/storageConstants';
 
 type Inputs = {
   email: string;
@@ -28,7 +29,7 @@ export default function SignInForm() {
   const onSubmit: SubmitHandler<Inputs> = async ({ email, password }) => {
     try {
       setLogInError('');
-      localStorage.setItem('redirect_after_login', redirect);
+      localStorage.setItem(REDIRECT_AFTER_LOGIN_KEY, redirect);
       await signInWithPassword({ email, password });
     } catch (error) {
       const message = generateErrorMessage(error);

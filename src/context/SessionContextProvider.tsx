@@ -14,6 +14,7 @@ import {
 import { supabase } from '@/shared/supabase/client';
 import { AuthError, PostgrestError, Session } from '@supabase/supabase-js';
 import { getProfileById } from '@/apis/user';
+import { REDIRECT_AFTER_LOGIN_KEY } from '@/shared/constants/storageConstants';
 import { ProfileType } from '@/shared/types/types';
 
 const SessionContext = createContext<{
@@ -57,9 +58,9 @@ function SessionContextProvider({ children }: PropsWithChildren) {
           fetchProfile(userId);
         }
 
-        const redirectTo = localStorage.getItem('redirect_after_login');
+        const redirectTo = localStorage.getItem(REDIRECT_AFTER_LOGIN_KEY);
         if (redirectTo) {
-          localStorage.removeItem('redirect_after_login');
+          localStorage.removeItem(REDIRECT_AFTER_LOGIN_KEY);
           router.replace(redirectTo);
         }
       }

@@ -1,5 +1,6 @@
 'use client';
 
+import { useSearchParams } from 'next/navigation';
 import { useState, useEffect } from 'react';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { signUp } from '@/apis/auth';
@@ -8,6 +9,7 @@ import FormAlertMessage from '@/app/_component/auth/FormAlertMessage';
 import FormField from '@/app/_component/auth/FormField';
 import { generateErrorMessage } from '@/shared/constants/error';
 import { FORM_VALIDATIONS } from '@/shared/constants/validation';
+import { REDIRECT_AFTER_LOGIN_KEY } from '@/shared/constants/storageConstants';
 
 type Inputs = {
   email: string;
@@ -28,12 +30,14 @@ export default function SignUpForm() {
     formState: { errors, isValid, isSubmitting }
   } = useForm<Inputs>({ mode: 'onChange' });
   const { password, confirmPassword } = watch();
+  const searchParams = useSearchParams();
+  const redirect = searchParams.get('redirect') ?? '/';
 
   const onSubmit: SubmitHandler<Inputs> = async ({ email, password, name, username }) => {
     setSignUpError('');
-
     try {
       await signUp({ email, password, name, username });
+      localStorage.setItem(REDIRECT_AFTER_LOGIN_KEY, redirect);
     } catch (error) {
       const message = generateErrorMessage(error);
       setSignUpError(message);
