@@ -1,7 +1,15 @@
 'use client';
 
 import { useRouter } from 'next/navigation';
-import { createContext, PropsWithChildren, useEffect, useState, useContext, useMemo } from 'react';
+import {
+  createContext,
+  PropsWithChildren,
+  useEffect,
+  useState,
+  useRef,
+  useContext,
+  useMemo
+} from 'react';
 import { supabase } from '@/shared/supabase/client';
 import { AuthError } from '@supabase/supabase-js';
 import { ProfileType } from '@/shared/types/types';
@@ -18,6 +26,7 @@ const SessionContext = createContext<{
 });
 
 function SessionContextProvider({ children }: PropsWithChildren) {
+  const lastUserIdRef = useRef<string | null>(null);
   const [profile, setProfile] = useState<ProfileType | null>(null);
   const [error, setError] = useState<AuthError | null>(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -44,17 +53,22 @@ function SessionContextProvider({ children }: PropsWithChildren) {
     const {
       data: { subscription }
     } = supabase.auth.onAuthStateChange(async (event, session) => {
-      if ((event === 'INITIAL_SESSION' || event === 'SIGNED_IN') && session) {
-        fetchProfile(session.user.id);
-      } else if (event === 'SIGNED_OUT') {
+      const userId = session?.user?.id ?? null;
+
+      if ((event === 'INITIAL_SESSION' || event === 'SIGNED_IN') && userId) {
+        if (lastUserIdRef.current !== userId) {
+          lastUserIdRef.current = userId;
+          await fetchProfile(userId);
+        }
+      }
+
+      if (event === 'SIGNED_OUT') {
+        lastUserIdRef.current = null;
         setIsLoading(true);
         setProfile(null);
         setError(null);
         setIsLoading(false);
         router.refresh();
-      } else if (!session) {
-        setProfile(null);
-        setIsLoading(false);
       }
 
       if (event === 'INITIAL_SESSION' && !session) {
