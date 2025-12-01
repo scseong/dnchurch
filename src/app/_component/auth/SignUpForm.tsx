@@ -9,6 +9,7 @@ import FormAlertMessage from '@/app/_component/auth/FormAlertMessage';
 import FormField from '@/app/_component/auth/FormField';
 import { generateErrorMessage } from '@/shared/constants/error';
 import { FORM_VALIDATIONS } from '@/shared/constants/validation';
+import { REDIRECT_AFTER_LOGIN_KEY } from '@/shared/constants/storageConstants';
 
 type Inputs = {
   email: string;
@@ -34,10 +35,9 @@ export default function SignUpForm() {
 
   const onSubmit: SubmitHandler<Inputs> = async ({ email, password, name, username }) => {
     setSignUpError('');
-
     try {
-      localStorage.setItem('redirect_after_login', redirect);
       await signUp({ email, password, name, username });
+      localStorage.setItem(REDIRECT_AFTER_LOGIN_KEY, redirect);
     } catch (error) {
       const message = generateErrorMessage(error);
       setSignUpError(message);
