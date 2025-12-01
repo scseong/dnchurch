@@ -25,7 +25,9 @@ export default function Login() {
               로그인 후, 더욱 편리한 서비스를 이용해 보세요.
             </p>
           </div>
-          <SignInForm />
+          <Suspense fallback={null}>
+            <SignInForm />
+          </Suspense>
           <div className={styles.link_group}>
             <Link href="/sign-up">회원가입</Link>
             <div className={styles.divide}></div>

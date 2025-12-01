@@ -60,6 +60,12 @@ function SessionContextProvider({ children }: PropsWithChildren) {
           lastUserIdRef.current = userId;
           fetchProfile(userId);
         }
+
+        const redirectTo = localStorage.getItem('redirect_after_login');
+        if (redirectTo) {
+          localStorage.removeItem('redirect_after_login');
+          router.replace(redirectTo);
+        }
       }
 
       if (event === 'SIGNED_OUT') {
