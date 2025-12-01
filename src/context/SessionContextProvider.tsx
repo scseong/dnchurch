@@ -8,17 +8,18 @@ import {
   useState,
   useRef,
   useContext,
+  useCallback,
   useMemo
 } from 'react';
 import { supabase } from '@/shared/supabase/client';
-import { AuthError } from '@supabase/supabase-js';
-import { ProfileType } from '@/shared/types/types';
+import { AuthError, PostgrestError, Session } from '@supabase/supabase-js';
 import { getProfileById } from '@/apis/user';
+import { ProfileType } from '@/shared/types/types';
 
 const SessionContext = createContext<{
   isLoading: boolean;
   profile: ProfileType | null;
-  error: AuthError | null;
+  error: AuthError | PostgrestError | null;
 }>({
   isLoading: true,
   profile: null,
@@ -28,31 +29,26 @@ const SessionContext = createContext<{
 function SessionContextProvider({ children }: PropsWithChildren) {
   const lastUserIdRef = useRef<string | null>(null);
   const [profile, setProfile] = useState<ProfileType | null>(null);
-  const [error, setError] = useState<AuthError | null>(null);
+  const [error, setError] = useState<AuthError | PostgrestError | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const router = useRouter();
 
-  const fetchProfile = useMemo(
-    () => async (userId: string) => {
-      setIsLoading(true);
-      try {
-        const profile = await getProfileById(userId);
-        setProfile(profile);
-      } catch (error) {
-        console.error('Failed to fetch profile:', error);
-        setProfile(null);
-        setError(error as AuthError);
-      } finally {
-        setIsLoading(false);
-      }
-    },
-    []
-  );
+  const fetchProfile = useCallback(async (userId: string) => {
+    setIsLoading(true);
+    try {
+      const profile = await getProfileById(userId);
+      setProfile(profile);
+    } catch (error) {
+      console.error('Failed to fetch profile:', error);
+      setProfile(null);
+      setError(error as AuthError | PostgrestError);
+    } finally {
+      setIsLoading(false);
+    }
+  }, []);
 
-  useEffect(() => {
-    const {
-      data: { subscription }
-    } = supabase.auth.onAuthStateChange(async (event, session) => {
+  const handleAuthStateChange = useCallback(
+    async (event: string, session: Session | null) => {
       const userId = session?.user?.id ?? null;
 
       if ((event === 'INITIAL_SESSION' || event === 'SIGNED_IN') && userId) {
@@ -70,7 +66,6 @@ function SessionContextProvider({ children }: PropsWithChildren) {
 
       if (event === 'SIGNED_OUT') {
         lastUserIdRef.current = null;
-        setIsLoading(true);
         setProfile(null);
         setError(null);
         setIsLoading(false);
@@ -80,10 +75,17 @@ function SessionContextProvider({ children }: PropsWithChildren) {
       if (event === 'INITIAL_SESSION' && !session) {
         setIsLoading(false);
       }
-    });
+    },
+    [router, fetchProfile]
+  );
+
+  useEffect(() => {
+    const {
+      data: { subscription }
+    } = supabase.auth.onAuthStateChange(handleAuthStateChange);
 
     return () => subscription.unsubscribe();
-  }, [router, fetchProfile]);
+  }, [handleAuthStateChange]);
 
   const value = useMemo(() => {
     return { profile, isLoading, error };
@@ -94,21 +96,13 @@ function SessionContextProvider({ children }: PropsWithChildren) {
 
 export const useProfile = () => {
   const context = useContext(SessionContext);
-
-  if (context === null || context === undefined) {
-    throw new Error(`useProfile must be used within a SessionContextProvider.`);
-  }
-
+  if (!context) throw new Error(`useProfile must be used within a SessionContextProvider.`);
   return context.profile;
 };
 
 export const useIsAdmin = () => {
   const context = useContext(SessionContext);
-
-  if (context === null || context === undefined) {
-    throw new Error(`useIsAdmin must be used within a SessionContextProvider.`);
-  }
-
+  if (!context) throw new Error(`useIsAdmin must be used within a SessionContextProvider.`);
   return context.profile?.is_admin;
 };
 
