@@ -58,7 +58,7 @@ function SessionContextProvider({ children }: PropsWithChildren) {
       if ((event === 'INITIAL_SESSION' || event === 'SIGNED_IN') && userId) {
         if (lastUserIdRef.current !== userId) {
           lastUserIdRef.current = userId;
-          await fetchProfile(userId);
+          fetchProfile(userId);
         }
       }
 
