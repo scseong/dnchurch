@@ -44,6 +44,7 @@ export type Database = {
       bulletin: {
         Row: {
           created_at: string
+          date: string
           id: number
           image_url: string[]
           title: string
@@ -52,6 +53,7 @@ export type Database = {
         }
         Insert: {
           created_at?: string
+          date: string
           id?: number
           image_url: string[]
           title: string
@@ -60,6 +62,7 @@ export type Database = {
         }
         Update: {
           created_at?: string
+          date?: string
           id?: number
           image_url?: string[]
           title?: string
@@ -79,6 +82,7 @@ export type Database = {
       "bulletin-dev": {
         Row: {
           created_at: string
+          date: string | null
           id: number
           image_url: string[]
           title: string
@@ -87,6 +91,7 @@ export type Database = {
         }
         Insert: {
           created_at?: string
+          date?: string | null
           id?: number
           image_url: string[]
           title: string
@@ -95,6 +100,7 @@ export type Database = {
         }
         Update: {
           created_at?: string
+          date?: string | null
           id?: number
           image_url?: string[]
           title?: string
@@ -228,7 +234,7 @@ export type Database = {
       }
       profiles: {
         Row: {
-          avatar_url: string
+          avatar_url: string | null
           created_at: string
           email: string
           id: string
@@ -237,8 +243,8 @@ export type Database = {
           user_name: string
         }
         Insert: {
-          avatar_url: string
-          created_at: string
+          avatar_url?: string | null
+          created_at?: string
           email: string
           id?: string
           is_admin?: boolean
@@ -246,7 +252,7 @@ export type Database = {
           user_name: string
         }
         Update: {
-          avatar_url?: string
+          avatar_url?: string | null
           created_at?: string
           email?: string
           id?: string
@@ -278,6 +284,10 @@ export type Database = {
           prev_id: number
           prev_title: string
         }[]
+      }
+      getbulletinsummary: {
+        Args: { limit_count?: number; page?: number; select_year: number }
+        Returns: Json
       }
     }
     Enums: {

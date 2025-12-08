@@ -17,7 +17,7 @@ const columnHelper = createColumnHelper<BulletinType>();
 type BulletinTableProps = {
   bulletins: BulletinType[] | null;
   count: number;
-  currentPage: string;
+  currentPage: number;
 };
 
 export default function BulletinTable({ bulletins, count, currentPage }: BulletinTableProps) {
@@ -44,7 +44,7 @@ export default function BulletinTable({ bulletins, count, currentPage }: Bulleti
   });
 
   const totalPage = count ? Math.ceil(count / ITEM_PER_PAGE) : 0;
-  const currentGroup = Math.floor((parseInt(currentPage) - 1) / ITEM_PER_PAGE);
+  const currentGroup = Math.floor((currentPage - 1) / ITEM_PER_PAGE);
   const startPage = currentGroup * ITEM_PER_PAGE + 1;
   const endPage = Math.min(startPage + ITEM_PER_PAGE - 1, totalPage);
 
@@ -82,7 +82,7 @@ export default function BulletinTable({ bulletins, count, currentPage }: Bulleti
                 <li key={number}>
                   <Link
                     href={createPageURL('page', number)}
-                    className={number === parseInt(currentPage) ? styles.active : ''}
+                    className={number === currentPage ? styles.active : ''}
                     scroll={false}
                   >
                     {number}

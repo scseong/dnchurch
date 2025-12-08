@@ -1,0 +1,41 @@
+.latest_bulletin {
+  flex: 1 50%;
+
+  .notification {
+    padding: $spacing-lg 0;
+    margin-bottom: $spacing-sm;
+    background-color: $color-bg-default;
+    border: 0.1rem solid $color-primary;
+    font-weight: $font-weight-semibold;
+    text-align: center;
+  }
+
+  .images_wrap {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+
+    a {
+      padding: 1rem;
+      display: block;
+      width: 100%;
+      border: 1px solid #fcd8b7;
+    }
+
+    img {
+      width: 100%;
+    }
+  }
+
+  .share {
+    padding: 1rem 0;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 0.4rem;
+
+    button {
+      font-size: 1.3rem;
+    }
+  }
+}
