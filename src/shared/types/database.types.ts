@@ -286,7 +286,7 @@ export type Database = {
         }[]
       }
       getbulletinsummary: {
-        Args: { limit_count?: number; page?: number; select_year: number }
+        Args: { limit_count: number; page: number; select_year?: number }
         Returns: Json
       }
     }

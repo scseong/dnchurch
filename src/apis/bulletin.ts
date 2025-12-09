@@ -201,6 +201,12 @@ export const getLatestBulletin = async () => {
   return { latestBulletin: bulletin };
 };
 
+export type BulletinSummary = {
+  year?: number;
+  page?: number;
+  limit?: number;
+};
+
 export type BulletinSummaryResponse = {
   latest: BulletinType;
   years: { year: number }[];
@@ -209,13 +215,13 @@ export type BulletinSummaryResponse = {
 };
 
 export const getBulletinSummary = async ({
-  year = 2026,
+  year,
   page = 1,
   limit = 10
-}): Promise<BulletinSummaryResponse> => {
+}: BulletinSummary): Promise<BulletinSummaryResponse> => {
   const supabase = await createServerSideClient();
   const { data, error } = await supabase.rpc('getbulletinsummary', {
-    select_year: year,
+    select_year: year || undefined,
     page,
     limit_count: limit
   });

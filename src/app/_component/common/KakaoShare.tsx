@@ -52,6 +52,7 @@ export default function KakaoShareBtn({
     });
   };
 
+  /* TODO: 이미지로 변경 */
   return (
     <button onClick={handleClick}>
       <FiShare2 size={size} />

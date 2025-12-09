@@ -1,10 +1,11 @@
 .table {
+  margin-bottom: $spacing-sm;
   width: 100%;
   border-collapse: collapse;
 
   th,
   td {
-    padding: 1rem;
+    padding: $spacing-sm;
   }
 
   th:first-child,
@@ -12,30 +13,42 @@
     width: 15%;
   }
 
+  thead {
+    tr {
+      border-top: 0.1rem solid $color-border-primary;
+      border-bottom: 0.1rem solid $color-border-primary;
+    }
+  }
+
   tr {
-    border-top: 1px solid #fcd8b7;
-    border-bottom: 1px solid #fcd8b7;
+    border-bottom: 0.1rem solid $color-border-primary-inverse;
   }
 
   th {
-    background-color: #fff5ec;
-    font-size: 1.3rem;
-    font-weight: 600;
+    background-color: $color-bg-default;
+    font-size: $font-size-md;
+    font-weight: $font-weight-semibold;
     text-align: center;
   }
 
   td:first-child {
     text-align: center;
-    color: #666;
+    color: $color-text-subtle;
   }
 
   td {
-    font-size: 1.2rem;
+    font-size: $font-size-sm;
+
+    a:hover {
+      color: $color-text-link;
+      text-decoration: underline;
+      text-decoration-line: $color-text-link;
+    }
   }
 }
 
 .pagination {
-  padding: 1rem;
+  padding: $spacing-xs;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -47,7 +60,7 @@
       padding: 0 1rem;
       display: block;
       width: 3.6rem;
-      border: 2px solid #fff5ec;
+      border: 0.2rem solid $color-border-primary-inverse;
       border-radius: 0.41rem;
       font-size: 1.3rem;
       font-weight: 500;

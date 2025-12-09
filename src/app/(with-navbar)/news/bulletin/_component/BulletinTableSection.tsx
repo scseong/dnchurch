@@ -5,7 +5,7 @@ import { BulletinType } from '@/shared/types/types';
 import styles from './BulletinTableSection.module.scss';
 
 type Props = {
-  yearFilter: number;
+  yearFilter?: number;
   years: { year: number }[];
   bulletins: BulletinType[];
   count: number;

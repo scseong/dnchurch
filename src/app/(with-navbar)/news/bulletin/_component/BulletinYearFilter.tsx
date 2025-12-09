@@ -2,7 +2,7 @@ import Link from 'next/link';
 import styles from './BulletinYearFilter.module.scss';
 
 type Props = {
-  selectedYear: number;
+  selectedYear?: number;
   years: { year: number }[];
 };
 

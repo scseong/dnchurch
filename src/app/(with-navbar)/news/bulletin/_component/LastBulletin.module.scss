@@ -5,21 +5,24 @@
     padding: $spacing-lg 0;
     margin-bottom: $spacing-sm;
     background-color: $color-bg-default;
-    border: 0.1rem solid $color-primary;
+    border: 0.1rem solid $color-border-primary;
     font-weight: $font-weight-semibold;
     text-align: center;
   }
 
   .images_wrap {
-    width: 100%;
     display: flex;
     flex-direction: column;
 
     a {
-      padding: 1rem;
+      padding: $spacing-sm;
       display: block;
       width: 100%;
-      border: 1px solid #fcd8b7;
+      border: 0.1rem solid $color-border-primary;
+
+      &:last-child {
+        border-top: none;
+      }
     }
 
     img {
@@ -28,14 +31,14 @@
   }
 
   .share {
-    padding: 1rem 0;
+    padding: $spacing-sm 0;
     display: flex;
     justify-content: flex-end;
     align-items: center;
-    gap: 0.4rem;
+    gap: $spacing-xxs;
 
     button {
-      font-size: 1.3rem;
+      font-size: $font-size-md;
     }
   }
 }

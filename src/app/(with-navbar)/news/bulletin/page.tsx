@@ -3,7 +3,6 @@ import MainContainer from '@/app/_component/layout/common/MainContainer';
 import LatestBulletin from '@/app/(with-navbar)/news/bulletin/_component/LastBulletin';
 import BulletinTableSection from '@/app/(with-navbar)/news/bulletin/_component/BulletinTableSection';
 import { getBulletinSummary } from '@/apis/bulletin';
-import { getCurrentYear } from '@/shared/util/date';
 import styles from './page.module.scss';
 
 export const metadata: Metadata = {
@@ -19,9 +18,11 @@ type Props = {
   searchParams: Promise<{ page: string; year: string }>;
 };
 
+export const revalidate = 60;
+
 export default async function BulletinPage({ searchParams }: Props) {
   const params = await searchParams;
-  const yearFilter = params.year ? parseInt(params.year) : getCurrentYear();
+  const yearFilter = params.year ? parseInt(params.year) : undefined;
   const page = params.page ? parseInt(params.page) : 1;
   const {
     items: bulletins,
