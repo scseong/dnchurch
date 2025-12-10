@@ -7,13 +7,9 @@ import {
   getCoreRowModel,
   useReactTable
 } from '@tanstack/react-table';
-import useQueryParams from '@/hooks/useQueryParams';
-import { ITEM_PER_PAGE } from '@/shared/constants/bulletin';
+import Pagination from '@/app/_component/layout/common/Pagination';
 import type { BulletinType } from '@/shared/types/types';
 import styles from './BulletinTable.module.scss';
-import Pagination from '@/app/_component/layout/common/Pagination';
-
-const columnHelper = createColumnHelper<BulletinType>();
 
 type BulletinTableProps = {
   bulletins: BulletinType[] | null;
@@ -21,7 +17,9 @@ type BulletinTableProps = {
   currentPage: number;
 };
 
-export default function BulletinTable({ bulletins, total, currentPage }: BulletinTableProps) {
+const columnHelper = createColumnHelper<BulletinType>();
+
+export default function BulletinTable({ bulletins, total }: BulletinTableProps) {
   const columns = [
     columnHelper.accessor('id', {
       id: '번호',
@@ -42,11 +40,6 @@ export default function BulletinTable({ bulletins, total, currentPage }: Bulleti
     manualPagination: true,
     rowCount: total
   });
-
-  const totalPage = total ? Math.ceil(total / ITEM_PER_PAGE) : 0;
-  const currentGroup = Math.floor((currentPage - 1) / ITEM_PER_PAGE);
-  const startPage = currentGroup * ITEM_PER_PAGE + 1;
-  const endPage = Math.min(startPage + ITEM_PER_PAGE - 1, totalPage);
 
   return (
     <>
@@ -72,7 +65,7 @@ export default function BulletinTable({ bulletins, total, currentPage }: Bulleti
           ))}
         </tbody>
       </table>
-      <Pagination totalCount={total} pageSize={10} maxVisiblePages={10} />
+      <Pagination totalCount={total} pageSize={10} maxVisiblePages={5} />
     </>
   );
 }

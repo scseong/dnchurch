@@ -33,7 +33,6 @@
 
   td:first-child {
     text-align: center;
-    color: $color-text-subtle;
   }
 
   td {
@@ -43,52 +42,6 @@
       color: $color-text-link;
       text-decoration: underline;
       text-decoration-line: $color-text-link;
-    }
-  }
-}
-
-.pagination {
-  padding: $spacing-xs;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-
-  li {
-    padding: 0.1rem;
-
-    a {
-      padding: 0 1rem;
-      display: block;
-      width: 3.6rem;
-      border: 0.2rem solid $color-border-primary-inverse;
-      border-radius: 0.41rem;
-      font-size: 1.3rem;
-      font-weight: 500;
-      line-height: 3rem;
-      text-align: center;
-      color: #666;
-
-      @include respond($breakpoint-lg) {
-        width: 3rem;
-        font-size: 1.2rem;
-        line-height: 2.4rem;
-      }
-
-      @media (hover: hover) and (pointer: fine) {
-        &:not(.active) {
-          @media (hover: hover) and (pointer: fine) {
-            &:hover {
-              background-color: #fff5ec;
-            }
-          }
-        }
-      }
-    }
-
-    .active {
-      background-color: $color-primary;
-      border-color: $color-primary;
-      color: white;
     }
   }
 }
