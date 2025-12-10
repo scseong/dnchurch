@@ -8,7 +8,7 @@ type Props = {
   yearFilter?: number;
   years: { year: number }[];
   bulletins: BulletinType[];
-  count: number;
+  total: number;
   currentPage: number;
 };
 
@@ -16,13 +16,13 @@ export default function BulletinTableSection({
   yearFilter,
   years,
   bulletins,
-  count,
+  total,
   currentPage
 }: Props) {
   return (
     <section className={styles.table}>
       <BulletinYearFilter selectedYear={yearFilter} years={years} />
-      <BulletinTable bulletins={bulletins} count={count} currentPage={currentPage} />
+      <BulletinTable bulletins={bulletins} total={total} currentPage={currentPage} />
       <CreateBulletinButton />
     </section>
   );

@@ -39,7 +39,7 @@ export default async function BulletinPage({ searchParams }: Props) {
           yearFilter={yearFilter}
           years={years}
           bulletins={bulletins}
-          count={total}
+          total={total}
           currentPage={page}
         />
       </div>

@@ -11,17 +11,17 @@ import useQueryParams from '@/hooks/useQueryParams';
 import { ITEM_PER_PAGE } from '@/shared/constants/bulletin';
 import type { BulletinType } from '@/shared/types/types';
 import styles from './BulletinTable.module.scss';
+import Pagination from '@/app/_component/layout/common/Pagination';
 
 const columnHelper = createColumnHelper<BulletinType>();
 
 type BulletinTableProps = {
   bulletins: BulletinType[] | null;
-  count: number;
+  total: number;
   currentPage: number;
 };
 
-export default function BulletinTable({ bulletins, count, currentPage }: BulletinTableProps) {
-  const { createPageURL } = useQueryParams();
+export default function BulletinTable({ bulletins, total, currentPage }: BulletinTableProps) {
   const columns = [
     columnHelper.accessor('id', {
       id: '번호',
@@ -40,10 +40,10 @@ export default function BulletinTable({ bulletins, count, currentPage }: Bulleti
     columns,
     getCoreRowModel: getCoreRowModel(),
     manualPagination: true,
-    rowCount: count
+    rowCount: total
   });
 
-  const totalPage = count ? Math.ceil(count / ITEM_PER_PAGE) : 0;
+  const totalPage = total ? Math.ceil(total / ITEM_PER_PAGE) : 0;
   const currentGroup = Math.floor((currentPage - 1) / ITEM_PER_PAGE);
   const startPage = currentGroup * ITEM_PER_PAGE + 1;
   const endPage = Math.min(startPage + ITEM_PER_PAGE - 1, totalPage);
@@ -72,27 +72,7 @@ export default function BulletinTable({ bulletins, count, currentPage }: Bulleti
           ))}
         </tbody>
       </table>
-      <div>
-        <ul className={styles.pagination}>
-          {Array.from({ length: endPage - startPage + 1 }, (_, index) => startPage + index).map(
-            // TODO: 알고리즘 수정, Prev, Next 버튼 추가
-            (number) => {
-              if (number > endPage) return null;
-              return (
-                <li key={number}>
-                  <Link
-                    href={createPageURL('page', number)}
-                    className={number === currentPage ? styles.active : ''}
-                    scroll={false}
-                  >
-                    {number}
-                  </Link>
-                </li>
-              );
-            }
-          )}
-        </ul>
-      </div>
+      <Pagination totalCount={total} pageSize={10} maxVisiblePages={10} />
     </>
   );
 }
