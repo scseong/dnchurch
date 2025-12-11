@@ -27,7 +27,11 @@ export default function LatestBulletin({ latestBulletin }: { latestBulletin?: Bu
         )}
       </div>
       <div className={styles.share}>
-        <KakaoShareBtn title="주보 - 대구동남교회" description={title} />
+        <KakaoShareBtn
+          title={`${title} 주보 | 대구동남교회`}
+          description="이번 주 교회 주보에서 예배 일정과 소식을 살펴보세요."
+          imageUrl={images[0]}
+        />
       </div>
     </section>
   );

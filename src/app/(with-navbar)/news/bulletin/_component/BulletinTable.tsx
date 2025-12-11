@@ -25,9 +25,7 @@ export default function BulletinTable({ bulletins, total, currentPage }: Bulleti
     columnHelper.accessor('id', {
       id: '번호',
       header: (info) => info.column.id,
-      cell: (info) => {
-        return total - (currentPage - 1) * ITEM_PER_PAGE - info.row.index;
-      }
+      cell: (info) => total - (currentPage - 1) * ITEM_PER_PAGE - info.row.index
     }),
     columnHelper.accessor('title', {
       id: '제목',

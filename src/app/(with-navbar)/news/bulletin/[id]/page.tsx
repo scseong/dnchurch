@@ -12,10 +12,10 @@ export async function generateMetadata({ params }: { params: Promise<{ id: strin
   const bulletin = await getBulletinsById(bulletinId);
 
   return {
-    title: bulletin?.title,
+    title: `${bulletin?.title} 주보`,
     description: '이번 주 교회 주보에서 예배 일정과 소식을 살펴보세요.',
     openGraph: {
-      title: bulletin?.title,
+      title: `${bulletin?.title} 주보`,
       description: '이번 주 교회 주보에서 예배 일정과 소식을 살펴보세요.',
       images: {
         url: bulletin?.image_url[0]

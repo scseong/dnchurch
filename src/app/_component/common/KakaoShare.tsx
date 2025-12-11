@@ -1,7 +1,5 @@
 'use client';
 
-import { FiShare2 } from 'react-icons/fi';
-
 declare global {
   interface Window {
     Kakao: any;
@@ -21,7 +19,7 @@ export default function KakaoShareBtn({
   description,
   imageUrl = '/images/dnchurch.png',
   link,
-  size
+  size = '40px'
 }: KakaoShareBtn) {
   const handleClick = () => {
     const { Kakao, location } = window;
@@ -52,10 +50,15 @@ export default function KakaoShareBtn({
     });
   };
 
-  /* TODO: 이미지로 변경 */
   return (
-    <button onClick={handleClick}>
-      <FiShare2 size={size} />
+    <button onClick={handleClick} style={{ display: 'flex' }}>
+      <img
+        src="/images/icon-kakaotalk.png"
+        alt="카카오톡 로고 이미지"
+        width={size}
+        height={size}
+        aria-label="카카오톡 공유하기"
+      />
     </button>
   );
 }

@@ -5,17 +5,17 @@ import BulletinTableSection from '@/app/(with-navbar)/news/bulletin/_component/B
 import { getBulletinSummary } from '@/apis/bulletin';
 import styles from './page.module.scss';
 
-export const metadata: Metadata = {
-  title: '주보 - 대구동남교회',
-  description: '이번 주 교회 주보에서 예배 일정과 소식을 살펴보세요.',
-  openGraph: {
-    title: '주보 - 대구동남교회',
-    description: '이번 주 교회 주보에서 예배 일정과 소식을 살펴보세요.'
-  }
-};
-
 type Props = {
   searchParams: Promise<{ page: string; year: string }>;
+};
+
+export const metadata: Metadata = {
+  title: '주보',
+  description: '이번 주 교회 주보에서 예배 일정과 소식을 살펴보세요.',
+  openGraph: {
+    title: '주보',
+    description: '이번 주 교회 주보에서 예배 일정과 소식을 살펴보세요.'
+  }
 };
 
 export const revalidate = 60;
