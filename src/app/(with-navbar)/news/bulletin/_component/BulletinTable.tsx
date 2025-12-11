@@ -10,6 +10,7 @@ import {
 import Pagination from '@/app/_component/layout/common/Pagination';
 import type { BulletinType } from '@/shared/types/types';
 import styles from './BulletinTable.module.scss';
+import { ITEM_PER_PAGE } from '@/shared/constants/bulletin';
 
 type BulletinTableProps = {
   bulletins: BulletinType[] | null;
@@ -19,12 +20,14 @@ type BulletinTableProps = {
 
 const columnHelper = createColumnHelper<BulletinType>();
 
-export default function BulletinTable({ bulletins, total }: BulletinTableProps) {
+export default function BulletinTable({ bulletins, total, currentPage }: BulletinTableProps) {
   const columns = [
     columnHelper.accessor('id', {
       id: '번호',
       header: (info) => info.column.id,
-      cell: (info) => info.getValue()
+      cell: (info) => {
+        return total - (currentPage - 1) * ITEM_PER_PAGE - info.row.index;
+      }
     }),
     columnHelper.accessor('title', {
       id: '제목',
