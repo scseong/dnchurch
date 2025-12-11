@@ -5,7 +5,6 @@ import { BoardHeader, BoardBody, BoardFooter, BoardListButton } from '@/app/_com
 import { convertBase64ToFileName, getFilenameFromUrl } from '@/shared/util/file';
 import { getDownloadFilePath } from '@/apis/storage';
 import { BULLETIN_BUCKET } from '@/shared/constants/bulletin';
-import styles from './page.module.scss';
 
 export async function generateMetadata({ params }: { params: Promise<{ id: string }> }) {
   const { id: bulletinId } = await params;
@@ -50,11 +49,10 @@ export default async function BulletinDetail({ params }: { params: Promise<{ id:
         thumbnail={image_url[0]}
         id={id.toString()}
         updateLink={`/news/bulletin/${id}/update`}
-        onDelete={() => null}
       />
       <BoardBody>
         {image_url.map((url) => (
-          <div key={url} className={styles.image_wrap}>
+          <div key={url}>
             <img src={url} alt={url} />
           </div>
         ))}

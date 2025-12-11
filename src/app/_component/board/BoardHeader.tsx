@@ -5,6 +5,17 @@ import UserIdMatcher from '../auth/UserIdMatcher';
 import { formattedDate } from '@/shared/util/date';
 import styles from './BoardHeader.module.scss';
 
+type Props = {
+  id: string;
+  title: string;
+  userName: string;
+  createdAt: string;
+  userId: string;
+  thumbnail: string;
+  updateLink: string;
+  onDelete?: () => void;
+};
+
 export default async function BoardHeader({
   title,
   userName,
@@ -12,8 +23,7 @@ export default async function BoardHeader({
   userId,
   thumbnail,
   updateLink = '/'
-  // onDelete
-}: BoardHeaderProps) {
+}: Props) {
   return (
     <div className={styles.header}>
       <div className={styles.title}>
@@ -31,26 +41,23 @@ export default async function BoardHeader({
           </dl>
         </div>
         <div className={styles.right}>
-          <ul>
-            {userId && (
-              <>
-                <UserIdMatcher userId={userId}>
-                  <li>
-                    <FiTrash />
-                  </li>
-                  <li>
-                    <Link href={updateLink}>
-                      <FiEdit />
-                    </Link>
-                  </li>
-                </UserIdMatcher>
-              </>
-            )}
+          <ul className={styles.icons}>
+            <UserIdMatcher userId={userId}>
+              <li>
+                <FiTrash size="2rem" />
+              </li>
+              <li>
+                <Link href={updateLink}>
+                  <FiEdit size="2rem" />
+                </Link>
+              </li>
+            </UserIdMatcher>
             <li>
               <KakaoShareBtn
                 title={`${title} 주보 | 대구동남교회`}
                 imageUrl={thumbnail}
                 description=""
+                size="30"
               />
             </li>
           </ul>
@@ -59,14 +66,3 @@ export default async function BoardHeader({
     </div>
   );
 }
-
-type BoardHeaderProps = {
-  id: string;
-  title: string;
-  userName: string;
-  createdAt: string;
-  userId: string;
-  thumbnail: string;
-  updateLink: string;
-  onDelete: () => void;
-};
