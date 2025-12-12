@@ -23,6 +23,8 @@ export default function Pagination({ totalCount, pageSize = 10, maxVisiblePages 
     currentPage: initialCurrentPage
   });
 
+  if (!totalCount) return;
+
   return (
     <nav className={styles.pagination} aria-label="페이지 네비게이션" role="navigation">
       <ul className={styles.page_list}>

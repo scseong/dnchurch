@@ -1,26 +1,36 @@
 import { notFound } from 'next/navigation';
-import { getBulletinsById, getPrevAndNextBulletin } from '@/apis/bulletin';
 import MainContainer from '@/app/_component/layout/common/MainContainer';
 import { BoardHeader, BoardBody, BoardFooter, BoardListButton } from '@/app/_component/board';
-import { convertBase64ToFileName, getFilenameFromUrl } from '@/shared/util/file';
+import { getAllBulletinIds, getBulletinsById, getPrevAndNextBulletin } from '@/apis/bulletin';
 import { getDownloadFilePath } from '@/apis/storage';
+import { convertBase64ToFileName, getFilenameFromUrl } from '@/shared/util/file';
 import { BULLETIN_BUCKET } from '@/shared/constants/bulletin';
 
 export async function generateMetadata({ params }: { params: Promise<{ id: string }> }) {
-  const { id: bulletinId } = await params;
-  const bulletin = await getBulletinsById(bulletinId);
+  const { id } = await params;
+  const bulletin = await getBulletinsById(id);
+
+  if (!bulletin) return {};
+
+  const title = `${bulletin.title} 주보`;
+  const description = '이번 주 교회 주보에서 예배 일정과 소식을 살펴보세요.';
 
   return {
-    title: `${bulletin?.title} 주보`,
-    description: '이번 주 교회 주보에서 예배 일정과 소식을 살펴보세요.',
+    title,
+    description,
     openGraph: {
-      title: `${bulletin?.title} 주보`,
-      description: '이번 주 교회 주보에서 예배 일정과 소식을 살펴보세요.',
-      images: {
-        url: bulletin?.image_url[0]
-      }
+      title,
+      description,
+      images: bulletin.image_url?.[0] ? [{ url: bulletin.image_url[0] }] : []
     }
   };
+}
+
+export async function generateStaticParams() {
+  const allBulletins = await getAllBulletinIds();
+  return allBulletins.map((bulletin) => ({
+    id: bulletin.id.toString()
+  }));
 }
 
 export default async function BulletinDetail({ params }: { params: Promise<{ id: string }> }) {
