@@ -1,37 +1,39 @@
-import { useMemo } from 'react';
+import { useCallback } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 
 export default function useQueryParams() {
   const searchParams = useSearchParams();
   const router = useRouter();
 
-  const queryParam = useMemo(() => {
-    const query = new URLSearchParams(searchParams.toString());
-    return query;
-  }, [searchParams]);
+  const getQueryParam = useCallback(
+    (name: string) => {
+      const value = searchParams.get(name);
+      return value ?? undefined;
+    },
+    [searchParams]
+  );
 
-  const setQueryParam = (name: string, value: string | number | boolean) => {
-    queryParam.set(String(name), String(value));
-    router.replace(`?${queryParam}`, { scroll: false });
-  };
+  const updateQueryParam = useCallback(
+    (name: string, value: string | number | boolean) => {
+      const query = new URLSearchParams(searchParams.toString());
+      query.set(name, String(value));
+      router.replace(`?${query.toString()}`, { scroll: false });
+    },
+    [searchParams, router]
+  );
 
-  const getQueryParam = (name: string) => {
-    const value = queryParam.get(String(name));
-    if (value === null) return undefined;
-
-    return value;
-  };
-
-  const createPageURL = (name: string, value: string | number | boolean) => {
-    const query = new URLSearchParams(queryParam.toString());
-    query.set(name, String(value));
-    return `?${query.toString()}`;
-  };
+  const createQueryURL = useCallback(
+    (name: string, value: string | number | boolean) => {
+      const query = new URLSearchParams(searchParams.toString());
+      query.set(name, String(value));
+      return `?${query.toString()}`;
+    },
+    [searchParams]
+  );
 
   return {
-    queryParam,
-    setQueryParam,
     getQueryParam,
-    createPageURL
+    updateQueryParam,
+    createQueryURL
   };
 }

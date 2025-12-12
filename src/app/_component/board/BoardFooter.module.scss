@@ -1,72 +1,59 @@
-.file_attachment {
-  padding: 2rem 0 2rem 2rem;
-
-  dt {
-    margin-right: 3rem;
-    min-width: fit-content;
-    font-size: 1.3rem;
-    font-weight: 500;
-  }
-
+.file_attachment,
+.prev_next {
   dl {
     display: flex;
+    flex-direction: column;
   }
 
-  dd {
+  dt {
+    min-width: 20%;
+    flex-basis: 20%;
+    font-size: $font-size-sm;
+    font-weight: $font-weight-medium;
+
+    @include respond-up($breakpoint-md) {
+      flex-basis: auto;
+      min-width: 10rem;
+    }
+  }
+
+  dd,
+  a {
     display: flex;
-    align-items: center;
-    font-size: 1.2rem;
+    font-size: $font-size-sm;
     word-break: break-all;
 
     svg {
-      margin-right: 0.6rem;
+      margin-right: $spacing-xxs;
       width: 1.5rem;
       height: 1.5rem;
     }
 
-    a:hover {
+    & + dd {
+      margin-top: $spacing-xs;
+    }
+  }
+
+  a {
+    &:hover {
       @include link-hover-style;
     }
   }
 
-  .download {
+  .group {
+    padding: $spacing-sm 0 $spacing-sm $spacing-md;
     display: flex;
-    flex-direction: column;
-    gap: 0.6rem;
   }
 }
 
 .prev_next {
-  border-top: 1px solid black;
-  border-bottom: 1px solid black;
+  border-bottom: 0.15rem solid $color-black;
 
-  dl {
-    display: flex;
-    flex-direction: column;
+  .group:first-child {
+    border-top: 0.15rem solid $color-black;
+  }
 
-    div {
-      padding: 1rem 0 1rem 2rem;
-      display: flex;
-      align-items: center;
-
-      &:first-child {
-        border-bottom: 1px solid #ddd;
-      }
-
-      dt {
-        margin-right: 4rem;
-        font-size: 1.3rem;
-        font-weight: 500;
-      }
-
-      dd {
-        font-size: 1.2rem;
-        opacity: 0.9;
-
-        a:hover {
-          @include link-hover-style;
-        }
-      }
-    }
+  .group:last-child {
+    border-top: 0.1rem solid $color-border-default;
   }
 }

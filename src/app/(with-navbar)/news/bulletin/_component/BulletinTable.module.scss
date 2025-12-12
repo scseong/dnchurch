@@ -1,81 +1,47 @@
 .table {
+  margin-bottom: $spacing-sm;
   width: 100%;
   border-collapse: collapse;
 
   th,
   td {
-    padding: 1rem;
+    padding: $spacing-sm;
   }
 
   th:first-child,
   td:first-child {
-    width: 15%;
+    width: 17%;
+  }
+
+  thead {
+    tr {
+      border-top: 0.1rem solid $color-border-primary;
+      border-bottom: 0.1rem solid $color-border-primary;
+    }
   }
 
   tr {
-    border-top: 1px solid #fcd8b7;
-    border-bottom: 1px solid #fcd8b7;
+    border-bottom: 0.1rem solid $color-border-primary-inverse;
   }
 
   th {
-    background-color: #fff5ec;
-    font-size: 1.3rem;
-    font-weight: 600;
+    background-color: $color-bg-default;
+    font-size: $font-size-md;
+    font-weight: $font-weight-semibold;
     text-align: center;
   }
 
   td:first-child {
     text-align: center;
-    color: #666;
   }
 
   td {
-    font-size: 1.2rem;
-  }
-}
+    font-size: $font-size-sm;
 
-.pagination {
-  padding: 1rem;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-
-  li {
-    padding: 0.1rem;
-
-    a {
-      padding: 0 1rem;
-      display: block;
-      width: 3.6rem;
-      border: 2px solid #fff5ec;
-      border-radius: 0.41rem;
-      font-size: 1.3rem;
-      font-weight: 500;
-      line-height: 3rem;
-      text-align: center;
-      color: #666;
-
-      @include respond($breakpoint-lg) {
-        width: 3rem;
-        font-size: 1.2rem;
-        line-height: 2.4rem;
-      }
-
-      @media (hover: hover) and (pointer: fine) {
-        &:not(.active) {
-          @media (hover: hover) and (pointer: fine) {
-            &:hover {
-              background-color: #fff5ec;
-            }
-          }
-        }
-      }
-    }
-
-    .active {
-      background-color: $color-primary;
-      border-color: $color-primary;
-      color: white;
+    a:hover {
+      color: $color-text-link;
+      text-decoration: underline;
+      text-decoration-line: $color-text-link;
     }
   }
 }

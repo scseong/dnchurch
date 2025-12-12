@@ -3,14 +3,15 @@
 import { cookies } from 'next/headers';
 import { createServerSideClient } from '@/shared/supabase/server';
 import { generateErrorMessage } from '@/shared/constants/error';
+import { RESET_AUTH_CODE_KEY, RESET_USER_ID_KEY } from '@/shared/constants/storageConstants';
 
 export async function updatePasswordAndSignOut(newPassword: string) {
   const supabase = await createServerSideClient();
   const supabaseAdmin = await createServerSideClient(true);
   const cookieStore = await cookies();
 
-  const authCode = cookieStore.get('reset_auth_code')?.value;
-  let userId = cookieStore.get('reset_user_id')?.value;
+  const authCode = cookieStore.get(RESET_AUTH_CODE_KEY)?.value;
+  let userId = cookieStore.get(RESET_USER_ID_KEY)?.value;
 
   if (authCode) {
     const {
@@ -18,7 +19,7 @@ export async function updatePasswordAndSignOut(newPassword: string) {
       data: { session }
     } = await supabase.auth.exchangeCodeForSession(authCode);
     userId = session?.user.id;
-    cookieStore.delete('reset_auth_code');
+    cookieStore.delete(RESET_AUTH_CODE_KEY);
 
     if (exchangeError) {
       return {
@@ -26,7 +27,7 @@ export async function updatePasswordAndSignOut(newPassword: string) {
       };
     }
 
-    cookieStore.set('reset_user_id', userId!, {
+    cookieStore.set(RESET_USER_ID_KEY, userId!, {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
       sameSite: 'lax',
@@ -46,7 +47,7 @@ export async function updatePasswordAndSignOut(newPassword: string) {
       return { error: generateErrorMessage(updateError) };
     }
 
-    cookieStore.delete('reset_user_id');
+    cookieStore.delete(RESET_USER_ID_KEY);
     return { error: null, redirectTo: '/login' };
   }
 

@@ -1,8 +1,13 @@
 .body {
-  padding: 6rem 0;
-  border-bottom: 2px solid black;
+  padding: $spacing-lg 0;
+  border-bottom: 0.15rem solid $color-black;
 
-  @include respond($breakpoint-md) {
-    padding: 2rem 0;
+  div {
+    padding: $spacing-sm;
+    border: 0.1rem solid $color-divide;
+
+    img {
+      width: 100%;
+    }
   }
 }

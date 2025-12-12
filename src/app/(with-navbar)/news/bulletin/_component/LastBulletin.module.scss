@@ -1,0 +1,44 @@
+.latest_bulletin {
+  flex: 1 50%;
+
+  .notification {
+    padding: $spacing-lg 0;
+    margin-bottom: $spacing-sm;
+    background-color: $color-bg-default;
+    border: 0.1rem solid $color-border-primary;
+    font-weight: $font-weight-semibold;
+    text-align: center;
+  }
+
+  .images_wrap {
+    display: flex;
+    flex-direction: column;
+
+    a {
+      padding: $spacing-sm;
+      display: block;
+      width: 100%;
+      border: 0.1rem solid $color-border-primary;
+
+      &:last-child {
+        border-top: none;
+      }
+    }
+
+    img {
+      width: 100%;
+    }
+  }
+
+  .share {
+    padding: $spacing-sm 0;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: $spacing-xxs;
+
+    button {
+      font-size: $font-size-md;
+    }
+  }
+}

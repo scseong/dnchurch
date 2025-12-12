@@ -11,6 +11,7 @@ import { convertFileToImageData } from '@/shared/util/file';
 import type { ImageFileData } from '@/shared/types/types';
 import styles from './page.module.scss';
 import useConfirmPageLeave from '@/hooks/useConfirmPageLeave';
+import { uploadImage } from '@/apis/upload';
 
 export default function Page() {
   const [selectedFiles, setSelectedFiles] = useState<ImageFileData[]>([]);
@@ -24,17 +25,19 @@ export default function Page() {
   const handleInputChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files === null) return;
 
-    const files = Array.from(e.target.files);
-    const imageFiles = files.filter((file) => file.type.startsWith('image/'));
+    await uploadImage(e.target.files[0]);
 
-    if (imageFiles.length < files.length) {
-      window.alert('이미지 파일만 첨부해주세요.');
-    }
+    // const files = Array.from(e.target.files);
+    // const imageFiles = files.filter((file) => file.type.startsWith('image/'));
 
-    const imagePromises = Array.from(imageFiles).map(convertFileToImageData);
-    const imageData = await Promise.all(imagePromises);
+    // if (imageFiles.length < files.length) {
+    //   window.alert('이미지 파일만 첨부해주세요.');
+    // }
 
-    setSelectedFiles((prev) => [...prev, ...imageData]);
+    // const imagePromises = Array.from(imageFiles).map(convertFileToImageData);
+    // const imageData = await Promise.all(imagePromises);
+
+    // setSelectedFiles((prev) => [...prev, ...imageData]);
   };
 
   const handleDeleteSelectedFile = (id: number) => {

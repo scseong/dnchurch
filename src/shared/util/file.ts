@@ -73,3 +73,15 @@ export function convertFileNameToBase64(name: string) {
 export function convertBase64ToFileName(encoded: string) {
   return new TextDecoder().decode(base64ToBytes(encoded));
 }
+
+export function extractFilename(url: string): string {
+  try {
+    return new URL(url).pathname.split('/').pop() || '';
+  } catch {
+    return '';
+  }
+}
+
+export function getDownloadFilename(filename: string) {
+  return decodeURIComponent(filename);
+}

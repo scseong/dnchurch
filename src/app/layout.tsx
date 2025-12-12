@@ -7,9 +7,15 @@ import KakaoScript from './_component/lib/KakaoScript';
 import '@/styles/globals.scss';
 
 export const metadata: Metadata = {
-  title: '대구동남교회',
+  title: {
+    template: '%s | 대구동남교회',
+    default: '대구동남교회'
+  },
   openGraph: {
-    title: '대구동남교회',
+    title: {
+      template: '%s | 대구동남교회',
+      default: '대구동남교회'
+    },
     description: '주님의 기도를 배우는 교회(성도), 동남교회'
   }
 };

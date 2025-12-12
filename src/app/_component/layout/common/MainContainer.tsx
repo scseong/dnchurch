@@ -5,7 +5,7 @@ export default function MainContainer({ children, title }: { children: ReactNode
   return (
     <section className={styles.container}>
       <div className={styles.title}>
-        <h3>{title}</h3>
+        <h2>{title}</h2>
       </div>
       {children}
     </section>
