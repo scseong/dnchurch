@@ -1,35 +1,41 @@
 import { ImageFileData } from '@/shared/types/types';
 import styles from './FilePreview.module.scss';
+import { formattedDate } from '@/shared/util/date';
+import { convertBytesToFileSize } from '@/shared/util/file';
+
+type Image = {
+  file: File;
+  previewUrl: string;
+};
 
 type FilePreviewProps = {
-  files: ImageFileData[];
-  onDelete?: (id: number) => void;
+  files: Image[];
+  onDelete: (id: number) => void;
 };
 
 export default function FilePreview({ files, onDelete }: FilePreviewProps) {
   return (
-    <div>
-      {files.map((file, idx) => {
-        const { id, filename, fileimage, filesize, datetime } = file;
+    <div className={styles.preview_container}>
+      {files.map((img, idx) => {
+        const { name, size, lastModified } = img.file;
+        const previewUrl = img.previewUrl;
 
-        if (!fileimage) return null;
+        if (!previewUrl) return null;
 
         return (
-          <div key={`${id}-${idx}`} className={styles.file_preview}>
+          <div key={`${name}-${idx}`} className={styles.file_preview}>
             <div className={styles.image_wrap}>
-              <img src={fileimage as string} alt={filename} />
+              <img src={previewUrl} alt={name} />
             </div>
             <div className={styles.file_info}>
-              <h5>{filename}</h5>
+              <h5 title={name}>{name}</h5>
               <p>
-                <span>크기 : {filesize}</span>
-                <span>수정한 날짜 : {datetime}</span>
+                <span>크기 : {convertBytesToFileSize(size)}</span>
+                <span>수정한 날짜 : {formattedDate(lastModified, 'YYYY-MM-DD A h:mm')}</span>
               </p>
-              {onDelete && (
-                <button type="button" onClick={() => onDelete(id)}>
-                  삭제
-                </button>
-              )}
+              <button type="button" className={styles.delete_btn} onClick={() => onDelete(idx)}>
+                삭제
+              </button>
             </div>
           </div>
         );
