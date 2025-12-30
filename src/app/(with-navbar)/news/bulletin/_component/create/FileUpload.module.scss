@@ -1,28 +1,48 @@
-.file_upload {
-  padding: 1.6rem;
-  position: relative;
+.container {
+}
+
+.upload_area {
+  padding: $spacing-xxl $spacing-md;
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
-  min-height: 15rem;
-  border: 1px dashed #bbb;
-  background-color: #eee;
-  border-radius: 0.4rem;
-  font-size: 1.6rem;
-  overflow: hidden;
+  border: 0.2rem dashed $color-border-card;
+  background-color: $color-bg-default;
+  border-radius: $border-radius-lg;
+  text-align: center;
 
   & > input[type='file'] {
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    top: 0;
-    left: 0;
-    opacity: 0;
-    cursor: pointer;
+    display: none;
   }
 
-  span {
-    text-decoration: underline;
-    text-underline-offset: 0.2rem;
+  p {
+    margin-bottom: $spacing-lg;
+    font-size: $font-size-sm;
+  }
+
+  &.dragging {
+    border-color: $color-primary-active;
+    background-color: $color-bg-hover;
+
+    p {
+      color: $color-primary;
+      font-weight: $font-weight-semibold;
+    }
+  }
+
+  .select_button {
+    padding: $spacing-xs $spacing-sm;
+    display: inline-block;
+    background-color: $color-primary;
+    border-radius: $border-radius-lg;
+    font-size: $font-size-xs;
+    color: white;
+    cursor: pointer;
+
+    svg {
+      margin-right: $spacing-xxs;
+      transform: translateY(0.1rem);
+    }
   }
 }

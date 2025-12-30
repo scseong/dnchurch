@@ -20,7 +20,7 @@
       width: 100%;
       border: 0.1rem solid $color-border-primary;
 
-      &:last-child {
+      &:not(:first-child) {
         border-top: none;
       }
     }

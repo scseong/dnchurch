@@ -14,11 +14,11 @@ import styles from './CreateBulletinForm.module.scss';
 type Inputs = {
   title: string;
   date: string;
-  file: Image[];
+  files: Image[];
 };
 
 type Image = {
-  file: File;
+  files: File;
   previewUrl: string;
 };
 
@@ -29,7 +29,7 @@ export default function CreateBulletinForm() {
     defaultValues: {
       title: '',
       date: '',
-      file: []
+      files: []
     },
     mode: 'onChange'
   });
@@ -76,15 +76,15 @@ export default function CreateBulletinForm() {
           <FormField
             id="title"
             label="제목"
-            placeholder="제목을 입력해주세요 (2025년 1월 5일 첫째 주)"
+            placeholder="제목을 입력해주세요. (예시) 2025년 1월 5일 주보"
             register={register('title', { required: '제목을 입력해주세요.' })}
             error={errors.title?.message}
           />
         </div>
-        <div className={styles.group}>
-          <label htmlFor="image_url">주보 이미지 업로드</label>
-          <ImageUpload />
-        </div>
+        {/* <div className={styles.group}> */}
+        {/* <label htmlFor="image_url">주보 이미지 업로드</label> */}
+        <ImageUpload />
+        {/* </div> */}
         <input name="user_id" value={user!.id} hidden readOnly />
         <div className={styles.button_group}>
           {/* TODO: 공통 컴포넌트화 */}
