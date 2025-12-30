@@ -1,7 +1,7 @@
-import { ImageFileData } from '@/shared/types/types';
-import styles from './FilePreview.module.scss';
 import { formattedDate } from '@/shared/util/date';
 import { convertBytesToFileSize } from '@/shared/util/file';
+import { FaRegTrashAlt } from 'react-icons/fa';
+import styles from './FilePreview.module.scss';
 
 type Image = {
   file: File;
@@ -14,27 +14,37 @@ type FilePreviewProps = {
 };
 
 export default function FilePreview({ files, onDelete }: FilePreviewProps) {
+  if (files.length === 0) return null;
+
   return (
-    <div className={styles.preview_container}>
+    <div className={styles.container}>
       {files.map((img, idx) => {
         const { name, size, lastModified } = img.file;
         const previewUrl = img.previewUrl;
 
-        if (!previewUrl) return null;
-
         return (
-          <div key={`${name}-${idx}`} className={styles.file_preview}>
+          <div key={`${name}-${idx}`} className={styles.preview}>
             <div className={styles.image_wrap}>
-              <img src={previewUrl} alt={name} />
+              <img
+                src={previewUrl}
+                alt={`${name} 미리보기`}
+                onError={(e) => {
+                  e.currentTarget.src = '/images/no-image.jpg';
+                }}
+              />
             </div>
             <div className={styles.file_info}>
-              <h5 title={name}>{name}</h5>
-              <p>
-                <span>크기 : {convertBytesToFileSize(size)}</span>
-                <span>수정한 날짜 : {formattedDate(lastModified, 'YYYY-MM-DD A h:mm')}</span>
-              </p>
-              <button type="button" className={styles.delete_btn} onClick={() => onDelete(idx)}>
-                삭제
+              <h5 className={styles.filename} title={name}>
+                {name}
+              </h5>
+              <div className={styles.meta_data}>
+                <span>{convertBytesToFileSize(size)}</span>
+                <span>{formattedDate(lastModified, 'YYYY.MM.DD A h:mm')}</span>
+              </div>
+            </div>
+            <div className={styles.button_wrap}>
+              <button type="button" onClick={() => onDelete(idx)} aria-label={`${name} 파일 삭제`}>
+                <FaRegTrashAlt size="1.4rem" />
               </button>
             </div>
           </div>

@@ -5,7 +5,7 @@ import { useFormContext } from 'react-hook-form';
 import clsx from 'clsx';
 import { PiUploadSimpleBold } from 'react-icons/pi';
 import FilePreview from '@/app/(with-navbar)/news/bulletin/_component/create/FilePreview';
-import styles from './FileUpload.module.scss';
+import styles from './ImageUpload.module.scss';
 
 type Image = {
   file: File;
@@ -44,6 +44,13 @@ export default function ImageUpload() {
     setValue('files', updated, { shouldValidate: true });
   };
 
+  const handleClearAll = () => {
+    if (confirm('선택한 모든 이미지를 삭제하시겠습니까?')) {
+      images.forEach((img) => URL.revokeObjectURL(img.previewUrl));
+      setValue('files', [], { shouldValidate: true });
+    }
+  };
+
   const onDragOver = (e: React.DragEvent) => {
     e.preventDefault();
     setIsDragging(true);
@@ -67,11 +74,14 @@ export default function ImageUpload() {
   return (
     <section className={styles.container}>
       <div className={styles.header}>
-        <label className={styles.label}>주보 이미지 업로드</label>
-        <p className={styles.help_text}>
-          이미지를 최대 {MAX_FILE_COUNT}개까지 업로드할 수 있습니다. (개당 최대 {MAX_FILE_SIZE_MB}
-          MB)
-        </p>
+        <h3 className={styles.label}>이미지 업로드</h3>
+        <ul className={styles.help_text}>
+          <li>이미지 파일만 등록할 수 있습니다.</li>
+          <li>
+            파일 1개당 크기는 {MAX_FILE_SIZE_MB}MB를 초과할 수 없으며, 최대 {MAX_FILE_COUNT}개까지
+            등록할 수 있습니다.
+          </li>
+        </ul>
       </div>
       <div
         className={clsx(styles.upload_area, { [styles.dragging]: isDragging })}
@@ -91,6 +101,17 @@ export default function ImageUpload() {
           validate: (value) => value.length > 0 || '최소 한 장의 이미지를 업로드해주세요.'
         })}
       />
+      {images.length > 0 && (
+        <div className={styles.status_bar}>
+          <div className={styles.count_info}>
+            <strong>{images.length}개</strong> / {MAX_FILE_COUNT}개
+          </div>
+          <button type="button" className={styles.clear_button} onClick={handleClearAll}>
+            전체 삭제
+          </button>
+        </div>
+      )}
+
       {images.length > 0 && <FilePreview files={images} onDelete={handleDeleteImage} />}
       {errors.files && <p>{errors.files.message as string}</p>}
     </section>
