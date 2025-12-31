@@ -18,61 +18,6 @@
   }
 }
 
-.upload_area {
-  padding: $spacing-xxl $spacing-md;
-  margin-bottom: $spacing-sm;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  border: 0.2rem dashed $color-border-card;
-  background-color: $color-bg-default;
-  border-radius: $border-radius-lg;
-  text-align: center;
-
-  & > input[type='file'] {
-    display: none;
-  }
-
-  p {
-    margin-bottom: $spacing-lg;
-    font-size: $font-size-sm;
-  }
-
-  &.dragging {
-    border-style: solid;
-    border-color: $color-primary-active;
-    background-color: $color-bg-hover;
-
-    p {
-      color: $color-primary;
-      font-weight: $font-weight-semibold;
-    }
-  }
-
-  .select_button {
-    padding: $spacing-xs $spacing-sm;
-    display: inline-block;
-    border: 0.1rem solid $color-primary;
-    border-radius: $border-radius-lg;
-    font-size: $font-size-xs;
-    font-weight: $font-weight-semibold;
-    color: $color-primary;
-    cursor: pointer;
-    transition: background-color 0.2s ease-in-out;
-
-    &:hover {
-      background-color: $color-primary;
-      color: $color-white;
-    }
-
-    svg {
-      margin-right: $spacing-xxs;
-      transform: translateY(0.1rem);
-    }
-  }
-}
-
 .status_bar {
   margin-bottom: $spacing-sm;
   display: flex;

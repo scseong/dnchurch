@@ -1,73 +1,52 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import { useFormContext } from 'react-hook-form';
-import clsx from 'clsx';
-import { PiUploadSimpleBold } from 'react-icons/pi';
-import FilePreview from '@/app/(with-navbar)/news/bulletin/_component/create/FilePreview';
+import useFilePreview from '@/hooks/useFilePreview';
+import FileSelector from '@/app/_component/file/FileSelector';
+import FilePreviewList from '@/app/_component/file/FilePreviewList';
+import { validateFiles } from '@/shared/util/fileValidator';
 import styles from './ImageUpload.module.scss';
-
-type Image = {
-  file: File;
-  previewUrl: string;
-};
+import FormAlertMessage from '@/app/_component/auth/FormAlertMessage';
 
 const MAX_FILE_COUNT = 5;
 const MAX_FILE_SIZE_MB = 5;
 
 export default function ImageUpload() {
+  const inputRef = useRef<HTMLInputElement>(null);
   const [isDragging, setIsDragging] = useState(false);
   const {
-    watch,
     register,
     setValue,
+    setError,
+    clearErrors,
+    getValues,
     formState: { errors }
   } = useFormContext();
-  const images: Image[] = watch('files') || [];
+  const files: File[] = getValues('files') || [];
+  const images = useFilePreview(files);
 
-  // TODO: 파일 확장자 검증
-  const handleSelectImages = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files) {
-      const newFiles = Array.from(e.target.files);
-      const newImageItems: Image[] = newFiles.map((file) => ({
-        file,
-        previewUrl: URL.createObjectURL(file)
-      }));
-      setValue('files', [...images, ...newImageItems], { shouldValidate: true });
+  const handleFilesSelected = (selectedFiles: FileList) => {
+    const { validFiles, errorMessage } = validateFiles(files, selectedFiles, 'image/*');
+
+    if (errorMessage) setError('files', { message: errorMessage });
+    if (validFiles.length > 0) {
+      setValue('files', [...files, ...validFiles], { shouldValidate: true });
+      clearErrors('files');
     }
-    e.target.value = '';
+
+    if (inputRef.current) inputRef.current.value = '';
   };
 
-  const handleDeleteImage = (index: number) => {
-    URL.revokeObjectURL(images[index].previewUrl);
-    const updated = images.filter((_, i) => i !== index);
+  const handleDelete = (index: number) => {
+    const updated = files.filter((_, i) => i !== index);
     setValue('files', updated, { shouldValidate: true });
   };
 
   const handleClearAll = () => {
+    if (files.length === 0) return;
     if (confirm('선택한 모든 이미지를 삭제하시겠습니까?')) {
-      images.forEach((img) => URL.revokeObjectURL(img.previewUrl));
       setValue('files', [], { shouldValidate: true });
-    }
-  };
-
-  const onDragOver = (e: React.DragEvent) => {
-    e.preventDefault();
-    setIsDragging(true);
-  };
-
-  const onDragLeave = () => setIsDragging(false);
-
-  const onDrop = (e: React.DragEvent) => {
-    e.preventDefault();
-    setIsDragging(false);
-    if (e.dataTransfer.files) {
-      const newFiles = Array.from(e.dataTransfer.files);
-      const newImageItems: Image[] = newFiles.map((file) => ({
-        file,
-        previewUrl: URL.createObjectURL(file)
-      }));
-      setValue('files', [...images, ...newImageItems], { shouldValidate: true });
     }
   };
 
@@ -83,23 +62,10 @@ export default function ImageUpload() {
           </li>
         </ul>
       </div>
-      <div
-        className={clsx(styles.upload_area, { [styles.dragging]: isDragging })}
-        onDragOver={onDragOver}
-        onDragLeave={onDragLeave}
-        onDrop={onDrop}
-      >
-        <input type="file" id="images" accept="image/*" onChange={handleSelectImages} multiple />
-        <p>첨부할 파일을 여기에 끌어다 놓거나, 파일 선택 버튼을 직접 선택해주세요.</p>
-        <label htmlFor="images" className={styles.select_button}>
-          <PiUploadSimpleBold /> 파일 선택
-        </label>
-      </div>
-      <input
-        type="hidden"
-        {...register('files', {
-          validate: (value) => value.length > 0 || '최소 한 장의 이미지를 업로드해주세요.'
-        })}
+      <FileSelector
+        onFilesSelected={handleFilesSelected}
+        isDragging={isDragging}
+        setIsDragging={setIsDragging}
       />
       {images.length > 0 && (
         <div className={styles.status_bar}>
@@ -111,9 +77,14 @@ export default function ImageUpload() {
           </button>
         </div>
       )}
-
-      {images.length > 0 && <FilePreview files={images} onDelete={handleDeleteImage} />}
-      {errors.files && <p>{errors.files.message as string}</p>}
+      <input
+        type="hidden"
+        {...register('files', {
+          validate: (value) => (value.length > 0 ? true : '최소 한 장의 이미지를 업로드해주세요.')
+        })}
+      />
+      {images.length > 0 && <FilePreviewList files={images} onDelete={handleDelete} />}
+      {errors.files && <FormAlertMessage message={errors.files.message as string} type="error" />}
     </section>
   );
 }
