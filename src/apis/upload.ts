@@ -1,9 +1,15 @@
 import { CloudinaryUploadResponse } from '@/shared/types/cloudinary';
 
-export async function uploadImage(file: File) {
+type Props = {
+  file: File;
+  folder: string;
+};
+
+export async function uploadImage({ file, folder = '' }: Props) {
   const data = new FormData();
   data.append('file', file);
   data.append('upload_preset', `${process.env.NEXT_PUBLIC_CLOUDINARY_PROJECT}`);
+  data.append('folder', folder);
 
   const res = await fetch(`${process.env.NEXT_PUBLIC_CLOUDINARY_URL}`, {
     method: 'POST',
