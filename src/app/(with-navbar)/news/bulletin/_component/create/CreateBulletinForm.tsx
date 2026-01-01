@@ -1,15 +1,16 @@
 'use client';
 
-import { useActionState, useEffect, useRef } from 'react';
+import { useRouter } from 'next/navigation';
+import { useEffect, useRef } from 'react';
 import { useForm, FormProvider } from 'react-hook-form';
 import { useProfile } from '@/context/SessionContextProvider';
 import AuthSubmitBtn from '@/app/_component/auth/AuthSubmitBtn';
+import FormAlertMessage from '@/app/_component/auth/FormAlertMessage';
 import FormField from '@/app/_component/auth/FormField';
-import Loader from '@/app/_component/common/Loader';
 import ImageUpload from '@/app/(with-navbar)/news/bulletin/_component/create/ImageUpload';
+import Loader from '@/app/_component/common/Loader';
 import { createBulletinAction } from '@/actions/bulletin/bulletin.action';
 import { formattedDate } from '@/shared/util/date';
-import { ImageFile } from '@/shared/types/types';
 import styles from './CreateBulletinForm.module.scss';
 
 type Inputs = {
@@ -19,13 +20,13 @@ type Inputs = {
 };
 
 export default function CreateBulletinForm() {
+  const router = useRouter();
   const user = useProfile();
   const formRef = useRef<HTMLFormElement>(null);
   const methods = useForm<Inputs>({
     defaultValues: {
-      // TODO: reset
       title: '',
-      date: '2025-12-18',
+      date: '',
       files: []
     },
     mode: 'onChange'
@@ -35,14 +36,16 @@ export default function CreateBulletinForm() {
     watch,
     setValue,
     handleSubmit,
+    setError,
     clearErrors,
     formState: { errors, isValid, isSubmitting }
   } = methods;
 
   const selectedDate = watch('date');
-  const title = watch('title');
 
   const onSubmit = async (data: Inputs) => {
+    clearErrors('root');
+
     try {
       const formData = new FormData();
       formData.append('title', data.title);
@@ -53,15 +56,27 @@ export default function CreateBulletinForm() {
         formData.append('files', file);
       });
 
-      await createBulletinAction(formData);
-    } catch (err) {
-      console.error(err);
+      const { success, message } = await createBulletinAction(formData);
+      if (!success) {
+        setError('root', { message });
+        return;
+      }
+
+      formRef.current?.reset();
+      methods.reset({
+        title: '',
+        date: '',
+        files: []
+      });
+      router.push('/news/bulletin');
+    } catch (error) {
+      console.error(error);
+      setError('root', { message: '서버 오류가 발생했습니다.' });
     }
   };
 
   useEffect(() => {
     if (selectedDate) {
-      console.log('selectedDate', selectedDate);
       const title = formattedDate(selectedDate, 'YYYY년 M월 D일 주보');
       setValue('title', title);
       clearErrors('title');
@@ -91,6 +106,7 @@ export default function CreateBulletinForm() {
         </div>
         <ImageUpload />
         <input name="user_id" value={user!.id} hidden readOnly />
+        {errors.root && <FormAlertMessage type="error" message={errors.root.message} />}
         <div className={styles.button_group}>
           <AuthSubmitBtn isDisabled={!isValid} isSubmitting={isSubmitting} label="작성하기" />
         </div>
