@@ -7,51 +7,58 @@ import { updateFileAction, uploadFileAction } from '../file.action';
 import { getUrlsFromApiResponse } from '@/shared/util/file';
 import { BULLETIN_BUCKET } from '@/shared/constants/bulletin';
 import type { ImageFileData } from '@/shared/types/types';
+import { validateFiles } from '@/shared/util/fileValidator';
+import { uploadImage } from '@/apis/upload';
 
-export const createBulletinAction = async (
-  selectedFiles: ImageFileData[],
-  state: { status: boolean; payload?: FormData; error?: string } | null | undefined,
-  formData: FormData
-) => {
-  const title = formData.get('title')?.toString().trim();
-  const user_id = formData.get('user_id')?.toString();
-
-  if (!title || !selectedFiles.length || !user_id)
-    return {
-      status: false,
-      payload: formData,
-      error: '모든 항목을 작성해주세요.'
-    };
-
-  const uploadPromises = selectedFiles.map((file) => uploadFileAction(file));
-  const uploadResults = await Promise.all(uploadPromises);
-  const imagefileUrls = getUrlsFromApiResponse(uploadResults);
-
+export const createBulletinAction = async (formData: FormData) => {
   try {
+    const title = formData.get('title')?.toString().trim();
+    const date = formData.get('date')?.toString();
+    const userId = formData.get('user_id')?.toString();
+    const files = formData.getAll('files').filter(Boolean) as File[];
+
+    if (!title) return { success: false, message: '제목을 입력해주세요.' };
+    if (!date) return { success: false, message: '날짜를 선택해주세요.' };
+    if (!userId) return { success: false, message: '잘못된 접근입니다.' };
+    if (files.length === 0) {
+      return { success: false, message: '최소 한 장의 이미지를 업로드해주세요.' };
+    }
+
+    const { validFiles, errorMessage } = validateFiles([], files, 'image/*');
+
+    if (errorMessage) {
+      return { success: false, message: errorMessage };
+    }
+
+    const uploadPromises = validFiles.map((file) =>
+      uploadImage({
+        file,
+        folder: `/bulletin/${date}`
+      })
+    );
+    const uploadResults = await Promise.all(uploadPromises);
+    const imageUrls = uploadResults.map((res) => res.secure_url);
+
     const supabase = await createServerSideClient();
     const { error } = await supabase
       .from(BULLETIN_BUCKET)
       .insert({
         title,
-        image_url: imagefileUrls,
-        user_id
+        date,
+        image_url: imageUrls,
+        user_id: userId
       })
       .select();
 
     if (error) {
-      throw new Error(error.message);
+      return { success: false, message: '주보 업로드에 실패했습니다.' };
     }
-  } catch (error) {
-    console.error(error);
-    return {
-      status: false,
-      error: `주보 생성에 실패했습니다: ${error}`
-    };
-  }
 
-  revalidatePath('/news');
-  revalidatePath('/news/bulletin');
-  redirect('/news/bulletin', RedirectType.push);
+    // TODO: Optimize revalidation
+    return { success: true };
+  } catch (error) {
+    return { success: false, message: '서버 오류가 발생했습니다.' };
+  }
 };
 
 export const updateBulletinAction = async (

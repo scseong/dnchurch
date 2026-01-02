@@ -11,7 +11,7 @@ export default function LatestBulletin({ latestBulletin }: { latestBulletin?: Bu
     <section className={styles.latest_bulletin}>
       <div className={styles.notification}>
         <h3>이번 주 주보</h3>
-        <p>{title}</p>
+        <p>{title || '게시된 주보가 없습니다.'} </p>
       </div>
       <div className={styles.images_wrap}>
         {images.length > 0 ? (
@@ -22,7 +22,7 @@ export default function LatestBulletin({ latestBulletin }: { latestBulletin?: Bu
           ))
         ) : (
           <Link href="#" scroll={false}>
-            <img src="/images/noimage.jpg" alt="주보 이미지가 없습니다" />
+            <img src="/images/no-image.jpg" alt="주보 이미지가 없습니다" />
           </Link>
         )}
       </div>

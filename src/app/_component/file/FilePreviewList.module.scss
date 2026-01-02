@@ -1,6 +1,6 @@
 $item-gap: 0.8rem;
 
-.container {
+.list {
   margin-bottom: $spacing-md;
   display: flex;
   flex-direction: row;
@@ -8,7 +8,7 @@ $item-gap: 0.8rem;
   gap: $item-gap;
 }
 
-.preview {
+.item {
   padding: $spacing-xs $spacing-sm;
   display: flex;
   flex-basis: 100%;
@@ -21,7 +21,7 @@ $item-gap: 0.8rem;
   }
 }
 
-.image_wrap {
+.image {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -37,19 +37,19 @@ $item-gap: 0.8rem;
   }
 }
 
-.file_info {
+.info {
   flex: 1;
   color: $color-text-secondary;
   word-break: break-all;
 
-  h5 {
+  .name {
     margin-bottom: $spacing-xxs;
     font-size: $font-size-sm;
     color: $color-primary;
     @include ellipsis-multi(2);
   }
 
-  .meta_data {
+  .meta {
     span {
       margin-bottom: $spacing-nano;
       display: block;
@@ -59,7 +59,7 @@ $item-gap: 0.8rem;
   }
 }
 
-.button_wrap {
+.actions {
   display: inline-flex;
   align-items: center;
 

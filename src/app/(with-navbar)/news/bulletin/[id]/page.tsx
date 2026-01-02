@@ -2,9 +2,7 @@ import { notFound } from 'next/navigation';
 import MainContainer from '@/app/_component/layout/common/MainContainer';
 import { BoardHeader, BoardBody, BoardFooter, BoardListButton } from '@/app/_component/board';
 import { getAllBulletinIds, getBulletinsById, getPrevAndNextBulletin } from '@/apis/bulletin';
-import { getDownloadFilePath } from '@/apis/storage';
-import { convertBase64ToFileName, getFilenameFromUrl } from '@/shared/util/file';
-import { BULLETIN_BUCKET } from '@/shared/constants/bulletin';
+import { generateFileDownloadList } from '@/shared/util/file';
 
 export async function generateMetadata({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
@@ -41,13 +39,7 @@ export default async function BulletinDetail({ params }: { params: Promise<{ id:
   if (!bulletin) notFound();
 
   const { id, created_at, image_url, title, user_id, profiles } = bulletin;
-  const files = image_url.map((url) => {
-    const res = getFilenameFromUrl(url);
-    const filename = convertBase64ToFileName(res);
-    const downloadPath = getDownloadFilePath({ bucket: BULLETIN_BUCKET, path: res });
-
-    return { filename, downloadPath };
-  });
+  const files = generateFileDownloadList({ urls: image_url });
 
   return (
     <MainContainer title="주보">

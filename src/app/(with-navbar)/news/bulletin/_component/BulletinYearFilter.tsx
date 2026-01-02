@@ -14,7 +14,7 @@ export default function BulletinYearFilter({ selectedYear, years }: Props) {
           전체
         </Link>
       </li>
-      {years.map(({ year }) => (
+      {years?.map(({ year }) => (
         <li key={year}>
           <Link
             href={`/news/bulletin?year=${year}`}

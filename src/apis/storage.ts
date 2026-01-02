@@ -1,13 +1,14 @@
+// --- IGNORE ---
 import { supabase } from '@/shared/supabase/client';
-import { extractFilename, getDownloadFilename } from '@/shared/util/file';
+import { getFilenameFromUrl } from '@/shared/util/file';
 import type { Database } from '@/shared/types/database.types';
 
 export function getDownloadFilePath({ bucket, path }: { bucket: BucketType; path: string }) {
-  const filename = extractFilename(path);
+  const filename = getFilenameFromUrl(path);
   const {
     data: { publicUrl }
   } = supabase.storage.from(bucket).getPublicUrl(path, {
-    download: getDownloadFilename(filename)
+    download: decodeURIComponent(filename)
   });
 
   return publicUrl;

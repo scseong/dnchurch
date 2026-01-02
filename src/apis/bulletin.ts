@@ -65,11 +65,15 @@ export const getBulletinSummary = async ({
   page = 1,
   limit = 10
 }: BulletinSummary): Promise<BulletinSummaryResponse> => {
-  const { data, error } = await supabase.rpc('getbulletinsummary', {
-    select_year: year || undefined,
-    page,
-    limit_count: limit
-  });
+  const { data, error } = await supabase.rpc(
+    'getbulletinsummary',
+    {
+      select_year: year || undefined,
+      page,
+      limit_count: limit
+    },
+    { get: true }
+  );
 
   if (error) throw error;
   return data as BulletinSummaryResponse;
@@ -91,7 +95,7 @@ export const getPrevAndNextBulletin = async (targetId: number) => {
       },
       { get: true }
     )
-    .single();
+    .maybeSingle();
 
   if (error) console.error(error);
 
