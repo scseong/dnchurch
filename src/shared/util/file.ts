@@ -6,9 +6,9 @@ export function getFilenameFromUrl(url: string) {
   return decodeURIComponent(rawFileName).split(/[?#]/)[0];
 }
 
-export function getFileExtension(fileName: string): string {
+export function getFileExtension(fileName: string) {
   const lastDotIndex = fileName.lastIndexOf('.');
-  return fileName.substring(lastDotIndex + 1);
+  return lastDotIndex !== -1 ? fileName.substring(lastDotIndex) : '';
 }
 
 /**
@@ -98,9 +98,18 @@ export function convertBase64ToFileName(encoded: string) {
 
 export function generateFileDownloadList({ urls }: { urls: string[] }) {
   return urls.map((url, index) => {
-    const filename = url.split('/').pop() || `file_${index + 1}`;
+    const fullFilename = decodeURIComponent(url.split('/').pop() || `file_${index + 1}`);
+    const extension = getFileExtension(fullFilename);
+    const nameWithoutExt = fullFilename.replace(extension, '');
+
+    const nameParts = nameWithoutExt.split('_');
+    const originalName = nameParts.length > 1 ? nameParts.slice(0, -1).join('_') : nameWithoutExt;
+
     const downloadUrl = url.replace('/upload/', '/upload/fl_attachment/');
 
-    return { filename, downloadUrl };
+    return {
+      filename: `${originalName}${extension}`,
+      downloadUrl
+    };
   });
 }

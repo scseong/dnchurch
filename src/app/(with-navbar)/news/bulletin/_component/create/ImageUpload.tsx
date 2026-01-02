@@ -27,7 +27,11 @@ export default function ImageUpload() {
   const handleFilesSelected = (selectedFiles: FileList) => {
     const { validFiles, errorMessage } = validateFiles(files, selectedFiles, 'image/*');
 
-    if (errorMessage) setError('files', { message: errorMessage });
+    if (errorMessage) {
+      setError('files', { message: errorMessage });
+      return;
+    }
+
     if (validFiles.length > 0) {
       setValue('files', [...files, ...validFiles], { shouldValidate: true });
       clearErrors('files');

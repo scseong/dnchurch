@@ -33,15 +33,15 @@ export default function CreateBulletinForm() {
   });
   const {
     register,
-    watch,
     setValue,
     handleSubmit,
     setError,
     clearErrors,
+    getValues,
     formState: { errors, isValid, isSubmitting }
   } = methods;
-
-  const selectedDate = watch('date');
+  const files = getValues('files');
+  const selectedDate = getValues('date');
 
   const onSubmit = async (data: Inputs) => {
     clearErrors('root');
@@ -108,7 +108,11 @@ export default function CreateBulletinForm() {
         <input name="user_id" value={user!.id} hidden readOnly />
         {errors.root && <FormAlertMessage type="error" message={errors.root.message} />}
         <div className={styles.button_group}>
-          <AuthSubmitBtn isDisabled={!isValid} isSubmitting={isSubmitting} label="작성하기" />
+          <AuthSubmitBtn
+            isDisabled={!isValid && files.length === 0}
+            isSubmitting={isSubmitting}
+            label="작성하기"
+          />
         </div>
       </form>
     </FormProvider>
