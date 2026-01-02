@@ -5,8 +5,8 @@ import { useActionState, useEffect, useState } from 'react';
 import { useProfile } from '@/context/SessionContextProvider';
 import useConfirmPageLeave from '@/hooks/useConfirmPageLeave';
 import MainContainer from '@/app/_component/layout/common/MainContainer';
-import FileUpload from '../../_component/create/FileUpload';
-import FilePreview from '../../_component/create/FilePreview';
+// import FileUpload from '../../_component/create/FileUpload';
+// import FilePreview from '../../_component/create/FilePreview';
 import { supabase } from '@/shared/supabase/client';
 import { updateBulletinAction } from '@/actions/bulletin/bulletin.action';
 import {
@@ -17,7 +17,7 @@ import {
 import { BulletinWithUserName } from '@/apis/bulletin';
 import { BULLETIN_BUCKET } from '@/shared/constants/bulletin';
 import type { ImageFileData } from '@/shared/types/types';
-import styles from '../../create/page.module.scss';
+// import styles from '../../create/.module.scss';
 import Link from 'next/link';
 
 export default function UpdateBulletin() {
@@ -95,7 +95,8 @@ export default function UpdateBulletin() {
 
   return (
     <MainContainer title="주보 수정하기">
-      <form action={formAction} className={styles.form}>
+      null
+      {/* <form action={formAction} className={styles.form}>
         <div className={styles.group}>
           <label htmlFor="title">제목</label>
           <input
@@ -131,7 +132,7 @@ export default function UpdateBulletin() {
             수정하기
           </button>
         </div>
-      </form>
+      </form> */}
     </MainContainer>
   );
 }

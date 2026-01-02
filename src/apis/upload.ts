@@ -9,6 +9,7 @@ export async function uploadImage({ file, folder = '' }: Props) {
   const data = new FormData();
   data.append('file', file);
   data.append('upload_preset', `${process.env.NEXT_PUBLIC_CLOUDINARY_PROJECT}`);
+  data.append('public_id', file.name.replace(/\.[^/.]+$/, ''));
   data.append('folder', folder);
 
   const res = await fetch(`${process.env.NEXT_PUBLIC_CLOUDINARY_URL}`, {

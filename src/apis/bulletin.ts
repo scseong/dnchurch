@@ -95,7 +95,7 @@ export const getPrevAndNextBulletin = async (targetId: number) => {
       },
       { get: true }
     )
-    .single();
+    .maybeSingle();
 
   if (error) console.error(error);
 
