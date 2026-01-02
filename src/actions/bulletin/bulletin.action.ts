@@ -3,7 +3,7 @@
 import { redirect, RedirectType } from 'next/navigation';
 import { revalidatePath, revalidateTag } from 'next/cache';
 import { createServerSideClient } from '@/shared/supabase/server';
-import { updateFileAction, uploadFileAction } from '../file.action';
+import { updateFileAction } from '../file.action';
 import { getUrlsFromApiResponse } from '@/shared/util/file';
 import { BULLETIN_BUCKET } from '@/shared/constants/bulletin';
 import { validateFiles } from '@/shared/util/fileValidator';

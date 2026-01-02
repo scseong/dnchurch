@@ -14,14 +14,14 @@ export default function ImageUpload() {
   const inputRef = useRef<HTMLInputElement>(null);
   const [isDragging, setIsDragging] = useState(false);
   const {
+    watch,
     register,
     setValue,
     setError,
     clearErrors,
-    getValues,
     formState: { errors }
   } = useFormContext();
-  const files: File[] = getValues('files') || [];
+  const files: File[] = watch('files') || [];
   const images = useFilePreview(files);
 
   const handleFilesSelected = (selectedFiles: FileList) => {
