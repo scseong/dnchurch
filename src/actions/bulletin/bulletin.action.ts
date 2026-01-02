@@ -12,7 +12,7 @@ import { uploadImage } from '@/apis/upload';
 
 export const createBulletinAction = async (formData: FormData) => {
   try {
-    const title = formData.get('title')?.toString();
+    const title = formData.get('title')?.toString().trim();
     const date = formData.get('date')?.toString();
     const userId = formData.get('user_id')?.toString();
     const files = formData.getAll('files').filter(Boolean) as File[];
@@ -54,6 +54,7 @@ export const createBulletinAction = async (formData: FormData) => {
       return { success: false, message: '주보 업로드에 실패했습니다.' };
     }
 
+    // TODO: Optimize revalidation
     return { success: true };
   } catch (error) {
     return { success: false, message: '서버 오류가 발생했습니다.' };

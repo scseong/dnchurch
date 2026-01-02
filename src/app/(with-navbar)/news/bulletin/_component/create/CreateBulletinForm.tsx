@@ -81,7 +81,7 @@ export default function CreateBulletinForm() {
       setValue('title', title);
       clearErrors('title');
     }
-  }, [selectedDate, setValue]);
+  }, [selectedDate, setValue, clearErrors]);
 
   if (!user) return <Loader />;
 

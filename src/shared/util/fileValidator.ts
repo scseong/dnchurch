@@ -1,15 +1,17 @@
-const MAX_FILE_COUNT = 5;
-const MAX_FILE_SIZE_MB = 5;
-const BYTES_PER_MB = 1024 * 1024;
+import {
+  FILE_BYTES_PER_MB,
+  FILE_UPLOAD_MAX_COUNT,
+  FILE_UPLOAD_MAX_SIZE_MB
+} from '@/shared/constants/file';
 
-export function isFileSizeExceeded(file: File, maxSizeMB = MAX_FILE_SIZE_MB) {
-  return file.size > maxSizeMB * BYTES_PER_MB;
+export function isFileSizeExceeded(file: File, maxSizeMB = FILE_UPLOAD_MAX_SIZE_MB) {
+  return file.size > maxSizeMB * FILE_BYTES_PER_MB;
 }
 
 export function isFileCountExceeded(
   existingCount: number,
   newCount: number,
-  maxCount = MAX_FILE_COUNT
+  maxCount = FILE_UPLOAD_MAX_COUNT
 ) {
   return existingCount + newCount > maxCount;
 }
@@ -40,7 +42,7 @@ export function validateFiles(
   if (isFileCountExceeded(existingFiles.length, newFilesArray.length)) {
     return {
       validFiles: [],
-      errorMessage: `최대 ${MAX_FILE_COUNT}개의 이미지만 업로드 가능합니다.`
+      errorMessage: `최대 ${FILE_UPLOAD_MAX_COUNT}개의 이미지만 업로드 가능합니다.`
     };
   }
 
@@ -62,7 +64,7 @@ export function validateFiles(
     if (isFileSizeExceeded(file)) {
       return {
         validFiles: [],
-        errorMessage: `파일이 ${MAX_FILE_SIZE_MB}MB를 초과합니다.`
+        errorMessage: `파일이 ${FILE_UPLOAD_MAX_SIZE_MB}MB를 초과합니다.`
       };
     }
 

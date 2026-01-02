@@ -3,14 +3,12 @@
 import { useState, useRef } from 'react';
 import { useFormContext } from 'react-hook-form';
 import useFilePreview from '@/hooks/useFilePreview';
+import FormAlertMessage from '@/app/_component/auth/FormAlertMessage';
 import FileSelector from '@/app/_component/file/FileSelector';
 import FilePreviewList from '@/app/_component/file/FilePreviewList';
+import { FILE_UPLOAD_MAX_COUNT, FILE_UPLOAD_MAX_SIZE_MB } from '@/shared/constants/file';
 import { validateFiles } from '@/shared/util/fileValidator';
 import styles from './ImageUpload.module.scss';
-import FormAlertMessage from '@/app/_component/auth/FormAlertMessage';
-
-const MAX_FILE_COUNT = 5;
-const MAX_FILE_SIZE_MB = 5;
 
 export default function ImageUpload() {
   const inputRef = useRef<HTMLInputElement>(null);
@@ -57,8 +55,8 @@ export default function ImageUpload() {
         <ul className={styles.help_text}>
           <li>이미지 파일만 등록할 수 있습니다.</li>
           <li>
-            파일 1개당 크기는 {MAX_FILE_SIZE_MB}MB를 초과할 수 없으며, 최대 {MAX_FILE_COUNT}개까지
-            등록할 수 있습니다.
+            파일 1개당 크기는 {FILE_UPLOAD_MAX_SIZE_MB}MB를 초과할 수 없으며, 최대{' '}
+            {FILE_UPLOAD_MAX_COUNT}개까지 등록할 수 있습니다.
           </li>
         </ul>
       </div>
@@ -70,7 +68,7 @@ export default function ImageUpload() {
       {images.length > 0 && (
         <div className={styles.status_bar}>
           <div className={styles.count_info}>
-            <strong>{images.length}개</strong> / {MAX_FILE_COUNT}개
+            <strong>{images.length}개</strong> / {FILE_UPLOAD_MAX_SIZE_MB}개
           </div>
           <button type="button" className={styles.clear_button} onClick={handleClearAll}>
             전체 삭제
