@@ -7,7 +7,7 @@ import { RESET_AUTH_CODE_KEY, RESET_USER_ID_KEY } from '@/shared/constants/stora
 
 export async function updatePasswordAndSignOut(newPassword: string) {
   const supabase = await createServerSideClient();
-  const supabaseAdmin = await createServerSideClient(true);
+  const supabaseAdmin = await createServerSideClient({ isAdmin: true });
   const cookieStore = await cookies();
 
   const authCode = cookieStore.get(RESET_AUTH_CODE_KEY)?.value;
