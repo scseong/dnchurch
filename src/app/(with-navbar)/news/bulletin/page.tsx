@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import MainContainer from '@/app/_component/layout/common/MainContainer';
 import LatestBulletin from '@/app/(with-navbar)/news/bulletin/_component/LastBulletin';
 import BulletinTableSection from '@/app/(with-navbar)/news/bulletin/_component/BulletinTableSection';
-import { getBulletinSummary } from '@/apis/bulletin';
+import { getServerService } from '@/services';
 import styles from './page.module.scss';
 
 type Props = {
@@ -18,18 +18,26 @@ export const metadata: Metadata = {
   }
 };
 
-export const revalidate = 60;
+export const revalidate = 86400; // 24 hours
 
 export default async function BulletinPage({ searchParams }: Props) {
   const params = await searchParams;
   const yearFilter = params.year ? parseInt(params.year) : undefined;
   const page = params.page ? parseInt(params.page) : 1;
-  const {
-    items: bulletins,
-    latest: latestBulletin,
-    years,
-    total
-  } = await getBulletinSummary({ year: yearFilter, page });
+
+  const api = await getServerService({
+    tags: ['bulletins'],
+    revalidate: 86400
+  });
+
+  const { data, error } = await api.bulletin.getBulletinSummary({
+    year: yearFilter,
+    page
+  });
+
+  if (error || !data) return <div>데이터를 불러올 수 없습니다.</div>;
+
+  const { items: bulletins, latest: latestBulletin, years, total } = data;
 
   return (
     <MainContainer title="주보">

@@ -1,7 +1,8 @@
 'use server';
 
 import { redirect, RedirectType } from 'next/navigation';
-import { revalidatePath, revalidateTag } from 'next/cache';
+import { revalidateTag, updateTag } from 'next/cache';
+import { isRedirectError } from 'next/dist/client/components/redirect-error';
 import { createServerSideClient } from '@/shared/supabase/server';
 import { updateFileAction } from '../file.action';
 import { getUrlsFromApiResponse } from '@/shared/util/file';
@@ -65,12 +66,15 @@ export const createBulletinAction = async (formData: FormData) => {
       return { success: false, message: '주보 업로드에 실패했습니다.' };
     }
 
-    // TODO: Optimize revalidation
-    return { success: true };
+    updateTag('bulletins');
+    updateTag('bulletin-navigation');
+    redirect('/news/bulletin');
   } catch (error) {
+    if (isRedirectError(error)) throw error;
     if (uploadedPublicIds.length > 0) {
       await Promise.all(uploadedPublicIds.map(deleteImage));
     }
+    console.error(error);
     return { success: false, message: '서버 오류가 발생했습니다.' };
   }
 };
@@ -124,8 +128,8 @@ export const updateBulletinAction = async (
     };
   }
 
-  revalidateTag('bulletin', 'max');
-  revalidatePath('/news/bulletin');
+  revalidateTag('bulletins', 'max');
+  revalidateTag('bulletin-navigation', 'max');
   redirect(`/news/bulletin/${bulletinId}`, RedirectType.push);
 };
 

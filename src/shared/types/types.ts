@@ -42,3 +42,10 @@ export type ImageFile = {
   file: File;
   previewUrl: string;
 };
+
+export type SupabaseClientOptions = {
+  tags?: string[];
+  revalidate?: number;
+  isAdmin?: boolean;
+  isStatic?: boolean;
+};
