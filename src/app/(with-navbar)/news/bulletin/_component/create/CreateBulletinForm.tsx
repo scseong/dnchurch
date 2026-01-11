@@ -106,7 +106,7 @@ export default function CreateBulletinForm() {
         {errors.root && <FormAlertMessage type="error" message={errors.root.message} />}
         <div className={styles.button_group}>
           <AuthSubmitBtn
-            isDisabled={!isValid && files.length === 0}
+            isDisabled={!isValid || files.length === 0}
             isSubmitting={isSubmitting}
             label="작성하기"
           />
