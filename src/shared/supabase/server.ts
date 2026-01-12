@@ -1,23 +1,19 @@
 import { cookies } from 'next/headers';
 import { NextRequest, NextResponse } from 'next/server';
 import { createServerClient } from '@supabase/ssr';
-import { createFetch } from '@/shared/supabase/lib';
-import { Database } from '@/shared/types/database.types';
-import { SupabaseClientOptions } from '@/shared/types/types';
+import { createFetch } from '@/shared/supabase/fetch';
+import type { NextCacheOptions } from '@/shared/supabase/types';
+import type { Database } from '@/shared/types/database.types';
 
-export const createServerSideClient = async ({
-  tags = [],
-  revalidate = 0,
-  isAdmin = false
-}: SupabaseClientOptions = {}) => {
+export const createServerSideClient = async (options: NextCacheOptions = {}) => {
   const cookieStore = await cookies();
 
   return createServerClient<Database>(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    isAdmin ? process.env.NEXT_SUPABASE_SERVICE_ROLE! : process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
     {
       global: {
-        fetch: createFetch({ next: { tags, revalidate } })
+        fetch: createFetch({ cache: 'no-store', ...options })
       },
       cookies: {
         getAll() {

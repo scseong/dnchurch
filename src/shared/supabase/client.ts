@@ -1,6 +1,7 @@
+'use client';
+
 import { createBrowserClient } from '@supabase/ssr';
-import { createFetch } from '@/shared/supabase/lib';
-import { Database } from '@/shared/types/database.types';
+import type { Database } from '@/shared/types/database.types';
 
 export const supabase = createBrowserClient<Database>(
   process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -9,17 +10,12 @@ export const supabase = createBrowserClient<Database>(
 
 let client: ReturnType<typeof createBrowserClient> | undefined;
 
-export function getSupabaseBrowserClient(tags: string[] = [], revalidate = 3600) {
+export function getSupabaseBrowserClient() {
   if (client) return client;
 
   client = createBrowserClient<Database>(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-    {
-      global: {
-        fetch: createFetch({ next: { tags, revalidate } })
-      }
-    }
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
   );
 
   return client;
