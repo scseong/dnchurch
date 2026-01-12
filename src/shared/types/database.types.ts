@@ -82,7 +82,7 @@ export type Database = {
       "bulletin-dev": {
         Row: {
           created_at: string
-          date: string | null
+          date: string
           id: number
           image_url: string[]
           title: string
@@ -91,7 +91,7 @@ export type Database = {
         }
         Insert: {
           created_at?: string
-          date?: string | null
+          date: string
           id?: number
           image_url: string[]
           title: string
@@ -100,7 +100,7 @@ export type Database = {
         }
         Update: {
           created_at?: string
-          date?: string | null
+          date?: string
           id?: number
           image_url?: string[]
           title?: string
@@ -294,6 +294,12 @@ export type Database = {
       [_ in never]: never
     }
     CompositeTypes: {
+      bulletin_summary_response: {
+        latest: Database["public"]["Tables"]["bulletin-dev"]["Row"] | null
+        years: number[] | null
+        items: Database["public"]["Tables"]["bulletin-dev"]["Row"][] | null
+        total: number | null
+      }
       previous_next_type: {
         previous_id: number | null
         previous_title: string | null

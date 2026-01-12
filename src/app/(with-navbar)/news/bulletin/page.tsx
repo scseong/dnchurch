@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import MainContainer from '@/app/_component/layout/common/MainContainer';
 import LatestBulletin from '@/app/(with-navbar)/news/bulletin/_component/LastBulletin';
 import BulletinTableSection from '@/app/(with-navbar)/news/bulletin/_component/BulletinTableSection';
-import { getServerService } from '@/services';
+import { getServerService } from '@/services/root/server';
 import styles from './page.module.scss';
 
 type Props = {
@@ -25,12 +25,13 @@ export default async function BulletinPage({ searchParams }: Props) {
   const yearFilter = params.year ? parseInt(params.year) : undefined;
   const page = params.page ? parseInt(params.page) : 1;
 
-  const api = await getServerService({
+  const { bulletin } = await getServerService({
+    cache: 'force-cache',
     tags: ['bulletins'],
     revalidate: 86400
   });
 
-  const { data, error } = await api.bulletin.getBulletinSummary({
+  const { data, error } = await bulletin.fetchBulletinSummaryRpc({
     year: yearFilter,
     page
   });
@@ -42,11 +43,14 @@ export default async function BulletinPage({ searchParams }: Props) {
   return (
     <MainContainer title="주보">
       <div className={styles.wrap}>
-        <LatestBulletin latestBulletin={latestBulletin} />
+        <LatestBulletin
+          title={latestBulletin?.title ?? ''}
+          image_url={latestBulletin?.image_url ?? []}
+        />
         <BulletinTableSection
           yearFilter={yearFilter}
           years={years}
-          bulletins={bulletins}
+          bulletins={bulletins ?? []}
           total={total}
           currentPage={page}
         />

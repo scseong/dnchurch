@@ -55,7 +55,7 @@ export type BulletinSummary = {
 
 export type BulletinSummaryResponse = {
   latest: BulletinType;
-  years: { year: number }[];
+  years: number[];
   items: BulletinType[];
   total: number;
 };

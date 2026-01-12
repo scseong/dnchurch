@@ -1,15 +1,15 @@
 import { notFound } from 'next/navigation';
 import MainContainer from '@/app/_component/layout/common/MainContainer';
 import { BoardHeader, BoardBody, BoardFooter, BoardListButton } from '@/app/_component/board';
-import { getStaticService } from '@/services/server-static';
+import { getStaticService } from '@/services/root/static';
 import { generateFileDownloadList } from '@/shared/util/file';
 import { createStaticClient } from '@/shared/supabase/static';
-import { bulletinService } from '@/services/bulletin-service';
+import { bulletinService } from '@/services/bulletin/bulletin-service';
 
 export async function generateMetadata({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
   const supabase = createStaticClient();
-  const { data: bulletin } = await bulletinService(supabase).getBulletinById(id);
+  const { data: bulletin } = await bulletinService(supabase).fetchBulletinDetailById(id);
 
   if (!bulletin) return {};
 
@@ -29,7 +29,7 @@ export async function generateMetadata({ params }: { params: Promise<{ id: strin
 
 export async function generateStaticParams() {
   const supabase = createStaticClient();
-  const { data: allBulletins, error } = await bulletinService(supabase).getAllBulletinIds();
+  const { data: allBulletins, error } = await bulletinService(supabase).fetchAllBulletinIds();
 
   if (error || !allBulletins) {
     console.error('주보 ID 목록을 불러오는 데 실패했습니다:', error?.message);
@@ -47,21 +47,15 @@ export default async function BulletinDetail({ params }: { params: Promise<{ id:
   const { id: bulletinId } = await params;
 
   const api = {
-    bulletin: getStaticService({
-      tags: [`bulletin-${bulletinId}`],
-      revalidate: 86400
-    }).bulletin,
-    navigation: getStaticService({
-      tags: ['bulletin-navigation'],
-      revalidate: 86400
-    }).bulletin
+    bulletin: getStaticService({ tags: [`bulletin-${bulletinId}`], revalidate: 86400 }).bulletin,
+    navigation: getStaticService({ tags: ['bulletin-navigation'], revalidate: 86400 }).bulletin
   };
   const [bulletinRes, prevNextRes] = await Promise.all([
-    api.bulletin.getBulletinById(bulletinId),
-    api.navigation.getPrevAndNextBulletin(Number(bulletinId))
+    api.bulletin.fetchBulletinDetailById(bulletinId),
+    api.navigation.fetchNavigationBulletins(Number(bulletinId))
   ]);
 
-  const { data: bulletin, error } = bulletinRes;
+  const { data: bulletin } = bulletinRes;
   const { data: prevNextBulletin } = prevNextRes;
 
   if (!bulletin) notFound();

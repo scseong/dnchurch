@@ -6,7 +6,7 @@ import styles from './BulletinTableSection.module.scss';
 
 type Props = {
   yearFilter?: number;
-  years: { year: number }[];
+  years: number[];
   bulletins: BulletinType[];
   total: number;
   currentPage: number;
