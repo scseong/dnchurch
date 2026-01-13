@@ -1,8 +1,10 @@
-import type { SupabaseResult } from '@/shared/supabase/types';
+import { PostgrestResponse, PostgrestSingleResponse } from '@supabase/supabase-js';
 
-export const handleResponse = <T>(res: SupabaseResult<T>): SupabaseResult<T> => {
+type AnyPostgrestResponse = PostgrestResponse<any> | PostgrestSingleResponse<any>;
+
+export const handleResponse = <T extends AnyPostgrestResponse>(res: T): T => {
   if (res.error) {
-    console.error('[Supabase Error]', res.error);
+    console.error(`[Supabase Error] ${res.error.code}: ${res.error.message}`);
     throw res.error;
   }
   return res;
