@@ -1,16 +1,19 @@
 'use server';
 
 import { redirect, RedirectType } from 'next/navigation';
-import { revalidatePath, revalidateTag } from 'next/cache';
+import { revalidateTag, updateTag } from 'next/cache';
+import { isRedirectError } from 'next/dist/client/components/redirect-error';
 import { createServerSideClient } from '@/shared/supabase/server';
-import { updateFileAction, uploadFileAction } from '../file.action';
+import { updateFileAction } from '../file.action';
 import { getUrlsFromApiResponse } from '@/shared/util/file';
 import { BULLETIN_BUCKET } from '@/shared/constants/bulletin';
-import type { ImageFileData } from '@/shared/types/types';
 import { validateFiles } from '@/shared/util/fileValidator';
-import { uploadImage } from '@/apis/upload';
+import { deleteImage, uploadImage } from '@/actions/cloudinary';
+import type { ImageFileData } from '@/shared/types/types';
 
 export const createBulletinAction = async (formData: FormData) => {
+  let uploadedPublicIds: string[] = [];
+
   try {
     const title = formData.get('title')?.toString().trim();
     const date = formData.get('date')?.toString();
@@ -30,14 +33,21 @@ export const createBulletinAction = async (formData: FormData) => {
       return { success: false, message: errorMessage };
     }
 
-    const uploadPromises = validFiles.map((file) =>
-      uploadImage({
-        file,
-        folder: `/bulletin/${date}`
+    const uploadResults = await Promise.all(
+      validFiles.map(async (file) => {
+        const res = await uploadImage({ file, folder: `bulletin/${date}` });
+        uploadedPublicIds.push(res.public_id);
+        return res;
       })
     );
-    const uploadResults = await Promise.all(uploadPromises);
-    const imageUrls = uploadResults.map((res) => res.secure_url);
+    const imageUrls = uploadResults
+      .map((res) => res.secure_url)
+      .sort((a, b) => {
+        const nameA = a.split('/').pop() || '';
+        const nameB = b.split('/').pop() || '';
+
+        return nameA.localeCompare(nameB, undefined, { numeric: true, sensitivity: 'base' });
+      });
 
     const supabase = await createServerSideClient();
     const { error } = await supabase
@@ -51,12 +61,20 @@ export const createBulletinAction = async (formData: FormData) => {
       .select();
 
     if (error) {
+      const deletePromises = uploadedPublicIds.map(deleteImage);
+      await Promise.all(deletePromises);
       return { success: false, message: '주보 업로드에 실패했습니다.' };
     }
 
-    // TODO: Optimize revalidation
-    return { success: true };
+    updateTag('bulletins');
+    updateTag('bulletin-navigation');
+    redirect('/news/bulletin');
   } catch (error) {
+    if (isRedirectError(error)) throw error;
+    if (uploadedPublicIds.length > 0) {
+      await Promise.all(uploadedPublicIds.map(deleteImage));
+    }
+    console.error(error);
     return { success: false, message: '서버 오류가 발생했습니다.' };
   }
 };
@@ -110,8 +128,8 @@ export const updateBulletinAction = async (
     };
   }
 
-  revalidateTag('bulletin', 'max');
-  revalidatePath('/news/bulletin');
+  revalidateTag('bulletins', 'max');
+  revalidateTag('bulletin-navigation', 'max');
   redirect(`/news/bulletin/${bulletinId}`, RedirectType.push);
 };
 

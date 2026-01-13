@@ -14,20 +14,24 @@ export default function ImageUpload() {
   const inputRef = useRef<HTMLInputElement>(null);
   const [isDragging, setIsDragging] = useState(false);
   const {
+    watch,
     register,
     setValue,
     setError,
     clearErrors,
-    getValues,
     formState: { errors }
   } = useFormContext();
-  const files: File[] = getValues('files') || [];
+  const files: File[] = watch('files') || [];
   const images = useFilePreview(files);
 
   const handleFilesSelected = (selectedFiles: FileList) => {
     const { validFiles, errorMessage } = validateFiles(files, selectedFiles, 'image/*');
 
-    if (errorMessage) setError('files', { message: errorMessage });
+    if (errorMessage) {
+      setError('files', { message: errorMessage });
+      return;
+    }
+
     if (validFiles.length > 0) {
       setValue('files', [...files, ...validFiles], { shouldValidate: true });
       clearErrors('files');

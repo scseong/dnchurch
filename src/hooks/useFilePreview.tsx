@@ -1,24 +1,35 @@
+import { useEffect, useRef, useState } from 'react';
 import { ImageFile } from '@/shared/types/types';
-import { useEffect, useState } from 'react';
 
 export default function useFilePreview(files: File[]) {
-  const [images, setImages] = useState<ImageFile[]>([]);
+  const [previewImages, setPreviewImages] = useState<ImageFile[]>([]);
+  const fileUrlMapRef = useRef<Map<File, string>>(new Map());
 
   useEffect(() => {
-    const newPreviews = files.map((file) => ({ file, previewUrl: URL.createObjectURL(file) }));
+    const nextPreviewImages: ImageFile[] = files.map((file) => {
+      if (!fileUrlMapRef.current.has(file)) {
+        fileUrlMapRef.current.set(file, URL.createObjectURL(file));
+      }
 
-    setImages((prev) => {
-      prev.forEach((img) => {
-        const exists = files.some((f) => f.name === img.file.name && f.size === img.file.size);
-        if (!exists) URL.revokeObjectURL(img.previewUrl);
-      });
-      return newPreviews;
+      return { file, previewUrl: fileUrlMapRef.current.get(file)! };
     });
 
-    return () => {
-      newPreviews.forEach((img) => URL.revokeObjectURL(img.previewUrl));
-    };
+    fileUrlMapRef.current.forEach((url, file) => {
+      if (!files.includes(file)) {
+        URL.revokeObjectURL(url);
+        fileUrlMapRef.current.delete(file);
+      }
+    });
+
+    setPreviewImages(nextPreviewImages);
   }, [files]);
 
-  return images;
+  useEffect(() => {
+    return () => {
+      fileUrlMapRef.current.forEach((url) => URL.revokeObjectURL(url));
+      fileUrlMapRef.current.clear();
+    };
+  }, []);
+
+  return previewImages;
 }

@@ -55,16 +55,12 @@ export type BulletinSummary = {
 
 export type BulletinSummaryResponse = {
   latest: BulletinType;
-  years: { year: number }[];
+  years: number[];
   items: BulletinType[];
   total: number;
 };
 
-export const getBulletinSummary = async ({
-  year,
-  page = 1,
-  limit = 10
-}: BulletinSummary): Promise<BulletinSummaryResponse> => {
+export async function getBulletinSummary({ year, page = 1, limit = 10 }: BulletinSummary) {
   const { data, error } = await supabase.rpc(
     'getbulletinsummary',
     {
@@ -77,7 +73,7 @@ export const getBulletinSummary = async ({
 
   if (error) throw error;
   return data as BulletinSummaryResponse;
-};
+}
 
 export async function getAllBulletinIds() {
   const { data, error } = await supabase.from(BULLETIN_BUCKET).select('id');
@@ -98,6 +94,5 @@ export const getPrevAndNextBulletin = async (targetId: number) => {
     .maybeSingle();
 
   if (error) console.error(error);
-
   return data;
 };

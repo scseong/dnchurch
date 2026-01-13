@@ -3,10 +3,10 @@ import KakaoShareBtn from '@/app/_component/common/KakaoShare';
 import { BulletinType } from '@/shared/types/types';
 import styles from './LastBulletin.module.scss';
 
-export default function LatestBulletin({ latestBulletin }: { latestBulletin?: BulletinType }) {
-  const title = latestBulletin?.title ?? '';
-  const images = Array.isArray(latestBulletin?.image_url) ? latestBulletin.image_url : [];
-
+export default function LatestBulletin({
+  title,
+  image_url: images
+}: Pick<BulletinType, 'title' | 'image_url'>) {
   return (
     <section className={styles.latest_bulletin}>
       <div className={styles.notification}>

@@ -3,6 +3,7 @@
 import { useRouter } from 'next/navigation';
 import { useEffect, useRef } from 'react';
 import { useForm, FormProvider } from 'react-hook-form';
+import { isRedirectError } from 'next/dist/client/components/redirect-error';
 import { useProfile } from '@/context/SessionContextProvider';
 import AuthSubmitBtn from '@/app/_component/auth/AuthSubmitBtn';
 import FormAlertMessage from '@/app/_component/auth/FormAlertMessage';
@@ -19,6 +20,7 @@ type Inputs = {
   files: File[];
 };
 
+// TODO: 취소 버튼 및 이탈 방지 기능 추가
 export default function CreateBulletinForm() {
   const router = useRouter();
   const user = useProfile();
@@ -33,14 +35,14 @@ export default function CreateBulletinForm() {
   });
   const {
     register,
-    watch,
     setValue,
     handleSubmit,
     setError,
     clearErrors,
+    watch,
     formState: { errors, isValid, isSubmitting }
   } = methods;
-
+  const files = watch('files');
   const selectedDate = watch('date');
 
   const onSubmit = async (data: Inputs) => {
@@ -62,15 +64,10 @@ export default function CreateBulletinForm() {
         return;
       }
 
+      methods.reset();
       formRef.current?.reset();
-      methods.reset({
-        title: '',
-        date: '',
-        files: []
-      });
-      router.push('/news/bulletin');
     } catch (error) {
-      console.error(error);
+      if (isRedirectError(error)) return;
       setError('root', { message: '서버 오류가 발생했습니다.' });
     }
   };
@@ -108,7 +105,11 @@ export default function CreateBulletinForm() {
         <input name="user_id" value={user!.id} hidden readOnly />
         {errors.root && <FormAlertMessage type="error" message={errors.root.message} />}
         <div className={styles.button_group}>
-          <AuthSubmitBtn isDisabled={!isValid} isSubmitting={isSubmitting} label="작성하기" />
+          <AuthSubmitBtn
+            isDisabled={!isValid || files.length === 0}
+            isSubmitting={isSubmitting}
+            label="작성하기"
+          />
         </div>
       </form>
     </FormProvider>
