@@ -30,7 +30,11 @@ export default function BulletinTable({ bulletins, total, currentPage }: Bulleti
     columnHelper.accessor('title', {
       id: '제목',
       header: (info) => info.column.id,
-      cell: (info) => <Link href={`/news/bulletin/${info.row.original.id}`}>{info.getValue()}</Link>
+      cell: (info) => (
+        <Link href={`/news/bulletin/${info.row.original.id}`} prefetch={false}>
+          {info.getValue()}
+        </Link>
+      )
     })
   ];
 
