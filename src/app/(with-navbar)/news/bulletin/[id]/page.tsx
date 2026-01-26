@@ -1,18 +1,20 @@
 import { notFound } from 'next/navigation';
 import MainContainer from '@/app/_component/layout/common/MainContainer';
 import { BoardHeader, BoardBody, BoardFooter, BoardListButton } from '@/app/_component/board';
-import { getStaticService } from '@/services/root/static';
 import { generateFileDownloadList } from '@/shared/util/file';
-import { createStaticClient } from '@/shared/supabase/static';
-import { bulletinService } from '@/services/bulletin/bulletin-service';
+import { isNumeric } from '@/shared/util/validator';
+import {
+  fetchAllBulletinIds,
+  fetchBulletinDetailById,
+  fetchNavigationBulletins
+} from '@/services/bulletin';
 
 export async function generateMetadata({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
 
-  if (!/^\d+$/.test(id)) return {};
+  if (!isNumeric(id)) return {};
 
-  const supabase = createStaticClient();
-  const { data: bulletin } = await bulletinService(supabase).fetchBulletinDetailById(id);
+  const { data: bulletin } = await fetchBulletinDetailById(id);
 
   if (!bulletin) return {};
 
@@ -31,15 +33,14 @@ export async function generateMetadata({ params }: { params: Promise<{ id: strin
 }
 
 export async function generateStaticParams() {
-  const supabase = createStaticClient();
-  const { data: allBulletins, error } = await bulletinService(supabase).fetchAllBulletinIds();
+  const { data: allBulletins, error } = await fetchAllBulletinIds();
 
   if (error || !allBulletins) {
     console.error('주보 ID 목록을 불러오는 데 실패했습니다:', error?.message);
     return [];
   }
 
-  return allBulletins.map((bulletin) => ({
+  return allBulletins.slice(0, 10).map((bulletin) => ({
     id: bulletin.id.toString()
   }));
 }
@@ -47,21 +48,17 @@ export async function generateStaticParams() {
 export default async function BulletinDetail({ params }: { params: Promise<{ id: string }> }) {
   const { id: bulletinId } = await params;
 
-  if (!/^\d+$/.test(bulletinId)) notFound();
+  if (!isNumeric(bulletinId)) notFound();
 
-  const api = {
-    bulletin: getStaticService({ tags: [`bulletin-${bulletinId}`], revalidate: 86400 }).bulletin,
-    navigation: getStaticService({ tags: ['bulletin-navigation'], revalidate: 86400 }).bulletin
-  };
   const [bulletinRes, prevNextRes] = await Promise.all([
-    api.bulletin.fetchBulletinDetailById(bulletinId),
-    api.navigation.fetchNavigationBulletins(Number(bulletinId))
+    fetchBulletinDetailById(bulletinId),
+    fetchNavigationBulletins(Number(bulletinId))
   ]);
 
-  const { data: bulletin } = bulletinRes;
+  const { data: bulletin, error } = bulletinRes;
   const { data: prevNextBulletin } = prevNextRes;
 
-  if (!bulletin) notFound();
+  if (!bulletin || error) notFound();
 
   const { id, created_at, image_url, title, user_id, profiles } = bulletin;
   const files = generateFileDownloadList({ urls: image_url });

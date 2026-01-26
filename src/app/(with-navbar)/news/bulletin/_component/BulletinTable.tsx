@@ -61,16 +61,22 @@ export default function BulletinTable({ bulletins, total, currentPage }: Bulleti
           ))}
         </thead>
         <tbody>
-          {table.getRowModel().rows.map((row) => (
-            <tr key={row.id}>
-              {row.getVisibleCells().map((cell) => (
-                <td key={cell.id}>{flexRender(cell.column.columnDef.cell, cell.getContext())}</td>
-              ))}
+          {table.getRowModel().rows.length > 0 ? (
+            table.getRowModel().rows.map((row) => (
+              <tr key={row.id}>
+                {row.getVisibleCells().map((cell) => (
+                  <td key={cell.id}>{flexRender(cell.column.columnDef.cell, cell.getContext())}</td>
+                ))}
+              </tr>
+            ))
+          ) : (
+            <tr>
+              <td colSpan={columns.length}>주보가 존재하지 않습니다.</td>
             </tr>
-          ))}
+          )}
         </tbody>
       </table>
-      <Pagination totalCount={total} pageSize={10} maxVisiblePages={5} />
+      <Pagination totalCount={total} currentPage={currentPage} pageSize={10} maxVisiblePages={5} />
     </>
   );
 }
