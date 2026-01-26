@@ -1,6 +1,10 @@
-import Link from 'next/link';
+'use client';
 
 export default function NotFound() {
+  const handleGoBack = () => {
+    window.location.href = '/news/bulletin';
+  };
+
   return (
     <div style={containerStyle}>
       <h2 style={titleStyle}>주보를 찾을 수 없습니다</h2>
@@ -9,17 +13,11 @@ export default function NotFound() {
         입력하신 주소의 형식이 올바르지 않거나, <br />
         해당 주보가 이미 삭제되었을 수 있습니다.
       </p>
-
       <div style={buttonGroupStyle}>
-        <Link href="/news/bulletin" style={primaryButtonStyle}>
+        <button onClick={handleGoBack} style={primaryButtonStyle}>
           주보 목록으로 가기
-        </Link>
-        <Link href="/" style={secondaryButtonStyle}>
-          홈페이지 메인
-        </Link>
+        </button>
       </div>
-
-      <p style={footerStyle}>문의사항이 있으시면 교회 사무실로 연락 주시기 바랍니다.</p>
     </div>
   );
 }
@@ -61,19 +59,4 @@ const primaryButtonStyle = {
   borderRadius: '6px',
   textDecoration: 'none',
   fontWeight: '500'
-};
-
-const secondaryButtonStyle = {
-  padding: '12px 24px',
-  backgroundColor: '#f0f0f0',
-  color: '#333',
-  borderRadius: '6px',
-  textDecoration: 'none',
-  fontWeight: '500'
-};
-
-const footerStyle = {
-  marginTop: '48px',
-  fontSize: '14px',
-  color: '#999'
 };

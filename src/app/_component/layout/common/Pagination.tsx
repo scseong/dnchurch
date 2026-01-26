@@ -10,26 +10,40 @@ import styles from './Pagination.module.scss';
 type Props = {
   totalCount: number;
   pageSize?: number;
+  currentPage: number;
   maxVisiblePages?: number;
 };
 
-export default function Pagination({ totalCount, pageSize = 10, maxVisiblePages = 5 }: Props) {
-  const { getQueryParam, createQueryURL } = useQueryParams();
-  const initialCurrentPage = Number(getQueryParam('page')) || 1;
-  const { pages, totalPages, currentPage } = usePagination({
+export default function Pagination({
+  totalCount,
+  pageSize = 10,
+  currentPage,
+  maxVisiblePages = 5
+}: Props) {
+  const { createQueryURL } = useQueryParams();
+  const { pages, totalPages } = usePagination({
     totalCount,
     pageSize,
     maxVisiblePages,
-    currentPage: initialCurrentPage
+    currentPage
   });
 
-  if (!totalCount) return;
+  const getPrevPage = () => {
+    if (currentPage > totalPages) return totalPages;
+    return Math.max(1, currentPage - 1);
+  };
+
+  const getNextPage = () => {
+    return Math.min(totalPages, currentPage + 1);
+  };
+
+  if (!totalCount || totalPages <= 1) return null;
 
   return (
     <nav className={styles.pagination} aria-label="페이지 네비게이션" role="navigation">
       <ul className={styles.page_list}>
         <li>
-          <PrevButton disabled={currentPage === 1} href={createQueryURL('page', currentPage - 1)} />
+          <PrevButton disabled={currentPage <= 1} href={createQueryURL('page', getPrevPage())} />
         </li>
         {pages.map((page, idx) =>
           page === 'dots' ? (
@@ -47,8 +61,8 @@ export default function Pagination({ totalCount, pageSize = 10, maxVisiblePages 
         )}
         <li>
           <NextButton
-            disabled={currentPage === totalPages}
-            href={createQueryURL('page', currentPage + 1)}
+            disabled={currentPage >= totalPages}
+            href={createQueryURL('page', getNextPage())}
           />
         </li>
       </ul>
