@@ -8,6 +8,9 @@ import { bulletinService } from '@/services/bulletin/bulletin-service';
 
 export async function generateMetadata({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
+
+  if (!/^\d+$/.test(id)) return {};
+
   const supabase = createStaticClient();
   const { data: bulletin } = await bulletinService(supabase).fetchBulletinDetailById(id);
 
@@ -41,10 +44,10 @@ export async function generateStaticParams() {
   }));
 }
 
-export const revalidate = 86400; // 24 hours
-
 export default async function BulletinDetail({ params }: { params: Promise<{ id: string }> }) {
   const { id: bulletinId } = await params;
+
+  if (!/^\d+$/.test(bulletinId)) notFound();
 
   const api = {
     bulletin: getStaticService({ tags: [`bulletin-${bulletinId}`], revalidate: 86400 }).bulletin,
@@ -67,7 +70,7 @@ export default async function BulletinDetail({ params }: { params: Promise<{ id:
     <MainContainer title="주보">
       <BoardHeader
         title={title}
-        userName={profiles!.user_name}
+        userName={profiles?.user_name ?? '관리자'}
         createdAt={created_at}
         userId={user_id}
         thumbnail={image_url[0]}
