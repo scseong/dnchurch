@@ -2,20 +2,7 @@ import { handleResponse } from '@/services/root/handle-response';
 import { BULLETIN_BUCKET } from '@/shared/constants/bulletin';
 import type { PostgrestSingleResponse, SupabaseClient } from '@supabase/supabase-js';
 import type { Database } from '@/shared/types/database.types';
-import type { BulletinType } from '@/shared/types/types';
-
-type BulletinParams = {
-  year?: number;
-  page?: number;
-  limit?: number;
-};
-
-type BulletinSummaryResponse = {
-  latest: BulletinType;
-  years: number[];
-  items: BulletinType[];
-  total: number;
-};
+import type { BulletinParams, BulletinSummaryResponse } from '@/shared/types/bulletin';
 
 export const bulletinService = (supabase: SupabaseClient<Database>) => ({
   /**

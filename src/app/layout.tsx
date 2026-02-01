@@ -20,35 +20,55 @@ export const metadata: Metadata = {
   }
 };
 
-const notoSans = localFont({
+const pretendard = localFont({
   src: [
     {
-      path: './fonts/NotoSansKR-Light.woff2',
+      path: './fonts/Pretendard-Thin.subset.woff2',
+      weight: '100',
+      style: 'normal'
+    },
+    {
+      path: './fonts/Pretendard-ExtraLight.subset.woff2',
+      weight: '200',
+      style: 'normal'
+    },
+    {
+      path: './fonts/Pretendard-Light.subset.woff2',
       weight: '300',
       style: 'normal'
     },
     {
-      path: './fonts/NotoSansKR-Regular.woff2',
+      path: './fonts/Pretendard-Regular.subset.woff2',
       weight: '400',
       style: 'normal'
     },
     {
-      path: './fonts/NotoSansKR-Medium.woff2',
+      path: './fonts/Pretendard-Medium.subset.woff2',
       weight: '500',
       style: 'normal'
     },
     {
-      path: './fonts/NotoSansKR-SemiBold.woff2',
+      path: './fonts/Pretendard-SemiBold.subset.woff2',
       weight: '600',
       style: 'normal'
     },
     {
-      path: './fonts/NotoSansKR-Bold.woff2',
+      path: './fonts/Pretendard-Bold.subset.woff2',
       weight: '700',
+      style: 'normal'
+    },
+    {
+      path: './fonts/Pretendard-ExtraBold.subset.woff2',
+      weight: '800',
+      style: 'normal'
+    },
+    {
+      path: './fonts/Pretendard-Black.subset.woff2',
+      weight: '900',
       style: 'normal'
     }
   ],
-  variable: '--font-notosans'
+  variable: '--font-pretendard'
 });
 
 const myeongjo = localFont({
@@ -76,7 +96,7 @@ const API_KEY = `//dapi.kakao.com/v2/maps/sdk.js?appkey=${process.env.NEXT_PUBLI
 
 export default async function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="ko" className={`${myeongjo.variable} ${notoSans.variable}`}>
+    <html lang="ko" className={`${myeongjo.variable} ${pretendard.variable}`}>
       <body>
         <Script src={API_KEY} strategy="beforeInteractive" />
         <KakaoScript />
