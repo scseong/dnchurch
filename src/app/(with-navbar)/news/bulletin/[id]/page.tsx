@@ -32,18 +32,18 @@ export async function generateMetadata({ params }: { params: Promise<{ id: strin
   };
 }
 
-export async function generateStaticParams() {
-  const { data: allBulletins, error } = await fetchAllBulletinIds();
+// export async function generateStaticParams() {
+//   const { data: allBulletins, error } = await fetchAllBulletinIds();
 
-  if (error || !allBulletins) {
-    console.error('주보 ID 목록을 불러오는 데 실패했습니다:', error?.message);
-    return [];
-  }
+//   if (error || !allBulletins) {
+//     console.error('주보 ID 목록을 불러오는 데 실패했습니다:', error?.message);
+//     return [];
+//   }
 
-  return allBulletins.slice(0, 10).map((bulletin) => ({
-    id: bulletin.id.toString()
-  }));
-}
+//   return allBulletins.slice(0, 10).map((bulletin) => ({
+//     id: bulletin.id.toString()
+//   }));
+// }
 
 export default async function BulletinDetail({ params }: { params: Promise<{ id: string }> }) {
   const { id: bulletinId } = await params;

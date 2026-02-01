@@ -11,9 +11,9 @@ export const fetchBulletinList = (params: BulletinParams = {}) => {
   return bulletinService(supabase).fetchBulletinList(params);
 };
 
-export const fetchBulletinDetailById = (id: string) => {
-  const supabase = createStaticClient(bulletinCache.detail(id));
-  return bulletinService(supabase).fetchBulletinDetailById(id);
+export const fetchBulletinSummaryRpc = (params: BulletinParams) => {
+  const supabase = createStaticClient(bulletinCache.summary());
+  return bulletinService(supabase).fetchBulletinSummaryRpc(params);
 };
 
 export const fetchAllBulletinIds = () => {
@@ -21,12 +21,14 @@ export const fetchAllBulletinIds = () => {
   return bulletinService(supabase).fetchAllBulletinIds();
 };
 
-export const fetchBulletinSummaryRpc = (params: BulletinParams) => {
-  const supabase = createStaticClient(bulletinCache.summary());
-  return bulletinService(supabase).fetchBulletinSummaryRpc(params);
+export const fetchBulletinDetailById = (id: string) => {
+  // const supabase = createStaticClient(bulletinCache.detail(id));
+  const supabase = createStaticClient({ cache: 'default' });
+  return bulletinService(supabase).fetchBulletinDetailById(id);
 };
 
 export const fetchNavigationBulletins = (targetId: number) => {
-  const supabase = createStaticClient(bulletinCache.nav(targetId));
+  // const supabase = createStaticClient(bulletinCache.nav(targetId));
+  const supabase = createStaticClient({ cache: 'default' });
   return bulletinService(supabase).fetchNavigationBulletins(targetId);
 };
