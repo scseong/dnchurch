@@ -22,13 +22,11 @@ export const fetchAllBulletinIds = () => {
 };
 
 export const fetchBulletinDetailById = (id: string) => {
-  // const supabase = createStaticClient(bulletinCache.detail(id));
-  const supabase = createStaticClient({ cache: 'default' });
+  const supabase = createStaticClient(bulletinCache.detail(id));
   return bulletinService(supabase).fetchBulletinDetailById(id);
 };
 
 export const fetchNavigationBulletins = (targetId: number) => {
-  // const supabase = createStaticClient(bulletinCache.nav(targetId));
-  const supabase = createStaticClient({ cache: 'default' });
+  const supabase = createStaticClient(bulletinCache.nav(targetId));
   return bulletinService(supabase).fetchNavigationBulletins(targetId);
 };
