@@ -12,11 +12,9 @@ export const bulletinCache = {
     revalidate: 86400
   }),
   detail: (id: string | number): NextCacheOptions => ({
-    tags: [ROOT, 'bulletin-detail', `bulletin-detail-${id}`],
-    revalidate: 86400
+    tags: [ROOT, 'bulletin-detail', `bulletin-detail-${id}`]
   }),
   nav: (targetId: number): NextCacheOptions => ({
-    tags: [ROOT, 'bulletin-nav', `bulletin-nav-${targetId}`],
-    revalidate: 86400
+    tags: [ROOT, 'bulletin-nav', `bulletin-nav-${targetId}`]
   })
 } as const;

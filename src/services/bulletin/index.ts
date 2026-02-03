@@ -3,8 +3,7 @@ import 'server-only';
 import { bulletinCache } from '@/services/bulletin/bulletin-cache';
 import { bulletinService } from '@/services/bulletin/bulletin-service';
 import { createStaticClient } from '@/shared/supabase/static';
-
-type BulletinParams = { year?: number; page?: number; limit?: number };
+import type { BulletinParams } from '@/shared/types/bulletin';
 
 export const fetchBulletinList = (params: BulletinParams = {}) => {
   const supabase = createStaticClient(bulletinCache.list());

@@ -45,6 +45,8 @@ export async function generateStaticParams() {
   }));
 }
 
+export const revalidate = 86400; // 24 hours
+
 export default async function BulletinDetail({ params }: { params: Promise<{ id: string }> }) {
   const { id: bulletinId } = await params;
 
