@@ -1,13 +1,10 @@
 'use client';
 
-import { useRouter } from 'next/navigation';
 import styles from './not-found.module.scss';
 
 export default function NotFound() {
-  const router = useRouter();
-
   const handleGoBack = () => {
-    router.push('/news/bulletin');
+    window.location.href = '/news/bulletin';
   };
 
   return (
