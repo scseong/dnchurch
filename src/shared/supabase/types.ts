@@ -1,9 +1,8 @@
-import type { PostgrestError } from '@supabase/supabase-js';
 import type { PostgrestResponse, PostgrestSingleResponse } from '@supabase/supabase-js';
 
 export type NextCacheOptions = {
   tags?: string[];
-  revalidate?: number;
+  revalidate?: false | 0 | number;
   cache?: RequestCache;
 };
 

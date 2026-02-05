@@ -1,8 +1,10 @@
 import type { Metadata } from 'next';
+import { notFound } from 'next/navigation';
 import MainContainer from '@/app/_component/layout/common/MainContainer';
 import LatestBulletin from '@/app/(with-navbar)/news/bulletin/_component/LastBulletin';
 import BulletinTableSection from '@/app/(with-navbar)/news/bulletin/_component/BulletinTableSection';
-import { getServerService } from '@/services/root/server';
+import { fetchBulletinSummaryRpc } from '@/services/bulletin';
+import { isNumeric } from '@/shared/util/validator';
 import styles from './page.module.scss';
 
 type Props = {
@@ -18,23 +20,13 @@ export const metadata: Metadata = {
   }
 };
 
-export const revalidate = 86400; // 24 hours
-
 export default async function BulletinPage({ searchParams }: Props) {
   const params = await searchParams;
-  const yearFilter = params.year ? parseInt(params.year) : undefined;
-  const page = params.page ? parseInt(params.page) : 1;
+  const { year, page, isValid } = parseQueryParams(params);
 
-  const { bulletin } = await getServerService({
-    cache: 'force-cache',
-    tags: ['bulletins'],
-    revalidate: 86400
-  });
+  if (!isValid) notFound();
 
-  const { data, error } = await bulletin.fetchBulletinSummaryRpc({
-    year: yearFilter,
-    page
-  });
+  const { data, error } = await fetchBulletinSummaryRpc({ year, page });
 
   if (error || !data) return <div>데이터를 불러올 수 없습니다.</div>;
 
@@ -48,7 +40,7 @@ export default async function BulletinPage({ searchParams }: Props) {
           image_url={latestBulletin?.image_url ?? []}
         />
         <BulletinTableSection
-          yearFilter={yearFilter}
+          yearFilter={year}
           years={years}
           bulletins={bulletins ?? []}
           total={total}
@@ -57,4 +49,19 @@ export default async function BulletinPage({ searchParams }: Props) {
       </div>
     </MainContainer>
   );
+}
+
+function parseQueryParams(params: { page?: string; year?: string }) {
+  const isYearValid = isNumeric(params.year);
+  const isPageValid = isNumeric(params.page);
+
+  if (!isYearValid || !isPageValid) {
+    return { isValid: false, year: undefined, page: 1 };
+  }
+
+  return {
+    isValid: true,
+    year: params.year ? parseInt(params.year) : undefined,
+    page: Math.max(1, params.page ? parseInt(params.page) : 1)
+  };
 }

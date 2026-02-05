@@ -1,7 +1,7 @@
 'use server';
 
 import { redirect, RedirectType } from 'next/navigation';
-import { revalidateTag, updateTag } from 'next/cache';
+import { revalidatePath, revalidateTag, updateTag } from 'next/cache';
 import { isRedirectError } from 'next/dist/client/components/redirect-error';
 import { createServerSideClient } from '@/shared/supabase/server';
 import { updateFileAction } from '../file.action';
@@ -66,8 +66,9 @@ export const createBulletinAction = async (formData: FormData) => {
       return { success: false, message: '주보 업로드에 실패했습니다.' };
     }
 
-    updateTag('bulletins');
-    updateTag('bulletin-navigation');
+    revalidatePath('/news/bulletin');
+    revalidatePath('/news');
+    updateTag('bulletin-nav');
     redirect('/news/bulletin');
   } catch (error) {
     if (isRedirectError(error)) throw error;

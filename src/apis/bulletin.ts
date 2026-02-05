@@ -1,6 +1,7 @@
 import { supabase } from '@/shared/supabase/client';
 import { BULLETIN_BUCKET } from '@/shared/constants/bulletin';
 import { BulletinType } from '@/shared/types/types';
+import type { BulletinParams, BulletinSummaryResponse } from '@/shared/types/bulletin';
 
 export type BulletinWithUserName = BulletinType & { profiles: { user_name: string } };
 
@@ -47,20 +48,7 @@ export const getLatestBulletin = async () => {
   return { latestBulletin: bulletin };
 };
 
-export type BulletinSummary = {
-  year?: number;
-  page?: number;
-  limit?: number;
-};
-
-export type BulletinSummaryResponse = {
-  latest: BulletinType;
-  years: number[];
-  items: BulletinType[];
-  total: number;
-};
-
-export async function getBulletinSummary({ year, page = 1, limit = 10 }: BulletinSummary) {
+export async function getBulletinSummary({ year, page = 1, limit = 10 }: BulletinParams) {
   const { data, error } = await supabase.rpc(
     'getbulletinsummary',
     {

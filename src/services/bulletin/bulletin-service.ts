@@ -2,20 +2,7 @@ import { handleResponse } from '@/services/root/handle-response';
 import { BULLETIN_BUCKET } from '@/shared/constants/bulletin';
 import type { PostgrestSingleResponse, SupabaseClient } from '@supabase/supabase-js';
 import type { Database } from '@/shared/types/database.types';
-import type { BulletinType } from '@/shared/types/types';
-
-type BulletinParams = {
-  year?: number;
-  page?: number;
-  limit?: number;
-};
-
-type BulletinSummaryResponse = {
-  latest: BulletinType;
-  years: number[];
-  items: BulletinType[];
-  total: number;
-};
+import type { BulletinParams, BulletinSummaryResponse } from '@/shared/types/bulletin';
 
 export const bulletinService = (supabase: SupabaseClient<Database>) => ({
   /**
@@ -42,7 +29,10 @@ export const bulletinService = (supabase: SupabaseClient<Database>) => ({
    * [전체 ID] 정적 생성(SSG)을 위한 전체 주보 ID 목록 조회
    */
   fetchAllBulletinIds: async () => {
-    const res = await supabase.from(BULLETIN_BUCKET).select('id');
+    const res = await supabase
+      .from(BULLETIN_BUCKET)
+      .select('id')
+      .order('date', { ascending: false });
 
     return handleResponse(res);
   },
@@ -69,11 +59,15 @@ export const bulletinService = (supabase: SupabaseClient<Database>) => ({
     limit = 10
   }: BulletinParams): Promise<PostgrestSingleResponse<BulletinSummaryResponse>> => {
     const res = await supabase
-      .rpc('getbulletinsummary', {
-        select_year: year || undefined,
-        page,
-        limit_count: limit
-      })
+      .rpc(
+        'getbulletinsummary',
+        {
+          select_year: year || undefined,
+          page,
+          limit_count: limit
+        },
+        { get: true }
+      )
       .single();
 
     return handleResponse(res as any) as any;
