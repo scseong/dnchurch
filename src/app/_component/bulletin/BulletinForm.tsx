@@ -3,34 +3,34 @@
 import { useEffect, useRef } from 'react';
 import { useForm, FormProvider } from 'react-hook-form';
 import { isRedirectError } from 'next/dist/client/components/redirect-error';
-import { useProfile } from '@/context/SessionContextProvider';
 import AuthSubmitBtn from '@/app/_component/auth/AuthSubmitBtn';
 import FormAlertMessage from '@/app/_component/auth/FormAlertMessage';
 import FormField from '@/app/_component/auth/FormField';
-import ImageUpload from '@/app/(with-navbar)/news/bulletin/_component/create/ImageUpload';
-import Loader from '@/app/_component/common/Loader';
-import { createBulletinAction } from '@/actions/bulletin/bulletin.action';
+import ImageUpload from '@/app/_component/common/ImageUpload';
+import { createBulletinAction, updateBulletinAction } from '@/actions/bulletin/bulletin.action';
 import { formattedDate } from '@/shared/util/date';
-import styles from './CreateBulletinForm.module.scss';
+import type { BulletinFormInputs, BulletinFormProps, ImageItem } from '@/shared/types/bulletin';
+import styles from './BulletinForm.module.scss';
 
-type Inputs = {
-  title: string;
-  date: string;
-  files: File[];
-};
-
-// TODO: 취소 버튼 및 이탈 방지 기능 추가
-export default function CreateBulletinForm() {
-  const user = useProfile();
+export default function BulletinForm({ mode, bulletinId, initialData }: BulletinFormProps) {
   const formRef = useRef<HTMLFormElement>(null);
-  const methods = useForm<Inputs>({
+
+  const initialImages: ImageItem[] =
+    initialData?.imageUrls?.map((url, index) => ({
+      type: 'existing' as const,
+      url,
+      id: `existing-${index}-${Date.now()}`
+    })) || [];
+
+  const methods = useForm<BulletinFormInputs>({
     defaultValues: {
-      title: '',
-      date: '',
-      files: []
+      title: initialData?.title || '',
+      date: initialData?.date.split('T')[0] || '',
+      images: initialImages
     },
     mode: 'onChange'
   });
+
   const {
     register,
     setValue,
@@ -40,23 +40,45 @@ export default function CreateBulletinForm() {
     watch,
     formState: { errors, isValid, isSubmitting }
   } = methods;
-  const files = watch('files');
+
+  const images = watch('images');
   const selectedDate = watch('date');
 
-  const onSubmit = async (data: Inputs) => {
+  const onSubmit = async (data: BulletinFormInputs) => {
     clearErrors('root');
 
     try {
       const formData = new FormData();
       formData.append('title', data.title);
       formData.append('date', data.date);
-      formData.append('user_id', user!.id);
 
-      data.files.forEach((file) => {
+      const existingImageUrls = data.images
+        .filter((img): img is Extract<ImageItem, { type: 'existing' }> => img.type === 'existing')
+        .map((img) => img.url);
+
+      const newFiles = data.images
+        .filter((img): img is Extract<ImageItem, { type: 'new' }> => img.type === 'new')
+        .map((img) => img.file);
+
+      newFiles.forEach((file) => {
         formData.append('files', file);
       });
 
-      const { success, message } = await createBulletinAction(formData);
+      if (mode === 'edit' && bulletinId) {
+        formData.append('bulletinId', bulletinId);
+        formData.append('existingImages', JSON.stringify(existingImageUrls));
+        formData.append('userId', initialData?.userId || '');
+
+        const originalUrls = initialData?.imageUrls || [];
+        const deletedImages = originalUrls.filter((url) => !existingImageUrls.includes(url));
+        formData.append('deletedImages', JSON.stringify(deletedImages));
+      }
+
+      const { success, message } =
+        mode === 'create'
+          ? await createBulletinAction(formData)
+          : await updateBulletinAction(formData);
+
       if (!success) {
         setError('root', { message });
         return;
@@ -76,9 +98,7 @@ export default function CreateBulletinForm() {
       setValue('title', title);
       clearErrors('title');
     }
-  }, [selectedDate, setValue, clearErrors]);
-
-  if (!user) return <Loader />;
+  }, [selectedDate, setValue, clearErrors, mode]);
 
   return (
     <FormProvider {...methods}>
@@ -98,15 +118,15 @@ export default function CreateBulletinForm() {
             register={register('title', { required: '제목을 입력해주세요.' })}
             error={errors.title?.message}
           />
+          <input name="user_id" value={initialData?.userId} hidden readOnly />
         </div>
         <ImageUpload />
-        <input name="user_id" value={user!.id} hidden readOnly />
         {errors.root && <FormAlertMessage type="error" message={errors.root.message} />}
         <div className={styles.button_group}>
           <AuthSubmitBtn
-            isDisabled={!isValid || files.length === 0}
+            isDisabled={!isValid || images.length === 0}
             isSubmitting={isSubmitting}
-            label="작성하기"
+            label={mode === 'create' ? '작성하기' : '수정하기'}
           />
         </div>
       </form>
