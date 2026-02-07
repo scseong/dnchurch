@@ -13,7 +13,7 @@ export const createServerSideClient = async (options: NextCacheOptions = {}) => 
     process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
     {
       global: {
-        fetch: createFetch({ cache: 'no-store', ...options })
+        fetch: createFetch({ cache: 'no-store', revalidate: 0, ...options })
       },
       cookies: {
         getAll() {

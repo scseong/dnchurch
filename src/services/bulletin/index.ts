@@ -2,8 +2,9 @@ import 'server-only';
 
 import { bulletinCache } from '@/services/bulletin/bulletin-cache';
 import { bulletinService } from '@/services/bulletin/bulletin-service';
+import { createServerSideClient } from '@/shared/supabase/server';
 import { createStaticClient } from '@/shared/supabase/static';
-import type { BulletinParams } from '@/shared/types/bulletin';
+import type { BulletinEditFormParams, BulletinParams } from '@/shared/types/bulletin';
 
 export const fetchBulletinList = (params: BulletinParams = {}) => {
   const supabase = createStaticClient(bulletinCache.list());
@@ -25,7 +26,17 @@ export const fetchBulletinDetailById = (id: string) => {
   return bulletinService(supabase).fetchBulletinDetailById(id);
 };
 
+export const fetchPublicBulletinDetailById = async (id: string) => {
+  const supabase = await createServerSideClient();
+  return bulletinService(supabase).fetchBulletinDetailById(id);
+};
+
 export const fetchNavigationBulletins = (targetId: number) => {
   const supabase = createStaticClient(bulletinCache.nav(targetId));
   return bulletinService(supabase).fetchNavigationBulletins(targetId);
+};
+
+export const updateBulletin = async (payload: BulletinEditFormParams) => {
+  const supabase = await createServerSideClient();
+  return bulletinService(supabase).updateBulletin(payload);
 };

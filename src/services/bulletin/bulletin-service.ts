@@ -2,7 +2,11 @@ import { handleResponse } from '@/services/root/handle-response';
 import { BULLETIN_BUCKET } from '@/shared/constants/bulletin';
 import type { PostgrestSingleResponse, SupabaseClient } from '@supabase/supabase-js';
 import type { Database } from '@/shared/types/database.types';
-import type { BulletinParams, BulletinSummaryResponse } from '@/shared/types/bulletin';
+import type {
+  BulletinParams,
+  BulletinSummaryResponse,
+  BulletinEditFormParams
+} from '@/shared/types/bulletin';
 
 export const bulletinService = (supabase: SupabaseClient<Database>) => ({
   /**
@@ -78,6 +82,21 @@ export const bulletinService = (supabase: SupabaseClient<Database>) => ({
    */
   fetchNavigationBulletins: async (targetId: number) => {
     const res = await supabase.rpc('get_prev_and_next_dev', { target_id: targetId }).maybeSingle();
+
+    return handleResponse(res);
+  },
+
+  updateBulletin: async ({ title, date, imageUrls, bulletinId }: BulletinEditFormParams) => {
+    const res = await supabase
+      .from(BULLETIN_BUCKET)
+      .update({
+        title,
+        date,
+        image_url: imageUrls
+      })
+      .eq('id', Number(bulletinId))
+      .select()
+      .single();
 
     return handleResponse(res);
   },
