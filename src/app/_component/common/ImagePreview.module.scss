@@ -1,0 +1,95 @@
+$item-gap: 0.8rem;
+
+.container {
+  margin-bottom: $spacing-md;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: $item-gap;
+}
+
+.preview {
+  padding: $spacing-xs $spacing-sm;
+  display: flex;
+  flex-basis: 100%;
+  gap: $spacing-sm;
+  border: 0.1rem solid $color-border-primary-inverse;
+  border-radius: $border-radius-lg;
+
+  @include respond-up($breakpoint-lg) {
+    flex-basis: calc(50% - ($item-gap / 2));
+  }
+}
+
+.image_wrap {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  max-width: 8rem;
+  width: 8rem;
+  height: 8rem;
+  border-radius: $border-radius-lg;
+
+  img {
+    max-width: 100%;
+    max-height: 100%;
+    border-radius: $border-radius-lg;
+    object-fit: cover;
+  }
+}
+
+.file_info {
+  flex: 1;
+  color: $color-text-secondary;
+  word-break: break-all;
+
+  h5 {
+    margin-bottom: $spacing-xxs;
+    font-size: $font-size-sm;
+    color: $color-primary;
+    @include ellipsis-multi(2);
+  }
+
+  .meta_data {
+    display: flex;
+    flex-direction: column;
+    gap: $spacing-nano;
+
+    span {
+      display: block;
+      font-size: $font-size-xs;
+      color: $color-text-subtle;
+    }
+  }
+}
+
+.badge_existing,
+.badge_new {
+  padding: $spacing-nano $spacing-xs;
+  display: inline-block !important;
+  width: fit-content;
+  border-radius: $border-radius-sm;
+  font-size: $font-size-xs;
+  color: $color-white !important;
+}
+
+.badge_existing {
+  background-color: $color-primary;
+}
+
+.badge_new {
+  background-color: $color-status-success;
+}
+
+.button_wrap {
+  display: inline-flex;
+  align-items: center;
+
+  button {
+    transition: color 0.2s;
+
+    &:hover {
+      color: $color-primary;
+    }
+  }
+}

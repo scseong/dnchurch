@@ -76,13 +76,7 @@ export default async function BulletinDetail({ params }: { params: Promise<{ id:
         id={id.toString()}
         updateLink={`/news/bulletin/${id}/update`}
       />
-      <BoardBody>
-        {image_url.map((url) => (
-          <div key={url}>
-            <img src={url} alt={url} />
-          </div>
-        ))}
-      </BoardBody>
+      <BoardBody images={image_url} />
       <BoardFooter files={files} prevNext={prevNextBulletin} />
       <BoardListButton link="/news/bulletin" />
     </MainContainer>

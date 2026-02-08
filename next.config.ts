@@ -1,7 +1,15 @@
 import type { NextConfig } from 'next';
 
 const nextConfig: NextConfig = {
-  // TODO: 이미지 최적화
+  images: {
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'res.cloudinary.com',
+        pathname: '**'
+      }
+    ]
+  },
   experimental: {
     serverActions: {
       bodySizeLimit: '5mb'
