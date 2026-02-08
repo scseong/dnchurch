@@ -1,5 +1,5 @@
 .group {
-  margin-bottom: 1.6rem;
+  margin-bottom: $spacing-md;
 
   label {
     margin-bottom: 1rem;
@@ -9,7 +9,7 @@
     font-weight: 600;
   }
 
-  input[type='text'] {
+  input {
     padding: 0.8rem 1rem;
     width: 100%;
     border: 1px solid #ccc;
@@ -18,7 +18,7 @@
     font-size: 1.4rem;
   }
 
-  input[type='text']::placeholder {
+  input::placeholder {
     font-size: 1.4rem;
   }
 }

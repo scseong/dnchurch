@@ -37,3 +37,8 @@ export type ImageFileData = {
   datetime: string;
   filesize: string;
 };
+
+export type ImageFile = {
+  file: File;
+  previewUrl: string;
+};

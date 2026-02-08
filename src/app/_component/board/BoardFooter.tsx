@@ -9,7 +9,7 @@ export default function BoardFooter({
 }: {
   files: {
     filename: string;
-    downloadPath: string;
+    downloadUrl: string;
   }[];
   prevNext: {
     prev_id: number;
@@ -21,25 +21,27 @@ export default function BoardFooter({
   const { prev_id, prev_title, next_id, next_title } = prevNext || {};
 
   return (
-    <div>
+    <section>
       <div className={styles.file_attachment}>
         <dl>
-          <dt>첨부파일</dt>
-          <div className={styles.download}>
-            {files.map((file, idx) => (
-              <dd key={idx}>
-                <IconWrap Icon={PiDownloadSimpleBold} />
-                <Link href={file.downloadPath} download>
-                  {file.filename}
-                </Link>
-              </dd>
-            ))}
+          <div className={styles.group}>
+            <dt>첨부파일</dt>
+            <div>
+              {files.map((file, idx) => (
+                <dd key={`${file.filename}-${idx}`}>
+                  <IconWrap Icon={PiDownloadSimpleBold} />
+                  <Link href={file.downloadUrl} download={file.filename}>
+                    {file.filename}
+                  </Link>
+                </dd>
+              ))}
+            </div>
           </div>
         </dl>
       </div>
-      <div className={styles.prev_next}>
+      <nav className={styles.prev_next}>
         <dl>
-          <div>
+          <div className={styles.group}>
             <dt>이전글</dt>
             <dd>
               {prev_title ? (
@@ -49,7 +51,7 @@ export default function BoardFooter({
               )}
             </dd>
           </div>
-          <div>
+          <div className={styles.group}>
             <dt>다음글</dt>
             <dd>
               {next_title ? (
@@ -60,7 +62,7 @@ export default function BoardFooter({
             </dd>
           </div>
         </dl>
-      </div>
-    </div>
+      </nav>
+    </section>
   );
 }

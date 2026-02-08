@@ -71,3 +71,12 @@
     background-color: map-get($options, bg-hover-color);
   }
 }
+
+@mixin ellipsis-multi($lines: 2) {
+  display: -webkit-box;
+  -webkit-line-clamp: $lines;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  word-break: break-all;
+}
