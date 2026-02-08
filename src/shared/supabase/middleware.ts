@@ -9,17 +9,22 @@ export async function updateSession(request: NextRequest) {
   const {
     data: { user }
   } = await supabase.auth.getUser();
-  // const user = data?.claims;
 
   const noAuthPages = ['/login', '/sign-up', '/forget-password'];
-  const authPages = ['/mypage', '/news/bulletin/create', '/news/bulletin/update'];
-  const isAuthPage = authPages.some((page) => pathname.startsWith(page));
+  const isAuthPage = (path: string) => {
+    const exactMatches = ['/mypage', '/news/bulletin/create'];
+    const dynamicPattern = /^\/news\/bulletin\/[^/]+\/update$/;
+
+    if (exactMatches.includes(path)) return true;
+    if (dynamicPattern.test(path)) return true;
+    return false;
+  };
 
   if (user && noAuthPages.includes(pathname)) {
     return NextResponse.redirect(new URL('/', request.url));
   }
 
-  if (!user && isAuthPage) {
+  if (!user && isAuthPage(pathname)) {
     const callbackUrl = encodeURIComponent(`${pathname}${search}`);
     return NextResponse.redirect(new URL(`/login?redirect=${callbackUrl}`, request.url));
   }
