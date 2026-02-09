@@ -2428,6 +2428,11 @@ path-scurry@^1.11.1:
     lru-cache "^10.2.0"
     minipass "^5.0.0 || ^6.0.2 || ^7.0.0"
 
+photoswipe@^5.4.4, "photoswipe@>= 5.2.2":
+  version "5.4.4"
+  resolved "https://registry.npmjs.org/photoswipe/-/photoswipe-5.4.4.tgz"
+  integrity sha512-WNFHoKrkZNnvFFhbHL93WDkW3ifwVOXSW3w1UuZZelSmgXpIGiZSNlZJq37rR8YejqME2rHs9EhH9ZvlvFH2NA==
+
 picocolors@^1.0.0, picocolors@^1.1.1:
   version "1.1.1"
   resolved "https://registry.npmjs.org/picocolors/-/picocolors-1.1.1.tgz"
@@ -2467,7 +2472,7 @@ proc-log@^5.0.0:
   resolved "https://registry.npmjs.org/proc-log/-/proc-log-5.0.0.tgz"
   integrity sha512-Azwzvl90HaF0aCz1JrDdXQykFakSSNPaPoiZ9fm5qJIMHioDZEi7OAdRwSm6rSoPtY3Qutnm3L7ogmg3dc+wbQ==
 
-prop-types@^15.8.1:
+prop-types@^15.8.1, "prop-types@>= 15.7.0":
   version "15.8.1"
   resolved "https://registry.npmjs.org/prop-types/-/prop-types-15.8.1.tgz"
   integrity sha512-oj87CgZICdulUohogVAR7AjlC0327U4el4L6eAvOqCeudMDVU0NThNaV+b9Df4dXgSP1gXMTnPdhfe/2qDH5cg==
@@ -2521,7 +2526,12 @@ react-kakao-maps-sdk@^1.2.0:
     "@babel/runtime" "^7.22.15"
     kakao.maps.d.ts "^0.1.39"
 
-react@*, "react@^16.8.0 || ^17 || ^18 || ^19", "react@^18.2.0 || 19.0.0-rc-de68d2f4-20241204 || ^19.0.0", react@^19.2.1, "react@>= 16.8.0 || 17.x.x || ^18.0.0-0 || ^19.0.0-0", react@>=16.8:
+react-photoswipe-gallery@^4.0.0:
+  version "4.0.0"
+  resolved "https://registry.npmjs.org/react-photoswipe-gallery/-/react-photoswipe-gallery-4.0.0.tgz"
+  integrity sha512-rpvGSBddLp1hZfTZgi3UFLJKlupHfDhW6e7w6jUUr5bagTWfrxJ7nB8yzNkx+BaoiMyy4FvJBwc4n/+QW2ft4g==
+
+react@*, "react@^16.8.0 || ^17 || ^18 || ^19", "react@^18.2.0 || 19.0.0-rc-de68d2f4-20241204 || ^19.0.0", react@^19.2.1, "react@>= 16.8.0", "react@>= 16.8.0 || 17.x.x || ^18.0.0-0 || ^19.0.0-0", react@>=16.8:
   version "19.2.1"
   resolved "https://registry.npmjs.org/react/-/react-19.2.1.tgz"
   integrity sha512-DGrYcCWK7tvYMnWh79yrPHt+vdx9tY+1gPZa7nJQtO/p8bLTDaHp4dzwEhQB7pZ4Xe3ok4XKuEPrVuc+wlpkmw==

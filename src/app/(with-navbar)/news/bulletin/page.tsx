@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import MainContainer from '@/app/_component/layout/common/MainContainer';
-import LatestBulletin from '@/app/(with-navbar)/news/bulletin/_component/LastBulletin';
+import LatestBulletin from '@/app/(with-navbar)/news/bulletin/_component/LatestBulletin';
 import BulletinTableSection from '@/app/(with-navbar)/news/bulletin/_component/BulletinTableSection';
 import { fetchBulletinSummaryRpc } from '@/services/bulletin';
 import { isNumeric } from '@/shared/util/validator';
