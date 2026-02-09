@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import MainContainer from '@/app/_component/layout/common/MainContainer';
+import { getCloudinaryImgUrl } from '@/shared/util/cdnImage';
 import styles from './page.module.scss';
 
 export const metadata: Metadata = {
@@ -10,6 +11,9 @@ export const metadata: Metadata = {
     description: '2025년 교회목표 - 주님의 기도를 배우는 교회(성도)'
   }
 };
+
+const IMAGE_URL =
+  'https://res.cloudinary.com/dnchurch/image/upload/v1770628693/dnchurch_nxmttl.png';
 
 export default function Vision() {
   return (
@@ -45,7 +49,10 @@ export default function Vision() {
           </p>
         </div>
         <div className={styles.image_wrap}>
-          <img src="/images/dnchurch.png" alt="대구동남교회 이미지" />
+          <img
+            src={getCloudinaryImgUrl({ src: IMAGE_URL, width: 800, height: 400, format: 'webp' })}
+            alt="대구동남교회 이미지"
+          />
         </div>
       </div>
     </MainContainer>

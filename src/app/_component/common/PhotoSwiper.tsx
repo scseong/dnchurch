@@ -48,11 +48,8 @@ export default function PhotoSwiper({
   };
 
   const aspectRatioValue = getAspectRatioValue(aspectRatio);
-  console.log('aspectRatioValue', aspectRatioValue);
-
   const thumbnailWidth = 1600;
   const thumbnailHeight = Math.round(thumbnailWidth / aspectRatioValue);
-
   const fullWidth = 2400;
   const fullHeight = Math.round(fullWidth / aspectRatioValue);
 
@@ -87,8 +84,8 @@ export default function PhotoSwiper({
                 height={thumbnailHeight}
                 alt={`${altPrefix} ${index + 1}`}
                 sizes={sizes}
-                priority={prioritizeFirst && index === 0}
-                crop="scale"
+                preload={prioritizeFirst && index === 0}
+                crop="fill"
                 gravity="auto"
                 quality={quality}
                 style={{

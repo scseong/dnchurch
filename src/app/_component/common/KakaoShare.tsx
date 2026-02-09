@@ -17,7 +17,7 @@ type KakaoShareBtn = {
 export default function KakaoShareBtn({
   title,
   description,
-  imageUrl = '/images/dnchurch.png',
+  imageUrl,
   link,
   size = '40px'
 }: KakaoShareBtn) {
