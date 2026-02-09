@@ -2,13 +2,8 @@
   padding: $spacing-lg 0;
   border-bottom: 0.15rem solid $color-black;
 
-  div {
+  > div {
     padding: $spacing-sm;
     border: 0.1rem solid $color-divide;
-
-    img {
-      display: block;
-      width: 100%;
-    }
   }
 }
