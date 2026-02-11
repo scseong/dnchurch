@@ -1,19 +1,50 @@
-// import { getCloudinaryImgUrl } from '@/shared/util/cdnImage';
+'use client';
 
-// type Props = {
-//   width: number;
-//   height: number;
-//   src: string;
-//   alt: string;
-//   loading?: 'lazy' | 'eager';
-// };
+import { getCloudinaryImgUrl } from '@/shared/util/cdnImage';
+import type { CloudinaryImageProps } from '@/shared/types/cloudinary';
 
-// export default function CloudinaryImage({ width, height, src, alt, loading = 'lazy' }: Props) {
-//   const imageUrl = getCloudinaryImgUrl({ width, height, src });
+export default function CloudinaryImage({
+  src,
+  alt,
+  width,
+  sizes,
+  srcsetWidths,
+  quality = 'auto:good',
+  crop = 'fit',
+  priority = false,
+  className,
+  style
+}: CloudinaryImageProps) {
+  const srcFallback = getCloudinaryImgUrl({
+    src,
+    width,
+    quality,
+    crop
+  });
 
-//   return <img src={imageUrl} alt={alt} width={width} height={height} loading={loading} />;
-// }
+  const srcSet = srcsetWidths
+    .map((width) => {
+      const url = getCloudinaryImgUrl({
+        src,
+        width,
+        quality,
+        crop
+      });
+      return `${url} ${width}w`;
+    })
+    .join(', ');
 
-export default function CloudinaryImage() {
-  return <div>CloudinaryImage</div>;
+  return (
+    <img
+      src={srcFallback}
+      srcSet={srcSet}
+      sizes={sizes}
+      alt={alt}
+      loading={priority ? 'eager' : 'lazy'}
+      fetchPriority={priority ? 'high' : 'auto'}
+      decoding={priority ? 'sync' : 'async'}
+      className={className}
+      style={{ width: '100%', height: 'auto', display: 'block', ...style }}
+    />
+  );
 }
