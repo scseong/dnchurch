@@ -51,12 +51,13 @@ export default function Pagination({
               <IoIosMore />
             </li>
           ) : (
-            <PageLink
-              page={page}
-              isCurrent={page === currentPage}
-              href={createQueryURL('page', page)}
-              key={`page-${page}`}
-            />
+            <li key={`page-${page}`}>
+              <PageLink
+                page={page}
+                isCurrent={page === currentPage}
+                href={createQueryURL('page', page)}
+              />
+            </li>
           )
         )}
         <li>
