@@ -1,8 +1,7 @@
-import Link from 'next/link';
 import KakaoShareBtn from '@/app/_component/common/KakaoShare';
+import LatestBulletinImages from '@/app/(with-navbar)/news/bulletin/_component/LatestBulletinImages';
 import { BulletinType } from '@/shared/types/types';
 import styles from './LastBulletin.module.scss';
-import LatestBulletinImages from '@/app/(with-navbar)/news/bulletin/_component/LatestBulletinImages';
 
 export default function LatestBulletin({
   title,
@@ -15,7 +14,7 @@ export default function LatestBulletin({
         <p>{title || '게시된 주보가 없습니다.'} </p>
       </div>
       <div className={styles.images_wrap}>
-        <LatestBulletinImages title={title} images={images} />
+        <LatestBulletinImages images={images} />
       </div>
       <div className={styles.share}>
         <KakaoShareBtn

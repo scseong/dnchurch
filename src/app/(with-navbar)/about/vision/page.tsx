@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 import MainContainer from '@/app/_component/layout/common/MainContainer';
-import { getCloudinaryImgUrl } from '@/shared/util/cdnImage';
+import CloudinaryImage from '@/app/_component/common/CloudinaryImage';
 import styles from './page.module.scss';
 
 export const metadata: Metadata = {
@@ -49,9 +49,12 @@ export default function Vision() {
           </p>
         </div>
         <div className={styles.image_wrap}>
-          <img
-            src={getCloudinaryImgUrl({ src: IMAGE_URL, width: 800, height: 400, format: 'webp' })}
-            alt="대구동남교회 이미지"
+          <CloudinaryImage
+            src={IMAGE_URL}
+            width={1920}
+            alt="대구동남교회 전경"
+            sizes="(max-width: 1024px) 100vw, 40vw"
+            srcsetWidths={[640, 960, 1280, 1600, 1920]}
           />
         </div>
       </div>

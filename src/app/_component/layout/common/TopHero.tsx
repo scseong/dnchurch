@@ -1,28 +1,26 @@
-import { CldImage } from 'next-cloudinary';
+import CloudinaryImage from '@/app/_component/common/CloudinaryImage';
 import styles from './TopHero.module.scss';
 
 export default function TopHero({ title }: { title: string }) {
-  const publicId = 'dnchurch_nxmttl';
+  const IMAGE_URL =
+    'https://res.cloudinary.com/dnchurch/image/upload/v1770628693/dnchurch_nxmttl.png';
 
   return (
     <section className={styles.hero}>
-      <CldImage
-        src={publicId}
-        alt="Dongnam Presbyterian Church"
-        fill
+      <CloudinaryImage
+        src={IMAGE_URL}
+        alt="대구동남교회 이미지"
+        width={1920}
+        sizes="100vw"
         crop="fill"
-        gravity="auto"
-        quality="auto"
-        format="auto"
-        rawTransformations={['f_auto', 'q_auto:eco']}
+        srcsetWidths={[1024, 1920]}
+        priority
         className={styles.hero_image}
-        sizes="(max-width: 1280px) 100vw, 1200px"
-        preload
-        fetchPriority="high"
       />
-
-      <h2>{title}</h2>
-      <p>DONGNAM PRESBYTERIAN CHURCH</p>
+      <div className={styles.content}>
+        <h2 className={styles.title}>{title}</h2>
+        <p className={styles.subtitle}>DONGNAM PRESBYTERIAN CHURCH</p>
+      </div>
     </section>
   );
 }

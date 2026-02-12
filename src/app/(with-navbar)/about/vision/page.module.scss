@@ -40,7 +40,7 @@ $greeting_text_margin_bottom: 3rem;
 
   img {
     width: 100%;
-    height: 100%;
+    height: 100% !important;
     object-fit: cover;
     border-radius: 1rem;
   }

@@ -18,25 +18,32 @@
     z-index: 1;
   }
 
-  h2 {
-    margin-bottom: 1rem;
-    font-size: $font-size-h2;
-    font-weight: bold;
-    line-height: 1;
-    color: white;
-    z-index: 2;
-  }
+  .content {
+    position: relative;
+    text-align: center;
+    color: $color-white;
+    z-index: 10;
 
-  p {
-    font-size: 1.4rem;
-    font-weight: 500;
-    color: white;
-    z-index: 2;
+    h2 {
+      margin-bottom: $spacing-sm;
+      font-size: $font-size-h2;
+      line-height: 1;
+      color: $color-white;
+    }
+
+    p {
+      font-size: $font-size-md;
+      color: $color-white;
+    }
   }
 
   .hero_image {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100% !important;
+    height: 100% !important;
     object-fit: cover;
-    object-position: 50% 0%;
     z-index: 0;
   }
 
