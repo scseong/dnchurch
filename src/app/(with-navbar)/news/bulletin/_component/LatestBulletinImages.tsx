@@ -10,10 +10,10 @@ export default function LatestBulletinImages({ images }: { images: string[] }) {
   return (
     <PhotoSwipe
       imageUrls={images}
+      width={1600}
       sizes="(max-width: 768px) 100vw, 50vw"
-      width={1920}
-      srcsetWidths={[1200, 1920]}
-      quality="auto:best"
+      srcsetWidths={[640, 800, 1200, 1600]}
+      quality="auto:good"
     />
   );
 }
