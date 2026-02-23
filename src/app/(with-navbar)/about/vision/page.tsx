@@ -12,8 +12,7 @@ export const metadata: Metadata = {
   }
 };
 
-const IMAGE_URL =
-  'https://res.cloudinary.com/dnchurch/image/upload/v1770628693/dnchurch_nxmttl.png';
+const IMAGE_URL = 'dnchurch_nxmttl';
 
 export default function Vision() {
   return (
@@ -52,9 +51,9 @@ export default function Vision() {
           <CloudinaryImage
             src={IMAGE_URL}
             width={1920}
+            height={1080}
             alt="대구동남교회 전경"
             sizes="(max-width: 1024px) 100vw, 40vw"
-            srcsetWidths={[640, 960, 1280, 1600, 1920]}
           />
         </div>
       </div>
