@@ -2,6 +2,7 @@ import { notFound } from 'next/navigation';
 import MainContainer from '@/app/_component/layout/common/MainContainer';
 import { BoardHeader, BoardBody, BoardFooter, BoardListButton } from '@/app/_component/board';
 import { generateFileDownloadList } from '@/shared/util/file';
+import { getCloudinaryUrl } from '@/shared/util/cdnImage';
 import { isNumeric } from '@/shared/util/validator';
 import {
   fetchAllBulletinIds,
@@ -27,7 +28,7 @@ export async function generateMetadata({ params }: { params: Promise<{ id: strin
     openGraph: {
       title,
       description,
-      images: bulletin.image_url?.[0] ? [{ url: bulletin.image_url[0] }] : []
+      images: bulletin.image_url?.[0] ? [{ url: getCloudinaryUrl(bulletin.image_url[0]) }] : []
     }
   };
 }
@@ -72,7 +73,7 @@ export default async function BulletinDetail({ params }: { params: Promise<{ id:
         userName={profiles?.user_name ?? '관리자'}
         createdAt={created_at}
         userId={user_id}
-        thumbnail={image_url[0]}
+        thumbnail={getCloudinaryUrl(image_url[0])}
         id={id.toString()}
         updateLink={`/news/bulletin/${id}/update`}
       />

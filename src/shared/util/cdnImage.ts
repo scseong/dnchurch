@@ -1,14 +1,7 @@
-type CloudinaryImg = {
-  width: number;
-  height: number;
-  src: string;
-  format?: string;
-};
+const CLOUD_NAME = process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME;
+const BASE_URL = `https://res.cloudinary.com/${CLOUD_NAME}/image/upload`;
 
-export function changeImgFormat({ src, format }: Partial<CloudinaryImg>) {
-  return src?.replace(/\.[^/.]+$/, `.${format}`);
-}
+export const getCloudinaryUrl = (publicId: string) => `${BASE_URL}/${publicId}`;
 
-export function getCloudinaryImgUrl({ width, height, src, format = 'webp' }: CloudinaryImg) {
-  return src.replace('upload/', `upload/w_${width},h_${height},c_fill,q_auto,f_auto/`);
-}
+export const getCloudinaryDownloadUrl = (publicId: string) =>
+  `${BASE_URL}/fl_attachment/${publicId}`;

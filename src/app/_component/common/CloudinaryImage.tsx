@@ -1,19 +1,34 @@
-// import { getCloudinaryImgUrl } from '@/shared/util/cdnImage';
+'use client';
 
-// type Props = {
-//   width: number;
-//   height: number;
-//   src: string;
-//   alt: string;
-//   loading?: 'lazy' | 'eager';
-// };
+import Image, { ImageProps } from 'next/image';
+import cloudinaryLoader from '@/shared/util/cloudinaryLoader';
 
-// export default function CloudinaryImage({ width, height, src, alt, loading = 'lazy' }: Props) {
-//   const imageUrl = getCloudinaryImgUrl({ width, height, src });
-
-//   return <img src={imageUrl} alt={alt} width={width} height={height} loading={loading} />;
-// }
-
-export default function CloudinaryImage() {
-  return <div>CloudinaryImage</div>;
+export default function CloudinaryImage({
+  src,
+  alt,
+  width,
+  height,
+  fill,
+  sizes,
+  style,
+  ...rest
+}: ImageProps) {
+  return (
+    <Image
+      src={src}
+      alt={alt}
+      width={width}
+      height={height}
+      fill={fill}
+      sizes={sizes}
+      loader={cloudinaryLoader}
+      style={{
+        width: fill ? undefined : '100%',
+        height: fill ? undefined : style?.height || 'auto',
+        display: 'block',
+        ...style
+      }}
+      {...rest}
+    />
+  );
 }

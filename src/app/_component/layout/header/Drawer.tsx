@@ -20,7 +20,7 @@ export default function Drawer({ isOpen, onClose, user, pathname }: DrawerProps)
   return (
     <aside className={`${styles.drawer} ${isOpen ? styles.animate : styles.hidden}`}>
       <div className={styles.top}>
-        <button onClick={onClose}>
+        <button onClick={onClose} aria-label="메뉴 닫기">
           <IoMdClose />
         </button>
       </div>

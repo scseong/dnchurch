@@ -5,6 +5,7 @@ import { Footer, Header } from './_component/layout';
 import SessionContextProvider from '@/context/SessionContextProvider';
 import KakaoScript from './_component/lib/KakaoScript';
 import '@/styles/globals.scss';
+import 'photoswipe/dist/photoswipe.css';
 
 export const metadata: Metadata = {
   title: {
