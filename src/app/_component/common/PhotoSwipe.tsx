@@ -1,57 +1,100 @@
 'use client';
 
+import { useState } from 'react';
 import { Gallery, Item } from 'react-photoswipe-gallery';
 import CloudinaryImage from '@/app/_component/common/CloudinaryImage';
-import type { ImageQuality } from '@/shared/types/cloudinary';
+import cloudinaryLoader from '@/shared/util/cloudinaryLoader';
+import styles from './PhotoSwipe.module.scss';
+import 'photoswipe/dist/photoswipe.css';
 
 type PhotoSwipeProps = {
   imageUrls: string[];
   width: number;
-  srcsetWidths: number[];
-  quality?: ImageQuality;
+  height: number;
   sizes?: string;
-  priority?: boolean;
   className?: string;
 };
 
 export default function PhotoSwipe({
   imageUrls,
-  width,
-  srcsetWidths,
-  quality = 'auto:good',
+  width: initialWidth,
+  height: initialHeight,
   sizes = '100vw',
-  priority = false,
   className = ''
 }: PhotoSwipeProps) {
+  const [imgDimensions, setImgDimensions] = useState<{ [key: number]: { w: number; h: number } }>(
+    {}
+  );
+  const [loadedImages, setLoadedImages] = useState<{ [key: number]: boolean }>({});
+
+  const handleImageLoad = (index: number, e: React.SyntheticEvent<HTMLImageElement>) => {
+    const { naturalWidth, naturalHeight } = e.currentTarget;
+
+    setImgDimensions((prev) => ({
+      ...prev,
+      [index]: { w: naturalWidth, h: naturalHeight }
+    }));
+
+    setLoadedImages((prev) => ({
+      ...prev,
+      [index]: true
+    }));
+  };
+
   return (
-    <Gallery>
-      {imageUrls.map((url, index) => (
-        <Item key={url} original={url}>
-          {({ ref, open }) => (
-            <div
-              ref={ref}
-              onClick={open}
-              className={className}
-              aria-label={`이미지 ${index + 1} 크게 보기`}
-              style={{
-                width: '100%',
-                overflow: 'hidden',
-                cursor: 'pointer'
-              }}
+    <Gallery
+      options={{
+        clickToCloseNonZoomable: false,
+        wheelToZoom: true,
+        showHideAnimationType: 'zoom',
+        initialZoomLevel: 'fit'
+      }}
+    >
+      <div>
+        {imageUrls.map((url, index) => {
+          const originalUrl = cloudinaryLoader({ src: url, width: 1920 });
+          const currentW = Math.round(imgDimensions[index]?.w || initialWidth);
+          const currentH = Math.round(imgDimensions[index]?.h || initialHeight);
+          const isLoaded = loadedImages[index];
+          const aspectRatio = isLoaded
+            ? `${imgDimensions[index]?.w} / ${imgDimensions[index]?.h}`
+            : `${initialWidth} / ${initialHeight}`;
+
+          return (
+            <Item
+              key={url}
+              original={originalUrl}
+              thumbnail={originalUrl}
+              width={currentW}
+              height={currentH}
             >
-              <CloudinaryImage
-                src={url}
-                alt={`이미지 ${index + 1}`}
-                width={width}
-                sizes={sizes}
-                srcsetWidths={srcsetWidths}
-                quality={quality}
-                priority={priority}
-              />
-            </div>
-          )}
-        </Item>
-      ))}
+              {({ ref, open }) => (
+                <div className={styles.container} onClick={open} style={{ aspectRatio }}>
+                  {!isLoaded && <div className={styles.skeleton} />}
+                  <div
+                    ref={ref}
+                    className={`${styles.imageBox} ${className} ${isLoaded ? styles.visible : styles.hidden}`}
+                  >
+                    <CloudinaryImage
+                      src={url}
+                      alt={`이미지 ${index + 1}`}
+                      width={initialWidth}
+                      height={initialHeight}
+                      sizes={sizes}
+                      onLoad={(e) => handleImageLoad(index, e)}
+                      style={{
+                        objectFit: 'contain',
+                        display: 'block',
+                        height: 'auto'
+                      }}
+                    />
+                  </div>
+                </div>
+              )}
+            </Item>
+          );
+        })}
+      </div>
     </Gallery>
   );
 }
