@@ -97,7 +97,7 @@ export const updateBulletinAction = async (formData: FormData) => {
           const folderDate = formattedDate(date, 'YYYY/MM/DD');
           const res = await uploadImage({ file, folder: `bulletin/${folderDate}` });
           newUploadedPublicIds.push(res.public_id);
-          return res.public_id; // secure_url 대신 public_id 반환
+          return res.public_id;
         })
       );
     }

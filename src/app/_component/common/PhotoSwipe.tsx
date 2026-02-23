@@ -5,7 +5,6 @@ import { Gallery, Item } from 'react-photoswipe-gallery';
 import CloudinaryImage from '@/app/_component/common/CloudinaryImage';
 import cloudinaryLoader from '@/shared/util/cloudinaryLoader';
 import styles from './PhotoSwipe.module.scss';
-import 'photoswipe/dist/photoswipe.css';
 
 type PhotoSwipeProps = {
   imageUrls: string[];
