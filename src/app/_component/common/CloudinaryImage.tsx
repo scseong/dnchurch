@@ -1,50 +1,32 @@
-'use client';
-
-import { getCloudinaryImgUrl } from '@/shared/util/cdnImage';
-import type { CloudinaryImageProps } from '@/shared/types/cloudinary';
+import Image, { ImageProps } from 'next/image';
+import cloudinaryLoader from '@/shared/util/cloudinaryLoader';
 
 export default function CloudinaryImage({
   src,
   alt,
   width,
+  height,
+  fill,
   sizes,
-  srcsetWidths,
-  quality = 'auto:good',
-  crop = 'fit',
-  priority = false,
-  className,
-  style
-}: CloudinaryImageProps) {
-  const srcFallback = getCloudinaryImgUrl({
-    src,
-    width,
-    quality,
-    crop
-  });
-
-  const srcSet = srcsetWidths
-    .map((width) => {
-      const url = getCloudinaryImgUrl({
-        src,
-        width,
-        quality,
-        crop
-      });
-      return `${url} ${width}w`;
-    })
-    .join(', ');
-
+  style,
+  ...rest
+}: ImageProps) {
   return (
-    <img
-      src={srcFallback}
-      srcSet={srcSet}
-      sizes={sizes}
+    <Image
+      src={src}
       alt={alt}
-      loading={priority ? 'eager' : 'lazy'}
-      fetchPriority={priority ? 'high' : 'auto'}
-      decoding={priority ? 'sync' : 'async'}
-      className={className}
-      style={{ width: '100%', height: 'auto', display: 'block', ...style }}
+      width={width}
+      height={height}
+      fill={fill}
+      sizes={sizes}
+      loader={cloudinaryLoader}
+      style={{
+        width: fill ? undefined : '100%',
+        height: fill ? undefined : style?.height || 'auto',
+        display: 'block',
+        ...style
+      }}
+      {...rest}
     />
   );
 }

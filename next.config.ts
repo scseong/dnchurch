@@ -2,12 +2,14 @@ import type { NextConfig } from 'next';
 
 const nextConfig: NextConfig = {
   images: {
-    unoptimized: true,
+    loader: 'custom',
+    loaderFile: './src/shared/util/cloudinaryLoader.ts',
+    deviceSizes: [640, 750, 1080, 1440, 1920],
     remotePatterns: [
       {
         protocol: 'https',
         hostname: 'res.cloudinary.com',
-        pathname: '**'
+        pathname: '/**'
       }
     ]
   },
