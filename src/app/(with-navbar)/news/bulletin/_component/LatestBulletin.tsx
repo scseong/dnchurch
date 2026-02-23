@@ -2,6 +2,7 @@ import KakaoShareBtn from '@/app/_component/common/KakaoShare';
 import LatestBulletinImages from '@/app/(with-navbar)/news/bulletin/_component/LatestBulletinImages';
 import { BulletinType } from '@/shared/types/types';
 import styles from './LastBulletin.module.scss';
+import { getCloudinaryUrl } from '@/shared/util/cdnImage';
 
 export default function LatestBulletin({
   title,
@@ -20,7 +21,7 @@ export default function LatestBulletin({
         <KakaoShareBtn
           title={`${title} | 대구동남교회`}
           description="이번 주 교회 주보에서 예배 일정과 소식을 살펴보세요."
-          imageUrl={images[0]}
+          imageUrl={getCloudinaryUrl(images[0])}
         />
       </div>
     </section>

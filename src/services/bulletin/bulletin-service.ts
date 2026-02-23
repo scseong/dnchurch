@@ -5,7 +5,8 @@ import type { Database } from '@/shared/types/database.types';
 import type {
   BulletinParams,
   BulletinSummaryResponse,
-  BulletinEditFormParams
+  BulletinEditFormParams,
+  BulletinFormParams
 } from '@/shared/types/bulletin';
 
 export const bulletinService = (supabase: SupabaseClient<Database>) => ({
@@ -86,6 +87,27 @@ export const bulletinService = (supabase: SupabaseClient<Database>) => ({
     return handleResponse(res);
   },
 
+  /**
+   * [생성] 새로운 주보 게시글 등록
+   */
+  createBulletin: async ({ title, date, imageUrls, userId }: BulletinFormParams) => {
+    const res = await supabase
+      .from(BULLETIN_BUCKET)
+      .insert({
+        title,
+        date,
+        image_url: imageUrls,
+        user_id: userId
+      })
+      .select()
+      .single();
+
+    return handleResponse(res);
+  },
+
+  /**
+   * [수정] 기존 주보 게시글 업데이트
+   */
   updateBulletin: async ({ title, date, imageUrls, bulletinId }: BulletinEditFormParams) => {
     const res = await supabase
       .from(BULLETIN_BUCKET)

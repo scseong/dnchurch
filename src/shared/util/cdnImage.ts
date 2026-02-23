@@ -1,20 +1,7 @@
-import type { ImageFormat, ImageCrop, ImageQuality } from '@/shared/types/cloudinary';
+const CLOUD_NAME = process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME;
+const BASE_URL = `https://res.cloudinary.com/${CLOUD_NAME}/image/upload`;
 
-type CloudinaryTransform = {
-  src: string;
-  width: number;
-  crop?: ImageCrop;
-  format?: ImageFormat;
-  quality?: ImageQuality;
-};
+export const getCloudinaryUrl = (publicId: string) => `${BASE_URL}/${publicId}`;
 
-export function getCloudinaryImgUrl({
-  src,
-  width,
-  crop = 'fill',
-  format = 'auto',
-  quality = 'auto'
-}: CloudinaryTransform) {
-  if (!src.includes('/upload/')) return src;
-  return src.replace('/upload/', `/upload/w_${width},c_${crop},q_${quality},f_${format}/`);
-}
+export const getCloudinaryDownloadUrl = (publicId: string) =>
+  `${BASE_URL}/fl_attachment/${publicId}`;

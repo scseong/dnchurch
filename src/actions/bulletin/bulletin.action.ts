@@ -3,13 +3,11 @@
 import { redirect } from 'next/navigation';
 import { revalidatePath, updateTag } from 'next/cache';
 import { isRedirectError } from 'next/dist/client/components/redirect-error';
-import { createServerSideClient } from '@/shared/supabase/server';
-import { BULLETIN_BUCKET } from '@/shared/constants/bulletin';
-import { validateFiles } from '@/shared/util/fileValidator';
 import { deleteImage, uploadImage } from '@/actions/cloudinary';
 import { getUserSession } from '@/apis/auth-server';
-import { updateBulletin } from '@/services/bulletin';
-import { extractPublicIdFromUrl } from '@/shared/util/format';
+import { createBulletin, updateBulletin } from '@/services/bulletin';
+import { validateFiles } from '@/shared/util/fileValidator';
+import { formattedDate } from '@/shared/util/date';
 
 export const createBulletinAction = async (formData: FormData) => {
   let uploadedPublicIds: string[] = [];
@@ -34,30 +32,14 @@ export const createBulletinAction = async (formData: FormData) => {
 
     const uploadResults = await Promise.all(
       validFiles.map(async (file) => {
-        const res = await uploadImage({ file, folder: `bulletin/${date}` });
+        const formmatedDate = formattedDate(date, 'YYYY/MM/DD');
+        const res = await uploadImage({ file, folder: `bulletin/${formmatedDate}` });
         uploadedPublicIds.push(res.public_id);
-        return res;
+        return res.public_id;
       })
     );
-    const imageUrls = uploadResults
-      .map((res) => res.secure_url)
-      .sort((a, b) => {
-        const nameA = a.split('/').pop() || '';
-        const nameB = b.split('/').pop() || '';
 
-        return nameA.localeCompare(nameB, undefined, { numeric: true, sensitivity: 'base' });
-      });
-
-    const supabase = await createServerSideClient();
-    const { error } = await supabase
-      .from(BULLETIN_BUCKET)
-      .insert({
-        title,
-        date,
-        image_url: imageUrls,
-        user_id: userId
-      })
-      .select();
+    const { error } = await createBulletin({ title, date, imageUrls: uploadResults, userId });
 
     if (error) {
       const deletePromises = uploadedPublicIds.map(deleteImage);
@@ -100,25 +82,29 @@ export const updateBulletinAction = async (formData: FormData) => {
     const existingImagesJson = formData.get('existingImages')?.toString();
     const deletedImagesJson = formData.get('deletedImages')?.toString();
 
-    const existingImages: string[] = existingImagesJson ? JSON.parse(existingImagesJson) : [];
-    const deletedImages: string[] = deletedImagesJson ? JSON.parse(deletedImagesJson) : [];
+    const existingPublicIds: string[] = existingImagesJson ? JSON.parse(existingImagesJson) : [];
+    const deletedPublicIds: string[] = deletedImagesJson ? JSON.parse(deletedImagesJson) : [];
 
-    const retainedImages = existingImages.filter((url) => !deletedImages.includes(url));
-    let newImageUrls: string[] = [];
+    const retainedPublicIds = existingPublicIds.filter((id) => !deletedPublicIds.includes(id));
+
+    let newPublicIds: string[] = [];
     if (files.length > 0) {
-      const uploadResults = await Promise.all(
-        files.map(async (file) => {
-          const res = await uploadImage({ file, folder: `bulletin/${date}` });
+      const { validFiles, errorMessage } = validateFiles([], files, 'image/*');
+      if (errorMessage) return { success: false, message: errorMessage };
+
+      newPublicIds = await Promise.all(
+        validFiles.map(async (file) => {
+          const folderDate = formattedDate(date, 'YYYY/MM/DD');
+          const res = await uploadImage({ file, folder: `bulletin/${folderDate}` });
           newUploadedPublicIds.push(res.public_id);
-          return res;
+          return res.public_id; // secure_url 대신 public_id 반환
         })
       );
-
-      newImageUrls = uploadResults.map((res) => res.secure_url);
     }
-    const finalImageUrls = [...retainedImages, ...newImageUrls];
 
-    if (finalImageUrls.length === 0) {
+    const finalPublicIds = [...retainedPublicIds, ...newPublicIds];
+
+    if (finalPublicIds.length === 0) {
       if (newUploadedPublicIds.length > 0) {
         await Promise.all(newUploadedPublicIds.map(deleteImage));
       }
@@ -128,7 +114,7 @@ export const updateBulletinAction = async (formData: FormData) => {
     const { error: updateError } = await updateBulletin({
       title,
       date,
-      imageUrls: finalImageUrls,
+      imageUrls: finalPublicIds,
       bulletinId
     });
 
@@ -139,14 +125,8 @@ export const updateBulletinAction = async (formData: FormData) => {
       return { success: false, message: '주보 수정에 실패했습니다.' };
     }
 
-    if (deletedImages.length > 0) {
-      const publicIdsToDelete = deletedImages
-        .map((url) => extractPublicIdFromUrl(url))
-        .filter(Boolean) as string[];
-
-      if (publicIdsToDelete.length > 0) {
-        await Promise.all(publicIdsToDelete.map(deleteImage));
-      }
+    if (deletedPublicIds.length > 0) {
+      await Promise.all(deletedPublicIds.map(deleteImage));
     }
 
     revalidatePath('/news/bulletin');

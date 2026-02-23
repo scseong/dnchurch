@@ -54,7 +54,7 @@ export default async function BoardHeader({
             </UserIdMatcher>
             <li>
               <KakaoShareBtn
-                title={`${title} 주보 | 대구동남교회`}
+                title={`${title} | 대구동남교회`}
                 imageUrl={thumbnail}
                 description=""
                 size="30"
