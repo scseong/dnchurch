@@ -42,15 +42,13 @@ export default function PhotoSwipe({
   };
 
   const options: PhotoSwipeOptions = {
-    clickToCloseNonZoomable: false,
+    loop: false,
     wheelToZoom: true,
-    showHideAnimationType: 'zoom',
     initialZoomLevel: 'fit',
+    clickToCloseNonZoomable: false,
     bgClickAction: 'close',
-    tapAction: 'close',
     imageClickAction: 'zoom',
-    doubleTapAction: 'zoom',
-    hideAnimationDuration: 200
+    hideAnimationDuration: 100
   };
 
   return (
