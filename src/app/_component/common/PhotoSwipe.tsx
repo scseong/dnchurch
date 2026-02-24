@@ -48,7 +48,9 @@ export default function PhotoSwipe({
     initialZoomLevel: 'fit',
     bgClickAction: 'close',
     tapAction: 'close',
-    imageClickAction: 'zoom'
+    imageClickAction: 'zoom',
+    doubleTapAction: 'zoom',
+    hideAnimationDuration: 200
   };
 
   return (
