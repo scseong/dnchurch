@@ -45,9 +45,9 @@ export default function PhotoSwipe({
     loop: false,
     wheelToZoom: true,
     initialZoomLevel: 'fit',
-    clickToCloseNonZoomable: false,
-    bgClickAction: 'close',
-    imageClickAction: 'zoom',
+    secondaryZoomLevel: 2.5,
+    maxZoomLevel: 6,
+    tapAction: 'close',
     hideAnimationDuration: 100
   };
 
