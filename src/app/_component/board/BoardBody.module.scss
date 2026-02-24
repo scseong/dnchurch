@@ -2,13 +2,18 @@
   padding: $spacing-lg 0;
   border-bottom: 0.15rem solid $color-black;
 
-  div {
-    padding: $spacing-sm;
+  > div {
     border: 0.1rem solid $color-divide;
+  }
+
+  .photo_image {
+    display: block;
+    width: 100%;
 
     img {
       display: block;
       width: 100%;
+      height: auto;
     }
   }
 }

@@ -33,8 +33,6 @@
     border-radius: $border-radius-lg;
 
     @include respond-up($breakpoint-lg) {
-      max-width: 25rem;
-      max-height: 25rem;
       border: none;
       aspect-ratio: 1 / 1;
       border-radius: 50%;

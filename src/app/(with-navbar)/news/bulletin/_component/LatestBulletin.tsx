@@ -1,7 +1,8 @@
-import Link from 'next/link';
 import KakaoShareBtn from '@/app/_component/common/KakaoShare';
+import LatestBulletinImages from '@/app/(with-navbar)/news/bulletin/_component/LatestBulletinImages';
 import { BulletinType } from '@/shared/types/types';
 import styles from './LastBulletin.module.scss';
+import { getCloudinaryUrl } from '@/shared/util/cdnImage';
 
 export default function LatestBulletin({
   title,
@@ -14,23 +15,13 @@ export default function LatestBulletin({
         <p>{title || '게시된 주보가 없습니다.'} </p>
       </div>
       <div className={styles.images_wrap}>
-        {images.length > 0 ? (
-          images.map((url, idx) => (
-            <Link href={url} target="_blank" key={idx}>
-              <img src={url} alt={`${title ?? '이미지 없음'} - ${idx + 1}`} />
-            </Link>
-          ))
-        ) : (
-          <Link href="#" scroll={false}>
-            <img src="/images/no-image.jpg" alt="주보 이미지가 없습니다" />
-          </Link>
-        )}
+        <LatestBulletinImages images={images} />
       </div>
       <div className={styles.share}>
         <KakaoShareBtn
-          title={`${title} 주보 | 대구동남교회`}
+          title={`${title} | 대구동남교회`}
           description="이번 주 교회 주보에서 예배 일정과 소식을 살펴보세요."
-          imageUrl={images[0]}
+          imageUrl={getCloudinaryUrl(images[0])}
         />
       </div>
     </section>
