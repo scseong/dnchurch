@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { Gallery, Item } from 'react-photoswipe-gallery';
 import CloudinaryImage from '@/app/_component/common/CloudinaryImage';
 import cloudinaryLoader from '@/shared/util/cloudinaryLoader';
+import type { PhotoSwipeOptions } from 'photoswipe';
 import styles from './PhotoSwipe.module.scss';
 
 type PhotoSwipeProps = {
@@ -40,15 +41,18 @@ export default function PhotoSwipe({
     }));
   };
 
+  const options: PhotoSwipeOptions = {
+    loop: false,
+    wheelToZoom: true,
+    initialZoomLevel: 'fit',
+    secondaryZoomLevel: 2.5,
+    maxZoomLevel: 6,
+    tapAction: 'close',
+    hideAnimationDuration: 100
+  };
+
   return (
-    <Gallery
-      options={{
-        clickToCloseNonZoomable: false,
-        wheelToZoom: true,
-        showHideAnimationType: 'zoom',
-        initialZoomLevel: 'fit'
-      }}
-    >
+    <Gallery options={options}>
       <div>
         {imageUrls.map((url, index) => {
           const originalUrl = cloudinaryLoader({ src: url, width: 1920 });
