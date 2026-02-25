@@ -71,15 +71,7 @@ export default function Pagination({
   );
 }
 
-export function PageLink({
-  page,
-  isCurrent,
-  href
-}: {
-  page: number;
-  isCurrent: boolean;
-  href: string;
-}) {
+function PageLink({ page, isCurrent, href }: { page: number; isCurrent: boolean; href: string }) {
   return (
     <Link
       href={href}
@@ -91,7 +83,7 @@ export function PageLink({
   );
 }
 
-export function PrevButton({ disabled, href }: { disabled: boolean; href: string }) {
+function PrevButton({ disabled, href }: { disabled: boolean; href: string }) {
   return disabled ? (
     <span className={clsx(styles.page_link, styles.disabled)} aria-disabled="true">
       <IoIosArrowBack /> <span className="hidden-on-mobile">이전</span>
@@ -103,7 +95,7 @@ export function PrevButton({ disabled, href }: { disabled: boolean; href: string
   );
 }
 
-export function NextButton({ disabled, href }: { disabled: boolean; href: string }) {
+function NextButton({ disabled, href }: { disabled: boolean; href: string }) {
   return disabled ? (
     <span className={clsx(styles.page_link, styles.disabled)} aria-disabled="true">
       <span className="hidden-on-mobile">다음</span> <IoIosArrowForward />

@@ -48,7 +48,8 @@ export default function PhotoSwipe({
     secondaryZoomLevel: 2.5,
     maxZoomLevel: 6,
     tapAction: 'close',
-    hideAnimationDuration: 100
+    hideAnimationDuration: 100,
+    errorMsg: '이미지를 불러올 수 없습니다.'
   };
 
   return (

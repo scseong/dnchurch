@@ -6,9 +6,6 @@ export default async function Home() {
       <Banner />
       <AboutOurChurch />
       <ChurchVision />
-      {/* <Greeting /> */}
-      {/* <LinkButtons /> */}
-      {/* <HomeGallery /> */}
     </>
   );
 }

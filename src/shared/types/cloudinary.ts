@@ -20,20 +20,3 @@ export type CloudinaryUploadResponse = {
   display_name: string;
   original_filename: string;
 };
-
-export type ImageQuality = 'auto' | 'auto:eco' | 'auto:good' | 'auto:best' | number;
-export type ImageFormat = 'auto' | 'webp' | 'avif' | 'png' | 'jpg';
-export type ImageCrop = 'fill' | 'fit' | 'scale';
-
-export type CloudinaryImageProps = {
-  src: string;
-  alt: string;
-  width: number;
-  sizes: string;
-  srcsetWidths: number[];
-  quality?: ImageQuality;
-  crop?: ImageCrop;
-  priority?: boolean;
-  className?: string;
-  style?: React.CSSProperties;
-};

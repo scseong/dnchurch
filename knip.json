@@ -1,0 +1,8 @@
+{
+  "entry": [
+    "src/app/**/{page,layout,route,not-found,actions}.{ts,tsx}",
+    "src/app/reset-password/actions.ts"
+  ],
+  "project": ["src/**/*.{ts,tsx}"],
+  "ignore": ["src/shared/types/database.types.ts"]
+}

@@ -29,15 +29,6 @@ export type SearchParams = {
   searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
 };
 
-export type ImageFileData = {
-  id: number;
-  filename: string;
-  filetype: string;
-  fileimage: string | ArrayBuffer | null;
-  datetime: string;
-  filesize: string;
-};
-
 export type ImageFile = {
   file: File;
   previewUrl: string;
