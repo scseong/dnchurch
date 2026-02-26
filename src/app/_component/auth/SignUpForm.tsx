@@ -4,9 +4,9 @@ import { useSearchParams } from 'next/navigation';
 import { useState, useEffect } from 'react';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { signUp } from '@/apis/auth';
-import AuthSubmitBtn from '@/app/_component/auth/AuthSubmitBtn';
-import FormAlertMessage from '@/app/_component/auth/FormAlertMessage';
-import FormField from '@/app/_component/auth/FormField';
+import FormSubmitButton from '@/components/common/FormSubmitButton';
+import FormAlertMessage from '@/components/common/FormAlertMessage';
+import FormField from '@/components/common/FormField';
 import { generateErrorMessage } from '@/utils/error';
 import { FORM_VALIDATIONS } from '@/constants/validation';
 import { REDIRECT_AFTER_LOGIN_KEY } from '@/constants/auth';
@@ -97,7 +97,7 @@ export default function SignUpForm() {
         placeholder="사용할 닉네임 10자 이내"
         required
       />
-      <AuthSubmitBtn isDisabled={!isValid} isSubmitting={isSubmitting} label="회원가입" />
+      <FormSubmitButton isDisabled={!isValid} isSubmitting={isSubmitting} label="회원가입" />
       {signUpError && <FormAlertMessage type="error" message={signUpError} />}
     </form>
   );

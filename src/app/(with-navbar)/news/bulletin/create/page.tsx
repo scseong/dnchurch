@@ -1,6 +1,6 @@
 import { Metadata } from 'next';
-import CreateBulletinForm from '@/app/(with-navbar)/news/bulletin/_component/create/CreateBulletinForm';
-import { MainContainer } from '@/app/_component/layout/common';
+import { MainContainer } from '@/components/layout';
+import BulletinForm from '@/app/(with-navbar)/news/bulletin/_component/BulletinForm';
 
 export const metadata: Metadata = {
   title: '주보 추가하기'
@@ -9,7 +9,7 @@ export const metadata: Metadata = {
 export default function CreateBulletinPage() {
   return (
     <MainContainer title="주보 추가하기">
-      <CreateBulletinForm />
+      <BulletinForm mode="create" />
     </MainContainer>
   );
 }

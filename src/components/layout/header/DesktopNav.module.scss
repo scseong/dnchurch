@@ -1,0 +1,17 @@
+.desktop_nav {
+  display: none;
+
+  @include respond-up($breakpoint-md) {
+    margin-left: auto;
+    display: block;
+
+    ul {
+      display: flex;
+      gap: 4rem;
+
+      li {
+        font-size: $font-size-default;
+      }
+    }
+  }
+}

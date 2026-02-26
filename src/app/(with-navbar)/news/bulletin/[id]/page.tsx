@@ -1,6 +1,6 @@
 import { notFound } from 'next/navigation';
-import MainContainer from '@/app/_component/layout/common/MainContainer';
-import { BoardHeader, BoardBody, BoardFooter, BoardListButton } from '@/app/_component/board';
+import MainContainer from '@/components/layout/container/MainContainer';
+import { BoardHeader, BoardBody, BoardFooter, BoardListButton } from '@/components/board';
 import { getCloudinaryUrl } from '@/utils/cloudinary';
 import { generateFileDownloadList } from '@/utils/file';
 import { isNumeric } from '@/utils/validator';

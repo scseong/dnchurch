@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
-import BulletinForm from '@/app/_component/bulletin/BulletinForm';
-import { MainContainer } from '@/app/_component/layout/common';
+import BulletinForm from '@/app/(with-navbar)/news/bulletin/_component/BulletinForm';
+import { MainContainer } from '@/components/layout';
 import { fetchPublicBulletinDetailById } from '@/services/bulletin';
 
 export const metadata: Metadata = {

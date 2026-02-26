@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 import React from 'react';
-import MainContainer from '@/app/_component/layout/common/MainContainer';
+import MainContainer from '@/components/layout/container/MainContainer';
 import styles from './page.module.scss';
 
 export const metadata: Metadata = {

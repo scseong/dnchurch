@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import type { Metadata } from 'next';
 import { Suspense } from 'react';
-import { LayoutContainer } from '@/app/_component/layout/common';
+import { LayoutContainer } from '@/components/layout';
 import KakaoLoginBtn from '@/app/_component/auth/KakaoLoginBtn';
 import SignInForm from '@/app/_component/auth/SignInForm';
 import styles from './page.module.scss';

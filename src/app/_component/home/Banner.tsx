@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import LayoutContainer from '../layout/common/LayoutContainer';
+import { LayoutContainer } from '@/components/layout';
 import styles from './Banner.module.scss';
 
 export default async function Banner() {

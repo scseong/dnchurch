@@ -7,7 +7,7 @@ import {
   getCoreRowModel,
   useReactTable
 } from '@tanstack/react-table';
-import Pagination from '@/app/_component/layout/common/Pagination';
+import Pagination from '@/components/common/Pagination';
 import type { BulletinType } from '@/types/common';
 import styles from './BulletinTable.module.scss';
 import { ITEM_PER_PAGE } from '@/constants/bulletin';

@@ -1,10 +1,9 @@
 import Script from 'next/script';
 import type { Metadata } from 'next';
-import localFont from 'next/font/local';
 import { Nanum_Myeongjo } from 'next/font/google';
-import { Footer, Header } from './_component/layout';
+import { Header, Footer } from '@/components/layout';
 import SessionContextProvider from '@/context/SessionContextProvider';
-import KakaoScript from './_component/lib/KakaoScript';
+import KakaoScript from '@/components/lib/KakaoScript';
 import '@/styles/globals.scss';
 import 'photoswipe/dist/photoswipe.css';
 

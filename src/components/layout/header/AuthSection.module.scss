@@ -1,0 +1,7 @@
+.auth {
+  display: none;
+
+  @include respond-up($breakpoint-md) {
+    display: block;
+  }
+}

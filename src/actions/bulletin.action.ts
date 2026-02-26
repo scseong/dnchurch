@@ -15,12 +15,13 @@ export const createBulletinAction = async (formData: FormData) => {
   try {
     const title = formData.get('title')?.toString().trim();
     const date = formData.get('date')?.toString();
-    const userId = formData.get('user_id')?.toString();
     const files = formData.getAll('files').filter(Boolean) as File[];
+    const session = await getUserSession();
 
     if (!title) return { success: false, message: '제목을 입력해주세요.' };
     if (!date) return { success: false, message: '날짜를 선택해주세요.' };
-    if (!userId) return { success: false, message: '잘못된 접근입니다.' };
+    if (!session?.app_metadata.is_admin)
+      return { success: false, message: '업로드 권한이 없습니다.' };
     if (files.length === 0)
       return { success: false, message: '최소 한 장의 이미지를 업로드해주세요.' };
 
@@ -32,7 +33,12 @@ export const createBulletinAction = async (formData: FormData) => {
 
     const uploadResults = await uploadBulletinImages(validFiles, date);
 
-    const { error } = await createBulletin({ title, date, imageUrls: uploadResults, userId });
+    const { error } = await createBulletin({
+      title,
+      date,
+      imageUrls: uploadResults,
+      userId: session.id
+    });
 
     if (error) {
       const deletePromises = uploadedPublicIds.map(deleteImage);

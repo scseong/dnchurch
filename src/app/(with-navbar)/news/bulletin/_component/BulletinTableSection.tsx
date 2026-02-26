@@ -1,6 +1,6 @@
 import BulletinYearFilter from '@/app/(with-navbar)/news/bulletin/_component/BulletinYearFilter';
 import BulletinTable from '@/app/(with-navbar)/news/bulletin/_component/BulletinTable';
-import CreateBulletinButton from '@/app/(with-navbar)/news/bulletin/_component/create/CreateBulletinButton';
+import CreateBulletinButton from '@/app/(with-navbar)/news/bulletin/_component/CreateBulletinButton';
 import { BulletinType } from '@/types/common';
 import styles from './BulletinTableSection.module.scss';
 

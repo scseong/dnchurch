@@ -1,4 +1,4 @@
-import KakaoShareBtn from '@/app/_component/common/KakaoShare';
+import KakaoShareBtn from '@/components/common/KakaoShareButton';
 import LatestBulletinImages from '@/app/(with-navbar)/news/bulletin/_component/LatestBulletinImages';
 import { getCloudinaryUrl } from '@/utils/cloudinary';
 import { BulletinType } from '@/types/common';
