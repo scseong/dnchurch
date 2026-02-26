@@ -1,7 +1,7 @@
 import { createClient } from '@supabase/supabase-js';
-import { createFetch } from '@/shared/supabase/fetch';
-import type { Database } from '@/shared/types/database.types';
-import type { NextCacheOptions } from '@/shared/supabase/types';
+import { createFetch } from '@/lib/supabase/supabase-fetch';
+import type { Database } from '@/types/database.types';
+import type { NextCacheOptions } from '@/types/common';
 
 export const createStaticClient = (options: NextCacheOptions = {}) => {
   return createClient<Database>(

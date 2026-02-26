@@ -1,9 +1,9 @@
 'use client';
 
 import { FaRegTrashAlt } from 'react-icons/fa';
-import { formattedDate } from '@/shared/util/date';
-import { convertBytesToFileSize } from '@/shared/util/file';
-import { ImageFile } from '@/shared/types/types';
+import { formattedDate } from '@/utils/date';
+import { convertBytesToFileSize } from '@/utils/file';
+import { ImageFile } from '@/types/common';
 import styles from './FilePreviewList.module.scss';
 
 type Props = {

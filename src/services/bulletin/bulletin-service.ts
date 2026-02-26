@@ -1,13 +1,13 @@
 import { handleResponse } from '@/services/root/handle-response';
-import { BULLETIN_BUCKET } from '@/shared/constants/bulletin';
+import { BULLETIN_BUCKET } from '@/constants/bulletin';
 import type { PostgrestSingleResponse, SupabaseClient } from '@supabase/supabase-js';
-import type { Database } from '@/shared/types/database.types';
+import type { Database } from '@/types/database.types';
 import type {
   BulletinParams,
   BulletinSummaryResponse,
   BulletinEditFormParams,
   BulletinFormParams
-} from '@/shared/types/bulletin';
+} from '@/types/bulletin';
 
 export const bulletinService = (supabase: SupabaseClient<Database>) => ({
   /**

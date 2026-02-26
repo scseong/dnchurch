@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { sitemap } from '@/shared/constants/sitemap';
+import { sitemap } from '@/constants/sitemap';
 import styles from './index.module.scss';
 
 export default function DesktopNav() {

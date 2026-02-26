@@ -7,9 +7,9 @@ import { signUp } from '@/apis/auth';
 import AuthSubmitBtn from '@/app/_component/auth/AuthSubmitBtn';
 import FormAlertMessage from '@/app/_component/auth/FormAlertMessage';
 import FormField from '@/app/_component/auth/FormField';
-import { generateErrorMessage } from '@/shared/constants/error';
-import { FORM_VALIDATIONS } from '@/shared/constants/validation';
-import { REDIRECT_AFTER_LOGIN_KEY } from '@/shared/constants/storageConstants';
+import { generateErrorMessage } from '@/utils/error';
+import { FORM_VALIDATIONS } from '@/constants/validation';
+import { REDIRECT_AFTER_LOGIN_KEY } from '@/constants/auth';
 
 type Inputs = {
   email: string;

@@ -3,11 +3,11 @@
 import { redirect } from 'next/navigation';
 import { revalidatePath, updateTag } from 'next/cache';
 import { isRedirectError } from 'next/dist/client/components/redirect-error';
-import { deleteImage, uploadImage } from '@/actions/cloudinary';
+import { deleteImage, uploadImage } from '@/apis/cloudinary';
 import { getUserSession } from '@/apis/auth-server';
 import { createBulletin, updateBulletin } from '@/services/bulletin';
-import { validateFiles } from '@/shared/util/fileValidator';
-import { formattedDate } from '@/shared/util/date';
+import { validateFiles } from '@/utils/file';
+import { formattedDate } from '@/utils/date';
 
 export const createBulletinAction = async (formData: FormData) => {
   let uploadedPublicIds: string[] = [];
@@ -30,14 +30,7 @@ export const createBulletinAction = async (formData: FormData) => {
       return { success: false, message: errorMessage };
     }
 
-    const uploadResults = await Promise.all(
-      validFiles.map(async (file) => {
-        const formmatedDate = formattedDate(date, 'YYYY/MM/DD');
-        const res = await uploadImage({ file, folder: `bulletin/${formmatedDate}` });
-        uploadedPublicIds.push(res.public_id);
-        return res.public_id;
-      })
-    );
+    const uploadResults = await uploadBulletinImages(validFiles, date);
 
     const { error } = await createBulletin({ title, date, imageUrls: uploadResults, userId });
 
@@ -72,7 +65,7 @@ export const updateBulletinAction = async (formData: FormData) => {
     const files = formData.getAll('files').filter(Boolean) as File[];
     const session = await getUserSession();
 
-    if (userId !== session?.id || !session?.app_metadata.is_admin) {
+    if (!session?.app_metadata.is_admin && userId !== session?.id) {
       return { success: false, message: '수정 권한이 없습니다.' };
     }
     if (!bulletinId) return { success: false, message: '잘못된 접근입니다.' };
@@ -92,14 +85,7 @@ export const updateBulletinAction = async (formData: FormData) => {
       const { validFiles, errorMessage } = validateFiles([], files, 'image/*');
       if (errorMessage) return { success: false, message: errorMessage };
 
-      newPublicIds = await Promise.all(
-        validFiles.map(async (file) => {
-          const folderDate = formattedDate(date, 'YYYY/MM/DD');
-          const res = await uploadImage({ file, folder: `bulletin/${folderDate}` });
-          newUploadedPublicIds.push(res.public_id);
-          return res.public_id;
-        })
-      );
+      newPublicIds = await uploadBulletinImages(validFiles, date);
     }
 
     const finalPublicIds = [...retainedPublicIds, ...newPublicIds];
@@ -143,3 +129,11 @@ export const updateBulletinAction = async (formData: FormData) => {
     return { success: false, message: '서버 오류가 발생했습니다.' };
   }
 };
+
+async function uploadBulletinImages(files: File[], date: string) {
+  const folderDate = formattedDate(date, 'YYYY/MM/DD');
+  const results = await Promise.all(
+    files.map((file) => uploadImage({ file, folder: `bulletin/${folderDate}` }))
+  );
+  return results.map((res) => res.public_id);
+}

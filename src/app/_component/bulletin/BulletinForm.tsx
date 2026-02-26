@@ -7,9 +7,9 @@ import AuthSubmitBtn from '@/app/_component/auth/AuthSubmitBtn';
 import FormAlertMessage from '@/app/_component/auth/FormAlertMessage';
 import FormField from '@/app/_component/auth/FormField';
 import ImageUpload from '@/app/_component/common/ImageUpload';
-import { createBulletinAction, updateBulletinAction } from '@/actions/bulletin/bulletin.action';
-import { formattedDate } from '@/shared/util/date';
-import type { BulletinFormInputs, BulletinFormProps, ImageItem } from '@/shared/types/bulletin';
+import { createBulletinAction, updateBulletinAction } from '@/actions/bulletin.action';
+import { formattedDate } from '@/utils/date';
+import type { BulletinFormInputs, BulletinFormProps, ImageItem } from '@/types/bulletin';
 import styles from './BulletinForm.module.scss';
 
 export default function BulletinForm({ mode, bulletinId, initialData }: BulletinFormProps) {

@@ -7,7 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "generate:types": "supabase gen types typescript --project-id ndimreqwgdiwtjonjjzq --schema public > src/shared/types/database.types.ts",
+    "generate:types": "supabase gen types typescript --project-id ndimreqwgdiwtjonjjzq --schema public > src/types/database.types.ts",
     "knip": "knip"
   },
   "dependencies": {

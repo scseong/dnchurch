@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import { Gallery, Item } from 'react-photoswipe-gallery';
 import CloudinaryImage from '@/app/_component/common/CloudinaryImage';
-import cloudinaryLoader from '@/shared/util/cloudinaryLoader';
+import cloudinaryLoader from '@/utils/cloudinary';
 import type { PhotoSwipeOptions } from 'photoswipe';
 import styles from './PhotoSwipe.module.scss';
 

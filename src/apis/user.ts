@@ -1,4 +1,4 @@
-import { supabase } from '@/shared/supabase/client';
+import { supabase } from '@/lib/supabase/client';
 
 export const getUserInfo = async () => {
   const {

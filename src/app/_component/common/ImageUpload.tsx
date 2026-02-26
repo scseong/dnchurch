@@ -5,8 +5,8 @@ import { useFormContext } from 'react-hook-form';
 import FormAlertMessage from '@/app/_component/auth/FormAlertMessage';
 import FileSelector from '@/app/_component/file/FileSelector';
 import ImagePreview from '@/app/_component/common/ImagePreview';
-import { FILE_UPLOAD_MAX_COUNT, FILE_UPLOAD_MAX_SIZE_MB } from '@/shared/constants/file';
-import type { BulletinFormInputs, ImageItem, NewFileItem } from '@/shared/types/bulletin';
+import { FILE_UPLOAD_MAX_COUNT, FILE_UPLOAD_MAX_SIZE_MB } from '@/constants/file';
+import type { BulletinFormInputs, ImageItem, NewFileItem } from '@/types/bulletin';
 import styles from './ImageUpload.module.scss';
 
 export default function ImageUpload() {

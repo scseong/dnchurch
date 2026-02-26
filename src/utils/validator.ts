@@ -1,4 +1,4 @@
-import { NUMBER_REGEX } from '@/shared/util/regex';
+import { NUMBER_REGEX } from '@/constants/regex';
 
 export const isNumeric = (val: string | string[] | undefined | null) => {
   if (!val) return true;

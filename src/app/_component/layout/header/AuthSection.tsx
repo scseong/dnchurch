@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import UserProfile from '../../user/UserProfile';
 import UserProfileModal from '../../user/UserProfileModal';
-import { ProfileType } from '@/shared/types/types';
+import { ProfileType } from '@/types/common';
 import styles from './index.module.scss';
 
 type Props = {

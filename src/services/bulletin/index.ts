@@ -2,13 +2,9 @@ import 'server-only';
 
 import { bulletinCache } from '@/services/bulletin/bulletin-cache';
 import { bulletinService } from '@/services/bulletin/bulletin-service';
-import { createServerSideClient } from '@/shared/supabase/server';
-import { createStaticClient } from '@/shared/supabase/static';
-import type {
-  BulletinEditFormParams,
-  BulletinFormParams,
-  BulletinParams
-} from '@/shared/types/bulletin';
+import { createServerSideClient } from '@/lib/supabase/server';
+import { createStaticClient } from '@/lib/supabase/static';
+import type { BulletinEditFormParams, BulletinFormParams, BulletinParams } from '@/types/bulletin';
 
 export const fetchBulletinList = (params: BulletinParams = {}) => {
   const supabase = createStaticClient(bulletinCache.list());

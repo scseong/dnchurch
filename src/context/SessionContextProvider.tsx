@@ -11,11 +11,11 @@ import {
   useCallback,
   useMemo
 } from 'react';
-import { supabase } from '@/shared/supabase/client';
+import { supabase } from '@/lib/supabase/client';
 import { AuthError, PostgrestError, Session } from '@supabase/supabase-js';
 import { getProfileById } from '@/apis/user';
-import { REDIRECT_AFTER_LOGIN_KEY } from '@/shared/constants/storageConstants';
-import { ProfileType } from '@/shared/types/types';
+import { REDIRECT_AFTER_LOGIN_KEY } from '@/constants/auth';
+import { ProfileType } from '@/types/common';
 
 const SessionContext = createContext<{
   isLoading: boolean;

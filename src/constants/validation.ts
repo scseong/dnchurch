@@ -1,4 +1,4 @@
-import { EMAIL_REGEX, PASSWORD_REGEX, NAME_REGEX } from '@/shared/util/regex';
+import { EMAIL_REGEX, PASSWORD_REGEX, NAME_REGEX } from '@/constants/regex';
 
 export const FORM_VALIDATIONS = {
   email: {

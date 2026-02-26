@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { ImageFile } from '@/shared/types/types';
+import { ImageFile } from '@/types/common';
 
 export default function useFilePreview(files: File[]) {
   const [previewImages, setPreviewImages] = useState<ImageFile[]>([]);

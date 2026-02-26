@@ -8,7 +8,7 @@ import {
   useReactTable
 } from '@tanstack/react-table';
 import type { AnnouncementWithProfile } from '@/apis/announcement';
-import { formattedDate } from '@/shared/util/date';
+import { formattedDate } from '@/utils/date';
 import styles from './AnnouncementTable.module.scss';
 
 const columnHelper = createColumnHelper<AnnouncementWithProfile>();

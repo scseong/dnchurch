@@ -3,8 +3,8 @@ import { IoMdClose, IoIosArrowForward } from 'react-icons/io';
 import UserProfile from '../../user/UserProfile';
 import IconWrap from '../../common/IconWrap';
 import { signOut } from '@/apis/auth';
-import { sitemap } from '@/shared/constants/sitemap';
-import { ProfileType } from '@/shared/types/types';
+import { sitemap } from '@/constants/sitemap';
+import { ProfileType } from '@/types/common';
 import styles from './Drawer.module.scss';
 
 type DrawerProps = {

@@ -1,9 +1,9 @@
 import { notFound } from 'next/navigation';
 import MainContainer from '@/app/_component/layout/common/MainContainer';
 import { BoardHeader, BoardBody, BoardFooter, BoardListButton } from '@/app/_component/board';
-import { generateFileDownloadList } from '@/shared/util/file';
-import { getCloudinaryUrl } from '@/shared/util/cdnImage';
-import { isNumeric } from '@/shared/util/validator';
+import { getCloudinaryUrl } from '@/utils/cloudinary';
+import { generateFileDownloadList } from '@/utils/file';
+import { isNumeric } from '@/utils/validator';
 import {
   fetchAllBulletinIds,
   fetchBulletinDetailById,

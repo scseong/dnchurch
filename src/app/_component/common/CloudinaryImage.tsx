@@ -1,7 +1,7 @@
 'use client';
 
 import Image, { ImageProps } from 'next/image';
-import cloudinaryLoader from '@/shared/util/cloudinaryLoader';
+import cloudinaryLoader from '@/utils/cloudinary';
 
 export default function CloudinaryImage({
   src,

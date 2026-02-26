@@ -1,5 +1,4 @@
 import { User } from '@supabase/supabase-js';
-import { Tables } from './database.types';
 
 export type UserProps = UserWithCustomMetadata | null;
 
@@ -19,17 +18,4 @@ export type UserMetadata = {
   provider_id: string;
   sub: string;
   user_name: string;
-};
-
-export type ProfileType = Tables<'profiles'>;
-export type BulletinType = Tables<'bulletin'>;
-export type PostType = Tables<'posts'>;
-
-export type SearchParams = {
-  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
-};
-
-export type ImageFile = {
-  file: File;
-  previewUrl: string;
 };

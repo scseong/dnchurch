@@ -7,8 +7,8 @@ import AuthSubmitBtn from '@/app/_component/auth/AuthSubmitBtn';
 import FormAlertMessage from '@/app/_component/auth/FormAlertMessage';
 import FormField from '@/app/_component/auth/FormField';
 import { updatePasswordAndSignOut } from '@/app/reset-password/actions';
-import { generateErrorMessage } from '@/shared/constants/error';
-import { FORM_VALIDATIONS } from '@/shared/constants/validation';
+import { generateErrorMessage } from '@/utils/error';
+import { FORM_VALIDATIONS } from '@/constants/validation';
 
 type Inputs = {
   password: string;

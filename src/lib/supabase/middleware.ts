@@ -1,4 +1,4 @@
-import { createMiddlewareClient } from '@/shared/supabase/server';
+import { createMiddlewareClient } from '@/lib/supabase/server';
 import { NextResponse, type NextRequest } from 'next/server';
 
 export async function updateSession(request: NextRequest) {

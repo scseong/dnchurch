@@ -1,7 +1,7 @@
 'use server';
 
 import { v2 as cloudinary } from 'cloudinary';
-import { CloudinaryUploadResponse } from '@/shared/types/cloudinary';
+import { CloudinaryUploadResponse } from '@/types/cloudinary';
 
 cloudinary.config({
   cloud_name: process.env.NEXT_PUBLIC_CLOUDINARY_PROJECT,

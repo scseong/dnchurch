@@ -9,8 +9,8 @@ import FormAlertMessage from '@/app/_component/auth/FormAlertMessage';
 import FormField from '@/app/_component/auth/FormField';
 import ImageUpload from '@/app/(with-navbar)/news/bulletin/_component/create/ImageUpload';
 import Loader from '@/app/_component/common/Loader';
-import { createBulletinAction } from '@/actions/bulletin/bulletin.action';
-import { formattedDate } from '@/shared/util/date';
+import { createBulletinAction } from '@/actions/bulletin.action';
+import { formattedDate } from '@/utils/date';
 import styles from './CreateBulletinForm.module.scss';
 
 type Inputs = {

@@ -1,4 +1,4 @@
-import { NextCacheOptions } from '@/shared/supabase/types';
+import { NextCacheOptions } from '@/types/common';
 
 export const createFetch = ({ cache, tags, revalidate }: NextCacheOptions = {}) => {
   return (url: RequestInfo | URL, init?: RequestInit) => {

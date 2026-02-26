@@ -1,9 +1,9 @@
 import { cookies } from 'next/headers';
 import { NextRequest, NextResponse } from 'next/server';
 import { createServerClient } from '@supabase/ssr';
-import { createFetch } from '@/shared/supabase/fetch';
-import type { NextCacheOptions } from '@/shared/supabase/types';
-import type { Database } from '@/shared/types/database.types';
+import { createFetch } from '@/lib/supabase/supabase-fetch';
+import type { NextCacheOptions } from '@/types/common';
+import type { Database } from '@/types/database.types';
 
 export const createServerSideClient = async (options: NextCacheOptions = {}) => {
   const cookieStore = await cookies();

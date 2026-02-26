@@ -2,7 +2,7 @@ import Link from 'next/link';
 import { FiTrash, FiEdit } from 'react-icons/fi';
 import KakaoShareBtn from '../common/KakaoShare';
 import UserIdMatcher from '../auth/UserIdMatcher';
-import { formattedDate } from '@/shared/util/date';
+import { formattedDate } from '@/utils/date';
 import styles from './BoardHeader.module.scss';
 
 type Props = {

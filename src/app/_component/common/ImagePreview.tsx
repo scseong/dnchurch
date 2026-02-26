@@ -1,10 +1,10 @@
 'use client';
 
 import { FaRegTrashAlt } from 'react-icons/fa';
-import { formattedDate } from '@/shared/util/date';
-import { convertBytesToFileSize } from '@/shared/util/file';
-import { getCloudinaryUrl } from '@/shared/util/cdnImage';
-import type { ImageItem } from '@/shared/types/bulletin';
+import { formattedDate } from '@/utils/date';
+import { convertBytesToFileSize } from '@/utils/file';
+import { getCloudinaryUrl } from '@/utils/cloudinary';
+import type { ImageItem } from '@/types/bulletin';
 import styles from './ImagePreview.module.scss';
 
 type Props = {

@@ -4,7 +4,7 @@ import { useSelectedLayoutSegment } from 'next/navigation';
 import { PropsWithChildren } from 'react';
 import TopHero from '../_component/layout/common/TopHero';
 import SubNavMenu from '../_component/layout/common/SubNavMenu';
-import { sitemap } from '@/shared/constants/sitemap';
+import { sitemap } from '@/constants/sitemap';
 
 const findSubPathsAndLabel = (path: string | null) => {
   const item = sitemap.find((item) => item.path === path);

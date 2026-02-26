@@ -1,4 +1,4 @@
-import { createServerSideClient } from '@/shared/supabase/server';
+import { createServerSideClient } from '@/lib/supabase/server';
 
 export const getUserSession = async () => {
   const supabase = await createServerSideClient();

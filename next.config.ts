@@ -7,7 +7,7 @@ const withBundleAnalyzer = require('@next/bundle-analyzer')({
 const nextConfig: NextConfig = {
   images: {
     loader: 'custom',
-    loaderFile: './src/shared/util/cloudinaryLoader.ts',
+    loaderFile: './src/utils/cloudinary.ts',
     deviceSizes: [640, 750, 1080, 1440, 1920],
     remotePatterns: [
       {

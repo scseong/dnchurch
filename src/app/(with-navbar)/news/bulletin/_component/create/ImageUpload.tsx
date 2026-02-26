@@ -6,8 +6,8 @@ import useFilePreview from '@/hooks/useFilePreview';
 import FormAlertMessage from '@/app/_component/auth/FormAlertMessage';
 import FileSelector from '@/app/_component/file/FileSelector';
 import FilePreviewList from '@/app/_component/file/FilePreviewList';
-import { FILE_UPLOAD_MAX_COUNT, FILE_UPLOAD_MAX_SIZE_MB } from '@/shared/constants/file';
-import { validateFiles } from '@/shared/util/fileValidator';
+import { FILE_UPLOAD_MAX_COUNT, FILE_UPLOAD_MAX_SIZE_MB } from '@/constants/file';
+import { validateFiles } from '@/utils/file';
 import styles from './ImageUpload.module.scss';
 
 export default function ImageUpload() {

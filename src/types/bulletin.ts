@@ -1,4 +1,4 @@
-import { BulletinType } from '@/shared/types/types';
+import { BulletinType } from '@/types/common';
 
 export type BulletinParams = { year?: number; page?: number; limit?: number };
 
