@@ -31,12 +31,12 @@ export const createBulletinAction = async (formData: FormData) => {
       return { success: false, message: errorMessage };
     }
 
-    const uploadResults = await uploadBulletinImages(validFiles, date);
+    uploadedPublicIds = await uploadBulletinImages(validFiles, date);
 
     const { error } = await createBulletin({
       title,
       date,
-      imageUrls: uploadResults,
+      imageUrls: uploadedPublicIds,
       userId: session.id
     });
 

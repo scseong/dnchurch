@@ -106,7 +106,7 @@ export const bulletinService = (supabase: SupabaseClient<Database>) => ({
    * @deprecated
    * [최신] 가장 최근 날짜의 주보 1건 조회
    */
-  detailByLatest: async () => {
+  latest: async () => {
     const res = await supabase
       .from(BULLETIN_BUCKET)
       .select('*')
