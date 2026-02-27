@@ -3,9 +3,7 @@
 import { useRouter } from 'next/navigation';
 import { useState, useEffect } from 'react';
 import { useForm, SubmitHandler } from 'react-hook-form';
-import FormSubmitButton from '@/components/common/FormSubmitButton';
-import FormAlertMessage from '@/components/common/FormAlertMessage';
-import FormField from '@/components/common/FormField';
+import { FormField, FormAlertMessage, FormSubmitButton } from '@/components/form';
 import { updatePasswordAndSignOut } from '@/app/reset-password/actions';
 import { generateErrorMessage } from '@/utils/error';
 import { FORM_VALIDATIONS } from '@/constants/validation';

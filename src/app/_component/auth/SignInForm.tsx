@@ -3,9 +3,7 @@
 import { useSearchParams } from 'next/navigation';
 import { useState } from 'react';
 import { useForm, SubmitHandler } from 'react-hook-form';
-import FormSubmitButton from '@/components/common/FormSubmitButton';
-import FormAlertMessage from '@/components/common/FormAlertMessage';
-import FormField from '@/components/common/FormField';
+import { FormField, FormAlertMessage, FormSubmitButton } from '@/components/form';
 import { signInWithPassword } from '@/apis/auth';
 import { FORM_VALIDATIONS } from '@/constants/validation';
 import { generateErrorMessage } from '@/utils/error';

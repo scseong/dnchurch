@@ -3,7 +3,7 @@ import { notFound } from 'next/navigation';
 import MainContainer from '@/components/layout/container/MainContainer';
 import LatestBulletin from '@/app/(with-navbar)/news/bulletin/_component/LatestBulletin';
 import BulletinTableSection from '@/app/(with-navbar)/news/bulletin/_component/BulletinTableSection';
-import { fetchBulletinSummaryRpc } from '@/services/bulletin';
+import { getBulletinSummary } from '@/services/bulletin';
 import { isNumeric } from '@/utils/validator';
 import styles from './page.module.scss';
 
@@ -26,7 +26,7 @@ export default async function BulletinPage({ searchParams }: Props) {
 
   if (!isValid) notFound();
 
-  const { data, error } = await fetchBulletinSummaryRpc({ year, page });
+  const { data, error } = await getBulletinSummary({ year, page });
 
   if (error || !data) return <div>데이터를 불러올 수 없습니다.</div>;
 

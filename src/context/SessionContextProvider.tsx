@@ -101,10 +101,4 @@ export const useProfile = () => {
   return context.profile;
 };
 
-export const useIsAdmin = () => {
-  const context = useContext(SessionContext);
-  if (!context) throw new Error(`useIsAdmin must be used within a SessionContextProvider.`);
-  return context.profile?.is_admin;
-};
-
 export default SessionContextProvider;

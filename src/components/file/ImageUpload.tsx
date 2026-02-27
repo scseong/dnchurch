@@ -2,7 +2,7 @@
 
 import { useState, useRef, useEffect } from 'react';
 import { useFormContext } from 'react-hook-form';
-import FormAlertMessage from '@/components/common/FormAlertMessage';
+import FormAlertMessage from '@/components/form/FormAlertMessage';
 import FileSelector from '@/components/file/FileSelector';
 import ImagePreview from '@/components/file/ImagePreview';
 import { FILE_UPLOAD_MAX_COUNT, FILE_UPLOAD_MAX_SIZE_MB } from '@/constants/file';

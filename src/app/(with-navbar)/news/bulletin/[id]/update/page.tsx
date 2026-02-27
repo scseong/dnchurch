@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import BulletinForm from '@/app/(with-navbar)/news/bulletin/_component/BulletinForm';
 import { MainContainer } from '@/components/layout';
-import { fetchPublicBulletinDetailById } from '@/services/bulletin';
+import { getBulletinById } from '@/services/bulletin';
 
 export const metadata: Metadata = {
   title: '주보 수정'
@@ -10,7 +10,7 @@ export const metadata: Metadata = {
 
 export default async function BulletinPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
-  const { data: bulletin, error } = await fetchPublicBulletinDetailById(id);
+  const { data: bulletin, error } = await getBulletinById(id);
 
   if (error || !bulletin) notFound();
 

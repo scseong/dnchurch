@@ -3,9 +3,7 @@
 import { useState } from 'react';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import useTimer from '@/hooks/useTimer';
-import FormSubmitButton from '@/components/common/FormSubmitButton';
-import FormAlertMessage from '@/components/common/FormAlertMessage';
-import FormField from '@/components/common/FormField';
+import { FormField, FormAlertMessage, FormSubmitButton } from '@/components/form';
 import { requestPasswordResetEmail } from '@/apis/auth';
 import { EMAIL_RESEND_DELAY_SECONDS } from '@/constants/auth';
 import { FORM_VALIDATIONS } from '@/constants/validation';

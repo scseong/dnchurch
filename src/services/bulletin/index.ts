@@ -6,42 +6,46 @@ import { createServerSideClient } from '@/lib/supabase/server';
 import { createStaticClient } from '@/lib/supabase/static';
 import type { BulletinEditFormParams, BulletinFormParams, BulletinParams } from '@/types/bulletin';
 
-export const fetchBulletinList = (params: BulletinParams = {}) => {
+/**
+ *
+ * @deprecated
+ */
+export const getBulletinList = (params: BulletinParams = {}) => {
   const supabase = createStaticClient(bulletinCache.list());
-  return bulletinService(supabase).fetchBulletinList(params);
+  return bulletinService(supabase).list(params);
 };
 
-export const fetchBulletinSummaryRpc = (params: BulletinParams) => {
+export const getBulletinSummary = (params: BulletinParams) => {
   const supabase = createStaticClient(bulletinCache.summary());
-  return bulletinService(supabase).fetchBulletinSummaryRpc(params);
+  return bulletinService(supabase).summary(params);
 };
 
-export const fetchAllBulletinIds = () => {
+export const getAllBulletinIds = () => {
   const supabase = createStaticClient();
-  return bulletinService(supabase).fetchAllBulletinIds();
+  return bulletinService(supabase).allIds();
 };
 
-export const fetchBulletinDetailById = (id: string) => {
+export const getBulletinById = (id: string) => {
   const supabase = createStaticClient(bulletinCache.detail(id));
-  return bulletinService(supabase).fetchBulletinDetailById(id);
+  return bulletinService(supabase).detailById(id);
 };
 
-export const fetchPublicBulletinDetailById = async (id: string) => {
+export const getBulletinByIdSSR = async (id: string) => {
   const supabase = await createServerSideClient();
-  return bulletinService(supabase).fetchBulletinDetailById(id);
+  return bulletinService(supabase).detailById(id);
 };
 
-export const fetchNavigationBulletins = (targetId: number) => {
+export const getAdjacentBulletins = (targetId: number) => {
   const supabase = createStaticClient(bulletinCache.nav(targetId));
-  return bulletinService(supabase).fetchNavigationBulletins(targetId);
+  return bulletinService(supabase).adjacents(targetId);
 };
 
 export const createBulletin = async (payload: BulletinFormParams) => {
   const supabase = await createServerSideClient();
-  return bulletinService(supabase).createBulletin(payload);
+  return bulletinService(supabase).create(payload);
 };
 
 export const updateBulletin = async (payload: BulletinEditFormParams) => {
   const supabase = await createServerSideClient();
-  return bulletinService(supabase).updateBulletin(payload);
+  return bulletinService(supabase).update(payload);
 };

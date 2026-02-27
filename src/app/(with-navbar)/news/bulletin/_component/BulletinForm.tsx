@@ -3,9 +3,7 @@
 import { useEffect, useRef } from 'react';
 import { useForm, FormProvider } from 'react-hook-form';
 import { isRedirectError } from 'next/dist/client/components/redirect-error';
-import FormSubmitButton from '@/components/common/FormSubmitButton';
-import FormAlertMessage from '@/components/common/FormAlertMessage';
-import FormField from '@/components/common/FormField';
+import { FormField, FormAlertMessage, FormSubmitButton } from '@/components/form';
 import ImageUpload from '@/components/file/ImageUpload';
 import { createBulletinAction, updateBulletinAction } from '@/actions/bulletin.action';
 import { formattedDate } from '@/utils/date';

@@ -6,16 +6,6 @@ import {
 } from '@/constants/file';
 
 // ---- 파일 정보 ----
-export function getFilenameFromUrl(url: string) {
-  const rawFileName = url.split('/').pop() || '';
-  return decodeURIComponent(rawFileName).split(/[?#]/)[0];
-}
-
-export function getFileExtension(fileName: string) {
-  const lastDotIndex = fileName.lastIndexOf('.');
-  return lastDotIndex !== -1 ? fileName.substring(lastDotIndex) : '';
-}
-
 export function convertBytesToFileSize(totalBytes: number, decimals = 2) {
   if (totalBytes === 0) return '0 Bytes';
   const KILOBYTE = 1024;
@@ -39,11 +29,11 @@ export function generateFileDownloadList({ urls }: { urls: string[] }) {
 }
 
 // ---- 파일 검증 ----
-export function isFileSizeExceeded(file: File, maxSizeMB = FILE_UPLOAD_MAX_SIZE_MB) {
+function isFileSizeExceeded(file: File, maxSizeMB = FILE_UPLOAD_MAX_SIZE_MB) {
   return file.size > maxSizeMB * FILE_BYTES_PER_MB;
 }
 
-export function isFileCountExceeded(
+function isFileCountExceeded(
   existingCount: number,
   newCount: number,
   maxCount = FILE_UPLOAD_MAX_COUNT
@@ -51,7 +41,7 @@ export function isFileCountExceeded(
   return existingCount + newCount > maxCount;
 }
 
-export function isAllowedFileType(file: File, allowedTypes: string[]) {
+function isAllowedFileType(file: File, allowedTypes: string[]) {
   const extension = file.name.split('.').pop()?.toLowerCase();
 
   return allowedTypes.some((type) => {
@@ -60,7 +50,7 @@ export function isAllowedFileType(file: File, allowedTypes: string[]) {
   });
 }
 
-export function hasDuplicateFile(existingFiles: File[], file: File) {
+function hasDuplicateFile(existingFiles: File[], file: File) {
   const key = `${file.name}-${file.size}`;
   return existingFiles.some((f) => `${f.name}-${f.size}` === key);
 }

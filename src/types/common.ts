@@ -9,8 +9,3 @@ export type NextCacheOptions = {
   revalidate?: false | 0 | number;
   cache?: RequestCache;
 };
-
-export type ImageFile = {
-  file: File;
-  previewUrl: string;
-};

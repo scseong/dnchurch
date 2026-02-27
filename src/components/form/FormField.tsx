@@ -1,5 +1,5 @@
 import clsx from 'clsx';
-import FormAlertMessage from '@/components/common/FormAlertMessage';
+import FormAlertMessage from '@/components/form/FormAlertMessage';
 import type { UseFormRegisterReturn } from 'react-hook-form';
 import styles from './FormField.module.scss';
 
