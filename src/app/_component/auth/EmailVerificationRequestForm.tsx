@@ -3,13 +3,11 @@
 import { useState } from 'react';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import useTimer from '@/hooks/useTimer';
-import AuthSubmitBtn from '@/app/_component/auth/AuthSubmitBtn';
-import FormAlertMessage from '@/app/_component/auth/FormAlertMessage';
-import FormField from '@/app/_component/auth/FormField';
+import { FormField, FormAlertMessage, FormSubmitButton } from '@/components/form';
 import { requestPasswordResetEmail } from '@/apis/auth';
-import { generateErrorMessage } from '@/shared/constants/error';
-import { EMAIL_RESEND_DELAY_SECONDS } from '@/shared/constants/timer';
-import { FORM_VALIDATIONS } from '@/shared/constants/validation';
+import { EMAIL_RESEND_DELAY_SECONDS } from '@/constants/auth';
+import { FORM_VALIDATIONS } from '@/constants/validation';
+import { generateErrorMessage } from '@/utils/error';
 
 type Inputs = {
   email: string;
@@ -61,7 +59,7 @@ export default function EmailVerificationRequestForm() {
         error={errors.email?.message}
         blindLabel
       />
-      <AuthSubmitBtn
+      <FormSubmitButton
         isDisabled={!isValid || isRunning}
         isSubmitting={isSubmitting}
         label={getButtonContent()}

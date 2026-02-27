@@ -2,9 +2,8 @@
 
 import { useSelectedLayoutSegment } from 'next/navigation';
 import { PropsWithChildren } from 'react';
-import TopHero from '../_component/layout/common/TopHero';
-import SubNavMenu from '../_component/layout/common/SubNavMenu';
-import { sitemap } from '@/shared/constants/sitemap';
+import { SubHeader, SubNav } from '@/components/layout';
+import { sitemap } from '@/constants/sitemap';
 
 const findSubPathsAndLabel = (path: string | null) => {
   const item = sitemap.find((item) => item.path === path);
@@ -17,8 +16,8 @@ export default function Layout({ children }: PropsWithChildren) {
 
   return (
     <>
-      <TopHero title={label || ''} />
-      <SubNavMenu subPaths={subPaths} segment={`/${segment}`} />
+      <SubHeader title={label || ''} />
+      <SubNav subPaths={subPaths} segment={`/${segment}`} />
       {children}
     </>
   );

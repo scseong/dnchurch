@@ -1,4 +1,4 @@
-import { LayoutContainer } from '@/app/_component/layout/common';
+import { LayoutContainer } from '@/components/layout';
 import PasswordUpdateForm from '@/app/_component/auth/PasswordUpdateForm';
 import styles from '../login/page.module.scss';
 

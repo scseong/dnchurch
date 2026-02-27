@@ -1,5 +1,5 @@
 import type { Metadata } from 'next';
-import MainContainer from '@/app/_component/layout/common/MainContainer';
+import MainContainer from '@/components/layout/container/MainContainer';
 import WorshipSchedule from './_component/WorshipSchedule';
 import styles from './page.module.scss';
 

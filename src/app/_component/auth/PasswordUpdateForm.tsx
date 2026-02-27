@@ -3,12 +3,10 @@
 import { useRouter } from 'next/navigation';
 import { useState, useEffect } from 'react';
 import { useForm, SubmitHandler } from 'react-hook-form';
-import AuthSubmitBtn from '@/app/_component/auth/AuthSubmitBtn';
-import FormAlertMessage from '@/app/_component/auth/FormAlertMessage';
-import FormField from '@/app/_component/auth/FormField';
+import { FormField, FormAlertMessage, FormSubmitButton } from '@/components/form';
 import { updatePasswordAndSignOut } from '@/app/reset-password/actions';
-import { generateErrorMessage } from '@/shared/constants/error';
-import { FORM_VALIDATIONS } from '@/shared/constants/validation';
+import { generateErrorMessage } from '@/utils/error';
+import { FORM_VALIDATIONS } from '@/constants/validation';
 
 type Inputs = {
   password: string;
@@ -70,7 +68,11 @@ export default function PasswordUpdateForm() {
         placeholder="비밀번호 재입력"
         required
       />
-      <AuthSubmitBtn isDisabled={!isValid} isSubmitting={isSubmitting} label="비밀번호 변경하기" />
+      <FormSubmitButton
+        isDisabled={!isValid}
+        isSubmitting={isSubmitting}
+        label="비밀번호 변경하기"
+      />
       {error && <FormAlertMessage type="error" message={error} />}
     </form>
   );

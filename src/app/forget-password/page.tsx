@@ -1,4 +1,4 @@
-import { LayoutContainer } from '@/app/_component/layout/common';
+import { LayoutContainer } from '@/components/layout';
 import EmailVerificationRequestForm from '@/app/_component/auth/EmailVerificationRequestForm';
 import styles from '../login/page.module.scss';
 

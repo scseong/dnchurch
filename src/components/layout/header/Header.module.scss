@@ -1,0 +1,19 @@
+.header {
+  position: sticky;
+  top: 0;
+  right: 0;
+  left: 0;
+  background: $color-white;
+  z-index: 9999;
+  box-shadow: 0 1px 20px 0 rgba(239, 227, 221, 0.35);
+}
+
+.header_wrap {
+  position: relative;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 6rem;
+  height: $header-height;
+  background-color: inherit;
+}

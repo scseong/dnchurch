@@ -1,7 +1,7 @@
 import { Metadata } from 'next';
 import Link from 'next/link';
 import { Suspense } from 'react';
-import { LayoutContainer } from '@/app/_component/layout/common';
+import { LayoutContainer } from '@/components/layout';
 import SignUpForm from '@/app/_component/auth/SignUpForm';
 import styles from '../login/page.module.scss';
 

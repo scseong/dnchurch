@@ -1,7 +1,7 @@
 import { PiChurchLight, PiHandHeartLight } from 'react-icons/pi';
 import { LiaBibleSolid } from 'react-icons/lia';
-import { LayoutContainer } from '@/app/_component/layout/common';
-import IconWrap from '@/app/_component/common/IconWrap';
+import { LayoutContainer } from '@/components/layout';
+import IconWrap from '@/components/common/IconWrap';
 import styles from './ChurchVision.module.scss';
 
 export default function ChurchVision() {

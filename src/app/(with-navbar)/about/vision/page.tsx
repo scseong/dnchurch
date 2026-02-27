@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
-import MainContainer from '@/app/_component/layout/common/MainContainer';
-import CloudinaryImage from '@/app/_component/common/CloudinaryImage';
+import MainContainer from '@/components/layout/container/MainContainer';
+import CloudinaryImage from '@/components/common/CloudinaryImage';
 import styles from './page.module.scss';
 
 export const metadata: Metadata = {

@@ -1,8 +1,8 @@
-import { LayoutContainer } from '@/app/_component/layout/common';
-import { getStorageImageUrl } from '@/apis/home';
-import { IMAGE_FILENAME } from '@/shared/constants/supabase';
-import styles from './AboutOurChurch.module.scss';
 import Link from 'next/link';
+import { LayoutContainer } from '@/components/layout';
+import { getStorageImageUrl } from '@/apis/home';
+import { IMAGE_FILENAME } from '@/constants/assets';
+import styles from './AboutOurChurch.module.scss';
 
 export default async function AboutOurChurch() {
   const churchImageUrl = await getStorageImageUrl(IMAGE_FILENAME.church);
