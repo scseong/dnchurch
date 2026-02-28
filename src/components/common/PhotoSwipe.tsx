@@ -1,19 +1,19 @@
 'use client';
 
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { Gallery, Item } from 'react-photoswipe-gallery';
+import clsx from 'clsx';
 import CloudinaryImage from '@/components/common/CloudinaryImage';
 import cloudinaryLoader from '@/utils/cloudinary';
-import type { PhotoSwipeOptions } from 'photoswipe';
+import {
+  BASE_PHOTOSWIPE_OPTIONS,
+  getAspectRatio,
+  getSlideSize,
+  isBackgroundTarget
+} from '@/utils/photoswipe';
+import PhotoSwipeType, { type PhotoSwipeOptions } from 'photoswipe';
+import { type ImageState, type PhotoSwipeProps } from '@/types/photoswipe';
 import styles from './PhotoSwipe.module.scss';
-
-type PhotoSwipeProps = {
-  images: string[];
-  width: number;
-  height: number;
-  sizes?: string;
-  className?: string;
-};
 
 export default function PhotoSwipe({
   images,
@@ -22,62 +22,60 @@ export default function PhotoSwipe({
   sizes = '100vw',
   className = ''
 }: PhotoSwipeProps) {
-  const [imgDimensions, setImgDimensions] = useState<{ [key: number]: { w: number; h: number } }>(
-    {}
-  );
-  const [loadedImages, setLoadedImages] = useState<{ [key: number]: boolean }>({});
+  const pswpRef = useRef<PhotoSwipeType | null>(null);
+  const fallbackSize = { w: initialWidth, h: initialHeight };
+  const [imageStates, setImageStates] = useState<Record<number, ImageState>>({});
+
+  const handleBeforeOpen = (pswp: PhotoSwipeType) => {
+    pswpRef.current = pswp;
+  };
 
   const handleImageLoad = (index: number, e: React.SyntheticEvent<HTMLImageElement>) => {
-    const { naturalWidth, naturalHeight } = e.currentTarget;
-
-    setImgDimensions((prev) => ({
-      ...prev,
-      [index]: { w: naturalWidth, h: naturalHeight }
-    }));
-
-    setLoadedImages((prev) => ({
-      ...prev,
-      [index]: true
-    }));
+    const { naturalWidth: w, naturalHeight: h } = e.currentTarget;
+    setImageStates((prev) => ({ ...prev, [index]: { w, h, loaded: true } }));
   };
 
   const options: PhotoSwipeOptions = {
-    loop: false,
-    wheelToZoom: true,
-    initialZoomLevel: 'fit',
-    secondaryZoomLevel: 2.5,
-    maxZoomLevel: 6,
-    tapAction: 'close',
-    hideAnimationDuration: 100,
-    errorMsg: '이미지를 불러올 수 없습니다.'
+    ...BASE_PHOTOSWIPE_OPTIONS,
+    tapAction: (_, originalEvent) => {
+      const target = originalEvent?.target as HTMLElement;
+
+      if (isBackgroundTarget(target)) {
+        pswpRef.current?.close();
+      } else {
+        pswpRef.current?.element?.classList.toggle('pswp--ui-visible');
+      }
+    }
   };
 
   return (
-    <Gallery options={options}>
+    <Gallery options={options} onBeforeOpen={handleBeforeOpen}>
       <div>
         {images.map((publicId, index) => {
+          const state = imageStates[index];
           const originalUrl = cloudinaryLoader({ src: publicId, width: 1920 });
-          const currentW = Math.round(imgDimensions[index]?.w || initialWidth);
-          const currentH = Math.round(imgDimensions[index]?.h || initialHeight);
-          const isLoaded = loadedImages[index];
-          const aspectRatio = isLoaded
-            ? `${imgDimensions[index]?.w} / ${imgDimensions[index]?.h}`
-            : `${initialWidth} / ${initialHeight}`;
+          const slideSize = getSlideSize(state, fallbackSize);
+          const aspectRatio = getAspectRatio(state, fallbackSize);
 
           return (
             <Item
               key={publicId}
               original={originalUrl}
               thumbnail={originalUrl}
-              width={currentW}
-              height={currentH}
+              width={slideSize.width}
+              height={slideSize.height}
             >
               {({ ref, open }) => (
-                <div className={styles.container} onClick={open} style={{ aspectRatio }}>
-                  {!isLoaded && <div className={styles.skeleton} />}
+                <div className={styles.container} style={{ aspectRatio }} onClick={open}>
+                  {!state?.loaded && <div className={styles.skeleton} />}
+
                   <div
                     ref={ref}
-                    className={`${styles.imageBox} ${className} ${isLoaded ? styles.visible : styles.hidden}`}
+                    className={clsx(
+                      styles.imageBox,
+                      className,
+                      state?.loaded ? styles.visible : styles.hidden
+                    )}
                   >
                     <CloudinaryImage
                       src={publicId}
@@ -85,12 +83,8 @@ export default function PhotoSwipe({
                       width={initialWidth}
                       height={initialHeight}
                       sizes={sizes}
+                      style={{ objectFit: 'contain', display: 'block', height: 'auto' }}
                       onLoad={(e) => handleImageLoad(index, e)}
-                      style={{
-                        objectFit: 'contain',
-                        display: 'block',
-                        height: 'auto'
-                      }}
                     />
                   </div>
                 </div>
