@@ -1,11 +1,10 @@
 import Link from 'next/link';
 import { LayoutContainer } from '@/components/layout';
 import CloudinaryImage from '@/components/common/CloudinaryImage';
+import { IMAGE_PUBLIC_IDS } from '@/constants/images';
 import styles from './AboutOurChurch.module.scss';
 
 export default async function AboutOurChurch() {
-  const IMAGE_PUBLIC_ID = 'about_church_qyqtpk';
-
   return (
     <section className={styles.about}>
       <LayoutContainer>
@@ -13,7 +12,7 @@ export default async function AboutOurChurch() {
           <div className={styles.image_container}>
             <div className={styles.frame}>
               <CloudinaryImage
-                src={IMAGE_PUBLIC_ID}
+                src={IMAGE_PUBLIC_IDS.church}
                 alt="대구동남교회 입구 아치형 구조물"
                 fill
                 sizes="(max-width:768px) 100vw, 40vw"

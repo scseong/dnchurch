@@ -15,7 +15,12 @@ export const BASE_PHOTOSWIPE_OPTIONS: PhotoSwipeOptions = {
 };
 
 export function isBackgroundTarget(target: HTMLElement): boolean {
-  return [...target.classList].some((cls) => BACKGROUND_CLASS_NAMES.has(cls));
+  for (const cls of target.classList) {
+    if (BACKGROUND_CLASS_NAMES.has(cls)) {
+      return true;
+    }
+  }
+  return false;
 }
 
 export function getAspectRatio(state: ImageState | undefined, fallback: FallbackSize): string {

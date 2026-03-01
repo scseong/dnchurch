@@ -1,17 +1,16 @@
 import Link from 'next/link';
 import { LayoutContainer } from '@/components/layout';
 import CloudinaryImage from '@/components/common/CloudinaryImage';
+import { IMAGE_PUBLIC_IDS } from '@/constants/images';
 import styles from './Banner.module.scss';
 
 export default async function Banner() {
-  const BANNER_PUBLIC_ID = 'banner_nkbhnp';
-
   return (
     <section>
       <div className={styles.banner}>
         <LayoutContainer>
           <CloudinaryImage
-            src={BANNER_PUBLIC_ID}
+            src={IMAGE_PUBLIC_IDS.banner}
             alt="대구동남교회 전경과 십자가 탑"
             fill
             fetchPriority="high"

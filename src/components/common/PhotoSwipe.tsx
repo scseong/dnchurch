@@ -38,9 +38,9 @@ export default function PhotoSwipe({
   const options: PhotoSwipeOptions = {
     ...BASE_PHOTOSWIPE_OPTIONS,
     tapAction: (_, originalEvent) => {
-      const target = originalEvent?.target as HTMLElement;
+      const target = originalEvent?.target;
 
-      if (isBackgroundTarget(target)) {
+      if (target instanceof HTMLElement && isBackgroundTarget(target)) {
         pswpRef.current?.close();
       } else {
         pswpRef.current?.element?.classList.toggle('pswp--ui-visible');
