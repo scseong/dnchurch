@@ -1,11 +1,10 @@
 import Link from 'next/link';
 import { LayoutContainer } from '@/components/layout';
-import { getStorageImageUrl } from '@/apis/home';
-import { IMAGE_FILENAME } from '@/constants/assets';
+import CloudinaryImage from '@/components/common/CloudinaryImage';
 import styles from './AboutOurChurch.module.scss';
 
 export default async function AboutOurChurch() {
-  const churchImageUrl = await getStorageImageUrl(IMAGE_FILENAME.church);
+  const IMAGE_PUBLIC_ID = 'about_church_qyqtpk';
 
   return (
     <section className={styles.about}>
@@ -13,7 +12,13 @@ export default async function AboutOurChurch() {
         <div className={styles.container}>
           <div className={styles.image_container}>
             <div className={styles.frame}>
-              <img src={churchImageUrl} alt="대구동남교회 예배당 전경" />
+              <CloudinaryImage
+                src={IMAGE_PUBLIC_ID}
+                alt="대구동남교회 입구 아치형 구조물"
+                fill
+                sizes="(max-width:768px) 100vw, 40vw"
+                style={{ objectFit: 'cover', objectPosition: 'center' }}
+              />
             </div>
           </div>
           <div className={styles.about_info}>
