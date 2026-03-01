@@ -14,28 +14,29 @@
 
 .image_container {
   order: 1;
+  width: 100%;
   display: flex;
   justify-content: center;
+  align-items: center;
   flex-basis: 35%;
 
   .frame {
-    display: inline-flex;
-    align-items: center;
     position: relative;
-    overflow: hidden;
-  }
-
-  img {
     width: 100%;
-    height: auto;
-    aspect-ratio: 5 / 3;
     border: 1px solid $color-border-card;
     border-radius: $border-radius-lg;
+    aspect-ratio: 5 / 3;
+    overflow: hidden;
 
     @include respond-up($breakpoint-lg) {
       border: none;
-      aspect-ratio: 1 / 1;
       border-radius: 50%;
+      aspect-ratio: 1 / 1;
+    }
+
+    img {
+      width: 100%;
+      height: 100%;
     }
   }
 }
