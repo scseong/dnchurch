@@ -1,10 +1,10 @@
 'use server';
 
 import { cookies } from 'next/headers';
-import { createServerSideClient } from '@/shared/supabase/server';
-import { generateErrorMessage } from '@/shared/constants/error';
-import { RESET_AUTH_CODE_KEY, RESET_USER_ID_KEY } from '@/shared/constants/storageConstants';
-import { createAdminServerClient } from '@/shared/supabase/admin';
+import { createServerSideClient } from '@/lib/supabase/server';
+import { generateErrorMessage } from '@/utils/error';
+import { RESET_AUTH_CODE_KEY, RESET_USER_ID_KEY } from '@/constants/auth';
+import { createAdminServerClient } from '@/lib/supabase/admin';
 
 export async function updatePasswordAndSignOut(newPassword: string) {
   const supabase = await createServerSideClient();

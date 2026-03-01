@@ -1,5 +1,5 @@
-import { createServerSideClient } from '@/shared/supabase/server';
-import { PostType, ProfileType } from '@/shared/types/types';
+import { createServerSideClient } from '@/lib/supabase/server';
+import { PostType, ProfileType } from '@/types/common';
 
 const POSTS_BUCKET = 'posts-dev';
 

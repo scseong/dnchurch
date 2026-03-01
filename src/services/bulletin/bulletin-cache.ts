@@ -1,4 +1,4 @@
-import { NextCacheOptions } from '@/shared/supabase/types';
+import type { NextCacheOptions } from '@/types/common';
 
 const ROOT = 'bulletin';
 

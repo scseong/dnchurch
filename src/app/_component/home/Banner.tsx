@@ -1,5 +1,7 @@
 import Link from 'next/link';
-import LayoutContainer from '../layout/common/LayoutContainer';
+import { LayoutContainer } from '@/components/layout';
+import CloudinaryImage from '@/components/common/CloudinaryImage';
+import { IMAGE_PUBLIC_IDS } from '@/constants/images';
 import styles from './Banner.module.scss';
 
 export default async function Banner() {
@@ -7,6 +9,15 @@ export default async function Banner() {
     <section>
       <div className={styles.banner}>
         <LayoutContainer>
+          <CloudinaryImage
+            src={IMAGE_PUBLIC_IDS.banner}
+            alt="대구동남교회 전경과 십자가 탑"
+            fill
+            fetchPriority="high"
+            sizes="100vw"
+            className={styles.banner_image}
+          />
+          <div className={styles.overlay} aria-hidden="true" />
           <div className={styles.content}>
             <h1>
               동남교회에 오신 것을

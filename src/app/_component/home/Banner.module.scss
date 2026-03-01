@@ -1,22 +1,42 @@
 $desktop-gradient: linear-gradient(90deg, rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.1));
 $mobile-gradient: linear-gradient(180deg, rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.4));
-$banner-image-url: 'https://ndimreqwgdiwtjonjjzq.supabase.co/storage/v1/object/public/homepage_assets/banner_wide.png';
+
+.banner_container {
+  position: relative;
+}
 
 .banner {
   --banner-gradient: #{$mobile-gradient};
+  position: relative;
   padding: $spacing-xxxxl 0;
-  background-image: var(--banner-gradient), url($banner-image-url);
-  background-position:
-    0 0,
-    45% top;
-  background-size: auto, cover;
-  background-repeat: repeat, no-repeat;
   z-index: 1;
 
+  @include respond-up($breakpoint-md) {
+    --banner-gradient: #{$desktop-gradient};
+    padding: $spacing-layout 0;
+  }
+
   .content {
+    position: relative;
     display: flex;
     flex-direction: column;
     gap: $spacing-sm;
+    z-index: 2;
+  }
+
+  .banner_image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: 45% 10%;
+    z-index: 0;
+  }
+
+  .overlay {
+    position: absolute;
+    inset: 0;
+    background: var(--banner-gradient);
+    z-index: 1;
   }
 
   h1 {

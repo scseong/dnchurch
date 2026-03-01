@@ -1,13 +1,4 @@
-import { supabase } from '@/shared/supabase/client';
-
-export const getUserInfo = async () => {
-  const {
-    data: { user },
-    error
-  } = await supabase.auth.getUser();
-
-  return { user, error };
-};
+import { supabase } from '@/lib/supabase/client';
 
 export const getProfileById = async (userId = '') => {
   const { data: profile, error } = await supabase

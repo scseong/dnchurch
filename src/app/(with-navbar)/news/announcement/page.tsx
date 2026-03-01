@@ -1,4 +1,4 @@
-import MainContainer from '@/app/_component/layout/common/MainContainer';
+import MainContainer from '@/components/layout/container/MainContainer';
 import AnnouncementTable from './_component/AnnouncementTable';
 import { getAnnouncement } from '@/apis/announcement';
 import styles from './page.module.scss';

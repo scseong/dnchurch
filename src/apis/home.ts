@@ -1,5 +1,5 @@
-import { createServerSideClient } from '@/shared/supabase/server';
-import { STORAGE_NAME } from '@/shared/constants/supabase';
+import { createServerSideClient } from '@/lib/supabase/server';
+import { STORAGE_NAME } from '@/constants/assets';
 
 export const getStorageImageUrl = async (filename: string) => {
   const supabase = await createServerSideClient();

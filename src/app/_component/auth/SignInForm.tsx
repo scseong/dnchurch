@@ -3,13 +3,11 @@
 import { useSearchParams } from 'next/navigation';
 import { useState } from 'react';
 import { useForm, SubmitHandler } from 'react-hook-form';
-import AuthSubmitBtn from '@/app/_component/auth/AuthSubmitBtn';
-import FormAlertMessage from '@/app/_component/auth/FormAlertMessage';
-import FormField from '@/app/_component/auth/FormField';
+import { FormField, FormAlertMessage, FormSubmitButton } from '@/components/form';
 import { signInWithPassword } from '@/apis/auth';
-import { FORM_VALIDATIONS } from '@/shared/constants/validation';
-import { generateErrorMessage } from '@/shared/constants/error';
-import { REDIRECT_AFTER_LOGIN_KEY } from '@/shared/constants/storageConstants';
+import { FORM_VALIDATIONS } from '@/constants/validation';
+import { generateErrorMessage } from '@/utils/error';
+import { REDIRECT_AFTER_LOGIN_KEY } from '@/constants/auth';
 
 type Inputs = {
   email: string;
@@ -56,7 +54,7 @@ export default function SignInForm() {
         error={errors.password?.message}
         blindLabel={true}
       />
-      <AuthSubmitBtn isDisabled={!isValid} isSubmitting={isSubmitting} label="이메일로 로그인" />
+      <FormSubmitButton isDisabled={!isValid} isSubmitting={isSubmitting} label="이메일로 로그인" />
       {logInError && <FormAlertMessage type="error" message={logInError} />}
     </form>
   );

@@ -1,0 +1,13 @@
+.wrap {
+  padding-top: $spacing-sm;
+  text-align: right;
+
+  a {
+    padding: $spacing-xxs $spacing-xs;
+    width: 10rem;
+    display: inline-block;
+    border: 0.1rem solid black;
+    border-radius: $border-radius-md;
+    text-align: center;
+  }
+}
