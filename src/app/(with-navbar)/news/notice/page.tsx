@@ -1,9 +1,9 @@
 import MainContainer from '@/components/layout/container/MainContainer';
-import AnnouncementTable from './_component/AnnouncementTable';
+import NoticeTable from './_component/NoticeTable';
 import { getAnnouncement } from '@/apis/announcement';
 import styles from './page.module.scss';
 
-export default async function Announcement() {
+export default async function Notice() {
   const { posts, count } = await getAnnouncement();
 
   if (!posts) {
@@ -19,7 +19,9 @@ export default async function Announcement() {
       <div className={styles.wrap}>
         {/* TODO: 검색 */}
         <div>검색</div>
-        <div>{/* <AnnouncementTable posts={posts} count={count} /> */}</div>
+        <div>
+          <NoticeTable posts={posts} count={count} />
+        </div>
       </div>
     </MainContainer>
   );

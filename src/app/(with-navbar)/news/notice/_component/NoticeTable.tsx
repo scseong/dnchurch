@@ -9,11 +9,11 @@ import {
 } from '@tanstack/react-table';
 import type { AnnouncementWithProfile } from '@/apis/announcement';
 import { formattedDate } from '@/utils/date';
-import styles from './AnnouncementTable.module.scss';
+import styles from './NoticeTable.module.scss';
 
 const columnHelper = createColumnHelper<AnnouncementWithProfile>();
 
-export default function AnnouncementTable({
+export default function NoticeTable({
   posts,
   count
 }: {
@@ -29,9 +29,7 @@ export default function AnnouncementTable({
     columnHelper.accessor('title', {
       id: '제목',
       header: (info) => info.column.id,
-      cell: (info) => (
-        <Link href={`/news/announcement/${info.row.original.id}`}>{info.getValue()}</Link>
-      )
+      cell: (info) => <Link href={`/news/notice/${info.row.original.id}`}>{info.getValue()}</Link>
     }),
     columnHelper.accessor('created_at', {
       id: '등록일',
