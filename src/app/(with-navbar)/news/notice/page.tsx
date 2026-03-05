@@ -1,10 +1,21 @@
+import { notFound } from 'next/navigation';
 import MainContainer from '@/components/layout/container/MainContainer';
-import NoticeTable from './_component/NoticeTable';
-import { getAnnouncement } from '@/apis/announcement';
+import NoticeTable from '@/app/(with-navbar)/news/notice/_component/NoticeTable';
+import { getNotices } from '@/services/notice';
+import { isNumeric } from '@/utils/validator';
 import styles from './page.module.scss';
 
-export default async function Notice() {
-  const { posts, count } = await getAnnouncement();
+type Props = {
+  searchParams: Promise<{ page: string }>;
+};
+
+export default async function Notice({ searchParams }: Props) {
+  const params = await searchParams;
+  const { page, isValid } = parseQueryParams(params);
+
+  if (!isValid) notFound();
+
+  const { data: posts, count } = await getNotices();
 
   if (!posts) {
     return (
@@ -19,10 +30,23 @@ export default async function Notice() {
       <div className={styles.wrap}>
         {/* TODO: 검색 */}
         <div>검색</div>
-        <div>
-          <NoticeTable posts={posts} count={count} />
-        </div>
+        {/* <NoticeTable data={posts} total={Number(count)} currentPage={page} /> */}
       </div>
     </MainContainer>
   );
+}
+
+function parseQueryParams(params: { page?: string; year?: string }) {
+  const isYearValid = isNumeric(params.year);
+  const isPageValid = isNumeric(params.page);
+
+  if (!isYearValid || !isPageValid) {
+    return { isValid: false, year: undefined, page: 1 };
+  }
+
+  return {
+    isValid: true,
+    year: params.year ? parseInt(params.year) : undefined,
+    page: Math.max(1, params.page ? parseInt(params.page) : 1)
+  };
 }

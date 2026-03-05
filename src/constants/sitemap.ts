@@ -55,7 +55,7 @@ export const sitemap: SitemapItem[] = [
         heroImageId: 'bible_qfgnyq'
       },
       {
-        path: '/news/announcement',
+        path: '/news/notice',
         label: '공지사항',
         title: '공지사항',
         description: '교회의 공지사항을 확인하세요',
