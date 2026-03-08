@@ -1,11 +1,13 @@
 .hero {
+  margin-top: calc(-1 * $header-height);
+
   position: relative;
   width: 100%;
-  height: 24rem;
+  height: calc(30rem + $header-height);
   overflow: hidden;
 
   @include respond-up($breakpoint-lg) {
-    height: 30rem;
+    height: calc(36rem + $header-height);
   }
 }
 

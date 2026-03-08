@@ -3,9 +3,21 @@
   top: 0;
   right: 0;
   left: 0;
-  background: $color-white;
   z-index: 9999;
-  box-shadow: 0 1px 20px 0 rgba(239, 227, 221, 0.35);
+
+  background: transparent;
+  color: $color-white;
+  transition:
+    background 0.25s ease,
+    box-shadow 0.25s ease;
+
+  background-clip: padding-box;
+  box-shadow: 0 1px 0 0 rgba(255, 255, 255, 0.3);
+}
+
+.scrolled {
+  background: $color-white;
+  color: $color-text-default;
 }
 
 .header_wrap {
@@ -15,5 +27,4 @@
   align-items: center;
   gap: 6rem;
   height: $header-height;
-  background-color: inherit;
 }

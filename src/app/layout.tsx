@@ -25,8 +25,7 @@ const myeongjo = Nanum_Myeongjo({
   weight: ['400', '700', '800'],
   subsets: ['latin'],
   variable: '--font-myeongjo',
-  display: 'swap',
-  preload: false
+  display: 'swap'
 });
 
 const API_KEY = `//dapi.kakao.com/v2/maps/sdk.js?appkey=${process.env.NEXT_PUBLIC_KAKAO_API_KEY}&libraries=services,clusterer&autoload=false`;

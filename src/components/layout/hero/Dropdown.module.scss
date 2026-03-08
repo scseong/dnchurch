@@ -16,6 +16,11 @@
     color: inherit;
   }
 
+  svg {
+    width: $font-size-sm;
+    height: $font-size-sm;
+  }
+
   &:hover,
   &.triggerOpen {
     color: $color-text-default;
