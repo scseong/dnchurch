@@ -52,9 +52,9 @@ export default function Header() {
           <MobileToggle ref={navRef} handleToggle={handleNavToggle} />
         </div>
       </LayoutContainer>
-      <Modal isVisible={isNavVisible} onClose={handleNavToggle}>
+      {/* <Modal isVisible={isNavVisible} onClose={handleNavToggle}>
         <Drawer isOpen={isNavVisible} onClose={handleNavToggle} user={user} pathname={pathname} />
-      </Modal>
+      </Modal> */}
     </header>
   );
 }

@@ -7,7 +7,7 @@ export default function DesktopNav() {
     <nav className={styles.desktop_nav}>
       <ul>
         {sitemap
-          .filter((item) => item.show)
+          .filter((item) => item.inNav)
           .map((item, index) => (
             <li key={index}>
               <Link href={item.path}>{item.label}</Link>

@@ -1,0 +1,89 @@
+.dropdown {
+  position: relative;
+}
+
+.trigger {
+  display: inline-flex;
+  align-items: center;
+  gap: $spacing-xxs;
+  padding: $spacing-xxs $spacing-xs;
+  color: $color-text-subtle;
+  font-size: $font-size-sm;
+  transition: color $transition-duration-normal $transition-easing-default;
+
+  span {
+    font-size: inherit;
+    color: inherit;
+  }
+
+  &:hover,
+  &.triggerOpen {
+    color: $color-text-default;
+    font-weight: $font-weight-semibold;
+  }
+}
+
+.triggerActive {
+  color: $color-text-default;
+  font-weight: $font-weight-semibold;
+}
+
+.chevron {
+  flex-shrink: 0;
+  color: inherit;
+  transition: transform $transition-duration-normal $transition-easing-default;
+
+  &.chevronOpen {
+    transform: rotate(180deg);
+  }
+}
+
+.menu {
+  position: absolute;
+  top: calc(100% + $spacing-sm - 0.2rem);
+  left: 0;
+  z-index: 100;
+  min-width: 14rem;
+  background-color: $color-white;
+  border: 0.1rem solid $color-border-default;
+  border-radius: $border-radius-md;
+  box-shadow: $shadow-md;
+  overflow: hidden;
+  animation: fadeIn 0.15s ease-out;
+
+  li {
+    display: block;
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-0.4rem);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.menuItem {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  padding: $spacing-xs $spacing-md;
+  color: $color-text-secondary;
+  font-size: $font-size-sm;
+  text-align: left;
+  transition: color $transition-duration-normal $transition-easing-default;
+
+  &:hover {
+    color: $color-primary;
+    font-weight: $font-weight-semibold;
+  }
+
+  &.menuItemActive {
+    color: $color-primary;
+    font-weight: $font-weight-semibold;
+  }
+}
