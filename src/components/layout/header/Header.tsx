@@ -11,8 +11,9 @@ import AuthSection from '@/components/layout/header/AuthSection';
 import DesktopNav from '@/components/layout/header/DesktopNav';
 import MobileToggle from '@/components/layout/header/MobileToggle';
 import LnbPanel from '@/components/layout/header/LnbPanel';
-import MobileDrawer from '@/components/layout/header/MobileDrawer';
 import LayoutContainer from '@/components/layout/container/LayoutContainer';
+import Modal from '@/components/common/Modal';
+import Drawer from '@/components/layout/header/Drawer';
 import styles from './Header.module.scss';
 
 export default function Header() {
@@ -27,7 +28,6 @@ export default function Header() {
   const mobileToggleRef = useRef<HTMLDivElement>(null);
 
   const navItems = sitemap.filter((item) => item.inNav);
-  const activeItem = activeIndex !== null ? navItems[activeIndex] : null;
 
   const {
     isVisible: isProfileVisible,
@@ -36,14 +36,12 @@ export default function Header() {
     setVisible: setProfileVisible
   } = useModal();
 
-  // 라우트 변경 시 모든 상태 리셋
   useEffect(() => {
     setProfileVisible(false);
     setMobileOpen(false);
     setActiveIndex(null);
   }, [pathname, setProfileVisible]);
 
-  // 뷰포트가 데스크톱으로 전환되면 드로워 닫기
   useEffect(() => {
     const handleResize = () => {
       if (window.innerWidth >= 600 && mobileOpen) setMobileOpen(false);
@@ -98,13 +96,15 @@ export default function Header() {
         </div>
       </LayoutContainer>
 
-      {/* LnbPanel: 배경 전용 (border-top + shadow). depth2 콘텐츠는 DesktopNav 내부에서 렌더링 */}
-      {activeItem?.children?.length && (
+      {activeIndex !== null && (
         <LnbPanel onMouseEnter={cancelCloseTimer} onMouseLeave={startCloseTimer} />
       )}
 
-      {/* 모바일 드로워 */}
-      {mobileOpen && <MobileDrawer pathname={pathname} onClose={() => setMobileOpen(false)} />}
+      {mobileOpen && (
+        <Modal isVisible={mobileOpen} onClose={() => setMobileOpen(false)}>
+          <Drawer isOpen={mobileOpen} onClose={() => setMobileOpen(false)} />
+        </Modal>
+      )}
     </header>
   );
 }

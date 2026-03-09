@@ -4,7 +4,7 @@
 }
 
 .nav_header {
-  padding: $spacing-xl $spacing-lg;
+  padding: $spacing-sm $spacing-lg $spacing-xl $spacing-lg;
 }
 
 .nav_logo {
@@ -27,9 +27,9 @@
 }
 
 .nav_divider {
-  width: 0.2rem;
+  width: 0.15rem;
   height: 1rem;
-  background-color: $color-divide;
+  background-color: $color-text-secondary;
 }
 
 .menu_list {

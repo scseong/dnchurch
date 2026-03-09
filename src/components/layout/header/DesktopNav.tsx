@@ -28,7 +28,7 @@ export default function DesktopNav({
         {navItems.map((item, i) => (
           <li
             key={item.path}
-            className={clsx(styles.item, activeIndex === i && styles.item_open)}
+            className={clsx(styles.item, activeIndex !== null && styles.item_open)}
             onMouseEnter={() => onItemEnter(i)}
           >
             <Link
@@ -39,11 +39,7 @@ export default function DesktopNav({
             </Link>
 
             {item.children?.length ? (
-              <ul
-                className={styles.depth2}
-                onMouseEnter={onLnbEnter}
-                onMouseLeave={onLnbLeave}
-              >
+              <ul className={styles.depth2} onMouseEnter={onLnbEnter} onMouseLeave={onLnbLeave}>
                 {item.children.map((child) => (
                   <li key={child.path}>
                     <Link href={child.path} className={styles.depth2_link}>
