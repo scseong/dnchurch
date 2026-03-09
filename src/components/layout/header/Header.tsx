@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { usePathname } from 'next/navigation';
+import clsx from 'clsx';
 import { useProfile } from '@/context/SessionContextProvider';
 import useModal from '@/hooks/useModal';
 import Logo from '@/components/layout/header/Logo';
@@ -9,6 +10,8 @@ import AuthSection from '@/components/layout/header/AuthSection';
 import DesktopNav from '@/components/layout/header/DesktopNav';
 import MobileToggle from '@/components/layout/header/MobileToggle';
 import LayoutContainer from '@/components/layout/container/LayoutContainer';
+import Modal from '@/components/common/Modal';
+import Drawer from '@/components/layout/header/Drawer';
 import styles from './Header.module.scss';
 
 export default function Header() {
@@ -36,6 +39,17 @@ export default function Header() {
   }, [setNavVisible, setProfileVisible, pathname]);
 
   useEffect(() => {
+    const handle_resize = () => {
+      if (window.innerWidth >= 600 && isNavVisible) {
+        setNavVisible(false);
+      }
+    };
+
+    window.addEventListener('resize', handle_resize);
+    return () => window.removeEventListener('resize', handle_resize);
+  }, [isNavVisible, setNavVisible]);
+
+  useEffect(() => {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 40);
     };
@@ -45,7 +59,7 @@ export default function Header() {
   }, []);
 
   return (
-    <header className={`${styles.header} ${isScrolled ? styles.scrolled : ''}`}>
+    <header className={clsx(styles.header, isScrolled && styles.scrolled)}>
       <LayoutContainer>
         <div className={styles.header_wrap}>
           <Logo />
@@ -60,6 +74,9 @@ export default function Header() {
           <MobileToggle ref={navRef} handleToggle={handleNavToggle} />
         </div>
       </LayoutContainer>
+      <Modal isVisible={isNavVisible} onClose={handleNavToggle}>
+        <Drawer isOpen={isNavVisible} onClose={handleNavToggle} />
+      </Modal>
     </header>
   );
 }

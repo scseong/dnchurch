@@ -12,7 +12,14 @@ export default function HeroSection() {
   return (
     <section className={styles.hero} aria-label={`${title} 히어로 섹션`}>
       <div className={styles.bg}>
-        <CloudinaryImage src={heroImageId} alt={title} fill preload sizes="100vw" />
+        <CloudinaryImage
+          src={heroImageId}
+          alt={title}
+          fill
+          sizes="(max-width: 768px) 100vw, 1440px"
+          preload
+          fetchPriority="high"
+        />
         <div className={styles.overlay} aria-hidden="true" />
       </div>
       <div className={styles.content}>

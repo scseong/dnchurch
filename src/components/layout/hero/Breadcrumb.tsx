@@ -13,7 +13,6 @@ export default function Breadcrumb() {
 
   const navItems = sitemap.filter((i) => i.inNav);
 
-  // 자식이 없으면 부모가 endpoint, 자식이 있으면 자식이 endpoint
   const isParentActive = !!parent && !parent.children;
   const isChildActive = true;
 
@@ -29,9 +28,9 @@ export default function Breadcrumb() {
               viewBox="0 0 24 24"
               fill="none"
               stroke="currentColor"
-              stroke-width="2"
-              stroke-linecap="round"
-              stroke-linejoin="round"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
             >
               <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
               <polyline points="9 22 9 12 15 12 15 22"></polyline>
