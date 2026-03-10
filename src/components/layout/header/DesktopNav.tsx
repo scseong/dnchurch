@@ -24,8 +24,22 @@ export default function DesktopNav() {
     };
   }, [pathname]);
 
+  const handleNavEnter = () => {
+    navRef.current?.closest('header')?.setAttribute('data-nav-hover', '');
+  };
+
+  const handleNavLeave = () => {
+    navRef.current?.closest('header')?.removeAttribute('data-nav-hover');
+  };
+
   return (
-    <nav ref={navRef} className={styles.desktop_nav} id="gnb">
+    <nav
+      ref={navRef}
+      className={styles.desktop_nav}
+      id="gnb"
+      onMouseEnter={handleNavEnter}
+      onMouseLeave={handleNavLeave}
+    >
       <ul className={styles.list}>
         {navItems.map((item) => (
           <li key={item.path} className={styles.item}>

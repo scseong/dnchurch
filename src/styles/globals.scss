@@ -77,6 +77,13 @@ button {
   cursor: pointer;
 }
 
+// 새로고침 시 FOUC 방지: 인라인 스크립트가 스크롤 위치 판단 후 속성 설정 → React 수화 전 스타일 적용
+html[data-scrolled] header {
+  background-color: $color-white !important;
+  color: $color-text-default !important;
+  box-shadow: 0 0.1rem 0 0 #e7e7e7 !important;
+}
+
 #root {
   display: flex;
   flex-direction: column;

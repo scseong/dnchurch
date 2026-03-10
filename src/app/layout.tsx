@@ -38,9 +38,15 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
           rel="stylesheet"
           href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css"
         />
+        {/* 렌더링 전 스크롤 위치 판단: globals.scss의 html[data-scrolled] header 규칙과 연동 */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `if(window.scrollY>40)document.documentElement.setAttribute('data-scrolled','');`
+          }}
+        />
       </head>
       <body>
-        <Script src={API_KEY} strategy="beforeInteractive" />
+        <Script src={API_KEY} strategy="lazyOnload" />
         <KakaoScript />
         <div id="root">
           <SessionContextProvider>
