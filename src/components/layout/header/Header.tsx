@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { usePathname } from 'next/navigation';
 import clsx from 'clsx';
 import { useProfile } from '@/context/SessionContextProvider';
@@ -9,7 +9,6 @@ import Logo from '@/components/layout/header/Logo';
 import AuthSection from '@/components/layout/header/AuthSection';
 import DesktopNav from '@/components/layout/header/DesktopNav';
 import MobileToggle from '@/components/layout/header/MobileToggle';
-import LnbPanel from '@/components/layout/header/LnbPanel';
 import LayoutContainer from '@/components/layout/container/LayoutContainer';
 import Modal from '@/components/common/Modal';
 import Drawer from '@/components/layout/header/Drawer';
@@ -20,10 +19,8 @@ export default function Header() {
   const pathname = usePathname();
 
   const [isScrolled, setIsScrolled] = useState(false);
-  const [activeIndex, setActiveIndex] = useState<number | null>(null);
   const [mobileOpen, setMobileOpen] = useState(false);
 
-  const leaveTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const mobileToggleRef = useRef<HTMLDivElement>(null);
 
   const {
@@ -36,7 +33,6 @@ export default function Header() {
   useEffect(() => {
     setProfileVisible(false);
     setMobileOpen(false);
-    setActiveIndex(null);
   }, [pathname, setProfileVisible]);
 
   useEffect(() => {
@@ -47,45 +43,20 @@ export default function Header() {
     return () => window.removeEventListener('resize', handleResize);
   }, [mobileOpen]);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
+    // @supports 미지원 브라우저 폴백: CSS scroll-driven animation이 없을 때 JS로 처리
     const handleScroll = () => setIsScrolled(window.scrollY > 40);
-    window.addEventListener('scroll', handleScroll);
+    handleScroll();
+    window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  const startCloseTimer = () => {
-    if (leaveTimer.current) clearTimeout(leaveTimer.current);
-    leaveTimer.current = setTimeout(() => setActiveIndex(null), 120);
-  };
-
-  const cancelCloseTimer = () => {
-    if (leaveTimer.current) clearTimeout(leaveTimer.current);
-  };
-
-  const handleNavItemEnter = (index: number) => {
-    cancelCloseTimer();
-    setActiveIndex(index);
-  };
-
   return (
-    <header
-      className={clsx(
-        styles.header,
-        isScrolled && styles.scrolled,
-        activeIndex !== null && styles.nav_hovered
-      )}
-      onMouseLeave={startCloseTimer}
-    >
+    <header className={clsx(styles.header, isScrolled && styles.scrolled)}>
       <LayoutContainer>
         <div className={styles.header_wrap}>
           <Logo />
-          <DesktopNav
-            activeIndex={activeIndex}
-            onItemEnter={handleNavItemEnter}
-            onNavLeave={startCloseTimer}
-            onLnbEnter={cancelCloseTimer}
-            onLnbLeave={startCloseTimer}
-          />
+          <DesktopNav />
           <AuthSection
             ref={profileRef}
             user={user}
@@ -96,11 +67,6 @@ export default function Header() {
           <MobileToggle ref={mobileToggleRef} handleToggle={() => setMobileOpen(true)} />
         </div>
       </LayoutContainer>
-
-      {activeIndex !== null && (
-        <LnbPanel onMouseEnter={cancelCloseTimer} onMouseLeave={startCloseTimer} />
-      )}
-
       {mobileOpen && (
         <Modal isVisible={mobileOpen} onClose={() => setMobileOpen(false)}>
           <Drawer isOpen={mobileOpen} onClose={() => setMobileOpen(false)} />
