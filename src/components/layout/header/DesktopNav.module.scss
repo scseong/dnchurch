@@ -15,7 +15,7 @@
 
 .list {
   display: flex;
-  gap: 4rem;
+  gap: 5rem;
   align-items: stretch;
 }
 
@@ -62,7 +62,6 @@
   list-style: none;
   opacity: 0;
   pointer-events: none;
-  transition: opacity 0.2s ease-out;
   z-index: 2;
 }
 
@@ -74,7 +73,7 @@
 .depth2_link {
   display: block;
   padding: $spacing-xs 0;
-  font-size: $font-size-sm;
+  font-size: $font-size-md;
   color: $color-text-secondary;
   white-space: nowrap;
   transition: font-weight $transition-duration-normal $transition-easing-default;

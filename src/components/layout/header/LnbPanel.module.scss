@@ -7,7 +7,6 @@
   background-color: $color-white;
   border-top: 0.1rem solid $color-divide;
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
-  animation: slideDown 0.18s ease-out;
   z-index: 1;
 
   @include respond($breakpoint-md) {

@@ -5,7 +5,6 @@ import { usePathname } from 'next/navigation';
 import clsx from 'clsx';
 import { useProfile } from '@/context/SessionContextProvider';
 import useModal from '@/hooks/useModal';
-import { sitemap } from '@/constants/sitemap';
 import Logo from '@/components/layout/header/Logo';
 import AuthSection from '@/components/layout/header/AuthSection';
 import DesktopNav from '@/components/layout/header/DesktopNav';
@@ -26,8 +25,6 @@ export default function Header() {
 
   const leaveTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const mobileToggleRef = useRef<HTMLDivElement>(null);
-
-  const navItems = sitemap.filter((item) => item.inNav);
 
   const {
     isVisible: isProfileVisible,
@@ -58,7 +55,7 @@ export default function Header() {
 
   const startCloseTimer = () => {
     if (leaveTimer.current) clearTimeout(leaveTimer.current);
-    leaveTimer.current = setTimeout(() => setActiveIndex(null), 80);
+    leaveTimer.current = setTimeout(() => setActiveIndex(null), 120);
   };
 
   const cancelCloseTimer = () => {
@@ -72,7 +69,11 @@ export default function Header() {
 
   return (
     <header
-      className={clsx(styles.header, isScrolled && styles.scrolled)}
+      className={clsx(
+        styles.header,
+        isScrolled && styles.scrolled,
+        activeIndex !== null && styles.nav_hovered
+      )}
       onMouseLeave={startCloseTimer}
     >
       <LayoutContainer>

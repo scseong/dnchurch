@@ -29,11 +29,11 @@ export default function DesktopNav({
           <li
             key={item.path}
             className={clsx(styles.item, activeIndex !== null && styles.item_open)}
-            onMouseEnter={() => onItemEnter(i)}
           >
             <Link
               href={item.path}
               className={clsx(styles.link, activeIndex === i && styles.link_active)}
+              onMouseEnter={() => onItemEnter(i)}
             >
               {item.label}
             </Link>
