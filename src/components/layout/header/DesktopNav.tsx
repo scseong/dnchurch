@@ -11,32 +11,37 @@ export default function DesktopNav() {
   const pathname = usePathname();
   const navRef = useRef<HTMLElement>(null);
   const rafRef = useRef<number>(0);
+  const isHoveredRef = useRef(false);
 
   useEffect(() => {
     const el = navRef.current;
     if (!el) return;
 
     el.classList.add(styles.no_hover);
-    rafRef.current = requestAnimationFrame(() => el.classList.remove(styles.no_hover));
-    return () => {
-      cancelAnimationFrame(rafRef.current);
-      el.classList.remove(styles.no_hover);
-    };
+    el.closest('header')?.removeAttribute('data-nav-hover');
+
+    if (!isHoveredRef.current) {
+      rafRef.current = requestAnimationFrame(() => el.classList.remove(styles.no_hover));
+    }
+
+    return () => cancelAnimationFrame(rafRef.current);
   }, [pathname]);
 
   const handleNavEnter = () => {
+    isHoveredRef.current = true;
     navRef.current?.closest('header')?.setAttribute('data-nav-hover', '');
   };
 
   const handleNavLeave = () => {
+    isHoveredRef.current = false;
     navRef.current?.closest('header')?.removeAttribute('data-nav-hover');
+    navRef.current?.classList.remove(styles.no_hover);
   };
 
   return (
     <nav
       ref={navRef}
       className={styles.desktop_nav}
-      id="gnb"
       onMouseEnter={handleNavEnter}
       onMouseLeave={handleNavLeave}
     >
