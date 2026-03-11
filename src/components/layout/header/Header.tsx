@@ -37,7 +37,7 @@ export default function Header() {
 
   useEffect(() => {
     const handleResize = () => {
-      if (window.innerWidth >= 600 && mobileOpen) setMobileOpen(false);
+      if (window.innerWidth >= 768 && mobileOpen) setMobileOpen(false);
     };
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
@@ -46,8 +46,6 @@ export default function Header() {
   useLayoutEffect(() => {
     const handleScroll = () => setIsScrolled(window.scrollY > 40);
     handleScroll();
-    // 인라인 스크립트가 설정한 data-scrolled 제거: React state(.scrolled 클래스)가 이어받음
-    // useLayoutEffect 내에서 제거하므로 브라우저 페인트 전에 .scrolled 클래스 추가까지 완료
     document.documentElement.removeAttribute('data-scrolled');
     window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);

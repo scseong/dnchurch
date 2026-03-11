@@ -32,6 +32,7 @@
 }
 
 .content {
+  padding: $header-height $spacing-lg 0;
   position: absolute;
   inset: 0;
   display: flex;
@@ -39,7 +40,6 @@
   align-items: center;
   justify-content: center;
   gap: $spacing-sm;
-  padding: $spacing-lg;
   text-align: center;
   color: $color-white;
 }

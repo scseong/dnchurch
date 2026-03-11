@@ -2,7 +2,7 @@
   display: none;
   z-index: 9999;
 
-  @include respond-up($breakpoint-md) {
+  @include respond-up($header-breakpoint) {
     position: absolute;
     top: 0;
     bottom: 0;
@@ -23,11 +23,9 @@
     background-color: $color-white;
     border-top: 0.1rem solid $color-divide;
     box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
-    // 위→아래 슬라이드: bottom 클리핑을 100%→0%로 전환
     clip-path: inset(0 0 100% 0);
     pointer-events: none;
     box-shadow: 0 0.1rem 0 0 rgba(255, 255, 255, 0.2);
-
     transition: clip-path 0.28s $transition-easing-default;
     z-index: 1;
   }
@@ -101,7 +99,6 @@
   min-width: 100%;
   padding-top: 2rem;
   padding-bottom: $spacing-lg;
-  // 숨김 상태: 최종 위치보다 1rem 위에서 시작 → hover 시 제자리로 내려오며 등장
   transform: translate(-50%, calc(100% - 1rem));
   text-align: center;
   list-style: none;

@@ -1,12 +1,13 @@
 .dropdown {
   position: relative;
+  display: flex;
 }
 
 .trigger {
   display: inline-flex;
   align-items: center;
   gap: $spacing-xxs;
-  padding: $spacing-xxs $spacing-xs;
+  padding: $spacing-xxs;
   color: $color-text-subtle;
   font-size: $font-size-sm;
   transition: color $transition-duration-normal $transition-easing-default;
@@ -45,7 +46,7 @@
 
 .menu {
   position: absolute;
-  top: calc(100% + $spacing-sm - 0.2rem);
+  top: calc(100% + $spacing-sm - 0.05rem);
   left: 0;
   z-index: 100;
   min-width: 14rem;

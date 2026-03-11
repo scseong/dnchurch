@@ -9,7 +9,7 @@
   max-width: $max-width;
   margin: 0 auto;
   padding: 0 $spacing-lg;
-  height: 4.4rem;
+  height: 4.6rem;
 }
 
 .item {
@@ -26,6 +26,7 @@
 }
 
 .link {
+  padding: $spacing-xxs;
   display: inline-flex;
   align-items: center;
   gap: $spacing-xxs;
@@ -33,14 +34,9 @@
   font-size: $font-size-sm;
   transition: color $transition-duration-normal $transition-easing-default;
 
-  span {
-    padding: $spacing-xxs $spacing-xs;
-    font-size: inherit;
-  }
-
   svg {
-    width: $font-size-sm;
-    height: $font-size-sm;
+    width: $font-size-md;
+    height: $font-size-md;
     stroke: currentColor;
   }
 

@@ -13,8 +13,6 @@
     color $transition-duration-normal $transition-easing-default,
     box-shadow $transition-duration-normal $transition-easing-default;
 
-  // CSS Scroll-Driven Animation: JS 번들과 무관하게 렌더링 전부터 스크롤 위치에 맞는 스타일 적용
-  // steps(1): 40px 지점에서 즉시 전환 (JS의 scrollY > 40 로직과 동일한 동작)
   @supports (animation-timeline: scroll()) {
     animation: header-scroll steps(1) both;
     animation-timeline: scroll(root);
@@ -29,8 +27,6 @@
   box-shadow: 0 0.1rem 0 0 #e7e7e7;
 }
 
-// DesktopNav hover: !important로 animation 우선순위 오버라이드 → transition 정상 동작
-// CSS cascade 우선순위: transitions > !important author > animations > normal author
 .header[data-nav-hover] {
   background: $color-white !important;
   color: $color-text-default !important;
