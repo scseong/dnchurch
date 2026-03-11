@@ -1,3 +1,5 @@
+$nav-center: 60%;
+
 .desktop_nav {
   display: none;
   z-index: 9999;
@@ -6,7 +8,7 @@
     position: absolute;
     top: 0;
     bottom: 0;
-    left: 50%;
+    left: $nav-center;
     transform: translateX(-50%);
     display: flex;
     align-items: stretch;
@@ -17,7 +19,7 @@
     position: absolute;
     top: 100%;
     left: 50%;
-    width: 100vw;
+    width: 200vw;
     min-height: 22rem;
     background-color: $color-white;
     border-top: 0.1rem solid $color-divide;
@@ -44,10 +46,14 @@
   &.no_hover:hover {
     &::after {
       transform: translateX(-50%) scaleY(0);
+      pointer-events: none;
       transition: none;
     }
+
     .depth2 {
       opacity: 0;
+      transform: translate(-50%, calc(100% - 1rem));
+      pointer-events: none;
       transition: none;
     }
   }
@@ -98,8 +104,8 @@
   opacity: 0;
   pointer-events: none;
   transition:
-    opacity 0.25s $transition-easing-default,
-    transform 0.25s $transition-easing-default;
+    opacity $transition-duration-normal $transition-easing-default,
+    transform $transition-duration-normal $transition-easing-default;
   z-index: 2;
 }
 

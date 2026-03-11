@@ -7,47 +7,87 @@ import { sitemap } from '@/constants/sitemap';
 import styles from './DesktopNav.module.scss';
 
 export default function DesktopNav() {
-  const navItems = sitemap.filter((item) => item.inNav);
   const pathname = usePathname();
   const navRef = useRef<HTMLElement>(null);
   const rafRef = useRef<number>(0);
   const isHoveredRef = useRef(false);
+  const lockedItemRef = useRef<string | null>(null);
+  const hoveredItemRef = useRef<string | null>(null);
+
+  const navItems = sitemap.filter((item) => item.inNav);
+
+  const lockNav = (el: HTMLElement) => {
+    el.classList.add(styles.no_hover);
+    el.closest('header')?.setAttribute('data-nav-locked', '');
+    el.closest('header')?.removeAttribute('data-nav-hover');
+  };
+
+  const unlockNav = (el: HTMLElement) => {
+    el.classList.remove(styles.no_hover);
+    el.closest('header')?.removeAttribute('data-nav-locked');
+  };
+
+  const handleNavEnter = () => {
+    isHoveredRef.current = true;
+    if (!navRef.current?.classList.contains(styles.no_hover)) {
+      navRef.current?.closest('header')?.setAttribute('data-nav-hover', '');
+    }
+  };
+
+  const handleNavLeave = () => {
+    isHoveredRef.current = false;
+    hoveredItemRef.current = null;
+    lockedItemRef.current = null;
+    const header = navRef.current?.closest('header');
+    header?.removeAttribute('data-nav-hover');
+    if (navRef.current) unlockNav(navRef.current);
+  };
+
+  const handleItemEnter = (path: string) => {
+    hoveredItemRef.current = path;
+    const el = navRef.current;
+    if (!el?.classList.contains(styles.no_hover)) return;
+
+    if (lockedItemRef.current !== path) {
+      lockedItemRef.current = null;
+      unlockNav(el);
+      el.closest('header')?.setAttribute('data-nav-hover', '');
+    }
+  };
 
   useEffect(() => {
     const el = navRef.current;
     if (!el) return;
 
-    el.classList.add(styles.no_hover);
-    el.closest('header')?.removeAttribute('data-nav-hover');
+    lockNav(el);
 
     if (!isHoveredRef.current) {
-      rafRef.current = requestAnimationFrame(() => el.classList.remove(styles.no_hover));
+      rafRef.current = requestAnimationFrame(() => {
+        unlockNav(el);
+        lockedItemRef.current = null;
+      });
+    } else {
+      lockedItemRef.current = hoveredItemRef.current;
     }
 
     return () => cancelAnimationFrame(rafRef.current);
   }, [pathname]);
 
-  const handleNavEnter = () => {
-    isHoveredRef.current = true;
-    navRef.current?.closest('header')?.setAttribute('data-nav-hover', '');
-  };
-
-  const handleNavLeave = () => {
-    isHoveredRef.current = false;
-    navRef.current?.closest('header')?.removeAttribute('data-nav-hover');
-    navRef.current?.classList.remove(styles.no_hover);
-  };
-
   return (
     <nav
       ref={navRef}
+      id="gnb"
       className={styles.desktop_nav}
       onMouseEnter={handleNavEnter}
       onMouseLeave={handleNavLeave}
     >
       <ul className={styles.list}>
         {navItems.map((item) => (
-          <li key={item.path} className={styles.item}>
+          <li
+            key={item.path}
+            className={styles.item}
+            onMouseEnter={() => handleItemEnter(item.path)}
+          >
             <Link href={item.path} className={styles.link}>
               {item.label}
             </Link>
