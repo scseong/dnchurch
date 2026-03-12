@@ -96,8 +96,7 @@ $nav-center: 60%;
   bottom: 0;
   width: max-content;
   min-width: 100%;
-  padding-top: 2rem;
-  padding-bottom: $spacing-lg;
+  padding-top: $spacing-md;
   transform: translate(-50%, calc(100% - 1rem));
   text-align: center;
   list-style: none;
@@ -111,11 +110,11 @@ $nav-center: 60%;
 
 .depth2_link {
   display: block;
-  padding: $spacing-sm 0;
+  padding: $spacing-xs 0;
   font-size: $font-size-md;
   color: $color-text-secondary;
   white-space: nowrap;
-  transition: font-weight $transition-duration-normal $transition-easing-default;
+  transition: font-weight 0.1s $transition-easing-default;
 
   &:hover {
     font-weight: $font-weight-semibold;
