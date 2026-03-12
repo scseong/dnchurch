@@ -24,7 +24,7 @@
 .scrolled {
   background: $color-white;
   color: $color-text-default;
-  box-shadow: 0 0.1rem 0 0 #e7e7e7;
+  box-shadow: 0 0.1rem 0 0 $color-gray-200;
 }
 
 .header[data-nav-hover] {

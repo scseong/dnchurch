@@ -20,7 +20,7 @@ $nav-center: 60%;
     top: 100%;
     left: 50%;
     width: 200vw;
-    min-height: 22rem;
+    min-height: $lnb-min-height;
     background-color: $color-white;
     border-top: 0.1rem solid $color-divide;
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);

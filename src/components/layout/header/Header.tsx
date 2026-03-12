@@ -12,6 +12,7 @@ import MobileToggle from '@/components/layout/header/MobileToggle';
 import LayoutContainer from '@/components/layout/container/LayoutContainer';
 import Modal from '@/components/common/Modal';
 import Drawer from '@/components/layout/header/Drawer';
+import { SCROLL_THRESHOLD } from '@/constants';
 import styles from './Header.module.scss';
 
 export default function Header() {
@@ -44,7 +45,7 @@ export default function Header() {
   }, [mobileOpen]);
 
   useLayoutEffect(() => {
-    const handleScroll = () => setIsScrolled(window.scrollY > 40);
+    const handleScroll = () => setIsScrolled(window.scrollY > SCROLL_THRESHOLD);
     handleScroll();
     document.documentElement.removeAttribute('data-scrolled');
     window.addEventListener('scroll', handleScroll, { passive: true });
