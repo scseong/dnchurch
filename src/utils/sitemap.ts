@@ -1,0 +1,30 @@
+import { sitemap } from '@/constants/sitemap';
+import type { SitemapChild, SitemapItem } from '@/types/layout';
+
+export function resolveCurrentNode(pathname: string): {
+  parent: SitemapItem | null;
+  child: SitemapChild | null;
+} {
+  for (const item of sitemap) {
+    if (item.children) {
+      const child = item.children.find((c) => pathname.startsWith(c.path));
+      if (child) return { parent: item, child };
+    }
+    if (pathname.startsWith(item.path)) return { parent: item, child: null };
+  }
+  return { parent: null, child: null };
+}
+
+export function resolveHeroMeta(pathname: string): {
+  title: string;
+  description: string;
+  heroImageId: string;
+} {
+  const { parent, child } = resolveCurrentNode(pathname);
+  const node = child ?? parent;
+  return {
+    title: node?.title ?? '',
+    description: node?.description ?? '',
+    heroImageId: node?.heroImageId ?? ''
+  };
+}

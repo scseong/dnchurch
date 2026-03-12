@@ -1,0 +1,69 @@
+.hero {
+  margin-top: calc(-1 * $header-height);
+
+  position: relative;
+  width: 100%;
+  height: calc(30rem + $header-height);
+  overflow: hidden;
+
+  @include respond-up($breakpoint-lg) {
+    height: calc(36rem + $header-height);
+  }
+}
+
+.bg {
+  position: absolute;
+  inset: 0;
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+
+    @include prevent-img-drag;
+  }
+}
+
+.overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to bottom, rgba(0, 0, 0, 0.25) 0%, rgba(0, 0, 0, 0.52) 100%);
+}
+
+.content {
+  padding: $header-height $spacing-lg 0;
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: $spacing-sm;
+  text-align: center;
+  color: $color-white;
+}
+
+.eyebrow {
+  font-size: $font-size-xxs;
+  font-weight: $font-weight-medium;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.75);
+}
+
+.title {
+  font-family: $font-family-secondary;
+  font-weight: $font-weight-bold;
+  line-height: $line-height-heading;
+  color: $color-white;
+  word-break: keep-all;
+}
+
+.desc {
+  margin-top: $spacing-xxs;
+  max-width: 48rem;
+  font-family: $font-family-secondary;
+  color: rgba(255, 255, 255, 0.85);
+  word-break: keep-all;
+}

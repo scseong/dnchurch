@@ -3,9 +3,47 @@
   top: 0;
   right: 0;
   left: 0;
-  background: $color-white;
+  background: transparent;
+  background-clip: padding-box;
+  color: $color-white;
+  box-shadow: 0 0.1rem 0 0 rgba(255, 255, 255, 0.2);
   z-index: 9999;
-  box-shadow: 0 1px 20px 0 rgba(239, 227, 221, 0.35);
+  transition:
+    background-color $transition-duration-normal $transition-easing-default,
+    color $transition-duration-normal $transition-easing-default,
+    box-shadow $transition-duration-normal $transition-easing-default;
+
+  @supports (animation-timeline: scroll()) {
+    animation: header-scroll steps(1) both;
+    animation-timeline: scroll(root);
+    animation-range: 0px 41px;
+  }
+}
+
+// @supports 미지원 브라우저를 위한 JS 폴백
+.scrolled {
+  background: $color-white;
+  color: $color-text-default;
+  box-shadow: 0 0.1rem 0 0 $color-gray-200;
+}
+
+.header[data-nav-hover] {
+  background: $color-white !important;
+  color: $color-text-default !important;
+  box-shadow: 0 0.1rem 0 0 #e7e7e7 !important;
+}
+
+@keyframes header-scroll {
+  from {
+    background: transparent;
+    color: $color-white;
+    box-shadow: 0 0.1rem 0 0 rgba(255, 255, 255, 0.2);
+  }
+  to {
+    background: $color-white;
+    color: $color-text-default;
+    box-shadow: 0 0.1rem 0 0 #e7e7e7;
+  }
 }
 
 .header_wrap {
@@ -15,5 +53,4 @@
   align-items: center;
   gap: 6rem;
   height: $header-height;
-  background-color: inherit;
 }

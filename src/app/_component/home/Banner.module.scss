@@ -6,14 +6,17 @@ $mobile-gradient: linear-gradient(180deg, rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.4)
 }
 
 .banner {
+  margin-top: calc(-1 * $header-height);
+
   --banner-gradient: #{$mobile-gradient};
   position: relative;
-  padding: $spacing-xxxxl 0;
+  padding: calc($spacing-xxxxl + $header-height / 2) 0;
+
   z-index: 1;
 
   @include respond-up($breakpoint-md) {
     --banner-gradient: #{$desktop-gradient};
-    padding: $spacing-layout 0;
+    padding: calc($spacing-layout + $header-height / 2) 0;
   }
 
   .content {

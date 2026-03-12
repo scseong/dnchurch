@@ -9,7 +9,7 @@
     height: 1.8rem;
   }
 
-  @include respond-up($breakpoint-md) {
+  @include respond-up($header-breakpoint) {
     display: none;
   }
 }

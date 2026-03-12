@@ -77,6 +77,18 @@ button {
   cursor: pointer;
 }
 
+html[data-scrolled] header {
+  background-color: $color-white !important;
+  color: $color-text-default !important;
+  box-shadow: 0 0.1rem 0 0 #e7e7e7 !important;
+}
+
+header:has(#gnb:hover):not([data-nav-locked]) {
+  background-color: $color-white !important;
+  color: $color-text-default !important;
+  box-shadow: 0 0.1rem 0 0 #e7e7e7 !important;
+}
+
 #root {
   display: flex;
   flex-direction: column;
