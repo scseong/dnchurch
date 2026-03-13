@@ -1,10 +1,10 @@
 import { createServerSideClient } from '@/lib/supabase/server';
-import { PostType, ProfileType } from '@/types/common';
+import { NoticeType, ProfileType } from '@/types/common';
 
-const POSTS_BUCKET = 'posts-dev';
+const NOTICES_TABLE = 'notices';
 
-export type AnnouncementWithProfile = PostType & {
-  profiles: Pick<ProfileType, 'user_name'> | null;
+export type AnnouncementWithProfile = NoticeType & {
+  profiles: Pick<ProfileType, 'display_name'> | null;
 };
 
 export const getAnnouncement = async () => {
@@ -14,8 +14,10 @@ export const getAnnouncement = async () => {
     count,
     error
   } = await supabase
-    .from(POSTS_BUCKET)
-    .select(`*, profiles (user_name)`, { count: 'exact' })
+    .from(NOTICES_TABLE)
+    .select(`*, profiles (display_name)`, { count: 'exact' })
+    .is('deleted_at', null)
+    .eq('is_public', true)
     .order('id', { ascending: false });
 
   if (error) console.error(error);
