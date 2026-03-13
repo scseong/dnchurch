@@ -7,7 +7,7 @@ import styles from './CreateBulletinButton.module.scss';
 export default function CreateBulletinButton() {
   const user = useProfile();
 
-  if (!user || !user.is_admin) return null;
+  if (!user || user.role !== 'admin') return null;
 
   return (
     <div className={styles.wrap}>
