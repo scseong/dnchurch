@@ -14,218 +14,170 @@ export type Database = {
   }
   public: {
     Tables: {
-      about_banner: {
+      bulletin_images: {
         Row: {
-          description: string | null
-          id: number
-          image_url: string
-          order: number
-          title: string
-          year: number | null
-        }
-        Insert: {
-          description?: string | null
-          id?: number
-          image_url: string
-          order: number
-          title: string
-          year?: number | null
-        }
-        Update: {
-          description?: string | null
-          id?: number
-          image_url?: string
-          order?: number
-          title?: string
-          year?: number | null
-        }
-        Relationships: []
-      }
-      bulletin: {
-        Row: {
+          bulletin_id: number
+          cloudinary_id: string
           created_at: string
-          date: string
           id: number
-          image_url: string[]
-          title: string
-          updated_at: string | null
-          user_id: string
+          order_index: number
+          url: string
         }
         Insert: {
+          bulletin_id: number
+          cloudinary_id: string
           created_at?: string
-          date: string
           id?: number
-          image_url: string[]
-          title: string
-          updated_at?: string | null
-          user_id?: string
+          order_index?: number
+          url: string
         }
         Update: {
+          bulletin_id?: number
+          cloudinary_id?: string
           created_at?: string
-          date?: string
           id?: number
-          image_url?: string[]
-          title?: string
-          updated_at?: string | null
-          user_id?: string
+          order_index?: number
+          url?: string
         }
         Relationships: [
           {
-            foreignKeyName: "bulletin_duplicate_user_id_fkey1"
-            columns: ["user_id"]
+            foreignKeyName: "bulletin_images_bulletin_id_fkey"
+            columns: ["bulletin_id"]
+            isOneToOne: false
+            referencedRelation: "bulletins"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      bulletins: {
+        Row: {
+          author_id: string | null
+          content: string | null
+          created_at: string
+          deleted_at: string | null
+          id: number
+          sunday_date: string
+          title: string
+          updated_at: string
+          view_count: number
+        }
+        Insert: {
+          author_id?: string | null
+          content?: string | null
+          created_at?: string
+          deleted_at?: string | null
+          id?: number
+          sunday_date: string
+          title: string
+          updated_at?: string
+          view_count?: number
+        }
+        Update: {
+          author_id?: string | null
+          content?: string | null
+          created_at?: string
+          deleted_at?: string | null
+          id?: number
+          sunday_date?: string
+          title?: string
+          updated_at?: string
+          view_count?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "bulletins_author_id_fkey"
+            columns: ["author_id"]
             isOneToOne: false
             referencedRelation: "profiles"
             referencedColumns: ["id"]
           },
         ]
       }
-      "bulletin-dev": {
+      comments: {
         Row: {
-          created_at: string
-          date: string
-          id: number
-          image_url: string[]
-          title: string
-          updated_at: string | null
-          user_id: string
-        }
-        Insert: {
-          created_at?: string
-          date: string
-          id?: number
-          image_url: string[]
-          title: string
-          updated_at?: string | null
-          user_id?: string
-        }
-        Update: {
-          created_at?: string
-          date?: string
-          id?: number
-          image_url?: string[]
-          title?: string
-          updated_at?: string | null
-          user_id?: string
-        }
-        Relationships: [
-          {
-            foreignKeyName: "bulletin_user_id_fkey1"
-            columns: ["user_id"]
-            isOneToOne: false
-            referencedRelation: "profiles"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
-      home_banner: {
-        Row: {
-          description: string | null
-          id: number
-          image_url: string
-          order: number
-          title: string
-          year: number | null
-        }
-        Insert: {
-          description?: string | null
-          id?: number
-          image_url: string
-          order: number
-          title: string
-          year?: number | null
-        }
-        Update: {
-          description?: string | null
-          id?: number
-          image_url?: string
-          order?: number
-          title?: string
-          year?: number | null
-        }
-        Relationships: []
-      }
-      posts: {
-        Row: {
+          author_id: string | null
           content: string
           created_at: string
+          deleted_at: string | null
           id: number
-          is_deleted: boolean
-          is_important: boolean
-          post_type: string
-          title: string
-          updated_at: string | null
-          user_id: string | null
+          target_id: number
+          target_type: string
+          updated_at: string
         }
         Insert: {
+          author_id?: string | null
           content: string
           created_at?: string
+          deleted_at?: string | null
           id?: number
-          is_deleted?: boolean
-          is_important?: boolean
-          post_type: string
-          title: string
-          updated_at?: string | null
-          user_id?: string | null
+          target_id: number
+          target_type: string
+          updated_at?: string
         }
         Update: {
+          author_id?: string | null
           content?: string
           created_at?: string
+          deleted_at?: string | null
           id?: number
-          is_deleted?: boolean
-          is_important?: boolean
-          post_type?: string
-          title?: string
-          updated_at?: string | null
-          user_id?: string | null
+          target_id?: number
+          target_type?: string
+          updated_at?: string
         }
         Relationships: [
           {
-            foreignKeyName: "posts_user_id_fkey1"
-            columns: ["user_id"]
+            foreignKeyName: "comments_author_id_fkey"
+            columns: ["author_id"]
             isOneToOne: false
             referencedRelation: "profiles"
             referencedColumns: ["id"]
           },
         ]
       }
-      "posts-dev": {
+      notices: {
         Row: {
+          attachment_url: string | null
+          author_id: string | null
+          category: Database["public"]["Enums"]["notice_category_enum"]
           content: string
           created_at: string
+          deleted_at: string | null
           id: number
-          is_deleted: boolean
-          is_important: boolean
-          post_type: string
+          is_pinned: boolean
+          is_public: boolean
           title: string
-          updated_at: string | null
-          user_id: string | null
+          updated_at: string
         }
         Insert: {
+          attachment_url?: string | null
+          author_id?: string | null
+          category?: Database["public"]["Enums"]["notice_category_enum"]
           content: string
           created_at?: string
+          deleted_at?: string | null
           id?: number
-          is_deleted?: boolean
-          is_important?: boolean
-          post_type: string
+          is_pinned?: boolean
+          is_public?: boolean
           title: string
-          updated_at?: string | null
-          user_id?: string | null
+          updated_at?: string
         }
         Update: {
+          attachment_url?: string | null
+          author_id?: string | null
+          category?: Database["public"]["Enums"]["notice_category_enum"]
           content?: string
           created_at?: string
+          deleted_at?: string | null
           id?: number
-          is_deleted?: boolean
-          is_important?: boolean
-          post_type?: string
+          is_pinned?: boolean
+          is_public?: boolean
           title?: string
-          updated_at?: string | null
-          user_id?: string | null
+          updated_at?: string
         }
         Relationships: [
           {
-            foreignKeyName: "posts_dev_user_id_fkey1"
-            columns: ["user_id"]
+            foreignKeyName: "notices_author_id_fkey"
+            columns: ["author_id"]
             isOneToOne: false
             referencedRelation: "profiles"
             referencedColumns: ["id"]
@@ -234,31 +186,43 @@ export type Database = {
       }
       profiles: {
         Row: {
-          avatar_url: string
           created_at: string
+          deleted_at: string | null
+          dept_id: number | null
+          display_name: string | null
           email: string
           id: string
-          is_admin: boolean
           name: string
-          user_name: string
+          phone: string | null
+          role: Database["public"]["Enums"]["role_enum"]
+          status: Database["public"]["Enums"]["profile_status_enum"]
+          updated_at: string
         }
         Insert: {
-          avatar_url?: string
           created_at?: string
+          deleted_at?: string | null
+          dept_id?: number | null
+          display_name?: string | null
           email: string
           id?: string
-          is_admin?: boolean
           name: string
-          user_name: string
+          phone?: string | null
+          role?: Database["public"]["Enums"]["role_enum"]
+          status?: Database["public"]["Enums"]["profile_status_enum"]
+          updated_at?: string
         }
         Update: {
-          avatar_url?: string
           created_at?: string
+          deleted_at?: string | null
+          dept_id?: number | null
+          display_name?: string | null
           email?: string
           id?: string
-          is_admin?: boolean
           name?: string
-          user_name?: string
+          phone?: string | null
+          role?: Database["public"]["Enums"]["role_enum"]
+          status?: Database["public"]["Enums"]["profile_status_enum"]
+          updated_at?: string
         }
         Relationships: []
       }
@@ -267,45 +231,24 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      get_prev_and_next: {
-        Args: { target_id: number }
-        Returns: {
-          next_id: number
-          next_title: string
-          prev_id: number
-          prev_title: string
-        }[]
-      }
-      get_prev_and_next_dev: {
-        Args: { target_id: number }
-        Returns: {
-          next_id: number
-          next_title: string
-          prev_id: number
-          prev_title: string
-        }[]
-      }
-      getbulletinsummary: {
-        Args: { limit_count: number; page: number; select_year?: number }
-        Returns: Json
-      }
-    }
-    Enums: {
       [_ in never]: never
     }
+    Enums: {
+      notice_category_enum:
+        | '예배'
+        | '행사'
+        | '교육'
+        | '모집'
+        | '교인소식'
+        | '선교'
+        | '행정'
+        | '긴급'
+        | '기타'
+      profile_status_enum: 'pending' | 'approved' | 'rejected'
+      role_enum: 'admin' | 'dept_manager' | 'member'
+    }
     CompositeTypes: {
-      bulletin_summary_response: {
-        latest: Database["public"]["Tables"]["bulletin-dev"]["Row"] | null
-        years: number[] | null
-        items: Database["public"]["Tables"]["bulletin-dev"]["Row"][] | null
-        total: number | null
-      }
-      previous_next_type: {
-        previous_id: number | null
-        previous_title: string | null
-        next_id: number | null
-        next_title: string | null
-      }
+      [_ in never]: never
     }
   }
 }
@@ -429,6 +372,10 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      notice_category_enum: ['예배', '행사', '교육', '모집', '교인소식', '선교', '행정', '긴급', '기타'],
+      profile_status_enum: ['pending', 'approved', 'rejected'],
+      role_enum: ['admin', 'dept_manager', 'member'],
+    },
   },
 } as const
