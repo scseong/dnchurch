@@ -1,29 +1,46 @@
-import { BulletinType } from '@/types/common';
+import { BulletinImageType, BulletinType } from '@/types/common';
+
+export type BulletinWithImages = BulletinType & {
+  bulletin_images: BulletinImageType[];
+  profiles?: { display_name: string | null } | null;
+};
 
 export type BulletinParams = { year?: number; page?: number; limit?: number };
 
-export type BulletinFormParams = {
-  title: string;
-  date: string;
-  imageUrls: string[];
-  userId: string;
+export type BulletinImageInput = {
+  cloudinaryId: string;
+  url: string;
+  orderIndex: number;
 };
 
-export type BulletinEditFormParams = Partial<BulletinFormParams> & {
+export type BulletinFormParams = {
+  title: string;
+  sundayDate: string;
+  images: BulletinImageInput[];
+  authorId: string;
+};
+
+export type BulletinEditFormParams = {
   bulletinId: string;
+  title?: string;
+  sundayDate?: string;
+  imagesToAdd?: BulletinImageInput[];
+  imageIdsToDelete?: number[];
 };
 
 export type BulletinSummaryResponse = {
-  latest: BulletinType;
+  latest: BulletinWithImages | null;
   years: number[];
-  items: BulletinType[];
+  items: BulletinWithImages[];
   total: number;
 };
 
 export type ExistingImageItem = {
   type: 'existing';
+  imageId: number;
+  cloudinaryId: string;
   url: string;
-  id: string;
+  orderIndex: number;
 };
 
 export type NewFileItem = {
@@ -37,7 +54,7 @@ export type ImageItem = ExistingImageItem | NewFileItem;
 
 export type BulletinFormInputs = {
   title: string;
-  date: string;
+  sundayDate: string;
   images: ImageItem[];
 };
 
@@ -46,8 +63,8 @@ export type BulletinFormProps = {
   bulletinId?: string;
   initialData?: {
     title: string;
-    date: string;
-    imageUrls?: string[];
-    userId: string;
+    sundayDate: string;
+    images?: ExistingImageItem[];
+    authorId: string;
   };
 };
