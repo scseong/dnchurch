@@ -19,6 +19,7 @@ export default async function BulletinPage({ params }: { params: Promise<{ id: s
     .sort((a, b) => a.order_index - b.order_index)
     .map((img) => ({
       type: 'existing' as const,
+      id: `existing-${img.id}`,
       imageId: img.id,
       cloudinaryId: img.cloudinary_id,
       url: img.url,

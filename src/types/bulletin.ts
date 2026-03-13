@@ -37,6 +37,7 @@ export type BulletinSummaryResponse = {
 
 export type ExistingImageItem = {
   type: 'existing';
+  id: string;
   imageId: number;
   cloudinaryId: string;
   url: string;

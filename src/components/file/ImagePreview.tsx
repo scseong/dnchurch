@@ -3,7 +3,6 @@
 import { FaRegTrashAlt } from 'react-icons/fa';
 import { formattedDate } from '@/utils/date';
 import { convertBytesToFileSize } from '@/utils/file';
-import { getCloudinaryUrl } from '@/utils/cloudinary';
 import type { ImageItem } from '@/types/bulletin';
 import styles from './ImagePreview.module.scss';
 
@@ -19,10 +18,10 @@ export default function ImagePreview({ images, onDelete }: Props) {
     <div className={styles.container}>
       {images.map((image) => {
         const isExisting = image.type === 'existing';
-        const imageSrc = isExisting ? getCloudinaryUrl(image.url) : image.previewUrl;
+        const imageSrc = isExisting ? image.url : image.previewUrl;
 
         const fileName = isExisting
-          ? image.url.split('/').pop()?.split('?')[0] || '기존 이미지'
+          ? image.cloudinaryId.split('/').pop() || '기존 이미지'
           : image.file.name;
 
         return (
