@@ -24,8 +24,7 @@ export async function uploadImage({
 
     const result = await cloudinary.uploader.upload(dataUri, {
       folder,
-      public_id: filename,
-      upload_preset: process.env.NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET
+      public_id: filename
     });
 
     return result;
