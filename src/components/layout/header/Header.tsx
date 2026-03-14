@@ -1,28 +1,28 @@
 'use client';
 
-import { useEffect } from 'react';
+import { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { usePathname } from 'next/navigation';
+import clsx from 'clsx';
 import { useProfile } from '@/context/SessionContextProvider';
 import useModal from '@/hooks/useModal';
-import Modal from '@/components/common/Modal';
 import Logo from '@/components/layout/header/Logo';
 import AuthSection from '@/components/layout/header/AuthSection';
 import DesktopNav from '@/components/layout/header/DesktopNav';
 import MobileToggle from '@/components/layout/header/MobileToggle';
-import Drawer from '@/components/layout/header/Drawer';
 import LayoutContainer from '@/components/layout/container/LayoutContainer';
+import Modal from '@/components/common/Modal';
+import Drawer from '@/components/layout/header/Drawer';
+import { SCROLL_THRESHOLD } from '@/constants';
 import styles from './Header.module.scss';
 
 export default function Header() {
   const user = useProfile();
   const pathname = usePathname();
 
-  const {
-    isVisible: isNavVisible,
-    ref: navRef,
-    handleToggle: handleNavToggle,
-    setVisible: setNavVisible
-  } = useModal();
+  const [isScrolled, setIsScrolled] = useState(false);
+  const [mobileOpen, setMobileOpen] = useState(false);
+
+  const mobileToggleRef = useRef<HTMLDivElement>(null);
 
   const {
     isVisible: isProfileVisible,
@@ -32,12 +32,28 @@ export default function Header() {
   } = useModal();
 
   useEffect(() => {
-    setNavVisible(false);
     setProfileVisible(false);
-  }, [setNavVisible, setProfileVisible, pathname]);
+    setMobileOpen(false);
+  }, [pathname, setProfileVisible]);
+
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth >= 768 && mobileOpen) setMobileOpen(false);
+    };
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, [mobileOpen]);
+
+  useLayoutEffect(() => {
+    const handleScroll = () => setIsScrolled(window.scrollY > SCROLL_THRESHOLD);
+    handleScroll();
+    document.documentElement.removeAttribute('data-scrolled');
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
   return (
-    <header className={styles.header}>
+    <header className={clsx(styles.header, isScrolled && styles.scrolled)}>
       <LayoutContainer>
         <div className={styles.header_wrap}>
           <Logo />
@@ -49,12 +65,14 @@ export default function Header() {
             isVisible={isProfileVisible}
             handleToggle={handleProfileToggle}
           />
-          <MobileToggle ref={navRef} handleToggle={handleNavToggle} />
+          <MobileToggle ref={mobileToggleRef} handleToggle={() => setMobileOpen(true)} />
         </div>
       </LayoutContainer>
-      <Modal isVisible={isNavVisible} onClose={handleNavToggle}>
-        <Drawer isOpen={isNavVisible} onClose={handleNavToggle} user={user} pathname={pathname} />
-      </Modal>
+      {mobileOpen && (
+        <Modal isVisible={mobileOpen} onClose={() => setMobileOpen(false)}>
+          <Drawer isOpen={mobileOpen} onClose={() => setMobileOpen(false)} />
+        </Modal>
+      )}
     </header>
   );
 }

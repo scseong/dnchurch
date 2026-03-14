@@ -4,7 +4,7 @@ import { Map, MapMarker, useMap, ZoomControl } from 'react-kakao-maps-sdk';
 
 export default function LocationMap({ lat, lng, width, height }: LocationMapProps) {
   return (
-    <Map center={{ lat, lng }} style={{ width, height }}>
+    <Map center={{ lat, lng }} style={{ width: '100%', height: '100%' }}>
       <ZoomControl position={'RIGHT'} />
       <EventMarkerContainer lat={lat} lng={lng} />
     </Map>

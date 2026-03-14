@@ -1,42 +1,55 @@
 $desktop-gradient: linear-gradient(90deg, rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.1));
 $mobile-gradient: linear-gradient(180deg, rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.4));
 
-.banner_container {
-  position: relative;
-}
-
 .banner {
-  --banner-gradient: #{$mobile-gradient};
+  margin-top: calc(-1 * $header-height);
   position: relative;
-  padding: $spacing-xxxxl 0;
-  z-index: 1;
+  height: calc(36rem + $header-height);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 
   @include respond-up($breakpoint-md) {
-    --banner-gradient: #{$desktop-gradient};
-    padding: $spacing-layout 0;
+    height: calc(42rem + $header-height);
   }
+}
 
-  .content {
-    position: relative;
-    display: flex;
-    flex-direction: column;
-    gap: $spacing-sm;
-    z-index: 2;
-  }
+.bg {
+  position: absolute;
+  inset: 0;
 
-  .banner_image {
+  img {
     width: 100%;
     height: 100%;
     object-fit: cover;
     object-position: 45% 10%;
-    z-index: 0;
   }
+}
 
-  .overlay {
-    position: absolute;
-    inset: 0;
-    background: var(--banner-gradient);
-    z-index: 1;
+.overlay {
+  position: absolute;
+  inset: 0;
+  background: $mobile-gradient;
+
+  @include respond-up($breakpoint-md) {
+    background: $desktop-gradient;
+  }
+}
+
+.content {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-sm;
+  padding: $header-height $spacing-lg $spacing-lg;
+  max-width: $max-width;
+  margin: 0 auto;
+  width: 100%;
+
+  @include respond-up($breakpoint-md) {
+    padding: $header-height $spacing-xl $spacing-xl;
   }
 
   h1 {
@@ -49,30 +62,22 @@ $mobile-gradient: linear-gradient(180deg, rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.4)
     line-height: $line-height-wide;
     animation: slideUp 0.6s ease-out;
   }
+}
 
-  .learn_more {
-    padding: $spacing-sm $spacing-xl;
-    margin-top: $spacing-xs;
-    display: inline-block;
-    width: fit-content;
-    background-color: $color-gray-100;
-    border-radius: $border-radius-lg;
-    font-size: $font-size-md;
-    color: $color-black;
-    animation: slideUp 0.6s ease-out;
-    transition: transform 325ms cubic-bezier(0, 0, 0.2, 1);
+.learn_more {
+  padding: $spacing-sm $spacing-xl;
+  margin-top: $spacing-xs;
+  display: inline-block;
+  width: fit-content;
+  background-color: $color-gray-100;
+  border-radius: $border-radius-lg;
+  font-size: $font-size-md;
+  color: $color-black;
+  animation: slideUp 0.6s ease-out;
+  transition: transform 325ms cubic-bezier(0, 0, 0.2, 1);
 
-    &:hover {
-      transform: scale(1.05);
-    }
-  }
-
-  @include respond-up($breakpoint-md) {
-    --banner-gradient: #{$desktop-gradient};
-    padding: $spacing-layout 0;
-    background-position:
-      0 0,
-      50% 10%;
+  &:hover {
+    transform: scale(1.05);
   }
 }
 

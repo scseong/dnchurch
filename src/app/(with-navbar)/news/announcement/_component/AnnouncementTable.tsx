@@ -38,7 +38,7 @@ export default function AnnouncementTable({
       header: (info) => info.column.id,
       cell: (info) => formattedDate(info.getValue(), 'YY.MM.DD')
     }),
-    columnHelper.accessor('profiles.user_name', {
+    columnHelper.accessor('profiles.display_name', {
       id: '작성자',
       header: (info) => info.column.id,
       cell: (info) => info.getValue()

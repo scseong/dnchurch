@@ -14,7 +14,7 @@ export const metadata: Metadata = {
 
 export default function Login() {
   return (
-    <section>
+    <section id="login">
       <LayoutContainer>
         <div className={styles.wrap}>
           <div className={styles.header}>

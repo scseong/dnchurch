@@ -2,8 +2,9 @@
 
 import { PropsWithChildren, useEffect, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
+import clsx from 'clsx';
 import useScrollLock from '@/hooks/useScrollLock';
-import style from './Modal.module.scss';
+import styles from './Modal.module.scss';
 
 type Props = PropsWithChildren<{
   onClose?: () => void;
@@ -29,7 +30,7 @@ export default function Modal({ children, onClose, isVisible }: Props) {
 
   return createPortal(
     <div
-      className={`${style.modal} ${isVisible ? style.show : ''}`}
+      className={clsx(styles.modal, isVisible && styles.show)}
       ref={overlayRef}
       onClick={handleOverlayClick}
     >

@@ -13,8 +13,7 @@ export async function signUp({ email, password, name, username }: Credentials) {
     password,
     options: {
       data: {
-        name,
-        user_name: username
+        name
       }
     }
   });

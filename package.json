@@ -1,13 +1,13 @@
 {
   "name": "dnchurch",
-  "version": "0.1.0",
+  "version": "0.2.0-beta.1",
   "private": true,
   "scripts": {
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "generate:types": "supabase gen types typescript --project-id ndimreqwgdiwtjonjjzq --schema public > src/types/database.types.ts",
+    "generate:types": "supabase gen types typescript --project-id mficogrxekuahjqborxw --schema public > src/types/database.types.ts",
     "knip": "knip",
     "analyze": "cross-env ANALYZE=true next build --webpack"
   },

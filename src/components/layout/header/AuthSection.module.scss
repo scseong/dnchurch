@@ -1,7 +1,11 @@
 .auth {
   display: none;
 
-  @include respond-up($breakpoint-md) {
+  @include respond-up($header-breakpoint) {
     display: block;
+
+    a {
+      font-size: $font-size-default;
+    }
   }
 }

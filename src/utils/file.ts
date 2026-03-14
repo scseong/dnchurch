@@ -18,11 +18,10 @@ export function convertBytesToFileSize(totalBytes: number, decimals = 2) {
 
 export function generateFileDownloadList({ urls }: { urls: string[] }) {
   return urls.map((publicId, index) => {
-    const segment = decodeURIComponent(publicId.split('/').pop() || `file_${index + 1}`);
-    const nameWithoutSuffix = segment.replace(/_[^_]+$/, '');
+    const filename = decodeURIComponent(publicId.split('/').pop() || `file_${index + 1}`);
 
     return {
-      filename: nameWithoutSuffix,
+      filename,
       downloadUrl: getCloudinaryDownloadUrl(publicId)
     };
   });

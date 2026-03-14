@@ -19,9 +19,7 @@ export default async function Announcement() {
       <div className={styles.wrap}>
         {/* TODO: 검색 */}
         <div>검색</div>
-        <div>
-          <AnnouncementTable posts={posts} count={count} />
-        </div>
+        <div>{/* <AnnouncementTable posts={posts} count={count} /> */}</div>
       </div>
     </MainContainer>
   );
