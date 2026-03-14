@@ -1,27 +1,37 @@
 import type { Metadata } from 'next';
 import MainContainer from '@/components/layout/container/MainContainer';
-import LocationMap from './_component/LocationMap';
+import { getSiteSettings } from '@/apis/site-settings';
 import styles from './page.module.scss';
 import { MdDirectionsBus, MdLocationOn } from 'react-icons/md';
+import LocationMapClient from './_component/LocationMapClient';
 
 export const metadata: Metadata = {
-  title: '오시는 길 - 대구동남교회',
+  title: '오시는 길',
   description: '대구동남교회에 오시는 방법을 안내합니다.',
   openGraph: {
-    title: '오시는 길 - 대구동남교회',
+    title: '오시는 길',
     description: '대구동남교회에 오시는 방법을 안내합니다.'
   }
 };
 
-const location = {
-  lat: 35.85262832577055,
-  lng: 128.53467835707838
-};
+export default async function Directions() {
+  const settings = await getSiteSettings([
+    'church_address',
+    'church_lat',
+    'church_lng',
+    'directions_subway',
+    'directions_bus_stop_1',
+    'directions_bus_routes_1',
+    'directions_bus_stop_2',
+    'directions_bus_routes_2'
+  ]);
 
-export default function Directions() {
+  const lat = parseFloat(settings.church_lat ?? '35.85262832577055');
+  const lng = parseFloat(settings.church_lng ?? '128.53467835707838');
+
   return (
     <MainContainer title="오시는 길">
-      <LocationMap lat={location.lat} lng={location.lng} width="100%" height="35rem" />
+      <LocationMapClient lat={lat} lng={lng} width="100%" height="35rem" />
       <div className={styles.directions_info}>
         <div className={styles.container}>
           <div className={styles.icon}>
@@ -29,7 +39,7 @@ export default function Directions() {
           </div>
           <div className={styles.info}>
             <h4>주소</h4>
-            <p>대구광역시 달서구 달구벌대로307길 58 (죽전동)</p>
+            <p>{settings.church_address}</p>
           </div>
         </div>
         <div className={styles.container}>
@@ -41,17 +51,18 @@ export default function Directions() {
             <ul>
               <li>
                 <p>
-                  <mark>지하철</mark> 2호선 죽전역 1번 출구 (도보 8분)
+                  <mark>지하철</mark> {settings.directions_subway}
                 </p>
               </li>
               <li>
                 <p>
-                  <mark>버스</mark> 죽전네거리 405 425 509 527 달서5 성서2 250
+                  <mark>버스</mark> {settings.directions_bus_stop_1}{' '}
+                  {settings.directions_bus_routes_1}
                 </p>
               </li>
               <li>
                 <p>
-                  <mark></mark> 죽전119안전센터앞 503 서구 1-1
+                  <mark></mark> {settings.directions_bus_stop_2} {settings.directions_bus_routes_2}
                 </p>
               </li>
             </ul>
