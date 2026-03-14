@@ -17,6 +17,7 @@ export async function generateMetadata({ params }: { params: Promise<{ id: strin
 
   const title = `${bulletin.title}`;
   const description = '이번 주 교회 주보에서 예배 일정과 소식을 살펴보세요.';
+  const firstImage = bulletin.bulletin_images?.[0];
 
   return {
     title,
@@ -24,7 +25,7 @@ export async function generateMetadata({ params }: { params: Promise<{ id: strin
     openGraph: {
       title,
       description,
-      images: bulletin.image_url?.[0] ? [{ url: getCloudinaryUrl(bulletin.image_url[0]) }] : []
+      images: firstImage ? [{ url: getCloudinaryUrl(firstImage.cloudinary_id) }] : []
     }
   };
 }
@@ -59,21 +60,24 @@ export default async function BulletinDetail({ params }: { params: Promise<{ id:
 
   if (!bulletin || error) notFound();
 
-  const { id, created_at, image_url, title, user_id, profiles } = bulletin;
-  const files = generateFileDownloadList({ urls: image_url });
+  const { id, created_at, bulletin_images, title, author_id } = bulletin;
+  const imageIds = (bulletin_images ?? [])
+    .sort((a, b) => a.order_index - b.order_index)
+    .map((img) => img.cloudinary_id);
+  const files = generateFileDownloadList({ urls: imageIds });
 
   return (
     <MainContainer title="주보">
       <BoardHeader
         title={title}
-        userName={profiles?.user_name ?? '관리자'}
+        userName="관리자"
         createdAt={created_at}
-        userId={user_id}
-        thumbnail={getCloudinaryUrl(image_url[0])}
+        userId={author_id ?? ''}
+        thumbnail={imageIds[0] ? getCloudinaryUrl(imageIds[0]) : ''}
         id={id.toString()}
         updateLink={`/news/bulletin/${id}/update`}
       />
-      <BoardBody images={image_url} />
+      <BoardBody images={imageIds} />
       <BoardFooter files={files} prevNext={prevNextBulletin} />
       <BoardListLink link="/news/bulletin" />
     </MainContainer>

@@ -1,34 +1,35 @@
 'use server';
 
 import { v2 as cloudinary } from 'cloudinary';
-import { CloudinaryUploadResponse } from '@/types/cloudinary';
 
 cloudinary.config({
-  cloud_name: process.env.NEXT_PUBLIC_CLOUDINARY_PROJECT,
+  cloud_name: process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME,
   api_key: process.env.CLOUDINARY_API_KEY,
   api_secret: process.env.CLOUDINARY_API_SECRET
 });
 
-export async function uploadImage({ file, folder = '' }: { file: File; folder?: string }) {
+export async function uploadImage({
+  file,
+  folder,
+  filename
+}: {
+  file: File;
+  folder: string;
+  filename: string;
+}) {
   try {
-    const data = new FormData();
-    data.append('file', file);
-    data.append('upload_preset', `${process.env.NEXT_PUBLIC_CLOUDINARY_PROJECT}`);
-    data.append('folder', folder);
+    const arrayBuffer = await file.arrayBuffer();
+    const buffer = Buffer.from(arrayBuffer);
+    const dataUri = `data:${file.type};base64,${buffer.toString('base64')}`;
 
-    const res = await fetch(`${process.env.NEXT_PUBLIC_CLOUDINARY_URL}/upload`, {
-      method: 'POST',
-      body: data
+    const result = await cloudinary.uploader.upload(dataUri, {
+      folder,
+      public_id: filename
     });
 
-    if (!res.ok) {
-      const errorData = await res.json();
-      throw new Error(errorData.error?.message || 'Cloudinary upload failed');
-    }
-
-    return (await res.json()) as CloudinaryUploadResponse;
+    return result;
   } catch (error) {
-    console.error(`[Upload Error] ${file.name}:`, error);
+    console.error(`[Cloudinary Upload Error] ${file.name}:`, error);
     throw error;
   }
 }
@@ -38,7 +39,7 @@ export async function deleteImage(publicId: string) {
     const result = await cloudinary.uploader.destroy(publicId);
     return result;
   } catch (error: any) {
-    console.error('Cloudinary Delete Error:', error.response?.data || error.message);
+    console.error('[Cloudinary Delete Error] ', error.response?.data || error.message);
     throw error;
   }
 }

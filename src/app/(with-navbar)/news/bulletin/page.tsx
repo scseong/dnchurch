@@ -37,7 +37,7 @@ export default async function BulletinPage({ searchParams }: Props) {
       <div className={styles.wrap}>
         <LatestBulletin
           title={latestBulletin?.title ?? ''}
-          image_url={latestBulletin?.image_url ?? []}
+          images={latestBulletin?.bulletin_images ?? []}
         />
         <BulletinTableSection
           yearFilter={year}
