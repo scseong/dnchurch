@@ -104,29 +104,20 @@ export const bulletinService = (supabase: SupabaseClient<Database>) => ({
   },
 
   create: async ({ title, sundayDate, images, authorId }: BulletinFormParams) => {
-    const bulletinRes = await supabase
-      .from(BULLETIN_BUCKET)
-      .insert({ title, sunday_date: sundayDate, author_id: authorId })
-      .select()
-      .single();
-
-    const bulletinData = handleResponse(bulletinRes);
-    if (bulletinRes.error || !bulletinRes.data) return bulletinData;
-
-    const bulletinId = bulletinRes.data.id;
-
-    if (images.length > 0) {
-      await supabase.from('bulletin_images').insert(
-        images.map((img) => ({
-          bulletin_id: bulletinId,
+    const res = await supabase
+      .rpc('create_bulletin', {
+        p_title: title,
+        p_sunday_date: sundayDate,
+        p_author_id: authorId,
+        p_images: images.map((img) => ({
           cloudinary_id: img.cloudinaryId,
           url: img.url,
           order_index: img.orderIndex
         }))
-      );
-    }
+      })
+      .maybeSingle();
 
-    return bulletinData;
+    return handleResponse(res);
   },
 
   update: async ({
@@ -136,35 +127,20 @@ export const bulletinService = (supabase: SupabaseClient<Database>) => ({
     imagesToAdd = [],
     imageIdsToDelete = []
   }: BulletinEditFormParams) => {
-    const updatePayload: { title?: string; sunday_date?: string } = {};
-    if (title !== undefined) updatePayload.title = title;
-    if (sundayDate !== undefined) updatePayload.sunday_date = sundayDate;
-
-    const bulletinRes = await supabase
-      .from(BULLETIN_BUCKET)
-      .update(updatePayload)
-      .eq('id', Number(bulletinId))
-      .select()
-      .single();
-
-    const bulletinData = handleResponse(bulletinRes);
-    if (bulletinRes.error) return bulletinData;
-
-    if (imageIdsToDelete.length > 0) {
-      await supabase.from('bulletin_images').delete().in('id', imageIdsToDelete);
-    }
-
-    if (imagesToAdd.length > 0) {
-      await supabase.from('bulletin_images').insert(
-        imagesToAdd.map((img) => ({
-          bulletin_id: Number(bulletinId),
+    const res = await supabase
+      .rpc('update_bulletin', {
+        p_bulletin_id: Number(bulletinId),
+        p_title: title,
+        p_sunday_date: sundayDate,
+        p_images_to_add: imagesToAdd.map((img) => ({
           cloudinary_id: img.cloudinaryId,
           url: img.url,
           order_index: img.orderIndex
-        }))
-      );
-    }
+        })),
+        p_image_ids_to_delete: imageIdsToDelete
+      })
+      .maybeSingle();
 
-    return bulletinData;
+    return handleResponse(res);
   }
 });

@@ -180,6 +180,31 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      create_bulletin: {
+        Args: {
+          p_author_id: string
+          p_images?: Json
+          p_sunday_date: string
+          p_title: string
+        }
+        Returns: {
+          author_id: string
+          content: string | null
+          created_at: string
+          deleted_at: string | null
+          id: number
+          sunday_date: string
+          title: string
+          updated_at: string
+          view_count: number
+        }[]
+        SetofOptions: {
+          from: "*"
+          to: "bulletins"
+          isOneToOne: false
+          isSetofReturn: true
+        }
+      }
       get_adjacent_bulletins: {
         Args: { target_id: number }
         Returns: {
@@ -188,6 +213,32 @@ export type Database = {
           prev_id: number
           prev_title: string
         }[]
+      }
+      update_bulletin: {
+        Args: {
+          p_bulletin_id: number
+          p_image_ids_to_delete?: number[]
+          p_images_to_add?: Json
+          p_sunday_date?: string
+          p_title?: string
+        }
+        Returns: {
+          author_id: string
+          content: string | null
+          created_at: string
+          deleted_at: string | null
+          id: number
+          sunday_date: string
+          title: string
+          updated_at: string
+          view_count: number
+        }[]
+        SetofOptions: {
+          from: "*"
+          to: "bulletins"
+          isOneToOne: false
+          isSetofReturn: true
+        }
       }
     }
     Enums: {
