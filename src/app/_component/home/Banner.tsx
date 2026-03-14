@@ -1,39 +1,30 @@
 import Link from 'next/link';
-import { LayoutContainer } from '@/components/layout';
 import CloudinaryImage from '@/components/common/CloudinaryImage';
-import { IMAGE_PUBLIC_IDS } from '@/constants/images';
+import SettingsText from '@/components/common/SettingsText';
+import { getSiteSettings } from '@/apis/site-settings';
 import styles from './Banner.module.scss';
 
 export default async function Banner() {
+  const settings = await getSiteSettings(['banner_title', 'banner_subtitle', 'banner_image']);
+
   return (
-    <section>
-      <div className={styles.banner}>
-        <LayoutContainer>
-          <CloudinaryImage
-            src={IMAGE_PUBLIC_IDS.banner}
-            alt="대구동남교회 전경과 십자가 탑"
-            fill
-            fetchPriority="high"
-            sizes="100vw"
-            className={styles.banner_image}
-          />
-          <div className={styles.overlay} aria-hidden="true" />
-          <div className={styles.content}>
-            <h1>
-              동남교회에 오신 것을
-              <br />
-              환영합니다
-            </h1>
-            <p>
-              수고하고 무거운 짐진 당신을 주님의 사랑으로 초대합니다.&nbsp;
-              <br className="hidden-on-mobile" />
-              마음의 짐을 내려놓고 참된 안식을 누리세요.
-            </p>
-            <Link href="/about" className={styles.learn_more}>
-              처음 오셨나요?
-            </Link>
-          </div>
-        </LayoutContainer>
+    <section className={styles.banner}>
+      <div className={styles.bg}>
+        <CloudinaryImage
+          src={settings.banner_image ?? 'banner_nkbhnp'}
+          alt="대구동남교회 전경과 십자가 탑"
+          fill
+          fetchPriority="high"
+          sizes="100vw"
+        />
+        <div className={styles.overlay} aria-hidden="true" />
+      </div>
+      <div className={styles.content}>
+        <h1><SettingsText value={settings.banner_title} /></h1>
+        <p><SettingsText value={settings.banner_subtitle} /></p>
+        <Link href="/about" className={styles.learn_more}>
+          처음 오셨나요?
+        </Link>
       </div>
     </section>
   );
