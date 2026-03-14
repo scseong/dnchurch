@@ -5,9 +5,13 @@ import { resolveHeroMeta } from '@/utils/sitemap';
 import CloudinaryImage from '@/components/common/CloudinaryImage';
 import styles from './HeroSection.module.scss';
 
-export default function HeroSection() {
+type Props = {
+  heroImageOverrides?: Record<string, string>;
+};
+
+export default function HeroSection({ heroImageOverrides = {} }: Props) {
   const pathname = usePathname();
-  const { title, description, heroImageId } = resolveHeroMeta(pathname);
+  const { title, description, heroImageId } = resolveHeroMeta(pathname, heroImageOverrides);
 
   return (
     <section className={styles.hero} aria-label={`${title} 히어로 섹션`}>
