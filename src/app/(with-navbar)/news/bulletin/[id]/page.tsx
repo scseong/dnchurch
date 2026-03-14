@@ -60,7 +60,7 @@ export default async function BulletinDetail({ params }: { params: Promise<{ id:
 
   if (!bulletin || error) notFound();
 
-  const { id, created_at, bulletin_images, title, author_id, profiles } = bulletin;
+  const { id, created_at, bulletin_images, title, author_id } = bulletin;
   const imageIds = (bulletin_images ?? [])
     .sort((a, b) => a.order_index - b.order_index)
     .map((img) => img.cloudinary_id);
@@ -70,7 +70,7 @@ export default async function BulletinDetail({ params }: { params: Promise<{ id:
     <MainContainer title="주보">
       <BoardHeader
         title={title}
-        userName={profiles?.display_name ?? '관리자'}
+        userName="관리자"
         createdAt={created_at}
         userId={author_id ?? ''}
         thumbnail={imageIds[0] ? getCloudinaryUrl(imageIds[0]) : ''}

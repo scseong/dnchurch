@@ -20,11 +20,13 @@ export default function AuthSection({ ref, user, pathname, isVisible, handleTogg
       ) : (
         <div className={styles.profile} ref={ref}>
           <UserProfile
+            avatarUrl={user.avatar_url ?? ''}
             name={user.name}
             username={user.display_name ?? user.name}
             handleClick={handleToggle}
           />
           <UserProfileModal
+            avatarUrl={user.avatar_url ?? ''}
             name={user.name}
             username={user.display_name ?? user.name}
             id={user.id}

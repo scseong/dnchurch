@@ -99,39 +99,8 @@ export const bulletinService = (supabase: SupabaseClient<Database>) => ({
   },
 
   adjacents: async (targetId: number) => {
-    const [prevRes, nextRes] = await Promise.all([
-      supabase
-        .from(BULLETIN_BUCKET)
-        .select('id, title')
-        .is('deleted_at', null)
-        .lt('id', targetId)
-        .order('id', { ascending: false })
-        .limit(1)
-        .maybeSingle(),
-      supabase
-        .from(BULLETIN_BUCKET)
-        .select('id, title')
-        .is('deleted_at', null)
-        .gt('id', targetId)
-        .order('id', { ascending: true })
-        .limit(1)
-        .maybeSingle()
-    ]);
-
-    const error = prevRes.error || nextRes.error || null;
-
-    return {
-      data: {
-        prev_id: prevRes.data?.id ?? null,
-        prev_title: prevRes.data?.title ?? null,
-        next_id: nextRes.data?.id ?? null,
-        next_title: nextRes.data?.title ?? null
-      },
-      error,
-      count: null,
-      status: error ? 500 : 200,
-      statusText: error ? 'Error' : 'OK'
-    };
+    const res = await supabase.rpc('get_adjacent_bulletins', { target_id: targetId }).maybeSingle();
+    return handleResponse(res);
   },
 
   create: async ({ title, sundayDate, images, authorId }: BulletinFormParams) => {

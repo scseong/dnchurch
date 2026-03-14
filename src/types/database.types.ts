@@ -10,7 +10,7 @@ export type Database = {
   // Allows to automatically instantiate createClient with right options
   // instead of createClient<Database, { PostgrestVersion: 'XX' }>(URL, KEY)
   __InternalSupabase: {
-    PostgrestVersion: "12.2.3 (519615d)"
+    PostgrestVersion: "14.4"
   }
   public: {
     Tables: {
@@ -27,7 +27,7 @@ export type Database = {
           bulletin_id: number
           cloudinary_id: string
           created_at?: string
-          id?: number
+          id?: never
           order_index?: number
           url: string
         }
@@ -35,7 +35,7 @@ export type Database = {
           bulletin_id?: number
           cloudinary_id?: string
           created_at?: string
-          id?: number
+          id?: never
           order_index?: number
           url?: string
         }
@@ -51,7 +51,7 @@ export type Database = {
       }
       bulletins: {
         Row: {
-          author_id: string | null
+          author_id: string
           content: string | null
           created_at: string
           deleted_at: string | null
@@ -62,77 +62,28 @@ export type Database = {
           view_count: number
         }
         Insert: {
-          author_id?: string | null
+          author_id: string
           content?: string | null
           created_at?: string
           deleted_at?: string | null
-          id?: number
+          id?: never
           sunday_date: string
           title: string
           updated_at?: string
           view_count?: number
         }
         Update: {
-          author_id?: string | null
+          author_id?: string
           content?: string | null
           created_at?: string
           deleted_at?: string | null
-          id?: number
+          id?: never
           sunday_date?: string
           title?: string
           updated_at?: string
           view_count?: number
         }
-        Relationships: [
-          {
-            foreignKeyName: "bulletins_author_id_fkey"
-            columns: ["author_id"]
-            isOneToOne: false
-            referencedRelation: "profiles"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
-      comments: {
-        Row: {
-          author_id: string | null
-          content: string
-          created_at: string
-          deleted_at: string | null
-          id: number
-          target_id: number
-          target_type: string
-          updated_at: string
-        }
-        Insert: {
-          author_id?: string | null
-          content: string
-          created_at?: string
-          deleted_at?: string | null
-          id?: number
-          target_id: number
-          target_type: string
-          updated_at?: string
-        }
-        Update: {
-          author_id?: string | null
-          content?: string
-          created_at?: string
-          deleted_at?: string | null
-          id?: number
-          target_id?: number
-          target_type?: string
-          updated_at?: string
-        }
-        Relationships: [
-          {
-            foreignKeyName: "comments_author_id_fkey"
-            columns: ["author_id"]
-            isOneToOne: false
-            referencedRelation: "profiles"
-            referencedColumns: ["id"]
-          },
-        ]
+        Relationships: []
       }
       notices: {
         Row: {
@@ -147,6 +98,7 @@ export type Database = {
           is_public: boolean
           title: string
           updated_at: string
+          view_count: number
         }
         Insert: {
           attachment_url?: string | null
@@ -155,11 +107,12 @@ export type Database = {
           content: string
           created_at?: string
           deleted_at?: string | null
-          id?: number
+          id?: never
           is_pinned?: boolean
           is_public?: boolean
           title: string
           updated_at?: string
+          view_count?: number
         }
         Update: {
           attachment_url?: string | null
@@ -168,24 +121,18 @@ export type Database = {
           content?: string
           created_at?: string
           deleted_at?: string | null
-          id?: number
+          id?: never
           is_pinned?: boolean
           is_public?: boolean
           title?: string
           updated_at?: string
+          view_count?: number
         }
-        Relationships: [
-          {
-            foreignKeyName: "notices_author_id_fkey"
-            columns: ["author_id"]
-            isOneToOne: false
-            referencedRelation: "profiles"
-            referencedColumns: ["id"]
-          },
-        ]
+        Relationships: []
       }
       profiles: {
         Row: {
+          avatar_url: string | null
           created_at: string
           deleted_at: string | null
           dept_id: number | null
@@ -199,12 +146,13 @@ export type Database = {
           updated_at: string
         }
         Insert: {
+          avatar_url?: string | null
           created_at?: string
           deleted_at?: string | null
           dept_id?: number | null
           display_name?: string | null
           email: string
-          id?: string
+          id: string
           name: string
           phone?: string | null
           role?: Database["public"]["Enums"]["role_enum"]
@@ -212,6 +160,7 @@ export type Database = {
           updated_at?: string
         }
         Update: {
+          avatar_url?: string | null
           created_at?: string
           deleted_at?: string | null
           dept_id?: number | null
@@ -231,21 +180,29 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      get_adjacent_bulletins: {
+        Args: { target_id: number }
+        Returns: {
+          next_id: number
+          next_title: string
+          prev_id: number
+          prev_title: string
+        }[]
+      }
     }
     Enums: {
       notice_category_enum:
-        | '예배'
-        | '행사'
-        | '교육'
-        | '모집'
-        | '교인소식'
-        | '선교'
-        | '행정'
-        | '긴급'
-        | '기타'
-      profile_status_enum: 'pending' | 'approved' | 'rejected'
-      role_enum: 'admin' | 'dept_manager' | 'member'
+        | "예배"
+        | "행사"
+        | "교육"
+        | "모집"
+        | "교인소식"
+        | "선교"
+        | "행정"
+        | "긴급"
+        | "기타"
+      profile_status_enum: "pending" | "approved" | "rejected"
+      role_enum: "admin" | "dept_manager" | "member"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -373,9 +330,19 @@ export type CompositeTypes<
 export const Constants = {
   public: {
     Enums: {
-      notice_category_enum: ['예배', '행사', '교육', '모집', '교인소식', '선교', '행정', '긴급', '기타'],
-      profile_status_enum: ['pending', 'approved', 'rejected'],
-      role_enum: ['admin', 'dept_manager', 'member'],
+      notice_category_enum: [
+        "예배",
+        "행사",
+        "교육",
+        "모집",
+        "교인소식",
+        "선교",
+        "행정",
+        "긴급",
+        "기타",
+      ],
+      profile_status_enum: ["pending", "approved", "rejected"],
+      role_enum: ["admin", "dept_manager", "member"],
     },
   },
 } as const
