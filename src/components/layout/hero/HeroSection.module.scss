@@ -1,8 +1,6 @@
 .hero {
   margin-top: calc(-1 * $header-height);
-
   position: relative;
-  width: 100%;
   height: calc(30rem + $header-height);
   overflow: hidden;
 

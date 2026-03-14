@@ -46,7 +46,7 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
         />
       </head>
       <body>
-        <Script src={API_KEY} strategy="lazyOnload" />
+        <Script src={API_KEY} strategy="afterInteractive" />
         <KakaoScript />
         <div id="root">
           <SessionContextProvider>

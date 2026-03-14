@@ -6,12 +6,12 @@ import {
   getCoreRowModel,
   useReactTable
 } from '@tanstack/react-table';
-import { ScheduleType } from '../page';
+import type { WorshipScheduleType } from '@/types/common';
 import styles from './WorshipSchedule.module.scss';
 
-const columnHelper = createColumnHelper<ScheduleType[0]>();
+const columnHelper = createColumnHelper<WorshipScheduleType>();
 const columns = [
-  columnHelper.accessor('worship', {
+  columnHelper.accessor('name', {
     id: '구분',
     header: (info) => info.column.id,
     cell: (info) => info.getValue()
@@ -28,7 +28,7 @@ const columns = [
   })
 ];
 
-export default function WorshipSchedule({ schedule }: { schedule: ScheduleType }) {
+export default function WorshipSchedule({ schedule }: { schedule: WorshipScheduleType[] }) {
   const table = useReactTable({
     data: schedule,
     columns,

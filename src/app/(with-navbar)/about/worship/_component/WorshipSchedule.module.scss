@@ -3,16 +3,16 @@
   border-collapse: collapse;
 
   th {
-    padding: 0.8rem 1rem;
-    background-color: rgba(35, 19, 5, 0.9);
-    border-collapse: collapse;
-    color: white;
-    font-weight: 500;
+    padding: $spacing-xs $spacing-sm;
+    background-color: $color-primary;
+    color: $color-white;
+    font-size: $font-size-default;
+
+    font-weight: $font-weight-medium;
     text-align: center;
 
     &:first-child {
       width: 37%;
-      border-left: none;
     }
 
     &:nth-child(2) {
@@ -21,7 +21,6 @@
 
     &:nth-child(3) {
       width: 30%;
-      border-right: none;
     }
   }
 
@@ -30,18 +29,13 @@
     word-break: keep-all;
 
     td {
-      padding: 1rem;
-      border-collapse: collapse;
-      background-color: rgba(253, 231, 211, 0.2);
+      padding: $spacing-sm;
+      background-color: $color-bg-default;
+      font-size: $font-size-md;
     }
 
     td:first-child {
-      font-weight: 500;
-      border-left: none;
-    }
-
-    td:last-child {
-      border-right: none;
+      font-weight: $font-weight-medium;
     }
   }
 }

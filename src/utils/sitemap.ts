@@ -15,16 +15,31 @@ export function resolveCurrentNode(pathname: string): {
   return { parent: null, child: null };
 }
 
-export function resolveHeroMeta(pathname: string): {
+export function resolveHeroMeta(
+  pathname: string,
+  overrides: Record<string, string> = {}
+): {
   title: string;
   description: string;
   heroImageId: string;
 } {
   const { parent, child } = resolveCurrentNode(pathname);
   const node = child ?? parent;
+  const key = pathToHeroImageKey(pathname);
   return {
     title: node?.title ?? '',
     description: node?.description ?? '',
-    heroImageId: node?.heroImageId ?? ''
+    heroImageId: overrides[key] ?? node?.heroImageId ?? ''
   };
+}
+
+export function pathToHeroImageKey(path: string): string {
+  return `hero_image${path.replaceAll('/', '_')}`;
+}
+
+export function getAllHeroImageKeys(): string[] {
+  return sitemap.flatMap((item) => [
+    pathToHeroImageKey(item.path),
+    ...(item.children?.map((c) => pathToHeroImageKey(c.path)) ?? [])
+  ]);
 }
