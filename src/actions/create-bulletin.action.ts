@@ -13,7 +13,7 @@ export const createBulletinAction = async (formData: FormData) => {
 
   try {
     const title = formData.get('title')?.toString().trim();
-    const sundayDate = formData.get('date')?.toString();
+    const sundayDate = formData.get('sundayDate')?.toString();
     const files = formData.getAll('files').filter(Boolean) as File[];
     const { user, isAdmin } = await checkAdminPermission();
 

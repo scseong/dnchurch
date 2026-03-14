@@ -50,7 +50,7 @@ export default function BulletinForm({ mode, bulletinId, initialData }: Bulletin
     try {
       const formData = new FormData();
       formData.append('title', data.title);
-      formData.append('date', data.sundayDate);
+      formData.append('sundayDate', data.sundayDate);
 
       const existingImages = data.images.filter(
         (img): img is ExistingImageItem => img.type === 'existing'

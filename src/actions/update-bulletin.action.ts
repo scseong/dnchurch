@@ -15,7 +15,7 @@ export const updateBulletinAction = async (formData: FormData) => {
   try {
     const bulletinId = formData.get('bulletinId')?.toString();
     const title = formData.get('title')?.toString().trim();
-    const sundayDate = formData.get('date')?.toString();
+    const sundayDate = formData.get('sundayDate')?.toString();
     const authorId = formData.get('authorId')?.toString();
     const files = formData.getAll('files').filter(Boolean) as File[];
     const { user, isAdmin } = await checkAdminPermission();
@@ -33,8 +33,9 @@ export const updateBulletinAction = async (formData: FormData) => {
     const existingImages: ExistingImageItem[] = existingImagesJson
       ? JSON.parse(existingImagesJson)
       : [];
-    const deletedImages: Pick<ExistingImageItem, 'imageId' | 'cloudinaryId'>[] =
-      deletedImagesJson ? JSON.parse(deletedImagesJson) : [];
+    const deletedImages: Pick<ExistingImageItem, 'imageId' | 'cloudinaryId'>[] = deletedImagesJson
+      ? JSON.parse(deletedImagesJson)
+      : [];
 
     const imageIdsToDelete = deletedImages.map((img) => img.imageId);
     const retainedCount = existingImages.filter(
@@ -51,7 +52,7 @@ export const updateBulletinAction = async (formData: FormData) => {
       newImages = uploaded;
     }
 
-    if (existingImages.length - deletedImages.length + newImages.length === 0) {
+    if (existingImages.length + newImages.length === 0) {
       if (newUploadedPublicIds.length > 0) {
         await Promise.all(newUploadedPublicIds.map(deleteImage));
       }
