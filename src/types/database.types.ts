@@ -175,6 +175,105 @@ export type Database = {
         }
         Relationships: []
       }
+      site_settings: {
+        Row: {
+          key: string
+          value: string
+          description: string | null
+          updated_at: string
+        }
+        Insert: {
+          key: string
+          value: string
+          description?: string | null
+          updated_at?: string
+        }
+        Update: {
+          key?: string
+          value?: string
+          description?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      worship_schedules: {
+        Row: {
+          id: number
+          name: string
+          time: string
+          location: string
+          category: Database["public"]["Enums"]["worship_category"]
+          order_index: number
+          is_active: boolean
+          created_at: string
+          updated_at: string
+        }
+        Insert: {
+          id?: never
+          name: string
+          time: string
+          location: string
+          category: Database["public"]["Enums"]["worship_category"]
+          order_index?: number
+          is_active?: boolean
+          created_at?: string
+          updated_at?: string
+        }
+        Update: {
+          id?: never
+          name?: string
+          time?: string
+          location?: string
+          category?: Database["public"]["Enums"]["worship_category"]
+          order_index?: number
+          is_active?: boolean
+          created_at?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      staff: {
+        Row: {
+          contact: string | null
+          created_at: string
+          education: string[]
+          experience: string[]
+          id: number
+          image_url: string | null
+          is_active: boolean
+          name: string
+          order_index: number
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          contact?: string | null
+          created_at?: string
+          education?: string[]
+          experience?: string[]
+          id?: number
+          image_url?: string | null
+          is_active?: boolean
+          name: string
+          order_index?: number
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          contact?: string | null
+          created_at?: string
+          education?: string[]
+          experience?: string[]
+          id?: number
+          image_url?: string | null
+          is_active?: boolean
+          name?: string
+          order_index?: number
+          title?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
@@ -252,6 +351,7 @@ export type Database = {
         | "행정"
         | "긴급"
         | "기타"
+      worship_category: "main" | "church_school"
       profile_status_enum: "pending" | "approved" | "rejected"
       role_enum: "admin" | "dept_manager" | "member"
     }
