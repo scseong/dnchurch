@@ -17,7 +17,7 @@ export function resolveCurrentNode(pathname: string): {
 
 export function resolveHeroMeta(
   pathname: string,
-  overrides: Record<string, string> = {}
+  heroImages: Record<string, string> = {}
 ): {
   title: string;
   description: string;
@@ -29,7 +29,7 @@ export function resolveHeroMeta(
   return {
     title: node?.title ?? '',
     description: node?.description ?? '',
-    heroImageId: overrides[key] ?? node?.heroImageId ?? ''
+    heroImageId: heroImages[key] ?? ''
   };
 }
 

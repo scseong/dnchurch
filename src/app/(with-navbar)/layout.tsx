@@ -5,11 +5,11 @@ import { getSiteSettings } from '@/apis/site-settings';
 import { getAllHeroImageKeys } from '@/utils/sitemap';
 
 export default async function Layout({ children }: PropsWithChildren) {
-  const heroImageOverrides = await getSiteSettings(getAllHeroImageKeys());
+  const heroImages = await getSiteSettings(getAllHeroImageKeys());
 
   return (
     <>
-      <HeroSection heroImageOverrides={heroImageOverrides} />
+      <HeroSection heroImages={heroImages} />
       <Breadcrumb />
       {children}
     </>

@@ -3,7 +3,6 @@ export type SitemapChild = {
   label: string;
   title: string;
   description: string;
-  heroImageId: string;
 };
 
 export type SitemapItem = {
@@ -11,7 +10,6 @@ export type SitemapItem = {
   label: string;
   title: string;
   description: string;
-  heroImageId: string;
   inNav: boolean;
   children?: SitemapChild[];
 };

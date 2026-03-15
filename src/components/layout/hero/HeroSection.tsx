@@ -6,12 +6,12 @@ import CloudinaryImage from '@/components/common/CloudinaryImage';
 import styles from './HeroSection.module.scss';
 
 type Props = {
-  heroImageOverrides?: Record<string, string>;
+  heroImages?: Record<string, string>;
 };
 
-export default function HeroSection({ heroImageOverrides = {} }: Props) {
+export default function HeroSection({ heroImages = {} }: Props) {
   const pathname = usePathname();
-  const { title, description, heroImageId } = resolveHeroMeta(pathname, heroImageOverrides);
+  const { title, description, heroImageId } = resolveHeroMeta(pathname, heroImages);
 
   return (
     <section className={styles.hero} aria-label={`${title} 히어로 섹션`}>
