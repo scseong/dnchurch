@@ -4,7 +4,7 @@ import MainContainer from '@/components/layout/container/MainContainer';
 import LatestBulletin from '@/app/(with-navbar)/news/bulletin/_component/LatestBulletin';
 import BulletinTableSection from '@/app/(with-navbar)/news/bulletin/_component/BulletinTableSection';
 import { getBulletinSummary } from '@/services/bulletin';
-import { isNumeric } from '@/utils/validator';
+import { validateSearchParams, validate } from '@/utils/common';
 import styles from './page.module.scss';
 
 type Props = {
@@ -22,9 +22,15 @@ export const metadata: Metadata = {
 
 export default async function BulletinPage({ searchParams }: Props) {
   const params = await searchParams;
-  const { year, page, isValid } = parseQueryParams(params);
+  const isValid = validateSearchParams(params, {
+    year: validate.number,
+    page: validate.number
+  });
 
   if (!isValid) notFound();
+
+  const page = params.page ? parseInt(params.page) : 1;
+  const year = params.year ? parseInt(params.year) : undefined;
 
   const { data, error } = await getBulletinSummary({ year, page });
 
@@ -49,19 +55,4 @@ export default async function BulletinPage({ searchParams }: Props) {
       </div>
     </MainContainer>
   );
-}
-
-function parseQueryParams(params: { page?: string; year?: string }) {
-  const isYearValid = isNumeric(params.year);
-  const isPageValid = isNumeric(params.page);
-
-  if (!isYearValid || !isPageValid) {
-    return { isValid: false, year: undefined, page: 1 };
-  }
-
-  return {
-    isValid: true,
-    year: params.year ? parseInt(params.year) : undefined,
-    page: Math.max(1, params.page ? parseInt(params.page) : 1)
-  };
 }
