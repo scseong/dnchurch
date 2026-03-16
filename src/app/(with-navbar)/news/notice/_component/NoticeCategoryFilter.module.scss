@@ -1,0 +1,48 @@
+.filter {
+  overflow-x: auto;
+  scrollbar-width: none;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+.chip_list {
+  display: flex;
+  gap: $spacing-xxs;
+  white-space: nowrap;
+}
+
+.chip {
+  padding: 0 $spacing-sm;
+  display: inline-flex;
+  align-items: center;
+  gap: $spacing-xxs;
+  height: 3rem;
+  border: 1px solid $color-border-default;
+  border-radius: $border-radius-full;
+  background: transparent;
+  font-size: $font-size-xs;
+  transition: background-color $transition-duration-normal $transition-easing-default;
+
+  &:hover:not(.selected) {
+    border-color: $color-border-primary;
+    background: $color-bg-hover;
+  }
+
+  &.selected {
+    border-color: $color-primary;
+    background: $color-primary;
+    color: $color-white;
+  }
+}
+
+.count {
+  font-size: 0.9rem;
+  opacity: 0.5;
+
+  .selected & {
+    color: rgba(255, 255, 255, 0.5);
+    opacity: 1;
+  }
+}

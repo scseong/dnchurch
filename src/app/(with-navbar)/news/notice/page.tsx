@@ -1,14 +1,25 @@
+import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import MainContainer from '@/components/layout/container/MainContainer';
-import NoticeTable from '@/app/(with-navbar)/news/notice/_component/NoticeTable';
+import NoticeControlBar from '@/app/(with-navbar)/news/notice/_component/NoticeControlBar';
+import NoticeListClient from '@/app/(with-navbar)/news/notice/_component/NoticeListClient';
 import { getNotices } from '@/services/notice';
 import { validateSearchParams, validate } from '@/utils/common';
 import { NOTICE_CATEGORIES } from '@/constants/notice';
 import type { NoticeCategory } from '@/types/notice';
 import styles from './page.module.scss';
 
+export const metadata: Metadata = {
+  title: '공지사항',
+  description: '대구동남교회 공지사항을 확인하세요.'
+};
+
 type Props = {
-  searchParams: Promise<{ page: string; category: NoticeCategory }>;
+  searchParams: Promise<{
+    page: string;
+    category: NoticeCategory;
+    search: string;
+  }>;
 };
 
 export default async function Notice({ searchParams }: Props) {
@@ -22,15 +33,23 @@ export default async function Notice({ searchParams }: Props) {
 
   const page = params.page ? parseInt(params.page) : 1;
   const category = params.category ?? undefined;
+  const search = params.search ?? undefined;
 
-  const { data: posts, count } = await getNotices({ page, category });
+  const { data: posts, count } = await getNotices({ page, category, search });
 
   return (
     <MainContainer title="공지사항">
       <div className={styles.wrap}>
-        {/* TODO: 검색 */}
-        <div>검색</div>
-        {/* <NoticeTable data={posts} total={Number(count)} currentPage={page} /> */}
+        <NoticeControlBar
+          total={Number(count)}
+          currentCategory={category}
+          currentSearch={search}
+        />
+        <NoticeListClient
+          data={posts ?? []}
+          total={Number(count)}
+          currentPage={page}
+        />
       </div>
     </MainContainer>
   );

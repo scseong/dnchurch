@@ -1,0 +1,262 @@
+// ── PC 슬라이드업 애니메이션 ──
+@keyframes nb-slide-up {
+  from {
+    opacity: 0;
+    transform: translate(-50%, calc(-50% + 2.4rem));
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, -50%);
+  }
+}
+
+// ── 모바일 슬라이드업 애니메이션 ──
+@keyframes nb-slide-up-mobile {
+  from {
+    transform: translateY(100%);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+
+// ── 오버레이 ──
+.overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(3px);
+  z-index: 9999;
+}
+
+// ── 모달 (PC: 중앙 고정, Mobile: 하단 시트) ──
+.modal {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  width: min(64rem, 90vw);
+  height: min(72rem, 88vh);
+  background: $color-bg-body;
+  border-radius: 1.6rem;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  z-index: 10000;
+  animation: nb-slide-up 0.28s cubic-bezier(0.32, 0.72, 0, 1) both;
+
+  @include respond($breakpoint-md) {
+    top: auto;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: 100%;
+    height: 90dvh;
+    border-radius: 1.6rem 1.6rem 0 0;
+    transform: none;
+    animation: nb-slide-up-mobile 0.3s cubic-bezier(0.32, 0.72, 0, 1) both;
+  }
+}
+
+// ── 핸들 (모바일 전용) ──
+.handle {
+  display: none;
+
+  @include respond($breakpoint-md) {
+    display: block;
+    margin: $spacing-xs auto $spacing-xxs;
+    width: 3.6rem;
+    height: 0.4rem;
+    border-radius: $border-radius-full;
+    background: $color-border-default;
+    flex-shrink: 0;
+  }
+}
+
+// ── 헤더 ──
+.header {
+  padding: $spacing-xl $spacing-xl $spacing-md;
+  border-bottom: 1px solid $color-gray-200;
+  flex-shrink: 0;
+
+  @include respond($breakpoint-md) {
+    padding: $spacing-sm $spacing-md $spacing-sm;
+  }
+}
+
+.header_top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.header_meta {
+  display: flex;
+  align-items: center;
+  gap: $spacing-xxs;
+}
+
+.category {
+  font-size: $font-size-sm;
+  font-weight: $font-weight-semibold;
+  color: $color-text-secondary;
+  text-transform: uppercase;
+
+  &.urgent {
+    color: $color-status-danger;
+  }
+}
+
+.badge_new {
+  padding: 0.2rem 0.6rem;
+  border-radius: 0.3rem;
+  font-size: 0.9rem;
+  font-weight: $font-weight-semibold;
+  color: $color-status-danger;
+  background: rgba($color-red-500, 0.05);
+  border: 1px solid rgba($color-red-500, 0.18);
+}
+
+.close_btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 3.2rem;
+  height: 3.2rem;
+  border-radius: $border-radius-md;
+  font-size: 2.2rem;
+  color: $color-text-secondary;
+  cursor: pointer;
+  transition: background-color 0.12s ease;
+
+  &:hover {
+    background: $color-bg-default;
+  }
+
+  &:focus-visible {
+    outline: 2px solid $color-primary-active;
+    outline-offset: 2px;
+  }
+}
+
+.title {
+  margin-bottom: $spacing-xs;
+  font-family: $font-family-secondary;
+  font-size: $font-size-xl;
+  font-weight: $font-weight-semibold;
+  color: $color-text-default;
+  word-break: keep-all;
+  line-height: $line-height-heading;
+
+  &.urgent {
+    color: $color-status-danger;
+  }
+
+  @include respond($breakpoint-md) {
+    font-size: $font-size-default;
+  }
+}
+
+.header_info {
+  display: flex;
+  align-items: center;
+  gap: $spacing-sm;
+  font-size: $font-size-sm;
+  color: $color-text-subtle;
+}
+
+.views {
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+}
+
+// ── 본문 ──
+.content {
+  flex: 1;
+  overflow-y: auto;
+  padding: $spacing-xl;
+
+  @include respond($breakpoint-md) {
+    padding: $spacing-md;
+  }
+}
+
+.content_body {
+  font-size: $font-size-md;
+  line-height: $line-height-wide;
+  color: $color-text-default;
+  white-space: pre-line;
+  word-break: keep-all;
+}
+
+// ── 첨부파일 ──
+.attachment {
+  padding: $spacing-sm $spacing-xl;
+  display: flex;
+  align-items: center;
+  gap: $spacing-xxs;
+  border-top: 1px solid $color-gray-200;
+  font-size: $font-size-xs;
+  color: $color-primary-active;
+  flex-shrink: 0;
+
+  @include respond($breakpoint-md) {
+    padding: $spacing-xs $spacing-md;
+  }
+}
+
+.attachment_link {
+  text-decoration: underline;
+
+  &:hover {
+    color: $color-text-default;
+  }
+
+  &:focus-visible {
+    outline: 2px solid $color-primary-active;
+    outline-offset: 2px;
+    border-radius: 2px;
+  }
+}
+
+// ── 이전/다음 ──
+.nav {
+  display: flex;
+  border-top: 1px solid $color-gray-200;
+  flex-shrink: 0;
+  padding-bottom: env(safe-area-inset-bottom, 0);
+}
+
+.nav_btn {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: $spacing-xxs;
+  padding: $spacing-md;
+  font-size: $font-size-sm;
+  font-weight: $font-weight-medium;
+  color: $color-text-default;
+  cursor: pointer;
+  transition: background-color 0.12s ease;
+
+  &:hover:not(.disabled) {
+    background: $color-bg-default;
+  }
+
+  &:first-child {
+    border-right: 1px solid $color-gray-200;
+  }
+
+  &.disabled {
+    color: $color-text-subtle;
+    opacity: 0.4;
+    cursor: not-allowed;
+  }
+
+  &:focus-visible {
+    outline: 2px solid $color-primary-active;
+    outline-offset: -2px;
+  }
+}
