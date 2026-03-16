@@ -5,7 +5,7 @@ const ROOT = 'notice';
 export const noticeCache = {
   list: (): NextCacheOptions => ({
     tags: [ROOT, 'notice-list'],
-    revalidate: 86400
+    revalidate: 300
   }),
   detail: (id: string | number): NextCacheOptions => ({
     tags: [ROOT, 'notice-detail', `notice-detail-${id}`]

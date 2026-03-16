@@ -1,8 +1,8 @@
-import { NOTICE_CATEGORIES } from '@/constants/notice';
-import { Tables } from '@/types/database.types';
+import { Tables, Database } from '@/types/database.types';
+import type { NoticeSortOption } from '@/constants/notice';
 
 export type NoticeType = Tables<'notices'>;
-export type NoticeCategory = keyof typeof NOTICE_CATEGORIES;
+export type NoticeCategory = Database['public']['Enums']['notice_category_enum'];
 
 export interface TipTapContent {
   type: 'doc';
@@ -24,8 +24,8 @@ export interface TipTapMark {
 
 export type CreateNoticeDto = Pick<
   NoticeType,
-  'title' | 'category' | 'content' | 'is_pinned' | 'is_published' | 'author'
->;
+  'title' | 'category' | 'content' | 'is_pinned' | 'is_public'
+> & { author_id: string };
 
 export type UpdateNoticeDto = Partial<CreateNoticeDto>;
 
@@ -33,5 +33,6 @@ export interface NoticeListParams {
   category?: NoticeCategory;
   page?: number;
   pageSize?: number;
-  pinned?: boolean;
+  search?: string;
+  sort?: NoticeSortOption;
 }
