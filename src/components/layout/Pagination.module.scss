@@ -19,12 +19,12 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  min-width: 3.2rem;
-  height: 3.2rem;
+  width: 2.6rem;
+  height: 2.6rem;
   border: 0.1rem solid transparent;
   border-radius: $border-radius-md;
   background: $color-bg-body;
-  font-size: $font-size-md;
+  font-size: $font-size-xxs;
   font-weight: $font-weight-medium;
   color: $color-text-default;
   transition:

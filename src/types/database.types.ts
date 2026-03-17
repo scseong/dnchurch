@@ -177,58 +177,22 @@ export type Database = {
       }
       site_settings: {
         Row: {
-          key: string
-          value: string
           description: string | null
-          updated_at: string
-        }
-        Insert: {
           key: string
-          value: string
-          description?: string | null
-          updated_at?: string
-        }
-        Update: {
-          key?: string
-          value?: string
-          description?: string | null
-          updated_at?: string
-        }
-        Relationships: []
-      }
-      worship_schedules: {
-        Row: {
-          id: number
-          name: string
-          time: string
-          location: string
-          category: Database["public"]["Enums"]["worship_category"]
-          order_index: number
-          is_active: boolean
-          created_at: string
           updated_at: string
+          value: string
         }
         Insert: {
-          id?: never
-          name: string
-          time: string
-          location: string
-          category: Database["public"]["Enums"]["worship_category"]
-          order_index?: number
-          is_active?: boolean
-          created_at?: string
+          description?: string | null
+          key: string
           updated_at?: string
+          value: string
         }
         Update: {
-          id?: never
-          name?: string
-          time?: string
-          location?: string
-          category?: Database["public"]["Enums"]["worship_category"]
-          order_index?: number
-          is_active?: boolean
-          created_at?: string
+          description?: string | null
+          key?: string
           updated_at?: string
+          value?: string
         }
         Relationships: []
       }
@@ -270,6 +234,42 @@ export type Database = {
           name?: string
           order_index?: number
           title?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      worship_schedules: {
+        Row: {
+          category: Database["public"]["Enums"]["worship_category"]
+          created_at: string
+          id: number
+          is_active: boolean
+          location: string
+          name: string
+          order_index: number
+          time: string
+          updated_at: string
+        }
+        Insert: {
+          category: Database["public"]["Enums"]["worship_category"]
+          created_at?: string
+          id?: number
+          is_active?: boolean
+          location: string
+          name: string
+          order_index?: number
+          time: string
+          updated_at?: string
+        }
+        Update: {
+          category?: Database["public"]["Enums"]["worship_category"]
+          created_at?: string
+          id?: number
+          is_active?: boolean
+          location?: string
+          name?: string
+          order_index?: number
+          time?: string
           updated_at?: string
         }
         Relationships: []
@@ -351,9 +351,9 @@ export type Database = {
         | "행정"
         | "긴급"
         | "기타"
-      worship_category: "main" | "church_school"
       profile_status_enum: "pending" | "approved" | "rejected"
       role_enum: "admin" | "dept_manager" | "member"
+      worship_category: "main" | "church_school"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -494,6 +494,7 @@ export const Constants = {
       ],
       profile_status_enum: ["pending", "approved", "rejected"],
       role_enum: ["admin", "dept_manager", "member"],
+      worship_category: ["main", "church_school"],
     },
   },
 } as const
