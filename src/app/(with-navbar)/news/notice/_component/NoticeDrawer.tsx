@@ -6,8 +6,8 @@ import clsx from 'clsx';
 import { IoCloseOutline, IoChevronBack, IoChevronForward, IoEyeOutline } from 'react-icons/io5';
 import { BsPaperclip } from 'react-icons/bs';
 import useScrollLock from '@/hooks/useScrollLock';
-import { NOTICE_CATEGORIES, NEW_BADGE_DAYS } from '@/constants/notice';
-import { formattedDate } from '@/utils/date';
+import { NOTICE_CATEGORIES } from '@/constants/notice';
+import { formattedDate, isRecent } from '@/utils/date';
 import type { NoticeType } from '@/types/notice';
 import styles from './NoticeDrawer.module.scss';
 
@@ -38,8 +38,7 @@ export default function NoticeDrawer({ notice, onClose, onNavigate, hasPrev, has
 
   if (!isOpen || typeof window === 'undefined') return null;
 
-  const isNew =
-    Date.now() - new Date(notice.created_at).getTime() < NEW_BADGE_DAYS * 24 * 60 * 60 * 1000;
+  const isNew = isRecent(notice.created_at);
   const isUrgent = notice.category === '긴급';
 
   return createPortal(
@@ -63,12 +62,7 @@ export default function NoticeDrawer({ notice, onClose, onNavigate, hasPrev, has
               </span>
               {isNew && <span className={styles.badge_new}>NEW</span>}
             </div>
-            <button
-              type="button"
-              className={styles.close_btn}
-              onClick={onClose}
-              aria-label="닫기"
-            >
+            <button type="button" className={styles.close_btn} onClick={onClose} aria-label="닫기">
               <IoCloseOutline aria-hidden="true" />
             </button>
           </div>

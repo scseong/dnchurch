@@ -29,7 +29,7 @@ export default async function BulletinPage({ searchParams }: Props) {
 
   if (!isValid) notFound();
 
-  const page = params.page ? parseInt(params.page) : 1;
+  const page = Math.max(1, params.page ? parseInt(params.page) : 1);
   const year = params.year ? parseInt(params.year) : undefined;
 
   const { data, error } = await getBulletinSummary({ year, page });

@@ -3,11 +3,10 @@
 import clsx from 'clsx';
 import { IoEyeOutline } from 'react-icons/io5';
 import { BsPinAngleFill, BsPaperclip } from 'react-icons/bs';
-import { NOTICE_CATEGORIES, DEFAULT_PAGE_SIZE, NEW_BADGE_DAYS } from '@/constants/notice';
-import { formattedDate } from '@/utils/date';
+import { NOTICE_CATEGORIES, DEFAULT_PAGE_SIZE } from '@/constants/notice';
+import { formattedDate, isRecent } from '@/utils/date';
 import type { NoticeType } from '@/types/notice';
 import styles from './NoticeTable.module.scss';
-import IconWrap from '@/components/common/IconWrap';
 
 type Props = {
   data: NoticeType[];
@@ -15,10 +14,6 @@ type Props = {
   currentPage: number;
   onRowClick: (notice: NoticeType) => void;
 };
-
-function isNew(createdAt: string): boolean {
-  return Date.now() - new Date(createdAt).getTime() < NEW_BADGE_DAYS * 24 * 60 * 60 * 1000;
-}
 
 function getFileExt(url: string): string {
   return url.match(/\.(\w+)$/)?.[1].toUpperCase() ?? '파일';
@@ -63,11 +58,7 @@ export default function NoticeTable({ data, total, currentPage, onRowClick }: Pr
               >
                 <td className={styles.col_pin}>
                   {notice.is_pinned ? (
-                    <IconWrap
-                      Icon={BsPinAngleFill}
-                      className={styles.pin_icon}
-                      aria-hidden="true"
-                    />
+                    <BsPinAngleFill className={styles.pin_icon} aria-hidden="true" />
                   ) : (
                     <span className={styles.row_number}>{rowNumber}</span>
                   )}
@@ -90,7 +81,7 @@ export default function NoticeTable({ data, total, currentPage, onRowClick }: Pr
                       {notice.attachment_url && (
                         <BsPaperclip className={styles.clip_icon} aria-hidden="true" />
                       )}
-                      {isNew(notice.created_at) && <span className={styles.badge_new}>NEW</span>}
+                      {isRecent(notice.created_at) && <span className={styles.badge_new}>NEW</span>}
                     </span>
                   </div>
                 </td>
@@ -131,7 +122,7 @@ export default function NoticeTable({ data, total, currentPage, onRowClick }: Pr
                   <span className={clsx(styles.mobile_category, isUrgent && styles.urgent)}>
                     {NOTICE_CATEGORIES[notice.category]}
                   </span>
-                  {isNew(notice.created_at) && <span className={styles.badge_new}>NEW</span>}
+                  {isRecent(notice.created_at) && <span className={styles.badge_new}>NEW</span>}
                 </div>
                 <span className={styles.mobile_date}>
                   {formattedDate(notice.created_at, 'YY.MM.DD')}

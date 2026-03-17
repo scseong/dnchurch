@@ -31,7 +31,7 @@ export default async function Notice({ searchParams }: Props) {
 
   if (!isValid) notFound();
 
-  const page = params.page ? parseInt(params.page) : 1;
+  const page = Math.max(1, params.page ? parseInt(params.page) : 1);
   const category = params.category ?? undefined;
   const search = params.search ?? undefined;
 
@@ -40,16 +40,8 @@ export default async function Notice({ searchParams }: Props) {
   return (
     <MainContainer title="공지사항">
       <div className={styles.wrap}>
-        <NoticeControlBar
-          total={Number(count)}
-          currentCategory={category}
-          currentSearch={search}
-        />
-        <NoticeListClient
-          data={posts ?? []}
-          total={Number(count)}
-          currentPage={page}
-        />
+        <NoticeControlBar total={Number(count)} currentCategory={category} currentSearch={search} />
+        <NoticeListClient data={posts ?? []} total={Number(count)} currentPage={page} />
       </div>
     </MainContainer>
   );

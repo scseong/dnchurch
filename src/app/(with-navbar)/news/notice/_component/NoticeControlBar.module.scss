@@ -3,12 +3,8 @@
   align-items: center;
   justify-content: space-between;
   gap: $spacing-xs;
-  padding-bottom: $spacing-xs;
+  padding-bottom: $spacing-sm;
   border-bottom: 1.5px solid $color-border-primary;
-
-  @include respond($breakpoint-md) {
-    padding: 1rem 1.6rem 1rem;
-  }
 }
 
 // ── 좌측 ──
@@ -72,7 +68,7 @@
   border: 1px solid $color-border-default;
   border-radius: 0.6rem;
   background: $color-bg-default;
-  font-size: $font-size-sm;
+  font-size: $font-size-xs;
   color: $color-text-secondary;
   cursor: pointer;
   outline: none;
@@ -97,7 +93,7 @@
   border: 1px solid $color-border-default;
   border-radius: 0.6rem;
   background: $color-bg-default;
-  font-size: $font-size-sm;
+  font-size: $font-size-xs;
   color: $color-text-secondary;
   white-space: nowrap;
   cursor: pointer;
@@ -142,12 +138,13 @@
   height: 100%;
   border: none;
   background: transparent;
-  font-size: $font-size-sm;
+  font-size: $font-size-xs;
   color: $color-text-default;
   outline: none;
 
   &::placeholder {
     color: $color-text-subtle;
+    font-size: $font-size-xs;
   }
 
   @include respond($breakpoint-md) {
