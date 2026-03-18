@@ -1,18 +1,18 @@
-$desktop-gradient: linear-gradient(90deg, rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.1));
+$desktop-gradient: linear-gradient(90deg, rgba(0, 0, 0, 0.9), rgba(0, 0, 0, 0.4));
 $mobile-gradient: linear-gradient(180deg, rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.4));
 
 .banner {
   margin-top: calc(-1 * $header-height);
+  padding-top: $header-height;
   position: relative;
-  height: calc(36rem + $header-height);
+  width: 100%;
+  min-height: calc(42rem + $header-height);
+  max-height: calc(50rem + $header-height);
   overflow: hidden;
   display: flex;
   flex-direction: column;
   justify-content: center;
-
-  @include respond-up($breakpoint-md) {
-    height: calc(42rem + $header-height);
-  }
+  align-items: center;
 }
 
 .bg {
@@ -23,71 +23,117 @@ $mobile-gradient: linear-gradient(180deg, rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.4)
     width: 100%;
     height: 100%;
     object-fit: cover;
-    object-position: 45% 10%;
+    object-position: 50% 70%;
   }
 }
 
 .overlay {
   position: absolute;
   inset: 0;
-  background: $mobile-gradient;
-
-  @include respond-up($breakpoint-md) {
-    background: $desktop-gradient;
-  }
+  background: rgba(0, 0, 0, 0.7);
 }
 
 .content {
+  padding: 0 $spacing-lg;
+  margin: 0 auto;
   position: relative;
-  z-index: 1;
   display: flex;
   flex-direction: column;
   gap: $spacing-sm;
-  padding: $header-height $spacing-lg $spacing-lg;
   max-width: $max-width;
-  margin: 0 auto;
   width: 100%;
+  text-align: center;
+  z-index: 1;
 
-  @include respond-up($breakpoint-md) {
-    padding: $header-height $spacing-xl $spacing-xl;
+  .scripture {
+    display: block;
+    font-size: $font-size-default;
+    font-weight: 600;
+    color: rgb(184, 151, 106);
+    letter-spacing: 0.12rem;
+    opacity: 0;
+    animation: fadeUp 0.8s 0.3s ease forwards;
   }
 
   h1 {
+    font-family: $font-family-secondary;
+    font-weight: 800;
+    line-height: $line-height-heading;
+    white-space: pre-line;
     color: $color-text-inverse;
-    animation: slideUp 0.6s ease-out;
+    opacity: 0;
+    animation: fadeUp 0.8s 0.5s ease forwards;
+
+    @include respond($breakpoint-md) {
+      font-size: 2.8rem;
+    }
   }
 
   p {
-    color: $color-text-inverse;
+    font-size: $font-size-md;
     line-height: $line-height-wide;
-    animation: slideUp 0.6s ease-out;
-  }
-}
-
-.learn_more {
-  padding: $spacing-sm $spacing-xl;
-  margin-top: $spacing-xs;
-  display: inline-block;
-  width: fit-content;
-  background-color: $color-gray-100;
-  border-radius: $border-radius-lg;
-  font-size: $font-size-md;
-  color: $color-black;
-  animation: slideUp 0.6s ease-out;
-  transition: transform 325ms cubic-bezier(0, 0, 0.2, 1);
-
-  &:hover {
-    transform: scale(1.05);
-  }
-}
-
-@keyframes slideUp {
-  0% {
-    transform: translateY(100%);
+    color: rgba(255, 255, 255, 0.75);
+    white-space: pre-line;
     opacity: 0;
+    animation: fadeUp 0.8s 0.7s ease forwards;
   }
-  100% {
-    transform: translateY(0);
+
+  .cta {
+    margin-top: $spacing-xs;
+    display: flex;
+    justify-content: center;
+    gap: $spacing-sm;
+    opacity: 0;
+    animation: fadeUp 0.8s 0.9s ease forwards;
+
+    .btn_primary {
+      padding: $spacing-xs $spacing-lg;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      background: #c4924a;
+      font-size: $font-size-sm;
+      font-weight: 700;
+      line-height: 1;
+      border-radius: $border-radius-sm;
+      transition: background 0.2s ease;
+
+      &:hover {
+        background: rgb(163, 132, 88);
+      }
+    }
+
+    .btn_secondary {
+      padding: $spacing-xs $spacing-lg;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      background: transparent;
+      color: rgba(255, 255, 255, 0.7);
+      font-weight: 500;
+      font-size: $font-size-sm;
+      line-height: 2;
+      border: 0.1rem solid rgba(255, 255, 255, 0.5);
+      border-radius: $border-radius-sm;
+      text-decoration: none;
+      transition:
+        border-color 0.2s ease,
+        background 0.2s ease;
+
+      &:hover {
+        border-color: rgba(255, 255, 255, 0.7);
+        color: $color-text-inverse;
+      }
+    }
+  }
+}
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(2.4rem);
+  }
+  to {
     opacity: 1;
+    transform: translateY(0);
   }
 }

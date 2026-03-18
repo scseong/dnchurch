@@ -8,7 +8,28 @@ export const getCloudinaryUrl = (publicId: string) => `${BASE_URL}/${publicId}`;
 export const getCloudinaryDownloadUrl = (publicId: string) =>
   `${BASE_URL}/fl_attachment/${publicId}`;
 
-export default function cloudinaryLoader({ src, width, quality }: ImageLoaderProps) {
-  const params = ['f_auto', 'c_limit', `w_${width}`, `q_${quality || 85}`];
-  return `${BASE_URL}/${params.join(',')}/${src}`;
+export type CropMode = 'fill' | 'crop' | 'thumb' | 'scale' | 'fit' | 'limit' | 'pad' | 'auto';
+export type CropGravity = 'auto' | 'face' | 'faces' | 'center' | 'north' | 'south' | 'east' | 'west' | 'north_east' | 'north_west' | 'south_east' | 'south_west';
+
+type CloudinaryLoaderOptions = {
+  cropMode?: CropMode;
+  gravity?: CropGravity;
+  aspectRatio?: string;
+};
+
+export function createCloudinaryLoader({ cropMode, gravity, aspectRatio }: CloudinaryLoaderOptions = {}) {
+  return function ({ src, width, quality }: ImageLoaderProps) {
+    const params = ['f_auto'];
+    if (cropMode) {
+      params.push(`c_${cropMode}`);
+      if (gravity) params.push(`g_${gravity}`);
+      if (aspectRatio) params.push(`ar_${aspectRatio}`);
+    } else {
+      params.push('c_limit');
+    }
+    params.push(`w_${width}`, `q_${quality || 85}`);
+    return `${BASE_URL}/${params.join(',')}/${src}`;
+  };
 }
+
+export default createCloudinaryLoader();
