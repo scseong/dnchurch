@@ -1,0 +1,107 @@
+$color-navy: #1b2d4e;
+$color-gold: #b8976a;
+$color-cream-deep: #ede6d7;
+$color-cream: #f5f0e6;
+$item-padding-v: 2.8rem;
+$icon_box_size: 4.4rem;
+$icon_box_radius: 0.8rem;
+
+.quick_wap {
+  background: $color-cream-deep;
+}
+
+.quick_container {
+  padding: 0;
+}
+
+.quick_access {
+  border-bottom: 0.1rem solid $color-border-default;
+  display: grid;
+  grid-template-columns: 1fr;
+
+  @include respond-up($breakpoint-lg) {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.item {
+  display: flex;
+  align-items: center;
+  gap: $spacing-sm;
+  padding: $spacing-md $spacing-lg;
+  border-bottom: 0.1rem solid $color-border-default;
+  text-decoration: none;
+  transition: background $transition-duration-normal $transition-easing-default;
+
+  &:last-child {
+    border-bottom: none;
+  }
+
+  @include respond-up($breakpoint-lg) {
+    padding: $spacing-lg;
+    border-bottom: none;
+    border-right: 0.1rem solid $color-border-default;
+
+    &:last-child {
+      border-right: none;
+    }
+  }
+
+  &:hover {
+    background: $color-cream;
+
+    .arrow {
+      opacity: 1;
+      transform: translateX(0);
+    }
+  }
+}
+
+.icon_box {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: $icon_box_size;
+  height: $icon_box_size;
+  background: $color-navy;
+  border-radius: $icon_box_radius;
+  font-size: calc($icon_box_size / 1.8);
+  color: $color-gold;
+
+  svg {
+    transform: translateX(0.05rem);
+  }
+}
+
+.text {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-nano;
+}
+
+.label {
+  font-family: $font-family-secondary;
+  font-size: $font-size-lg;
+  font-weight: $font-weight-semibold;
+  color: $color-navy;
+  line-height: $line-height-base;
+}
+
+.desc {
+  font-size: $font-size-xs;
+  color: $color-text-subtle;
+  line-height: 1.4;
+}
+
+.arrow {
+  flex-shrink: 0;
+  font-size: $font-size-md;
+  color: $color-navy;
+  opacity: 0;
+  transform: translateX(-$spacing-xs);
+  transition:
+    opacity 0.2s ease,
+    transform 0.2s ease;
+}

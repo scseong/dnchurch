@@ -4,6 +4,6 @@
   max-width: $max-width;
 
   @include respond-up($breakpoint-md) {
-    padding: 0 $spacing-xl;
+    padding: 0 $spacing-lg;
   }
 }

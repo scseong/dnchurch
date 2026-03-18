@@ -18,6 +18,7 @@ export default async function Banner() {
           src={settings.banner_image}
           alt="대구동남교회 전경과 십자가 탑"
           fetchPriority="high"
+          preload
           sizes="100vw"
           fill
         />

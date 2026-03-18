@@ -3,16 +3,23 @@ $mobile-gradient: linear-gradient(180deg, rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.4)
 
 .banner {
   margin-top: calc(-1 * $header-height);
-  padding-top: $header-height;
+  padding-top: calc($header-height + $spacing-layout);
+  padding-bottom: $spacing-xxl;
+
   position: relative;
   width: 100%;
-  min-height: calc(42rem + $header-height);
-  max-height: calc(50rem + $header-height);
+  min-height: calc(48rem + $header-height);
+  max-height: calc(56rem + $header-height);
   overflow: hidden;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
+
+  @include respond-up($breakpoint-md) {
+    padding-top: $header-height;
+    padding-bottom: 0;
+  }
 }
 
 .bg {
@@ -42,15 +49,14 @@ $mobile-gradient: linear-gradient(180deg, rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.4)
   gap: $spacing-sm;
   max-width: $max-width;
   width: 100%;
-  text-align: center;
   z-index: 1;
 
   .scripture {
     display: block;
-    font-size: $font-size-default;
+    font-size: $font-size-md;
     font-weight: 600;
     color: rgb(184, 151, 106);
-    letter-spacing: 0.12rem;
+    letter-spacing: 0.05rem;
     opacity: 0;
     animation: fadeUp 0.8s 0.3s ease forwards;
   }
@@ -63,10 +69,6 @@ $mobile-gradient: linear-gradient(180deg, rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.4)
     color: $color-text-inverse;
     opacity: 0;
     animation: fadeUp 0.8s 0.5s ease forwards;
-
-    @include respond($breakpoint-md) {
-      font-size: 2.8rem;
-    }
   }
 
   p {
@@ -81,13 +83,19 @@ $mobile-gradient: linear-gradient(180deg, rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.4)
   .cta {
     margin-top: $spacing-xs;
     display: flex;
-    justify-content: center;
+    flex-direction: column;
+    align-items: stretch;
     gap: $spacing-sm;
     opacity: 0;
     animation: fadeUp 0.8s 0.9s ease forwards;
 
+    @include respond-up($breakpoint-xs-mid) {
+      flex-direction: row;
+      align-items: center;
+    }
+
     .btn_primary {
-      padding: $spacing-xs $spacing-lg;
+      padding: $spacing-md $spacing-lg;
       display: inline-flex;
       align-items: center;
       justify-content: center;
@@ -98,27 +106,34 @@ $mobile-gradient: linear-gradient(180deg, rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.4)
       border-radius: $border-radius-sm;
       transition: background 0.2s ease;
 
+      @include respond-up($breakpoint-xs-mid) {
+        padding: $spacing-md $spacing-lg;
+      }
+
       &:hover {
         background: rgb(163, 132, 88);
       }
     }
 
     .btn_secondary {
-      padding: $spacing-xs $spacing-lg;
+      padding: $spacing-md $spacing-lg;
       display: inline-flex;
       align-items: center;
       justify-content: center;
       background: transparent;
-      color: rgba(255, 255, 255, 0.7);
-      font-weight: 500;
-      font-size: $font-size-sm;
-      line-height: 2;
       border: 0.1rem solid rgba(255, 255, 255, 0.5);
       border-radius: $border-radius-sm;
-      text-decoration: none;
+      font-weight: 500;
+      font-size: $font-size-sm;
+      line-height: 1;
+      color: rgba(255, 255, 255, 0.7);
       transition:
         border-color 0.2s ease,
         background 0.2s ease;
+
+      @include respond-up($breakpoint-xs-mid) {
+        padding: $spacing-md $spacing-lg;
+      }
 
       &:hover {
         border-color: rgba(255, 255, 255, 0.7);
@@ -127,6 +142,7 @@ $mobile-gradient: linear-gradient(180deg, rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.4)
     }
   }
 }
+
 @keyframes fadeUp {
   from {
     opacity: 0;

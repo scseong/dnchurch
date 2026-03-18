@@ -5,9 +5,10 @@
   left: 0;
   background: transparent;
   background-clip: padding-box;
-  color: $color-white;
   box-shadow: 0 0.1rem 0 0 rgba(255, 255, 255, 0.2);
   z-index: 9999;
+  color: $color-text-inverse;
+
   transition:
     background-color $transition-duration-normal $transition-easing-default,
     color $transition-duration-normal $transition-easing-default,
@@ -36,12 +37,10 @@
 @keyframes header-scroll {
   from {
     background: transparent;
-    color: $color-white;
     box-shadow: 0 0.1rem 0 0 rgba(255, 255, 255, 0.2);
   }
   to {
     background: $color-white;
-    color: $color-text-default;
     box-shadow: 0 0.1rem 0 0 #e7e7e7;
   }
 }
