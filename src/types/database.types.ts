@@ -175,6 +175,101 @@ export type Database = {
         }
         Relationships: []
       }
+      sermon_series: {
+        Row: {
+          cover_url: string | null
+          created_at: string
+          description: string | null
+          ended_at: string | null
+          id: number
+          started_at: string | null
+          title: string
+        }
+        Insert: {
+          cover_url?: string | null
+          created_at?: string
+          description?: string | null
+          ended_at?: string | null
+          id?: number
+          started_at?: string | null
+          title: string
+        }
+        Update: {
+          cover_url?: string | null
+          created_at?: string
+          description?: string | null
+          ended_at?: string | null
+          id?: number
+          started_at?: string | null
+          title?: string
+        }
+        Relationships: []
+      }
+      sermons: {
+        Row: {
+          created_at: string
+          deleted_at: string | null
+          id: number
+          is_published: boolean
+          pdf_url: string | null
+          preacher: string
+          scripture: string
+          series_id: number | null
+          sermon_date: string
+          service_type: Database["public"]["Enums"]["service_type_enum"]
+          summary: string | null
+          title: string
+          updated_at: string
+          view_count: number
+          youtube_id: string | null
+          youtube_url: string | null
+        }
+        Insert: {
+          created_at?: string
+          deleted_at?: string | null
+          id?: number
+          is_published?: boolean
+          pdf_url?: string | null
+          preacher: string
+          scripture: string
+          series_id?: number | null
+          sermon_date: string
+          service_type?: Database["public"]["Enums"]["service_type_enum"]
+          summary?: string | null
+          title: string
+          updated_at?: string
+          view_count?: number
+          youtube_id?: string | null
+          youtube_url?: string | null
+        }
+        Update: {
+          created_at?: string
+          deleted_at?: string | null
+          id?: number
+          is_published?: boolean
+          pdf_url?: string | null
+          preacher?: string
+          scripture?: string
+          series_id?: number | null
+          sermon_date?: string
+          service_type?: Database["public"]["Enums"]["service_type_enum"]
+          summary?: string | null
+          title?: string
+          updated_at?: string
+          view_count?: number
+          youtube_id?: string | null
+          youtube_url?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "sermons_series_id_fkey"
+            columns: ["series_id"]
+            isOneToOne: false
+            referencedRelation: "sermon_series"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       site_settings: {
         Row: {
           description: string | null
@@ -353,6 +448,13 @@ export type Database = {
         | "기타"
       profile_status_enum: "pending" | "approved" | "rejected"
       role_enum: "admin" | "dept_manager" | "member"
+      service_type_enum:
+        | "주일오전예배"
+        | "주일저녁예배"
+        | "수요기도회"
+        | "금요기도회"
+        | "새벽예배"
+        | "특별예배"
       worship_category: "main" | "church_school"
     }
     CompositeTypes: {
@@ -494,6 +596,14 @@ export const Constants = {
       ],
       profile_status_enum: ["pending", "approved", "rejected"],
       role_enum: ["admin", "dept_manager", "member"],
+      service_type_enum: [
+        "주일오전예배",
+        "주일저녁예배",
+        "수요기도회",
+        "금요기도회",
+        "새벽예배",
+        "특별예배",
+      ],
       worship_category: ["main", "church_school"],
     },
   },
