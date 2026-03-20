@@ -2,6 +2,7 @@ import Link from 'next/link';
 import { getRecentSermons } from '@/apis/sermons';
 import { LayoutContainer } from '@/components/layout';
 import { formattedDate } from '@/utils/date';
+import { revealStyle } from '@/utils/reveal';
 import styles from './RecentSermons.module.scss';
 
 const YT_THUMB = 'https://img.youtube.com/vi';
@@ -27,7 +28,7 @@ export default async function RecentSermons() {
   return (
     <section className={styles.section}>
       <LayoutContainer>
-        <div className={styles.header}>
+        <div data-reveal style={revealStyle()} className={styles.header}>
           <div className={styles.header_left}>
             <span className={styles.caption}>the Message</span>
             <h2>하나님의 말씀</h2>
@@ -36,8 +37,9 @@ export default async function RecentSermons() {
             설교 전체 보기 →
           </Link>
         </div>
-        {/* TODO: 설교 섹션으로 이동 */}
         <a
+          data-reveal
+          style={revealStyle(0.15)}
           href={
             featured.youtube_id ? `${YT_WATCH}${featured.youtube_id}` : `/sermons/${featured.id}`
           }
@@ -68,10 +70,11 @@ export default async function RecentSermons() {
           </div>
         </a>
         <div className={styles.cards}>
-          {/* TODO: 설교 섹션으로 이동 */}
-          {cards.map((sermon) => (
+          {cards.map((sermon, i) => (
             <a
               key={sermon.id}
+              data-reveal
+              style={revealStyle(i * 0.15)}
               href={sermon.youtube_id ? `${YT_WATCH}${sermon.youtube_id}` : `/sermons/${sermon.id}`}
               className={styles.card}
               target="_blank"
