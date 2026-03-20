@@ -164,3 +164,46 @@
 // - 리스트 아이템 간:  $gap-items (1.2rem)
 // - 관련 그룹 간:     $gap-group (2rem)
 // - 독립 섹션 간:     $gap-section (6.4rem)
+//
+//
+// ══════════════════════════════════════════
+// TEXT MIXIN 적용 우선순위
+// ══════════════════════════════════════════
+//
+// 1순위: mixin 기본값 사용
+//
+//   .page_title {
+//     @include text-page-title;
+//   }
+//
+// 2순위: mixin 파라미터로 변형
+//   $color, $weight를 named parameter로 전달.
+//   헤딩 계열 $color의 default는 null (미전달 시 부모 상속).
+//   본문 계열 $color의 default는 역할별 기본 색상.
+//
+//   // 다크 배경 위 섹션 제목
+//   .dark_section_title {
+//     @include text-section-title($color: $text-on-image);
+//   }
+//
+//   // 강조 카드 제목
+//   .featured_card_title {
+//     @include text-card-title($weight: $font-weight-bold);
+//   }
+//
+//   // 본문 색상 변경
+//   .muted_text {
+//     @include text-body($color: $color-text-secondary);
+//   }
+//
+// 3순위: 시맨틱/primitive 토큰 직접 조합
+//   mixin에 맞는 역할이 없을 때. 토큰을 직접 조합하되,
+//   위 텍스트 역할 테이블에서 가장 가까운 역할을 참조.
+//
+//   // "큰 보조 텍스트" — mixin에 정확히 맞는 역할 없음
+//   .intro_desc {
+//     font-size: $font-size-lg;
+//     font-weight: $font-weight-regular;
+//     line-height: $line-height-base;
+//     color: $color-text-secondary;
+//   }

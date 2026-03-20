@@ -91,14 +91,25 @@
 // TEXT ROLE MIXINS
 // 텍스트 역할별 font-size + weight + line-height + color 조합
 // 헤딩 계열은 반응형(mobile → PC) 포함
+//
+// 파라미터:
+//   $color — 텍스트 색상. 헤딩은 default null (부모 상속), 본문은 역할별 기본값
+//   $weight — font-weight. 각 역할의 기본 굵기
+//
+// 사용법:
+//   @include text-section-title;                              // 기본값
+//   @include text-section-title($color: $text-on-image);      // 다크 배경
+//   @include text-card-title($weight: $font-weight-bold);     // 강조
+//   @include text-body($color: $color-text-secondary);        // 색상 변경
 // ══════════════════════════════════════════
 
 /// 히어로 타이틀 — 배너, 랜딩 최상단 (h1 반응형)
-@mixin text-hero {
+@mixin text-hero($color: null, $weight: $font-weight-bold) {
   font-size: $font-size-h1-mobile;
-  font-weight: $font-weight-bold;
+  font-weight: $weight;
   line-height: $line-height-heading;
   letter-spacing: $letter-spacing-heading;
+  @if $color { color: $color; }
 
   @include respond-up($breakpoint-lg) {
     font-size: $font-size-h1;
@@ -106,11 +117,12 @@
 }
 
 /// 페이지 타이틀 — 각 페이지 최상위 제목 (h2 반응형)
-@mixin text-page-title {
+@mixin text-page-title($color: null, $weight: $font-weight-bold) {
   font-size: $font-size-h2-mobile;
-  font-weight: $font-weight-bold;
+  font-weight: $weight;
   line-height: $line-height-heading;
   letter-spacing: $letter-spacing-heading;
+  @if $color { color: $color; }
 
   @include respond-up($breakpoint-lg) {
     font-size: $font-size-h2;
@@ -118,11 +130,12 @@
 }
 
 /// 섹션 타이틀 — 페이지 내 구역 제목 (h3 반응형)
-@mixin text-section-title {
+@mixin text-section-title($color: null, $weight: $font-weight-bold) {
   font-size: $font-size-h3-mobile;
-  font-weight: $font-weight-bold;
+  font-weight: $weight;
   line-height: $line-height-heading;
   letter-spacing: $letter-spacing-tight;
+  @if $color { color: $color; }
 
   @include respond-up($breakpoint-lg) {
     font-size: $font-size-h3;
@@ -130,11 +143,12 @@
 }
 
 /// 서브 섹션 타이틀 — 섹션 내 하위 제목 (h4 반응형)
-@mixin text-sub-section-title {
+@mixin text-sub-section-title($color: null, $weight: $font-weight-semibold) {
   font-size: $font-size-h4-mobile;
-  font-weight: $font-weight-semibold;
+  font-weight: $weight;
   line-height: $line-height-heading;
   letter-spacing: $letter-spacing-tight;
+  @if $color { color: $color; }
 
   @include respond-up($breakpoint-lg) {
     font-size: $font-size-h4;
@@ -142,10 +156,11 @@
 }
 
 /// 카드 타이틀 — 카드, 리스트 아이템 제목 (h5 반응형)
-@mixin text-card-title {
+@mixin text-card-title($color: null, $weight: $font-weight-semibold) {
   font-size: $font-size-h5-mobile;
-  font-weight: $font-weight-semibold;
+  font-weight: $weight;
   line-height: $line-height-heading;
+  @if $color { color: $color; }
 
   @include respond-up($breakpoint-lg) {
     font-size: $font-size-h5;
@@ -153,33 +168,33 @@
 }
 
 /// 본문 — 일반 텍스트 (기본 크기, 반응형 변경 없음)
-@mixin text-body {
+@mixin text-body($color: $color-text-default) {
   font-size: $font-size-default;
   font-weight: $font-weight-regular;
   line-height: $line-height-base;
-  color: $color-text-default;
+  color: $color;
 }
 
 /// 보조 텍스트 — 부연 설명, 서브 텍스트
-@mixin text-sub {
+@mixin text-sub($color: $color-text-secondary) {
   font-size: $font-size-md;
   font-weight: $font-weight-regular;
   line-height: $line-height-base;
-  color: $color-text-secondary;
+  color: $color;
 }
 
 /// 캡션 — 날짜, 작성자, 메타 정보
-@mixin text-caption {
+@mixin text-caption($color: $color-text-subtle) {
   font-size: $font-size-sm;
   font-weight: $font-weight-regular;
   line-height: $line-height-base;
-  color: $color-text-subtle;
+  color: $color;
 }
 
 /// 라벨 — 폼 라벨, 카테고리 이름, 네비게이션
-@mixin text-label {
+@mixin text-label($color: $color-text-secondary) {
   font-size: $font-size-sm;
   font-weight: $font-weight-medium;
   line-height: $line-height-base;
-  color: $color-text-secondary;
+  color: $color;
 }
