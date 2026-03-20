@@ -2,18 +2,19 @@ import { PiChurchLight, PiHandHeartLight } from 'react-icons/pi';
 import { LiaBibleSolid } from 'react-icons/lia';
 import { LayoutContainer } from '@/components/layout';
 import IconWrap from '@/components/common/IconWrap';
+import { revealStyle } from '@/utils/reveal';
 import styles from './ChurchVision.module.scss';
 
 export default function ChurchVision() {
   return (
     <section className={styles.vision}>
       <LayoutContainer>
-        <div className={styles.title}>
+        <div data-reveal style={revealStyle()} className={styles.title}>
           <span className={styles.caption}>우리의 비전</span>
           <h2>동남교회의 핵심 사역</h2>
         </div>
         <div className={styles.feature_container}>
-          <div className={styles.feature}>
+          <div data-reveal style={revealStyle(0.15)} className={styles.feature}>
             <div className={styles.icon}>
               <IconWrap Icon={LiaBibleSolid} />
             </div>
@@ -23,7 +24,7 @@ export default function ChurchVision() {
               서도록 훈련합니다.
             </p>
           </div>
-          <div className={styles.feature}>
+          <div data-reveal style={revealStyle(0.30)} className={styles.feature}>
             <div className={styles.icon}>
               <IconWrap Icon={PiChurchLight} />
             </div>
@@ -33,7 +34,7 @@ export default function ChurchVision() {
               공동체를 세워갑니다.
             </p>
           </div>
-          <div className={styles.feature}>
+          <div data-reveal style={revealStyle(0.45)} className={styles.feature}>
             <div className={styles.icon}>
               <IconWrap Icon={PiHandHeartLight} />
             </div>

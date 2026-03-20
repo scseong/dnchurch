@@ -1,7 +1,13 @@
 'use client';
 
 import Image, { ImageProps } from 'next/image';
-import cloudinaryLoader from '@/utils/cloudinary';
+import { createCloudinaryLoader, CropMode, CropGravity } from '@/utils/cloudinary';
+
+type Props = ImageProps & {
+  cropMode?: CropMode;
+  gravity?: CropGravity;
+  aspectRatio?: string;
+};
 
 export default function CloudinaryImage({
   src,
@@ -11,8 +17,11 @@ export default function CloudinaryImage({
   fill,
   sizes,
   style,
+  cropMode,
+  gravity,
+  aspectRatio,
   ...rest
-}: ImageProps) {
+}: Props) {
   return (
     <Image
       src={src}
@@ -21,7 +30,7 @@ export default function CloudinaryImage({
       height={height}
       fill={fill}
       sizes={sizes}
-      loader={cloudinaryLoader}
+      loader={createCloudinaryLoader({ cropMode, gravity, aspectRatio })}
       style={{
         width: fill ? undefined : '100%',
         height: fill ? undefined : style?.height || 'auto',

@@ -11,9 +11,8 @@ export default function SettingsText({ value, fallback = '' }: Props) {
   return (
     <>
       {lines.map((line, i) => (
-        <span key={i}>
+        <span key={i} style={{ display: 'block', fontFamily: 'inherit', color: 'inherit' }}>
           {line}
-          {i < lines.length - 1 && <br />}
         </span>
       ))}
     </>

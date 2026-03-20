@@ -29,6 +29,24 @@ const myeongjo = Nanum_Myeongjo({
   display: 'swap'
 });
 
+const REVEAL_JS = `
+(function(){
+  var elementsToReveal=document.querySelectorAll('[data-reveal]');
+  if(!elementsToReveal.length)return;
+  var observer=new IntersectionObserver(function(entries){
+    entries.forEach(function(entry){
+      if(entry.isIntersecting){
+        var targetStyle=entry.target.style;
+        targetStyle.opacity='1';
+        targetStyle.transform='translateY(0)';
+        observer.unobserve(entry.target);
+      }
+    });
+  },{threshold:0.1});
+  elementsToReveal.forEach(function(el){observer.observe(el)});
+})();
+`;
+
 const API_KEY = `//dapi.kakao.com/v2/maps/sdk.js?appkey=${process.env.NEXT_PUBLIC_KAKAO_API_KEY}&libraries=services,clusterer&autoload=false`;
 
 export default async function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
@@ -56,6 +74,7 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
           <Footer />
         </div>
         <div id="modal-root"></div>
+        <Script id="reveal-observer" strategy="afterInteractive" dangerouslySetInnerHTML={{ __html: REVEAL_JS }} />
       </body>
     </html>
   );
