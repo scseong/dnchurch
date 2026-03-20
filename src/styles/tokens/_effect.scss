@@ -13,3 +13,14 @@ $shadow-md:
 // Transition
 $transition-duration-normal: 0.28s;
 $transition-easing-default: cubic-bezier(0.4, 0, 0.2, 1);
+
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(2.4rem);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

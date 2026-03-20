@@ -31,19 +31,19 @@ const myeongjo = Nanum_Myeongjo({
 
 const REVEAL_JS = `
 (function(){
-  var q=document.querySelectorAll('[data-reveal]');
-  if(!q.length)return;
+  var elementsToReveal=document.querySelectorAll('[data-reveal]');
+  if(!elementsToReveal.length)return;
   var observer=new IntersectionObserver(function(entries){
-    entries.forEach(function(e){
-      if(e.isIntersecting){
-        var s=e.target.style;
-        s.opacity='1';
-        s.transform='translateY(0)';
-        observer.unobserve(e.target);
+    entries.forEach(function(entry){
+      if(entry.isIntersecting){
+        var targetStyle=entry.target.style;
+        targetStyle.opacity='1';
+        targetStyle.transform='translateY(0)';
+        observer.unobserve(entry.target);
       }
     });
   },{threshold:0.1});
-  q.forEach(function(el){observer.observe(el)});
+  elementsToReveal.forEach(function(el){observer.observe(el)});
 })();
 `;
 

@@ -1,5 +1,7 @@
 $desktop-gradient: linear-gradient(90deg, rgba(0, 0, 0, 0.9), rgba(0, 0, 0, 0.4));
 $mobile-gradient: linear-gradient(180deg, rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.4));
+$btn-gold: #c4924a;
+$btn-gold-hover: #a38458;
 
 .banner {
   margin-top: calc(-1 * $header-height);
@@ -55,7 +57,7 @@ $mobile-gradient: linear-gradient(180deg, rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.4)
     display: block;
     font-size: $font-size-md;
     font-weight: 600;
-    color: rgb(184, 151, 106);
+    color: $color-gold;
     letter-spacing: 0.05rem;
     opacity: 0;
     animation: fadeUp 0.8s 0.3s ease forwards;
@@ -99,7 +101,7 @@ $mobile-gradient: linear-gradient(180deg, rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.4)
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      background: #c4924a;
+      background: $btn-gold;
       font-size: $font-size-sm;
       font-weight: 700;
       line-height: 1;
@@ -111,7 +113,7 @@ $mobile-gradient: linear-gradient(180deg, rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.4)
       }
 
       &:hover {
-        background: rgb(163, 132, 88);
+        background: $btn-gold-hover;
       }
     }
 
@@ -143,13 +145,3 @@ $mobile-gradient: linear-gradient(180deg, rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.4)
   }
 }
 
-@keyframes fadeUp {
-  from {
-    opacity: 0;
-    transform: translateY(2.4rem);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}

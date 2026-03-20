@@ -37,7 +37,7 @@ export default async function RecentSermons() {
             설교 전체 보기 →
           </Link>
         </div>
-        <a
+        <Link
           data-reveal
           style={revealStyle(0.15)}
           href={
@@ -68,10 +68,10 @@ export default async function RecentSermons() {
               <PlayIcon className={styles.play_btn} />
             </div>
           </div>
-        </a>
+        </Link>
         <div className={styles.cards}>
           {cards.map((sermon, i) => (
-            <a
+            <Link
               key={sermon.id}
               data-reveal
               style={revealStyle(i * 0.15)}
@@ -98,7 +98,7 @@ export default async function RecentSermons() {
                 </div>
                 <PlayIcon className={styles.play_btn} />
               </div>
-            </a>
+            </Link>
           ))}
         </div>
       </LayoutContainer>

@@ -1,17 +1,13 @@
-$color-navy: #1b2d4e;
-$color-gold: #b8976a;
-$color-cream-deep: #ede6d7;
-$color-cream: #f5f0e6;
 $item-padding-v: 2.8rem;
 $icon_box_size: 4.4rem;
 $icon_box_radius: 0.8rem;
 
 .quick_wap {
   background: $color-cream-deep;
-}
 
-.quick_container {
-  padding: 0;
+  .quick_container {
+    padding: 0;
+  }
 }
 
 .quick_access {
@@ -35,9 +31,15 @@ $icon_box_radius: 0.8rem;
   opacity: 0;
   animation: fadeUp 0.8s ease forwards;
 
-  &:nth-child(1) { animation-delay: 0.9s; }
-  &:nth-child(2) { animation-delay: 1.05s; }
-  &:nth-child(3) { animation-delay: 1.2s; }
+  &:nth-child(1) {
+    animation-delay: 0.9s;
+  }
+  &:nth-child(2) {
+    animation-delay: 1.05s;
+  }
+  &:nth-child(3) {
+    animation-delay: 1.2s;
+  }
 
   &:last-child {
     border-bottom: none;
@@ -112,13 +114,3 @@ $icon_box_radius: 0.8rem;
     transform 0.2s ease;
 }
 
-@keyframes fadeUp {
-  from {
-    opacity: 0;
-    transform: translateY(2.4rem);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
