@@ -1,5 +1,6 @@
 $item-padding-v: 2.8rem;
-$icon_box_size: 4.4rem;
+$icon_box_pc_size: 4.4rem;
+$icon_box_mobile_size: 4.2rem;
 $icon_box_radius: 0.8rem;
 
 .quick_wap {
@@ -29,7 +30,7 @@ $icon_box_radius: 0.8rem;
   text-decoration: none;
   transition: background $transition-duration-normal $transition-easing-default;
   opacity: 0;
-  animation: fadeUp 0.8s ease forwards;
+  animation: fadeUp $animation-duration-reveal ease forwards;
 
   &:nth-child(1) {
     animation-delay: 0.9s;
@@ -70,12 +71,18 @@ $icon_box_radius: 0.8rem;
   display: flex;
   align-items: center;
   justify-content: center;
-  width: $icon_box_size;
-  height: $icon_box_size;
+  width: $icon_box_mobile_size;
+  height: $icon_box_mobile_size;
   background: $color-navy;
   border-radius: $icon_box_radius;
-  font-size: calc($icon_box_size / 1.8);
+  font-size: calc($icon_box_mobile_size / 1.6);
   color: $color-gold;
+
+  @include respond-up($breakpoint-lg) {
+    width: $icon_box_pc_size;
+    height: $icon_box_pc_size;
+    font-size: calc($icon_box_pc_size / 1.6);
+  }
 
   svg {
     transform: translateX(0.05rem);
@@ -86,20 +93,20 @@ $icon_box_radius: 0.8rem;
   flex: 1;
   display: flex;
   flex-direction: column;
-  gap: $spacing-nano;
+  gap: $spacing-xxs;
 }
 
 .label {
   font-family: $font-family-secondary;
   font-size: $font-size-lg;
   font-weight: $font-weight-semibold;
-  color: $color-navy;
-  line-height: $line-height-base;
+  color: $color-text-default;
+  line-height: $line-height-reset;
 }
 
 .desc {
   font-size: $font-size-xs;
-  color: $color-text-subtle;
+  color: $color-text-secondary;
   line-height: 1.4;
 }
 
@@ -113,4 +120,3 @@ $icon_box_radius: 0.8rem;
     opacity 0.2s ease,
     transform 0.2s ease;
 }
-
