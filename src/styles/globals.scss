@@ -50,19 +50,11 @@ ol,
 blockquote {
   font-size: $font-size-default;
   word-break: keep-all;
-
-  @include respond-up($breakpoint-xl) {
-    font-size: $font-size-xl;
-  }
 }
 
 a {
   text-decoration: none;
   font-size: $font-size-md;
-
-  @include respond-up($breakpoint-xl) {
-    font-size: $font-size-lg;
-  }
 }
 
 ul,
@@ -111,7 +103,7 @@ header:has(#gnb:hover):not([data-nav-locked]) {
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: rgba(0, 0, 0, 0.5);
+  background-color: $overlay-scrim;
   z-index: 9999;
 }
 
