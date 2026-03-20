@@ -1,0 +1,81 @@
+// ══════════════════════════════════════════
+// SPACING: 컴포넌트 내부 여백 (padding)
+// ══════════════════════════════════════════
+
+/// 0.2rem 0.8rem — 태그, 뱃지 등 인라인 요소 내부 여백
+$padding-inline-xs: $spacing-nano $spacing-xs;
+
+/// 0.4rem 0.8rem — 약간 큰 인라인 요소 (필터 칩 등)
+$padding-inline-sm: $spacing-xxs $spacing-xs;
+
+/// 0.8rem 1.2rem — input, select, button 내부 여백
+$padding-control: $spacing-xs $spacing-sm;
+
+/// 1.6rem 2rem — 카드, 패널 내부 여백
+$padding-card: $spacing-md $spacing-lg;
+
+/// 1.2rem 1.6rem — 작은 카드, 리스트 아이템 내부 여백
+$padding-card-compact: $spacing-sm $spacing-md;
+
+/// 2rem — 페이지 섹션 좌우 여백 (모바일 기준)
+$padding-section-x: $spacing-lg;
+
+/// 6.4rem — 페이지 섹션 상하 여백
+$padding-section-y: $spacing-xxxl;
+
+// ══════════════════════════════════════════
+// SPACING: 요소 간 간격 (gap)
+// 근접성의 법칙: 관련성 높을수록 간격 좁게
+// inline < items < group < section
+// ══════════════════════════════════════════
+
+/// 0.8rem — 같은 줄 요소 간 (아이콘+텍스트, 뱃지 나열)
+$gap-inline: $spacing-xs;
+
+/// 1.2rem — 리스트 아이템 간, 폼 필드 간
+$gap-items: $spacing-sm;
+
+/// 2rem — 관련 그룹 간 (제목+본문 블록과 다음 블록 사이)
+$gap-group: $spacing-lg;
+
+/// 6.4rem — 독립 섹션 간 (페이지 내 대단위 구역 사이)
+$gap-section: $spacing-xxxl;
+
+// ══════════════════════════════════════════
+// BORDER-RADIUS: 4단계
+// ══════════════════════════════════════════
+
+/// 0.25rem — input, button, 태그 등 작은 컨트롤
+$radius-control: $border-radius-sm;
+
+/// 0.5rem — 카드, 패널, 드롭다운
+$radius-card: $border-radius-md;
+
+/// 0.75rem — 모달, 바텀시트, 드로어
+$radius-sheet: $border-radius-lg;
+
+/// 9999px — pill 뱃지, 아바타, 둥근 버튼
+$radius-pill: $border-radius-full;
+
+// ══════════════════════════════════════════
+// OVERLAY — 반투명 레이어
+// ══════════════════════════════════════════
+
+/// rgba(0,0,0,0.5) — 모달/드로어 뒤 딤 배경
+$overlay-scrim: rgba(0, 0, 0, 0.5);
+
+/// rgba(0,0,0,0.45) — 이미지 위 텍스트 가독성 확보용 오버레이
+$overlay-image-text: rgba(0, 0, 0, 0.45);
+
+/// rgba(0,0,0,0.04) — 호버/포커스 시 미세한 시각 피드백
+$overlay-subtle: rgba(0, 0, 0, 0.04);
+
+// ══════════════════════════════════════════
+// TEXT ON IMAGE — 이미지/다크 배경 위 텍스트 색상
+// ══════════════════════════════════════════
+
+/// rgba(255,255,255,0.9) — 이미지 위 메인 텍스트 (제목, 본문)
+$text-on-image: rgba(255, 255, 255, 0.9);
+
+/// rgba(255,255,255,0.7) — 이미지 위 보조 텍스트 (날짜, 캡션)
+$text-on-image-subtle: rgba(255, 255, 255, 0.7);
