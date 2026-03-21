@@ -34,6 +34,17 @@ const SCROLL_REVEAL_OBSERVER_SCRIPT = `
   var STAGGER=0.1;
   var pending=[];
   var rafId=null;
+  var revealed={};
+
+  function isRevealed(){return !!revealed[location.pathname]}
+
+  function markRevealed(){revealed[location.pathname]=true}
+
+  function revealImmediate(el){
+    el.style.transition='none';
+    el.style.opacity='1';
+    el.style.transform='translateY(0)';
+  }
 
   function processBatch(){
     if(!pending.length)return;
@@ -49,6 +60,7 @@ const SCROLL_REVEAL_OBSERVER_SCRIPT = `
       running=eff+STAGGER;
     }
     pending=[];
+    markRevealed();
   }
 
   var observer=new IntersectionObserver(function(entries){
@@ -63,20 +75,18 @@ const SCROLL_REVEAL_OBSERVER_SCRIPT = `
     }
   },{threshold:0.1});
 
-  function revealImmediate(el){
-    el.style.transition='none';
-    el.style.opacity='1';
-    el.style.transform='translateY(0)';
+  function processElement(el){
+    if(isRevealed()){
+      revealImmediate(el);
+    } else if(el.getBoundingClientRect().bottom<0){
+      revealImmediate(el);
+    } else {
+      observer.observe(el);
+    }
   }
 
   function observeAll(root){
-    root.querySelectorAll('[data-reveal]').forEach(function(el){
-      if(el.getBoundingClientRect().bottom<0){
-        revealImmediate(el);
-      } else {
-        observer.observe(el);
-      }
-    });
+    root.querySelectorAll('[data-reveal]').forEach(processElement);
   }
 
   observeAll(document);
@@ -86,7 +96,7 @@ const SCROLL_REVEAL_OBSERVER_SCRIPT = `
       var nodes=mutations[i].addedNodes;
       for(var j=0;j<nodes.length;j++){
         if(nodes[j].nodeType!==1)continue;
-        if(nodes[j].hasAttribute('data-reveal'))observer.observe(nodes[j]);
+        if(nodes[j].hasAttribute('data-reveal'))processElement(nodes[j]);
         observeAll(nodes[j]);
       }
     }
