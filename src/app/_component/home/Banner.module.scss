@@ -1,11 +1,9 @@
-$desktop-gradient: linear-gradient(90deg, rgba(0, 0, 0, 0.9), rgba(0, 0, 0, 0.4));
-$mobile-gradient: linear-gradient(180deg, rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.4));
 $btn-gold: #c4924a;
 $btn-gold-hover: #a38458;
 
 .banner {
   margin-top: calc(-1 * $header-height);
-  padding-top: calc($header-height + $spacing-layout);
+  padding-top: calc($header-height + $spacing-7xl);
   padding-bottom: $spacing-xxl;
 
   position: relative;
@@ -39,28 +37,29 @@ $btn-gold-hover: #a38458;
 .overlay {
   position: absolute;
   inset: 0;
-  background: rgba(0, 0, 0, 0.7);
+  background: linear-gradient(
+    to bottom,
+    rgba(0, 0, 0, 0.75) 0%,
+    rgba(0, 0, 0, 0.5) 40%,
+    rgba(0, 0, 0, 0.65) 100%
+  );
 }
 
 .content {
-  padding: 0 $spacing-lg;
+  padding: 0 $padding-section-x;
   margin: 0 auto;
   position: relative;
   display: flex;
   flex-direction: column;
-  gap: $spacing-sm;
+  gap: $gap-items;
   max-width: $max-width;
   width: 100%;
   z-index: 1;
 
   .scripture {
     display: block;
-    font-size: $font-size-md;
-    font-weight: 600;
-    color: $color-gold;
+    @include text-label($color: $color-gold);
     letter-spacing: 0.05rem;
-    opacity: 0;
-    animation: fadeUp 0.8s 0.3s ease forwards;
   }
 
   h1 {
@@ -69,17 +68,12 @@ $btn-gold-hover: #a38458;
     line-height: $line-height-heading;
     white-space: pre-line;
     color: $color-text-inverse;
-    opacity: 0;
-    animation: fadeUp 0.8s 0.5s ease forwards;
   }
 
   p {
-    font-size: $font-size-md;
+    @include text-sub($color: $text-on-image-subtle);
     line-height: $line-height-wide;
-    color: rgba(255, 255, 255, 0.75);
     white-space: pre-line;
-    opacity: 0;
-    animation: fadeUp 0.8s 0.7s ease forwards;
   }
 
   .cta {
@@ -87,30 +81,29 @@ $btn-gold-hover: #a38458;
     display: flex;
     flex-direction: column;
     align-items: stretch;
-    gap: $spacing-sm;
-    opacity: 0;
-    animation: fadeUp 0.8s 0.9s ease forwards;
+    gap: $gap-items;
 
     @include respond-up($breakpoint-xs-mid) {
       flex-direction: row;
       align-items: center;
     }
 
-    .btn_primary {
-      padding: $spacing-md $spacing-lg;
+    .btn_primary,
+    .btn_secondary {
+      padding: $padding-card;
+      min-height: 4.8rem;
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      background: $btn-gold;
       font-size: $font-size-sm;
-      font-weight: 700;
-      line-height: 1;
-      border-radius: $border-radius-sm;
-      transition: background 0.2s ease;
+      line-height: $line-height-reset;
+      border-radius: $radius-control;
+    }
 
-      @include respond-up($breakpoint-xs-mid) {
-        padding: $spacing-md $spacing-lg;
-      }
+    .btn_primary {
+      background: $btn-gold;
+      font-weight: $font-weight-bold;
+      transition: background 0.2s ease;
 
       &:hover {
         background: $btn-gold-hover;
@@ -118,24 +111,13 @@ $btn-gold-hover: #a38458;
     }
 
     .btn_secondary {
-      padding: $spacing-md $spacing-lg;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
       background: transparent;
-      border: 0.1rem solid rgba(255, 255, 255, 0.5);
-      border-radius: $border-radius-sm;
-      font-weight: 500;
-      font-size: $font-size-sm;
-      line-height: 1;
-      color: rgba(255, 255, 255, 0.7);
+      border: $spacing-min solid rgba(255, 255, 255, 0.5);
+      font-weight: $font-weight-medium;
+      color: $text-on-image-subtle;
       transition:
         border-color 0.2s ease,
         background 0.2s ease;
-
-      @include respond-up($breakpoint-xs-mid) {
-        padding: $spacing-md $spacing-lg;
-      }
 
       &:hover {
         border-color: rgba(255, 255, 255, 0.7);
@@ -144,4 +126,3 @@ $btn-gold-hover: #a38458;
     }
   }
 }
-

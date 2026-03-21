@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import CloudinaryImage from '@/components/common/CloudinaryImage';
 import { getSiteSettings } from '@/apis/site-settings';
+import { revealStyle, REVEAL_STEP_CONTENT } from '@/utils/reveal';
 import styles from './Banner.module.scss';
 
 export default async function Banner() {
@@ -25,10 +26,10 @@ export default async function Banner() {
         <div className={styles.overlay} aria-hidden="true" />
       </div>
       <div className={styles.content}>
-        <span className={styles.scripture}>{settings.banner_scripture}</span>
-        <h1>{settings.banner_title}</h1>
-        <p>{settings.banner_subtitle}</p>
-        <div className={styles.cta}>
+        <span className={styles.scripture} data-reveal style={revealStyle()}>{settings.banner_scripture}</span>
+        <h1 data-reveal style={revealStyle(REVEAL_STEP_CONTENT)}>{settings.banner_title}</h1>
+        <p data-reveal style={revealStyle(REVEAL_STEP_CONTENT * 2)}>{settings.banner_subtitle}</p>
+        <div className={styles.cta} data-reveal style={revealStyle(REVEAL_STEP_CONTENT * 3)}>
           <Link href="/about" className={styles.btn_primary}>
             처음 오셨나요?
           </Link>
