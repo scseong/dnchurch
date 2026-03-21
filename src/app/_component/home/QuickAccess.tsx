@@ -3,6 +3,7 @@ import { PiCalendarLight, PiBookOpenLight, PiMapPinLight } from 'react-icons/pi'
 import styles from './QuickAccess.module.scss';
 import { LayoutContainer } from '@/components/layout';
 import IconWrap from '@/components/common/IconWrap';
+import { revealStyle, REVEAL_STEP } from '@/utils/reveal';
 
 const ITEMS = [
   {
@@ -30,8 +31,8 @@ export default function QuickAccess() {
     <section className={styles.quick_wap}>
       <LayoutContainer className={styles.quick_container}>
         <nav className={styles.quick_access} aria-label="퀵 액세스">
-          {ITEMS.map(({ href, label, desc, Icon }) => (
-            <Link key={label} href={href} className={styles.item}>
+          {ITEMS.map(({ href, label, desc, Icon }, i) => (
+            <Link key={label} href={href} className={styles.item} data-reveal style={revealStyle(i * REVEAL_STEP)}>
               <IconWrap Icon={Icon} className={styles.icon_box} aria-hidden="true" />
               <span className={styles.text}>
                 <span className={styles.label}>{label}</span>
