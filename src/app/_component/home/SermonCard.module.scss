@@ -1,0 +1,235 @@
+$play-btn-size: 2.8rem;
+$play-btn-size-lg: 4.8rem;
+$thumb-sub-w: 14rem;
+
+// ─── Card (공통 · 세로 레이아웃) ────────────────────
+.card {
+  display: flex;
+  flex-direction: column;
+  border-radius: $radius-card;
+  overflow: hidden;
+  background: $color-bg-dark-card;
+  text-decoration: none;
+}
+
+// ─── Card 썸네일 ────────────────────────────────────
+.card_thumb {
+  position: relative;
+  overflow: hidden;
+  aspect-ratio: 16 / 9;
+  flex-shrink: 0;
+
+  img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    filter: brightness(0.88);
+    transition:
+      transform 0.5s ease,
+      filter 0.4s ease;
+  }
+}
+
+.card:hover .card_thumb img {
+  transform: scale(1.04);
+  filter: brightness(0.72);
+}
+
+// ─── LATEST 뱃지 (썸네일 좌상단) ────────────────────
+.latest_badge {
+  position: absolute;
+  top: $spacing-xs;
+  left: $spacing-xs;
+  z-index: 1;
+  font-size: 0.9rem;
+  font-weight: $font-weight-bold;
+  color: $color-navy;
+  background: $color-gold;
+  padding: $padding-inline-xs;
+  border-radius: $radius-control;
+  text-transform: uppercase;
+  letter-spacing: 0.05rem;
+}
+
+// ─── 메타 바 ────────────────────────────────────────
+.meta_bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: $padding-card-compact;
+  background: $overlay-subtle;
+  border-top: 1px solid rgba(255, 255, 255, 0.07);
+
+  @include respond-up($breakpoint-sm) {
+    padding: $spacing-sm $spacing-md;
+  }
+}
+
+.meta_left {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-xxs;
+  min-width: 0;
+}
+
+.title {
+  font-size: $font-size-default;
+  font-weight: $font-weight-medium;
+  color: $color-white;
+  @include ellipsis-multi(1);
+}
+
+.meta_sub {
+  display: flex;
+  align-items: center;
+  gap: $spacing-xxs;
+  flex-wrap: wrap;
+}
+
+.scripture {
+  font-size: $font-size-xxs;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.dot {
+  width: 0.3rem;
+  height: 0.3rem;
+  border-radius: $radius-pill;
+  background: rgba(255, 255, 255, 0.25);
+  flex-shrink: 0;
+}
+
+.date {
+  font-size: $font-size-xxs;
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.preacher {
+  font-size: $font-size-xxs;
+  color: rgba(255, 255, 255, 0.5);
+}
+
+// ─── 재생 버튼 (메타 바 내 · 모바일 항상 노출) ─────
+.play_btn {
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: $play-btn-size;
+  height: $play-btn-size;
+  border-radius: $radius-pill;
+  background: rgba($color-gold, 0.18);
+  border: 1px solid rgba($color-gold, 0.35);
+  color: $color-gold;
+  transition:
+    background 0.2s ease,
+    border-color 0.2s ease,
+    color 0.2s ease;
+
+  svg {
+    width: 1rem;
+    height: 1rem;
+    margin-left: 0.15rem;
+  }
+
+  @include respond-up($breakpoint-lg) {
+    display: none;
+  }
+}
+
+.card:hover .play_btn {
+  background: $color-gold;
+  border-color: $color-gold;
+  color: $color-navy;
+}
+
+// ─── 썸네일 오버레이 재생 버튼 (PC hover) ───────────
+.thumb_play {
+  display: none;
+
+  @include respond-up($breakpoint-lg) {
+    display: flex;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(0.85);
+    z-index: 1;
+    width: $play-btn-size-lg;
+    height: $play-btn-size-lg;
+    border-radius: $radius-pill;
+    background: rgba($color-gold, 0.25);
+    border: 1px solid rgba($color-gold, 0.5);
+    color: $color-gold;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition:
+      opacity 0.3s ease,
+      transform 0.3s ease;
+
+    svg {
+      width: 1.6rem;
+      height: 1.6rem;
+      margin-left: 0.2rem;
+    }
+  }
+}
+
+.card:hover .thumb_play {
+  opacity: 1;
+  transform: translate(-50%, -50%) scale(1);
+}
+
+// ─── Sub Card (모바일: 가로 행) ─────────────────────
+.card_sub {
+  flex-direction: row;
+  border-radius: 0;
+  background: transparent;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+
+  &:last-child {
+    border-bottom: none;
+  }
+
+  .card_thumb {
+    width: $thumb-sub-w;
+    aspect-ratio: 16 / 9;
+  }
+
+  .meta_bar {
+    flex: 1;
+    border-top: none;
+    background: transparent;
+    padding: $spacing-xs $spacing-sm;
+  }
+
+  .title {
+    font-size: $font-size-sm;
+  }
+
+  // PC: 세로 카드로 복원
+  @include respond-up($breakpoint-lg) {
+    flex-direction: column;
+    border-radius: $radius-card;
+    background: $color-bg-dark-card;
+    overflow: hidden;
+    border-bottom: none;
+
+    .card_thumb {
+      width: 100%;
+    }
+
+    .meta_bar {
+      flex: none;
+      background: $overlay-subtle;
+      border-top: 1px solid rgba(255, 255, 255, 0.07);
+      padding: $spacing-sm $spacing-md;
+    }
+
+    .title {
+      font-size: $font-size-default;
+    }
+  }
+}
