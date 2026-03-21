@@ -2,6 +2,7 @@ import Script from 'next/script';
 import type { Metadata } from 'next';
 import { Nanum_Myeongjo } from 'next/font/google';
 import { Header, Footer } from '@/components/layout';
+import ScrollToTop from '@/components/common/ScrollToTop';
 import SessionContextProvider from '@/context/SessionContextProvider';
 import KakaoScript from '@/components/lib/KakaoScript';
 import { SCROLL_THRESHOLD } from '@/constants';
@@ -125,6 +126,7 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
         <KakaoScript />
         <div id="root">
           <SessionContextProvider>
+            <ScrollToTop />
             <Header />
             <main id="main">{children}</main>
           </SessionContextProvider>
