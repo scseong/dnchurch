@@ -22,7 +22,7 @@ $icon_box_radius: 0.8rem;
 
 .item {
   display: flex;
-  align-items: center;
+  align-items: self-end;
   gap: $gap-items;
   padding: $spacing-lg;
   border-bottom: $spacing-min solid $color-border-default;

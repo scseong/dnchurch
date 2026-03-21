@@ -26,12 +26,13 @@
 
 .caption {
   @include text-label($color: $color-gold);
-  letter-spacing: 0.18rem;
+  letter-spacing: 0.1rem;
   text-transform: uppercase;
 }
 
 .header h2 {
   color: $color-white;
+  @include text-page-title();
   font-family: $font-family-secondary;
 }
 

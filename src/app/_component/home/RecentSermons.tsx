@@ -31,7 +31,7 @@ export default async function RecentSermons() {
               <SermonCard
                 key={sermon.id}
                 sermon={sermon}
-                delay={REVEAL_STEP_CONTENT + i * REVEAL_STEP}
+                delay={REVEAL_STEP_CONTENT + (i + 1) * REVEAL_STEP}
                 isSub
               />
             ))}
