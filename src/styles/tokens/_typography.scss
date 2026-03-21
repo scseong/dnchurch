@@ -1,44 +1,123 @@
-// Font Family
+// ══════════════════════════════════════════
+// FONT FAMILY
+// ══════════════════════════════════════════
+
+/// 본문 기본 폰트 (Pretendard Variable)
 $font-family-base: 'Pretendard Variable', Pretendard, sans-serif;
+
+/// 강조/헤딩용 세리프 폰트 (나눔명조). 배너 타이틀, 인용문 등 특별한 강조에만 사용
 $font-family-secondary: var(--font-myeongjo);
 
-// Line Height
+// ══════════════════════════════════════════
+// LINE HEIGHT
+// ══════════════════════════════════════════
+
+/// 1 — 아이콘, 뱃지 등 단일 줄 요소. 줄간격 제거
 $line-height-reset: 1;
+
+/// 1.35 — 헤딩 전용. h1~h5에 사용
 $line-height-heading: 1.35;
+
+/// 1.5 — 본문 기본. 대부분의 텍스트에 사용
 $line-height-base: 1.5;
+
+/// 1.8 — 긴 본문, 설교 내용 등 가독성이 중요한 장문 텍스트
 $line-height-wide: 1.8;
 
-// Font Weight
+// ══════════════════════════════════════════
+// FONT WEIGHT
+// 선택 기준: default → regular, 구분 필요 → medium, 강조 → semibold, 헤딩 → bold
+// ══════════════════════════════════════════
+
+/// 400 — 본문 텍스트 기본
 $font-weight-regular: 400;
+
+/// 500 — 라벨, 네비게이션, 본문 내 살짝 강조. regular과 구분이 필요할 때
 $font-weight-medium: 500;
+
+/// 600 — 카드 제목, 리스트 타이틀, 버튼 텍스트. 명확한 강조
 $font-weight-semibold: 600;
+
+/// 700 — 페이지/섹션 헤딩(h1~h3). 최상위 제목에만 사용
 $font-weight-bold: 700;
 
-// Letter Spacing
+// ══════════════════════════════════════════
+// LETTER SPACING
+// ══════════════════════════════════════════
+
+/// -0.15rem — 대형 헤딩(h1~h2)에서 글자 간 간격 축소
 $letter-spacing-heading: -0.15rem;
+
+/// -0.1rem — 중형 헤딩(h3~h5)
 $letter-spacing-tight: -0.1rem;
+
+/// -0.05rem — 본문 기본
 $letter-spacing-base: -0.05rem;
 
-// Base Text Size
+// ══════════════════════════════════════════
+// BASE TEXT SIZE (본문용)
+// 선택 기준: 기본 본문 → $font-size-default
+// ══════════════════════════════════════════
+
+/// 1.8rem — 본문 중 가장 큰 텍스트. 리드 문단, 강조 인트로
 $font-size-xl: 1.8rem;
+
+/// 1.6rem — 서브 헤딩 보조, 큰 본문
 $font-size-lg: 1.6rem;
+
+/// 1.5rem — ✦ 본문 기본 크기. 대부분의 텍스트에 사용
 $font-size-default: 1.5rem;
+
+/// 1.4rem — 보조 텍스트, 테이블 셀, 폼 입력값
 $font-size-md: 1.4rem;
+
+/// 1.3rem — 캡션, 메타 정보 (날짜, 작성자)
 $font-size-sm: 1.3rem;
+
+/// 1.2rem — 뱃지, 태그, 각주 등 가장 작은 텍스트
 $font-size-xs: 1.2rem;
+
+/// 1.1rem — 특수 케이스에만. 가독성 주의 필요
 $font-size-xxs: 1.1rem;
 
-// Heading Sizes
+// ══════════════════════════════════════════
+// HEADING SIZE — Desktop (min-width: $breakpoint-lg 이상)
+// respond-up($breakpoint-lg) 안에서 사용
+// ══════════════════════════════════════════
+
+/// 4.2rem — 히어로 배너 등 최상위 타이틀 (PC)
 $font-size-h1: 4.2rem;
+
+/// 3.4rem — 페이지 타이틀 (PC)
 $font-size-h2: 3.4rem;
+
+/// 2.8rem — 섹션 타이틀 (PC)
 $font-size-h3: 2.8rem;
+
+/// 2.2rem — 서브 섹션 타이틀 (PC)
 $font-size-h4: 2.2rem;
+
+/// 2rem — 카드/아이템 타이틀 (PC)
 $font-size-h5: 2rem;
 
+// ══════════════════════════════════════════
+// HEADING SIZE — Mobile (기본값, mobile-first)
+// 기본 스타일에서 사용. respond-up() 없이 적용
+// ══════════════════════════════════════════
+
+/// 3.2rem — 히어로 배너 등 최상위 타이틀 (모바일)
 $font-size-h1-mobile: 3.2rem;
+
+/// 2.6rem — 페이지 타이틀 (모바일)
 $font-size-h2-mobile: 2.6rem;
+
+/// 2.2rem — 섹션 타이틀 (모바일)
 $font-size-h3-mobile: 2.2rem;
+
+/// 2rem — 서브 섹션 타이틀 (모바일)
 $font-size-h4-mobile: 2rem;
+
+/// 1.8rem — 카드/아이템 타이틀 (모바일)
 $font-size-h5-mobile: 1.8rem;
 
 $heading-sizes: (

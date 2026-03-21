@@ -1,10 +1,24 @@
-// Church Brand
+// ══════════════════════════════════════════
+// CHURCH BRAND — 교회 고유 색상. 배너, 로고, 강조 포인트에 사용
+// ══════════════════════════════════════════
+
+/// #1b2d4e — 교회 네이비. 다크 배경, 헤더/푸터, 강한 브랜드 표현
 $color-navy: #1b2d4e;
+
+/// #b8976a — 교회 골드. CTA 강조, 브랜드 포인트 컬러
 $color-gold: #b8976a;
+
+/// #f5f0e6 — 크림 배경. 따뜻한 톤의 섹션 배경
 $color-cream: #f5f0e6;
+
+/// #ede6d7 — 진한 크림. cream과의 경계/구분이 필요할 때
 $color-cream-deep: #ede6d7;
 
-// Scale
+// ══════════════════════════════════════════
+// COLOR SCALE — Primitive 팔레트 (직접 사용 지양, 시맨틱 토큰 우선)
+// ══════════════════════════════════════════
+
+// Blue Scale
 $color-blue-900: #0969b6;
 $color-blue-800: #116eb9;
 $color-blue-700: #1a73bb;
@@ -16,6 +30,7 @@ $color-blue-200: #aacbe6;
 $color-blue-100: #d5e5f2;
 $color-blue-50: #f7fafc;
 
+// Orange Scale
 $color-orange-900: #88430a;
 $color-orange-800: #b95d00;
 $color-orange-700: #e47712;
@@ -27,6 +42,7 @@ $color-orange-200: #ffe4c3;
 $color-orange-100: #fff0db;
 $color-orange-50: #fff9f0;
 
+// Gray Scale
 $color-black: #000000;
 $color-gray-900: #111827;
 $color-gray-800: #1f2937;
@@ -44,45 +60,112 @@ $color-white: #faf9f6;
 $color-green-500: #10b981;
 $color-red-500: #ef4444;
 
-// Primary Actions
+// ══════════════════════════════════════════
+// SEMANTIC: PRIMARY — 주요 액션 (링크, CTA 버튼, 선택된 탭)
+// ══════════════════════════════════════════
+
+/// 주요 액션 기본 색상 (blue-700)
 $color-primary: $color-blue-700;
+/// 주요 액션 클릭/활성 상태
 $color-primary-active: $color-blue-900;
+/// 주요 액션 호버 상태
 $color-primary-hover: $color-blue-800;
+/// 주요 액션 연한 배경 (선택된 탭 배경, 알림 배경)
 $color-primary-subtle: $color-blue-100;
 
-// Secondary Actions
+// ══════════════════════════════════════════
+// SEMANTIC: SECONDARY — 보조 액션 (보조 버튼, 경고성 강조)
+// ══════════════════════════════════════════
+
+/// 보조 액션 기본 색상 (orange-700)
 $color-secondary: $color-orange-700;
+/// 보조 액션 클릭/활성 상태
 $color-secondary-active: $color-orange-900;
+/// 보조 액션 호버 상태
 $color-secondary-hover: $color-orange-800;
+/// 보조 액션 연한 배경
 $color-secondary-subtle: $color-orange-100;
 
-// Disabled State x
+// ══════════════════════════════════════════
+// SEMANTIC: DISABLED — 비활성 상태
+// ══════════════════════════════════════════
+
+/// 비활성 텍스트 색상
 $color-disabled-text: $color-gray-400;
+/// 비활성 배경 색상
 $color-disabled-bg: $color-gray-200;
+/// 비활성 보더 색상
 $color-disabled-border: $color-gray-300;
 
-// Backgrounds & Borders
+// ══════════════════════════════════════════
+// SEMANTIC: BACKGROUND & BORDER
+// ══════════════════════════════════════════
+
+/// 페이지 전체 배경 (gray-50)
 $color-bg-body: $color-gray-50;
+/// 카드/섹션 기본 배경 (blue-50). body 위에 올라가는 영역
 $color-bg-default: $color-blue-50;
+/// 호버 시 배경 변화 (blue-100)
 $color-bg-hover: $color-blue-100;
+/// 푸터 배경 (black)
 $color-bg-footer: $color-black;
+
+/// 기본 보더 색상 — input, 구분선에 사용
 $color-border-default: $color-gray-300;
+/// 포커스 상태 보더 — input focus 시
 $color-border-focus: $color-gray-500;
+/// 카드 보더 색상 — 카드, 패널 테두리
 $color-border-card: $color-blue-300;
+/// primary 강조 보더 — 선택된 항목 테두리
 $color-border-primary: $color-blue-500;
+/// primary 보더 활성 상태
 $color-border-primary-active: $color-blue-700;
+/// primary 보더 반전 (다크 배경 위)
 $color-border-primary-inverse: $color-blue-200;
+/// 구분선 색상 — 리스트 아이템 사이, hr 요소
 $color-divide: $color-gray-400;
 
-// Text
+// ══════════════════════════════════════════
+// SEMANTIC: TEXT COLOR
+// 선택 기준: 제목/본문 → default, 부연 설명 → secondary, 날짜/메타 → subtle
+// ══════════════════════════════════════════
+
+/// ✦ 기본 텍스트 (gray-900). 제목, 본문 등 대부분의 텍스트
 $color-text-default: $color-gray-900;
+
+/// 보조 텍스트 (gray-700). 부연 설명, 서브타이틀, 짧은 설명문
 $color-text-secondary: $color-gray-700;
+
+/// 약한 텍스트 (gray-500). 날짜, 메타 정보, 캡션, 플레이스홀더
 $color-text-subtle: $color-gray-500;
+
+/// 링크 텍스트 (blue-700). 클릭 가능한 텍스트 링크
 $color-text-link: $color-blue-700;
+
+/// 링크 활성 상태 (blue-900)
 $color-text-link-active: $color-blue-900;
+
+/// 반전 텍스트 (white). 다크 배경/이미지 위의 텍스트
 $color-text-inverse: $color-white;
 
-// Status
+// ══════════════════════════════════════════
+// SEMANTIC: STATUS — 상태 피드백 색상
+// ══════════════════════════════════════════
+
+/// 성공 상태 (초록)
 $color-status-success: $color-green-500;
+/// 위험/에러 상태 (빨강)
 $color-status-danger: $color-red-500;
+/// 경고 상태 (주황)
 $color-status-warning: $color-orange-600;
+
+// ══════════════════════════════════════════
+// SEMANTIC: DARK SECTION — 이미지/영상 위 콘텐츠 영역
+// ══════════════════════════════════════════
+
+/// 다크 섹션 배경색. 이미지/영상 위 콘텐츠 영역
+$color-bg-dark: #0f1820;
+/// 다크 섹션 내 카드 배경
+$color-bg-dark-card: #1a2535;
+/// 다크 섹션 내 카드 호버 배경
+$color-bg-dark-card-hover: #243347;

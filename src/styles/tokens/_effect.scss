@@ -1,18 +1,44 @@
-// Border Radius
+// ══════════════════════════════════════════
+// BORDER RADIUS — 직접 사용 지양, $radius-* 시맨틱 토큰 우선
+// ══════════════════════════════════════════
+
+/// 0.25rem — → $radius-control 사용 권장
 $border-radius-sm: 0.25rem;
+/// 0.5rem — → $radius-card 사용 권장
 $border-radius-md: 0.5rem;
+/// 0.75rem — → $radius-sheet 사용 권장
 $border-radius-lg: 0.75rem;
+/// 9999px — → $radius-pill 사용 권장
 $border-radius-full: 9999px;
 
-// Box Shadow
+// ══════════════════════════════════════════
+// BOX SHADOW
+// ══════════════════════════════════════════
+
+/// 얕은 그림자 — 카드, 드롭다운 기본
 $shadow-sm: 0 1px 2px 0 rgba($color-gray-900, 0.05);
+
+/// 중간 그림자 — 호버된 카드, 플로팅 요소
 $shadow-md:
   0 4px 6px -1px rgba($color-gray-900, 0.1),
   0 2px 4px -2px rgba($color-gray-900, 0.1);
 
-// Transition
+// ══════════════════════════════════════════
+// TRANSITION
+// ══════════════════════════════════════════
+
+/// 0.28s — 일반 트랜지션 지속 시간
 $transition-duration-normal: 0.28s;
+
+/// cubic-bezier(0.4, 0, 0.2, 1) — 기본 이징 함수
 $transition-easing-default: cubic-bezier(0.4, 0, 0.2, 1);
+
+// ══════════════════════════════════════════
+// ANIMATION
+// ══════════════════════════════════════════
+
+/// 0.8s — 스크롤 reveal 애니메이션 지속 시간
+$animation-duration-reveal: 0.8s;
 
 @keyframes fadeUp {
   from {
