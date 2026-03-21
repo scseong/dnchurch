@@ -2,6 +2,7 @@ import {
   Banner,
   QuickAccess,
   RecentSermons,
+  FeedSection,
   AboutOurChurch,
   ChurchVision
 } from './_component/home';
@@ -12,6 +13,7 @@ export default async function Home() {
       <Banner />
       <QuickAccess />
       <RecentSermons />
+      <FeedSection />
     </>
   );
 }
