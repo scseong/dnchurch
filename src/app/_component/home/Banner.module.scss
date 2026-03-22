@@ -83,21 +83,23 @@ $btn-gold-hover: #a38458;
     align-items: stretch;
     gap: $gap-items;
 
-    @include respond-up($breakpoint-xs-mid) {
-      flex-direction: row;
-      align-items: center;
-    }
-
     .btn_primary,
     .btn_secondary {
-      padding: $padding-card;
-      min-height: 4.8rem;
+      padding: $padding-control;
+      min-height: 4.2rem;
       display: inline-flex;
       align-items: center;
       justify-content: center;
       font-size: $font-size-sm;
       line-height: $line-height-reset;
       border-radius: $radius-control;
+
+      svg {
+        margin-right: $spacing-xs;
+        width: $font-size-lg;
+        height: $font-size-lg;
+        transform: translateY(-0.1rem);
+      }
     }
 
     .btn_primary {
@@ -112,7 +114,7 @@ $btn-gold-hover: #a38458;
 
     .btn_secondary {
       background: transparent;
-      border: $spacing-min solid rgba(255, 255, 255, 0.5);
+      border: 0.1rem solid rgba(255, 255, 255, 0.5);
       font-weight: $font-weight-medium;
       color: $text-on-image-subtle;
       transition:
@@ -122,6 +124,16 @@ $btn-gold-hover: #a38458;
       &:hover {
         border-color: rgba(255, 255, 255, 0.7);
         color: $color-text-inverse;
+      }
+    }
+
+    @include respond-up($breakpoint-xs-mid) {
+      flex-direction: row;
+      align-items: center;
+
+      .btn_primary,
+      .btn_secondary {
+        padding: $padding-control-wide;
       }
     }
   }

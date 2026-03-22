@@ -11,6 +11,9 @@ $padding-inline-sm: $spacing-xxs $spacing-xs;
 /// 0.8rem 1.2rem — input, select, button 내부 여백
 $padding-control: $spacing-xs $spacing-sm;
 
+/// 1.2rem 2.4rem — CTA 링크 버튼 (가로:세로 ≈ 4:3)
+$padding-control-wide: $spacing-sm $spacing-xl;
+
 /// 1.6rem 2rem — 카드, 패널 내부 여백
 $padding-card: $spacing-md $spacing-lg;
 
