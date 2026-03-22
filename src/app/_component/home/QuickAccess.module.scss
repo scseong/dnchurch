@@ -3,7 +3,7 @@ $icon_box_mobile_size: 4.2rem;
 $icon_box_radius: 0.8rem;
 
 .quick_wap {
-  background: $color-cream-deep;
+  background: #faf9f6;
 
   .quick_container {
     padding: 0;
@@ -22,7 +22,7 @@ $icon_box_radius: 0.8rem;
 
 .item {
   display: flex;
-  align-items: self-end;
+  align-items: center;
   gap: $gap-items;
   padding: $spacing-lg;
   border-bottom: $spacing-min solid $color-border-default;
