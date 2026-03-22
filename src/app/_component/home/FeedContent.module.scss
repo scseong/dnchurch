@@ -1,0 +1,230 @@
+// 로컬 변수 (디자인 토큰 미포함)
+$color-feed-primary: #5c6b4f;
+$color-feed-primary-light: #eef1eb;
+$color-feed-accent: #c49352;
+$radius-list: 1.4rem;
+$radius-list-lg: 1.6rem;
+
+// ─── Tab Switcher (Mobile Only) ─────────────────────
+.tab_switcher {
+  display: flex;
+  gap: $spacing-xxs;
+  margin-bottom: $spacing-md;
+
+  @include respond-up($breakpoint-lg) {
+    display: none;
+  }
+}
+
+.tab_active,
+.tab_inactive {
+  flex: 1;
+  padding: $spacing-sm 0;
+  border-radius: $radius-card;
+  border: none;
+  font-size: $font-size-default;
+  font-weight: $font-weight-semibold;
+  font-family: $font-family-base;
+  cursor: pointer;
+  transition:
+    background $transition-duration-normal $transition-easing-default,
+    color $transition-duration-normal $transition-easing-default;
+}
+
+.tab_active {
+  background: $color-gray-900;
+  color: $color-white;
+}
+
+.tab_inactive {
+  background: $color-cream;
+  color: $color-text-secondary;
+}
+
+// ─── Grid ───────────────────────────────────────────
+.grid {
+  min-width: 0;
+  overflow: hidden;
+
+  @include respond-up($breakpoint-lg) {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: $spacing-xxl;
+  }
+}
+
+// ─── Column ─────────────────────────────────────────
+.column {
+  min-width: 0;
+}
+
+.column_hidden {
+  display: none;
+
+  @include respond-up($breakpoint-lg) {
+    display: block;
+  }
+}
+
+// ─── Column Header (PC Only) ────────────────────────
+.column_header {
+  display: none;
+
+  @include respond-up($breakpoint-lg) {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: $spacing-sm;
+  }
+}
+
+.column_title {
+  @include text-card-title;
+  display: flex;
+  align-items: center;
+  gap: $spacing-xs;
+}
+
+.color_bar_news,
+.color_bar_sharing {
+  width: $spacing-xxs;
+  height: 2.2rem;
+  border-radius: $spacing-nano;
+  display: inline-block;
+  flex-shrink: 0;
+  transform: translateY(-0.1rem);
+}
+
+.color_bar_news {
+  background: $color-feed-primary;
+}
+
+.color_bar_sharing {
+  background: $color-feed-accent;
+}
+
+.more_link {
+  @include text-caption;
+  font-weight: $font-weight-semibold;
+  text-decoration: none;
+  color: $color-feed-accent;
+  transition: opacity $transition-duration-normal $transition-easing-default;
+
+  &:hover {
+    opacity: 0.7;
+  }
+}
+
+// ─── List Card ──────────────────────────────────────
+.list_card {
+  background: $color-white;
+  border-radius: $radius-list;
+  border: 1px solid $color-border-default;
+  overflow: hidden;
+
+  @include respond-up($breakpoint-lg) {
+    border-radius: $radius-list-lg;
+  }
+}
+
+// ─── Item Row ───────────────────────────────────────
+.item {
+  display: block;
+  padding: $padding-card-compact;
+  text-decoration: none;
+  cursor: pointer;
+  transition: background $transition-duration-normal $transition-easing-default;
+
+  &:not(:last-child) {
+    border-bottom: 1px solid $color-gray-200;
+  }
+
+  &:hover {
+    background: $color-cream;
+  }
+
+  @include respond-up($breakpoint-lg) {
+    padding: $padding-card;
+  }
+}
+
+// ─── Item Body ──────────────────────────────────────
+.item_body {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-xxs;
+  min-width: 0;
+}
+
+// ─── Item Content ───────────────────────────────────
+.item_title_row {
+  display: flex;
+  align-items: center;
+  gap: $spacing-xxs;
+  min-width: 0;
+  overflow: hidden;
+}
+
+.item_title {
+  color: $color-text-default;
+  font-size: $font-size-default;
+  font-weight: $font-weight-medium;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+
+  @include respond-up($breakpoint-lg) {
+    font-size: $font-size-lg;
+  }
+}
+
+.item_meta {
+  display: flex;
+  align-items: center;
+  gap: $spacing-xs;
+}
+
+.item_author {
+  @include text-caption;
+}
+
+.item_date {
+  @include text-caption;
+}
+
+// ─── Badges ─────────────────────────────────────────
+.badge_new {
+  color: $color-white;
+  font-size: 0.8rem;
+  font-weight: $font-weight-bold;
+  background: $color-gold;
+  border-radius: $radius-control;
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: $font-size-sm;
+  height: $font-size-sm;
+}
+
+// ─── More Button (Mobile Only) ──────────────────────
+.more_button {
+  display: block;
+  width: 100%;
+  padding: $spacing-xs 0;
+  border-radius: $radius-list;
+  border: 1px solid $color-border-default;
+  background: transparent;
+  color: $color-text-secondary;
+  font-size: $font-size-sm;
+  font-weight: $font-weight-semibold;
+  font-family: $font-family-base;
+  cursor: pointer;
+  margin-top: $spacing-sm;
+  text-align: center;
+  text-decoration: none;
+
+  @include respond-up($breakpoint-lg) {
+    display: none;
+  }
+}
