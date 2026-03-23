@@ -28,6 +28,6 @@
     @include text-sub();
     margin: $spacing-xxs 0;
     display: block;
-    font-size: $font-size-lg !important;
+    font-size: $font-size-lg;
   }
 }
