@@ -1,4 +1,4 @@
-import { Banner, QuickAccess, RecentSermons, AboutOurChurch, ChurchVision } from './_component/home';
+import { Banner, QuickAccess, RecentSermons, FeedSection } from './_component/home';
 
 export default async function Home() {
   return (
@@ -6,8 +6,7 @@ export default async function Home() {
       <Banner />
       <QuickAccess />
       <RecentSermons />
-      <AboutOurChurch />
-      <ChurchVision />
+      <FeedSection />
     </>
   );
 }

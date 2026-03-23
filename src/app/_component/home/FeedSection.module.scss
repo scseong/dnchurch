@@ -1,0 +1,33 @@
+// ─── Section ────────────────────────────────────────
+.section {
+  padding: $padding-section-y 0;
+}
+
+// ─── Header ─────────────────────────────────────────
+.header {
+  margin-bottom: $gap-group;
+}
+
+.caption {
+  @include text-label($color: $color-gold);
+  margin-bottom: $spacing-xxs;
+  display: inline-block;
+  letter-spacing: 0.1rem;
+  text-transform: uppercase;
+}
+
+.header h2 {
+  @include text-page-title();
+  font-family: $font-family-secondary;
+}
+
+.subtitle {
+  display: none;
+
+  @include respond-up($breakpoint-lg) {
+    @include text-sub();
+    margin: $spacing-xxs 0;
+    display: block;
+    font-size: $font-size-lg;
+  }
+}

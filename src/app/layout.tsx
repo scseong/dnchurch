@@ -2,6 +2,7 @@ import Script from 'next/script';
 import type { Metadata } from 'next';
 import { Nanum_Myeongjo } from 'next/font/google';
 import { Header, Footer } from '@/components/layout';
+import ScrollToTop from '@/components/common/ScrollToTop';
 import SessionContextProvider from '@/context/SessionContextProvider';
 import KakaoScript from '@/components/lib/KakaoScript';
 import { SCROLL_THRESHOLD } from '@/constants';
@@ -29,21 +30,78 @@ const myeongjo = Nanum_Myeongjo({
   display: 'swap'
 });
 
-const REVEAL_JS = `
+const SCROLL_REVEAL_OBSERVER_SCRIPT = `
 (function(){
-  var elementsToReveal=document.querySelectorAll('[data-reveal]');
-  if(!elementsToReveal.length)return;
+  var STAGGER=0.1;
+  var pending=[];
+  var rafId=null;
+  var revealed={};
+
+  function isRevealed(){return !!revealed[location.pathname]}
+
+  function markRevealed(){revealed[location.pathname]=true}
+
+  function revealImmediate(el){
+    el.style.transition='none';
+    el.style.opacity='1';
+    el.style.transform='translateY(0)';
+  }
+
+  function processBatch(){
+    if(!pending.length)return;
+    pending.sort(function(a,b){return a.top-b.top});
+    var running=0;
+    for(var i=0;i<pending.length;i++){
+      var el=pending[i].el;
+      var base=parseFloat(el.style.transitionDelay)||0;
+      var eff=Math.max(base,running);
+      el.style.transitionDelay=eff+'s';
+      el.style.opacity='1';
+      el.style.transform='translateY(0)';
+      running=eff+STAGGER;
+    }
+    pending=[];
+    markRevealed();
+  }
+
   var observer=new IntersectionObserver(function(entries){
-    entries.forEach(function(entry){
-      if(entry.isIntersecting){
-        var targetStyle=entry.target.style;
-        targetStyle.opacity='1';
-        targetStyle.transform='translateY(0)';
-        observer.unobserve(entry.target);
+    for(var i=0;i<entries.length;i++){
+      if(entries[i].isIntersecting){
+        pending.push({el:entries[i].target,top:entries[i].boundingClientRect.top});
+        observer.unobserve(entries[i].target);
       }
-    });
-  },{threshold:0.1});
-  elementsToReveal.forEach(function(el){observer.observe(el)});
+    }
+    if(pending.length&&!rafId){
+      rafId=requestAnimationFrame(function(){processBatch();rafId=null});
+    }
+  },{threshold:0,rootMargin:'0px 0px 80px 0px'});
+
+  function processElement(el){
+    if(isRevealed()){
+      revealImmediate(el);
+    } else if(el.getBoundingClientRect().bottom<0){
+      revealImmediate(el);
+    } else {
+      observer.observe(el);
+    }
+  }
+
+  function observeAll(root){
+    root.querySelectorAll('[data-reveal]').forEach(processElement);
+  }
+
+  observeAll(document);
+
+  new MutationObserver(function(mutations){
+    for(var i=0;i<mutations.length;i++){
+      var nodes=mutations[i].addedNodes;
+      for(var j=0;j<nodes.length;j++){
+        if(nodes[j].nodeType!==1)continue;
+        if(nodes[j].hasAttribute('data-reveal'))processElement(nodes[j]);
+        observeAll(nodes[j]);
+      }
+    }
+  }).observe(document.getElementById('main'),{childList:true,subtree:true});
 })();
 `;
 
@@ -68,13 +126,14 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
         <KakaoScript />
         <div id="root">
           <SessionContextProvider>
+            <ScrollToTop />
             <Header />
             <main id="main">{children}</main>
           </SessionContextProvider>
           <Footer />
         </div>
         <div id="modal-root"></div>
-        <Script id="reveal-observer" strategy="afterInteractive" dangerouslySetInnerHTML={{ __html: REVEAL_JS }} />
+        <Script id="scroll-reveal-observer" strategy="afterInteractive" dangerouslySetInnerHTML={{ __html: SCROLL_REVEAL_OBSERVER_SCRIPT }} />
       </body>
     </html>
   );
