@@ -59,10 +59,10 @@ export default function FeedContent({ notices }: Props) {
         </button>
       </div>
 
-      <div className={styles.grid} data-reveal style={revealStyle(REVEAL_STEP_CONTENT)}>
+      <div className={styles.grid}>
         {/* 교회 소식 */}
         <div className={clsx(styles.column, activeTab !== 'news' && styles.column_hidden)}>
-          <div className={styles.column_header}>
+          <div className={styles.column_header} data-reveal style={revealStyle()}>
             <h3 className={styles.column_title}>
               <span className={styles.color_bar_news} />
               교회 소식
@@ -78,7 +78,7 @@ export default function FeedContent({ notices }: Props) {
                 href={`/news/notice/${notice.id}`}
                 className={styles.item}
                 data-reveal
-                style={revealStyle(REVEAL_STEP_CONTENT + (i + 1) * REVEAL_STEP)}
+                style={revealStyle(i * REVEAL_STEP)}
               >
                 <div className={styles.item_body}>
                   <span className={styles.item_title_row}>
@@ -100,7 +100,7 @@ export default function FeedContent({ notices }: Props) {
 
         {/* 은혜 나눔 */}
         <div className={clsx(styles.column, activeTab !== 'sharing' && styles.column_hidden)}>
-          <div className={styles.column_header}>
+          <div className={styles.column_header} data-reveal style={revealStyle()}>
             <h3 className={styles.column_title}>
               <span className={styles.color_bar_sharing} />
               은혜 나눔
@@ -115,7 +115,7 @@ export default function FeedContent({ notices }: Props) {
                 key={item.id}
                 className={styles.item}
                 data-reveal
-                style={revealStyle(REVEAL_STEP_CONTENT + REVEAL_STEP + (i + 1) * REVEAL_STEP)}
+                style={revealStyle(i * REVEAL_STEP)}
               >
                 <div className={styles.item_body}>
                   <span className={styles.item_title_row}>
@@ -137,7 +137,7 @@ export default function FeedContent({ notices }: Props) {
         href={activeTab === 'news' ? '/news/notice' : '/fellowship'}
         className={styles.more_button}
         data-reveal
-        style={revealStyle(REVEAL_STEP_CONTENT + 0.6)}
+        style={revealStyle(notices.length * REVEAL_STEP)}
       >
         더 보기
       </Link>

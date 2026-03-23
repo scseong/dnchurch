@@ -212,17 +212,22 @@ $radius-list-lg: 1.6rem;
   display: block;
   width: 100%;
   padding: $spacing-xs 0;
-  border-radius: $radius-list;
+  border-radius: $radius-card;
   border: 1px solid $color-border-default;
   background: transparent;
   color: $color-text-secondary;
   font-size: $font-size-sm;
   font-weight: $font-weight-semibold;
-  font-family: $font-family-base;
-  cursor: pointer;
   margin-top: $spacing-sm;
   text-align: center;
   text-decoration: none;
+  transition: background $transition-duration-normal $transition-easing-default,
+    color $transition-duration-normal $transition-easing-default;
+
+  &:hover {
+    background: $color-cream;
+    color: $color-text-default;
+  }
 
   @include respond-up($breakpoint-lg) {
     display: none;

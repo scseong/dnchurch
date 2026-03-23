@@ -37,7 +37,7 @@ export default function QuickAccess() {
               href={href}
               className={styles.item}
               data-reveal
-              style={revealStyle(REVEAL_STEP_CONTENT + (i + 1) * REVEAL_STEP)}
+              style={revealStyle(i * REVEAL_STEP)}
             >
               <IconWrap Icon={Icon} className={styles.icon_box} aria-hidden="true" />
               <span className={styles.text}>

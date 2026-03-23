@@ -25,13 +25,13 @@ export default async function RecentSermons() {
           </Link>
         </div>
         <div className={styles.grid}>
-          <SermonCard sermon={featured} isLatest delay={REVEAL_STEP_CONTENT} />
+          <SermonCard sermon={featured} isLatest delay={REVEAL_STEP} />
           <div className={styles.sub_list}>
             {rest.map((sermon, i) => (
               <SermonCard
                 key={sermon.id}
                 sermon={sermon}
-                delay={REVEAL_STEP_CONTENT + (i + 1) * REVEAL_STEP}
+                delay={(i + 1) * REVEAL_STEP}
                 isSub
               />
             ))}
