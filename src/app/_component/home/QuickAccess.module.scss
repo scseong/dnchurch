@@ -24,9 +24,8 @@ $icon_box_radius: 0.8rem;
   display: flex;
   align-items: center;
   gap: $gap-items;
-  padding: $spacing-lg;
+  padding: $spacing-lg $spacing-xl;
   border-bottom: $spacing-min solid $color-border-default;
-  text-decoration: none;
   transition: background $transition-duration-normal $transition-easing-default;
 
   &:last-child {

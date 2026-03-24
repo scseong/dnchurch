@@ -1,4 +1,4 @@
-$nav-center: 60%;
+$nav-center: 65%;
 
 .desktop_nav {
   display: none;
@@ -61,7 +61,7 @@ $nav-center: 60%;
 
 .list {
   display: flex;
-  gap: 3rem;
+  gap: $spacing-md;
   align-items: stretch;
 }
 
@@ -76,7 +76,7 @@ $nav-center: 60%;
   align-items: center;
   padding: $spacing-sm $spacing-sm calc($spacing-sm - 0.2rem) $spacing-sm;
   border-bottom: 0.2rem solid transparent;
-  font-size: $font-size-default;
+  font-size: $font-size-md;
   font-weight: $font-weight-medium;
   color: inherit;
   white-space: nowrap;
