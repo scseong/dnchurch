@@ -70,17 +70,22 @@
     }
   }
 
-  a {
+  .about_link {
     margin-top: $spacing-xs;
     width: fit-content;
     display: inline-block;
+    padding-bottom: $spacing-nano;
     color: $color-text-link;
-    transition: transform 0.3s ease;
     font-weight: $font-weight-medium;
+    text-decoration: none;
+    border-bottom: $spacing-min solid transparent;
+    transition:
+      border-color $transition-duration-normal $transition-easing-default,
+      opacity $transition-duration-normal $transition-easing-default;
 
     &:hover {
-      text-decoration: underline;
-      transform: translateX(0.5rem);
+      border-color: $color-text-link;
+      opacity: 0.8;
     }
   }
 }

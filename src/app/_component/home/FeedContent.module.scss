@@ -108,10 +108,15 @@ $radius-list-lg: 1.6rem;
   font-weight: $font-weight-semibold;
   text-decoration: none;
   color: $color-feed-accent;
-  transition: opacity $transition-duration-normal $transition-easing-default;
+  padding-bottom: $spacing-nano;
+  border-bottom: $spacing-min solid transparent;
+  transition:
+    border-color $transition-duration-normal $transition-easing-default,
+    opacity $transition-duration-normal $transition-easing-default;
 
   &:hover {
-    opacity: 0.7;
+    border-color: $color-feed-accent;
+    opacity: 0.8;
   }
 }
 

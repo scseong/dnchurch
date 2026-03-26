@@ -8,11 +8,17 @@ import { LayoutContainer } from '@/components/layout';
 import { revealStyle, REVEAL_STEP_CONTENT } from '@/utils/reveal';
 import styles from './NewHere.module.scss';
 
-const FAQ_ITEMS = [
+const FAQ_ITEMS: { question: string; answer: string; link?: { href: string; label: string } }[] = [
   {
     question: '예배는 언제, 어디서 드리나요?',
     answer:
-      '주일오전예배는 매주 일요일 오전 11시, 수요예배는 매주 수요일 저녁 7시에 드립니다. 주소는 대구광역시 달서구 달구벌대로307길 58입니다.'
+      '주일오전예배는 매주 일요일 오전 11시, 수요예배는 매주 수요일 저녁 7시에 드립니다. 주소는 대구광역시 달서구 달구벌대로307길 58입니다.',
+    link: { href: '/about', label: '예배안내 보기 →' }
+  },
+  {
+    question: '대구동남교회는 어떤 교회인가요?',
+    answer:
+      '대한예수교장로회(합신) 소속의 개혁주의 교회로, 바른 신학·바른 교회·바른 생활을 지향합니다. 성경 본문에 충실한 강해 설교와 경건한 예배를 통해 성도의 삶을 세워갑니다.'
   },
   {
     question: '처음 가는데 특별히 준비할 게 있나요?',
@@ -23,11 +29,6 @@ const FAQ_ITEMS = [
     question: '아이들과 함께 가도 되나요?',
     answer:
       '물론입니다. 영아부부터 고등부까지 연령별 맞춤 교회학교를 운영하고 있어, 안전한 환경에서 예배드릴 수 있습니다.'
-  },
-  {
-    question: '주차 공간이 있나요?',
-    answer:
-      '교회 인근에 주차 공간을 이용하실 수 있습니다. 자세한 내용은 오시는 길 페이지를 참고해 주세요.'
   }
 ];
 
@@ -44,22 +45,24 @@ export default function NewHere() {
         <div className={styles.inner}>
           {/* 좌측: 교회 이미지 (PC only) */}
           <div className={styles.image_area} data-reveal style={revealStyle()}>
-            <div className={styles.image_frame}>
-              <CloudinaryImage
-                src="dnchurch-dev/site/home/sketch"
-                alt="대구동남교회 전경"
-                width={600}
-                height={800}
-                sizes="50vw"
-                cropMode="fill"
-                gravity="auto"
-                aspectRatio="3:4"
-                className={styles.image}
-              />
-            </div>
-            <div className={styles.year_badge}>
-              <span className={styles.year_number}>1958</span>
-              <span className={styles.year_label}>설립연도</span>
+            <div className={styles.image_sticky}>
+              <div className={styles.image_frame}>
+                <CloudinaryImage
+                  src="dnchurch-dev/site/home/sketch"
+                  alt="대구동남교회 전경"
+                  width={600}
+                  height={800}
+                  sizes="50vw"
+                  cropMode="fill"
+                  gravity="auto"
+                  aspectRatio="3:4"
+                  className={styles.image}
+                />
+              </div>
+              <div className={styles.year_badge}>
+                <span className={styles.year_number}>1958</span>
+                <span className={styles.year_label}>설립연도</span>
+              </div>
             </div>
           </div>
 
@@ -99,7 +102,12 @@ export default function NewHere() {
                   </button>
                   <div className={styles.faq_answer}>
                     <div className={styles.faq_answer_inner}>
-                      <p>{item.answer}</p>
+                      <p className={styles.faq_answer_text}>{item.answer}</p>
+                      {item.link && (
+                        <Link href={item.link.href} className={styles.faq_link}>
+                          {item.link.label}
+                        </Link>
+                      )}
                     </div>
                   </div>
                 </div>
