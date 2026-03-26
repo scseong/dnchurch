@@ -30,7 +30,7 @@ export default async function AboutOurChurch() {
               <p>{settings.about_intro_1}</p>
               <p>{settings.about_intro_2}</p>
             </div>
-            <Link href="/about">교회소개 살펴보기</Link>
+            <Link href="/about" className={styles.about_link}>교회소개 살펴보기 →</Link>
           </div>
         </div>
       </LayoutContainer>

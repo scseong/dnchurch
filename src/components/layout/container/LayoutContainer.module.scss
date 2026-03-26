@@ -1,9 +1,5 @@
 .container {
-  padding: 0 $spacing-lg;
+  padding: 0 $padding-section-x;
   margin: 0 auto;
   max-width: $max-width;
-
-  @include respond-up($breakpoint-md) {
-    padding: 0 $spacing-lg;
-  }
 }

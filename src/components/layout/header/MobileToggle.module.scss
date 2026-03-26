@@ -5,8 +5,9 @@
     display: inline-flex;
   }
   svg {
-    width: 1.8rem;
-    height: 1.8rem;
+    width: 2.8rem;
+    height: 2.8rem;
+    color: inherit;
   }
 
   @include respond-up($header-breakpoint) {

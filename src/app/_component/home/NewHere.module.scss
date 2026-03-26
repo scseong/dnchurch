@@ -1,0 +1,238 @@
+// Local variables
+$bg-section: #fdfaf5;
+$divider-width: 4rem;
+$divider-height: 0.2rem;
+
+// ─── Section ────────────────────────────────────────
+.section {
+  padding: $padding-section-y 0;
+  background: $bg-section;
+}
+
+// ─── Inner Grid ─────────────────────────────────────
+.inner {
+  @include respond-up($breakpoint-lg) {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: $spacing-5xl;
+  }
+}
+
+// ─── 좌측: 이미지 (PC only) ────────────────────────
+.image_area {
+  display: none;
+
+  @include respond-up($breakpoint-lg) {
+    display: block;
+    position: relative;
+    align-self: start;
+  }
+}
+
+.image_sticky {
+  position: sticky;
+  top: calc($header-height + $spacing-xl);
+}
+
+.image_frame {
+  aspect-ratio: 3 / 4;
+  border-radius: $radius-control;
+  overflow: hidden;
+}
+
+.image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  @include prevent-img-drag;
+}
+
+.year_badge {
+  position: absolute;
+  bottom: -$spacing-md;
+  right: -$spacing-md;
+  padding: $spacing-lg $spacing-xl;
+  background: $color-navy;
+  border-radius: $radius-control;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-xxs;
+}
+
+.year_number {
+  font-family: $font-family-secondary;
+  font-size: 3.2rem;
+  font-weight: $font-weight-regular;
+  color: $color-gold;
+  line-height: $line-height-reset;
+}
+
+.year_label {
+  font-size: $font-size-xxs;
+  font-weight: $font-weight-regular;
+  color: rgba($color-white, 0.5);
+  letter-spacing: 0.1rem;
+}
+
+// ─── 우측: 콘텐츠 ──────────────────────────────────
+.content {
+  display: flex;
+  flex-direction: column;
+
+  @include respond-up($breakpoint-lg) {
+    align-self: center;
+  }
+}
+
+// ─── 헤더 ───────────────────────────────────────────
+.header {
+  margin-bottom: $spacing-md;
+}
+
+.caption {
+  @include text-label($color: $color-gold);
+  display: inline-block;
+  letter-spacing: 0.25rem;
+  text-transform: uppercase;
+  margin-bottom: $spacing-sm;
+}
+
+.title {
+  @include text-page-title();
+  font-family: $font-family-secondary;
+  font-weight: $font-weight-regular;
+  line-height: 1.25;
+  letter-spacing: $letter-spacing-heading;
+
+  strong {
+    font-family: inherit;
+    font-weight: $font-weight-bold;
+  }
+}
+
+.divider {
+  width: $divider-width;
+  height: $divider-height;
+  background: $color-gold;
+  margin: $spacing-lg 0;
+}
+
+.desc {
+  @include text-sub();
+  font-size: $font-size-md;
+  line-height: $line-height-wide;
+}
+
+// ─── FAQ 아코디언 ───────────────────────────────────
+.faq_list {
+  margin-bottom: $spacing-xl;
+}
+
+.faq_item {
+  border-bottom: 1px solid $color-border-default;
+}
+
+.faq_question {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: $spacing-sm;
+  width: 100%;
+  padding: $spacing-md 0;
+  background: none;
+  border: none;
+  cursor: pointer;
+  text-align: left;
+  font-family: $font-family-base;
+  font-size: $font-size-md;
+  font-weight: $font-weight-medium;
+  color: $color-text-default;
+  line-height: $line-height-base;
+
+  @include respond-up($breakpoint-lg) {
+    font-size: $font-size-default;
+  }
+}
+
+.faq_toggle {
+  font-size: $font-size-xl;
+  color: $color-gold;
+  line-height: $line-height-reset;
+  flex-shrink: 0;
+  transition: transform 0.2s ease;
+
+  .faq_open & {
+    transform: rotate(45deg);
+  }
+}
+
+.faq_answer {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 0.35s $transition-easing-default;
+
+  .faq_open & {
+    grid-template-rows: 1fr;
+  }
+}
+
+.faq_answer_inner {
+  overflow: hidden;
+}
+
+.faq_answer_text {
+  margin: 0;
+  padding-bottom: $spacing-md;
+  font-size: $font-size-md;
+  color: $color-text-secondary;
+  line-height: $line-height-wide;
+}
+
+.faq_link {
+  display: inline-block;
+  margin-bottom: $spacing-md;
+  padding-bottom: $spacing-nano;
+  font-size: $font-size-sm;
+  font-weight: $font-weight-semibold;
+  color: $color-gold;
+  text-decoration: none;
+  border-bottom: $spacing-min solid transparent;
+  transition:
+    border-color $transition-duration-normal $transition-easing-default,
+    opacity $transition-duration-normal $transition-easing-default;
+
+  &:hover {
+    border-color: $color-gold;
+    opacity: 0.8;
+  }
+}
+
+// ─── CTA 링크 ───────────────────────────────────────
+.cta_link {
+  display: inline-flex;
+  align-items: center;
+  gap: $spacing-xs;
+  width: fit-content;
+  font-size: $font-size-md;
+  font-weight: $font-weight-semibold;
+  color: $color-gold;
+  text-decoration: none;
+  padding-bottom: $spacing-xxs;
+  border-bottom: 1px solid rgba($color-gold, 0.3);
+  transition:
+    border-color $transition-duration-normal $transition-easing-default,
+    opacity $transition-duration-normal $transition-easing-default;
+
+  &:hover {
+    border-color: $color-gold;
+    opacity: 0.8;
+  }
+}
+
+// ─── 반응형 보정 ────────────────────────────────────
+@include respond($breakpoint-xs) {
+  .faq_list {
+    margin-bottom: $spacing-lg;
+  }
+}

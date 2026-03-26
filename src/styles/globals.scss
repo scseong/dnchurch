@@ -10,7 +10,6 @@ body {
   font-family: $font-family-base;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  letter-spacing: $letter-spacing-base;
   line-height: $line-height-base;
   color: $color-text-default;
   overflow-x: hidden;
@@ -92,7 +91,6 @@ header:has(#gnb:hover):not([data-nav-locked]) {
   flex: 1;
 }
 
-
 #footer {
   width: 100%;
   border-top: 0.1rem solid $color-divide;
@@ -115,7 +113,6 @@ header:has(#gnb:hover):not([data-nav-locked]) {
     display: inline-block;
   }
 }
-
 
 @each $width, $vw-value in $responsive-font-vw-map {
   @include respond-fonts($width, $vw-value);
