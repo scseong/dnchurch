@@ -12,7 +12,7 @@ const FAQ_ITEMS = [
   {
     question: '예배는 언제, 어디서 드리나요?',
     answer:
-      '주일오전예배는 매주 일요일 오전 11시, 수요예배는 매주 수요일 저녁 7시 30분에 드립니다. 주소는 대구광역시 달서구 달구벌대로307길 58입니다.'
+      '주일오전예배는 매주 일요일 오전 11시, 수요예배는 매주 수요일 저녁 7시에 드립니다. 주소는 대구광역시 달서구 달구벌대로307길 58입니다.'
   },
   {
     question: '처음 가는데 특별히 준비할 게 있나요?',
@@ -48,10 +48,12 @@ export default function NewHere() {
               <CloudinaryImage
                 src="dnchurch-dev/site/home/sketch"
                 alt="대구동남교회 전경"
-                fill
+                width={600}
+                height={800}
                 sizes="50vw"
                 cropMode="fill"
-                gravity="center"
+                gravity="auto"
+                aspectRatio="3:4"
                 className={styles.image}
               />
             </div>
