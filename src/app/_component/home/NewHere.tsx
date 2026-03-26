@@ -8,6 +8,8 @@ import { LayoutContainer } from '@/components/layout';
 import { revealStyle, REVEAL_STEP_CONTENT } from '@/utils/reveal';
 import styles from './NewHere.module.scss';
 
+const FOUNDING_YEAR = 1958;
+
 const FAQ_ITEMS: { question: string; answer: string; link?: { href: string; label: string } }[] = [
   {
     question: '예배는 언제, 어디서 드리나요?',
@@ -60,7 +62,7 @@ export default function NewHere() {
                 />
               </div>
               <div className={styles.year_badge}>
-                <span className={styles.year_number}>1958</span>
+                <span className={styles.year_number}>{FOUNDING_YEAR}</span>
                 <span className={styles.year_label}>설립연도</span>
               </div>
             </div>

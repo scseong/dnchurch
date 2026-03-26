@@ -1,5 +1,7 @@
 // Local variables
 $bg-section: #fdfaf5;
+$divider-width: 4rem;
+$divider-height: 0.2rem;
 
 // ─── Section ────────────────────────────────────────
 .section {
@@ -110,8 +112,8 @@ $bg-section: #fdfaf5;
 }
 
 .divider {
-  width: 4rem;
-  height: 0.2rem;
+  width: $divider-width;
+  height: $divider-height;
   background: $color-gold;
   margin: $spacing-lg 0;
 }
