@@ -122,25 +122,25 @@
 // │ UI 요소          │ 사용 토큰              │
 // ├─────────────────┼───────────────────────┤
 // │ input, select   │ $padding-control       │
-// │                 │ $radius-control        │
+// │                 │ $radius-xs        │
 // │                 │ $border-primary  │
 // │                 │ focus: $border-secondary │
 // ├─────────────────┼───────────────────────┤
 // │ button          │ $padding-control       │
-// │                 │ $radius-control        │
+// │                 │ $radius-xs        │
 // │                 │ $button-height-*       │
 // ├─────────────────┼───────────────────────┤
 // │ card            │ $padding-card          │
-// │                 │ $radius-card           │
+// │                 │ $radius-s           │
 // │                 │ $shadow-sm             │
 // │                 │ $border-primary     │
 // ├─────────────────┼───────────────────────┤
-// │ 모달/바텀시트     │ $radius-sheet          │
+// │ 모달/바텀시트     │ $radius-m          │
 // │                 │ $overlay-scrim         │
 // │                 │ $padding-card          │
 // ├─────────────────┼───────────────────────┤
 // │ 태그/뱃지        │ $padding-inline-xs     │
-// │                 │ $radius-pill           │
+// │                 │ $radius-circle           │
 // │                 │ $font-size-xs          │
 // ├─────────────────┼───────────────────────┤
 // │ 섹션 컨테이너    │ $padding-section-x/y   │

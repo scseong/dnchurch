@@ -36,7 +36,7 @@ $divider-height: 0.2rem;
 
 .image_frame {
   aspect-ratio: 3 / 4;
-  border-radius: $radius-control;
+  border-radius: $radius-xs;
   overflow: hidden;
 }
 
@@ -53,7 +53,7 @@ $divider-height: 0.2rem;
   right: -$spacing-md;
   padding: $spacing-lg $spacing-xl;
   background: $navy;
-  border-radius: $radius-control;
+  border-radius: $radius-xs;
   text-align: center;
   display: flex;
   flex-direction: column;

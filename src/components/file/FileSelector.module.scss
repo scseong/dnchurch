@@ -7,7 +7,7 @@
   justify-content: center;
   border: 0.2rem dashed $border-primary;
   background-color: $bg-secondary;
-  border-radius: $border-radius-lg;
+  border-radius: $radius-m;
   text-align: center;
 
   & > input[type='file'] {
@@ -34,7 +34,7 @@
     padding: $spacing-xs $spacing-sm;
     display: inline-block;
     border: 0.1rem solid $primary;
-    border-radius: $border-radius-lg;
+    border-radius: $radius-m;
     font-size: $font-size-xs;
     font-weight: $font-weight-semibold;
     color: $primary;

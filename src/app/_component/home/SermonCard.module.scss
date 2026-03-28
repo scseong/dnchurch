@@ -6,7 +6,7 @@ $thumb-sub-w: 14rem;
 .card {
   display: flex;
   flex-direction: column;
-  border-radius: $radius-card;
+  border-radius: $radius-s;
   overflow: hidden;
   background: $bg-dark-card;
   text-decoration: none;
@@ -48,7 +48,7 @@ $thumb-sub-w: 14rem;
   color: $navy;
   background: $gold;
   padding: $padding-inline-xs;
-  border-radius: $radius-control;
+  border-radius: $radius-xs;
   text-transform: uppercase;
   letter-spacing: 0.05rem;
 }
@@ -96,7 +96,7 @@ $thumb-sub-w: 14rem;
 .dot {
   width: 0.3rem;
   height: 0.3rem;
-  border-radius: $radius-pill;
+  border-radius: $radius-circle;
   background: rgba(255, 255, 255, 0.25);
   flex-shrink: 0;
 }
@@ -119,7 +119,7 @@ $thumb-sub-w: 14rem;
   justify-content: center;
   width: $play-btn-size;
   height: $play-btn-size;
-  border-radius: $radius-pill;
+  border-radius: $radius-circle;
   background: rgba($gold, 0.18);
   border: 1px solid rgba($gold, 0.35);
   color: $gold;
@@ -158,7 +158,7 @@ $thumb-sub-w: 14rem;
     z-index: 1;
     width: $play-btn-size-lg;
     height: $play-btn-size-lg;
-    border-radius: $radius-pill;
+    border-radius: $radius-circle;
     background: rgba($gold, 0.25);
     border: 1px solid rgba($gold, 0.5);
     color: $gold;
@@ -212,7 +212,7 @@ $thumb-sub-w: 14rem;
   // PC: 세로 카드로 복원
   @include respond-up($breakpoint-lg) {
     flex-direction: column;
-    border-radius: $radius-card;
+    border-radius: $radius-s;
     background: $bg-dark-card;
     overflow: hidden;
     border-bottom: none;

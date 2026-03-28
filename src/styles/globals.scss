@@ -1,3 +1,58 @@
+// ══════════════════════════════════════════
+// RADIUS — Primitive Tokens (반응형)
+// PC·Tablet은 동일 값, Mobile은 자동 대응되는 값
+// 값 자체에 의미를 부여하지 않고, 오직 크기만 정의
+// Semantic 토큰($radius-xs ~ $radius-circle)은 _semantic.scss에서 정의
+// ══════════════════════════════════════════
+
+:root {
+  // radius-2 ~ radius-6: 모든 해상도 동일
+  --radius-2: 0.2rem;
+  --radius-4: 0.4rem;
+  --radius-6: 0.6rem;
+
+  // radius-8+: Mobile 기본값
+  --radius-8: 0.6rem;
+  --radius-10: 0.8rem;
+  --radius-12: 1rem;
+  --radius-16: 1.2rem;
+  --radius-20: 1.6rem;
+  --radius-24: 2rem;
+  --radius-28: 2.2rem;
+  --radius-32: 2.4rem;
+  --radius-40: 3.2rem;
+  --radius-48: 4rem;
+  --radius-64: 5.2rem;
+  --radius-80: 6.4rem;
+  --radius-120: 8rem;
+  --radius-160: 12rem;
+  --radius-200: 16rem;
+  --radius-240: 20rem;
+
+  --radius-999: 9999px;
+}
+
+@include respond-up($breakpoint-md) {
+  :root {
+    --radius-8: 0.8rem;
+    --radius-10: 1rem;
+    --radius-12: 1.2rem;
+    --radius-16: 1.6rem;
+    --radius-20: 2rem;
+    --radius-24: 2.4rem;
+    --radius-28: 2.8rem;
+    --radius-32: 3.2rem;
+    --radius-40: 4rem;
+    --radius-48: 4.8rem;
+    --radius-64: 6.4rem;
+    --radius-80: 8rem;
+    --radius-120: 12rem;
+    --radius-160: 16rem;
+    --radius-200: 20rem;
+    --radius-240: 24rem;
+  }
+}
+
 html {
   height: 100%;
   font-size: 2.777778vw;
