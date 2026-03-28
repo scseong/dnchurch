@@ -9,7 +9,7 @@
 }
 
 .caption {
-  @include text-label($color: $color-gold);
+  @include text-label($color: $gold);
   margin-bottom: $spacing-xxs;
   display: inline-block;
   letter-spacing: 0.1rem;

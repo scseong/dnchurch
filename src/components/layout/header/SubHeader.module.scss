@@ -21,19 +21,19 @@
   .content {
     position: relative;
     text-align: center;
-    color: $color-white;
+    color: $white;
     z-index: 10;
 
     h2 {
       margin-bottom: $spacing-sm;
       font-size: $font-size-h2;
       line-height: 1;
-      color: $color-white;
+      color: $white;
     }
 
     p {
       font-size: $font-size-md;
-      color: $color-white;
+      color: $white;
     }
   }
 

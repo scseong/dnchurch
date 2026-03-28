@@ -67,9 +67,6 @@ $radius-pill: $border-radius-full;
 /// rgba(0,0,0,0.5) — 모달/드로어 뒤 딤 배경
 $overlay-scrim: rgba(0, 0, 0, 0.5);
 
-/// rgba(0,0,0,0.45) — 이미지 위 텍스트 가독성 확보용 오버레이
-$overlay-image-text: rgba(0, 0, 0, 0.45);
-
 /// rgba(0,0,0,0.04) — 호버/포커스 시 미세한 시각 피드백
 $overlay-subtle: rgba(0, 0, 0, 0.04);
 
@@ -77,8 +74,5 @@ $overlay-subtle: rgba(0, 0, 0, 0.04);
 // TEXT ON IMAGE — 이미지/다크 배경 위 텍스트 색상
 // ══════════════════════════════════════════
 
-/// rgba(255,255,255,0.9) — 이미지 위 메인 텍스트 (제목, 본문)
-$text-on-image: rgba(255, 255, 255, 0.9);
-
 /// rgba(255,255,255,0.7) — 이미지 위 보조 텍스트 (날짜, 캡션)
-$text-on-image-subtle: rgba(255, 255, 255, 0.7);
+$txt-image-subtle: rgba(255, 255, 255, 0.7);

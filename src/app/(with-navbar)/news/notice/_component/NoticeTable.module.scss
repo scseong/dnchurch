@@ -19,7 +19,7 @@
 }
 
 .row {
-  border-bottom: 1px solid $color-gray-200;
+  border-bottom: 1px solid $gray-200;
   cursor: pointer;
   transition: background-color 0.12s ease;
 
@@ -29,14 +29,14 @@
   }
 
   &:hover {
-    background-color: $color-gray-200;
+    background-color: $gray-200;
   }
 
   &.pinned {
-    background-color: $color-bg-default;
+    background-color: $bg-secondary;
 
     &:hover {
-      background-color: $color-bg-hover;
+      background-color: $bg-tertiary;
     }
   }
 
@@ -45,7 +45,7 @@
   }
 
   &:focus-visible {
-    outline: 2px solid $color-primary-active;
+    outline: 2px solid $primary-active;
     outline-offset: -2px;
   }
 }
@@ -58,12 +58,12 @@
 
 .pin_icon {
   font-size: 1.2rem;
-  color: $color-text-subtle;
+  color: $txt-tertiary;
 }
 
 .row_number {
   font-size: $font-size-xs;
-  color: $color-text-subtle;
+  color: $txt-tertiary;
 }
 
 .col_category {
@@ -71,11 +71,11 @@
   padding-right: $spacing-xs;
   font-size: 1.1rem;
   font-weight: $font-weight-semibold;
-  color: $color-text-secondary;
+  color: $txt-secondary;
   text-transform: uppercase;
 
   &.urgent {
-    color: $color-status-danger;
+    color: $status-negative;
   }
 }
 
@@ -93,7 +93,7 @@
 .title_text {
   font-size: $font-size-sm;
   font-weight: $font-weight-regular;
-  color: $color-text-default;
+  color: $txt-primary;
   @include ellipsis-multi(1);
 
   &.pinned_title {
@@ -101,7 +101,7 @@
   }
 
   &.urgent {
-    color: $color-status-danger;
+    color: $status-negative;
   }
 }
 
@@ -114,13 +114,13 @@
 
 .clip_icon {
   font-size: $font-size-xs;
-  color: $color-text-subtle;
+  color: $txt-tertiary;
 }
 
 .col_date {
   padding-left: $spacing-sm;
   font-size: $font-size-xs;
-  color: $color-text-subtle;
+  color: $txt-tertiary;
   text-align: right;
   white-space: nowrap;
 }
@@ -128,7 +128,7 @@
 .col_views {
   padding-left: $spacing-xs;
   font-size: $font-size-xs;
-  color: $color-text-subtle;
+  color: $txt-tertiary;
   white-space: nowrap;
   text-align: right;
 }
@@ -145,9 +145,9 @@
   border-radius: 0.3rem;
   font-size: 0.9rem;
   font-weight: $font-weight-semibold;
-  color: $color-status-danger;
-  background: rgba($color-red-500, 0.05);
-  border: 1px solid rgba($color-red-500, 0.18);
+  color: $status-negative;
+  background: rgba($red-500, 0.05);
+  border: 1px solid rgba($red-500, 0.18);
   white-space: nowrap;
 }
 
@@ -156,9 +156,9 @@
   border-radius: 0.3rem;
   font-size: 0.9rem;
   font-weight: $font-weight-semibold;
-  color: $color-primary-active;
-  background: $color-primary-subtle;
-  border: 1px solid $color-border-primary-inverse;
+  color: $primary-active;
+  background: $primary-subtle;
+  border: 1px solid $border-inverse;
   white-space: nowrap;
 }
 
@@ -167,7 +167,7 @@
   padding: $spacing-xxxl 0;
   text-align: center;
   font-size: $font-size-md;
-  color: $color-text-subtle;
+  color: $txt-tertiary;
 }
 
 // ── Mobile List ──
@@ -185,25 +185,25 @@
   display: flex;
   flex-direction: column;
   gap: $spacing-xxs;
-  border-top: 1px solid $color-gray-200;
+  border-top: 1px solid $gray-200;
   text-align: left;
   cursor: pointer;
   transition: background-color 0.12s ease;
   width: 100%;
 
   &:last-child {
-    border-bottom: 1px solid $color-gray-200;
+    border-bottom: 1px solid $gray-200;
   }
 
   &:hover {
-    background-color: $color-gray-200;
+    background-color: $gray-200;
   }
 
   &.pinned {
-    background-color: $color-bg-default;
+    background-color: $bg-secondary;
 
     &:hover {
-      background-color: $color-bg-hover;
+      background-color: $bg-tertiary;
     }
   }
 
@@ -212,7 +212,7 @@
   }
 
   &:focus-visible {
-    outline: 2px solid $color-primary-active;
+    outline: 2px solid $primary-active;
     outline-offset: -2px;
   }
 }
@@ -232,22 +232,22 @@
 .mobile_category {
   font-size: 1.1rem;
   font-weight: $font-weight-semibold;
-  color: $color-text-secondary;
+  color: $txt-secondary;
 
   &.urgent {
-    color: $color-status-danger;
+    color: $status-negative;
   }
 }
 
 .mobile_date {
   font-size: 1.1rem;
-  color: $color-text-subtle;
+  color: $txt-tertiary;
 }
 
 .mobile_title {
   font-size: $font-size-sm;
   font-weight: $font-weight-regular;
-  color: $color-text-default;
+  color: $txt-primary;
   word-break: keep-all;
   @include ellipsis-multi(2);
 
@@ -256,7 +256,7 @@
   }
 
   &.urgent {
-    color: $color-status-danger;
+    color: $status-negative;
   }
 }
 
@@ -276,5 +276,5 @@
   align-items: center;
   gap: 0.3rem;
   font-size: 1.1rem;
-  color: $color-text-subtle;
+  color: $txt-tertiary;
 }

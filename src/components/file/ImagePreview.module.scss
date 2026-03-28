@@ -13,7 +13,7 @@ $item-gap: 0.8rem;
   display: flex;
   flex-basis: 100%;
   gap: $spacing-sm;
-  border: 0.1rem solid $color-border-primary-inverse;
+  border: 0.1rem solid $border-inverse;
   border-radius: $border-radius-lg;
 
   @include respond-up($breakpoint-lg) {
@@ -40,13 +40,13 @@ $item-gap: 0.8rem;
 
 .file_info {
   flex: 1;
-  color: $color-text-secondary;
+  color: $txt-secondary;
   word-break: break-all;
 
   h5 {
     margin-bottom: $spacing-xxs;
     font-size: $font-size-sm;
-    color: $color-primary;
+    color: $primary;
     @include ellipsis-multi(2);
   }
 
@@ -58,7 +58,7 @@ $item-gap: 0.8rem;
     span {
       display: block;
       font-size: $font-size-xs;
-      color: $color-text-subtle;
+      color: $txt-tertiary;
     }
   }
 }
@@ -70,15 +70,15 @@ $item-gap: 0.8rem;
   width: fit-content;
   border-radius: $border-radius-sm;
   font-size: $font-size-xs;
-  color: $color-white !important;
+  color: $white !important;
 }
 
 .badge_existing {
-  background-color: $color-primary;
+  background-color: $primary;
 }
 
 .badge_new {
-  background-color: $color-status-success;
+  background-color: $status-positive;
 }
 
 .button_wrap {
@@ -89,7 +89,7 @@ $item-gap: 0.8rem;
     transition: color 0.2s;
 
     &:hover {
-      color: $color-primary;
+      color: $primary;
     }
   }
 }

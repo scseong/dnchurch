@@ -1,6 +1,6 @@
 .breadcrumb {
   width: 100%;
-  border-bottom: 0.1rem solid $color-border-default;
+  border-bottom: 0.1rem solid $border-primary;
 }
 
 .list {
@@ -18,7 +18,7 @@
 
   &:not(:first-child)::before {
     content: '|';
-    color: $color-divide;
+    color: $border-primary;
     font-size: $font-size-sm;
     padding: 0 $spacing-xs;
     user-select: none;
@@ -30,7 +30,7 @@
   display: inline-flex;
   align-items: center;
   gap: $spacing-xxs;
-  color: $color-text-subtle;
+  color: $txt-tertiary;
   font-size: $font-size-sm;
   transition: color $transition-duration-normal $transition-easing-default;
 
@@ -41,7 +41,7 @@
   }
 
   &:hover {
-    color: $color-text-default;
+    color: $txt-primary;
     font-weight: $font-weight-semibold;
   }
 }

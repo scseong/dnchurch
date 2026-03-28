@@ -4,8 +4,8 @@
 
   th {
     padding: $spacing-xs $spacing-sm;
-    background-color: $color-primary;
-    color: $color-white;
+    background-color: $primary;
+    color: $white;
     font-size: $font-size-default;
 
     font-weight: $font-weight-medium;
@@ -30,7 +30,7 @@
 
     td {
       padding: $spacing-sm;
-      background-color: $color-bg-default;
+      background-color: $bg-secondary;
       font-size: $font-size-md;
     }
 

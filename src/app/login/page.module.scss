@@ -21,7 +21,7 @@
   }
 
   p {
-    color: $color-text-subtle;
+    color: $txt-tertiary;
   }
 }
 
@@ -36,7 +36,7 @@
     height: 1px;
     left: 50%;
     top: 50%;
-    background-color: $color-border-default;
+    background-color: $border-primary;
     z-index: -1;
     transform: translate(-50%, -50%);
   }
@@ -44,9 +44,9 @@
   .caption {
     padding: 0 $spacing-xs;
     display: inline-block;
-    background-color: $color-white;
+    background-color: $white;
     font-size: $font-size-md;
-    color: $color-text-subtle;
+    color: $txt-tertiary;
   }
 }
 
@@ -71,24 +71,24 @@
 
   a {
     font-size: $font-size-md;
-    color: $color-text-subtle;
+    color: $txt-tertiary;
     text-decoration: underline;
-    text-decoration-color: $color-text-subtle;
+    text-decoration-color: $txt-tertiary;
 
     &:hover {
-      color: $color-text-default;
+      color: $txt-primary;
     }
   }
 
   p {
     margin-right: $spacing-xs;
-    color: $color-text-subtle;
+    color: $txt-tertiary;
   }
 
   .divide {
     margin: 0 $spacing-lg;
     width: 1px;
     height: $font-size-sm;
-    background-color: $color-border-default;
+    background-color: $border-primary;
   }
 }

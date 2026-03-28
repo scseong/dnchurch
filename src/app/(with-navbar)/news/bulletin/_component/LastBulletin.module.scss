@@ -4,8 +4,8 @@
   .notification {
     padding: $spacing-lg 0;
     margin-bottom: $spacing-sm;
-    background-color: $color-bg-default;
-    border: 0.1rem solid $color-border-primary;
+    background-color: $bg-secondary;
+    border: 0.1rem solid $border-primary;
     font-weight: $font-weight-semibold;
     text-align: center;
   }
@@ -18,7 +18,7 @@
       padding: $spacing-xs;
       display: block;
       width: 100%;
-      border: 0.1rem solid $color-border-primary;
+      border: 0.1rem solid $border-primary;
     }
 
     img {

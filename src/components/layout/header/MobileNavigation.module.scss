@@ -1,6 +1,6 @@
 .nav_container {
   width: 100%;
-  background-color: $color-white;
+  background-color: $white;
 }
 
 .nav_header {
@@ -10,7 +10,7 @@
 .nav_logo {
   margin-bottom: $spacing-lg;
   font-size: $font-size-h4-mobile;
-  color: $color-black;
+  color: $black;
 }
 
 .auth_links {
@@ -18,7 +18,7 @@
   align-items: center;
   gap: $spacing-xs;
   font-size: $font-size-md;
-  color: $color-text-secondary;
+  color: $txt-secondary;
   transition: color 0.2s;
 
   & > a:hover {
@@ -29,11 +29,11 @@
 .nav_divider {
   width: 0.15rem;
   height: 1rem;
-  background-color: $color-text-secondary;
+  background-color: $txt-secondary;
 }
 
 .menu_list {
-  border-top: 0.2rem solid $color-black;
+  border-top: 0.2rem solid $black;
 
   li:first-child {
     margin-top: $spacing-xs;
@@ -53,7 +53,7 @@
 
   &.active {
     font-weight: $font-weight-bold;
-    color: $color-black;
+    color: $black;
   }
 }
 
@@ -76,17 +76,17 @@
   display: block;
   padding: $spacing-xs $spacing-lg $spacing-xs $spacing-xxl;
   font-size: $font-size-default;
-  color: $color-text-subtle;
+  color: $txt-tertiary;
   transition: color 0.2s;
 
   &.active {
     font-weight: $font-weight-bold;
-    color: $color-text-default;
+    color: $txt-primary;
   }
 
   &:hover {
     font-weight: $font-weight-bold;
-    color: $color-text-default;
+    color: $txt-primary;
   }
 }
 
@@ -97,8 +97,8 @@
 .nav_icon {
   width: 1rem;
   height: 1rem;
-  border-right: 0.2rem solid $color-black;
-  border-bottom: 0.2rem solid $color-black;
+  border-right: 0.2rem solid $black;
+  border-bottom: 0.2rem solid $black;
   transform: rotate(45deg);
   transition: transform 0.2s;
 }

@@ -8,7 +8,7 @@ $thumb-sub-w: 14rem;
   flex-direction: column;
   border-radius: $radius-card;
   overflow: hidden;
-  background: $color-bg-dark-card;
+  background: $bg-dark-card;
   text-decoration: none;
 }
 
@@ -45,8 +45,8 @@ $thumb-sub-w: 14rem;
   z-index: 1;
   font-size: 0.9rem;
   font-weight: $font-weight-bold;
-  color: $color-navy;
-  background: $color-gold;
+  color: $navy;
+  background: $gold;
   padding: $padding-inline-xs;
   border-radius: $radius-control;
   text-transform: uppercase;
@@ -77,7 +77,7 @@ $thumb-sub-w: 14rem;
 .title {
   font-size: $font-size-default;
   font-weight: $font-weight-medium;
-  color: $color-white;
+  color: $white;
   @include ellipsis-multi(1);
 }
 
@@ -120,9 +120,9 @@ $thumb-sub-w: 14rem;
   width: $play-btn-size;
   height: $play-btn-size;
   border-radius: $radius-pill;
-  background: rgba($color-gold, 0.18);
-  border: 1px solid rgba($color-gold, 0.35);
-  color: $color-gold;
+  background: rgba($gold, 0.18);
+  border: 1px solid rgba($gold, 0.35);
+  color: $gold;
   transition:
     background 0.2s ease,
     border-color 0.2s ease,
@@ -140,9 +140,9 @@ $thumb-sub-w: 14rem;
 }
 
 .card:hover .play_btn {
-  background: $color-gold;
-  border-color: $color-gold;
-  color: $color-navy;
+  background: $gold;
+  border-color: $gold;
+  color: $navy;
 }
 
 // ─── 썸네일 오버레이 재생 버튼 (PC hover) ───────────
@@ -159,9 +159,9 @@ $thumb-sub-w: 14rem;
     width: $play-btn-size-lg;
     height: $play-btn-size-lg;
     border-radius: $radius-pill;
-    background: rgba($color-gold, 0.25);
-    border: 1px solid rgba($color-gold, 0.5);
-    color: $color-gold;
+    background: rgba($gold, 0.25);
+    border: 1px solid rgba($gold, 0.5);
+    color: $gold;
     align-items: center;
     justify-content: center;
     opacity: 0;
@@ -213,7 +213,7 @@ $thumb-sub-w: 14rem;
   @include respond-up($breakpoint-lg) {
     flex-direction: column;
     border-radius: $radius-card;
-    background: $color-bg-dark-card;
+    background: $bg-dark-card;
     overflow: hidden;
     border-bottom: none;
 

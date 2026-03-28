@@ -7,34 +7,34 @@
 // ┌──────────────┬──────────────────────────┬──────────────────────┬──────────────────────┐
 // │ 역할          │ font-size                │ font-weight          │ color                │
 // ├──────────────┼──────────────────────────┼──────────────────────┼──────────────────────┤
-// │ 히어로 타이틀  │ $font-size-h1-mobile     │ $font-weight-bold    │ $color-text-default  │
-// │              │ → $font-size-h1 (PC)     │                      │ 또는 $color-text-inverse │
+// │ 히어로 타이틀  │ $font-size-h1-mobile     │ $font-weight-bold    │ $txt-primary  │
+// │              │ → $font-size-h1 (PC)     │                      │ 또는 $txt-inverse │
 // ├──────────────┼──────────────────────────┼──────────────────────┼──────────────────────┤
-// │ 페이지 타이틀  │ $font-size-h2-mobile     │ $font-weight-bold    │ $color-text-default  │
+// │ 페이지 타이틀  │ $font-size-h2-mobile     │ $font-weight-bold    │ $txt-primary  │
 // │              │ → $font-size-h2 (PC)     │                      │                      │
 // ├──────────────┼──────────────────────────┼──────────────────────┼──────────────────────┤
-// │ 섹션 타이틀   │ $font-size-h3-mobile     │ $font-weight-bold    │ $color-text-default  │
+// │ 섹션 타이틀   │ $font-size-h3-mobile     │ $font-weight-bold    │ $txt-primary  │
 // │              │ → $font-size-h3 (PC)     │                      │                      │
 // ├──────────────┼──────────────────────────┼──────────────────────┼──────────────────────┤
-// │ 카드 타이틀   │ $font-size-h5-mobile     │ $font-weight-semibold│ $color-text-default  │
+// │ 카드 타이틀   │ $font-size-h5-mobile     │ $font-weight-semibold│ $txt-primary  │
 // │              │ → $font-size-h5 (PC)     │                      │                      │
 // ├──────────────┼──────────────────────────┼──────────────────────┼──────────────────────┤
-// │ 본문 텍스트   │ $font-size-default       │ $font-weight-regular │ $color-text-default  │
+// │ 본문 텍스트   │ $font-size-default       │ $font-weight-regular │ $txt-primary  │
 // ├──────────────┼──────────────────────────┼──────────────────────┼──────────────────────┤
-// │ 보조 설명     │ $font-size-md            │ $font-weight-regular │ $color-text-secondary│
+// │ 보조 설명     │ $font-size-md            │ $font-weight-regular │ $txt-secondary│
 // ├──────────────┼──────────────────────────┼──────────────────────┼──────────────────────┤
-// │ 캡션/메타     │ $font-size-sm            │ $font-weight-regular │ $color-text-subtle   │
+// │ 캡션/메타     │ $font-size-sm            │ $font-weight-regular │ $txt-tertiary   │
 // │ (날짜, 작성자)│                          │                      │                      │
 // ├──────────────┼──────────────────────────┼──────────────────────┼──────────────────────┤
-// │ 라벨         │ $font-size-sm            │ $font-weight-medium  │ $color-text-secondary│
+// │ 라벨         │ $font-size-sm            │ $font-weight-medium  │ $txt-secondary│
 // ├──────────────┼──────────────────────────┼──────────────────────┼──────────────────────┤
 // │ 뱃지/태그     │ $font-size-xs            │ $font-weight-medium  │ (컨텍스트에 따라)     │
 // ├──────────────┼──────────────────────────┼──────────────────────┼──────────────────────┤
 // │ 버튼 텍스트   │ $font-size-md            │ $font-weight-semibold│ (버튼 스타일에 따라)  │
 // ├──────────────┼──────────────────────────┼──────────────────────┼──────────────────────┤
-// │ 네비게이션    │ $font-size-md            │ $font-weight-medium  │ $color-text-default  │
+// │ 네비게이션    │ $font-size-md            │ $font-weight-medium  │ $txt-primary  │
 // ├──────────────┼──────────────────────────┼──────────────────────┼──────────────────────┤
-// │ 링크         │ (부모 크기 상속)           │ (부모 굵기 상속)      │ $color-text-link     │
+// │ 링크         │ (부모 크기 상속)           │ (부모 굵기 상속)      │ $txt-link     │
 // └──────────────┴──────────────────────────┴──────────────────────┴──────────────────────┘
 //
 //
@@ -51,7 +51,7 @@
 //     font-weight: $font-weight-bold;
 //     line-height: $line-height-heading;
 //     letter-spacing: $letter-spacing-heading;
-//     color: $color-text-default;
+//     color: $txt-primary;
 //
 //     @include respond-up($breakpoint-lg) {
 //       font-size: $font-size-h2;                // PC 확장
@@ -83,12 +83,12 @@
 //     font-size: $font-size-default;             // 반응형 변경 없음
 //     font-weight: $font-weight-regular;
 //     line-height: $line-height-base;
-//     color: $color-text-default;
+//     color: $txt-primary;
 //   }
 //
 //   .caption {
 //     font-size: $font-size-sm;                  // 반응형 변경 없음
-//     color: $color-text-subtle;
+//     color: $txt-tertiary;
 //   }
 //
 //
@@ -96,12 +96,12 @@
 // TEXT COLOR 선택 기준
 // ══════════════════════════════════════════
 //
-// "이 텍스트가 가장 중요한가?" → $color-text-default (gray-900)
-// "부연 설명인가?"             → $color-text-secondary (gray-700)
-// "메타/날짜/보조 정보인가?"    → $color-text-subtle (gray-500)
-// "클릭 가능한 링크인가?"       → $color-text-link (blue-700)
-// "다크 배경/이미지 위인가?"    → $color-text-inverse 또는 $text-on-image
-// "비활성 상태인가?"           → $color-disabled-text (gray-400)
+// "이 텍스트가 가장 중요한가?" → $txt-primary (gray-900)
+// "부연 설명인가?"             → $txt-secondary (gray-700)
+// "메타/날짜/보조 정보인가?"    → $txt-tertiary (gray-500)
+// "클릭 가능한 링크인가?"       → $txt-link (blue-700)
+// "다크 배경/이미지 위인가?"    → $txt-inverse 또는 $txt-image
+// "비활성 상태인가?"           → $txt-disabled (gray-400)
 //
 //
 // ══════════════════════════════════════════
@@ -123,8 +123,8 @@
 // ├─────────────────┼───────────────────────┤
 // │ input, select   │ $padding-control       │
 // │                 │ $radius-control        │
-// │                 │ $color-border-default  │
-// │                 │ focus: $color-border-focus │
+// │                 │ $border-primary  │
+// │                 │ focus: $border-secondary │
 // ├─────────────────┼───────────────────────┤
 // │ button          │ $padding-control       │
 // │                 │ $radius-control        │
@@ -133,7 +133,7 @@
 // │ card            │ $padding-card          │
 // │                 │ $radius-card           │
 // │                 │ $shadow-sm             │
-// │                 │ $color-border-card     │
+// │                 │ $border-primary     │
 // ├─────────────────┼───────────────────────┤
 // │ 모달/바텀시트     │ $radius-sheet          │
 // │                 │ $overlay-scrim         │
@@ -149,9 +149,9 @@
 // │ 리스트 아이템     │ $gap-items             │
 // │                 │ $padding-card-compact  │
 // ├─────────────────┼───────────────────────┤
-// │ 이미지 오버레이   │ $overlay-image-text    │
-// │                 │ $text-on-image         │
-// │                 │ $text-on-image-subtle  │
+// │ 이미지 오버레이   │ $overlay-scrim             │
+// │                 │ $txt-inverse               │
+// │                 │ $txt-image-subtle          │
 // └─────────────────┴───────────────────────┘
 //
 //
@@ -183,7 +183,7 @@
 //
 //   // 다크 배경 위 섹션 제목
 //   .dark_section_title {
-//     @include text-section-title($color: $text-on-image);
+//     @include text-section-title($color: $txt-image);
 //   }
 //
 //   // 강조 카드 제목
@@ -193,7 +193,7 @@
 //
 //   // 본문 색상 변경
 //   .muted_text {
-//     @include text-body($color: $color-text-secondary);
+//     @include text-body($color: $txt-secondary);
 //   }
 //
 // 3순위: 시맨틱/primitive 토큰 직접 조합
@@ -205,5 +205,5 @@
 //     font-size: $font-size-lg;
 //     font-weight: $font-weight-regular;
 //     line-height: $line-height-base;
-//     color: $color-text-secondary;
+//     color: $txt-secondary;
 //   }

@@ -6,23 +6,23 @@
   li {
     margin-right: 0.1rem;
     min-width: 5.5rem;
-    background-color: $color-bg-default;
+    background-color: $bg-secondary;
 
     a {
       padding: $spacing-xs $spacing-sm;
       display: block;
-      border: 0.1rem solid $color-border-primary;
+      border: 0.1rem solid $border-primary;
       font-size: $font-size-md;
       text-align: center;
 
       &:hover {
-        color: $color-text-link-active;
+        color: $txt-link-active;
       }
     }
 
     .active {
       font-weight: $font-weight-bold;
-      color: $color-text-link-active;
+      color: $txt-link-active;
     }
   }
 }

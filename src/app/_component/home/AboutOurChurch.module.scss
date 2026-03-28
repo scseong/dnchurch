@@ -23,7 +23,7 @@
   .frame {
     position: relative;
     width: 100%;
-    border: 1px solid $color-border-card;
+    border: 1px solid $border-primary;
     border-radius: $border-radius-lg;
     aspect-ratio: 5 / 3;
     overflow: hidden;
@@ -52,7 +52,7 @@
     display: inline-block;
     font-size: $font-size-default;
     font-weight: $font-weight-semibold;
-    color: $color-primary;
+    color: $primary;
   }
 
   h2 {
@@ -75,7 +75,7 @@
     width: fit-content;
     display: inline-block;
     padding-bottom: $spacing-nano;
-    color: $color-text-link;
+    color: $txt-link;
     font-weight: $font-weight-medium;
     text-decoration: none;
     border-bottom: $spacing-min solid transparent;
@@ -84,7 +84,7 @@
       opacity $transition-duration-normal $transition-easing-default;
 
     &:hover {
-      border-color: $color-text-link;
+      border-color: $txt-link;
       opacity: 0.8;
     }
   }

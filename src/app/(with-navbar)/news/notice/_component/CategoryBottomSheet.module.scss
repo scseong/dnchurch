@@ -19,7 +19,7 @@
   bottom: 0;
   left: 0;
   right: 0;
-  background: $color-bg-body;
+  background: $bg-primary;
   border-radius: 1.6rem 1.6rem 0 0;
   padding-bottom: env(safe-area-inset-bottom, 0);
   transform: translateY(100%);
@@ -36,7 +36,7 @@
   width: 3.6rem;
   height: 0.4rem;
   border-radius: $border-radius-full;
-  background: $color-border-default;
+  background: $border-primary;
 }
 
 .option_list {
@@ -52,12 +52,12 @@
   justify-content: space-between;
   width: 100%;
   font-size: $font-size-md;
-  color: $color-text-default;
+  color: $txt-primary;
   cursor: pointer;
   transition: background-color 0.12s ease;
 
   &:hover {
-    background: $color-bg-default;
+    background: $bg-secondary;
   }
 
   &.selected {
@@ -65,12 +65,12 @@
   }
 
   &:focus-visible {
-    outline: 2px solid $color-primary-active;
+    outline: 2px solid $primary-active;
     outline-offset: -2px;
   }
 }
 
 .check {
   font-size: $font-size-lg;
-  color: $color-primary;
+  color: $primary;
 }

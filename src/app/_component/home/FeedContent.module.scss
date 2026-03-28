@@ -32,13 +32,13 @@ $radius-list-lg: 1.6rem;
 }
 
 .tab_active {
-  background: $color-gray-900;
-  color: $color-white;
+  background: $gray-900;
+  color: $white;
 }
 
 .tab_inactive {
-  background: $color-cream;
-  color: $color-text-secondary;
+  background: $cream;
+  color: $txt-secondary;
 }
 
 // ─── Grid ───────────────────────────────────────────
@@ -122,9 +122,9 @@ $radius-list-lg: 1.6rem;
 
 // ─── List Card ──────────────────────────────────────
 .list_card {
-  background: $color-white;
+  background: $white;
   border-radius: $radius-list;
-  border: 1px solid $color-border-default;
+  border: 1px solid $border-primary;
   overflow: hidden;
 
   @include respond-up($breakpoint-lg) {
@@ -141,11 +141,11 @@ $radius-list-lg: 1.6rem;
   transition: background $transition-duration-normal $transition-easing-default;
 
   &:not(:last-child) {
-    border-bottom: 1px solid $color-gray-200;
+    border-bottom: 1px solid $gray-200;
   }
 
   &:hover {
-    background: $color-cream;
+    background: $cream;
   }
 
   @include respond-up($breakpoint-lg) {
@@ -171,7 +171,7 @@ $radius-list-lg: 1.6rem;
 }
 
 .item_title {
-  color: $color-text-default;
+  color: $txt-primary;
   font-size: $font-size-default;
   font-weight: $font-weight-medium;
   white-space: nowrap;
@@ -199,10 +199,10 @@ $radius-list-lg: 1.6rem;
 
 // ─── Badges ─────────────────────────────────────────
 .badge_new {
-  color: $color-white;
+  color: $white;
   font-size: 0.8rem;
   font-weight: $font-weight-bold;
-  background: $color-gold;
+  background: $gold;
   border-radius: $radius-control;
   flex-shrink: 0;
   display: inline-flex;
@@ -218,9 +218,9 @@ $radius-list-lg: 1.6rem;
   width: 100%;
   padding: $spacing-xs 0;
   border-radius: $radius-card;
-  border: 1px solid $color-border-default;
+  border: 1px solid $border-primary;
   background: transparent;
-  color: $color-text-secondary;
+  color: $txt-secondary;
   font-size: $font-size-sm;
   font-weight: $font-weight-semibold;
   margin-top: $spacing-sm;
@@ -230,8 +230,8 @@ $radius-list-lg: 1.6rem;
     color $transition-duration-normal $transition-easing-default;
 
   &:hover {
-    background: $color-cream;
-    color: $color-text-default;
+    background: $cream;
+    color: $txt-primary;
   }
 
   @include respond-up($breakpoint-lg) {

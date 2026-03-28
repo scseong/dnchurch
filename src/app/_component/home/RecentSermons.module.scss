@@ -1,7 +1,7 @@
 // ─── Section ────────────────────────────────────────
 .section {
   padding: $padding-section-y 0;
-  background: $color-bg-dark;
+  background: $bg-dark;
 }
 
 // ─── Header ─────────────────────────────────────────
@@ -25,19 +25,19 @@
 }
 
 .caption {
-  @include text-label($color: $color-gold);
+  @include text-label($color: $gold);
   letter-spacing: 0.1rem;
   text-transform: uppercase;
 }
 
 .header h2 {
-  color: $color-white;
+  color: $white;
   @include text-page-title();
   font-family: $font-family-secondary;
 }
 
 .header_link {
-  @include text-sub($color: $color-gold);
+  @include text-sub($color: $gold);
   padding-bottom: $spacing-nano;
   display: inline-block;
   width: fit-content;
@@ -49,7 +49,7 @@
     border 0.2s ease;
 
   &:hover {
-    border-color: $color-gold;
+    border-color: $gold;
     opacity: 0.8;
   }
 }

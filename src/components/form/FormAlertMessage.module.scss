@@ -3,11 +3,11 @@
 
   .error {
     font-size: $font-size-md;
-    color: $color-status-danger;
+    color: $status-negative;
   }
 
   .success {
     font-size: $font-size-md;
-    color: $color-status-success;
+    color: $status-positive;
   }
 }

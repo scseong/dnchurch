@@ -51,11 +51,11 @@ $image_max_width: 20rem;
 
       h5 {
         margin-bottom: 0.4rem;
-        color: $color-primary;
+        color: $primary;
       }
 
       li {
-        color: $color-text-secondary;
+        color: $txt-secondary;
       }
 
       @include respond($breakpoint-md) {

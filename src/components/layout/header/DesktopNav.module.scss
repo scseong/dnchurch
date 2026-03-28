@@ -21,8 +21,8 @@ $nav-center: 65%;
     left: 50%;
     width: 200vw;
     min-height: $lnb-min-height;
-    background-color: $color-white;
-    border-top: 0.1rem solid $color-divide;
+    background-color: $white;
+    border-top: 0.1rem solid $border-primary;
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
     transform: translateX(-50%) scaleY(0);
     transform-origin: top;
@@ -112,12 +112,12 @@ $nav-center: 65%;
   display: block;
   padding: $spacing-xs 0;
   font-size: $font-size-md;
-  color: $color-text-secondary;
+  color: $txt-secondary;
   white-space: nowrap;
   transition: font-weight 0.1s $transition-easing-default;
 
   &:hover {
     font-weight: $font-weight-semibold;
-    color: $color-text-default;
+    color: $txt-primary;
   }
 }

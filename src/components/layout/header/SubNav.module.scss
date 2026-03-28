@@ -5,7 +5,7 @@
     align-items: center;
     gap: 2rem;
     height: 4rem;
-    background-color: $color-bg-footer;
+    background-color: $bg-invert;
   }
 
   li {
@@ -13,7 +13,7 @@
     color: white;
 
     &:hover {
-      color: $color-primary;
+      color: $primary;
     }
 
     a {
@@ -24,6 +24,6 @@
 
   .isActive {
     font-weight: 500;
-    color: $color-primary;
+    color: $primary;
   }
 }

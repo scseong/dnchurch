@@ -19,21 +19,21 @@
   align-items: center;
   gap: $spacing-xxs;
   height: 3rem;
-  border: 1px solid $color-border-default;
+  border: 1px solid $border-primary;
   border-radius: $border-radius-full;
   background: transparent;
   font-size: $font-size-xs;
   transition: background-color $transition-duration-normal $transition-easing-default;
 
   &:hover:not(.selected) {
-    border-color: $color-border-primary;
-    background: $color-bg-hover;
+    border-color: $border-primary;
+    background: $bg-tertiary;
   }
 
   &.selected {
-    border-color: $color-primary;
-    background: $color-primary;
-    color: $color-white;
+    border-color: $primary;
+    background: $primary;
+    color: $white;
   }
 }
 

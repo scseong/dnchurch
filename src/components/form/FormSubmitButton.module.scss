@@ -2,20 +2,20 @@
 .active_button {
   padding: $spacing-sm;
   width: 100%;
-  border: 1px solid $color-border-default;
+  border: 1px solid $border-primary;
   border-radius: $border-radius-md;
   font-size: $font-size-md;
 }
 
 .disabled_button {
-  background-color: $color-disabled-bg;
-  border: 1px solid $color-disabled-border;
-  color: $color-disabled-text;
+  background-color: $gray-200;
+  border: 1px solid $gray-300;
+  color: $txt-disabled;
   cursor: not-allowed;
 }
 
 .active_button {
-  background-color: $color-primary-active;
-  border: 1px solid $color-primary-active;
-  color: $color-white;
+  background-color: $primary-active;
+  border: 1px solid $primary-active;
+  color: $white;
 }

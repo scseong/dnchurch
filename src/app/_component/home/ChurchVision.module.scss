@@ -1,6 +1,6 @@
 .vision {
   padding: $spacing-xxxl 0;
-  background-color: $color-bg-default;
+  background-color: $bg-secondary;
 }
 
 .title {
@@ -14,7 +14,7 @@
     display: inline-block;
     font-size: $font-size-default;
     font-weight: $font-weight-semibold;
-    color: $color-primary;
+    color: $primary;
   }
 
   h2 {

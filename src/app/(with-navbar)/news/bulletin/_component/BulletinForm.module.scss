@@ -46,8 +46,8 @@
   button {
     @include button-hover-style(
       (
-        bg-color: $color-primary,
-        bg-hover-color: $color-primary-hover,
+        bg-color: $primary,
+        bg-hover-color: $primary-hover,
         text-color: white
       )
     );

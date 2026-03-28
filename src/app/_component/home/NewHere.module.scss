@@ -52,7 +52,7 @@ $divider-height: 0.2rem;
   bottom: -$spacing-md;
   right: -$spacing-md;
   padding: $spacing-lg $spacing-xl;
-  background: $color-navy;
+  background: $navy;
   border-radius: $radius-control;
   text-align: center;
   display: flex;
@@ -64,14 +64,14 @@ $divider-height: 0.2rem;
   font-family: $font-family-secondary;
   font-size: 3.2rem;
   font-weight: $font-weight-regular;
-  color: $color-gold;
+  color: $gold;
   line-height: $line-height-reset;
 }
 
 .year_label {
   font-size: $font-size-xxs;
   font-weight: $font-weight-regular;
-  color: rgba($color-white, 0.5);
+  color: rgba($white, 0.5);
   letter-spacing: 0.1rem;
 }
 
@@ -91,7 +91,7 @@ $divider-height: 0.2rem;
 }
 
 .caption {
-  @include text-label($color: $color-gold);
+  @include text-label($color: $gold);
   display: inline-block;
   letter-spacing: 0.25rem;
   text-transform: uppercase;
@@ -114,7 +114,7 @@ $divider-height: 0.2rem;
 .divider {
   width: $divider-width;
   height: $divider-height;
-  background: $color-gold;
+  background: $gold;
   margin: $spacing-lg 0;
 }
 
@@ -130,7 +130,7 @@ $divider-height: 0.2rem;
 }
 
 .faq_item {
-  border-bottom: 1px solid $color-border-default;
+  border-bottom: 1px solid $border-primary;
 }
 
 .faq_question {
@@ -147,7 +147,7 @@ $divider-height: 0.2rem;
   font-family: $font-family-base;
   font-size: $font-size-md;
   font-weight: $font-weight-medium;
-  color: $color-text-default;
+  color: $txt-primary;
   line-height: $line-height-base;
 
   @include respond-up($breakpoint-lg) {
@@ -157,7 +157,7 @@ $divider-height: 0.2rem;
 
 .faq_toggle {
   font-size: $font-size-xl;
-  color: $color-gold;
+  color: $gold;
   line-height: $line-height-reset;
   flex-shrink: 0;
   transition: transform 0.2s ease;
@@ -185,7 +185,7 @@ $divider-height: 0.2rem;
   margin: 0;
   padding-bottom: $spacing-md;
   font-size: $font-size-md;
-  color: $color-text-secondary;
+  color: $txt-secondary;
   line-height: $line-height-wide;
 }
 
@@ -195,7 +195,7 @@ $divider-height: 0.2rem;
   padding-bottom: $spacing-nano;
   font-size: $font-size-sm;
   font-weight: $font-weight-semibold;
-  color: $color-gold;
+  color: $gold;
   text-decoration: none;
   border-bottom: $spacing-min solid transparent;
   transition:
@@ -203,7 +203,7 @@ $divider-height: 0.2rem;
     opacity $transition-duration-normal $transition-easing-default;
 
   &:hover {
-    border-color: $color-gold;
+    border-color: $gold;
     opacity: 0.8;
   }
 }
@@ -216,16 +216,16 @@ $divider-height: 0.2rem;
   width: fit-content;
   font-size: $font-size-md;
   font-weight: $font-weight-semibold;
-  color: $color-gold;
+  color: $gold;
   text-decoration: none;
   padding-bottom: $spacing-xxs;
-  border-bottom: 1px solid rgba($color-gold, 0.3);
+  border-bottom: 1px solid rgba($gold, 0.3);
   transition:
     border-color $transition-duration-normal $transition-easing-default,
     opacity $transition-duration-normal $transition-easing-default;
 
   &:hover {
-    border-color: $color-gold;
+    border-color: $gold;
     opacity: 0.8;
   }
 }

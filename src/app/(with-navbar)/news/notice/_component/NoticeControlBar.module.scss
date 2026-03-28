@@ -4,7 +4,7 @@
   justify-content: space-between;
   gap: $spacing-xs;
   padding-bottom: $spacing-sm;
-  border-bottom: 1.5px solid $color-border-primary;
+  border-bottom: 1.5px solid $border-primary;
 }
 
 // ── 좌측 ──
@@ -18,7 +18,7 @@
 
 .total {
   font-size: $font-size-xs;
-  color: $color-text-subtle;
+  color: $txt-tertiary;
   white-space: nowrap;
   flex-shrink: 0;
 }
@@ -30,25 +30,25 @@
   padding: 0 $spacing-xs;
   height: 2.2rem;
   border-radius: $border-radius-full;
-  background: $color-bg-default;
+  background: $bg-secondary;
   font-size: $font-size-xs;
-  color: $color-text-secondary;
-  border: 1px solid $color-border-default;
+  color: $txt-secondary;
+  border: 1px solid $border-primary;
 }
 
 .tag_remove {
   display: flex;
   align-items: center;
   font-size: $font-size-sm;
-  color: $color-text-subtle;
+  color: $txt-tertiary;
   cursor: pointer;
 
   &:hover {
-    color: $color-text-default;
+    color: $txt-primary;
   }
 
   &:focus-visible {
-    outline: 2px solid $color-primary-active;
+    outline: 2px solid $primary-active;
     outline-offset: 2px;
     border-radius: 2px;
   }
@@ -65,21 +65,21 @@
 .category_select {
   padding: 0 $spacing-xs;
   height: 3.2rem;
-  border: 1px solid $color-border-default;
+  border: 1px solid $border-primary;
   border-radius: 0.6rem;
-  background: $color-bg-default;
+  background: $bg-secondary;
   font-size: $font-size-xs;
-  color: $color-text-secondary;
+  color: $txt-secondary;
   cursor: pointer;
   outline: none;
 
   &.selected {
     font-weight: $font-weight-semibold;
-    color: $color-text-default;
+    color: $txt-primary;
   }
 
   &:focus-visible {
-    outline: 2px solid $color-primary-active;
+    outline: 2px solid $primary-active;
     outline-offset: 2px;
   }
 }
@@ -90,21 +90,21 @@
   gap: 0.2rem;
   padding: 0 $spacing-xs;
   height: 3.2rem;
-  border: 1px solid $color-border-default;
+  border: 1px solid $border-primary;
   border-radius: 0.6rem;
-  background: $color-bg-default;
+  background: $bg-secondary;
   font-size: $font-size-xs;
-  color: $color-text-secondary;
+  color: $txt-secondary;
   white-space: nowrap;
   cursor: pointer;
 
   &.selected {
     font-weight: $font-weight-semibold;
-    color: $color-text-default;
+    color: $txt-primary;
   }
 
   &:focus-visible {
-    outline: 2px solid $color-primary-active;
+    outline: 2px solid $primary-active;
     outline-offset: 2px;
   }
 }
@@ -114,13 +114,13 @@
   display: flex;
   align-items: center;
   height: 3.2rem;
-  border: 1px solid $color-border-default;
+  border: 1px solid $border-primary;
   border-radius: 0.6rem;
-  background: $color-bg-default;
+  background: $bg-secondary;
 
   &:focus-within {
-    border-color: $color-border-primary;
-    box-shadow: 0 0 0 2px $color-primary-subtle;
+    border-color: $border-primary;
+    box-shadow: 0 0 0 2px $primary-subtle;
   }
 }
 
@@ -128,7 +128,7 @@
   position: absolute;
   left: $spacing-xs;
   font-size: $font-size-md;
-  color: $color-text-subtle;
+  color: $txt-tertiary;
   pointer-events: none;
 }
 
@@ -139,11 +139,11 @@
   border: none;
   background: transparent;
   font-size: $font-size-xs;
-  color: $color-text-default;
+  color: $txt-primary;
   outline: none;
 
   &::placeholder {
-    color: $color-text-subtle;
+    color: $txt-tertiary;
     font-size: $font-size-xs;
   }
 
@@ -158,15 +158,15 @@
   display: flex;
   align-items: center;
   font-size: $font-size-md;
-  color: $color-text-subtle;
+  color: $txt-tertiary;
   cursor: pointer;
 
   &:hover {
-    color: $color-text-default;
+    color: $txt-primary;
   }
 
   &:focus-visible {
-    outline: 2px solid $color-primary-active;
+    outline: 2px solid $primary-active;
     outline-offset: 2px;
     border-radius: 2px;
   }

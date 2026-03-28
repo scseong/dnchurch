@@ -21,8 +21,8 @@
 
     .primaryButton {
       padding: $spacing-sm $spacing-lg;
-      background-color: $color-primary;
-      color: $color-white;
+      background-color: $primary;
+      color: $white;
       border-radius: $border-radius-md;
       border: none;
       font-weight: $font-weight-semibold;
@@ -30,7 +30,7 @@
       cursor: pointer;
 
       &:hover {
-        background-color: $color-primary-hover;
+        background-color: $primary-hover;
       }
     }
   }

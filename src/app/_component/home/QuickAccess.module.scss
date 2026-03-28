@@ -3,7 +3,7 @@ $icon_box_mobile_size: 4.2rem;
 $icon_box_radius: 0.8rem;
 
 .quick_wap {
-  background: $color-white;
+  background: $white;
 
   .quick_container {
     padding: 0;
@@ -11,7 +11,7 @@ $icon_box_radius: 0.8rem;
 }
 
 .quick_access {
-  border-bottom: $spacing-min solid $color-border-default;
+  border-bottom: $spacing-min solid $border-primary;
   display: grid;
   grid-template-columns: 1fr;
 
@@ -25,7 +25,7 @@ $icon_box_radius: 0.8rem;
   align-items: center;
   gap: $gap-items;
   padding: $spacing-lg $spacing-xl;
-  border-bottom: $spacing-min solid $color-border-default;
+  border-bottom: $spacing-min solid $border-primary;
   transition: background $transition-duration-normal $transition-easing-default;
 
   &:last-child {
@@ -34,7 +34,7 @@ $icon_box_radius: 0.8rem;
 
   @include respond-up($breakpoint-lg) {
     border-bottom: none;
-    border-right: $spacing-min solid $color-border-default;
+    border-right: $spacing-min solid $border-primary;
 
     &:last-child {
       border-right: none;
@@ -42,7 +42,7 @@ $icon_box_radius: 0.8rem;
   }
 
   &:hover {
-    background: $color-cream;
+    background: $cream;
 
     .arrow {
       opacity: 1;
@@ -58,10 +58,10 @@ $icon_box_radius: 0.8rem;
   justify-content: center;
   width: $icon_box_mobile_size;
   height: $icon_box_mobile_size;
-  background: $color-navy;
+  background: $navy;
   border-radius: $icon_box_radius;
   font-size: calc($icon_box_mobile_size / 1.6);
-  color: $color-gold;
+  color: $gold;
 
   @include respond-up($breakpoint-lg) {
     width: $icon_box_pc_size;
@@ -83,9 +83,9 @@ $icon_box_radius: 0.8rem;
 
 .label {
   font-family: $font-family-secondary;
-  font-size: $font-size-lg;
+  font-size: $font-size-md;
   font-weight: $font-weight-semibold;
-  color: $color-text-default;
+  color: $txt-primary;
   line-height: $line-height-reset;
 }
 
@@ -98,7 +98,7 @@ $icon_box_radius: 0.8rem;
 .arrow {
   flex-shrink: 0;
   font-size: $font-size-md;
-  color: $color-navy;
+  color: $navy;
   opacity: 0.4;
   transition:
     opacity 0.2s ease,

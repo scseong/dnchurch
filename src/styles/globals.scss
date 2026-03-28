@@ -2,16 +2,17 @@ html {
   height: 100%;
   font-size: 2.777778vw;
   scrollbar-gutter: stable;
+  scroll-behavior: smooth;
 }
 
 body {
   min-height: 100vh;
-  background: $color-bg-body;
+  background: $bg-primary;
   font-family: $font-family-base;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   line-height: $line-height-base;
-  color: $color-text-default;
+  color: $txt-primary;
   overflow-x: hidden;
   -webkit-text-size-adjust: none;
   -ms-text-size-adjust: none;
@@ -22,7 +23,7 @@ body {
 * {
   padding: 0;
   margin: 0;
-  font-family: $font-family-base;
+  font-family: inherit;
   color: inherit;
   box-sizing: border-box;
 }
@@ -69,14 +70,14 @@ button {
 }
 
 html[data-scrolled] header {
-  background-color: $color-white !important;
-  color: $color-text-default !important;
+  background-color: $white !important;
+  color: $txt-primary !important;
   box-shadow: 0 0.1rem 0 0 #e7e7e7 !important;
 }
 
 header:has(#gnb:hover):not([data-nav-locked]) {
-  background-color: $color-white !important;
-  color: $color-text-default !important;
+  background-color: $white !important;
+  color: $txt-primary !important;
   box-shadow: 0 0.1rem 0 0 #e7e7e7 !important;
 }
 
@@ -93,7 +94,7 @@ header:has(#gnb:hover):not([data-nav-locked]) {
 
 #footer {
   width: 100%;
-  border-top: 0.1rem solid $color-divide;
+  border-top: 0.1rem solid $border-primary;
 }
 
 .overlay {

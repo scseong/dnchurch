@@ -47,13 +47,13 @@
 }
 
 .prev_next {
-  border-bottom: 0.15rem solid $color-black;
+  border-bottom: 0.15rem solid $black;
 
   .group:first-child {
-    border-top: 0.15rem solid $color-black;
+    border-top: 0.15rem solid $black;
   }
 
   .group:last-child {
-    border-top: 0.1rem solid $color-border-default;
+    border-top: 0.1rem solid $border-primary;
   }
 }

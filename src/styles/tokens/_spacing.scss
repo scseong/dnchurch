@@ -47,3 +47,54 @@ $spacing-7xl: 9.6rem;
 $spacing-xxxl: $spacing-5xl;
 $spacing-xxxxl: $spacing-6xl;
 $spacing-layout: $spacing-7xl;
+
+$section-gaps: (
+  '240': (
+    pc: 24rem,
+    tablet: 24rem,
+    mobile: 12rem
+  ),
+  '200': (
+    pc: 20rem,
+    tablet: 20rem,
+    mobile: 12rem
+  ),
+  '160': (
+    pc: 16rem,
+    tablet: 16rem,
+    mobile: 8rem
+  ),
+  '120': (
+    pc: 12rem,
+    tablet: 12rem,
+    mobile: 6.4rem
+  ),
+  '80': (
+    pc: 8rem,
+    tablet: 8rem,
+    mobile: 6.4rem
+  ),
+  '40': (
+    pc: 4rem,
+    tablet: 4rem,
+    mobile: 2.4rem
+  )
+);
+
+// Primitive Tokens (spacing-N)
+$spacing: (
+  '32': 3.2rem,
+  '24': 2.4rem,
+  '16': 1.6rem,
+  '12': 1.2rem,
+  '8': 0.8rem
+);
+
+// Semantic Tokens (Content Gap)
+$content-gaps: (
+  'XL': map-get($spacing, '32'),
+  'L': map-get($spacing, '24'),
+  'M': map-get($spacing, '16'),
+  'S': map-get($spacing, '12'),
+  'XS': map-get($spacing, '8')
+);

@@ -65,7 +65,7 @@
 /// 링크 호버 — 밑줄 + 활성 색상
 @mixin link-hover-style {
   text-decoration: underline;
-  color: $color-text-link-active;
+  color: $txt-link-active;
 }
 
 /// 버튼 배경/텍스트 색상 + 호버 상태
@@ -98,9 +98,9 @@
 //
 // 사용법:
 //   @include text-section-title;                              // 기본값
-//   @include text-section-title($color: $text-on-image);      // 다크 배경
+//   @include text-section-title($color: $txt-image);      // 다크 배경
 //   @include text-card-title($weight: $font-weight-bold);     // 강조
-//   @include text-body($color: $color-text-secondary);        // 색상 변경
+//   @include text-body($color: $txt-secondary);        // 색상 변경
 // ══════════════════════════════════════════
 
 /// 히어로 타이틀 — 배너, 랜딩 최상단 (h1 반응형)
@@ -168,7 +168,7 @@
 }
 
 /// 본문 — 일반 텍스트 (기본 크기, 반응형 변경 없음)
-@mixin text-body($color: $color-text-default) {
+@mixin text-body($color: $txt-primary) {
   font-size: $font-size-default;
   font-weight: $font-weight-regular;
   line-height: $line-height-base;
@@ -176,7 +176,7 @@
 }
 
 /// 보조 텍스트 — 부연 설명, 서브 텍스트
-@mixin text-sub($color: $color-text-secondary) {
+@mixin text-sub($color: $txt-secondary) {
   font-size: $font-size-md;
   font-weight: $font-weight-regular;
   line-height: $line-height-base;
@@ -184,7 +184,7 @@
 }
 
 /// 캡션 — 날짜, 작성자, 메타 정보
-@mixin text-caption($color: $color-text-subtle) {
+@mixin text-caption($color: $txt-tertiary) {
   font-size: $font-size-sm;
   font-weight: $font-weight-regular;
   line-height: $line-height-base;
@@ -192,7 +192,7 @@
 }
 
 /// 라벨 — 폼 라벨, 카테고리 이름, 네비게이션
-@mixin text-label($color: $color-text-secondary) {
+@mixin text-label($color: $txt-secondary) {
   font-size: $font-size-sm;
   font-weight: $font-weight-medium;
   line-height: $line-height-base;

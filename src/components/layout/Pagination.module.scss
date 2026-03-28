@@ -23,45 +23,45 @@
   height: 2.6rem;
   border: 0.1rem solid transparent;
   border-radius: $border-radius-md;
-  background: $color-bg-body;
+  background: $bg-primary;
   font-size: $font-size-xxs;
   font-weight: $font-weight-medium;
-  color: $color-text-default;
+  color: $txt-primary;
   transition:
     background-color 0.2s ease,
     border-color 0.2s ease,
     outline 0.2s ease;
 
   &:hover:not(.current):not(.disabled) {
-    background: $color-primary-subtle;
-    border-color: $color-border-primary;
+    background: $primary-subtle;
+    border-color: $border-primary;
   }
 
   &:focus {
-    outline: 0.2rem solid $color-border-primary;
+    outline: 0.2rem solid $border-primary;
     outline-offset: 0.2rem;
   }
 }
 
 .page_link.current {
-  background: $color-primary;
-  border-color: $color-primary;
-  color: $color-white;
+  background: $primary;
+  border-color: $primary;
+  color: $white;
   font-weight: $font-weight-semibold;
 
   &:hover {
-    background: $color-primary-active;
-    border-color: $color-primary-active;
+    background: $primary-active;
+    border-color: $primary-active;
   }
 }
 
 .disabled {
-  color: $color-disabled-text;
+  color: $txt-disabled;
   cursor: not-allowed;
 }
 
 .dot {
   padding: 0 $spacing-xs;
   font-weight: bold;
-  color: $color-text-subtle;
+  color: $txt-tertiary;
 }

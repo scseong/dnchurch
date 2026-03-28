@@ -58,7 +58,7 @@ $btn-gold-hover: #a38458;
 
   .scripture {
     display: block;
-    @include text-label($color: $color-gold);
+    @include text-label($color: $gold);
     letter-spacing: 0.05rem;
   }
 
@@ -67,11 +67,11 @@ $btn-gold-hover: #a38458;
     font-weight: 800;
     line-height: $line-height-heading;
     white-space: pre-line;
-    color: $color-text-inverse;
+    color: $txt-inverse;
   }
 
   p {
-    @include text-sub($color: $text-on-image-subtle);
+    @include text-sub($color: $txt-image-subtle);
     line-height: $line-height-wide;
     white-space: pre-line;
   }
@@ -116,14 +116,14 @@ $btn-gold-hover: #a38458;
       background: transparent;
       border: 0.1rem solid rgba(255, 255, 255, 0.5);
       font-weight: $font-weight-medium;
-      color: $text-on-image-subtle;
+      color: $txt-image-subtle;
       transition:
         border-color 0.2s ease,
         background 0.2s ease;
 
       &:hover {
         border-color: rgba(255, 255, 255, 0.7);
-        color: $color-text-inverse;
+        color: $txt-inverse;
       }
     }
 
