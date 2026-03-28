@@ -51,87 +51,82 @@ $letter-spacing-heading: -0.15rem;
 /// -0.1rem — 중형 헤딩(h3~h5)
 $letter-spacing-tight: -0.1rem;
 
-/// -0.05rem — 본문 기본
-$letter-spacing-base: -0.05rem;
-
 // ══════════════════════════════════════════
-// BASE TEXT SIZE (본문용)
-// 선택 기준: 기본 본문 → $font-size-default
+// FONT SIZE — 숫자 기반 네이밍
+// 토큰명의 숫자 = px 크기 (1rem = 10px 기준)
+// 오름차순: 11 · 12 · 13 · 14 · 15 · 16 · 18 · 20 · 22 · 24 · 26 · 28 · 32 · 34 · 42
 // ══════════════════════════════════════════
 
-/// 1.8rem — 본문 중 가장 큰 텍스트. 리드 문단, 강조 인트로
-$font-size-xl: 1.8rem;
+/// 1.1rem (11px) — 특수 케이스에만. 가독성 주의 필요
+$font-size-11: 1.1rem;
 
-/// 1.6rem — 서브 헤딩 보조, 큰 본문
-$font-size-lg: 1.6rem;
+/// 1.2rem (12px) — 뱃지, 태그, 각주 등 가장 작은 텍스트
+$font-size-12: 1.2rem;
 
-/// 1.5rem — ✦ 본문 기본 크기. 대부분의 텍스트에 사용
-$font-size-default: 1.5rem;
+/// 1.3rem (13px) — 캡션, 메타 정보 (날짜, 작성자)
+$font-size-13: 1.3rem;
 
-/// 1.4rem — 보조 텍스트, 테이블 셀, 폼 입력값
-$font-size-md: 1.4rem;
+/// 1.4rem (14px) — 보조 텍스트, 테이블 셀, 폼 입력값
+$font-size-14: 1.4rem;
 
-/// 1.3rem — 캡션, 메타 정보 (날짜, 작성자)
-$font-size-sm: 1.3rem;
+/// 1.5rem (15px) — ✦ 본문 기본 크기. 대부분의 텍스트에 사용
+$font-size-15: 1.5rem;
 
-/// 1.2rem — 뱃지, 태그, 각주 등 가장 작은 텍스트
-$font-size-xs: 1.2rem;
+/// 1.6rem (16px) — 서브 헤딩 보조, 큰 본문
+$font-size-16: 1.6rem;
 
-/// 1.1rem — 특수 케이스에만. 가독성 주의 필요
-$font-size-xxs: 1.1rem;
+/// 1.8rem (18px) — 본문 중 가장 큰 텍스트. 리드 문단, 강조 인트로. h5 모바일
+$font-size-18: 1.8rem;
+
+/// 2rem (20px) — h5 PC / h4 모바일
+$font-size-20: 2rem;
+
+/// 2.2rem (22px) — h3 모바일
+$font-size-22: 2.2rem;
+
+/// 2.4rem (24px) — h4 PC
+$font-size-24: 2.4rem;
+
+/// 2.6rem (26px) — h2 모바일
+$font-size-26: 2.6rem;
+
+/// 2.8rem (28px) — h3 PC
+$font-size-28: 2.8rem;
+
+/// 3.2rem (32px) — h1 모바일
+$font-size-32: 3.2rem;
+
+/// 3.4rem (34px) — h2 PC
+$font-size-34: 3.4rem;
+
+/// 4.2rem (42px) — h1 PC. 히어로 배너 등 최상위 타이틀
+$font-size-42: 4.2rem;
 
 // ══════════════════════════════════════════
-// HEADING SIZE — Desktop (min-width: $breakpoint-tablet 이상)
-// respond-up($breakpoint-tablet) 안에서 사용
+// HEADING MAPS — globals.scss에서 자동 적용
+// 큰 텍스트는 줄간격 좁게, 작은 텍스트는 넓게 (타이포그래피 원칙)
 // ══════════════════════════════════════════
-
-/// 4.2rem — 히어로 배너 등 최상위 타이틀 (PC)
-$font-size-h1: 4.2rem;
-
-/// 3.4rem — 페이지 타이틀 (PC)
-$font-size-h2: 3.4rem;
-
-/// 2.8rem — 섹션 타이틀 (PC)
-$font-size-h3: 2.8rem;
-
-/// 2.2rem — 서브 섹션 타이틀 (PC)
-$font-size-h4: 2.2rem;
-
-/// 2rem — 카드/아이템 타이틀 (PC)
-$font-size-h5: 2rem;
-
-// ══════════════════════════════════════════
-// HEADING SIZE — Mobile (기본값, mobile-first)
-// 기본 스타일에서 사용. respond-up() 없이 적용
-// ══════════════════════════════════════════
-
-/// 3.2rem — 히어로 배너 등 최상위 타이틀 (모바일)
-$font-size-h1-mobile: 3.2rem;
-
-/// 2.6rem — 페이지 타이틀 (모바일)
-$font-size-h2-mobile: 2.6rem;
-
-/// 2.2rem — 섹션 타이틀 (모바일)
-$font-size-h3-mobile: 2.2rem;
-
-/// 2rem — 서브 섹션 타이틀 (모바일)
-$font-size-h4-mobile: 2rem;
-
-/// 1.8rem — 카드/아이템 타이틀 (모바일)
-$font-size-h5-mobile: 1.8rem;
 
 $heading-sizes: (
-  'h1': $font-size-h1,
-  'h2': $font-size-h2,
-  'h3': $font-size-h3,
-  'h4': $font-size-h4,
-  'h5': $font-size-h5
+  'h1': $font-size-42,
+  'h2': $font-size-34,
+  'h3': $font-size-28,
+  'h4': $font-size-24,
+  'h5': $font-size-20
 );
 
 $heading-sizes-mobile: (
-  'h1': $font-size-h1-mobile,
-  'h2': $font-size-h2-mobile,
-  'h3': $font-size-h3-mobile,
-  'h4': $font-size-h4-mobile,
-  'h5': $font-size-h5-mobile
+  'h1': $font-size-32,
+  'h2': $font-size-26,
+  'h3': $font-size-22,
+  'h4': $font-size-20,
+  'h5': $font-size-18
+);
+
+$heading-line-heights: (
+  'h1': 1.25,
+  'h2': 1.35,
+  'h3': 1.4,
+  'h4': 1.5,
+  'h5': 1.5
 );

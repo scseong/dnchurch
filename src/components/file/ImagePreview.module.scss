@@ -45,7 +45,7 @@ $item-gap: 0.8rem;
 
   h5 {
     margin-bottom: $spacing-xxs;
-    font-size: $font-size-sm;
+    font-size: $font-size-13;
     color: $primary;
     @include ellipsis-multi(2);
   }
@@ -57,7 +57,7 @@ $item-gap: 0.8rem;
 
     span {
       display: block;
-      font-size: $font-size-xs;
+      font-size: $font-size-12;
       color: $txt-tertiary;
     }
   }
@@ -69,7 +69,7 @@ $item-gap: 0.8rem;
   display: inline-block !important;
   width: fit-content;
   border-radius: $radius-xs;
-  font-size: $font-size-xs;
+  font-size: $font-size-12;
   color: $white !important;
 }
 

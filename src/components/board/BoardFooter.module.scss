@@ -8,7 +8,7 @@
   dt {
     min-width: 20%;
     flex-basis: 20%;
-    font-size: $font-size-sm;
+    font-size: $font-size-13;
     font-weight: $font-weight-medium;
 
     @include respond-up($breakpoint-tablet-sm) {
@@ -20,7 +20,7 @@
   dd,
   a {
     display: flex;
-    font-size: $font-size-sm;
+    font-size: $font-size-13;
     word-break: break-all;
 
     svg {

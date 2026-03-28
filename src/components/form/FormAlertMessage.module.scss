@@ -2,12 +2,12 @@
   padding: $spacing-xxs;
 
   .error {
-    font-size: $font-size-md;
+    font-size: $font-size-14;
     color: $status-negative;
   }
 
   .success {
-    font-size: $font-size-md;
+    font-size: $font-size-14;
     color: $status-positive;
   }
 }

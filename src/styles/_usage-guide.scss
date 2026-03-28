@@ -7,32 +7,32 @@
 // ┌──────────────┬──────────────────────────┬──────────────────────┬──────────────────────┐
 // │ 역할          │ font-size                │ font-weight          │ color                │
 // ├──────────────┼──────────────────────────┼──────────────────────┼──────────────────────┤
-// │ 히어로 타이틀  │ $font-size-h1-mobile     │ $font-weight-bold    │ $txt-primary  │
-// │              │ → $font-size-h1 (PC)     │                      │ 또는 $txt-inverse │
+// │ 히어로 타이틀  │ $font-size-32     │ $font-weight-bold    │ $txt-primary  │
+// │              │ → $font-size-42 (PC)     │                      │ 또는 $txt-inverse │
 // ├──────────────┼──────────────────────────┼──────────────────────┼──────────────────────┤
-// │ 페이지 타이틀  │ $font-size-h2-mobile     │ $font-weight-bold    │ $txt-primary  │
-// │              │ → $font-size-h2 (PC)     │                      │                      │
+// │ 페이지 타이틀  │ $font-size-26     │ $font-weight-bold    │ $txt-primary  │
+// │              │ → $font-size-34 (PC)     │                      │                      │
 // ├──────────────┼──────────────────────────┼──────────────────────┼──────────────────────┤
-// │ 섹션 타이틀   │ $font-size-h3-mobile     │ $font-weight-bold    │ $txt-primary  │
-// │              │ → $font-size-h3 (PC)     │                      │                      │
+// │ 섹션 타이틀   │ $font-size-22     │ $font-weight-bold    │ $txt-primary  │
+// │              │ → $font-size-28 (PC)     │                      │                      │
 // ├──────────────┼──────────────────────────┼──────────────────────┼──────────────────────┤
-// │ 카드 타이틀   │ $font-size-h5-mobile     │ $font-weight-semibold│ $txt-primary  │
-// │              │ → $font-size-h5 (PC)     │                      │                      │
+// │ 카드 타이틀   │ $font-size-18     │ $font-weight-semibold│ $txt-primary  │
+// │              │ → $font-size-20 (PC)     │                      │                      │
 // ├──────────────┼──────────────────────────┼──────────────────────┼──────────────────────┤
-// │ 본문 텍스트   │ $font-size-default       │ $font-weight-regular │ $txt-primary  │
+// │ 본문 텍스트   │ $font-size-15       │ $font-weight-regular │ $txt-primary  │
 // ├──────────────┼──────────────────────────┼──────────────────────┼──────────────────────┤
-// │ 보조 설명     │ $font-size-md            │ $font-weight-regular │ $txt-secondary│
+// │ 보조 설명     │ $font-size-14            │ $font-weight-regular │ $txt-secondary│
 // ├──────────────┼──────────────────────────┼──────────────────────┼──────────────────────┤
-// │ 캡션/메타     │ $font-size-sm            │ $font-weight-regular │ $txt-tertiary   │
+// │ 캡션/메타     │ $font-size-13            │ $font-weight-regular │ $txt-tertiary   │
 // │ (날짜, 작성자)│                          │                      │                      │
 // ├──────────────┼──────────────────────────┼──────────────────────┼──────────────────────┤
-// │ 라벨         │ $font-size-sm            │ $font-weight-medium  │ $txt-secondary│
+// │ 라벨         │ $font-size-13            │ $font-weight-medium  │ $txt-secondary│
 // ├──────────────┼──────────────────────────┼──────────────────────┼──────────────────────┤
-// │ 뱃지/태그     │ $font-size-xs            │ $font-weight-medium  │ (컨텍스트에 따라)     │
+// │ 뱃지/태그     │ $font-size-12            │ $font-weight-medium  │ (컨텍스트에 따라)     │
 // ├──────────────┼──────────────────────────┼──────────────────────┼──────────────────────┤
-// │ 버튼 텍스트   │ $font-size-md            │ $font-weight-semibold│ (버튼 스타일에 따라)  │
+// │ 버튼 텍스트   │ $font-size-14            │ $font-weight-semibold│ (버튼 스타일에 따라)  │
 // ├──────────────┼──────────────────────────┼──────────────────────┼──────────────────────┤
-// │ 네비게이션    │ $font-size-md            │ $font-weight-medium  │ $txt-primary  │
+// │ 네비게이션    │ $font-size-14            │ $font-weight-medium  │ $txt-primary  │
 // ├──────────────┼──────────────────────────┼──────────────────────┼──────────────────────┤
 // │ 링크         │ (부모 크기 상속)           │ (부모 굵기 상속)      │ $txt-link     │
 // └──────────────┴──────────────────────────┴──────────────────────┴──────────────────────┘
@@ -43,51 +43,51 @@
 // ══════════════════════════════════════════
 //
 // 기본 스타일 = 모바일. respond-up()으로 PC 확장.
-// 헤딩만 반응형 크기 변경. 본문 크기($font-size-default 등)는 고정.
+// 헤딩만 반응형 크기 변경. 본문 크기($font-size-15 등)는 고정.
 //
 // 예시:
 //   .page_title {
-//     font-size: $font-size-h2-mobile;           // 모바일 기본
+//     font-size: $font-size-26;           // 모바일 기본
 //     font-weight: $font-weight-bold;
-//     line-height: $line-height-heading;
+//     line-height: map-get($heading-line-heights, 'h2');  // 1.35
 //     letter-spacing: $letter-spacing-heading;
 //     color: $txt-primary;
 //
 //     @include respond-up($breakpoint-tablet) {
-//       font-size: $font-size-h2;                // PC 확장
+//       font-size: $font-size-34;                // PC 확장
 //     }
 //   }
 //
 //   .section_title {
-//     font-size: $font-size-h3-mobile;
+//     font-size: $font-size-22;
 //     font-weight: $font-weight-bold;
-//     line-height: $line-height-heading;
+//     line-height: map-get($heading-line-heights, 'h3');  // 1.4
 //     letter-spacing: $letter-spacing-tight;
 //
 //     @include respond-up($breakpoint-tablet) {
-//       font-size: $font-size-h3;
+//       font-size: $font-size-28;
 //     }
 //   }
 //
 //   .card_title {
-//     font-size: $font-size-h5-mobile;
+//     font-size: $font-size-18;
 //     font-weight: $font-weight-semibold;
-//     line-height: $line-height-heading;
+//     line-height: map-get($heading-line-heights, 'h5');  // 1.5
 //
 //     @include respond-up($breakpoint-tablet) {
-//       font-size: $font-size-h5;
+//       font-size: $font-size-20;
 //     }
 //   }
 //
 //   .body_text {
-//     font-size: $font-size-default;             // 반응형 변경 없음
+//     font-size: $font-size-15;             // 반응형 변경 없음
 //     font-weight: $font-weight-regular;
 //     line-height: $line-height-base;
 //     color: $txt-primary;
 //   }
 //
 //   .caption {
-//     font-size: $font-size-sm;                  // 반응형 변경 없음
+//     font-size: $font-size-13;                  // 반응형 변경 없음
 //     color: $txt-tertiary;
 //   }
 //
@@ -141,7 +141,7 @@
 // ├─────────────────┼───────────────────────┤
 // │ 태그/뱃지        │ $padding-inline-xs     │
 // │                 │ $radius-circle           │
-// │                 │ $font-size-xs          │
+// │                 │ $font-size-12          │
 // ├─────────────────┼───────────────────────┤
 // │ 섹션 컨테이너    │ $container-padding / $padding-section-y   │
 // │                 │ $gap-section (형제 간)  │
@@ -202,7 +202,7 @@
 //
 //   // "큰 보조 텍스트" — mixin에 정확히 맞는 역할 없음
 //   .intro_desc {
-//     font-size: $font-size-lg;
+//     font-size: $font-size-16;
 //     font-weight: $font-weight-regular;
 //     line-height: $line-height-base;
 //     color: $txt-secondary;

@@ -22,7 +22,7 @@
   border: 1px solid $border-primary;
   border-radius: $radius-circle;
   background: transparent;
-  font-size: $font-size-xs;
+  font-size: $font-size-12;
   transition: background-color $transition-duration-normal $transition-easing-default;
 
   &:hover:not(.selected) {

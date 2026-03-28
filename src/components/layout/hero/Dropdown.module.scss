@@ -9,7 +9,7 @@
   gap: $spacing-xxs;
   padding: $spacing-xxs;
   color: $txt-tertiary;
-  font-size: $font-size-sm;
+  font-size: $font-size-13;
   transition: color $transition-duration-normal $transition-easing-default;
 
   span {
@@ -18,8 +18,8 @@
   }
 
   svg {
-    width: $font-size-sm;
-    height: $font-size-sm;
+    width: $font-size-13;
+    height: $font-size-13;
   }
 
   &:hover,
@@ -79,7 +79,7 @@
   width: 100%;
   padding: $spacing-xs $spacing-md;
   color: $txt-secondary;
-  font-size: $font-size-sm;
+  font-size: $font-size-13;
   text-align: left;
   transition: color $transition-duration-normal $transition-easing-default;
 

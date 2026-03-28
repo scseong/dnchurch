@@ -117,7 +117,7 @@ input,
 input::placeholder,
 textarea,
 select {
-  font-size: $font-size-md;
+  font-size: $font-size-14;
 }
 
 p,
@@ -125,13 +125,13 @@ label,
 ul,
 ol,
 blockquote {
-  font-size: $font-size-default;
+  font-size: $font-size-15;
   word-break: keep-all;
 }
 
 a {
   text-decoration: none;
-  font-size: $font-size-md;
+  font-size: $font-size-14;
 }
 
 ul,
@@ -142,7 +142,7 @@ li {
 button {
   border: none;
   background: none;
-  font-size: $font-size-md;
+  font-size: $font-size-14;
   cursor: pointer;
 }
 
@@ -196,7 +196,7 @@ header:has(#gnb:hover):not([data-nav-locked]) {
   @include respond-fonts($width, $vw-value);
 }
 
-@include set-heading-fonts($heading-sizes-mobile);
+@include set-heading-fonts($heading-sizes-mobile, $heading-line-heights);
 @include respond-up($breakpoint-tablet) {
   @include set-heading-fonts($heading-sizes);
 }

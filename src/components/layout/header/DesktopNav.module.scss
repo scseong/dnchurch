@@ -76,7 +76,7 @@ $nav-center: 65%;
   align-items: center;
   padding: $spacing-sm $spacing-sm calc($spacing-sm - 0.2rem) $spacing-sm;
   border-bottom: 0.2rem solid transparent;
-  font-size: $font-size-md;
+  font-size: $font-size-14;
   font-weight: $font-weight-medium;
   color: inherit;
   white-space: nowrap;
@@ -111,7 +111,7 @@ $nav-center: 65%;
 .depth2_link {
   display: block;
   padding: $spacing-xs 0;
-  font-size: $font-size-md;
+  font-size: $font-size-14;
   color: $txt-secondary;
   white-space: nowrap;
   transition: font-weight 0.1s $transition-easing-default;

@@ -9,7 +9,7 @@
 
 .nav_logo {
   margin-bottom: $spacing-lg;
-  font-size: $font-size-h4-mobile;
+  font-size: $font-size-20;
   color: $black;
 }
 
@@ -17,7 +17,7 @@
   display: flex;
   align-items: center;
   gap: $spacing-xs;
-  font-size: $font-size-md;
+  font-size: $font-size-14;
   color: $txt-secondary;
   transition: color 0.2s;
 
@@ -46,7 +46,7 @@
   justify-content: space-between;
   align-items: center;
   width: 100%;
-  font-size: $font-size-lg;
+  font-size: $font-size-16;
   font-weight: $font-weight-bold;
   text-align: left;
   cursor: pointer;
@@ -75,7 +75,7 @@
 .sub_link {
   display: block;
   padding: $spacing-xs $spacing-lg $spacing-xs $spacing-xxl;
-  font-size: $font-size-default;
+  font-size: $font-size-15;
   color: $txt-tertiary;
   transition: color 0.2s;
 

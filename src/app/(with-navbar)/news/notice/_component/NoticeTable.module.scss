@@ -62,7 +62,7 @@
 }
 
 .row_number {
-  font-size: $font-size-xs;
+  font-size: $font-size-12;
   color: $txt-tertiary;
 }
 
@@ -91,7 +91,7 @@
 }
 
 .title_text {
-  font-size: $font-size-sm;
+  font-size: $font-size-13;
   font-weight: $font-weight-regular;
   color: $txt-primary;
   @include ellipsis-multi(1);
@@ -113,13 +113,13 @@
 }
 
 .clip_icon {
-  font-size: $font-size-xs;
+  font-size: $font-size-12;
   color: $txt-tertiary;
 }
 
 .col_date {
   padding-left: $spacing-sm;
-  font-size: $font-size-xs;
+  font-size: $font-size-12;
   color: $txt-tertiary;
   text-align: right;
   white-space: nowrap;
@@ -127,7 +127,7 @@
 
 .col_views {
   padding-left: $spacing-xs;
-  font-size: $font-size-xs;
+  font-size: $font-size-12;
   color: $txt-tertiary;
   white-space: nowrap;
   text-align: right;
@@ -166,7 +166,7 @@
 .empty {
   padding: $spacing-xxxl 0;
   text-align: center;
-  font-size: $font-size-md;
+  font-size: $font-size-14;
   color: $txt-tertiary;
 }
 
@@ -245,7 +245,7 @@
 }
 
 .mobile_title {
-  font-size: $font-size-sm;
+  font-size: $font-size-13;
   font-weight: $font-weight-regular;
   color: $txt-primary;
   word-break: keep-all;

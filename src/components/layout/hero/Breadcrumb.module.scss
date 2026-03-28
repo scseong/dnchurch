@@ -19,7 +19,7 @@
   &:not(:first-child)::before {
     content: '|';
     color: $border-primary;
-    font-size: $font-size-sm;
+    font-size: $font-size-13;
     padding: 0 $spacing-xs;
     user-select: none;
   }
@@ -31,12 +31,12 @@
   align-items: center;
   gap: $spacing-xxs;
   color: $txt-tertiary;
-  font-size: $font-size-sm;
+  font-size: $font-size-13;
   transition: color $transition-duration-normal $transition-easing-default;
 
   svg {
-    width: $font-size-md;
-    height: $font-size-md;
+    width: $font-size-14;
+    height: $font-size-14;
     stroke: currentColor;
   }
 

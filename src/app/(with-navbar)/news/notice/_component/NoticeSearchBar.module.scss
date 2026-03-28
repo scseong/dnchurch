@@ -7,7 +7,7 @@
 }
 
 .total {
-  font-size: $font-size-xs;
+  font-size: $font-size-12;
   color: var(--notice-t3);
   flex-shrink: 0;
 }
@@ -32,7 +32,7 @@
 .search_icon {
   position: absolute;
   left: $spacing-xs;
-  font-size: $font-size-md;
+  font-size: $font-size-14;
   color: var(--notice-t3);
   pointer-events: none;
 }
@@ -43,7 +43,7 @@
   height: 100%;
   border: none;
   background: transparent;
-  font-size: $font-size-sm;
+  font-size: $font-size-13;
   color: var(--notice-t1);
   outline: none;
 
@@ -61,7 +61,7 @@
   right: $spacing-xxs;
   display: flex;
   align-items: center;
-  font-size: $font-size-md;
+  font-size: $font-size-14;
   color: var(--notice-t3);
   cursor: pointer;
 }
@@ -72,7 +72,7 @@
   border: 1px solid var(--notice-line-s);
   border-radius: 0.6rem;
   background: var(--notice-bg-sub);
-  font-size: $font-size-sm;
+  font-size: $font-size-13;
   color: var(--notice-t2);
   cursor: pointer;
   outline: none;
@@ -84,7 +84,7 @@
   border-radius: 0.6rem;
   background: var(--notice-bg-sub);
   border: 1px solid var(--notice-line-s);
-  font-size: $font-size-sm;
+  font-size: $font-size-13;
   color: var(--notice-t2);
   white-space: nowrap;
   cursor: pointer;

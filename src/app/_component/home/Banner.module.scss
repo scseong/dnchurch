@@ -65,7 +65,7 @@ $btn-gold-hover: #a38458;
   h1 {
     font-family: $font-family-secondary;
     font-weight: 800;
-    line-height: $line-height-heading;
+    line-height: map-get($heading-line-heights, 'h1');
     white-space: pre-line;
     color: $txt-inverse;
   }
@@ -90,14 +90,14 @@ $btn-gold-hover: #a38458;
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      font-size: $font-size-sm;
+      font-size: $font-size-13;
       line-height: $line-height-reset;
       border-radius: $radius-xs;
 
       svg {
         margin-right: $spacing-xs;
-        width: $font-size-lg;
-        height: $font-size-lg;
+        width: $font-size-16;
+        height: $font-size-16;
         transform: translateY(-0.1rem);
       }
     }

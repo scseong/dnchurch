@@ -6,7 +6,7 @@
     padding: $spacing-xs $spacing-sm;
     background-color: $primary;
     color: $white;
-    font-size: $font-size-default;
+    font-size: $font-size-15;
 
     font-weight: $font-weight-medium;
     text-align: center;
@@ -31,7 +31,7 @@
     td {
       padding: $spacing-sm;
       background-color: $bg-secondary;
-      font-size: $font-size-md;
+      font-size: $font-size-14;
     }
 
     td:first-child {

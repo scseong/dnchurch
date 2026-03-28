@@ -26,13 +26,13 @@
 
     h2 {
       margin-bottom: $spacing-sm;
-      font-size: $font-size-h2;
+      font-size: $font-size-34;
       line-height: 1;
       color: $white;
     }
 
     p {
-      font-size: $font-size-md;
+      font-size: $font-size-14;
       color: $white;
     }
   }
@@ -51,7 +51,7 @@
     height: 20rem;
 
     h2 {
-      font-size: $font-size-h2-mobile;
+      font-size: $font-size-26;
     }
   }
 }

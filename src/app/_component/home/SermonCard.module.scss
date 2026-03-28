@@ -75,7 +75,7 @@ $thumb-sub-w: 14rem;
 }
 
 .title {
-  font-size: $font-size-default;
+  font-size: $font-size-15;
   font-weight: $font-weight-medium;
   color: $white;
   @include ellipsis-multi(1);
@@ -89,7 +89,7 @@ $thumb-sub-w: 14rem;
 }
 
 .scripture {
-  font-size: $font-size-xxs;
+  font-size: $font-size-11;
   color: rgba(255, 255, 255, 0.7);
 }
 
@@ -102,12 +102,12 @@ $thumb-sub-w: 14rem;
 }
 
 .date {
-  font-size: $font-size-xxs;
+  font-size: $font-size-11;
   color: rgba(255, 255, 255, 0.5);
 }
 
 .preacher {
-  font-size: $font-size-xxs;
+  font-size: $font-size-11;
   color: rgba(255, 255, 255, 0.5);
 }
 
@@ -206,7 +206,7 @@ $thumb-sub-w: 14rem;
   }
 
   .title {
-    font-size: $font-size-sm;
+    font-size: $font-size-13;
   }
 
   // PC: 세로 카드로 복원
@@ -229,7 +229,7 @@ $thumb-sub-w: 14rem;
     }
 
     .title {
-      font-size: $font-size-default;
+      font-size: $font-size-15;
     }
   }
 }

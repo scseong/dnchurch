@@ -17,7 +17,7 @@
 }
 
 .total {
-  font-size: $font-size-xs;
+  font-size: $font-size-12;
   color: $txt-tertiary;
   white-space: nowrap;
   flex-shrink: 0;
@@ -31,7 +31,7 @@
   height: 2.2rem;
   border-radius: $radius-circle;
   background: $bg-secondary;
-  font-size: $font-size-xs;
+  font-size: $font-size-12;
   color: $txt-secondary;
   border: 1px solid $border-primary;
 }
@@ -39,7 +39,7 @@
 .tag_remove {
   display: flex;
   align-items: center;
-  font-size: $font-size-sm;
+  font-size: $font-size-13;
   color: $txt-tertiary;
   cursor: pointer;
 
@@ -68,7 +68,7 @@
   border: 1px solid $border-primary;
   border-radius: 0.6rem;
   background: $bg-secondary;
-  font-size: $font-size-xs;
+  font-size: $font-size-12;
   color: $txt-secondary;
   cursor: pointer;
   outline: none;
@@ -93,7 +93,7 @@
   border: 1px solid $border-primary;
   border-radius: 0.6rem;
   background: $bg-secondary;
-  font-size: $font-size-xs;
+  font-size: $font-size-12;
   color: $txt-secondary;
   white-space: nowrap;
   cursor: pointer;
@@ -127,7 +127,7 @@
 .search_icon {
   position: absolute;
   left: $spacing-xs;
-  font-size: $font-size-md;
+  font-size: $font-size-14;
   color: $txt-tertiary;
   pointer-events: none;
 }
@@ -138,13 +138,13 @@
   height: 100%;
   border: none;
   background: transparent;
-  font-size: $font-size-xs;
+  font-size: $font-size-12;
   color: $txt-primary;
   outline: none;
 
   &::placeholder {
     color: $txt-tertiary;
-    font-size: $font-size-xs;
+    font-size: $font-size-12;
   }
 
   @include respond($breakpoint-tablet-sm) {
@@ -157,7 +157,7 @@
   right: $spacing-xxs;
   display: flex;
   align-items: center;
-  font-size: $font-size-md;
+  font-size: $font-size-14;
   color: $txt-tertiary;
   cursor: pointer;
 

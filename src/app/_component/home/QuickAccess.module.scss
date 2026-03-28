@@ -83,7 +83,7 @@ $icon_box_radius: 0.8rem;
 
 .label {
   font-family: $font-family-secondary;
-  font-size: $font-size-md;
+  font-size: $font-size-14;
   font-weight: $font-weight-semibold;
   color: $txt-primary;
   line-height: $line-height-reset;
@@ -91,13 +91,13 @@ $icon_box_radius: 0.8rem;
 
 .desc {
   @include text-caption;
-  font-size: $font-size-xs;
+  font-size: $font-size-12;
   line-height: 1.4;
 }
 
 .arrow {
   flex-shrink: 0;
-  font-size: $font-size-md;
+  font-size: $font-size-14;
   color: $navy;
   opacity: 0.4;
   transition:

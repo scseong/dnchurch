@@ -69,7 +69,7 @@ $divider-height: 0.2rem;
 }
 
 .year_label {
-  font-size: $font-size-xxs;
+  font-size: $font-size-11;
   font-weight: $font-weight-regular;
   color: rgba($white, 0.5);
   letter-spacing: 0.1rem;
@@ -120,7 +120,7 @@ $divider-height: 0.2rem;
 
 .desc {
   @include text-sub();
-  font-size: $font-size-md;
+  font-size: $font-size-14;
   line-height: $line-height-wide;
 }
 
@@ -145,18 +145,18 @@ $divider-height: 0.2rem;
   cursor: pointer;
   text-align: left;
   font-family: $font-family-base;
-  font-size: $font-size-md;
+  font-size: $font-size-14;
   font-weight: $font-weight-medium;
   color: $txt-primary;
   line-height: $line-height-base;
 
   @include respond-up($breakpoint-tablet) {
-    font-size: $font-size-default;
+    font-size: $font-size-15;
   }
 }
 
 .faq_toggle {
-  font-size: $font-size-xl;
+  font-size: $font-size-18;
   color: $gold;
   line-height: $line-height-reset;
   flex-shrink: 0;
@@ -184,7 +184,7 @@ $divider-height: 0.2rem;
 .faq_answer_text {
   margin: 0;
   padding-bottom: $spacing-md;
-  font-size: $font-size-md;
+  font-size: $font-size-14;
   color: $txt-secondary;
   line-height: $line-height-wide;
 }
@@ -193,7 +193,7 @@ $divider-height: 0.2rem;
   display: inline-block;
   margin-bottom: $spacing-md;
   padding-bottom: $spacing-nano;
-  font-size: $font-size-sm;
+  font-size: $font-size-13;
   font-weight: $font-weight-semibold;
   color: $gold;
   text-decoration: none;
@@ -214,7 +214,7 @@ $divider-height: 0.2rem;
   align-items: center;
   gap: $spacing-xs;
   width: fit-content;
-  font-size: $font-size-md;
+  font-size: $font-size-14;
   font-weight: $font-weight-semibold;
   color: $gold;
   text-decoration: none;

@@ -9,10 +9,10 @@
 
   h1 {
     margin-bottom: $spacing-xxs;
-    font-size: $font-size-h2-mobile;
+    font-size: $font-size-26;
 
     @include respond-up($breakpoint-tablet-sm) {
-      font-size: $font-size-h2;
+      font-size: $font-size-34;
     }
 
     span {
@@ -45,7 +45,7 @@
     padding: 0 $spacing-xs;
     display: inline-block;
     background-color: $white;
-    font-size: $font-size-md;
+    font-size: $font-size-14;
     color: $txt-tertiary;
   }
 }
@@ -70,7 +70,7 @@
   align-items: center;
 
   a {
-    font-size: $font-size-md;
+    font-size: $font-size-14;
     color: $txt-tertiary;
     text-decoration: underline;
     text-decoration-color: $txt-tertiary;
@@ -88,7 +88,7 @@
   .divide {
     margin: 0 $spacing-lg;
     width: 1px;
-    height: $font-size-sm;
+    height: $font-size-13;
     background-color: $border-primary;
   }
 }

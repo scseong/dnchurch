@@ -16,7 +16,7 @@
 
   p {
     margin-bottom: $spacing-lg;
-    font-size: $font-size-sm;
+    font-size: $font-size-13;
   }
 
   &.dragging {
@@ -35,7 +35,7 @@
     display: inline-block;
     border: 0.1rem solid $primary;
     border-radius: $radius-m;
-    font-size: $font-size-xs;
+    font-size: $font-size-12;
     font-weight: $font-weight-semibold;
     color: $primary;
     cursor: pointer;

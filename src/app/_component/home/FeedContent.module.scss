@@ -22,7 +22,7 @@ $radius-list-lg: 1.6rem;
   padding: $spacing-sm 0;
   border-radius: $radius-s;
   border: none;
-  font-size: $font-size-default;
+  font-size: $font-size-15;
   font-weight: $font-weight-semibold;
   font-family: $font-family-base;
   cursor: pointer;
@@ -172,14 +172,14 @@ $radius-list-lg: 1.6rem;
 
 .item_title {
   color: $txt-primary;
-  font-size: $font-size-default;
+  font-size: $font-size-15;
   font-weight: $font-weight-medium;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 
   @include respond-up($breakpoint-tablet) {
-    font-size: $font-size-lg;
+    font-size: $font-size-16;
   }
 }
 
@@ -208,8 +208,8 @@ $radius-list-lg: 1.6rem;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: $font-size-sm;
-  height: $font-size-sm;
+  width: $font-size-13;
+  height: $font-size-13;
 }
 
 // ─── More Button (Mobile Only) ──────────────────────
@@ -221,7 +221,7 @@ $radius-list-lg: 1.6rem;
   border: 1px solid $border-primary;
   background: transparent;
   color: $txt-secondary;
-  font-size: $font-size-sm;
+  font-size: $font-size-13;
   font-weight: $font-weight-semibold;
   margin-top: $spacing-sm;
   text-align: center;
