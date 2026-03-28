@@ -15,7 +15,7 @@ $icon_box_radius: 0.8rem;
   display: grid;
   grid-template-columns: 1fr;
 
-  @include respond-up($breakpoint-lg) {
+  @include respond-up($breakpoint-tablet) {
     grid-template-columns: repeat(3, 1fr);
   }
 }
@@ -32,7 +32,7 @@ $icon_box_radius: 0.8rem;
     border-bottom: none;
   }
 
-  @include respond-up($breakpoint-lg) {
+  @include respond-up($breakpoint-tablet) {
     border-bottom: none;
     border-right: $spacing-min solid $border-primary;
 
@@ -63,7 +63,7 @@ $icon_box_radius: 0.8rem;
   font-size: calc($icon_box_mobile_size / 1.6);
   color: $gold;
 
-  @include respond-up($breakpoint-lg) {
+  @include respond-up($breakpoint-tablet) {
     width: $icon_box_pc_size;
     height: $icon_box_pc_size;
     font-size: calc($icon_box_pc_size / 1.6);
@@ -104,7 +104,7 @@ $icon_box_radius: 0.8rem;
     opacity 0.2s ease,
     transform 0.2s ease;
 
-  @include respond-up($breakpoint-lg) {
+  @include respond-up($breakpoint-tablet) {
     opacity: 0;
     transform: translateX(-$spacing-xs);
   }

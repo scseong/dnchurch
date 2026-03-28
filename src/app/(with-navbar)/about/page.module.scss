@@ -64,7 +64,7 @@
     line-height: 2;
   }
 
-  @include respond($breakpoint-md) {
+  @include respond($breakpoint-tablet-sm) {
     p {
       margin-top: 1.6rem;
       font-size: 1.2rem;
@@ -85,7 +85,7 @@
     align-items: center;
     gap: clamp(1rem, 2vw, 1.5rem);
 
-    @include respond($breakpoint-md) {
+    @include respond($breakpoint-tablet-sm) {
       flex-direction: column;
     }
 
@@ -93,7 +93,7 @@
       max-width: 50%;
       height: auto;
 
-      @include respond($breakpoint-md) {
+      @include respond($breakpoint-tablet-sm) {
         max-width: 75%;
       }
 
@@ -108,11 +108,11 @@
       h4 {
         font-size: 2.2rem;
 
-        @include respond($breakpoint-xl) {
+        @include respond($breakpoint-pc-sm) {
           font-size: 1.8rem;
         }
 
-        @include respond($breakpoint-md) {
+        @include respond($breakpoint-tablet-sm) {
           text-align: center;
         }
       }
@@ -120,7 +120,7 @@
       address {
         margin-top: 1rem;
 
-        @include respond($breakpoint-xl) {
+        @include respond($breakpoint-pc-sm) {
           margin-top: 0.6rem;
         }
 
@@ -131,7 +131,7 @@
           line-height: 1.8;
           font-style: normal;
 
-          @include respond($breakpoint-xl) {
+          @include respond($breakpoint-pc-sm) {
             margin-right: 0.6rem;
             font-size: 1.2rem;
           }
@@ -140,7 +140,7 @@
             margin-right: 0.6rem;
             font-size: 2rem;
 
-            @include respond($breakpoint-md) {
+            @include respond($breakpoint-tablet-sm) {
               margin-right: 0.4rem;
               font-size: 1.6rem;
             }
@@ -164,12 +164,12 @@
     position: relative;
     font-size: 3rem;
 
-    @include respond($breakpoint-xl) {
+    @include respond($breakpoint-pc-sm) {
       font-size: 2.2rem;
     }
   }
 
-  @include respond($breakpoint-md) {
+  @include respond($breakpoint-tablet-sm) {
     padding: 3rem 2rem;
 
     h3 {
@@ -193,7 +193,7 @@
 .directions {
   display: flex;
 
-  @include respond($breakpoint-lg) {
+  @include respond($breakpoint-tablet) {
     flex-direction: column;
   }
 
@@ -201,7 +201,7 @@
     display: inline-flex;
   }
 
-  @include respond($breakpoint-lg) {
+  @include respond($breakpoint-tablet) {
     & > div {
       width: 100% !important;
     }
@@ -214,13 +214,13 @@
     gap: 2rem;
     width: 40%;
 
-    @include respond($breakpoint-lg) {
+    @include respond($breakpoint-tablet) {
       padding: 2rem 0;
       flex-direction: row;
       justify-content: space-between;
     }
 
-    @include respond($breakpoint-md) {
+    @include respond($breakpoint-tablet-sm) {
       flex-direction: column;
     }
 
@@ -254,7 +254,7 @@
           margin-bottom: 0.4rem;
           font-size: 1.6rem;
 
-          @include respond($breakpoint-lg) {
+          @include respond($breakpoint-tablet) {
             font-size: 1.3rem;
           }
         }
@@ -264,7 +264,7 @@
           font-size: 1.4rem;
           line-height: 1.6;
 
-          @include respond($breakpoint-lg) {
+          @include respond($breakpoint-tablet) {
             font-size: 1.2rem;
           }
 

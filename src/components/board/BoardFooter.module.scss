@@ -11,7 +11,7 @@
     font-size: $font-size-sm;
     font-weight: $font-weight-medium;
 
-    @include respond-up($breakpoint-md) {
+    @include respond-up($breakpoint-tablet-sm) {
       flex-basis: auto;
       min-width: 10rem;
     }

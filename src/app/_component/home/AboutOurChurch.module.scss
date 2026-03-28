@@ -7,7 +7,7 @@
   flex-direction: column;
   gap: $spacing-lg;
 
-  @include respond-up($breakpoint-lg) {
+  @include respond-up($breakpoint-tablet) {
     flex-direction: row;
   }
 }
@@ -28,7 +28,7 @@
     aspect-ratio: 5 / 3;
     overflow: hidden;
 
-    @include respond-up($breakpoint-lg) {
+    @include respond-up($breakpoint-tablet) {
       border: none;
       border-radius: 50%;
       aspect-ratio: 1 / 1;

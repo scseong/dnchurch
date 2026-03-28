@@ -1,7 +1,7 @@
 .container {
   padding: $spacing-0 $spacing-lg;
 
-  @include respond($breakpoint-lg) {
+  @include respond($breakpoint-tablet) {
     padding: $spacing-0;
   }
 

@@ -47,7 +47,7 @@
     z-index: 0;
   }
 
-  @include respond($breakpoint-md) {
+  @include respond($breakpoint-tablet-sm) {
     height: 20rem;
 
     h2 {

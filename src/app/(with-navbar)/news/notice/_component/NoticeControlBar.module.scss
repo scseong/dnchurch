@@ -147,7 +147,7 @@
     font-size: $font-size-xs;
   }
 
-  @include respond($breakpoint-md) {
+  @include respond($breakpoint-tablet-sm) {
     width: 14rem;
   }
 }
@@ -174,7 +174,7 @@
 
 // ── 반응형 ──
 .pc_only {
-  @include respond($breakpoint-md) {
+  @include respond($breakpoint-tablet-sm) {
     display: none;
   }
 }
@@ -182,7 +182,7 @@
 .mobile_only {
   display: none;
 
-  @include respond($breakpoint-md) {
+  @include respond($breakpoint-tablet-sm) {
     display: inline-flex;
   }
 }

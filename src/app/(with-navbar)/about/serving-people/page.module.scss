@@ -1,15 +1,15 @@
 .wrap {
   padding: 0 8rem;
 
-  @include respond($breakpoint-xl) {
+  @include respond($breakpoint-pc-sm) {
     padding: 0 4rem;
   }
 
-  @include respond($breakpoint-lg) {
+  @include respond($breakpoint-tablet) {
     padding: 0 2rem;
   }
 
-  @include respond($breakpoint-md) {
+  @include respond($breakpoint-tablet-sm) {
     padding: 0;
   }
 }
@@ -17,7 +17,7 @@
 .title {
   margin-bottom: 3rem;
 
-  @include respond($breakpoint-md) {
+  @include respond($breakpoint-tablet-sm) {
     margin-bottom: 1.4rem;
   }
 }
@@ -28,7 +28,7 @@ $image_max_width: 20rem;
   display: flex;
   gap: 3rem;
 
-  @include respond($breakpoint-lg) {
+  @include respond($breakpoint-tablet) {
     gap: 2rem;
   }
 
@@ -58,7 +58,7 @@ $image_max_width: 20rem;
         color: $txt-secondary;
       }
 
-      @include respond($breakpoint-md) {
+      @include respond($breakpoint-tablet-sm) {
         margin-bottom: 1.2rem;
       }
     }
@@ -71,7 +71,7 @@ $image_max_width: 20rem;
   height: 1px;
   border: 1px solid #eee;
 
-  @include respond($breakpoint-md) {
+  @include respond($breakpoint-tablet-sm) {
     margin: 3rem 0;
   }
 }

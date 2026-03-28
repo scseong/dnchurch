@@ -11,7 +11,7 @@
   gap: $gap-items;
   margin-bottom: $gap-group;
 
-  @include respond-up($breakpoint-sm) {
+  @include respond-up($breakpoint-mobile-lg) {
     flex-direction: row;
     justify-content: space-between;
     align-items: flex-end;
@@ -60,7 +60,7 @@
   flex-direction: column;
   gap: $gap-items;
 
-  @include respond-up($breakpoint-lg) {
+  @include respond-up($breakpoint-tablet) {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     gap: $gap-items;
@@ -76,7 +76,7 @@
   border-radius: $radius-s;
   overflow: hidden;
 
-  @include respond-up($breakpoint-lg) {
+  @include respond-up($breakpoint-tablet) {
     background: none;
     border: none;
     border-radius: 0;

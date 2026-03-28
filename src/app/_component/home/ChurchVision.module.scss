@@ -27,7 +27,7 @@
   flex-direction: column;
   align-items: center;
 
-  @include respond-up($breakpoint-lg) {
+  @include respond-up($breakpoint-tablet) {
     flex-direction: row;
     gap: $spacing-md;
   }
@@ -44,7 +44,7 @@
       font-size: $font-size-h5-mobile;
     }
 
-    @include respond-up($breakpoint-sm) {
+    @include respond-up($breakpoint-mobile-lg) {
       padding: $spacing-xl $spacing-xs;
       max-width: 75%;
 

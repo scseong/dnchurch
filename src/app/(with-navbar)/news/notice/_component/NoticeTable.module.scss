@@ -13,7 +13,7 @@
   width: 100%;
   border-collapse: collapse;
 
-  @include respond($breakpoint-md) {
+  @include respond($breakpoint-tablet-sm) {
     display: none;
   }
 }
@@ -174,7 +174,7 @@
 .mobile_list {
   display: none;
 
-  @include respond($breakpoint-md) {
+  @include respond($breakpoint-tablet-sm) {
     display: flex;
     flex-direction: column;
   }

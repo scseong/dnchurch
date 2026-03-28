@@ -2,7 +2,7 @@
   display: flex;
   gap: $spacing-lg;
 
-  @include respond($breakpoint-lg) {
+  @include respond($breakpoint-tablet) {
     flex-direction: column;
   }
 }

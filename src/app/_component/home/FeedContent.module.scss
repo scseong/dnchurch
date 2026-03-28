@@ -11,7 +11,7 @@ $radius-list-lg: 1.6rem;
   gap: $spacing-xxs;
   margin-bottom: $spacing-md;
 
-  @include respond-up($breakpoint-lg) {
+  @include respond-up($breakpoint-tablet) {
     display: none;
   }
 }
@@ -46,7 +46,7 @@ $radius-list-lg: 1.6rem;
   min-width: 0;
   overflow: hidden;
 
-  @include respond-up($breakpoint-lg) {
+  @include respond-up($breakpoint-tablet) {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: $spacing-xxl;
@@ -61,7 +61,7 @@ $radius-list-lg: 1.6rem;
 .column_hidden {
   display: none;
 
-  @include respond-up($breakpoint-lg) {
+  @include respond-up($breakpoint-tablet) {
     display: block;
   }
 }
@@ -70,7 +70,7 @@ $radius-list-lg: 1.6rem;
 .column_header {
   display: none;
 
-  @include respond-up($breakpoint-lg) {
+  @include respond-up($breakpoint-tablet) {
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -127,7 +127,7 @@ $radius-list-lg: 1.6rem;
   border: 1px solid $border-primary;
   overflow: hidden;
 
-  @include respond-up($breakpoint-lg) {
+  @include respond-up($breakpoint-tablet) {
     border-radius: $radius-list-lg;
   }
 }
@@ -148,7 +148,7 @@ $radius-list-lg: 1.6rem;
     background: $cream;
   }
 
-  @include respond-up($breakpoint-lg) {
+  @include respond-up($breakpoint-tablet) {
     padding: $padding-card;
   }
 }
@@ -178,7 +178,7 @@ $radius-list-lg: 1.6rem;
   overflow: hidden;
   text-overflow: ellipsis;
 
-  @include respond-up($breakpoint-lg) {
+  @include respond-up($breakpoint-tablet) {
     font-size: $font-size-lg;
   }
 }
@@ -234,7 +234,7 @@ $radius-list-lg: 1.6rem;
     color: $txt-primary;
   }
 
-  @include respond-up($breakpoint-lg) {
+  @include respond-up($breakpoint-tablet) {
     display: none;
   }
 }

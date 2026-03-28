@@ -51,7 +51,7 @@
     color: var(--notice-t3);
   }
 
-  @include respond($breakpoint-md) {
+  @include respond($breakpoint-tablet-sm) {
     width: 16rem;
   }
 }
@@ -91,7 +91,7 @@
 }
 
 .pc_only {
-  @include respond($breakpoint-md) {
+  @include respond($breakpoint-tablet-sm) {
     display: none;
   }
 }
@@ -99,7 +99,7 @@
 .mobile_only {
   display: none;
 
-  @include respond($breakpoint-md) {
+  @include respond($breakpoint-tablet-sm) {
     display: block;
   }
 }

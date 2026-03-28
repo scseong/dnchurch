@@ -7,7 +7,7 @@
   background-color: $bg-invert;
   color: white;
 
-  @include respond($breakpoint-md) {
+  @include respond($breakpoint-tablet-sm) {
     flex-direction: column;
     align-items: center;
     text-align: center;

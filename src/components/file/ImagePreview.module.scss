@@ -16,7 +16,7 @@ $item-gap: 0.8rem;
   border: 0.1rem solid $border-inverse;
   border-radius: $radius-m;
 
-  @include respond-up($breakpoint-lg) {
+  @include respond-up($breakpoint-tablet) {
     flex-basis: calc(50% - ($item-gap / 2));
   }
 }

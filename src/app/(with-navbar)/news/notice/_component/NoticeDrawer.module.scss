@@ -44,7 +44,7 @@
   z-index: 10000;
   animation: nb-slide-up 0.28s cubic-bezier(0.32, 0.72, 0, 1) both;
 
-  @include respond($breakpoint-md) {
+  @include respond($breakpoint-tablet-sm) {
     top: auto;
     left: 0;
     right: 0;
@@ -61,7 +61,7 @@
 .handle {
   display: none;
 
-  @include respond($breakpoint-md) {
+  @include respond($breakpoint-tablet-sm) {
     display: block;
     margin: $spacing-xs auto $spacing-xxs;
     width: 3.6rem;
@@ -78,7 +78,7 @@
   border-bottom: 1px solid $gray-200;
   flex-shrink: 0;
 
-  @include respond($breakpoint-md) {
+  @include respond($breakpoint-tablet-sm) {
     padding: $spacing-sm $spacing-md $spacing-sm;
   }
 }
@@ -152,7 +152,7 @@
     color: $status-negative;
   }
 
-  @include respond($breakpoint-md) {
+  @include respond($breakpoint-tablet-sm) {
     font-size: $font-size-default;
   }
 }
@@ -177,7 +177,7 @@
   overflow-y: auto;
   padding: $spacing-xl;
 
-  @include respond($breakpoint-md) {
+  @include respond($breakpoint-tablet-sm) {
     padding: $spacing-md;
   }
 }
@@ -201,7 +201,7 @@
   color: $primary-active;
   flex-shrink: 0;
 
-  @include respond($breakpoint-md) {
+  @include respond($breakpoint-tablet-sm) {
     padding: $spacing-xs $spacing-md;
   }
 }

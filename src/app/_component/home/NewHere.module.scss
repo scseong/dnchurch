@@ -11,7 +11,7 @@ $divider-height: 0.2rem;
 
 // ─── Inner Grid ─────────────────────────────────────
 .inner {
-  @include respond-up($breakpoint-lg) {
+  @include respond-up($breakpoint-tablet) {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: $spacing-5xl;
@@ -22,7 +22,7 @@ $divider-height: 0.2rem;
 .image_area {
   display: none;
 
-  @include respond-up($breakpoint-lg) {
+  @include respond-up($breakpoint-tablet) {
     display: block;
     position: relative;
     align-self: start;
@@ -80,7 +80,7 @@ $divider-height: 0.2rem;
   display: flex;
   flex-direction: column;
 
-  @include respond-up($breakpoint-lg) {
+  @include respond-up($breakpoint-tablet) {
     align-self: center;
   }
 }
@@ -150,7 +150,7 @@ $divider-height: 0.2rem;
   color: $txt-primary;
   line-height: $line-height-base;
 
-  @include respond-up($breakpoint-lg) {
+  @include respond-up($breakpoint-tablet) {
     font-size: $font-size-default;
   }
 }
@@ -231,7 +231,7 @@ $divider-height: 0.2rem;
 }
 
 // ─── 반응형 보정 ────────────────────────────────────
-@include respond($breakpoint-xs) {
+@include respond($breakpoint-mobile) {
   .faq_list {
     margin-bottom: $spacing-lg;
   }

@@ -16,7 +16,7 @@ $btn-gold-hover: #a38458;
   justify-content: center;
   align-items: center;
 
-  @include respond-up($breakpoint-md) {
+  @include respond-up($breakpoint-tablet-sm) {
     padding-top: $header-height;
     padding-bottom: 0;
   }
@@ -46,13 +46,13 @@ $btn-gold-hover: #a38458;
 }
 
 .content {
-  padding: 0 $padding-section-x;
+  padding: 0 $container-padding;
   margin: 0 auto;
   position: relative;
   display: flex;
   flex-direction: column;
   gap: $gap-items;
-  max-width: $max-width;
+  max-width: $container-max;
   width: 100%;
   z-index: 1;
 
@@ -127,7 +127,7 @@ $btn-gold-hover: #a38458;
       }
     }
 
-    @include respond-up($breakpoint-xs-mid) {
+    @include respond-up($breakpoint-mobile) {
       flex-direction: row;
       align-items: center;
 

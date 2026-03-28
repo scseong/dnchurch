@@ -6,12 +6,12 @@ $svg_mobile_size: 3rem;
   display: flex;
   gap: 5rem;
 
-  @include respond($breakpoint-xl) {
+  @include respond($breakpoint-pc-sm) {
     justify-content: space-between;
     gap: 2rem;
   }
 
-  @include respond($breakpoint-lg) {
+  @include respond($breakpoint-tablet) {
     margin-top: 2rem;
     padding: 0;
     flex-direction: column;
@@ -41,7 +41,7 @@ $svg_mobile_size: 3rem;
         z-index: -1;
       }
 
-      @include respond($breakpoint-lg) {
+      @include respond($breakpoint-tablet) {
         svg {
           font-size: $svg_mobile_size;
         }

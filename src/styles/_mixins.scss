@@ -111,7 +111,7 @@
   letter-spacing: $letter-spacing-heading;
   @if $color { color: $color; }
 
-  @include respond-up($breakpoint-lg) {
+  @include respond-up($breakpoint-tablet) {
     font-size: $font-size-h1;
   }
 }
@@ -124,7 +124,7 @@
   letter-spacing: $letter-spacing-heading;
   @if $color { color: $color; }
 
-  @include respond-up($breakpoint-lg) {
+  @include respond-up($breakpoint-tablet) {
     font-size: $font-size-h2;
   }
 }
@@ -137,7 +137,7 @@
   letter-spacing: $letter-spacing-tight;
   @if $color { color: $color; }
 
-  @include respond-up($breakpoint-lg) {
+  @include respond-up($breakpoint-tablet) {
     font-size: $font-size-h3;
   }
 }
@@ -150,7 +150,7 @@
   letter-spacing: $letter-spacing-tight;
   @if $color { color: $color; }
 
-  @include respond-up($breakpoint-lg) {
+  @include respond-up($breakpoint-tablet) {
     font-size: $font-size-h4;
   }
 }
@@ -162,7 +162,7 @@
   line-height: $line-height-heading;
   @if $color { color: $color; }
 
-  @include respond-up($breakpoint-lg) {
+  @include respond-up($breakpoint-tablet) {
     font-size: $font-size-h5;
   }
 }

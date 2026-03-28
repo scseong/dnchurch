@@ -28,11 +28,16 @@
   --radius-160: 12rem;
   --radius-200: 16rem;
   --radius-240: 20rem;
-
   --radius-999: 9999px;
+
+  // ── Layout ──
+  --container-padding: 1.6rem;
+  --container-min: 37.5rem;
+  --container-max: 76.8rem;
+  --screensize-h-min: 81.2rem;
 }
 
-@include respond-up($breakpoint-md) {
+@include respond-up($breakpoint-tablet-sm) {
   :root {
     --radius-8: 0.8rem;
     --radius-10: 1rem;
@@ -50,6 +55,23 @@
     --radius-160: 16rem;
     --radius-200: 20rem;
     --radius-240: 24rem;
+  }
+}
+
+@include respond-up($breakpoint-tablet) {
+  :root {
+    --container-padding: 3.2rem;
+    --container-min: 76.8rem;
+    --container-max: 120rem;
+    --screensize-h-min: 102.4rem;
+  }
+}
+
+@include respond-up($breakpoint-pc-sm) {
+  :root {
+    --container-padding: 4rem;
+    --container-min: 120rem;
+    --screensize-h-min: 80rem;
   }
 }
 
@@ -165,7 +187,7 @@ header:has(#gnb:hover):not([data-nav-locked]) {
 .hidden-on-mobile {
   display: none;
 
-  @include respond-up($breakpoint-sm) {
+  @include respond-up($breakpoint-mobile-lg) {
     display: inline-block;
   }
 }
@@ -175,6 +197,6 @@ header:has(#gnb:hover):not([data-nav-locked]) {
 }
 
 @include set-heading-fonts($heading-sizes-mobile);
-@include respond-up($breakpoint-lg) {
+@include respond-up($breakpoint-tablet) {
   @include set-heading-fonts($heading-sizes);
 }

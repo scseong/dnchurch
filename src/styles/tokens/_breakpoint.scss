@@ -1,20 +1,48 @@
-$breakpoint-xs: 361px; // small phones
-$breakpoint-xs-mid: 421px; //
-$breakpoint-sm: 481px; // phones
-$breakpoint-md: 601px; // tablets
-$breakpoint-lg: 769px; // small desktops
-$breakpoint-xl: 1025px; // desktops
-$breakpoint-xxl: 1337px; // large desktops
-$breakpoint-xxxl: 1921px; // large screens
+// ══════════════════════════════════════════
+// BREAKPOINTS — Primitive (font-scaling 전용)
+// 각 구간 시작점에서 1rem = 10px 기준
+// ══════════════════════════════════════════
+
+$breakpoint-420: 420px;
+$breakpoint-480: 480px;
+$breakpoint-600: 600px;
+$breakpoint-768: 768px;
+$breakpoint-900: 900px;
+$breakpoint-1024: 1024px;
+$breakpoint-1280: 1280px;
+$breakpoint-1440: 1440px;
+$breakpoint-1920: 1920px;
 
 $responsive-font-vw-map: (
-  $breakpoint-xs-mid: 2.3753vw,
-  $breakpoint-sm: 2.083333vw,
-  $breakpoint-md: 1.666666vw,
-  $breakpoint-lg: 1.302083vw,
-  $breakpoint-xl: 0.9765625vw,
-  $breakpoint-xxl: 0.748502vw,
-  $breakpoint-xxxl: 0.520833vw
+  $breakpoint-420: 2.380952vw,
+  $breakpoint-480: 2.083333vw,
+  $breakpoint-600: 1.666667vw,
+  $breakpoint-768: 1.302083vw,
+  $breakpoint-900: 1.111111vw,
+  $breakpoint-1024: 0.976563vw,
+  $breakpoint-1280: 0.781250vw,
+  $breakpoint-1440: 0.694444vw,
+  $breakpoint-1920: 0.520833vw
 );
 
-$header-breakpoint: $breakpoint-lg;
+// ══════════════════════════════════════════
+// BREAKPOINTS — Semantic (레이아웃 · 컴포넌트용)
+// respond-up() / respond() 에서 사용
+// ══════════════════════════════════════════
+
+// Mobile
+$breakpoint-mobile: $breakpoint-420;
+$breakpoint-mobile-lg: $breakpoint-480;
+
+// Tablet
+$breakpoint-tablet-sm: $breakpoint-600;
+$breakpoint-tablet: $breakpoint-768;
+$breakpoint-tablet-lg: $breakpoint-900;
+
+// PC
+$breakpoint-pc-sm: $breakpoint-1024;
+$breakpoint-pc: $breakpoint-1280;
+$breakpoint-pc-lg: $breakpoint-1440;
+$breakpoint-pc-xl: $breakpoint-1920;
+
+$header-breakpoint: $breakpoint-pc-sm;
