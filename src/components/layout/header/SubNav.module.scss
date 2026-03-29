@@ -3,7 +3,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    gap: 2rem;
+    gap: $spacing-20;
     height: 4rem;
     background-color: $bg-invert;
   }
@@ -17,7 +17,7 @@
     }
 
     a {
-      padding: 0.4rem;
+      padding: $spacing-4;
       display: block;
     }
   }

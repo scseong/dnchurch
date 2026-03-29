@@ -3,7 +3,7 @@ $greeting_text_margin_bottom: 3rem;
 
 .wrap {
   display: flex;
-  gap: 2rem;
+  gap: $spacing-20;
 
   @include respond($breakpoint-pc-sm) {
     flex-direction: column;
