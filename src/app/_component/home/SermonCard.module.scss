@@ -40,8 +40,8 @@ $thumb-sub-w: 14rem;
 // ─── LATEST 뱃지 (썸네일 좌상단) ────────────────────
 .latest_badge {
   position: absolute;
-  top: $spacing-xs;
-  left: $spacing-xs;
+  top: $spacing-8;
+  left: $spacing-8;
   z-index: 1;
   font-size: 0.9rem;
   font-weight: $font-weight-bold;
@@ -63,14 +63,14 @@ $thumb-sub-w: 14rem;
   border-top: 1px solid rgba(255, 255, 255, 0.07);
 
   @include respond-up($breakpoint-mobile-lg) {
-    padding: $spacing-sm $spacing-md;
+    padding: $spacing-12 $spacing-16;
   }
 }
 
 .meta_left {
   display: flex;
   flex-direction: column;
-  gap: $spacing-xxs;
+  gap: $spacing-4;
   min-width: 0;
 }
 
@@ -84,7 +84,7 @@ $thumb-sub-w: 14rem;
 .meta_sub {
   display: flex;
   align-items: center;
-  gap: $spacing-xxs;
+  gap: $spacing-4;
   flex-wrap: wrap;
 }
 
@@ -202,7 +202,7 @@ $thumb-sub-w: 14rem;
     flex: 1;
     border-top: none;
     background: transparent;
-    padding: $spacing-xs $spacing-sm;
+    padding: $spacing-8 $spacing-12;
   }
 
   .title {
@@ -225,7 +225,7 @@ $thumb-sub-w: 14rem;
       flex: none;
       background: $overlay-subtle;
       border-top: 1px solid rgba(255, 255, 255, 0.07);
-      padding: $spacing-sm $spacing-md;
+      padding: $spacing-12 $spacing-16;
     }
 
     .title {

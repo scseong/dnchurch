@@ -8,7 +8,7 @@
   align-items: center;
   max-width: $container-max;
   margin: 0 auto;
-  padding: 0 $spacing-lg;
+  padding: 0 $spacing-20;
   height: 4.6rem;
 }
 
@@ -20,16 +20,16 @@
     content: '|';
     color: $border-primary;
     font-size: $font-size-13;
-    padding: 0 $spacing-xs;
+    padding: 0 $spacing-8;
     user-select: none;
   }
 }
 
 .link {
-  padding: $spacing-xxs;
+  padding: $spacing-4;
   display: inline-flex;
   align-items: center;
-  gap: $spacing-xxs;
+  gap: $spacing-4;
   color: $txt-tertiary;
   font-size: $font-size-13;
   transition: color $transition-duration-normal $transition-easing-default;

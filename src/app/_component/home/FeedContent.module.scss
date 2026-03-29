@@ -8,8 +8,8 @@ $radius-list-lg: 1.6rem;
 // ─── Tab Switcher (Mobile Only) ─────────────────────
 .tab_switcher {
   display: flex;
-  gap: $spacing-xxs;
-  margin-bottom: $spacing-md;
+  gap: $spacing-4;
+  margin-bottom: $spacing-16;
 
   @include respond-up($breakpoint-tablet) {
     display: none;
@@ -19,7 +19,7 @@ $radius-list-lg: 1.6rem;
 .tab_active,
 .tab_inactive {
   flex: 1;
-  padding: $spacing-sm 0;
+  padding: $spacing-12 0;
   border-radius: $radius-s;
   border: none;
   font-size: $font-size-15;
@@ -49,7 +49,7 @@ $radius-list-lg: 1.6rem;
   @include respond-up($breakpoint-tablet) {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: $spacing-xxl;
+    gap: $spacing-32;
   }
 }
 
@@ -74,7 +74,7 @@ $radius-list-lg: 1.6rem;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    margin-bottom: $spacing-sm;
+    margin-bottom: $spacing-12;
   }
 }
 
@@ -82,14 +82,14 @@ $radius-list-lg: 1.6rem;
   @include text-card-title;
   display: flex;
   align-items: center;
-  gap: $spacing-xs;
+  gap: $spacing-8;
 }
 
 .color_bar_news,
 .color_bar_sharing {
-  width: $spacing-xxs;
+  width: $spacing-4;
   height: 2.2rem;
-  border-radius: $spacing-nano;
+  border-radius: $spacing-2;
   display: inline-block;
   flex-shrink: 0;
   transform: translateY(-0.1rem);
@@ -108,8 +108,8 @@ $radius-list-lg: 1.6rem;
   font-weight: $font-weight-semibold;
   text-decoration: none;
   color: $color-feed-accent;
-  padding-bottom: $spacing-nano;
-  border-bottom: $spacing-min solid transparent;
+  padding-bottom: $spacing-2;
+  border-bottom: $spacing-1 solid transparent;
   transition:
     border-color $transition-duration-normal $transition-easing-default,
     opacity $transition-duration-normal $transition-easing-default;
@@ -157,7 +157,7 @@ $radius-list-lg: 1.6rem;
 .item_body {
   display: flex;
   flex-direction: column;
-  gap: $spacing-xxs;
+  gap: $spacing-4;
   min-width: 0;
 }
 
@@ -165,7 +165,7 @@ $radius-list-lg: 1.6rem;
 .item_title_row {
   display: flex;
   align-items: center;
-  gap: $spacing-xxs;
+  gap: $spacing-4;
   min-width: 0;
   overflow: hidden;
 }
@@ -186,7 +186,7 @@ $radius-list-lg: 1.6rem;
 .item_meta {
   display: flex;
   align-items: center;
-  gap: $spacing-xs;
+  gap: $spacing-8;
 }
 
 .item_author {
@@ -216,14 +216,14 @@ $radius-list-lg: 1.6rem;
 .more_button {
   display: block;
   width: 100%;
-  padding: $spacing-xs 0;
+  padding: $spacing-8 0;
   border-radius: $radius-s;
   border: 1px solid $border-primary;
   background: transparent;
   color: $txt-secondary;
   font-size: $font-size-13;
   font-weight: $font-weight-semibold;
-  margin-top: $spacing-sm;
+  margin-top: $spacing-12;
   text-align: center;
   text-decoration: none;
   transition: background $transition-duration-normal $transition-easing-default,

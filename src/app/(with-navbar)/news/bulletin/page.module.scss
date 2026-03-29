@@ -1,6 +1,6 @@
 .wrap {
   display: flex;
-  gap: $spacing-lg;
+  gap: $spacing-20;
 
   @include respond($breakpoint-tablet) {
     flex-direction: column;

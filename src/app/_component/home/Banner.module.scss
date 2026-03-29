@@ -3,9 +3,8 @@ $btn-gold-hover: #a38458;
 
 .banner {
   margin-top: calc(-1 * $header-height);
-  padding-top: calc($header-height + $spacing-7xl);
-  padding-bottom: $spacing-xxl;
-
+  padding-top: calc($header-height + $spacing-96);
+  padding-bottom: $spacing-32;
   position: relative;
   width: 100%;
   min-height: calc(48rem + $header-height);
@@ -51,7 +50,7 @@ $btn-gold-hover: #a38458;
   position: relative;
   display: flex;
   flex-direction: column;
-  gap: $gap-items;
+  gap: $content-gap-s;
   max-width: $container-max;
   width: 100%;
   z-index: 1;
@@ -77,11 +76,11 @@ $btn-gold-hover: #a38458;
   }
 
   .cta {
-    margin-top: $spacing-xs;
+    margin-top: $spacing-8;
     display: flex;
     flex-direction: column;
     align-items: stretch;
-    gap: $gap-items;
+    gap: $content-gap-s;
 
     .btn_primary,
     .btn_secondary {
@@ -95,7 +94,7 @@ $btn-gold-hover: #a38458;
       border-radius: $radius-xs;
 
       svg {
-        margin-right: $spacing-xs;
+        margin-right: $spacing-8;
         width: $font-size-16;
         height: $font-size-16;
         transform: translateY(-0.1rem);

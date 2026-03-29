@@ -1,5 +1,5 @@
 .yearList {
-  margin-bottom: $spacing-sm;
+  margin-bottom: $spacing-12;
   display: flex;
   flex-wrap: wrap;
 
@@ -9,7 +9,7 @@
     background-color: $bg-secondary;
 
     a {
-      padding: $spacing-xs $spacing-sm;
+      padding: $spacing-8 $spacing-12;
       display: block;
       border: 0.1rem solid $border-primary;
       font-size: $font-size-14;

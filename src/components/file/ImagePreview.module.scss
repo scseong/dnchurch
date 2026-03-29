@@ -1,7 +1,7 @@
 $item-gap: 0.8rem;
 
 .container {
-  margin-bottom: $spacing-md;
+  margin-bottom: $spacing-16;
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
@@ -9,10 +9,10 @@ $item-gap: 0.8rem;
 }
 
 .preview {
-  padding: $spacing-xs $spacing-sm;
+  padding: $spacing-8 $spacing-12;
   display: flex;
   flex-basis: 100%;
-  gap: $spacing-sm;
+  gap: $spacing-12;
   border: 0.1rem solid $border-inverse;
   border-radius: $radius-m;
 
@@ -44,7 +44,7 @@ $item-gap: 0.8rem;
   word-break: break-all;
 
   h5 {
-    margin-bottom: $spacing-xxs;
+    margin-bottom: $spacing-4;
     font-size: $font-size-13;
     color: $primary;
     @include ellipsis-multi(2);
@@ -53,7 +53,7 @@ $item-gap: 0.8rem;
   .meta_data {
     display: flex;
     flex-direction: column;
-    gap: $spacing-nano;
+    gap: $spacing-2;
 
     span {
       display: block;
@@ -65,7 +65,7 @@ $item-gap: 0.8rem;
 
 .badge_existing,
 .badge_new {
-  padding: $spacing-nano $spacing-xs;
+  padding: $spacing-2 $spacing-8;
   display: inline-block !important;
   width: fit-content;
   border-radius: $radius-xs;

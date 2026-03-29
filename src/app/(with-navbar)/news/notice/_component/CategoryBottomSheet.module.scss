@@ -32,7 +32,7 @@
 }
 
 .handle {
-  margin: $spacing-xs auto $spacing-xxs;
+  margin: $spacing-8 auto $spacing-4;
   width: 3.6rem;
   height: 0.4rem;
   border-radius: $radius-circle;
@@ -40,7 +40,7 @@
 }
 
 .option_list {
-  padding: $spacing-xxs 0 $spacing-sm;
+  padding: $spacing-4 0 $spacing-12;
   max-height: 70dvh;
   overflow-y: auto;
 }

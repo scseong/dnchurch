@@ -9,15 +9,15 @@
 
 .chip_list {
   display: flex;
-  gap: $spacing-xxs;
+  gap: $spacing-4;
   white-space: nowrap;
 }
 
 .chip {
-  padding: 0 $spacing-sm;
+  padding: 0 $spacing-12;
   display: inline-flex;
   align-items: center;
-  gap: $spacing-xxs;
+  gap: $spacing-4;
   height: 3rem;
   border: 1px solid $border-primary;
   border-radius: $radius-circle;

@@ -61,7 +61,7 @@ $nav-center: 65%;
 
 .list {
   display: flex;
-  gap: $spacing-md;
+  gap: $spacing-16;
   align-items: stretch;
 }
 
@@ -74,7 +74,7 @@ $nav-center: 65%;
 .link {
   display: flex;
   align-items: center;
-  padding: $spacing-sm $spacing-sm calc($spacing-sm - 0.2rem) $spacing-sm;
+  padding: $spacing-12 $spacing-12 calc($spacing-12 - 0.2rem) $spacing-12;
   border-bottom: 0.2rem solid transparent;
   font-size: $font-size-14;
   font-weight: $font-weight-medium;
@@ -96,7 +96,7 @@ $nav-center: 65%;
   bottom: 0;
   width: max-content;
   min-width: 100%;
-  padding-top: $spacing-md;
+  padding-top: $spacing-16;
   transform: translate(-50%, calc(100% - 1rem));
   text-align: center;
   list-style: none;
@@ -110,7 +110,7 @@ $nav-center: 65%;
 
 .depth2_link {
   display: block;
-  padding: $spacing-xs 0;
+  padding: $spacing-8 0;
   font-size: $font-size-14;
   color: $txt-secondary;
   white-space: nowrap;

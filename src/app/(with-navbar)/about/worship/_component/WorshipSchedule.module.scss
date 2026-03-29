@@ -3,7 +3,7 @@
   border-collapse: collapse;
 
   th {
-    padding: $spacing-xs $spacing-sm;
+    padding: $spacing-8 $spacing-12;
     background-color: $primary;
     color: $white;
     font-size: $font-size-15;
@@ -29,7 +29,7 @@
     word-break: keep-all;
 
     td {
-      padding: $spacing-sm;
+      padding: $spacing-12;
       background-color: $bg-secondary;
       font-size: $font-size-14;
     }

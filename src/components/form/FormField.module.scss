@@ -1,8 +1,8 @@
 .input_group {
-  margin-bottom: $spacing-sm;
+  margin-bottom: $spacing-12;
 
   .label {
-    margin-bottom: $spacing-xs;
+    margin-bottom: $spacing-8;
     display: block;
     position: relative;
   }
@@ -26,7 +26,7 @@
   }
 
   input {
-    padding: $spacing-sm;
+    padding: $spacing-12;
     display: block;
     width: 100%;
     border: 1px solid $border-primary;

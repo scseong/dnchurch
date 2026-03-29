@@ -1,9 +1,9 @@
 .pagination {
-  padding: $spacing-md 0;
+  padding: $spacing-16 0;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: $spacing-sm;
+  gap: $spacing-12;
 }
 
 .page_list {
@@ -11,11 +11,11 @@
   flex-wrap: wrap;
   justify-content: center;
   align-items: center;
-  gap: $spacing-xxs;
+  gap: $spacing-4;
 }
 
 .page_link {
-  padding: $spacing-xs;
+  padding: $spacing-8;
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -61,7 +61,7 @@
 }
 
 .dot {
-  padding: 0 $spacing-xs;
+  padding: 0 $spacing-8;
   font-weight: bold;
   color: $txt-tertiary;
 }

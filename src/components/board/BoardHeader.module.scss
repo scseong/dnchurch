@@ -1,11 +1,11 @@
 .header {
-  padding: $spacing-sm 0;
+  padding: $spacing-12 0;
   display: flex;
   flex-direction: column;
   border-bottom: 0.2rem solid $black;
 
   .title {
-    margin-bottom: $spacing-xs;
+    margin-bottom: $spacing-8;
 
     h4 {
       word-break: break-all;
@@ -25,7 +25,7 @@
       .icons {
         display: flex;
         align-items: center;
-        gap: $spacing-sm;
+        gap: $spacing-12;
 
         li,
         a {
@@ -37,11 +37,11 @@
 
   dl {
     display: flex;
-    gap: $spacing-xs;
+    gap: $spacing-8;
   }
 
   dl:first-child {
-    margin-right: $spacing-md;
+    margin-right: $spacing-16;
   }
 
   dd,

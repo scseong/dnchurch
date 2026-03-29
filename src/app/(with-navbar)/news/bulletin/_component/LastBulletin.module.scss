@@ -2,8 +2,8 @@
   flex: 1 50%;
 
   .notification {
-    padding: $spacing-lg 0;
-    margin-bottom: $spacing-sm;
+    padding: $spacing-20 0;
+    margin-bottom: $spacing-12;
     background-color: $bg-secondary;
     border: 0.1rem solid $border-primary;
     font-weight: $font-weight-semibold;
@@ -15,7 +15,7 @@
     flex-direction: column;
 
     & > div {
-      padding: $spacing-xs;
+      padding: $spacing-8;
       display: block;
       width: 100%;
       border: 0.1rem solid $border-primary;
@@ -28,11 +28,11 @@
   }
 
   .share {
-    padding: $spacing-sm 0;
+    padding: $spacing-12 0;
     display: flex;
     justify-content: flex-end;
     align-items: center;
-    gap: $spacing-xxs;
+    gap: $spacing-4;
 
     button {
       font-size: $font-size-14;

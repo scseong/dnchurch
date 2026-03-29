@@ -1,10 +1,10 @@
 .vision {
-  padding: $spacing-xxxl 0;
+  padding: $spacing-64 0;
   background-color: $bg-secondary;
 }
 
 .title {
-  margin-bottom: $spacing-lg;
+  margin-bottom: $spacing-20;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -18,7 +18,7 @@
   }
 
   h2 {
-    margin-top: $spacing-xs;
+    margin-top: $spacing-8;
   }
 }
 
@@ -29,15 +29,15 @@
 
   @include respond-up($breakpoint-tablet) {
     flex-direction: row;
-    gap: $spacing-md;
+    gap: $spacing-16;
   }
 
   .feature {
-    padding: $spacing-lg;
+    padding: $spacing-20;
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: $spacing-xs;
+    gap: $spacing-8;
     border-radius: $radius-m;
 
     h3 {
@@ -45,7 +45,7 @@
     }
 
     @include respond-up($breakpoint-mobile-lg) {
-      padding: $spacing-xl $spacing-xs;
+      padding: $spacing-24 $spacing-8;
       max-width: 75%;
 
       h3 {
@@ -54,7 +54,7 @@
     }
 
     .icon {
-      margin-bottom: $spacing-xs;
+      margin-bottom: $spacing-8;
 
       svg {
         width: 6rem;

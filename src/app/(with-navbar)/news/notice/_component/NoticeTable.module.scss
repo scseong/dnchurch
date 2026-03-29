@@ -24,7 +24,7 @@
   transition: background-color 0.12s ease;
 
   td {
-    padding: $spacing-xs;
+    padding: $spacing-8;
     vertical-align: middle;
   }
 
@@ -53,7 +53,7 @@
 .col_pin {
   white-space: nowrap;
   text-align: center;
-  padding-right: $spacing-xs;
+  padding-right: $spacing-8;
 }
 
 .pin_icon {
@@ -68,7 +68,7 @@
 
 .col_category {
   white-space: nowrap;
-  padding-right: $spacing-xs;
+  padding-right: $spacing-8;
   font-size: 1.1rem;
   font-weight: $font-weight-semibold;
   color: $txt-secondary;
@@ -81,7 +81,7 @@
 
 .col_title {
   width: 100%;
-  padding-left: $spacing-xs;
+  padding-left: $spacing-8;
 }
 
 .title_wrap {
@@ -118,7 +118,7 @@
 }
 
 .col_date {
-  padding-left: $spacing-sm;
+  padding-left: $spacing-12;
   font-size: $font-size-12;
   color: $txt-tertiary;
   text-align: right;
@@ -126,7 +126,7 @@
 }
 
 .col_views {
-  padding-left: $spacing-xs;
+  padding-left: $spacing-8;
   font-size: $font-size-12;
   color: $txt-tertiary;
   white-space: nowrap;
@@ -164,7 +164,7 @@
 
 // ── 빈 상태 ──
 .empty {
-  padding: $spacing-xxxl 0;
+  padding: $spacing-64 0;
   text-align: center;
   font-size: $font-size-14;
   color: $txt-tertiary;
@@ -184,7 +184,7 @@
   padding: 1.4rem 1.6rem;
   display: flex;
   flex-direction: column;
-  gap: $spacing-xxs;
+  gap: $spacing-4;
   border-top: 1px solid $gray-200;
   text-align: left;
   cursor: pointer;
@@ -226,7 +226,7 @@
 .mobile_meta {
   display: flex;
   align-items: center;
-  gap: $spacing-xxs;
+  gap: $spacing-4;
 }
 
 .mobile_category {
@@ -268,7 +268,7 @@
 
 .mobile_files {
   display: flex;
-  gap: $spacing-xxs;
+  gap: $spacing-4;
 }
 
 .mobile_views {

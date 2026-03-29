@@ -24,24 +24,25 @@
     word-break: break-all;
 
     svg {
-      margin-right: $spacing-xxs;
+      margin-right: $spacing-4;
       width: 1.5rem;
       height: 1.5rem;
     }
 
     & + dd {
-      margin-top: $spacing-xs;
+      margin-top: $spacing-8;
     }
   }
 
   a {
     &:hover {
-      @include link-hover-style;
+      text-decoration: underline;
+      color: $txt-link-active;
     }
   }
 
   .group {
-    padding: $spacing-sm 0 $spacing-sm $spacing-md;
+    padding: $spacing-12 0 $spacing-12 $spacing-16;
     display: flex;
   }
 }

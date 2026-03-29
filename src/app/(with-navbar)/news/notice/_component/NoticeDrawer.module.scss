@@ -63,7 +63,7 @@
 
   @include respond($breakpoint-tablet-sm) {
     display: block;
-    margin: $spacing-xs auto $spacing-xxs;
+    margin: $spacing-8 auto $spacing-4;
     width: 3.6rem;
     height: 0.4rem;
     border-radius: $radius-circle;
@@ -74,12 +74,12 @@
 
 // ── 헤더 ──
 .header {
-  padding: $spacing-xl $spacing-xl $spacing-md;
+  padding: $spacing-24 $spacing-24 $spacing-16;
   border-bottom: 1px solid $gray-200;
   flex-shrink: 0;
 
   @include respond($breakpoint-tablet-sm) {
-    padding: $spacing-sm $spacing-md $spacing-sm;
+    padding: $spacing-12 $spacing-16 $spacing-12;
   }
 }
 
@@ -92,7 +92,7 @@
 .header_meta {
   display: flex;
   align-items: center;
-  gap: $spacing-xxs;
+  gap: $spacing-4;
 }
 
 .category {
@@ -140,7 +140,7 @@
 }
 
 .title {
-  margin-bottom: $spacing-xs;
+  margin-bottom: $spacing-8;
   font-family: $font-family-secondary;
   font-size: $font-size-18;
   font-weight: $font-weight-semibold;
@@ -160,7 +160,7 @@
 .header_info {
   display: flex;
   align-items: center;
-  gap: $spacing-sm;
+  gap: $spacing-12;
   font-size: $font-size-13;
   color: $txt-tertiary;
 }
@@ -175,10 +175,10 @@
 .content {
   flex: 1;
   overflow-y: auto;
-  padding: $spacing-xl;
+  padding: $spacing-24;
 
   @include respond($breakpoint-tablet-sm) {
-    padding: $spacing-md;
+    padding: $spacing-16;
   }
 }
 
@@ -192,17 +192,17 @@
 
 // ── 첨부파일 ──
 .attachment {
-  padding: $spacing-sm $spacing-xl;
+  padding: $spacing-12 $spacing-24;
   display: flex;
   align-items: center;
-  gap: $spacing-xxs;
+  gap: $spacing-4;
   border-top: 1px solid $gray-200;
   font-size: $font-size-12;
   color: $primary-active;
   flex-shrink: 0;
 
   @include respond($breakpoint-tablet-sm) {
-    padding: $spacing-xs $spacing-md;
+    padding: $spacing-8 $spacing-16;
   }
 }
 
@@ -233,8 +233,8 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: $spacing-xxs;
-  padding: $spacing-md;
+  gap: $spacing-4;
+  padding: $spacing-16;
   font-size: $font-size-13;
   font-weight: $font-weight-medium;
   color: $txt-primary;

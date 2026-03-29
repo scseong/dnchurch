@@ -1,5 +1,5 @@
 .group {
-  margin-bottom: $spacing-md;
+  margin-bottom: $spacing-16;
 
   label {
     margin-bottom: 1rem;
@@ -40,30 +40,28 @@
 
   button,
   a {
-    @include action-button-style;
+    padding: 0 $spacing-40;
+    min-width: 14rem;
+    min-height: $spacing-40;
+    border-radius: $radius-xs;
+    font-size: $font-size-14;
+    font-weight: $font-weight-semibold;
+    line-height: $spacing-40;
   }
 
   button {
-    @include button-hover-style(
-      (
-        bg-color: $primary,
-        bg-hover-color: $primary-hover,
-        text-color: white
-      )
-    );
+    background-color: $primary;
+    color: white;
+
+    &:hover {
+      background-color: $primary-hover;
+    }
   }
 
   a {
     display: inline-block;
     text-align: center;
-
-    @include button-hover-style(
-      (
-        // bg-color: $button-color,
-        // bg-hover-color: $button-hover-color,
-        text-color: inherit
-      )
-    );
+    color: inherit;
   }
 
   @include respond($breakpoint-tablet-sm) {

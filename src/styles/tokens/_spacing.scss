@@ -1,100 +1,22 @@
-/// 0
+// ══════════════════════════════════════════
+// SPACING PRIMITIVE — 4·8 배수 기반 간격 스케일
+// 네이밍: $spacing-{px값}
+// ══════════════════════════════════════════
+
 $spacing-0: 0;
-
-/// 0.1rem (1px) — 보더, 미세 간격
-$spacing-min: 0.1rem;
-
-/// 0.2rem (2px) — 인라인 요소 내부 수직 패딩
-$spacing-nano: 0.2rem;
-
-/// 0.4rem (4px) — 아이콘과 텍스트 사이, 뱃지 내부 여백
-$spacing-xxs: 0.4rem;
-
-/// 0.8rem (8px) — 같은 줄 요소 간 기본 간격
-$spacing-xs: 0.8rem;
-
-/// 1.2rem (12px) — 리스트 아이템 간, 폼 필드 간
-$spacing-sm: 1.2rem;
-
-/// 1.6rem (16px) — 카드 내부 여백, 컴포넌트 내부 기본
-$spacing-md: 1.6rem;
-
-/// 2rem (20px) — 그룹 간 간격, 섹션 좌우 패딩 (모바일)
-$spacing-lg: 2rem;
-
-/// 2.4rem (24px) — 넓은 카드 패딩, 폼 그룹 간
-$spacing-xl: 2.4rem;
-
-/// 3.2rem (32px) — 컴포넌트 블록 간 간격
-$spacing-xxl: 3.2rem;
-
-/// 4rem (40px) — 섹션 내부 상하 여백 (모바일)
-$spacing-3xl: 4rem;
-
-/// 4.8rem (48px) — 넓은 섹션 내부 여백
-$spacing-4xl: 4.8rem;
-
-/// 6.4rem (64px) — 독립 섹션 간 간격
-$spacing-5xl: 6.4rem;
-
-/// 8rem (80px) — 페이지 상하 대형 여백
-$spacing-6xl: 8rem;
-
-/// 9.6rem (96px) — 레이아웃 최대 여백
-$spacing-7xl: 9.6rem;
-
-// ── 하위호환 alias (기존 코드에서 사용 중) ──
-$spacing-xxxl: $spacing-5xl;
-$spacing-xxxxl: $spacing-6xl;
-$spacing-layout: $spacing-7xl;
-
-$section-gaps: (
-  '240': (
-    pc: 24rem,
-    tablet: 24rem,
-    mobile: 12rem
-  ),
-  '200': (
-    pc: 20rem,
-    tablet: 20rem,
-    mobile: 12rem
-  ),
-  '160': (
-    pc: 16rem,
-    tablet: 16rem,
-    mobile: 8rem
-  ),
-  '120': (
-    pc: 12rem,
-    tablet: 12rem,
-    mobile: 6.4rem
-  ),
-  '80': (
-    pc: 8rem,
-    tablet: 8rem,
-    mobile: 6.4rem
-  ),
-  '40': (
-    pc: 4rem,
-    tablet: 4rem,
-    mobile: 2.4rem
-  )
-);
-
-// Primitive Tokens (spacing-N)
-$spacing: (
-  '32': 3.2rem,
-  '24': 2.4rem,
-  '16': 1.6rem,
-  '12': 1.2rem,
-  '8': 0.8rem
-);
-
-// Semantic Tokens (Content Gap)
-$content-gaps: (
-  'XL': map-get($spacing, '32'),
-  'L': map-get($spacing, '24'),
-  'M': map-get($spacing, '16'),
-  'S': map-get($spacing, '12'),
-  'XS': map-get($spacing, '8')
-);
+$spacing-1: 0.1rem;
+$spacing-2: 0.2rem;
+$spacing-4: 0.4rem;
+$spacing-6: 0.6rem;
+$spacing-8: 0.8rem;
+$spacing-10: 1rem;
+$spacing-12: 1.2rem;
+$spacing-16: 1.6rem;
+$spacing-20: 2rem;
+$spacing-24: 2.4rem;
+$spacing-32: 3.2rem;
+$spacing-40: 4rem;
+$spacing-48: 4.8rem;
+$spacing-64: 6.4rem;
+$spacing-80: 8rem;
+$spacing-96: 9.6rem;

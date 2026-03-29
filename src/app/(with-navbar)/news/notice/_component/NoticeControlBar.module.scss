@@ -2,8 +2,8 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: $spacing-xs;
-  padding-bottom: $spacing-sm;
+  gap: $spacing-8;
+  padding-bottom: $spacing-12;
   border-bottom: 1.5px solid $border-primary;
 }
 
@@ -11,7 +11,7 @@
 .bar_left {
   display: flex;
   align-items: center;
-  gap: $spacing-xs;
+  gap: $spacing-8;
   min-width: 0;
   flex: 1;
 }
@@ -26,8 +26,8 @@
 .active_tag {
   display: inline-flex;
   align-items: center;
-  gap: $spacing-xxs;
-  padding: 0 $spacing-xs;
+  gap: $spacing-4;
+  padding: 0 $spacing-8;
   height: 2.2rem;
   border-radius: $radius-circle;
   background: $bg-secondary;
@@ -58,12 +58,12 @@
 .bar_right {
   display: flex;
   align-items: center;
-  gap: $spacing-xxs;
+  gap: $spacing-4;
   flex-shrink: 0;
 }
 
 .category_select {
-  padding: 0 $spacing-xs;
+  padding: 0 $spacing-8;
   height: 3.2rem;
   border: 1px solid $border-primary;
   border-radius: 0.6rem;
@@ -88,7 +88,7 @@
   display: inline-flex;
   align-items: center;
   gap: 0.2rem;
-  padding: 0 $spacing-xs;
+  padding: 0 $spacing-8;
   height: 3.2rem;
   border: 1px solid $border-primary;
   border-radius: 0.6rem;
@@ -126,7 +126,7 @@
 
 .search_icon {
   position: absolute;
-  left: $spacing-xs;
+  left: $spacing-8;
   font-size: $font-size-14;
   color: $txt-tertiary;
   pointer-events: none;
@@ -154,7 +154,7 @@
 
 .search_clear {
   position: absolute;
-  right: $spacing-xxs;
+  right: $spacing-4;
   display: flex;
   align-items: center;
   font-size: $font-size-14;

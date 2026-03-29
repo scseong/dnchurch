@@ -1,16 +1,16 @@
 .container {
   .label {
-    margin-bottom: $spacing-xs;
+    margin-bottom: $spacing-8;
     font-size: $font-size-18;
     font-weight: $font-weight-semibold;
   }
 
   .help_text {
-    margin-bottom: $spacing-sm;
+    margin-bottom: $spacing-12;
 
     li {
-      margin-left: $spacing-xl;
-      margin-bottom: $spacing-xxs;
+      margin-left: $spacing-24;
+      margin-bottom: $spacing-4;
       font-size: $font-size-13;
       color: $txt-tertiary;
       list-style-type: disc;
@@ -19,7 +19,7 @@
 }
 
 .status_bar {
-  margin-bottom: $spacing-sm;
+  margin-bottom: $spacing-12;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -34,7 +34,7 @@
   }
 
   .clear_button {
-    padding: $spacing-xxs $spacing-xs;
+    padding: $spacing-4 $spacing-8;
     border-radius: $radius-m;
     font-size: $font-size-12;
     text-decoration: underline;

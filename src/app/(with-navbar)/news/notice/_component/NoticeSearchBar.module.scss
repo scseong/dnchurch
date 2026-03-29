@@ -2,7 +2,7 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding-bottom: $spacing-xs;
+  padding-bottom: $spacing-8;
   border-bottom: 1.5px solid var(--notice-t1);
 }
 
@@ -15,7 +15,7 @@
 .controls {
   display: flex;
   align-items: center;
-  gap: $spacing-xxs;
+  gap: $spacing-4;
 }
 
 .search {
@@ -31,14 +31,14 @@
 
 .search_icon {
   position: absolute;
-  left: $spacing-xs;
+  left: $spacing-8;
   font-size: $font-size-14;
   color: var(--notice-t3);
   pointer-events: none;
 }
 
 .search_input {
-  padding: 0 $spacing-sm 0 3rem;
+  padding: 0 $spacing-12 0 3rem;
   width: 20rem;
   height: 100%;
   border: none;
@@ -58,7 +58,7 @@
 
 .clear_button {
   position: absolute;
-  right: $spacing-xxs;
+  right: $spacing-4;
   display: flex;
   align-items: center;
   font-size: $font-size-14;
@@ -67,7 +67,7 @@
 }
 
 .sort_select {
-  padding: 0 $spacing-sm;
+  padding: 0 $spacing-12;
   height: 3.2rem;
   border: 1px solid var(--notice-line-s);
   border-radius: 0.6rem;
@@ -79,7 +79,7 @@
 }
 
 .sort_button {
-  padding: 0 $spacing-sm;
+  padding: 0 $spacing-12;
   height: 3.2rem;
   border-radius: 0.6rem;
   background: var(--notice-bg-sub);

@@ -54,32 +54,6 @@
   -ms-user-select: none;
 }
 
-/// 폼 액션 버튼 (제출, 취소 등)
-@mixin action-button-style {
-  padding: 0 $spacing-3xl;
-  min-width: 14rem;
-  min-height: $spacing-3xl;
-  border-radius: $radius-xs;
-  font-size: $font-size-14;
-  font-weight: $font-weight-semibold;
-  line-height: $spacing-3xl;
-}
-
-/// 링크 호버 — 밑줄 + 활성 색상
-@mixin link-hover-style {
-  text-decoration: underline;
-  color: $txt-link-active;
-}
-
-/// 버튼 배경/텍스트 색상 + 호버 상태
-@mixin button-hover-style($options) {
-  background-color: map-get($options, bg-color);
-  color: map-get($options, text-color);
-
-  &:hover {
-    background-color: map-get($options, bg-hover-color);
-  }
-}
 
 @mixin ellipsis-multi($lines: 2) {
   display: -webkit-box;

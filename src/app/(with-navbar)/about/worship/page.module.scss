@@ -1,19 +1,19 @@
 .container {
-  padding: $spacing-0 $spacing-lg;
+  padding: $spacing-0 $spacing-20;
 
   @include respond($breakpoint-tablet) {
     padding: $spacing-0;
   }
 
   div:first-child {
-    margin-bottom: $spacing-xxl;
+    margin-bottom: $spacing-32;
   }
 }
 
 .schedule {
   h4 {
-    margin-bottom: $spacing-md;
-    padding-left: $spacing-md;
+    margin-bottom: $spacing-16;
+    padding-left: $spacing-16;
     position: relative;
   }
 
@@ -22,8 +22,8 @@
     position: absolute;
     top: 50%;
     left: 0;
-    width: $spacing-xs;
-    height: $spacing-xs;
+    width: $spacing-8;
+    height: $spacing-8;
     background-color: $primary;
     border-radius: 50%;
     transform: translateY(-50%);

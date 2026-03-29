@@ -3,43 +3,51 @@
 // ══════════════════════════════════════════
 
 /// 0.2rem 0.8rem — 태그, 뱃지 등 인라인 요소 내부 여백
-$padding-inline-xs: $spacing-nano $spacing-xs;
+$padding-inline-xs: $spacing-2 $spacing-8;
 
 /// 0.4rem 0.8rem — 약간 큰 인라인 요소 (필터 칩 등)
-$padding-inline-sm: $spacing-xxs $spacing-xs;
+$padding-inline-sm: $spacing-4 $spacing-8;
 
 /// 0.8rem 1.2rem — input, select, button 내부 여백
-$padding-control: $spacing-xs $spacing-sm;
+$padding-control: $spacing-8 $spacing-12;
 
 /// 1.2rem 2.4rem — CTA 링크 버튼 (가로:세로 ≈ 4:3)
-$padding-control-wide: $spacing-sm $spacing-xl;
+$padding-control-wide: $spacing-12 $spacing-24;
 
 /// 1.6rem 2rem — 카드, 패널 내부 여백
-$padding-card: $spacing-md $spacing-lg;
+$padding-card: $spacing-16 $spacing-20;
 
 /// 1.2rem 1.6rem — 작은 카드, 리스트 아이템 내부 여백
-$padding-card-compact: $spacing-sm $spacing-md;
-
-/// 6.4rem — 페이지 섹션 상하 여백
-$padding-section-y: $spacing-xxxl;
+$padding-card-compact: $spacing-12 $spacing-16;
 
 // ══════════════════════════════════════════
-// SPACING: 요소 간 간격 (gap)
-// 근접성의 법칙: 관련성 높을수록 간격 좁게
-// inline < items < group < section
+// SPACING: Content Gap — 요소 간 간격
+// XL~XS 상대 크기 체계 (코드잇 디자인 시스템)
 // ══════════════════════════════════════════
 
-/// 0.8rem — 같은 줄 요소 간 (아이콘+텍스트, 뱃지 나열)
-$gap-inline: $spacing-xs;
+/// 3.2rem (32px) — 대형 컴포넌트 블록 간
+$content-gap-xl: $spacing-32;
 
-/// 1.2rem — 리스트 아이템 간, 폼 필드 간
-$gap-items: $spacing-sm;
+/// 2.4rem (24px) — 관련 그룹 간
+$content-gap-l: $spacing-24;
 
-/// 2.4rem — 관련 그룹 간 (제목+본문 블록과 다음 블록 사이)
-$gap-group: $spacing-xl;
+/// 1.6rem (16px) — 컴포넌트 내부 기본
+$content-gap-m: $spacing-16;
 
-/// 6.4rem — 독립 섹션 간 (페이지 내 대단위 구역 사이)
-$gap-section: $spacing-xxxl;
+/// 1.2rem (12px) — 리스트 아이템 간, 폼 필드 간
+$content-gap-s: $spacing-12;
+
+/// 0.8rem (8px) — 같은 줄 요소 간 (아이콘+텍스트, 뱃지 나열)
+$content-gap-xs: $spacing-8;
+
+// ══════════════════════════════════════════
+// SPACING: Section Gap — 섹션 간 여백
+// 네이밍: $section-padding-{PC px값}
+// ══════════════════════════════════════════
+
+$section-padding-40: $spacing-40;
+$section-padding-64: $spacing-64;
+$section-padding-80: $spacing-80;
 
 // ══════════════════════════════════════════
 // BORDER-RADIUS: Semantic (XS ~ XL + circle)
