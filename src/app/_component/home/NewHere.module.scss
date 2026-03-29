@@ -5,16 +5,16 @@ $divider-height: 0.2rem;
 
 // ─── Section ────────────────────────────────────────
 .section {
-  padding: $padding-section-y 0;
+  padding: $section-padding-64 0;
   background: $bg-section;
 }
 
 // ─── Inner Grid ─────────────────────────────────────
 .inner {
-  @include respond-up($breakpoint-lg) {
+  @include respond-up($breakpoint-tablet) {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: $spacing-5xl;
+    gap: $spacing-64;
   }
 }
 
@@ -22,7 +22,7 @@ $divider-height: 0.2rem;
 .image_area {
   display: none;
 
-  @include respond-up($breakpoint-lg) {
+  @include respond-up($breakpoint-tablet) {
     display: block;
     position: relative;
     align-self: start;
@@ -31,12 +31,12 @@ $divider-height: 0.2rem;
 
 .image_sticky {
   position: sticky;
-  top: calc($header-height + $spacing-xl);
+  top: calc($header-height + $spacing-24);
 }
 
 .image_frame {
   aspect-ratio: 3 / 4;
-  border-radius: $radius-control;
+  border-radius: $radius-xs;
   overflow: hidden;
 }
 
@@ -49,29 +49,29 @@ $divider-height: 0.2rem;
 
 .year_badge {
   position: absolute;
-  bottom: -$spacing-md;
-  right: -$spacing-md;
-  padding: $spacing-lg $spacing-xl;
-  background: $color-navy;
-  border-radius: $radius-control;
+  bottom: -$spacing-16;
+  right: -$spacing-16;
+  padding: $spacing-20 $spacing-24;
+  background: $navy;
+  border-radius: $radius-xs;
   text-align: center;
   display: flex;
   flex-direction: column;
-  gap: $spacing-xxs;
+  gap: $spacing-4;
 }
 
 .year_number {
   font-family: $font-family-secondary;
   font-size: 3.2rem;
   font-weight: $font-weight-regular;
-  color: $color-gold;
+  color: $gold;
   line-height: $line-height-reset;
 }
 
 .year_label {
-  font-size: $font-size-xxs;
+  font-size: $font-size-11;
   font-weight: $font-weight-regular;
-  color: rgba($color-white, 0.5);
+  color: rgba($white, 0.5);
   letter-spacing: 0.1rem;
 }
 
@@ -80,22 +80,22 @@ $divider-height: 0.2rem;
   display: flex;
   flex-direction: column;
 
-  @include respond-up($breakpoint-lg) {
+  @include respond-up($breakpoint-tablet) {
     align-self: center;
   }
 }
 
 // ─── 헤더 ───────────────────────────────────────────
 .header {
-  margin-bottom: $spacing-md;
+  margin-bottom: $spacing-16;
 }
 
 .caption {
-  @include text-label($color: $color-gold);
+  @include text-label($color: $gold);
   display: inline-block;
   letter-spacing: 0.25rem;
   text-transform: uppercase;
-  margin-bottom: $spacing-sm;
+  margin-bottom: $spacing-12;
 }
 
 .title {
@@ -114,50 +114,50 @@ $divider-height: 0.2rem;
 .divider {
   width: $divider-width;
   height: $divider-height;
-  background: $color-gold;
-  margin: $spacing-lg 0;
+  background: $gold;
+  margin: $spacing-20 0;
 }
 
 .desc {
   @include text-sub();
-  font-size: $font-size-md;
+  font-size: $font-size-14;
   line-height: $line-height-wide;
 }
 
 // ─── FAQ 아코디언 ───────────────────────────────────
 .faq_list {
-  margin-bottom: $spacing-xl;
+  margin-bottom: $spacing-24;
 }
 
 .faq_item {
-  border-bottom: 1px solid $color-border-default;
+  border-bottom: 1px solid $border-primary;
 }
 
 .faq_question {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  gap: $spacing-sm;
+  gap: $spacing-12;
   width: 100%;
-  padding: $spacing-md 0;
+  padding: $spacing-16 0;
   background: none;
   border: none;
   cursor: pointer;
   text-align: left;
   font-family: $font-family-base;
-  font-size: $font-size-md;
+  font-size: $font-size-14;
   font-weight: $font-weight-medium;
-  color: $color-text-default;
+  color: $txt-primary;
   line-height: $line-height-base;
 
-  @include respond-up($breakpoint-lg) {
-    font-size: $font-size-default;
+  @include respond-up($breakpoint-tablet) {
+    font-size: $font-size-15;
   }
 }
 
 .faq_toggle {
-  font-size: $font-size-xl;
-  color: $color-gold;
+  font-size: $font-size-18;
+  color: $gold;
   line-height: $line-height-reset;
   flex-shrink: 0;
   transition: transform 0.2s ease;
@@ -183,27 +183,27 @@ $divider-height: 0.2rem;
 
 .faq_answer_text {
   margin: 0;
-  padding-bottom: $spacing-md;
-  font-size: $font-size-md;
-  color: $color-text-secondary;
+  padding-bottom: $spacing-16;
+  font-size: $font-size-14;
+  color: $txt-secondary;
   line-height: $line-height-wide;
 }
 
 .faq_link {
   display: inline-block;
-  margin-bottom: $spacing-md;
-  padding-bottom: $spacing-nano;
-  font-size: $font-size-sm;
+  margin-bottom: $spacing-16;
+  padding-bottom: $spacing-2;
+  font-size: $font-size-13;
   font-weight: $font-weight-semibold;
-  color: $color-gold;
+  color: $gold;
   text-decoration: none;
-  border-bottom: $spacing-min solid transparent;
+  border-bottom: $spacing-1 solid transparent;
   transition:
     border-color $transition-duration-normal $transition-easing-default,
     opacity $transition-duration-normal $transition-easing-default;
 
   &:hover {
-    border-color: $color-gold;
+    border-color: $gold;
     opacity: 0.8;
   }
 }
@@ -212,27 +212,27 @@ $divider-height: 0.2rem;
 .cta_link {
   display: inline-flex;
   align-items: center;
-  gap: $spacing-xs;
+  gap: $spacing-8;
   width: fit-content;
-  font-size: $font-size-md;
+  font-size: $font-size-14;
   font-weight: $font-weight-semibold;
-  color: $color-gold;
+  color: $gold;
   text-decoration: none;
-  padding-bottom: $spacing-xxs;
-  border-bottom: 1px solid rgba($color-gold, 0.3);
+  padding-bottom: $spacing-4;
+  border-bottom: 1px solid rgba($gold, 0.3);
   transition:
     border-color $transition-duration-normal $transition-easing-default,
     opacity $transition-duration-normal $transition-easing-default;
 
   &:hover {
-    border-color: $color-gold;
+    border-color: $gold;
     opacity: 0.8;
   }
 }
 
 // ─── 반응형 보정 ────────────────────────────────────
-@include respond($breakpoint-xs) {
+@include respond($breakpoint-mobile) {
   .faq_list {
-    margin-bottom: $spacing-lg;
+    margin-bottom: $spacing-20;
   }
 }

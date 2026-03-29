@@ -1,13 +1,13 @@
 .wrap {
-  padding-top: $spacing-sm;
+  padding-top: $spacing-12;
   text-align: right;
 
   a {
-    padding: $spacing-xxs $spacing-xs;
+    padding: $spacing-4 $spacing-8;
     width: 10rem;
     display: inline-block;
     border: 0.1rem solid black;
-    border-radius: $border-radius-md;
+    border-radius: $radius-s;
     text-align: center;
   }
 }

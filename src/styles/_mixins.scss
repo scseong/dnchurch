@@ -20,10 +20,13 @@
   }
 }
 
-@mixin set-heading-fonts($sizes-map) {
+@mixin set-heading-fonts($sizes-map, $line-heights-map: null) {
   @each $heading, $size in $sizes-map {
     #{$heading} {
       font-size: $size;
+      @if $line-heights-map {
+        line-height: map-get($line-heights-map, $heading);
+      }
     }
   }
 }
@@ -51,32 +54,6 @@
   -ms-user-select: none;
 }
 
-/// 폼 액션 버튼 (제출, 취소 등)
-@mixin action-button-style {
-  padding: 0 $spacing-3xl;
-  min-width: 14rem;
-  min-height: $spacing-3xl;
-  border-radius: $radius-control;
-  font-size: $font-size-md;
-  font-weight: $font-weight-semibold;
-  line-height: $spacing-3xl;
-}
-
-/// 링크 호버 — 밑줄 + 활성 색상
-@mixin link-hover-style {
-  text-decoration: underline;
-  color: $color-text-link-active;
-}
-
-/// 버튼 배경/텍스트 색상 + 호버 상태
-@mixin button-hover-style($options) {
-  background-color: map-get($options, bg-color);
-  color: map-get($options, text-color);
-
-  &:hover {
-    background-color: map-get($options, bg-hover-color);
-  }
-}
 
 @mixin ellipsis-multi($lines: 2) {
   display: -webkit-box;
@@ -98,102 +75,102 @@
 //
 // 사용법:
 //   @include text-section-title;                              // 기본값
-//   @include text-section-title($color: $text-on-image);      // 다크 배경
+//   @include text-section-title($color: $txt-image);      // 다크 배경
 //   @include text-card-title($weight: $font-weight-bold);     // 강조
-//   @include text-body($color: $color-text-secondary);        // 색상 변경
+//   @include text-body($color: $txt-secondary);        // 색상 변경
 // ══════════════════════════════════════════
 
 /// 히어로 타이틀 — 배너, 랜딩 최상단 (h1 반응형)
 @mixin text-hero($color: null, $weight: $font-weight-bold) {
-  font-size: $font-size-h1-mobile;
+  font-size: $font-size-32;
   font-weight: $weight;
-  line-height: $line-height-heading;
+  line-height: map-get($heading-line-heights, 'h1');
   letter-spacing: $letter-spacing-heading;
   @if $color { color: $color; }
 
-  @include respond-up($breakpoint-lg) {
-    font-size: $font-size-h1;
+  @include respond-up($breakpoint-tablet) {
+    font-size: $font-size-42;
   }
 }
 
 /// 페이지 타이틀 — 각 페이지 최상위 제목 (h2 반응형)
 @mixin text-page-title($color: null, $weight: $font-weight-bold) {
-  font-size: $font-size-h2-mobile;
+  font-size: $font-size-26;
   font-weight: $weight;
-  line-height: $line-height-heading;
+  line-height: map-get($heading-line-heights, 'h2');
   letter-spacing: $letter-spacing-heading;
   @if $color { color: $color; }
 
-  @include respond-up($breakpoint-lg) {
-    font-size: $font-size-h2;
+  @include respond-up($breakpoint-tablet) {
+    font-size: $font-size-34;
   }
 }
 
 /// 섹션 타이틀 — 페이지 내 구역 제목 (h3 반응형)
 @mixin text-section-title($color: null, $weight: $font-weight-bold) {
-  font-size: $font-size-h3-mobile;
+  font-size: $font-size-22;
   font-weight: $weight;
-  line-height: $line-height-heading;
+  line-height: map-get($heading-line-heights, 'h3');
   letter-spacing: $letter-spacing-tight;
   @if $color { color: $color; }
 
-  @include respond-up($breakpoint-lg) {
-    font-size: $font-size-h3;
+  @include respond-up($breakpoint-tablet) {
+    font-size: $font-size-28;
   }
 }
 
 /// 서브 섹션 타이틀 — 섹션 내 하위 제목 (h4 반응형)
 @mixin text-sub-section-title($color: null, $weight: $font-weight-semibold) {
-  font-size: $font-size-h4-mobile;
+  font-size: $font-size-20;
   font-weight: $weight;
-  line-height: $line-height-heading;
+  line-height: map-get($heading-line-heights, 'h4');
   letter-spacing: $letter-spacing-tight;
   @if $color { color: $color; }
 
-  @include respond-up($breakpoint-lg) {
-    font-size: $font-size-h4;
+  @include respond-up($breakpoint-tablet) {
+    font-size: $font-size-24;
   }
 }
 
 /// 카드 타이틀 — 카드, 리스트 아이템 제목 (h5 반응형)
 @mixin text-card-title($color: null, $weight: $font-weight-semibold) {
-  font-size: $font-size-h5-mobile;
+  font-size: $font-size-18;
   font-weight: $weight;
-  line-height: $line-height-heading;
+  line-height: map-get($heading-line-heights, 'h5');
   @if $color { color: $color; }
 
-  @include respond-up($breakpoint-lg) {
-    font-size: $font-size-h5;
+  @include respond-up($breakpoint-tablet) {
+    font-size: $font-size-20;
   }
 }
 
 /// 본문 — 일반 텍스트 (기본 크기, 반응형 변경 없음)
-@mixin text-body($color: $color-text-default) {
-  font-size: $font-size-default;
+@mixin text-body($color: $txt-primary) {
+  font-size: $font-size-15;
   font-weight: $font-weight-regular;
   line-height: $line-height-base;
   color: $color;
 }
 
 /// 보조 텍스트 — 부연 설명, 서브 텍스트
-@mixin text-sub($color: $color-text-secondary) {
-  font-size: $font-size-md;
+@mixin text-sub($color: $txt-secondary) {
+  font-size: $font-size-14;
   font-weight: $font-weight-regular;
   line-height: $line-height-base;
   color: $color;
 }
 
 /// 캡션 — 날짜, 작성자, 메타 정보
-@mixin text-caption($color: $color-text-subtle) {
-  font-size: $font-size-sm;
+@mixin text-caption($color: $txt-tertiary) {
+  font-size: $font-size-13;
   font-weight: $font-weight-regular;
   line-height: $line-height-base;
   color: $color;
 }
 
 /// 라벨 — 폼 라벨, 카테고리 이름, 네비게이션
-@mixin text-label($color: $color-text-secondary) {
-  font-size: $font-size-sm;
+@mixin text-label($color: $txt-secondary) {
+  font-size: $font-size-13;
   font-weight: $font-weight-medium;
   line-height: $line-height-base;
   color: $color;

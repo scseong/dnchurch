@@ -1,4 +1,24 @@
-$max-width: 100rem;
+// ══════════════════════════════════════════
+// LAYOUT — Container & Screen 시맨틱 토큰
+// Primitive: globals.scss의 CSS custom properties (--container-*, --screensize-*)
+// ══════════════════════════════════════════
+
+/// 페이지 좌·우 기본 여백 (PC 4rem / Tablet 3.2rem / Mobile 1.6rem)
+$container-padding: var(--container-padding);
+
+/// 컨테이너 최소 너비 (PC 120rem / Tablet 76.8rem / Mobile 37.5rem)
+$container-min: var(--container-min);
+
+/// 컨테이너 최대 너비 (PC·Tablet 120rem / Mobile 76.8rem)
+$container-max: var(--container-max);
+
+/// 최소 화면 높이 (PC 80rem / Tablet 102.4rem / Mobile 81.2rem)
+$screensize-h-min: var(--screensize-h-min);
+
+// ══════════════════════════════════════════
+// LAYOUT — 기타 고정 토큰
+// ══════════════════════════════════════════
+
 $header-height: 5.8rem;
 $lnb-min-height: 22rem;
 

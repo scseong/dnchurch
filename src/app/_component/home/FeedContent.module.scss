@@ -8,10 +8,10 @@ $radius-list-lg: 1.6rem;
 // ─── Tab Switcher (Mobile Only) ─────────────────────
 .tab_switcher {
   display: flex;
-  gap: $spacing-xxs;
-  margin-bottom: $spacing-md;
+  gap: $spacing-4;
+  margin-bottom: $spacing-16;
 
-  @include respond-up($breakpoint-lg) {
+  @include respond-up($breakpoint-tablet) {
     display: none;
   }
 }
@@ -19,10 +19,10 @@ $radius-list-lg: 1.6rem;
 .tab_active,
 .tab_inactive {
   flex: 1;
-  padding: $spacing-sm 0;
-  border-radius: $radius-card;
+  padding: $spacing-12 0;
+  border-radius: $radius-s;
   border: none;
-  font-size: $font-size-default;
+  font-size: $font-size-15;
   font-weight: $font-weight-semibold;
   font-family: $font-family-base;
   cursor: pointer;
@@ -32,13 +32,13 @@ $radius-list-lg: 1.6rem;
 }
 
 .tab_active {
-  background: $color-gray-900;
-  color: $color-white;
+  background: $gray-900;
+  color: $white;
 }
 
 .tab_inactive {
-  background: $color-cream;
-  color: $color-text-secondary;
+  background: $cream;
+  color: $txt-secondary;
 }
 
 // ─── Grid ───────────────────────────────────────────
@@ -46,10 +46,10 @@ $radius-list-lg: 1.6rem;
   min-width: 0;
   overflow: hidden;
 
-  @include respond-up($breakpoint-lg) {
+  @include respond-up($breakpoint-tablet) {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: $spacing-xxl;
+    gap: $spacing-32;
   }
 }
 
@@ -61,7 +61,7 @@ $radius-list-lg: 1.6rem;
 .column_hidden {
   display: none;
 
-  @include respond-up($breakpoint-lg) {
+  @include respond-up($breakpoint-tablet) {
     display: block;
   }
 }
@@ -70,11 +70,11 @@ $radius-list-lg: 1.6rem;
 .column_header {
   display: none;
 
-  @include respond-up($breakpoint-lg) {
+  @include respond-up($breakpoint-tablet) {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    margin-bottom: $spacing-sm;
+    margin-bottom: $spacing-12;
   }
 }
 
@@ -82,14 +82,14 @@ $radius-list-lg: 1.6rem;
   @include text-card-title;
   display: flex;
   align-items: center;
-  gap: $spacing-xs;
+  gap: $spacing-8;
 }
 
 .color_bar_news,
 .color_bar_sharing {
-  width: $spacing-xxs;
+  width: $spacing-4;
   height: 2.2rem;
-  border-radius: $spacing-nano;
+  border-radius: $spacing-2;
   display: inline-block;
   flex-shrink: 0;
   transform: translateY(-0.1rem);
@@ -108,8 +108,8 @@ $radius-list-lg: 1.6rem;
   font-weight: $font-weight-semibold;
   text-decoration: none;
   color: $color-feed-accent;
-  padding-bottom: $spacing-nano;
-  border-bottom: $spacing-min solid transparent;
+  padding-bottom: $spacing-2;
+  border-bottom: $spacing-1 solid transparent;
   transition:
     border-color $transition-duration-normal $transition-easing-default,
     opacity $transition-duration-normal $transition-easing-default;
@@ -122,12 +122,12 @@ $radius-list-lg: 1.6rem;
 
 // ─── List Card ──────────────────────────────────────
 .list_card {
-  background: $color-white;
+  background: $white;
   border-radius: $radius-list;
-  border: 1px solid $color-border-default;
+  border: 1px solid $border-primary;
   overflow: hidden;
 
-  @include respond-up($breakpoint-lg) {
+  @include respond-up($breakpoint-tablet) {
     border-radius: $radius-list-lg;
   }
 }
@@ -141,14 +141,14 @@ $radius-list-lg: 1.6rem;
   transition: background $transition-duration-normal $transition-easing-default;
 
   &:not(:last-child) {
-    border-bottom: 1px solid $color-gray-200;
+    border-bottom: 1px solid $gray-200;
   }
 
   &:hover {
-    background: $color-cream;
+    background: $cream;
   }
 
-  @include respond-up($breakpoint-lg) {
+  @include respond-up($breakpoint-tablet) {
     padding: $padding-card;
   }
 }
@@ -157,7 +157,7 @@ $radius-list-lg: 1.6rem;
 .item_body {
   display: flex;
   flex-direction: column;
-  gap: $spacing-xxs;
+  gap: $spacing-4;
   min-width: 0;
 }
 
@@ -165,28 +165,28 @@ $radius-list-lg: 1.6rem;
 .item_title_row {
   display: flex;
   align-items: center;
-  gap: $spacing-xxs;
+  gap: $spacing-4;
   min-width: 0;
   overflow: hidden;
 }
 
 .item_title {
-  color: $color-text-default;
-  font-size: $font-size-default;
+  color: $txt-primary;
+  font-size: $font-size-15;
   font-weight: $font-weight-medium;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 
-  @include respond-up($breakpoint-lg) {
-    font-size: $font-size-lg;
+  @include respond-up($breakpoint-tablet) {
+    font-size: $font-size-16;
   }
 }
 
 .item_meta {
   display: flex;
   align-items: center;
-  gap: $spacing-xs;
+  gap: $spacing-8;
 }
 
 .item_author {
@@ -199,42 +199,42 @@ $radius-list-lg: 1.6rem;
 
 // ─── Badges ─────────────────────────────────────────
 .badge_new {
-  color: $color-white;
+  color: $white;
   font-size: 0.8rem;
   font-weight: $font-weight-bold;
-  background: $color-gold;
-  border-radius: $radius-control;
+  background: $gold;
+  border-radius: $radius-xs;
   flex-shrink: 0;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: $font-size-sm;
-  height: $font-size-sm;
+  width: $font-size-13;
+  height: $font-size-13;
 }
 
 // ─── More Button (Mobile Only) ──────────────────────
 .more_button {
   display: block;
   width: 100%;
-  padding: $spacing-xs 0;
-  border-radius: $radius-card;
-  border: 1px solid $color-border-default;
+  padding: $spacing-8 0;
+  border-radius: $radius-s;
+  border: 1px solid $border-primary;
   background: transparent;
-  color: $color-text-secondary;
-  font-size: $font-size-sm;
+  color: $txt-secondary;
+  font-size: $font-size-13;
   font-weight: $font-weight-semibold;
-  margin-top: $spacing-sm;
+  margin-top: $spacing-12;
   text-align: center;
   text-decoration: none;
   transition: background $transition-duration-normal $transition-easing-default,
     color $transition-duration-normal $transition-easing-default;
 
   &:hover {
-    background: $color-cream;
-    color: $color-text-default;
+    background: $cream;
+    color: $txt-primary;
   }
 
-  @include respond-up($breakpoint-lg) {
+  @include respond-up($breakpoint-tablet) {
     display: none;
   }
 }

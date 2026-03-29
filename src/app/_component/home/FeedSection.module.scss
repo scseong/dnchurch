@@ -1,16 +1,16 @@
 // ─── Section ────────────────────────────────────────
 .section {
-  padding: $padding-section-y 0;
+  padding: $section-padding-64 0;
 }
 
 // ─── Header ─────────────────────────────────────────
 .header {
-  margin-bottom: $gap-group;
+  margin-bottom: $content-gap-l;
 }
 
 .caption {
-  @include text-label($color: $color-gold);
-  margin-bottom: $spacing-xxs;
+  @include text-label($color: $gold);
+  margin-bottom: $spacing-4;
   display: inline-block;
   letter-spacing: 0.1rem;
   text-transform: uppercase;
@@ -24,10 +24,10 @@
 .subtitle {
   display: none;
 
-  @include respond-up($breakpoint-lg) {
+  @include respond-up($breakpoint-tablet) {
     @include text-sub();
-    margin: $spacing-xxs 0;
+    margin: $spacing-4 0;
     display: block;
-    font-size: $font-size-lg;
+    font-size: $font-size-16;
   }
 }

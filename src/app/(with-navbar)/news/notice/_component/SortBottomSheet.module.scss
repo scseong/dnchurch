@@ -19,7 +19,7 @@
   bottom: 0;
   left: 0;
   right: 0;
-  background: $color-white;
+  background: $white;
   border-radius: 1.6rem 1.6rem 0 0;
   padding-bottom: env(safe-area-inset-bottom, 0);
   transform: translateY(100%);
@@ -32,15 +32,15 @@
 }
 
 .handle {
-  margin: $spacing-xs auto $spacing-xxs;
+  margin: $spacing-8 auto $spacing-4;
   width: 3.6rem;
   height: 0.4rem;
-  border-radius: $border-radius-full;
+  border-radius: $radius-circle;
   background: var(--notice-line-s);
 }
 
 .option_list {
-  padding: $spacing-xxs 0;
+  padding: $spacing-4 0;
 }
 
 .option {
@@ -49,7 +49,7 @@
   align-items: center;
   justify-content: space-between;
   width: 100%;
-  font-size: $font-size-md;
+  font-size: $font-size-14;
   color: var(--notice-t1);
   cursor: pointer;
   transition: background-color 0.12s ease;
@@ -64,6 +64,6 @@
 }
 
 .check {
-  font-size: $font-size-lg;
+  font-size: $font-size-16;
   color: var(--notice-t1);
 }

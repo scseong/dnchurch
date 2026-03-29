@@ -36,7 +36,7 @@
   left: 50%;
   width: min(64rem, 90vw);
   height: min(72rem, 88vh);
-  background: $color-bg-body;
+  background: $bg-primary;
   border-radius: 1.6rem;
   display: flex;
   flex-direction: column;
@@ -44,7 +44,7 @@
   z-index: 10000;
   animation: nb-slide-up 0.28s cubic-bezier(0.32, 0.72, 0, 1) both;
 
-  @include respond($breakpoint-md) {
+  @include respond($breakpoint-tablet-sm) {
     top: auto;
     left: 0;
     right: 0;
@@ -61,25 +61,25 @@
 .handle {
   display: none;
 
-  @include respond($breakpoint-md) {
+  @include respond($breakpoint-tablet-sm) {
     display: block;
-    margin: $spacing-xs auto $spacing-xxs;
+    margin: $spacing-8 auto $spacing-4;
     width: 3.6rem;
     height: 0.4rem;
-    border-radius: $border-radius-full;
-    background: $color-border-default;
+    border-radius: $radius-circle;
+    background: $border-primary;
     flex-shrink: 0;
   }
 }
 
 // ── 헤더 ──
 .header {
-  padding: $spacing-xl $spacing-xl $spacing-md;
-  border-bottom: 1px solid $color-gray-200;
+  padding: $spacing-24 $spacing-24 $spacing-16;
+  border-bottom: 1px solid $gray-200;
   flex-shrink: 0;
 
-  @include respond($breakpoint-md) {
-    padding: $spacing-sm $spacing-md $spacing-sm;
+  @include respond($breakpoint-tablet-sm) {
+    padding: $spacing-12 $spacing-16 $spacing-12;
   }
 }
 
@@ -92,17 +92,17 @@
 .header_meta {
   display: flex;
   align-items: center;
-  gap: $spacing-xxs;
+  gap: $spacing-4;
 }
 
 .category {
-  font-size: $font-size-sm;
+  font-size: $font-size-13;
   font-weight: $font-weight-semibold;
-  color: $color-text-secondary;
+  color: $txt-secondary;
   text-transform: uppercase;
 
   &.urgent {
-    color: $color-status-danger;
+    color: $status-negative;
   }
 }
 
@@ -111,9 +111,9 @@
   border-radius: 0.3rem;
   font-size: 0.9rem;
   font-weight: $font-weight-semibold;
-  color: $color-status-danger;
-  background: rgba($color-red-500, 0.05);
-  border: 1px solid rgba($color-red-500, 0.18);
+  color: $status-negative;
+  background: rgba($red-500, 0.05);
+  border: 1px solid rgba($red-500, 0.18);
 }
 
 .close_btn {
@@ -123,46 +123,46 @@
   flex-shrink: 0;
   width: 3.2rem;
   height: 3.2rem;
-  border-radius: $border-radius-md;
+  border-radius: $radius-s;
   font-size: 2.2rem;
-  color: $color-text-secondary;
+  color: $txt-secondary;
   cursor: pointer;
   transition: background-color 0.12s ease;
 
   &:hover {
-    background: $color-bg-default;
+    background: $bg-secondary;
   }
 
   &:focus-visible {
-    outline: 2px solid $color-primary-active;
+    outline: 2px solid $primary-active;
     outline-offset: 2px;
   }
 }
 
 .title {
-  margin-bottom: $spacing-xs;
+  margin-bottom: $spacing-8;
   font-family: $font-family-secondary;
-  font-size: $font-size-xl;
+  font-size: $font-size-18;
   font-weight: $font-weight-semibold;
-  color: $color-text-default;
+  color: $txt-primary;
   word-break: keep-all;
-  line-height: $line-height-heading;
+  line-height: map-get($heading-line-heights, 'h5');
 
   &.urgent {
-    color: $color-status-danger;
+    color: $status-negative;
   }
 
-  @include respond($breakpoint-md) {
-    font-size: $font-size-default;
+  @include respond($breakpoint-tablet-sm) {
+    font-size: $font-size-15;
   }
 }
 
 .header_info {
   display: flex;
   align-items: center;
-  gap: $spacing-sm;
-  font-size: $font-size-sm;
-  color: $color-text-subtle;
+  gap: $spacing-12;
+  font-size: $font-size-13;
+  color: $txt-tertiary;
 }
 
 .views {
@@ -175,34 +175,34 @@
 .content {
   flex: 1;
   overflow-y: auto;
-  padding: $spacing-xl;
+  padding: $spacing-24;
 
-  @include respond($breakpoint-md) {
-    padding: $spacing-md;
+  @include respond($breakpoint-tablet-sm) {
+    padding: $spacing-16;
   }
 }
 
 .content_body {
-  font-size: $font-size-md;
+  font-size: $font-size-14;
   line-height: $line-height-wide;
-  color: $color-text-default;
+  color: $txt-primary;
   white-space: pre-line;
   word-break: keep-all;
 }
 
 // ── 첨부파일 ──
 .attachment {
-  padding: $spacing-sm $spacing-xl;
+  padding: $spacing-12 $spacing-24;
   display: flex;
   align-items: center;
-  gap: $spacing-xxs;
-  border-top: 1px solid $color-gray-200;
-  font-size: $font-size-xs;
-  color: $color-primary-active;
+  gap: $spacing-4;
+  border-top: 1px solid $gray-200;
+  font-size: $font-size-12;
+  color: $primary-active;
   flex-shrink: 0;
 
-  @include respond($breakpoint-md) {
-    padding: $spacing-xs $spacing-md;
+  @include respond($breakpoint-tablet-sm) {
+    padding: $spacing-8 $spacing-16;
   }
 }
 
@@ -210,11 +210,11 @@
   text-decoration: underline;
 
   &:hover {
-    color: $color-text-default;
+    color: $txt-primary;
   }
 
   &:focus-visible {
-    outline: 2px solid $color-primary-active;
+    outline: 2px solid $primary-active;
     outline-offset: 2px;
     border-radius: 2px;
   }
@@ -223,7 +223,7 @@
 // ── 이전/다음 ──
 .nav {
   display: flex;
-  border-top: 1px solid $color-gray-200;
+  border-top: 1px solid $gray-200;
   flex-shrink: 0;
   padding-bottom: env(safe-area-inset-bottom, 0);
 }
@@ -233,30 +233,30 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: $spacing-xxs;
-  padding: $spacing-md;
-  font-size: $font-size-sm;
+  gap: $spacing-4;
+  padding: $spacing-16;
+  font-size: $font-size-13;
   font-weight: $font-weight-medium;
-  color: $color-text-default;
+  color: $txt-primary;
   cursor: pointer;
   transition: background-color 0.12s ease;
 
   &:hover:not(.disabled) {
-    background: $color-bg-default;
+    background: $bg-secondary;
   }
 
   &:first-child {
-    border-right: 1px solid $color-gray-200;
+    border-right: 1px solid $gray-200;
   }
 
   &.disabled {
-    color: $color-text-subtle;
+    color: $txt-tertiary;
     opacity: 0.4;
     cursor: not-allowed;
   }
 
   &:focus-visible {
-    outline: 2px solid $color-primary-active;
+    outline: 2px solid $primary-active;
     outline-offset: -2px;
   }
 }

@@ -2,23 +2,23 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: $spacing-xs;
-  padding-bottom: $spacing-sm;
-  border-bottom: 1.5px solid $color-border-primary;
+  gap: $spacing-8;
+  padding-bottom: $spacing-12;
+  border-bottom: 1.5px solid $border-primary;
 }
 
 // ── 좌측 ──
 .bar_left {
   display: flex;
   align-items: center;
-  gap: $spacing-xs;
+  gap: $spacing-8;
   min-width: 0;
   flex: 1;
 }
 
 .total {
-  font-size: $font-size-xs;
-  color: $color-text-subtle;
+  font-size: $font-size-12;
+  color: $txt-tertiary;
   white-space: nowrap;
   flex-shrink: 0;
 }
@@ -26,29 +26,29 @@
 .active_tag {
   display: inline-flex;
   align-items: center;
-  gap: $spacing-xxs;
-  padding: 0 $spacing-xs;
+  gap: $spacing-4;
+  padding: 0 $spacing-8;
   height: 2.2rem;
-  border-radius: $border-radius-full;
-  background: $color-bg-default;
-  font-size: $font-size-xs;
-  color: $color-text-secondary;
-  border: 1px solid $color-border-default;
+  border-radius: $radius-circle;
+  background: $bg-secondary;
+  font-size: $font-size-12;
+  color: $txt-secondary;
+  border: 1px solid $border-primary;
 }
 
 .tag_remove {
   display: flex;
   align-items: center;
-  font-size: $font-size-sm;
-  color: $color-text-subtle;
+  font-size: $font-size-13;
+  color: $txt-tertiary;
   cursor: pointer;
 
   &:hover {
-    color: $color-text-default;
+    color: $txt-primary;
   }
 
   &:focus-visible {
-    outline: 2px solid $color-primary-active;
+    outline: 2px solid $primary-active;
     outline-offset: 2px;
     border-radius: 2px;
   }
@@ -58,28 +58,28 @@
 .bar_right {
   display: flex;
   align-items: center;
-  gap: $spacing-xxs;
+  gap: $spacing-4;
   flex-shrink: 0;
 }
 
 .category_select {
-  padding: 0 $spacing-xs;
+  padding: 0 $spacing-8;
   height: 3.2rem;
-  border: 1px solid $color-border-default;
+  border: 1px solid $border-primary;
   border-radius: 0.6rem;
-  background: $color-bg-default;
-  font-size: $font-size-xs;
-  color: $color-text-secondary;
+  background: $bg-secondary;
+  font-size: $font-size-12;
+  color: $txt-secondary;
   cursor: pointer;
   outline: none;
 
   &.selected {
     font-weight: $font-weight-semibold;
-    color: $color-text-default;
+    color: $txt-primary;
   }
 
   &:focus-visible {
-    outline: 2px solid $color-primary-active;
+    outline: 2px solid $primary-active;
     outline-offset: 2px;
   }
 }
@@ -88,23 +88,23 @@
   display: inline-flex;
   align-items: center;
   gap: 0.2rem;
-  padding: 0 $spacing-xs;
+  padding: 0 $spacing-8;
   height: 3.2rem;
-  border: 1px solid $color-border-default;
+  border: 1px solid $border-primary;
   border-radius: 0.6rem;
-  background: $color-bg-default;
-  font-size: $font-size-xs;
-  color: $color-text-secondary;
+  background: $bg-secondary;
+  font-size: $font-size-12;
+  color: $txt-secondary;
   white-space: nowrap;
   cursor: pointer;
 
   &.selected {
     font-weight: $font-weight-semibold;
-    color: $color-text-default;
+    color: $txt-primary;
   }
 
   &:focus-visible {
-    outline: 2px solid $color-primary-active;
+    outline: 2px solid $primary-active;
     outline-offset: 2px;
   }
 }
@@ -114,21 +114,21 @@
   display: flex;
   align-items: center;
   height: 3.2rem;
-  border: 1px solid $color-border-default;
+  border: 1px solid $border-primary;
   border-radius: 0.6rem;
-  background: $color-bg-default;
+  background: $bg-secondary;
 
   &:focus-within {
-    border-color: $color-border-primary;
-    box-shadow: 0 0 0 2px $color-primary-subtle;
+    border-color: $border-primary;
+    box-shadow: 0 0 0 2px $primary-subtle;
   }
 }
 
 .search_icon {
   position: absolute;
-  left: $spacing-xs;
-  font-size: $font-size-md;
-  color: $color-text-subtle;
+  left: $spacing-8;
+  font-size: $font-size-14;
+  color: $txt-tertiary;
   pointer-events: none;
 }
 
@@ -138,35 +138,35 @@
   height: 100%;
   border: none;
   background: transparent;
-  font-size: $font-size-xs;
-  color: $color-text-default;
+  font-size: $font-size-12;
+  color: $txt-primary;
   outline: none;
 
   &::placeholder {
-    color: $color-text-subtle;
-    font-size: $font-size-xs;
+    color: $txt-tertiary;
+    font-size: $font-size-12;
   }
 
-  @include respond($breakpoint-md) {
+  @include respond($breakpoint-tablet-sm) {
     width: 14rem;
   }
 }
 
 .search_clear {
   position: absolute;
-  right: $spacing-xxs;
+  right: $spacing-4;
   display: flex;
   align-items: center;
-  font-size: $font-size-md;
-  color: $color-text-subtle;
+  font-size: $font-size-14;
+  color: $txt-tertiary;
   cursor: pointer;
 
   &:hover {
-    color: $color-text-default;
+    color: $txt-primary;
   }
 
   &:focus-visible {
-    outline: 2px solid $color-primary-active;
+    outline: 2px solid $primary-active;
     outline-offset: 2px;
     border-radius: 2px;
   }
@@ -174,7 +174,7 @@
 
 // ── 반응형 ──
 .pc_only {
-  @include respond($breakpoint-md) {
+  @include respond($breakpoint-tablet-sm) {
     display: none;
   }
 }
@@ -182,7 +182,7 @@
 .mobile_only {
   display: none;
 
-  @include respond($breakpoint-md) {
+  @include respond($breakpoint-tablet-sm) {
     display: inline-flex;
   }
 }

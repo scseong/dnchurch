@@ -3,62 +3,76 @@
 // ══════════════════════════════════════════
 
 /// 0.2rem 0.8rem — 태그, 뱃지 등 인라인 요소 내부 여백
-$padding-inline-xs: $spacing-nano $spacing-xs;
+$padding-inline-xs: $spacing-2 $spacing-8;
 
 /// 0.4rem 0.8rem — 약간 큰 인라인 요소 (필터 칩 등)
-$padding-inline-sm: $spacing-xxs $spacing-xs;
+$padding-inline-sm: $spacing-4 $spacing-8;
 
 /// 0.8rem 1.2rem — input, select, button 내부 여백
-$padding-control: $spacing-xs $spacing-sm;
+$padding-control: $spacing-8 $spacing-12;
 
 /// 1.2rem 2.4rem — CTA 링크 버튼 (가로:세로 ≈ 4:3)
-$padding-control-wide: $spacing-sm $spacing-xl;
+$padding-control-wide: $spacing-12 $spacing-24;
 
 /// 1.6rem 2rem — 카드, 패널 내부 여백
-$padding-card: $spacing-md $spacing-lg;
+$padding-card: $spacing-16 $spacing-20;
 
 /// 1.2rem 1.6rem — 작은 카드, 리스트 아이템 내부 여백
-$padding-card-compact: $spacing-sm $spacing-md;
-
-/// 2.4em — 페이지 섹션 좌우 여백 (모바일 기준)
-$padding-section-x: $spacing-xl;
-
-/// 6.4rem — 페이지 섹션 상하 여백
-$padding-section-y: $spacing-xxxl;
+$padding-card-compact: $spacing-12 $spacing-16;
 
 // ══════════════════════════════════════════
-// SPACING: 요소 간 간격 (gap)
-// 근접성의 법칙: 관련성 높을수록 간격 좁게
-// inline < items < group < section
+// SPACING: Content Gap — 요소 간 간격
+// XL~XS 상대 크기 체계 (코드잇 디자인 시스템)
 // ══════════════════════════════════════════
 
-/// 0.8rem — 같은 줄 요소 간 (아이콘+텍스트, 뱃지 나열)
-$gap-inline: $spacing-xs;
+/// 3.2rem (32px) — 대형 컴포넌트 블록 간
+$content-gap-xl: $spacing-32;
 
-/// 1.2rem — 리스트 아이템 간, 폼 필드 간
-$gap-items: $spacing-sm;
+/// 2.4rem (24px) — 관련 그룹 간
+$content-gap-l: $spacing-24;
 
-/// 2.4rem — 관련 그룹 간 (제목+본문 블록과 다음 블록 사이)
-$gap-group: $spacing-xl;
+/// 1.6rem (16px) — 컴포넌트 내부 기본
+$content-gap-m: $spacing-16;
 
-/// 6.4rem — 독립 섹션 간 (페이지 내 대단위 구역 사이)
-$gap-section: $spacing-xxxl;
+/// 1.2rem (12px) — 리스트 아이템 간, 폼 필드 간
+$content-gap-s: $spacing-12;
+
+/// 0.8rem (8px) — 같은 줄 요소 간 (아이콘+텍스트, 뱃지 나열)
+$content-gap-xs: $spacing-8;
 
 // ══════════════════════════════════════════
-// BORDER-RADIUS: 4단계
+// SPACING: Section Gap — 섹션 간 여백
+// 네이밍: $section-padding-{PC px값}
 // ══════════════════════════════════════════
 
-/// 0.25rem — input, button, 태그 등 작은 컨트롤
-$radius-control: $border-radius-sm;
+$section-padding-40: $spacing-40;
+$section-padding-64: $spacing-64;
+$section-padding-80: $spacing-80;
 
-/// 0.5rem — 카드, 패널, 드롭다운
-$radius-card: $border-radius-md;
+// ══════════════════════════════════════════
+// BORDER-RADIUS: Semantic (XS ~ XL + circle)
+// Primitive CSS custom properties(--radius-*)를 XL~XS 크기 체계로 변환
+// 시각적 중요도·형태 비율·레이아웃 맥락에 맞춰 일관된 Radius 적용
+// XL~XS 단위는 숫자보다 직관적으로 크기를 파악할 수 있어 빠른 의사결정 가능
+// ══════════════════════════════════════════
 
-/// 0.75rem — 모달, 바텀시트, 드로어
-$radius-sheet: $border-radius-lg;
+/// XL (Desktop 2.8rem / Mobile 2.2rem) — 컨테이너의 90% 이상을 차지하는 박스나 대형 배경 요소
+$radius-xl: var(--radius-28);
 
-/// 9999px — pill 뱃지, 아바타, 둥근 버튼
-$radius-pill: $border-radius-full;
+/// L (Desktop 2rem / Mobile 1.6rem) — 400×350px 이상이면서 컨테이너의 35% 이상을 차지하는 큰 박스, bento 레이아웃
+$radius-l: var(--radius-20);
+
+/// M (Desktop 1.6rem / Mobile 1.2rem) — 가장 자주 사용되는 값, width/height가 400px 이하인 박스
+$radius-m: var(--radius-16);
+
+/// S (Desktop 1.2rem / Mobile 1rem) — banner, info 등 width가 height의 3–4배 이상 긴 형태의 박스
+$radius-s: var(--radius-12);
+
+/// XS (Desktop 0.8rem / Mobile 0.6rem) — label, tag, button 등 가장 작은 컴포넌트
+$radius-xs: var(--radius-8);
+
+/// Circle (9999px) — 원형 표현이 필요한 경우, 높이 또는 너비 값의 50%를 기준으로 사용
+$radius-circle: var(--radius-999);
 
 // ══════════════════════════════════════════
 // OVERLAY — 반투명 레이어
@@ -67,9 +81,6 @@ $radius-pill: $border-radius-full;
 /// rgba(0,0,0,0.5) — 모달/드로어 뒤 딤 배경
 $overlay-scrim: rgba(0, 0, 0, 0.5);
 
-/// rgba(0,0,0,0.45) — 이미지 위 텍스트 가독성 확보용 오버레이
-$overlay-image-text: rgba(0, 0, 0, 0.45);
-
 /// rgba(0,0,0,0.04) — 호버/포커스 시 미세한 시각 피드백
 $overlay-subtle: rgba(0, 0, 0, 0.04);
 
@@ -77,8 +88,5 @@ $overlay-subtle: rgba(0, 0, 0, 0.04);
 // TEXT ON IMAGE — 이미지/다크 배경 위 텍스트 색상
 // ══════════════════════════════════════════
 
-/// rgba(255,255,255,0.9) — 이미지 위 메인 텍스트 (제목, 본문)
-$text-on-image: rgba(255, 255, 255, 0.9);
-
 /// rgba(255,255,255,0.7) — 이미지 위 보조 텍스트 (날짜, 캡션)
-$text-on-image-subtle: rgba(255, 255, 255, 0.7);
+$txt-image-subtle: rgba(255, 255, 255, 0.7);

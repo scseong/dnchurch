@@ -3,9 +3,9 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    gap: 2rem;
+    gap: $spacing-20;
     height: 4rem;
-    background-color: $color-bg-footer;
+    background-color: $bg-invert;
   }
 
   li {
@@ -13,17 +13,17 @@
     color: white;
 
     &:hover {
-      color: $color-primary;
+      color: $primary;
     }
 
     a {
-      padding: 0.4rem;
+      padding: $spacing-4;
       display: block;
     }
   }
 
   .isActive {
     font-weight: 500;
-    color: $color-primary;
+    color: $primary;
   }
 }

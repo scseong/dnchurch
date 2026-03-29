@@ -1,27 +1,20 @@
 // ══════════════════════════════════════════
-// BORDER RADIUS — 직접 사용 지양, $radius-* 시맨틱 토큰 우선
+// BORDER RADIUS
+// Primitive: globals.scss의 CSS custom properties (--radius-*) — 반응형
+// Semantic: _semantic.scss의 $radius-xs ~ $radius-circle 사용
 // ══════════════════════════════════════════
-
-/// 0.25rem — → $radius-control 사용 권장
-$border-radius-sm: 0.25rem;
-/// 0.5rem — → $radius-card 사용 권장
-$border-radius-md: 0.5rem;
-/// 0.75rem — → $radius-sheet 사용 권장
-$border-radius-lg: 0.75rem;
-/// 9999px — → $radius-pill 사용 권장
-$border-radius-full: 9999px;
 
 // ══════════════════════════════════════════
 // BOX SHADOW
 // ══════════════════════════════════════════
 
 /// 얕은 그림자 — 카드, 드롭다운 기본
-$shadow-sm: 0 1px 2px 0 rgba($color-gray-900, 0.05);
+$shadow-sm: 0 1px 2px 0 rgba($gray-900, 0.05);
 
 /// 중간 그림자 — 호버된 카드, 플로팅 요소
 $shadow-md:
-  0 4px 6px -1px rgba($color-gray-900, 0.1),
-  0 2px 4px -2px rgba($color-gray-900, 0.1);
+  0 4px 6px -1px rgba($gray-900, 0.1),
+  0 2px 4px -2px rgba($gray-900, 0.1);
 
 // ══════════════════════════════════════════
 // TRANSITION

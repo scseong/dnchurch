@@ -3,7 +3,7 @@ $icon_box_mobile_size: 4.2rem;
 $icon_box_radius: 0.8rem;
 
 .quick_wap {
-  background: $color-white;
+  background: $white;
 
   .quick_container {
     padding: 0;
@@ -11,11 +11,11 @@ $icon_box_radius: 0.8rem;
 }
 
 .quick_access {
-  border-bottom: $spacing-min solid $color-border-default;
+  border-bottom: $spacing-1 solid $border-primary;
   display: grid;
   grid-template-columns: 1fr;
 
-  @include respond-up($breakpoint-lg) {
+  @include respond-up($breakpoint-tablet) {
     grid-template-columns: repeat(3, 1fr);
   }
 }
@@ -23,18 +23,18 @@ $icon_box_radius: 0.8rem;
 .item {
   display: flex;
   align-items: center;
-  gap: $gap-items;
-  padding: $spacing-lg $spacing-xl;
-  border-bottom: $spacing-min solid $color-border-default;
+  gap: $content-gap-s;
+  padding: $spacing-20 $spacing-24;
+  border-bottom: $spacing-1 solid $border-primary;
   transition: background $transition-duration-normal $transition-easing-default;
 
   &:last-child {
     border-bottom: none;
   }
 
-  @include respond-up($breakpoint-lg) {
+  @include respond-up($breakpoint-tablet) {
     border-bottom: none;
-    border-right: $spacing-min solid $color-border-default;
+    border-right: $spacing-1 solid $border-primary;
 
     &:last-child {
       border-right: none;
@@ -42,7 +42,7 @@ $icon_box_radius: 0.8rem;
   }
 
   &:hover {
-    background: $color-cream;
+    background: $cream;
 
     .arrow {
       opacity: 1;
@@ -58,12 +58,12 @@ $icon_box_radius: 0.8rem;
   justify-content: center;
   width: $icon_box_mobile_size;
   height: $icon_box_mobile_size;
-  background: $color-navy;
+  background: $navy;
   border-radius: $icon_box_radius;
   font-size: calc($icon_box_mobile_size / 1.6);
-  color: $color-gold;
+  color: $gold;
 
-  @include respond-up($breakpoint-lg) {
+  @include respond-up($breakpoint-tablet) {
     width: $icon_box_pc_size;
     height: $icon_box_pc_size;
     font-size: calc($icon_box_pc_size / 1.6);
@@ -78,34 +78,34 @@ $icon_box_radius: 0.8rem;
   flex: 1;
   display: flex;
   flex-direction: column;
-  gap: $spacing-xxs;
+  gap: $spacing-4;
 }
 
 .label {
   font-family: $font-family-secondary;
-  font-size: $font-size-lg;
+  font-size: $font-size-14;
   font-weight: $font-weight-semibold;
-  color: $color-text-default;
+  color: $txt-primary;
   line-height: $line-height-reset;
 }
 
 .desc {
   @include text-caption;
-  font-size: $font-size-xs;
+  font-size: $font-size-12;
   line-height: 1.4;
 }
 
 .arrow {
   flex-shrink: 0;
-  font-size: $font-size-md;
-  color: $color-navy;
+  font-size: $font-size-14;
+  color: $navy;
   opacity: 0.4;
   transition:
     opacity 0.2s ease,
     transform 0.2s ease;
 
-  @include respond-up($breakpoint-lg) {
+  @include respond-up($breakpoint-tablet) {
     opacity: 0;
-    transform: translateX(-$spacing-xs);
+    transform: translateX(-$spacing-8);
   }
 }

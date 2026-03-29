@@ -19,7 +19,7 @@
   bottom: 0;
   left: 0;
   right: 0;
-  background: $color-bg-body;
+  background: $bg-primary;
   border-radius: 1.6rem 1.6rem 0 0;
   padding-bottom: env(safe-area-inset-bottom, 0);
   transform: translateY(100%);
@@ -32,15 +32,15 @@
 }
 
 .handle {
-  margin: $spacing-xs auto $spacing-xxs;
+  margin: $spacing-8 auto $spacing-4;
   width: 3.6rem;
   height: 0.4rem;
-  border-radius: $border-radius-full;
-  background: $color-border-default;
+  border-radius: $radius-circle;
+  background: $border-primary;
 }
 
 .option_list {
-  padding: $spacing-xxs 0 $spacing-sm;
+  padding: $spacing-4 0 $spacing-12;
   max-height: 70dvh;
   overflow-y: auto;
 }
@@ -51,13 +51,13 @@
   align-items: center;
   justify-content: space-between;
   width: 100%;
-  font-size: $font-size-md;
-  color: $color-text-default;
+  font-size: $font-size-14;
+  color: $txt-primary;
   cursor: pointer;
   transition: background-color 0.12s ease;
 
   &:hover {
-    background: $color-bg-default;
+    background: $bg-secondary;
   }
 
   &.selected {
@@ -65,12 +65,12 @@
   }
 
   &:focus-visible {
-    outline: 2px solid $color-primary-active;
+    outline: 2px solid $primary-active;
     outline-offset: -2px;
   }
 }
 
 .check {
-  font-size: $font-size-lg;
-  color: $color-primary;
+  font-size: $font-size-16;
+  color: $primary;
 }

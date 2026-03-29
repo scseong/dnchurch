@@ -6,10 +6,10 @@
 .trigger {
   display: inline-flex;
   align-items: center;
-  gap: $spacing-xxs;
-  padding: $spacing-xxs;
-  color: $color-text-subtle;
-  font-size: $font-size-sm;
+  gap: $spacing-4;
+  padding: $spacing-4;
+  color: $txt-tertiary;
+  font-size: $font-size-13;
   transition: color $transition-duration-normal $transition-easing-default;
 
   span {
@@ -18,19 +18,19 @@
   }
 
   svg {
-    width: $font-size-sm;
-    height: $font-size-sm;
+    width: $font-size-13;
+    height: $font-size-13;
   }
 
   &:hover,
   &.triggerOpen {
-    color: $color-text-default;
+    color: $txt-primary;
     font-weight: $font-weight-semibold;
   }
 }
 
 .triggerActive {
-  color: $color-text-default;
+  color: $txt-primary;
   font-weight: $font-weight-semibold;
 }
 
@@ -46,13 +46,13 @@
 
 .menu {
   position: absolute;
-  top: calc(100% + $spacing-sm - 0.05rem);
+  top: calc(100% + $spacing-12 - 0.05rem);
   left: 0;
   z-index: 100;
   min-width: 14rem;
-  background-color: $color-white;
-  border: 0.1rem solid $color-border-default;
-  border-radius: $border-radius-md;
+  background-color: $white;
+  border: 0.1rem solid $border-primary;
+  border-radius: $radius-s;
   box-shadow: $shadow-md;
   overflow: hidden;
   animation: fadeIn 0.15s ease-out;
@@ -77,19 +77,19 @@
   display: flex;
   align-items: center;
   width: 100%;
-  padding: $spacing-xs $spacing-md;
-  color: $color-text-secondary;
-  font-size: $font-size-sm;
+  padding: $spacing-8 $spacing-16;
+  color: $txt-secondary;
+  font-size: $font-size-13;
   text-align: left;
   transition: color $transition-duration-normal $transition-easing-default;
 
   &:hover {
-    color: $color-primary;
+    color: $primary;
     font-weight: $font-weight-semibold;
   }
 
   &.menuItemActive {
-    color: $color-primary;
+    color: $primary;
     font-weight: $font-weight-semibold;
   }
 }

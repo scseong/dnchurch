@@ -21,8 +21,8 @@ $nav-center: 65%;
     left: 50%;
     width: 200vw;
     min-height: $lnb-min-height;
-    background-color: $color-white;
-    border-top: 0.1rem solid $color-divide;
+    background-color: $white;
+    border-top: 0.1rem solid $border-primary;
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
     transform: translateX(-50%) scaleY(0);
     transform-origin: top;
@@ -61,7 +61,7 @@ $nav-center: 65%;
 
 .list {
   display: flex;
-  gap: $spacing-md;
+  gap: $spacing-16;
   align-items: stretch;
 }
 
@@ -74,9 +74,9 @@ $nav-center: 65%;
 .link {
   display: flex;
   align-items: center;
-  padding: $spacing-sm $spacing-sm calc($spacing-sm - 0.2rem) $spacing-sm;
+  padding: $spacing-12 $spacing-12 calc($spacing-12 - 0.2rem) $spacing-12;
   border-bottom: 0.2rem solid transparent;
-  font-size: $font-size-md;
+  font-size: $font-size-14;
   font-weight: $font-weight-medium;
   color: inherit;
   white-space: nowrap;
@@ -96,7 +96,7 @@ $nav-center: 65%;
   bottom: 0;
   width: max-content;
   min-width: 100%;
-  padding-top: $spacing-md;
+  padding-top: $spacing-16;
   transform: translate(-50%, calc(100% - 1rem));
   text-align: center;
   list-style: none;
@@ -110,14 +110,14 @@ $nav-center: 65%;
 
 .depth2_link {
   display: block;
-  padding: $spacing-xs 0;
-  font-size: $font-size-md;
-  color: $color-text-secondary;
+  padding: $spacing-8 0;
+  font-size: $font-size-14;
+  color: $txt-secondary;
   white-space: nowrap;
   transition: font-weight 0.1s $transition-easing-default;
 
   &:hover {
     font-weight: $font-weight-semibold;
-    color: $color-text-default;
+    color: $txt-primary;
   }
 }

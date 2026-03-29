@@ -1,9 +1,9 @@
 .body {
-  padding: $spacing-lg 0;
-  border-bottom: 0.15rem solid $color-black;
+  padding: $spacing-20 0;
+  border-bottom: 0.15rem solid $black;
 
   > div {
-    border: 0.1rem solid $color-divide;
+    border: 0.1rem solid $border-primary;
   }
 
   .photo_image {

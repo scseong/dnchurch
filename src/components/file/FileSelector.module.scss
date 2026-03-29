@@ -1,13 +1,13 @@
 .upload_area {
-  padding: $spacing-xxl $spacing-md;
-  margin-bottom: $spacing-sm;
+  padding: $spacing-32 $spacing-16;
+  margin-bottom: $spacing-12;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  border: 0.2rem dashed $color-border-card;
-  background-color: $color-bg-default;
-  border-radius: $border-radius-lg;
+  border: 0.2rem dashed $border-primary;
+  background-color: $bg-secondary;
+  border-radius: $radius-m;
   text-align: center;
 
   & > input[type='file'] {
@@ -15,39 +15,39 @@
   }
 
   p {
-    margin-bottom: $spacing-lg;
-    font-size: $font-size-sm;
+    margin-bottom: $spacing-20;
+    font-size: $font-size-13;
   }
 
   &.dragging {
     border-style: solid;
-    border-color: $color-primary-active;
-    background-color: $color-bg-hover;
+    border-color: $primary-active;
+    background-color: $bg-tertiary;
 
     p {
-      color: $color-primary;
+      color: $primary;
       font-weight: $font-weight-semibold;
     }
   }
 
   .select_button {
-    padding: $spacing-xs $spacing-sm;
+    padding: $spacing-8 $spacing-12;
     display: inline-block;
-    border: 0.1rem solid $color-primary;
-    border-radius: $border-radius-lg;
-    font-size: $font-size-xs;
+    border: 0.1rem solid $primary;
+    border-radius: $radius-m;
+    font-size: $font-size-12;
     font-weight: $font-weight-semibold;
-    color: $color-primary;
+    color: $primary;
     cursor: pointer;
     transition: background-color 0.2s ease-in-out;
 
     &:hover {
-      background-color: $color-primary;
-      color: $color-white;
+      background-color: $primary;
+      color: $white;
     }
 
     svg {
-      margin-right: $spacing-xxs;
+      margin-right: $spacing-4;
       transform: translateY(0.1rem);
     }
   }

@@ -6,9 +6,9 @@ $thumb-sub-w: 14rem;
 .card {
   display: flex;
   flex-direction: column;
-  border-radius: $radius-card;
+  border-radius: $radius-s;
   overflow: hidden;
-  background: $color-bg-dark-card;
+  background: $bg-dark-card;
   text-decoration: none;
 }
 
@@ -40,15 +40,15 @@ $thumb-sub-w: 14rem;
 // ─── LATEST 뱃지 (썸네일 좌상단) ────────────────────
 .latest_badge {
   position: absolute;
-  top: $spacing-xs;
-  left: $spacing-xs;
+  top: $spacing-8;
+  left: $spacing-8;
   z-index: 1;
   font-size: 0.9rem;
   font-weight: $font-weight-bold;
-  color: $color-navy;
-  background: $color-gold;
+  color: $navy;
+  background: $gold;
   padding: $padding-inline-xs;
-  border-radius: $radius-control;
+  border-radius: $radius-xs;
   text-transform: uppercase;
   letter-spacing: 0.05rem;
 }
@@ -62,52 +62,52 @@ $thumb-sub-w: 14rem;
   background: $overlay-subtle;
   border-top: 1px solid rgba(255, 255, 255, 0.07);
 
-  @include respond-up($breakpoint-sm) {
-    padding: $spacing-sm $spacing-md;
+  @include respond-up($breakpoint-mobile-lg) {
+    padding: $spacing-12 $spacing-16;
   }
 }
 
 .meta_left {
   display: flex;
   flex-direction: column;
-  gap: $spacing-xxs;
+  gap: $spacing-4;
   min-width: 0;
 }
 
 .title {
-  font-size: $font-size-default;
+  font-size: $font-size-15;
   font-weight: $font-weight-medium;
-  color: $color-white;
+  color: $white;
   @include ellipsis-multi(1);
 }
 
 .meta_sub {
   display: flex;
   align-items: center;
-  gap: $spacing-xxs;
+  gap: $spacing-4;
   flex-wrap: wrap;
 }
 
 .scripture {
-  font-size: $font-size-xxs;
+  font-size: $font-size-11;
   color: rgba(255, 255, 255, 0.7);
 }
 
 .dot {
   width: 0.3rem;
   height: 0.3rem;
-  border-radius: $radius-pill;
+  border-radius: $radius-circle;
   background: rgba(255, 255, 255, 0.25);
   flex-shrink: 0;
 }
 
 .date {
-  font-size: $font-size-xxs;
+  font-size: $font-size-11;
   color: rgba(255, 255, 255, 0.5);
 }
 
 .preacher {
-  font-size: $font-size-xxs;
+  font-size: $font-size-11;
   color: rgba(255, 255, 255, 0.5);
 }
 
@@ -119,10 +119,10 @@ $thumb-sub-w: 14rem;
   justify-content: center;
   width: $play-btn-size;
   height: $play-btn-size;
-  border-radius: $radius-pill;
-  background: rgba($color-gold, 0.18);
-  border: 1px solid rgba($color-gold, 0.35);
-  color: $color-gold;
+  border-radius: $radius-circle;
+  background: rgba($gold, 0.18);
+  border: 1px solid rgba($gold, 0.35);
+  color: $gold;
   transition:
     background 0.2s ease,
     border-color 0.2s ease,
@@ -134,22 +134,22 @@ $thumb-sub-w: 14rem;
     margin-left: 0.15rem;
   }
 
-  @include respond-up($breakpoint-lg) {
+  @include respond-up($breakpoint-tablet) {
     display: none;
   }
 }
 
 .card:hover .play_btn {
-  background: $color-gold;
-  border-color: $color-gold;
-  color: $color-navy;
+  background: $gold;
+  border-color: $gold;
+  color: $navy;
 }
 
 // ─── 썸네일 오버레이 재생 버튼 (PC hover) ───────────
 .thumb_play {
   display: none;
 
-  @include respond-up($breakpoint-lg) {
+  @include respond-up($breakpoint-tablet) {
     display: flex;
     position: absolute;
     top: 50%;
@@ -158,10 +158,10 @@ $thumb-sub-w: 14rem;
     z-index: 1;
     width: $play-btn-size-lg;
     height: $play-btn-size-lg;
-    border-radius: $radius-pill;
-    background: rgba($color-gold, 0.25);
-    border: 1px solid rgba($color-gold, 0.5);
-    color: $color-gold;
+    border-radius: $radius-circle;
+    background: rgba($gold, 0.25);
+    border: 1px solid rgba($gold, 0.5);
+    color: $gold;
     align-items: center;
     justify-content: center;
     opacity: 0;
@@ -202,18 +202,18 @@ $thumb-sub-w: 14rem;
     flex: 1;
     border-top: none;
     background: transparent;
-    padding: $spacing-xs $spacing-sm;
+    padding: $spacing-8 $spacing-12;
   }
 
   .title {
-    font-size: $font-size-sm;
+    font-size: $font-size-13;
   }
 
   // PC: 세로 카드로 복원
-  @include respond-up($breakpoint-lg) {
+  @include respond-up($breakpoint-tablet) {
     flex-direction: column;
-    border-radius: $radius-card;
-    background: $color-bg-dark-card;
+    border-radius: $radius-s;
+    background: $bg-dark-card;
     overflow: hidden;
     border-bottom: none;
 
@@ -225,11 +225,11 @@ $thumb-sub-w: 14rem;
       flex: none;
       background: $overlay-subtle;
       border-top: 1px solid rgba(255, 255, 255, 0.07);
-      padding: $spacing-sm $spacing-md;
+      padding: $spacing-12 $spacing-16;
     }
 
     .title {
-      font-size: $font-size-default;
+      font-size: $font-size-15;
     }
   }
 }

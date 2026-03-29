@@ -1,10 +1,10 @@
 .container {
-  padding: $spacing-xxxl $spacing-lg;
+  padding: $spacing-64 $spacing-20;
   margin: 0 auto;
-  max-width: $max-width;
+  max-width: $container-max;
 
   .title {
-    margin-bottom: $spacing-xxxxl;
+    margin-bottom: $spacing-80;
     text-align: center;
 
     h2 {
@@ -20,15 +20,15 @@
         margin: 0 auto;
         width: 50%;
         height: 0.28rem;
-        background-color: $color-primary;
+        background-color: $primary;
         transform: translateX(-50%);
       }
     }
   }
 
-  @include respond($breakpoint-md) {
+  @include respond($breakpoint-tablet-sm) {
     .title {
-      margin-bottom: $spacing-xxxl;
+      margin-bottom: $spacing-64;
     }
   }
 }

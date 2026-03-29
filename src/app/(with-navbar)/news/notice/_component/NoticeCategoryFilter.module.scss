@@ -9,31 +9,31 @@
 
 .chip_list {
   display: flex;
-  gap: $spacing-xxs;
+  gap: $spacing-4;
   white-space: nowrap;
 }
 
 .chip {
-  padding: 0 $spacing-sm;
+  padding: 0 $spacing-12;
   display: inline-flex;
   align-items: center;
-  gap: $spacing-xxs;
+  gap: $spacing-4;
   height: 3rem;
-  border: 1px solid $color-border-default;
-  border-radius: $border-radius-full;
+  border: 1px solid $border-primary;
+  border-radius: $radius-circle;
   background: transparent;
-  font-size: $font-size-xs;
+  font-size: $font-size-12;
   transition: background-color $transition-duration-normal $transition-easing-default;
 
   &:hover:not(.selected) {
-    border-color: $color-border-primary;
-    background: $color-bg-hover;
+    border-color: $border-primary;
+    background: $bg-tertiary;
   }
 
   &.selected {
-    border-color: $color-primary;
-    background: $color-primary;
-    color: $color-white;
+    border-color: $primary;
+    background: $primary;
+    color: $white;
   }
 }
 

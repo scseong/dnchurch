@@ -1,13 +1,13 @@
 .about {
-  padding: $spacing-xxxl 0;
+  padding: $spacing-64 0;
 }
 
 .container {
   display: flex;
   flex-direction: column;
-  gap: $spacing-lg;
+  gap: $spacing-20;
 
-  @include respond-up($breakpoint-lg) {
+  @include respond-up($breakpoint-tablet) {
     flex-direction: row;
   }
 }
@@ -23,12 +23,12 @@
   .frame {
     position: relative;
     width: 100%;
-    border: 1px solid $color-border-card;
-    border-radius: $border-radius-lg;
+    border: 1px solid $border-primary;
+    border-radius: $radius-m;
     aspect-ratio: 5 / 3;
     overflow: hidden;
 
-    @include respond-up($breakpoint-lg) {
+    @include respond-up($breakpoint-tablet) {
       border: none;
       border-radius: 50%;
       aspect-ratio: 1 / 1;
@@ -48,21 +48,21 @@
   flex-basis: 65%;
 
   & > span {
-    margin-bottom: $spacing-xs;
+    margin-bottom: $spacing-8;
     display: inline-block;
-    font-size: $font-size-default;
+    font-size: $font-size-15;
     font-weight: $font-weight-semibold;
-    color: $color-primary;
+    color: $primary;
   }
 
   h2 {
-    margin-bottom: $spacing-lg;
+    margin-bottom: $spacing-20;
   }
 
   .about_content {
     display: flex;
     flex-direction: column;
-    gap: $spacing-md;
+    gap: $spacing-16;
 
     p {
       letter-spacing: -0.05rem;
@@ -71,20 +71,20 @@
   }
 
   .about_link {
-    margin-top: $spacing-xs;
+    margin-top: $spacing-8;
     width: fit-content;
     display: inline-block;
-    padding-bottom: $spacing-nano;
-    color: $color-text-link;
+    padding-bottom: $spacing-2;
+    color: $txt-link;
     font-weight: $font-weight-medium;
     text-decoration: none;
-    border-bottom: $spacing-min solid transparent;
+    border-bottom: $spacing-1 solid transparent;
     transition:
       border-color $transition-duration-normal $transition-easing-default,
       opacity $transition-duration-normal $transition-easing-default;
 
     &:hover {
-      border-color: $color-text-link;
+      border-color: $txt-link;
       opacity: 0.8;
     }
   }

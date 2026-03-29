@@ -1,7 +1,7 @@
-$item-gap: 0.8rem;
+$item-gap: $spacing-8;
 
 .container {
-  margin-bottom: $spacing-md;
+  margin-bottom: $spacing-16;
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
@@ -9,14 +9,14 @@ $item-gap: 0.8rem;
 }
 
 .preview {
-  padding: $spacing-xs $spacing-sm;
+  padding: $spacing-8 $spacing-12;
   display: flex;
   flex-basis: 100%;
-  gap: $spacing-sm;
-  border: 0.1rem solid $color-border-primary-inverse;
-  border-radius: $border-radius-lg;
+  gap: $spacing-12;
+  border: 0.1rem solid $border-inverse;
+  border-radius: $radius-m;
 
-  @include respond-up($breakpoint-lg) {
+  @include respond-up($breakpoint-tablet) {
     flex-basis: calc(50% - ($item-gap / 2));
   }
 }
@@ -28,57 +28,57 @@ $item-gap: 0.8rem;
   max-width: 8rem;
   width: 8rem;
   height: 8rem;
-  border-radius: $border-radius-lg;
+  border-radius: $radius-m;
 
   img {
     max-width: 100%;
     max-height: 100%;
-    border-radius: $border-radius-lg;
+    border-radius: $radius-m;
     object-fit: cover;
   }
 }
 
 .file_info {
   flex: 1;
-  color: $color-text-secondary;
+  color: $txt-secondary;
   word-break: break-all;
 
   h5 {
-    margin-bottom: $spacing-xxs;
-    font-size: $font-size-sm;
-    color: $color-primary;
+    margin-bottom: $spacing-4;
+    font-size: $font-size-13;
+    color: $primary;
     @include ellipsis-multi(2);
   }
 
   .meta_data {
     display: flex;
     flex-direction: column;
-    gap: $spacing-nano;
+    gap: $spacing-2;
 
     span {
       display: block;
-      font-size: $font-size-xs;
-      color: $color-text-subtle;
+      font-size: $font-size-12;
+      color: $txt-tertiary;
     }
   }
 }
 
 .badge_existing,
 .badge_new {
-  padding: $spacing-nano $spacing-xs;
+  padding: $spacing-2 $spacing-8;
   display: inline-block !important;
   width: fit-content;
-  border-radius: $border-radius-sm;
-  font-size: $font-size-xs;
-  color: $color-white !important;
+  border-radius: $radius-xs;
+  font-size: $font-size-12;
+  color: $white !important;
 }
 
 .badge_existing {
-  background-color: $color-primary;
+  background-color: $primary;
 }
 
 .badge_new {
-  background-color: $color-status-success;
+  background-color: $status-positive;
 }
 
 .button_wrap {
@@ -89,7 +89,7 @@ $item-gap: 0.8rem;
     transition: color 0.2s;
 
     &:hover {
-      color: $color-primary;
+      color: $primary;
     }
   }
 }
