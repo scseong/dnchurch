@@ -6,6 +6,20 @@
 // ══════════════════════════════════════════
 
 :root {
+  // ── Spacing — spacing-8+: Mobile 기본값 ──
+  --spacing-8: 0.6rem;
+  --spacing-10: 0.8rem;
+  --spacing-12: 1rem;
+  --spacing-16: 1.2rem;
+  --spacing-20: 1.6rem;
+  --spacing-24: 2rem;
+  --spacing-32: 2.4rem;
+  --spacing-40: 3.2rem;
+  --spacing-48: 4rem;
+  --spacing-64: 5.2rem;
+  --spacing-80: 6.4rem;
+  --spacing-96: 8rem;
+
   // radius-2 ~ radius-6: 모든 해상도 동일
   --radius-2: 0.2rem;
   --radius-4: 0.4rem;
@@ -39,6 +53,20 @@
 
 @include respond-up($breakpoint-tablet-sm) {
   :root {
+    // ── Spacing — Desktop 값 ──
+    --spacing-8: 0.8rem;
+    --spacing-10: 1rem;
+    --spacing-12: 1.2rem;
+    --spacing-16: 1.6rem;
+    --spacing-20: 2rem;
+    --spacing-24: 2.4rem;
+    --spacing-32: 3.2rem;
+    --spacing-40: 4rem;
+    --spacing-48: 4.8rem;
+    --spacing-64: 6.4rem;
+    --spacing-80: 8rem;
+    --spacing-96: 9.6rem;
+
     --radius-8: 0.8rem;
     --radius-10: 1rem;
     --radius-12: 1.2rem;
