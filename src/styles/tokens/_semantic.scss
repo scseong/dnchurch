@@ -71,6 +71,9 @@ $radius-s: var(--radius-12);
 /// XS (Desktop 0.8rem / Mobile 0.6rem) — label, tag, button 등 가장 작은 컴포넌트
 $radius-xs: var(--radius-8);
 
+/// XXS (Desktop 0.4rem / Mobile 0.4rem)
+$radius-xxs: var(--radius-4);
+
 /// Circle (9999px) — 원형 표현이 필요한 경우, 높이 또는 너비 값의 50%를 기준으로 사용
 $radius-circle: var(--radius-999);
 
