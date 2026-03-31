@@ -3,7 +3,8 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import clsx from 'clsx';
-import { revealStyle, REVEAL_STEP, REVEAL_STEP_CONTENT } from '@/utils/reveal';
+import { PiCaretRight } from 'react-icons/pi';
+import { revealStyle, REVEAL_STEP, REVEAL_STEP_CONTENT, getRevealStyle } from '@/utils/reveal';
 import { isRecent, formattedDate } from '@/utils/date';
 import type { NoticeType } from '@/types/notice';
 import styles from './FeedContent.module.scss';
@@ -42,7 +43,7 @@ export default function FeedContent({ notices }: Props) {
 
   return (
     <>
-      <div data-reveal style={revealStyle(REVEAL_STEP_CONTENT)} className={styles.tab_switcher}>
+      <div data-reveal style={getRevealStyle(1)} className={styles.tab_switcher}>
         <button
           type="button"
           className={activeTab === 'news' ? styles.tab_active : styles.tab_inactive}
@@ -62,7 +63,7 @@ export default function FeedContent({ notices }: Props) {
       <div className={styles.grid}>
         {/* 교회 소식 */}
         <div className={clsx(styles.column, activeTab !== 'news' && styles.column_hidden)}>
-          <div className={styles.column_header} data-reveal style={revealStyle()}>
+          <div className={styles.column_header} data-reveal style={getRevealStyle(1)}>
             <h3 className={styles.column_title}>
               <span className={styles.color_bar_news} />
               교회 소식
@@ -78,20 +79,22 @@ export default function FeedContent({ notices }: Props) {
                 href={`/news/notice/${notice.id}`}
                 className={styles.item}
                 data-reveal
-                style={revealStyle(i * REVEAL_STEP)}
+                style={getRevealStyle(i)}
               >
                 <div className={styles.item_body}>
-                  <span className={styles.item_title_row}>
-                    {isRecent(notice.created_at) && (
-                      <span className={styles.badge_new}>N</span>
-                    )}
-                    <span className={styles.item_title}>{notice.title}</span>
-                  </span>
-                  <span className={styles.item_meta}>
-                    <span className={styles.item_date}>
-                      {formattedDate(notice.created_at, 'YYYY.MM.DD')}
+                  <div className={styles.item_content}>
+                    <span className={styles.item_title_row}>
+                      {isRecent(notice.created_at) && <span className={styles.badge_new}>N</span>}
+                      <span className={styles.item_title}>{notice.title}</span>
                     </span>
-                  </span>
+                    <span className={styles.item_meta}>
+                      <span className={styles.badge_category}>{notice.category}</span>
+                      <span className={styles.item_date}>
+                        {formattedDate(notice.created_at, 'YYYY.MM.DD')}
+                      </span>
+                    </span>
+                  </div>
+                  <PiCaretRight className={styles.item_chevron} aria-hidden="true" />
                 </div>
               </Link>
             ))}
@@ -100,7 +103,7 @@ export default function FeedContent({ notices }: Props) {
 
         {/* 은혜 나눔 */}
         <div className={clsx(styles.column, activeTab !== 'sharing' && styles.column_hidden)}>
-          <div className={styles.column_header} data-reveal style={revealStyle()}>
+          <div className={styles.column_header} data-reveal style={getRevealStyle(1)}>
             <h3 className={styles.column_title}>
               <span className={styles.color_bar_sharing} />
               은혜 나눔
@@ -111,21 +114,18 @@ export default function FeedContent({ notices }: Props) {
           </div>
           <div className={styles.list_card}>
             {SHARING_ITEMS.map((item, i) => (
-              <div
-                key={item.id}
-                className={styles.item}
-                data-reveal
-                style={revealStyle(i * REVEAL_STEP)}
-              >
+              <div key={item.id} className={styles.item} data-reveal style={getRevealStyle(i)}>
                 <div className={styles.item_body}>
-                  <span className={styles.item_title_row}>
-                    {item.isNew && <span className={styles.badge_new}>N</span>}
-                    <span className={styles.item_title}>{item.title}</span>
-                  </span>
-                  <span className={styles.item_meta}>
-                    <span className={styles.item_author}>{item.author}</span>
-                    <span className={styles.item_date}>{item.date}</span>
-                  </span>
+                  <div className={styles.item_content}>
+                    <span className={styles.item_title_row}>
+                      {item.isNew && <span className={styles.badge_new}>N</span>}
+                      <span className={styles.item_title}>{item.title}</span>
+                    </span>
+                    <span className={styles.item_meta}>
+                      <span className={styles.item_author}>{item.author}</span>
+                      <span className={styles.item_date}>{item.date}</span>
+                    </span>
+                  </div>
                 </div>
               </div>
             ))}
@@ -137,7 +137,7 @@ export default function FeedContent({ notices }: Props) {
         href={activeTab === 'news' ? '/news/notice' : '/fellowship'}
         className={styles.more_button}
         data-reveal
-        style={revealStyle(notices.length * REVEAL_STEP)}
+        style={getRevealStyle(notices.length)}
       >
         더 보기
       </Link>

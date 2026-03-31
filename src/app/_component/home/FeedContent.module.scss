@@ -1,15 +1,11 @@
 // 로컬 변수 (디자인 토큰 미포함)
 $color-feed-primary: #5c6b4f;
-$color-feed-primary-light: #eef1eb;
-$color-feed-accent: #c49352;
-$radius-list: 1.4rem;
-$radius-list-lg: 1.6rem;
 
 // ─── Tab Switcher (Mobile Only) ─────────────────────
 .tab_switcher {
   display: flex;
-  gap: $spacing-4;
-  margin-bottom: $spacing-16;
+  border-bottom: $spacing-1 solid $border-primary;
+  margin-bottom: $spacing-32;
 
   @include respond-up($breakpoint-tablet) {
     display: none;
@@ -20,25 +16,31 @@ $radius-list-lg: 1.6rem;
 .tab_inactive {
   flex: 1;
   padding: $spacing-12 0;
-  border-radius: $radius-s;
   border: none;
-  font-size: $font-size-15;
-  font-weight: $font-weight-semibold;
+  border-bottom: 0.1rem solid transparent;
+  margin-bottom: calc(-1 * $spacing-1);
+  background: none;
+  font-size: $font-size-14;
   font-family: $font-family-base;
   cursor: pointer;
   transition:
-    background $transition-duration-normal $transition-easing-default,
-    color $transition-duration-normal $transition-easing-default;
+    color $transition-duration-normal $transition-easing-default,
+    border-color $transition-duration-normal $transition-easing-default;
 }
 
 .tab_active {
-  background: $gray-900;
-  color: $white;
+  font-weight: $font-weight-semibold;
+  color: $gold;
+  border-bottom-color: $gold;
 }
 
 .tab_inactive {
-  background: $cream;
-  color: $txt-secondary;
+  font-weight: $font-weight-regular;
+  color: $txt-tertiary;
+
+  &:hover {
+    color: $txt-secondary;
+  }
 }
 
 // ─── Grid ───────────────────────────────────────────
@@ -49,7 +51,7 @@ $radius-list-lg: 1.6rem;
   @include respond-up($breakpoint-tablet) {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: $spacing-32;
+    gap: $spacing-24;
   }
 }
 
@@ -89,7 +91,7 @@ $radius-list-lg: 1.6rem;
 .color_bar_sharing {
   width: $spacing-4;
   height: 2.2rem;
-  border-radius: $spacing-2;
+  border-radius: $radius-xs;
   display: inline-block;
   flex-shrink: 0;
   transform: translateY(-0.1rem);
@@ -100,36 +102,33 @@ $radius-list-lg: 1.6rem;
 }
 
 .color_bar_sharing {
-  background: $color-feed-accent;
+  background: $gold;
 }
 
 .more_link {
-  @include text-caption;
-  font-weight: $font-weight-semibold;
-  text-decoration: none;
-  color: $color-feed-accent;
   padding-bottom: $spacing-2;
-  border-bottom: $spacing-1 solid transparent;
+  display: block;
+  width: fit-content;
+  border-bottom: $spacing-1 solid rgba($gold, 0.2);
+  font-size: $font-size-13;
+  font-weight: $font-weight-medium;
+  color: rgba($gold, 0.8);
   transition:
-    border-color $transition-duration-normal $transition-easing-default,
-    opacity $transition-duration-normal $transition-easing-default;
+    color $transition-duration-normal $transition-easing-default,
+    border-color $transition-duration-normal $transition-easing-default;
 
   &:hover {
-    border-color: $color-feed-accent;
-    opacity: 0.8;
+    color: $gold;
+    border-color: $gold;
   }
 }
 
 // ─── List Card ──────────────────────────────────────
 .list_card {
   background: $white;
-  border-radius: $radius-list;
-  border: 1px solid $border-primary;
+  border-radius: $radius-xs;
+  border: $spacing-1 solid $border-primary;
   overflow: hidden;
-
-  @include respond-up($breakpoint-tablet) {
-    border-radius: $radius-list-lg;
-  }
 }
 
 // ─── Item Row ───────────────────────────────────────
@@ -141,7 +140,7 @@ $radius-list-lg: 1.6rem;
   transition: background $transition-duration-normal $transition-easing-default;
 
   &:not(:last-child) {
-    border-bottom: 1px solid $gray-200;
+    border-bottom: $spacing-1 solid $gray-200;
   }
 
   &:hover {
@@ -156,9 +155,28 @@ $radius-list-lg: 1.6rem;
 // ─── Item Body ──────────────────────────────────────
 .item_body {
   display: flex;
+  align-items: center;
+  gap: $spacing-12;
+  min-width: 0;
+}
+
+.item_content {
+  flex: 1;
+  display: flex;
   flex-direction: column;
   gap: $spacing-4;
   min-width: 0;
+}
+
+.item_chevron {
+  flex-shrink: 0;
+  font-size: $font-size-14;
+  color: $txt-tertiary;
+  transition: color $transition-duration-normal $transition-easing-default;
+
+  .item:hover & {
+    color: $txt-secondary;
+  }
 }
 
 // ─── Item Content ───────────────────────────────────
@@ -172,15 +190,8 @@ $radius-list-lg: 1.6rem;
 
 .item_title {
   color: $txt-primary;
-  font-size: $font-size-15;
-  font-weight: $font-weight-medium;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-
-  @include respond-up($breakpoint-tablet) {
-    font-size: $font-size-16;
-  }
+  font-size: $font-size-14;
+  @include ellipsis-multi(1);
 }
 
 .item_meta {
@@ -198,6 +209,18 @@ $radius-list-lg: 1.6rem;
 }
 
 // ─── Badges ─────────────────────────────────────────
+.badge_category {
+  flex-shrink: 0;
+  padding: $spacing-4 $spacing-6;
+  font-size: $font-size-11;
+  font-weight: $font-weight-medium;
+  line-height: $line-height-reset;
+  border-radius: $radius-xxs;
+  white-space: nowrap;
+  color: $txt-secondary;
+  background: $cream;
+}
+
 .badge_new {
   color: $white;
   font-size: 0.8rem;
@@ -216,9 +239,9 @@ $radius-list-lg: 1.6rem;
 .more_button {
   display: block;
   width: 100%;
-  padding: $spacing-8 0;
-  border-radius: $radius-s;
-  border: 1px solid $border-primary;
+  padding: $spacing-12 0;
+  border-radius: $radius-xs;
+  border: $spacing-1 solid $border-primary;
   background: transparent;
   color: $txt-secondary;
   font-size: $font-size-13;
@@ -226,7 +249,8 @@ $radius-list-lg: 1.6rem;
   margin-top: $spacing-12;
   text-align: center;
   text-decoration: none;
-  transition: background $transition-duration-normal $transition-easing-default,
+  transition:
+    background $transition-duration-normal $transition-easing-default,
     color $transition-duration-normal $transition-easing-default;
 
   &:hover {
