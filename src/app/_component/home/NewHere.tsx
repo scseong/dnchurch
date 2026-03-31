@@ -2,10 +2,11 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
+import { PiArrowRight } from 'react-icons/pi';
 import clsx from 'clsx';
 import CloudinaryImage from '@/components/common/CloudinaryImage';
 import { LayoutContainer } from '@/components/layout';
-import { revealStyle, REVEAL_STEP_CONTENT } from '@/utils/reveal';
+import { getRevealStyle } from '@/utils/reveal';
 import styles from './NewHere.module.scss';
 
 const FOUNDING_YEAR = 1958;
@@ -46,7 +47,7 @@ export default function NewHere() {
       <LayoutContainer>
         <div className={styles.inner}>
           {/* 좌측: 교회 이미지 (PC only) */}
-          <div className={styles.image_area} data-reveal style={revealStyle()}>
+          <div className={styles.image_area} data-reveal style={getRevealStyle()}>
             <div className={styles.image_sticky}>
               <div className={styles.image_frame}>
                 <CloudinaryImage
@@ -69,7 +70,7 @@ export default function NewHere() {
           </div>
 
           {/* 우측: 텍스트 + FAQ */}
-          <div className={styles.content} data-reveal style={revealStyle(REVEAL_STEP_CONTENT)}>
+          <div className={styles.content} data-reveal style={getRevealStyle()}>
             <div className={styles.header}>
               <span className={styles.caption}>Welcome</span>
               <h2 className={styles.title}>
@@ -90,6 +91,8 @@ export default function NewHere() {
                 <div
                   key={item.question}
                   className={clsx(styles.faq_item, openIndex === index && styles.faq_open)}
+                  data-reveal
+                  style={getRevealStyle(index)}
                 >
                   <button
                     type="button"
@@ -116,8 +119,14 @@ export default function NewHere() {
               ))}
             </div>
 
-            <Link href="/newcomer" className={styles.cta_link}>
-              새가족부 안내 보기 →
+            <Link
+              href="/newcomer"
+              className={styles.cta_link}
+              data-reveal
+              style={getRevealStyle(FAQ_ITEMS.length)}
+            >
+              새가족부 안내 보기
+              <PiArrowRight aria-hidden="true" />
             </Link>
           </div>
         </div>
