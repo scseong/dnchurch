@@ -1,6 +1,6 @@
 // ─── Section ────────────────────────────────────────
 .section {
-  padding: $section-padding-64 0;
+  padding: $section-padding-80 0;
   background: $bg-dark;
 }
 
@@ -8,7 +8,7 @@
 .header {
   display: flex;
   flex-direction: column;
-  gap: $content-gap-s;
+  gap: $content-gap-m;
   margin-bottom: $content-gap-l;
 
   @include respond-up($breakpoint-mobile-lg) {
@@ -21,36 +21,39 @@
 .header_left {
   display: flex;
   flex-direction: column;
-  gap: $spacing-4;
 }
 
 .caption {
-  @include text-label($color: $gold);
-  letter-spacing: 0.1rem;
+  margin-bottom: $spacing-12;
+  display: inline-block;
+  font-size: $font-size-12;
+  font-weight: $font-weight-medium;
   text-transform: uppercase;
+  letter-spacing: $letter-spacing-wider;
+  color: $gold;
 }
 
 .header h2 {
-  color: $white;
-  @include text-page-title();
   font-family: $font-family-secondary;
+  font-weight: $font-weight-medium;
+  color: $white;
 }
 
 .header_link {
-  @include text-sub($color: $gold);
   padding-bottom: $spacing-2;
-  display: inline-block;
+  display: block;
   width: fit-content;
-  border-bottom: $spacing-1 solid transparent;
-  text-decoration: none;
-  white-space: nowrap;
+  border-bottom: $spacing-1 solid rgba($gold, 0.2);
+  font-size: $font-size-13;
+  font-weight: $font-weight-medium;
+  color: rgba($gold, 0.7);
   transition:
-    opacity 0.2s ease,
-    border 0.2s ease;
+    color $transition-duration-normal $transition-easing-default,
+    border-color $transition-duration-normal $transition-easing-default;
 
   &:hover {
+    color: $gold;
     border-color: $gold;
-    opacity: 0.8;
   }
 }
 

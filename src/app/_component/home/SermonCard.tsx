@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import clsx from 'clsx';
 import { formattedDate } from '@/utils/date';
-import { revealStyle } from '@/utils/reveal';
+import { getRevealStyle } from '@/utils/reveal';
 import type { RecentSermon } from '@/apis/sermons';
 import styles from './SermonCard.module.scss';
 
@@ -11,25 +11,11 @@ const YT_WATCH = 'https://www.youtube.com/watch?v=';
 type SermonCardProps = {
   sermon: RecentSermon;
   isLatest?: boolean;
-  delay?: number;
+  index?: number;
   isSub?: boolean;
 };
 
-function PlayIcon({ className }: { className?: string }) {
-  return (
-    <span className={className} aria-hidden="true">
-      <svg viewBox="0 0 12 14" fill="currentColor">
-        <path d="M0 0v14l12-7z" />
-      </svg>
-    </span>
-  );
-}
-
-function sermonAlt(sermon: Pick<RecentSermon, 'title' | 'preacher' | 'sermon_date'>) {
-  return `${sermon.title} - ${sermon.preacher} (${formattedDate(sermon.sermon_date, 'YYYY.MM.DD')})`;
-}
-
-export default function SermonCard({ sermon, isLatest, delay, isSub }: SermonCardProps) {
+export default function SermonCard({ sermon, isLatest, index, isSub }: SermonCardProps) {
   return (
     <Link
       href={sermon.youtube_id ? `${YT_WATCH}${sermon.youtube_id}` : `/sermons/${sermon.id}`}
@@ -38,9 +24,10 @@ export default function SermonCard({ sermon, isLatest, delay, isSub }: SermonCar
       rel="noopener noreferrer"
       aria-label={`${sermon.title} 설교 영상 재생 - ${sermon.preacher}`}
       data-reveal
-      style={revealStyle(delay)}
+      style={getRevealStyle(index)}
     >
       <div className={styles.card_thumb}>
+        {/* TODO: Cloudinary 최적화 */}
         {sermon.youtube_id && (
           <img
             src={`${YT_THUMB}/${sermon.youtube_id}/maxresdefault.jpg`}
@@ -68,4 +55,18 @@ export default function SermonCard({ sermon, isLatest, delay, isSub }: SermonCar
       </div>
     </Link>
   );
+}
+
+function PlayIcon({ className }: { className?: string }) {
+  return (
+    <span className={className} aria-hidden="true">
+      <svg viewBox="0 0 12 14" fill="currentColor">
+        <path d="M0 0v14l12-7z" />
+      </svg>
+    </span>
+  );
+}
+
+function sermonAlt(sermon: Pick<RecentSermon, 'title' | 'preacher' | 'sermon_date'>) {
+  return `${sermon.title} - ${sermon.preacher} (${formattedDate(sermon.sermon_date, 'YYYY.MM.DD')})`;
 }
