@@ -28,6 +28,7 @@ yarn knip             # 미사용 코드 검사
 - `className` 네이밍: **snake_case** (`styles.quick_item`)
 - `className` 2개 이상: 반드시 `clsx` 사용
 - 스타일 작성: **모바일 퍼스트** — 기본값이 모바일, `respond-up($width)`으로 상위 뷰포트 확장
+- 커밋 메시지 본문은 **bullet(`-`)으로 항목 구분**
 
 ## ⚠️ Gotchas
 
@@ -41,8 +42,8 @@ yarn knip             # 미사용 코드 검사
 
 ## 상세 문서 (스킬 — 해당 작업 시 자동 로딩)
 
-| 트리거 | 스킬 |
-|---|---|
-| Supabase 클라이언트, 캐싱, revalidateTag, 인증 | `.claude/skills/supabase/` |
-| SCSS 토큰, 믹스인, 시맨틱 토큰 매핑 | `.claude/skills/styles/` |
-| 새 파일 위치, 디렉토리 구조, barrel export | `.claude/skills/file-structure/` |
+| 트리거                                         | 스킬                             |
+| ---------------------------------------------- | -------------------------------- |
+| Supabase 클라이언트, 캐싱, revalidateTag, 인증 | `.claude/skills/supabase/`       |
+| SCSS 토큰, 믹스인, 시맨틱 토큰 매핑            | `.claude/skills/styles/`         |
+| 새 파일 위치, 디렉토리 구조, barrel export     | `.claude/skills/file-structure/` |
