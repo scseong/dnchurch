@@ -20,12 +20,15 @@
   }
 }
 
-@mixin set-heading-fonts($sizes-map, $line-heights-map: null) {
+@mixin set-heading-fonts($sizes-map, $line-heights-map: null, $letter-spacings-map: null) {
   @each $heading, $size in $sizes-map {
     #{$heading} {
       font-size: $size;
       @if $line-heights-map {
         line-height: map-get($line-heights-map, $heading);
+      }
+      @if $letter-spacings-map {
+        letter-spacing: map-get($letter-spacings-map, $heading);
       }
     }
   }
@@ -53,7 +56,6 @@
   -webkit-user-select: none;
   -ms-user-select: none;
 }
-
 
 @mixin ellipsis-multi($lines: 2) {
   display: -webkit-box;
@@ -86,7 +88,9 @@
   font-weight: $weight;
   line-height: map-get($heading-line-heights, 'h1');
   letter-spacing: $letter-spacing-heading;
-  @if $color { color: $color; }
+  @if $color {
+    color: $color;
+  }
 
   @include respond-up($breakpoint-tablet) {
     font-size: $font-size-42;
@@ -99,7 +103,9 @@
   font-weight: $weight;
   line-height: map-get($heading-line-heights, 'h2');
   letter-spacing: $letter-spacing-heading;
-  @if $color { color: $color; }
+  @if $color {
+    color: $color;
+  }
 
   @include respond-up($breakpoint-tablet) {
     font-size: $font-size-34;
@@ -112,7 +118,9 @@
   font-weight: $weight;
   line-height: map-get($heading-line-heights, 'h3');
   letter-spacing: $letter-spacing-tight;
-  @if $color { color: $color; }
+  @if $color {
+    color: $color;
+  }
 
   @include respond-up($breakpoint-tablet) {
     font-size: $font-size-28;
@@ -125,7 +133,9 @@
   font-weight: $weight;
   line-height: map-get($heading-line-heights, 'h4');
   letter-spacing: $letter-spacing-tight;
-  @if $color { color: $color; }
+  @if $color {
+    color: $color;
+  }
 
   @include respond-up($breakpoint-tablet) {
     font-size: $font-size-24;
@@ -137,7 +147,9 @@
   font-size: $font-size-18;
   font-weight: $weight;
   line-height: map-get($heading-line-heights, 'h5');
-  @if $color { color: $color; }
+  @if $color {
+    color: $color;
+  }
 
   @include respond-up($breakpoint-tablet) {
     font-size: $font-size-20;

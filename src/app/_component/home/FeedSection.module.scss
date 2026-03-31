@@ -9,11 +9,13 @@
 }
 
 .caption {
-  @include text-label($color: $gold);
-  margin-bottom: $spacing-4;
+  margin-bottom: $spacing-12;
   display: inline-block;
-  letter-spacing: 0.1rem;
+  font-size: $font-size-12;
+  font-weight: $font-weight-medium;
   text-transform: uppercase;
+  letter-spacing: $letter-spacing-wider;
+  color: $gold;
 }
 
 .header h2 {
@@ -26,7 +28,7 @@
 
   @include respond-up($breakpoint-tablet) {
     @include text-sub();
-    margin: $spacing-4 0;
+    margin-top: $spacing-8;
     display: block;
     font-size: $font-size-16;
   }

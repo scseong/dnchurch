@@ -18,10 +18,19 @@ $white: #faf9f6;
 // ══════════════════════════════════════════
 
 /// 교회 네이비. 다크 배경, 헤더/푸터, 강한 브랜드 표현
-$navy: #1b2d4e;
+$navy: #1c2b3a;
+
+/// 네이비 중간 톤. 서브 배경, 구분선, 보조 요소
+$navy-mid: #2c3e50;
+
+/// 네이비 연한 톤. hover 상태, 보조 UI 요소
+$navy-light: #3d5166;
 
 /// 포인트 컬러. CTA 강조, 브랜드 액센트
-$gold: #b8976a;
+$gold: #c4924a;
+
+/// 골드 연한 톤. hover 상태, 보조 강조
+$gold-light: #d9a96a;
 
 /// 섹션/카드 배경. 따뜻한 톤의 배경
 $cream: #f5f0e6;
@@ -120,7 +129,10 @@ $border-primary: $gray-300;
 $border-secondary: $gray-500;
 
 /// 반전 경계선. 다크 배경 위
-$border-inverse: $gray-200;
+$border-inverse: $white;
+
+/// 따뜻한 경계선. cream 배경 위 구분선
+$border-warm: #64503226;
 
 // ══════════════════════════════════════════
 // SEMANTIC: Primary Action

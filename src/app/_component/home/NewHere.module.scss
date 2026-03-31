@@ -49,8 +49,8 @@ $divider-height: 0.2rem;
 
 .year_badge {
   position: absolute;
-  bottom: -$spacing-16;
-  right: -$spacing-16;
+  bottom: calc(-1 * $spacing-16);
+  right: calc(-1 * $spacing-16);
   padding: $spacing-20 $spacing-24;
   background: $navy;
   border-radius: $radius-xs;
@@ -81,29 +81,33 @@ $divider-height: 0.2rem;
   flex-direction: column;
 
   @include respond-up($breakpoint-tablet) {
-    align-self: center;
+    align-self: flex-start;
+  }
+
+  @include respond-up($breakpoint-tablet-lg) {
+    padding-top: $spacing-20;
   }
 }
 
 // ─── 헤더 ───────────────────────────────────────────
 .header {
-  margin-bottom: $spacing-16;
+  margin-bottom: $spacing-12;
 }
 
 .caption {
-  @include text-label($color: $gold);
-  display: inline-block;
-  letter-spacing: 0.25rem;
-  text-transform: uppercase;
   margin-bottom: $spacing-12;
+  display: inline-block;
+  font-size: $font-size-12;
+  font-weight: $font-weight-medium;
+  text-transform: uppercase;
+  letter-spacing: $letter-spacing-wider;
+  color: $gold;
 }
 
 .title {
   @include text-page-title();
   font-family: $font-family-secondary;
   font-weight: $font-weight-regular;
-  line-height: 1.25;
-  letter-spacing: $letter-spacing-heading;
 
   strong {
     font-family: inherit;
@@ -115,7 +119,7 @@ $divider-height: 0.2rem;
   width: $divider-width;
   height: $divider-height;
   background: $gold;
-  margin: $spacing-20 0;
+  margin: $spacing-16 0;
 }
 
 .desc {
@@ -130,7 +134,7 @@ $divider-height: 0.2rem;
 }
 
 .faq_item {
-  border-bottom: 1px solid $border-primary;
+  border-bottom: 1px solid $border-warm;
 }
 
 .faq_question {
@@ -149,9 +153,18 @@ $divider-height: 0.2rem;
   font-weight: $font-weight-medium;
   color: $txt-primary;
   line-height: $line-height-base;
+  transition: color $transition-duration-normal $transition-easing-default;
+
+  &:hover {
+    color: $gold;
+  }
 
   @include respond-up($breakpoint-tablet) {
     font-size: $font-size-15;
+  }
+
+  .faq_open & {
+    font-weight: $font-weight-semibold;
   }
 }
 
@@ -214,7 +227,7 @@ $divider-height: 0.2rem;
   align-items: center;
   gap: $spacing-8;
   width: fit-content;
-  font-size: $font-size-14;
+  font-size: $font-size-13;
   font-weight: $font-weight-semibold;
   color: $gold;
   text-decoration: none;

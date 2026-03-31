@@ -45,11 +45,20 @@ $font-weight-bold: 700;
 // LETTER SPACING
 // ══════════════════════════════════════════
 
+/// -0.03rem — 본문 기본값. body 기본 letter-spacing
+$letter-spacing-body: -0.03rem;
+
 /// -0.15rem — 대형 헤딩(h1~h2)에서 글자 간 간격 축소
 $letter-spacing-heading: -0.15rem;
 
 /// -0.1rem — 중형 헤딩(h3~h5)
 $letter-spacing-tight: -0.1rem;
+
+/// 0.05rem — 라벨, 캡션 등 소형 텍스트의 가독성 향상                  │
+$letter-spacing-wide: 0.1rem;
+
+/// 0.2rem — 영문 대문자, 뱃지, 섹션 제목 등 강한 트래킹
+$letter-spacing-wider: 0.2rem;
 
 // ══════════════════════════════════════════
 // FONT SIZE — 숫자 기반 네이밍
@@ -124,9 +133,17 @@ $heading-sizes-mobile: (
 );
 
 $heading-line-heights: (
-  'h1': 1.25,
-  'h2': 1.35,
+  'h1': 1.3,
+  'h2': 1.3,
   'h3': 1.4,
-  'h4': 1.5,
+  'h4': 1.4,
   'h5': 1.5
+);
+
+$heading-letter-spacings: (
+  'h1': -0.1rem,
+  'h2': -0.05rem,
+  'h3': -0.03rem,
+  'h4': -0.03rem,
+  'h5': -0.03rem,
 );

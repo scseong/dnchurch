@@ -18,7 +18,9 @@
   --spacing-48: 4rem;
   --spacing-64: 5.2rem;
   --spacing-80: 6.4rem;
-  --spacing-96: 8rem;
+  --spacing-120: 8rem;
+  --spacing-160: 12rem;
+  --spacing-200: 16rem;
 
   // radius-2 ~ radius-6: 모든 해상도 동일
   --radius-2: 0.2rem;
@@ -51,7 +53,7 @@
   --screensize-h-min: 81.2rem;
 }
 
-@include respond-up($breakpoint-tablet-sm) {
+@include respond-up($breakpoint-tablet) {
   :root {
     // ── Spacing — Desktop 값 ──
     --spacing-8: 0.8rem;
@@ -65,7 +67,9 @@
     --spacing-48: 4.8rem;
     --spacing-64: 6.4rem;
     --spacing-80: 8rem;
-    --spacing-96: 9.6rem;
+    --spacing-120: 12rem;
+    --spacing-160: 16rem;
+    --spacing-200: 20rem;
 
     --radius-8: 0.8rem;
     --radius-10: 1rem;
@@ -117,6 +121,7 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   line-height: $line-height-base;
+  letter-spacing: $letter-spacing-body;
   color: $txt-primary;
   overflow-x: hidden;
   -webkit-text-size-adjust: none;
@@ -131,14 +136,6 @@ body {
   font-family: inherit;
   color: inherit;
   box-sizing: border-box;
-}
-
-h1,
-h2,
-h3,
-h4,
-h5 {
-  letter-spacing: $letter-spacing-heading;
 }
 
 input,
@@ -224,7 +221,7 @@ header:has(#gnb:hover):not([data-nav-locked]) {
   @include respond-fonts($width, $vw-value);
 }
 
-@include set-heading-fonts($heading-sizes-mobile, $heading-line-heights);
+@include set-heading-fonts($heading-sizes-mobile, $heading-line-heights, $heading-letter-spacings);
 @include respond-up($breakpoint-tablet) {
   @include set-heading-fonts($heading-sizes);
 }

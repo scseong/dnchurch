@@ -15,3 +15,5 @@ export const revealStyle = (delay?: number): CSSProperties => ({
   transition: `opacity ${REVEAL_DURATION} ease, transform ${REVEAL_DURATION} ease`,
   ...(delay ? { transitionDelay: `${delay}s` } : {})
 });
+
+export const getRevealStyle = (step: number = 0, interval: number = REVEAL_STEP_CONTENT) => revealStyle(interval * step);

@@ -1,9 +1,9 @@
 import Link from 'next/link';
-import { PiCalendarLight, PiBookOpenLight, PiMapPinLight } from 'react-icons/pi';
-import styles from './QuickAccess.module.scss';
+import { PiCalendarLight, PiBookOpenLight, PiMapPinLight, PiArrowRight } from 'react-icons/pi';
 import { LayoutContainer } from '@/components/layout';
 import IconWrap from '@/components/common/IconWrap';
-import { revealStyle, REVEAL_STEP, REVEAL_STEP_CONTENT } from '@/utils/reveal';
+import { getRevealStyle } from '@/utils/reveal';
+import styles from './QuickAccess.module.scss';
 
 const ITEMS = [
   {
@@ -15,7 +15,7 @@ const ITEMS = [
   {
     href: '/about',
     label: '담임목사 인사말',
-    desc: '담임목사님의 말씀을 전합니다',
+    desc: '2026년 말씀 메시지 ',
     Icon: PiBookOpenLight
   },
   {
@@ -28,27 +28,23 @@ const ITEMS = [
 
 export default function QuickAccess() {
   return (
-    <section className={styles.quick_wap}>
+    <section className={styles.quick_wrap}>
       <LayoutContainer className={styles.quick_container}>
-        <nav className={styles.quick_access} aria-label="퀵 액세스">
-          {ITEMS.map(({ href, label, desc, Icon }, i) => (
-            <Link
-              key={label}
-              href={href}
-              className={styles.item}
-              data-reveal
-              style={revealStyle(i * REVEAL_STEP)}
-            >
-              <IconWrap Icon={Icon} className={styles.icon_box} aria-hidden="true" />
-              <span className={styles.text}>
-                <span className={styles.label}>{label}</span>
-                <span className={styles.desc}>{desc}</span>
-              </span>
-              <span className={styles.arrow} aria-hidden="true">
-                →
-              </span>
-            </Link>
-          ))}
+        <nav aria-label="퀵 액세스">
+          <ul className={styles.quick_access}>
+            {ITEMS.map(({ href, label, desc, Icon }, i) => (
+              <li key={href}>
+                <Link href={href} className={styles.item} data-reveal style={getRevealStyle(i)}>
+                  <IconWrap Icon={Icon} className={styles.icon_box} aria-hidden="true" />
+                  <div className={styles.text}>
+                    <span className={styles.label}>{label}</span>
+                    <span className={styles.desc}>{desc}</span>
+                  </div>
+                  <IconWrap Icon={PiArrowRight} className={styles.arrow} aria-hidden="true" />
+                </Link>
+              </li>
+            ))}
+          </ul>
         </nav>
       </LayoutContainer>
     </section>
