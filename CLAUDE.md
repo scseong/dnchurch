@@ -39,6 +39,7 @@ yarn knip             # 미사용 코드 검사
 - `respond($width)` (max-width)는 예외적 상황에만 — 기본은 `respond-up`
 - 한 페이지에서만 쓰이는 컴포넌트는 `src/components/`가 아닌 `app/[route]/_component/`에 배치
 - 재사용 가능성이 확인된 시점에만 `src/components/`로 이동
+- 커밋 prefix는 **Feat · Fix · Style · Refactor · Docs · Chore** 6개만 사용 — `Enhance` 등 임의 prefix 금지
 
 ## 상세 문서 (스킬 — 해당 작업 시 자동 로딩)
 
