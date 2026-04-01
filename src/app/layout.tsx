@@ -36,12 +36,21 @@ const SCROLL_REVEAL_OBSERVER_SCRIPT = `
   var SECTION_GAP=200;
   var pending=[];
   var rafId=null;
+  var revealed={};
+
+  function isRevealed(){return !!revealed[location.pathname]}
+  function markRevealed(){revealed[location.pathname]=true}
+
+  var _push=history.pushState.bind(history);
+  history.pushState=function(state,unused,url){
+    markRevealed();
+    return _push(state,unused,url);
+  };
 
   function revealImmediate(el){
     el.style.transition='none';
     el.style.opacity='1';
     el.style.transform='translateY(0)';
-    el.setAttribute('data-revealed','');
   }
 
   function processBatch(){
@@ -59,7 +68,6 @@ const SCROLL_REVEAL_OBSERVER_SCRIPT = `
       el.style.transitionDelay=eff+'s';
       el.style.opacity='1';
       el.style.transform='translateY(0)';
-      el.setAttribute('data-revealed','');
       running=eff+STAGGER;
     }
     pending=[];
@@ -78,7 +86,7 @@ const SCROLL_REVEAL_OBSERVER_SCRIPT = `
   },{threshold:0,rootMargin:'0px 0px 80px 0px'});
 
   function processElement(el){
-    if(el.hasAttribute('data-revealed')||el.getBoundingClientRect().bottom<0){
+    if(isRevealed()||el.getBoundingClientRect().bottom<0){
       revealImmediate(el);
     } else {
       observer.observe(el);
