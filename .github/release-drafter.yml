@@ -1,0 +1,51 @@
+name-template: 'v$RESOLVED_VERSION 🚀'
+tag-template: 'v$RESOLVED_VERSION'
+
+# 버전을 계산하는 규칙 (작성하신 라벨 기반)
+version-resolver:
+  major:
+    labels:
+      - '💥 파괴적 변경'
+  minor:
+    labels:
+      - '✨ 기능'
+  patch:
+    labels:
+      - '🐛 버그'
+      - '🚑️ 핫픽스'
+      - '🎨 코드 개선'
+      - '💄 UI'
+      - '📝 문서'
+      - '🔥 삭제'
+      - '🔧 설정'
+  default: patch
+
+# 문장형으로 다듬은 카테고리 분류
+categories:
+  - title: '✨ 새로운 기능이 추가되었어요'
+    labels:
+      - '✨ 기능'
+  - title: '🚑️ 급한 문제를 해결했어요'
+    labels:
+      - '🚑️ 핫픽스'
+      - '🐛 버그'
+  - title: '🎨 코드 구조와 UI를 깔끔하게 다듬었어요'
+    labels:
+      - '🎨 코드 개선'
+      - '💄 UI'
+  - title: '📝 문서와 설정에 변화가 있어요'
+    labels:
+      - '📝 문서'
+      - '🔧 설정'
+  - title: '🔥 사용하지 않는 것을 정리했어요'
+    labels:
+      - '🔥 삭제'
+      - '🚀 배포'
+
+# 릴리스 노트 템플릿
+template: |
+  ## 이번 릴리스에서 변경된 내용입니다
+  
+  $CHANGES
+  
+  **전체 변경 사항 확인하기**: https://github.com/scseong/dnchurch/compare/$PREVIOUS_TAG...v$RESOLVED_VERSION
