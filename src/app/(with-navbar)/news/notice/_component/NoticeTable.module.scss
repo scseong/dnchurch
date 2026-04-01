@@ -1,0 +1,280 @@
+// ── 접근성 전용 헤더 ──
+.sr_only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+}
+
+// ── PC Table ──
+.table {
+  width: 100%;
+  border-collapse: collapse;
+
+  @include respond($breakpoint-tablet-sm) {
+    display: none;
+  }
+}
+
+.row {
+  border-bottom: 1px solid $gray-200;
+  cursor: pointer;
+  transition: background-color 0.12s ease;
+
+  td {
+    padding: $spacing-8;
+    vertical-align: middle;
+  }
+
+  &:hover {
+    background-color: $gray-200;
+  }
+
+  &.pinned {
+    background-color: $bg-secondary;
+
+    &:hover {
+      background-color: $bg-tertiary;
+    }
+  }
+
+  &.urgent_row:not(.pinned) {
+    background-color: rgba(192, 57, 43, 0.025);
+  }
+
+  &:focus-visible {
+    outline: 2px solid $primary-active;
+    outline-offset: -2px;
+  }
+}
+
+.col_pin {
+  white-space: nowrap;
+  text-align: center;
+  padding-right: $spacing-8;
+}
+
+.pin_icon {
+  font-size: 1.2rem;
+  color: $txt-tertiary;
+}
+
+.row_number {
+  font-size: $font-size-12;
+  color: $txt-tertiary;
+}
+
+.col_category {
+  white-space: nowrap;
+  padding-right: $spacing-8;
+  font-size: 1.1rem;
+  font-weight: $font-weight-semibold;
+  color: $txt-secondary;
+  text-transform: uppercase;
+
+  &.urgent {
+    color: $status-negative;
+  }
+}
+
+.col_title {
+  width: 100%;
+  padding-left: $spacing-8;
+}
+
+.title_wrap {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+}
+
+.title_text {
+  font-size: $font-size-13;
+  font-weight: $font-weight-regular;
+  color: $txt-primary;
+  @include ellipsis-multi(1);
+
+  &.pinned_title {
+    font-weight: $font-weight-medium;
+  }
+
+  &.urgent {
+    color: $status-negative;
+  }
+}
+
+.inline_badges {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  flex-shrink: 0;
+}
+
+.clip_icon {
+  font-size: $font-size-12;
+  color: $txt-tertiary;
+}
+
+.col_date {
+  padding-left: $spacing-12;
+  font-size: $font-size-12;
+  color: $txt-tertiary;
+  text-align: right;
+  white-space: nowrap;
+}
+
+.col_views {
+  padding-left: $spacing-8;
+  font-size: $font-size-12;
+  color: $txt-tertiary;
+  white-space: nowrap;
+  text-align: right;
+}
+
+.views_inner {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+}
+
+// ── 뱃지 ──
+.badge_new {
+  padding: 0.2rem 0.6rem;
+  border-radius: 0.3rem;
+  font-size: 0.9rem;
+  font-weight: $font-weight-semibold;
+  color: $status-negative;
+  background: rgba($red-500, 0.05);
+  border: 1px solid rgba($red-500, 0.18);
+  white-space: nowrap;
+}
+
+.badge_file {
+  padding: 0.2rem 0.6rem;
+  border-radius: 0.3rem;
+  font-size: 0.9rem;
+  font-weight: $font-weight-semibold;
+  color: $primary-active;
+  background: $primary-subtle;
+  border: 1px solid $border-inverse;
+  white-space: nowrap;
+}
+
+// ── 빈 상태 ──
+.empty {
+  padding: $spacing-64 0;
+  text-align: center;
+  font-size: $font-size-14;
+  color: $txt-tertiary;
+}
+
+// ── Mobile List ──
+.mobile_list {
+  display: none;
+
+  @include respond($breakpoint-tablet-sm) {
+    display: flex;
+    flex-direction: column;
+  }
+}
+
+.mobile_row {
+  padding: 1.4rem 1.6rem;
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-4;
+  border-top: 1px solid $gray-200;
+  text-align: left;
+  cursor: pointer;
+  transition: background-color 0.12s ease;
+  width: 100%;
+
+  &:last-child {
+    border-bottom: 1px solid $gray-200;
+  }
+
+  &:hover {
+    background-color: $gray-200;
+  }
+
+  &.pinned {
+    background-color: $bg-secondary;
+
+    &:hover {
+      background-color: $bg-tertiary;
+    }
+  }
+
+  &.urgent_row:not(.pinned) {
+    background-color: rgba(192, 57, 43, 0.025);
+  }
+
+  &:focus-visible {
+    outline: 2px solid $primary-active;
+    outline-offset: -2px;
+  }
+}
+
+.mobile_top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.mobile_meta {
+  display: flex;
+  align-items: center;
+  gap: $spacing-4;
+}
+
+.mobile_category {
+  font-size: 1.1rem;
+  font-weight: $font-weight-semibold;
+  color: $txt-secondary;
+
+  &.urgent {
+    color: $status-negative;
+  }
+}
+
+.mobile_date {
+  font-size: 1.1rem;
+  color: $txt-tertiary;
+}
+
+.mobile_title {
+  font-size: $font-size-13;
+  font-weight: $font-weight-regular;
+  color: $txt-primary;
+  word-break: keep-all;
+  @include ellipsis-multi(2);
+
+  &.pinned_title {
+    font-weight: $font-weight-medium;
+  }
+
+  &.urgent {
+    color: $status-negative;
+  }
+}
+
+.mobile_bottom {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.mobile_files {
+  display: flex;
+  gap: $spacing-4;
+}
+
+.mobile_views {
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  font-size: 1.1rem;
+  color: $txt-tertiary;
+}

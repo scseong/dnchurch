@@ -1,28 +1,28 @@
 .yearList {
-  margin-bottom: $spacing-sm;
+  margin-bottom: $spacing-12;
   display: flex;
   flex-wrap: wrap;
 
   li {
     margin-right: 0.1rem;
     min-width: 5.5rem;
-    background-color: $color-bg-default;
+    background-color: $bg-secondary;
 
     a {
-      padding: $spacing-xs $spacing-sm;
+      padding: $spacing-8 $spacing-12;
       display: block;
-      border: 0.1rem solid $color-border-primary;
-      font-size: $font-size-md;
+      border: 0.1rem solid $border-primary;
+      font-size: $font-size-14;
       text-align: center;
 
       &:hover {
-        color: $color-text-link-active;
+        color: $txt-link-active;
       }
     }
 
     .active {
       font-weight: $font-weight-bold;
-      color: $color-text-link-active;
+      color: $txt-link-active;
     }
   }
 }

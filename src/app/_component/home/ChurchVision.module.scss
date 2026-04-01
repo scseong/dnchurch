@@ -1,10 +1,10 @@
 .vision {
-  padding: $spacing-xxxl 0;
-  background-color: $color-bg-default;
+  padding: $spacing-64 0;
+  background-color: $bg-secondary;
 }
 
 .title {
-  margin-bottom: $spacing-lg;
+  margin-bottom: $spacing-20;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -12,13 +12,13 @@
 
   .caption {
     display: inline-block;
-    font-size: $font-size-default;
+    font-size: $font-size-15;
     font-weight: $font-weight-semibold;
-    color: $color-primary;
+    color: $primary;
   }
 
   h2 {
-    margin-top: $spacing-xs;
+    margin-top: $spacing-8;
   }
 }
 
@@ -27,34 +27,34 @@
   flex-direction: column;
   align-items: center;
 
-  @include respond-up($breakpoint-lg) {
+  @include respond-up($breakpoint-tablet) {
     flex-direction: row;
-    gap: $spacing-md;
+    gap: $spacing-16;
   }
 
   .feature {
-    padding: $spacing-lg;
+    padding: $spacing-20;
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: $spacing-xs;
-    border-radius: $border-radius-lg;
+    gap: $spacing-8;
+    border-radius: $radius-m;
 
     h3 {
-      font-size: $font-size-h5-mobile;
+      font-size: $font-size-18;
     }
 
-    @include respond-up($breakpoint-sm) {
-      padding: $spacing-xl $spacing-xs;
+    @include respond-up($breakpoint-mobile-lg) {
+      padding: $spacing-24 $spacing-8;
       max-width: 75%;
 
       h3 {
-        font-size: $font-size-h5;
+        font-size: $font-size-20;
       }
     }
 
     .icon {
-      margin-bottom: $spacing-xs;
+      margin-bottom: $spacing-8;
 
       svg {
         width: 6rem;

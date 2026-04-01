@@ -1,0 +1,105 @@
+.bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-bottom: $spacing-8;
+  border-bottom: 1.5px solid var(--notice-t1);
+}
+
+.total {
+  font-size: $font-size-12;
+  color: var(--notice-t3);
+  flex-shrink: 0;
+}
+
+.controls {
+  display: flex;
+  align-items: center;
+  gap: $spacing-4;
+}
+
+.search {
+  position: relative;
+  display: flex;
+  align-items: center;
+  height: 3.2rem;
+  border: 1px solid var(--notice-line-s);
+  border-radius: 0.6rem;
+  background: var(--notice-bg-sub);
+  overflow: hidden;
+}
+
+.search_icon {
+  position: absolute;
+  left: $spacing-8;
+  font-size: $font-size-14;
+  color: var(--notice-t3);
+  pointer-events: none;
+}
+
+.search_input {
+  padding: 0 $spacing-12 0 3rem;
+  width: 20rem;
+  height: 100%;
+  border: none;
+  background: transparent;
+  font-size: $font-size-13;
+  color: var(--notice-t1);
+  outline: none;
+
+  &::placeholder {
+    color: var(--notice-t3);
+  }
+
+  @include respond($breakpoint-tablet-sm) {
+    width: 16rem;
+  }
+}
+
+.clear_button {
+  position: absolute;
+  right: $spacing-4;
+  display: flex;
+  align-items: center;
+  font-size: $font-size-14;
+  color: var(--notice-t3);
+  cursor: pointer;
+}
+
+.sort_select {
+  padding: 0 $spacing-12;
+  height: 3.2rem;
+  border: 1px solid var(--notice-line-s);
+  border-radius: 0.6rem;
+  background: var(--notice-bg-sub);
+  font-size: $font-size-13;
+  color: var(--notice-t2);
+  cursor: pointer;
+  outline: none;
+}
+
+.sort_button {
+  padding: 0 $spacing-12;
+  height: 3.2rem;
+  border-radius: 0.6rem;
+  background: var(--notice-bg-sub);
+  border: 1px solid var(--notice-line-s);
+  font-size: $font-size-13;
+  color: var(--notice-t2);
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+.pc_only {
+  @include respond($breakpoint-tablet-sm) {
+    display: none;
+  }
+}
+
+.mobile_only {
+  display: none;
+
+  @include respond($breakpoint-tablet-sm) {
+    display: block;
+  }
+}

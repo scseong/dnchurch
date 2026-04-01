@@ -1,0 +1,251 @@
+// Local variables
+$bg-section: #fdfaf5;
+$divider-width: 4rem;
+$divider-height: 0.2rem;
+
+// ─── Section ────────────────────────────────────────
+.section {
+  padding: $section-padding-64 0;
+  background: $bg-section;
+}
+
+// ─── Inner Grid ─────────────────────────────────────
+.inner {
+  @include respond-up($breakpoint-tablet) {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: $spacing-64;
+  }
+}
+
+// ─── 좌측: 이미지 (PC only) ────────────────────────
+.image_area {
+  display: none;
+
+  @include respond-up($breakpoint-tablet) {
+    display: block;
+    position: relative;
+    align-self: start;
+  }
+}
+
+.image_sticky {
+  position: sticky;
+  top: calc($header-height + $spacing-24);
+}
+
+.image_frame {
+  aspect-ratio: 3 / 4;
+  border-radius: $radius-xs;
+  overflow: hidden;
+}
+
+.image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  @include prevent-img-drag;
+}
+
+.year_badge {
+  position: absolute;
+  bottom: calc(-1 * $spacing-16);
+  right: calc(-1 * $spacing-16);
+  padding: $spacing-20 $spacing-24;
+  background: $navy;
+  border-radius: $radius-xs;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-4;
+}
+
+.year_number {
+  font-family: $font-family-secondary;
+  font-size: 3.2rem;
+  font-weight: $font-weight-regular;
+  color: $gold;
+  line-height: $line-height-reset;
+}
+
+.year_label {
+  font-size: $font-size-11;
+  font-weight: $font-weight-regular;
+  color: rgba($white, 0.5);
+  letter-spacing: 0.1rem;
+}
+
+// ─── 우측: 콘텐츠 ──────────────────────────────────
+.content {
+  display: flex;
+  flex-direction: column;
+
+  @include respond-up($breakpoint-tablet) {
+    align-self: flex-start;
+  }
+
+  @include respond-up($breakpoint-tablet-lg) {
+    padding-top: $spacing-20;
+  }
+}
+
+// ─── 헤더 ───────────────────────────────────────────
+.header {
+  margin-bottom: $spacing-12;
+}
+
+.caption {
+  margin-bottom: $spacing-12;
+  display: inline-block;
+  font-size: $font-size-12;
+  font-weight: $font-weight-medium;
+  text-transform: uppercase;
+  letter-spacing: $letter-spacing-wider;
+  color: $gold;
+}
+
+.title {
+  @include text-page-title();
+  font-family: $font-family-secondary;
+  font-weight: $font-weight-regular;
+
+  strong {
+    font-family: inherit;
+    font-weight: $font-weight-bold;
+  }
+}
+
+.divider {
+  width: $divider-width;
+  height: $divider-height;
+  background: $gold;
+  margin: $spacing-16 0;
+}
+
+.desc {
+  @include text-sub();
+  font-size: $font-size-14;
+  line-height: $line-height-wide;
+}
+
+// ─── FAQ 아코디언 ───────────────────────────────────
+.faq_list {
+  margin-bottom: $spacing-24;
+}
+
+.faq_item {
+  border-bottom: 1px solid $border-warm;
+}
+
+.faq_question {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: $spacing-12;
+  width: 100%;
+  padding: $spacing-16 0;
+  background: none;
+  border: none;
+  cursor: pointer;
+  text-align: left;
+  font-family: $font-family-base;
+  font-size: $font-size-14;
+  font-weight: $font-weight-medium;
+  color: $txt-primary;
+  line-height: $line-height-base;
+  transition: color $transition-duration-normal $transition-easing-default;
+
+  &:hover {
+    color: $gold;
+  }
+
+  @include respond-up($breakpoint-tablet) {
+    font-size: $font-size-15;
+  }
+
+  .faq_open & {
+    font-weight: $font-weight-semibold;
+  }
+}
+
+.faq_toggle {
+  font-size: $font-size-18;
+  color: $gold;
+  line-height: $line-height-reset;
+  flex-shrink: 0;
+  transition: transform 0.2s ease;
+
+  .faq_open & {
+    transform: rotate(45deg);
+  }
+}
+
+.faq_answer {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 0.35s $transition-easing-default;
+
+  .faq_open & {
+    grid-template-rows: 1fr;
+  }
+}
+
+.faq_answer_inner {
+  overflow: hidden;
+}
+
+.faq_answer_text {
+  margin: 0;
+  padding-bottom: $spacing-16;
+  font-size: $font-size-14;
+  color: $txt-secondary;
+  line-height: $line-height-wide;
+}
+
+.faq_link {
+  display: inline-block;
+  margin-bottom: $spacing-16;
+  padding-bottom: $spacing-2;
+  font-size: $font-size-13;
+  font-weight: $font-weight-semibold;
+  color: $gold;
+  text-decoration: none;
+  border-bottom: $spacing-1 solid transparent;
+  transition:
+    border-color $transition-duration-normal $transition-easing-default,
+    opacity $transition-duration-normal $transition-easing-default;
+
+  &:hover {
+    border-color: $gold;
+    opacity: 0.8;
+  }
+}
+
+// ─── CTA 링크 ───────────────────────────────────────
+.cta_link {
+  display: inline-flex;
+  align-items: center;
+  gap: $spacing-8;
+  width: fit-content;
+  font-size: $font-size-13;
+  font-weight: $font-weight-semibold;
+  color: $gold;
+  text-decoration: none;
+  padding-bottom: $spacing-4;
+  border-bottom: 1px solid rgba($gold, 0.3);
+  transition:
+    border-color $transition-duration-normal $transition-easing-default,
+    opacity $transition-duration-normal $transition-easing-default;
+
+  &:hover {
+    border-color: $gold;
+    opacity: 0.8;
+  }
+}
+
+// ─── 반응형 보정 ────────────────────────────────────
+@include respond($breakpoint-mobile) {
+  .faq_list {
+    margin-bottom: $spacing-20;
+  }
+}

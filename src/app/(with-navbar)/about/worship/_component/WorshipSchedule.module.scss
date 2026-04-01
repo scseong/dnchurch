@@ -3,10 +3,10 @@
   border-collapse: collapse;
 
   th {
-    padding: $spacing-xs $spacing-sm;
-    background-color: $color-primary;
-    color: $color-white;
-    font-size: $font-size-default;
+    padding: $spacing-8 $spacing-12;
+    background-color: $primary;
+    color: $white;
+    font-size: $font-size-15;
 
     font-weight: $font-weight-medium;
     text-align: center;
@@ -29,9 +29,9 @@
     word-break: keep-all;
 
     td {
-      padding: $spacing-sm;
-      background-color: $color-bg-default;
-      font-size: $font-size-md;
+      padding: $spacing-12;
+      background-color: $bg-secondary;
+      font-size: $font-size-14;
     }
 
     td:first-child {

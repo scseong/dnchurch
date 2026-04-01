@@ -1,0 +1,76 @@
+.overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(3px);
+  z-index: 9999;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.25s ease;
+
+  &.open {
+    opacity: 1;
+    pointer-events: auto;
+  }
+}
+
+.sheet {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: $bg-primary;
+  border-radius: 1.6rem 1.6rem 0 0;
+  padding-bottom: env(safe-area-inset-bottom, 0);
+  transform: translateY(100%);
+  transition: transform 0.3s $transition-easing-default;
+  z-index: 10000;
+
+  &.open {
+    transform: translateY(0);
+  }
+}
+
+.handle {
+  margin: $spacing-8 auto $spacing-4;
+  width: 3.6rem;
+  height: 0.4rem;
+  border-radius: $radius-circle;
+  background: $border-primary;
+}
+
+.option_list {
+  padding: $spacing-4 0 $spacing-12;
+  max-height: 70dvh;
+  overflow-y: auto;
+}
+
+.option {
+  padding: 1.5rem 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  font-size: $font-size-14;
+  color: $txt-primary;
+  cursor: pointer;
+  transition: background-color 0.12s ease;
+
+  &:hover {
+    background: $bg-secondary;
+  }
+
+  &.selected {
+    font-weight: $font-weight-semibold;
+  }
+
+  &:focus-visible {
+    outline: 2px solid $primary-active;
+    outline-offset: -2px;
+  }
+}
+
+.check {
+  font-size: $font-size-16;
+  color: $primary;
+}

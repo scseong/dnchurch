@@ -21,19 +21,19 @@
   .content {
     position: relative;
     text-align: center;
-    color: $color-white;
+    color: $white;
     z-index: 10;
 
     h2 {
-      margin-bottom: $spacing-sm;
-      font-size: $font-size-h2;
+      margin-bottom: $spacing-12;
+      font-size: $font-size-34;
       line-height: 1;
-      color: $color-white;
+      color: $white;
     }
 
     p {
-      font-size: $font-size-md;
-      color: $color-white;
+      font-size: $font-size-14;
+      color: $white;
     }
   }
 
@@ -47,11 +47,11 @@
     z-index: 0;
   }
 
-  @include respond($breakpoint-md) {
+  @include respond($breakpoint-tablet-sm) {
     height: 20rem;
 
     h2 {
-      font-size: $font-size-h2-mobile;
+      font-size: $font-size-26;
     }
   }
 }

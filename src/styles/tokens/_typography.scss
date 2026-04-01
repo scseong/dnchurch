@@ -1,58 +1,149 @@
-// Font Family
+// ══════════════════════════════════════════
+// FONT FAMILY
+// ══════════════════════════════════════════
+
+/// 본문 기본 폰트 (Pretendard Variable)
 $font-family-base: 'Pretendard Variable', Pretendard, sans-serif;
+
+/// 강조/헤딩용 세리프 폰트 (나눔명조). 배너 타이틀, 인용문 등 특별한 강조에만 사용
 $font-family-secondary: var(--font-myeongjo);
 
-// Line Height
+// ══════════════════════════════════════════
+// LINE HEIGHT
+// ══════════════════════════════════════════
+
+/// 1 — 아이콘, 뱃지 등 단일 줄 요소. 줄간격 제거
 $line-height-reset: 1;
-$line-height-heading: 1.25;
+
+/// 1.35 — 헤딩 전용. h1~h5에 사용
+$line-height-heading: 1.35;
+
+/// 1.5 — 본문 기본. 대부분의 텍스트에 사용
 $line-height-base: 1.5;
+
+/// 1.8 — 긴 본문, 설교 내용 등 가독성이 중요한 장문 텍스트
 $line-height-wide: 1.8;
 
-// Font Weight
+// ══════════════════════════════════════════
+// FONT WEIGHT
+// 선택 기준: default → regular, 구분 필요 → medium, 강조 → semibold, 헤딩 → bold
+// ══════════════════════════════════════════
+
+/// 400 — 본문 텍스트 기본
 $font-weight-regular: 400;
+
+/// 500 — 라벨, 네비게이션, 본문 내 살짝 강조. regular과 구분이 필요할 때
 $font-weight-medium: 500;
+
+/// 600 — 카드 제목, 리스트 타이틀, 버튼 텍스트. 명확한 강조
 $font-weight-semibold: 600;
+
+/// 700 — 페이지/섹션 헤딩(h1~h3). 최상위 제목에만 사용
 $font-weight-bold: 700;
 
-// Letter Spacing
+// ══════════════════════════════════════════
+// LETTER SPACING
+// ══════════════════════════════════════════
+
+/// -0.03rem — 본문 기본값. body 기본 letter-spacing
+$letter-spacing-body: -0.03rem;
+
+/// -0.15rem — 대형 헤딩(h1~h2)에서 글자 간 간격 축소
 $letter-spacing-heading: -0.15rem;
+
+/// -0.1rem — 중형 헤딩(h3~h5)
 $letter-spacing-tight: -0.1rem;
-$letter-spacing-base: -0.05rem;
 
-// Base Text Size
-$font-size-xl: 1.8rem;
-$font-size-lg: 1.6rem;
-$font-size-default: 1.5rem;
-$font-size-md: 1.4rem;
-$font-size-sm: 1.3rem;
-$font-size-xs: 1.2rem;
-$font-size-xxs: 1.1rem;
+/// 0.05rem — 라벨, 캡션 등 소형 텍스트의 가독성 향상                  │
+$letter-spacing-wide: 0.1rem;
 
-// Heading Sizes
-$font-size-h1: 4.2rem;
-$font-size-h2: 3.4rem;
-$font-size-h3: 2.8rem;
-$font-size-h4: 2.2rem;
-$font-size-h5: 2rem;
+/// 0.2rem — 영문 대문자, 뱃지, 섹션 제목 등 강한 트래킹
+$letter-spacing-wider: 0.2rem;
 
-$font-size-h1-mobile: 3.2rem;
-$font-size-h2-mobile: 2.6rem;
-$font-size-h3-mobile: 2.2rem;
-$font-size-h4-mobile: 2rem;
-$font-size-h5-mobile: 1.8rem;
+// ══════════════════════════════════════════
+// FONT SIZE — 숫자 기반 네이밍
+// 토큰명의 숫자 = px 크기 (1rem = 10px 기준)
+// 오름차순: 11 · 12 · 13 · 14 · 15 · 16 · 18 · 20 · 22 · 24 · 26 · 28 · 32 · 34 · 42
+// ══════════════════════════════════════════
+
+/// 1.1rem (11px) — 특수 케이스에만. 가독성 주의 필요
+$font-size-11: 1.1rem;
+
+/// 1.2rem (12px) — 뱃지, 태그, 각주 등 가장 작은 텍스트
+$font-size-12: 1.2rem;
+
+/// 1.3rem (13px) — 캡션, 메타 정보 (날짜, 작성자)
+$font-size-13: 1.3rem;
+
+/// 1.4rem (14px) — 보조 텍스트, 테이블 셀, 폼 입력값
+$font-size-14: 1.4rem;
+
+/// 1.5rem (15px) — ✦ 본문 기본 크기. 대부분의 텍스트에 사용
+$font-size-15: 1.5rem;
+
+/// 1.6rem (16px) — 서브 헤딩 보조, 큰 본문
+$font-size-16: 1.6rem;
+
+/// 1.8rem (18px) — 본문 중 가장 큰 텍스트. 리드 문단, 강조 인트로. h5 모바일
+$font-size-18: 1.8rem;
+
+/// 2rem (20px) — h5 PC / h4 모바일
+$font-size-20: 2rem;
+
+/// 2.2rem (22px) — h3 모바일
+$font-size-22: 2.2rem;
+
+/// 2.4rem (24px) — h4 PC
+$font-size-24: 2.4rem;
+
+/// 2.6rem (26px) — h2 모바일
+$font-size-26: 2.6rem;
+
+/// 2.8rem (28px) — h3 PC
+$font-size-28: 2.8rem;
+
+/// 3.2rem (32px) — h1 모바일
+$font-size-32: 3.2rem;
+
+/// 3.4rem (34px) — h2 PC
+$font-size-34: 3.4rem;
+
+/// 4.2rem (42px) — h1 PC. 히어로 배너 등 최상위 타이틀
+$font-size-42: 4.2rem;
+
+// ══════════════════════════════════════════
+// HEADING MAPS — globals.scss에서 자동 적용
+// 큰 텍스트는 줄간격 좁게, 작은 텍스트는 넓게 (타이포그래피 원칙)
+// ══════════════════════════════════════════
 
 $heading-sizes: (
-  'h1': $font-size-h1,
-  'h2': $font-size-h2,
-  'h3': $font-size-h3,
-  'h4': $font-size-h4,
-  'h5': $font-size-h5
+  'h1': $font-size-42,
+  'h2': $font-size-34,
+  'h3': $font-size-28,
+  'h4': $font-size-24,
+  'h5': $font-size-20
 );
 
 $heading-sizes-mobile: (
-  'h1': $font-size-h1-mobile,
-  'h2': $font-size-h2-mobile,
-  'h3': $font-size-h3-mobile,
-  'h4': $font-size-h4-mobile,
-  'h5': $font-size-h5-mobile
+  'h1': $font-size-32,
+  'h2': $font-size-26,
+  'h3': $font-size-22,
+  'h4': $font-size-20,
+  'h5': $font-size-18
+);
+
+$heading-line-heights: (
+  'h1': 1.3,
+  'h2': 1.3,
+  'h3': 1.4,
+  'h4': 1.4,
+  'h5': 1.5
+);
+
+$heading-letter-spacings: (
+  'h1': -0.1rem,
+  'h2': -0.05rem,
+  'h3': -0.03rem,
+  'h4': -0.03rem,
+  'h5': -0.03rem,
 );

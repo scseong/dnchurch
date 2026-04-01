@@ -1,7 +1,7 @@
 'use client';
 
-import { useRouter } from 'next/navigation';
 import { useEffect, useRef, useState } from 'react';
+import Link from 'next/link';
 import clsx from 'clsx';
 import styles from './Dropdown.module.scss';
 
@@ -14,7 +14,6 @@ type DropdownProps = {
 
 export default function Dropdown({ label, items, currentPath, isActive }: DropdownProps) {
   const [open, setOpen] = useState(false);
-  const router = useRouter();
   const ref = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -69,18 +68,15 @@ export default function Dropdown({ label, items, currentPath, isActive }: Dropdo
             const isItemSelected = currentPath.startsWith(item.path);
             return (
               <li key={item.path} role="option" aria-selected={isItemSelected}>
-                <button
-                  type="button"
+                <Link
+                  href={item.path}
                   className={clsx(styles.menuItem, {
                     [styles.menuItemActive]: isItemSelected
                   })}
-                  onClick={() => {
-                    router.push(item.path);
-                    setOpen(false);
-                  }}
+                  onClick={() => setOpen(false)}
                 >
                   {item.label}
-                </button>
+                </Link>
               </li>
             );
           })}

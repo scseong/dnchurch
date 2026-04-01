@@ -4,9 +4,9 @@ import styles from './MainContainer.module.scss';
 export default function MainContainer({ children, title }: { children: ReactNode; title: string }) {
   return (
     <section className={styles.container}>
-      <div className={styles.title}>
+      {/* <div className={styles.title}>
         <h2>{title}</h2>
-      </div>
+      </div> */}
       {children}
     </section>
   );

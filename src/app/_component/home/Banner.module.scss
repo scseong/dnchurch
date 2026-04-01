@@ -1,17 +1,23 @@
-$desktop-gradient: linear-gradient(90deg, rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.1));
-$mobile-gradient: linear-gradient(180deg, rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.4));
-
 .banner {
   margin-top: calc(-1 * $header-height);
+  padding-top: calc($header-height + $spacing-160);
+  padding-bottom: $spacing-64;
+  padding-left: $container-padding;
+  padding-right: $container-padding;
   position: relative;
-  height: calc(36rem + $header-height);
-  overflow: hidden;
   display: flex;
   flex-direction: column;
   justify-content: center;
+  align-items: center;
+  min-height: calc(48rem + $header-height);
+  max-height: calc(56rem + $header-height);
+  overflow: hidden;
 
-  @include respond-up($breakpoint-md) {
-    height: calc(42rem + $header-height);
+  @include respond-up($breakpoint-tablet-sm) {
+    padding-top: calc($header-height + $spacing-80);
+    padding-bottom: $spacing-48;
+    padding-left: 0;
+    padding-right: 0;
   }
 }
 
@@ -23,71 +29,118 @@ $mobile-gradient: linear-gradient(180deg, rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.4)
     width: 100%;
     height: 100%;
     object-fit: cover;
-    object-position: 45% 10%;
+    object-position: 50% 70%;
   }
 }
 
 .overlay {
   position: absolute;
   inset: 0;
-  background: $mobile-gradient;
-
-  @include respond-up($breakpoint-md) {
-    background: $desktop-gradient;
-  }
+  background: linear-gradient(
+    to bottom,
+    rgba(0, 0, 0, 0.75) 0%,
+    rgba(0, 0, 0, 0.5) 40%,
+    rgba(0, 0, 0, 0.65) 100%
+  );
 }
 
 .content {
+  padding: 0 $container-padding;
+  margin: 0 auto;
   position: relative;
-  z-index: 1;
   display: flex;
   flex-direction: column;
-  gap: $spacing-sm;
-  padding: $header-height $spacing-lg $spacing-lg;
-  max-width: $max-width;
-  margin: 0 auto;
+  gap: $content-gap-xs;
+  max-width: $container-max;
   width: 100%;
+  z-index: 1;
 
-  @include respond-up($breakpoint-md) {
-    padding: $header-height $spacing-xl $spacing-xl;
+  .label {
+    margin-bottom: $spacing-8;
+    display: block;
+    font-size: $font-size-13;
+    letter-spacing: 0.05rem;
+    color: $gold;
   }
 
   h1 {
-    color: $color-text-inverse;
-    animation: slideUp 0.6s ease-out;
+    font-family: $font-family-secondary;
+    font-weight: $font-weight-regular;
+    white-space: pre-line;
+    color: $txt-inverse;
+
+    .title_highlight {
+      font-weight: $font-weight-bold;
+      color: $gold;
+    }
   }
 
   p {
-    color: $color-text-inverse;
+    @include text-sub($color: $txt-image-subtle);
     line-height: $line-height-wide;
-    animation: slideUp 0.6s ease-out;
+    white-space: pre-line;
   }
-}
 
-.learn_more {
-  padding: $spacing-sm $spacing-xl;
-  margin-top: $spacing-xs;
-  display: inline-block;
-  width: fit-content;
-  background-color: $color-gray-100;
-  border-radius: $border-radius-lg;
-  font-size: $font-size-md;
-  color: $color-black;
-  animation: slideUp 0.6s ease-out;
-  transition: transform 325ms cubic-bezier(0, 0, 0.2, 1);
+  .cta {
+    margin-top: $spacing-20;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: $content-gap-s;
 
-  &:hover {
-    transform: scale(1.05);
-  }
-}
+    .btn_primary,
+    .btn_secondary {
+      padding: $spacing-20;
+      min-height: 4.4rem;
+      max-height: 4.6rem;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: $radius-xxs;
+      font-size: $font-size-13;
+      line-height: $line-height-reset;
 
-@keyframes slideUp {
-  0% {
-    transform: translateY(100%);
-    opacity: 0;
-  }
-  100% {
-    transform: translateY(0);
-    opacity: 1;
+      svg {
+        margin-right: $spacing-8;
+        width: $font-size-16;
+        height: $font-size-16;
+        transform: translateY(-0.1rem);
+      }
+    }
+
+    .btn_primary {
+      background: $gold;
+      font-weight: $font-weight-bold;
+      transition: background 0.2s ease;
+
+      &:hover {
+        background: $gold-light;
+      }
+    }
+
+    .btn_secondary {
+      background: transparent;
+      border: 0.1rem solid $border-secondary;
+      font-weight: $font-weight-medium;
+      color: $txt-image-subtle;
+      transition:
+        border-color 0.2s ease,
+        background 0.2s ease;
+
+      &:hover {
+        border-color: $border-primary;
+        color: $txt-inverse;
+      }
+    }
+
+    @include respond-up($breakpoint-mobile-lg) {
+      flex-direction: row;
+      align-items: center;
+
+      .btn_primary,
+      .btn_secondary {
+        padding: $spacing-20 $spacing-32;
+      }
+    }
   }
 }

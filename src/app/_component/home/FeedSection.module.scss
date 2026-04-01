@@ -1,0 +1,35 @@
+// ─── Section ────────────────────────────────────────
+.section {
+  padding: $section-padding-64 0;
+}
+
+// ─── Header ─────────────────────────────────────────
+.header {
+  margin-bottom: $content-gap-l;
+}
+
+.caption {
+  margin-bottom: $spacing-12;
+  display: inline-block;
+  font-size: $font-size-12;
+  font-weight: $font-weight-medium;
+  text-transform: uppercase;
+  letter-spacing: $letter-spacing-wider;
+  color: $gold;
+}
+
+.header h2 {
+  @include text-page-title();
+  font-family: $font-family-secondary;
+}
+
+.subtitle {
+  display: none;
+
+  @include respond-up($breakpoint-tablet) {
+    @include text-sub();
+    margin-top: $spacing-8;
+    display: block;
+    font-size: $font-size-16;
+  }
+}

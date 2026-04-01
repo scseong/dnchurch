@@ -1,0 +1,125 @@
+$icon_box_size: 4.2rem;
+
+.quick_wrap {
+  background: $cream-deep;
+}
+
+.quick_container {
+  padding: 0;
+
+  @include respond-up($breakpoint-tablet) {
+    padding: 0 calc($container-padding / 4);
+  }
+}
+
+.quick_access {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  border-bottom: $spacing-1 solid $border-primary;
+  display: grid;
+  grid-template-columns: 1fr;
+
+  li:last-child .item {
+    border-bottom: none;
+  }
+
+  @include respond-up($breakpoint-tablet) {
+    grid-template-columns: repeat(3, 1fr);
+
+    li:last-child .item {
+      border-right: none;
+    }
+  }
+}
+
+.item {
+  display: flex;
+  align-items: center;
+  padding: $spacing-24;
+  border-bottom: $spacing-1 solid $border-warm;
+  transition: background $transition-duration-normal $transition-easing-default;
+
+  @include respond-up($breakpoint-mobile) {
+    padding: $spacing-20 $spacing-24;
+  }
+
+  @include respond-up($breakpoint-tablet) {
+    padding: $spacing-20 $spacing-24;
+    border-bottom: none;
+    border-right: $spacing-1 solid $border-primary;
+  }
+
+  @include respond-up($breakpoint-pc) {
+    padding: $spacing-24 $spacing-32;
+  }
+
+  &:hover {
+    background: $cream;
+
+    .arrow {
+      opacity: 1;
+      transform: translateX(0.8rem);
+    }
+  }
+}
+
+.icon_box {
+  margin-right: $spacing-20;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: $icon_box_size;
+  height: $icon_box_size;
+  background: $navy;
+  border-radius: $radius-xs;
+  font-size: calc($icon_box_size / 1.8);
+  color: $gold;
+
+  @include respond-up($breakpoint-tablet) {
+    margin-right: $spacing-16;
+    width: $icon_box_size;
+    height: $icon_box_size;
+    font-size: calc($icon_box_size / 1.8);
+  }
+
+  svg {
+    display: block;
+    transform: translateX(0.05rem);
+  }
+}
+
+.text {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.label {
+  font-family: $font-family-secondary;
+  font-size: $font-size-15;
+  font-weight: $font-weight-semibold;
+  color: $txt-primary;
+}
+
+.desc {
+  display: block;
+  font-size: $font-size-12;
+  color: $txt-tertiary;
+}
+
+.arrow {
+  flex-shrink: 0;
+  font-size: $font-size-14;
+  color: $gold;
+  opacity: 0;
+  transition:
+    opacity 0.2s ease,
+    transform 0.2s ease;
+
+  @include respond-up($breakpoint-tablet) {
+    opacity: 0;
+    transform: translateX(-$spacing-8);
+  }
+}

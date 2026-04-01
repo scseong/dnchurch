@@ -175,60 +175,119 @@ export type Database = {
         }
         Relationships: []
       }
-      site_settings: {
+      sermon_series: {
         Row: {
-          key: string
-          value: string
+          cover_url: string | null
+          created_at: string
           description: string | null
-          updated_at: string
+          ended_at: string | null
+          id: number
+          started_at: string | null
+          title: string
         }
         Insert: {
-          key: string
-          value: string
+          cover_url?: string | null
+          created_at?: string
           description?: string | null
-          updated_at?: string
+          ended_at?: string | null
+          id?: number
+          started_at?: string | null
+          title: string
         }
         Update: {
-          key?: string
-          value?: string
+          cover_url?: string | null
+          created_at?: string
           description?: string | null
-          updated_at?: string
+          ended_at?: string | null
+          id?: number
+          started_at?: string | null
+          title?: string
         }
         Relationships: []
       }
-      worship_schedules: {
+      sermons: {
         Row: {
-          id: number
-          name: string
-          time: string
-          location: string
-          category: Database["public"]["Enums"]["worship_category"]
-          order_index: number
-          is_active: boolean
           created_at: string
+          deleted_at: string | null
+          id: number
+          is_published: boolean
+          pdf_url: string | null
+          preacher: string
+          scripture: string
+          series_id: number | null
+          sermon_date: string
+          service_type: Database["public"]["Enums"]["service_type_enum"]
+          summary: string | null
+          title: string
           updated_at: string
+          view_count: number
+          youtube_id: string | null
+          youtube_url: string | null
         }
         Insert: {
-          id?: never
-          name: string
-          time: string
-          location: string
-          category: Database["public"]["Enums"]["worship_category"]
-          order_index?: number
-          is_active?: boolean
           created_at?: string
+          deleted_at?: string | null
+          id?: number
+          is_published?: boolean
+          pdf_url?: string | null
+          preacher: string
+          scripture: string
+          series_id?: number | null
+          sermon_date: string
+          service_type?: Database["public"]["Enums"]["service_type_enum"]
+          summary?: string | null
+          title: string
           updated_at?: string
+          view_count?: number
+          youtube_id?: string | null
+          youtube_url?: string | null
         }
         Update: {
-          id?: never
-          name?: string
-          time?: string
-          location?: string
-          category?: Database["public"]["Enums"]["worship_category"]
-          order_index?: number
-          is_active?: boolean
           created_at?: string
+          deleted_at?: string | null
+          id?: number
+          is_published?: boolean
+          pdf_url?: string | null
+          preacher?: string
+          scripture?: string
+          series_id?: number | null
+          sermon_date?: string
+          service_type?: Database["public"]["Enums"]["service_type_enum"]
+          summary?: string | null
+          title?: string
           updated_at?: string
+          view_count?: number
+          youtube_id?: string | null
+          youtube_url?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "sermons_series_id_fkey"
+            columns: ["series_id"]
+            isOneToOne: false
+            referencedRelation: "sermon_series"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      site_settings: {
+        Row: {
+          description: string | null
+          key: string
+          updated_at: string
+          value: string
+        }
+        Insert: {
+          description?: string | null
+          key: string
+          updated_at?: string
+          value: string
+        }
+        Update: {
+          description?: string | null
+          key?: string
+          updated_at?: string
+          value?: string
         }
         Relationships: []
       }
@@ -270,6 +329,42 @@ export type Database = {
           name?: string
           order_index?: number
           title?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      worship_schedules: {
+        Row: {
+          category: Database["public"]["Enums"]["worship_category"]
+          created_at: string
+          id: number
+          is_active: boolean
+          location: string
+          name: string
+          order_index: number
+          time: string
+          updated_at: string
+        }
+        Insert: {
+          category: Database["public"]["Enums"]["worship_category"]
+          created_at?: string
+          id?: number
+          is_active?: boolean
+          location: string
+          name: string
+          order_index?: number
+          time: string
+          updated_at?: string
+        }
+        Update: {
+          category?: Database["public"]["Enums"]["worship_category"]
+          created_at?: string
+          id?: number
+          is_active?: boolean
+          location?: string
+          name?: string
+          order_index?: number
+          time?: string
           updated_at?: string
         }
         Relationships: []
@@ -351,9 +446,16 @@ export type Database = {
         | "행정"
         | "긴급"
         | "기타"
-      worship_category: "main" | "church_school"
       profile_status_enum: "pending" | "approved" | "rejected"
       role_enum: "admin" | "dept_manager" | "member"
+      service_type_enum:
+        | "주일오전예배"
+        | "주일저녁예배"
+        | "수요기도회"
+        | "금요기도회"
+        | "새벽예배"
+        | "특별예배"
+      worship_category: "main" | "church_school"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -494,6 +596,15 @@ export const Constants = {
       ],
       profile_status_enum: ["pending", "approved", "rejected"],
       role_enum: ["admin", "dept_manager", "member"],
+      service_type_enum: [
+        "주일오전예배",
+        "주일저녁예배",
+        "수요기도회",
+        "금요기도회",
+        "새벽예배",
+        "특별예배",
+      ],
+      worship_category: ["main", "church_school"],
     },
   },
 } as const

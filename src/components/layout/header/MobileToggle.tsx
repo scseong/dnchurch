@@ -1,4 +1,4 @@
-import { GiHamburgerMenu } from 'react-icons/gi';
+import { RxHamburgerMenu } from 'react-icons/rx';
 import styles from './MobileToggle.module.scss';
 
 type Props = {
@@ -10,7 +10,7 @@ export default function MobileToggle({ ref, handleToggle }: Props) {
   return (
     <div className={styles.toggle} ref={ref}>
       <button onClick={handleToggle} aria-label="Toggle Navigation">
-        <GiHamburgerMenu />
+        <RxHamburgerMenu />
       </button>
     </div>
   );

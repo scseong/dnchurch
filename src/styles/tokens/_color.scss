@@ -1,82 +1,164 @@
-// Scale
-$color-blue-900: #0969b6;
-$color-blue-800: #116eb9;
-$color-blue-700: #1a73bb;
-$color-blue-600: #2b7ec0;
-$color-blue-500: #448dc8;
-$color-blue-400: #6fa7d4;
-$color-blue-300: #91bcde;
-$color-blue-200: #aacbe6;
-$color-blue-100: #d5e5f2;
-$color-blue-50: #f7fafc;
+// ══════════════════════════════════════════
+// PRIMITIVE: Gray Palette
+// ══════════════════════════════════════════
 
-$color-orange-900: #88430a;
-$color-orange-800: #b95d00;
-$color-orange-700: #e47712;
-$color-orange-600: #f68b28;
-$color-orange-500: #fb9f42;
-$color-orange-400: #fdb46a;
-$color-orange-300: #feca93;
-$color-orange-200: #ffe4c3;
-$color-orange-100: #fff0db;
-$color-orange-50: #fff9f0;
+$black: #000000;
+$gray-900: #111827;
+$gray-700: #374151;
+$gray-500: #6b7280;
+$gray-400: #9ca3af;
+$gray-300: #d1d5db;
+$gray-200: #e5e7eb;
+$gray-100: #f3f4f6;
+$gray-50: #f9fafb;
+$white: #faf9f6;
 
-$color-black: #000000;
-$color-gray-900: #111827;
-$color-gray-800: #1f2937;
-$color-gray-700: #374151;
-$color-gray-600: #4b5563;
-$color-gray-500: #6b7280;
-$color-gray-400: #9ca3af;
-$color-gray-300: #d1d5db;
-$color-gray-200: #e5e7eb;
-$color-gray-100: #f3f4f6;
-$color-gray-50: #f9fafb;
-$color-white: #ffffff;
+// ══════════════════════════════════════════
+// PRIMITIVE: Brand Palette — 교회 아이덴티티
+// ══════════════════════════════════════════
 
-// Utility
-$color-green-500: #10b981;
-$color-red-500: #ef4444;
+/// 교회 네이비. 다크 배경, 헤더/푸터, 강한 브랜드 표현
+$navy: #1c2b3a;
 
-// Primary Actions
-$color-primary: $color-blue-700;
-$color-primary-active: $color-blue-900;
-$color-primary-hover: $color-blue-800;
-$color-primary-subtle: $color-blue-100;
+/// 네이비 중간 톤. 서브 배경, 구분선, 보조 요소
+$navy-mid: #2c3e50;
 
-// Secondary Actions
-$color-secondary: $color-orange-700;
-$color-secondary-active: $color-orange-900;
-$color-secondary-hover: $color-orange-800;
-$color-secondary-subtle: $color-orange-100;
+/// 네이비 연한 톤. hover 상태, 보조 UI 요소
+$navy-light: #3d5166;
 
-// Disabled State x
-$color-disabled-text: $color-gray-400;
-$color-disabled-bg: $color-gray-200;
-$color-disabled-border: $color-gray-300;
+/// 포인트 컬러. CTA 강조, 브랜드 액센트
+$gold: #c4924a;
 
-// Backgrounds & Borders
-$color-bg-body: $color-white;
-$color-bg-default: $color-blue-50;
-$color-bg-hover: $color-blue-100;
-$color-bg-footer: $color-black;
-$color-border-default: $color-gray-300;
-$color-border-focus: $color-gray-500;
-$color-border-card: $color-blue-300;
-$color-border-primary: $color-blue-500;
-$color-border-primary-active: $color-blue-700;
-$color-border-primary-inverse: $color-blue-200;
-$color-divide: $color-gray-400;
+/// 골드 연한 톤. hover 상태, 보조 강조
+$gold-light: #d9a96a;
 
-// Text
-$color-text-default: $color-gray-900;
-$color-text-secondary: $color-gray-700;
-$color-text-subtle: $color-gray-500;
-$color-text-link: $color-blue-700;
-$color-text-link-active: $color-blue-900;
-$color-text-inverse: $color-gray-50;
+/// 섹션/카드 배경. 따뜻한 톤의 배경
+$cream: #f5f0e6;
 
-// Status
-$color-status-success: $color-green-500;
-$color-status-danger: $color-red-500;
-$color-status-warning: $color-orange-600;
+/// 강조 배경, hover. cream과 구분이 필요할 때
+$cream-deep: #ede6d7;
+
+// ══════════════════════════════════════════
+// PRIMITIVE: Blue Palette — Primary 액션 전용
+// ══════════════════════════════════════════
+
+$blue-900: #0969b6;
+$blue-800: #116eb9;
+$blue-700: #1a73bb;
+$blue-100: #d5e5f2;
+
+// ══════════════════════════════════════════
+// PRIMITIVE: Utility — 상태 전용
+// ══════════════════════════════════════════
+
+$green-500: #10b981;
+$red-500: #ef4444;
+$orange-600: #f68b28;
+
+// ══════════════════════════════════════════
+// SEMANTIC: Text (`txt-`)
+//
+// "가장 중요한 텍스트인가?"    → $txt-primary
+// "부연 설명인가?"            → $txt-secondary
+// "날짜/메타/캡션인가?"       → $txt-tertiary
+// "클릭 가능한 링크인가?"      → $txt-link
+// "비활성 상태인가?"          → $txt-disabled
+// "다크 배경 위인가?"         → $txt-inverse
+// ══════════════════════════════════════════
+
+/// 기본 텍스트. 제목, 본문 등 대부분의 텍스트
+$txt-primary: $gray-900;
+
+/// 보조 텍스트. 부연 설명, 서브타이틀
+$txt-secondary: $gray-700;
+
+/// 약한 텍스트. 날짜, 메타 정보, 캡션
+$txt-tertiary: $gray-500;
+
+/// 링크 텍스트
+$txt-link: $blue-700;
+
+/// 링크 활성 상태
+$txt-link-active: $blue-900;
+
+/// 비활성 텍스트
+$txt-disabled: $gray-400;
+
+/// 반전 텍스트. 다크 배경/이미지 위
+$txt-inverse: $white;
+
+// ══════════════════════════════════════════
+// SEMANTIC: Background (`bg-`)
+//
+// "페이지 전체 배경?"         → $bg-primary
+// "카드/섹션 배경?"           → $bg-secondary
+// "hover 배경?"              → $bg-tertiary
+// "다크 영역?"               → $bg-invert
+// ══════════════════════════════════════════
+
+/// 페이지 전체 배경
+$bg-primary: $gray-50;
+
+/// 카드/섹션 기본 배경
+$bg-secondary: $cream;
+
+/// hover 배경, 강조 배경
+$bg-tertiary: $cream-deep;
+
+/// 푸터 등 다크 배경
+$bg-invert: $black;
+
+/// 다크 섹션 배경 (이미지/영상 위 콘텐츠 영역)
+$bg-dark: #0f1820;
+
+/// 다크 섹션 내 카드 배경
+$bg-dark-card: #1a2535;
+
+// ══════════════════════════════════════════
+// SEMANTIC: Border (`border-`)
+//
+// "기본 경계선?"              → $border-primary
+// "강조 경계선? (focus 등)"    → $border-secondary
+// "다크 배경 위 경계선?"       → $border-inverse
+// ══════════════════════════════════════════
+
+/// 기본 경계선. input, 구분선, 카드 테두리, 리스트 구분
+$border-primary: $gray-300;
+
+/// 강조 경계선. input focus 등
+$border-secondary: $gray-500;
+
+/// 반전 경계선. 다크 배경 위
+$border-inverse: $white;
+
+/// 따뜻한 경계선. cream 배경 위 구분선
+$border-warm: #64503226;
+
+// ══════════════════════════════════════════
+// SEMANTIC: Primary Action
+// ══════════════════════════════════════════
+
+/// 주요 액션 기본 색상 (링크, CTA 버튼, 선택된 탭)
+$primary: $blue-700;
+
+/// 주요 액션 클릭/활성 상태
+$primary-active: $blue-900;
+
+/// 주요 액션 호버 상태
+$primary-hover: $blue-800;
+
+/// 주요 액션 연한 배경 (선택된 탭 배경)
+$primary-subtle: $blue-100;
+
+// ══════════════════════════════════════════
+// SEMANTIC: Status
+// ══════════════════════════════════════════
+
+/// 성공 상태
+$status-positive: $green-500;
+
+/// 위험/에러 상태
+$status-negative: $red-500;
+
+/// 경고 상태
+$status-warning: $orange-600;

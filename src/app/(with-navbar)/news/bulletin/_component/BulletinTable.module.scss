@@ -1,11 +1,11 @@
 .table {
-  margin-bottom: $spacing-sm;
+  margin-bottom: $spacing-12;
   width: 100%;
   border-collapse: collapse;
 
   th,
   td {
-    padding: $spacing-sm;
+    padding: $spacing-12;
   }
 
   th:first-child,
@@ -15,18 +15,18 @@
 
   thead {
     tr {
-      border-top: 0.1rem solid $color-border-primary;
-      border-bottom: 0.1rem solid $color-border-primary;
+      border-top: 0.1rem solid $border-primary;
+      border-bottom: 0.1rem solid $border-primary;
     }
   }
 
   tr {
-    border-bottom: 0.1rem solid $color-border-primary-inverse;
+    border-bottom: 0.1rem solid $border-inverse;
   }
 
   th {
-    background-color: $color-bg-default;
-    font-size: $font-size-md;
+    background-color: $bg-secondary;
+    font-size: $font-size-14;
     font-weight: $font-weight-semibold;
     text-align: center;
   }
@@ -36,12 +36,12 @@
   }
 
   td {
-    font-size: $font-size-sm;
+    font-size: $font-size-13;
 
     a:hover {
-      color: $color-text-link;
+      color: $txt-link;
       text-decoration: underline;
-      text-decoration-line: $color-text-link;
+      text-decoration-line: $txt-link;
     }
   }
 }

@@ -3,8 +3,9 @@ import styles from './Logo.module.scss';
 
 export default function Logo() {
   return (
-    <div className={styles.logo}>
-      <Link href="/">대구동남교회</Link>
-    </div>
+    <Link href="/" className={styles.logo}>
+      <span className={styles.logo_kr}>대구동남교회</span>
+      <span className={styles.logo_en}>Dongnam Church · Hapshin</span>
+    </Link>
   );
 }

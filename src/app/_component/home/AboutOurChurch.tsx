@@ -2,6 +2,7 @@ import Link from 'next/link';
 import { LayoutContainer } from '@/components/layout';
 import CloudinaryImage from '@/components/common/CloudinaryImage';
 import { getSiteSettings } from '@/apis/site-settings';
+import { revealStyle } from '@/utils/reveal';
 import styles from './AboutOurChurch.module.scss';
 
 export default async function AboutOurChurch() {
@@ -11,7 +12,7 @@ export default async function AboutOurChurch() {
     <section className={styles.about}>
       <LayoutContainer>
         <div className={styles.container}>
-          <div className={styles.image_container}>
+          <div data-reveal style={revealStyle()} className={styles.image_container}>
             <div className={styles.frame}>
               <CloudinaryImage
                 src={settings.about_church_image ?? 'about_church_qyqtpk'}
@@ -22,14 +23,14 @@ export default async function AboutOurChurch() {
               />
             </div>
           </div>
-          <div className={styles.about_info}>
+          <div data-reveal style={revealStyle(0.15)} className={styles.about_info}>
             <span>{settings.about_slogan}</span>
             <h2>동남교회를 소개합니다</h2>
             <div className={styles.about_content}>
               <p>{settings.about_intro_1}</p>
               <p>{settings.about_intro_2}</p>
             </div>
-            <Link href="/about">교회소개 살펴보기</Link>
+            <Link href="/about" className={styles.about_link}>교회소개 살펴보기 →</Link>
           </div>
         </div>
       </LayoutContainer>

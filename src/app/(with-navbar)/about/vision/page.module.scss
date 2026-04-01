@@ -3,9 +3,9 @@ $greeting_text_margin_bottom: 3rem;
 
 .wrap {
   display: flex;
-  gap: 2rem;
+  gap: $spacing-20;
 
-  @include respond($breakpoint-xl) {
+  @include respond($breakpoint-pc-sm) {
     flex-direction: column;
   }
 }
@@ -25,7 +25,7 @@ $greeting_text_margin_bottom: 3rem;
 
   p {
     margin-bottom: 2rem;
-    color: $color-text-secondary;
+    color: $txt-secondary;
 
     &:last-child {
       margin-bottom: 0;
@@ -45,7 +45,7 @@ $greeting_text_margin_bottom: 3rem;
     border-radius: 1rem;
   }
 
-  @include respond($breakpoint-xl) {
+  @include respond($breakpoint-pc-sm) {
     padding-top: 0;
   }
 }

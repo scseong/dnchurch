@@ -4,7 +4,7 @@ type AnyPostgrestResponse = PostgrestResponse<any> | PostgrestSingleResponse<any
 
 export const handleResponse = <T extends AnyPostgrestResponse>(res: T): T => {
   if (res.error) {
-    if (res.error.code === 'PGRST116') {
+    if (res.error.code === 'PGRST116' || res.error.code === 'PGRST103') {
       return res;
     }
 

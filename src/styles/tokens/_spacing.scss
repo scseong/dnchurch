@@ -1,13 +1,27 @@
+// ══════════════════════════════════════════
+// SPACING PRIMITIVE — 4·8 배수 기반 간격 스케일
+// 네이밍: $spacing-{px값}
+// ══════════════════════════════════════════
+
+// spacing-1~6: 고정값 (border, 미세간격 — 모바일 축소 불필요)
 $spacing-0: 0;
-$spacing-min: 0.1rem;
-$spacing-nano: 0.2rem;
-$spacing-xxs: 0.4rem;
-$spacing-xs: 0.8rem;
-$spacing-sm: 1.2rem;
-$spacing-md: 1.6rem;
-$spacing-lg: 2.4rem;
-$spacing-xl: 3.2rem;
-$spacing-xxl: 4.8rem;
-$spacing-xxxl: 6.4rem;
-$spacing-xxxxl: 8rem;
-$spacing-layout: 9.6rem;
+$spacing-1: 0.1rem;
+$spacing-2: 0.2rem;
+$spacing-4: 0.4rem;
+$spacing-6: 0.6rem;
+
+// spacing-8+: 반응형 (CSS custom property — globals.scss에서 mobile/desktop 값 정의)
+$spacing-8: var(--spacing-8);
+$spacing-10: var(--spacing-10);
+$spacing-12: var(--spacing-12);
+$spacing-16: var(--spacing-16);
+$spacing-20: var(--spacing-20);
+$spacing-24: var(--spacing-24);
+$spacing-32: var(--spacing-32);
+$spacing-40: var(--spacing-40);
+$spacing-48: var(--spacing-48);
+$spacing-64: var(--spacing-64);
+$spacing-80: var(--spacing-80);
+$spacing-120: var(--spacing-120);
+$spacing-160: var(--spacing-160);
+$spacing-200: var(--spacing-200);

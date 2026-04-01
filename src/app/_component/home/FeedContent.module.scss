@@ -1,0 +1,261 @@
+// ─── Tab Switcher (Mobile Only) ─────────────────────
+.tab_switcher {
+  display: flex;
+  border-bottom: $spacing-1 solid $border-primary;
+  margin-bottom: $spacing-32;
+
+  @include respond-up($breakpoint-tablet) {
+    display: none;
+  }
+}
+
+.tab_active,
+.tab_inactive {
+  flex: 1;
+  padding: $spacing-12 0;
+  border: none;
+  border-bottom: 0.1rem solid transparent;
+  margin-bottom: calc(-1 * $spacing-1);
+  background: none;
+  font-size: $font-size-14;
+  font-family: $font-family-base;
+  cursor: pointer;
+  transition:
+    color $transition-duration-normal $transition-easing-default,
+    border-color $transition-duration-normal $transition-easing-default;
+}
+
+.tab_active {
+  font-weight: $font-weight-semibold;
+  color: $gold;
+  border-bottom-color: $gold;
+}
+
+.tab_inactive {
+  font-weight: $font-weight-regular;
+  color: $txt-tertiary;
+
+  &:hover {
+    color: $txt-secondary;
+  }
+}
+
+// ─── Grid ───────────────────────────────────────────
+.grid {
+  min-width: 0;
+  overflow: hidden;
+
+  @include respond-up($breakpoint-tablet) {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: $spacing-24;
+  }
+}
+
+// ─── Column ─────────────────────────────────────────
+.column {
+  min-width: 0;
+}
+
+.column_hidden {
+  display: none;
+
+  @include respond-up($breakpoint-tablet) {
+    display: block;
+  }
+}
+
+// ─── Column Header (PC Only) ────────────────────────
+.column_header {
+  display: none;
+
+  @include respond-up($breakpoint-tablet) {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: $spacing-12;
+  }
+}
+
+.column_title {
+  @include text-card-title;
+  display: flex;
+  align-items: center;
+  gap: $spacing-8;
+}
+
+.color_bar_news,
+.color_bar_sharing {
+  width: $spacing-4;
+  height: 2.2rem;
+  border-radius: $radius-xs;
+  display: inline-block;
+  flex-shrink: 0;
+  transform: translateY(-0.1rem);
+}
+
+.color_bar_news {
+  background: $gold;
+}
+
+.color_bar_sharing {
+  background: $gold;
+}
+
+.more_link {
+  padding-bottom: $spacing-2;
+  display: block;
+  width: fit-content;
+  border-bottom: $spacing-1 solid rgba($gold, 0.2);
+  font-size: $font-size-13;
+  font-weight: $font-weight-medium;
+  color: rgba($gold, 0.8);
+  transition:
+    color $transition-duration-normal $transition-easing-default,
+    border-color $transition-duration-normal $transition-easing-default;
+
+  &:hover {
+    color: $gold;
+    border-color: $gold;
+  }
+}
+
+// ─── List Card ──────────────────────────────────────
+.list_card {
+  background: $white;
+  border-radius: $radius-xs;
+  border: $spacing-1 solid $border-primary;
+  overflow: hidden;
+}
+
+// ─── Item Row ───────────────────────────────────────
+.item {
+  display: block;
+  padding: $padding-card-compact;
+  text-decoration: none;
+  cursor: pointer;
+  transition: background $transition-duration-normal $transition-easing-default;
+
+  &:not(:last-child) {
+    border-bottom: $spacing-1 solid $gray-200;
+  }
+
+  &:hover {
+    background: $cream;
+  }
+
+  @include respond-up($breakpoint-tablet) {
+    padding: $padding-card;
+  }
+}
+
+// ─── Item Body ──────────────────────────────────────
+.item_body {
+  display: flex;
+  align-items: center;
+  gap: $spacing-12;
+  min-width: 0;
+}
+
+.item_content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-4;
+  min-width: 0;
+}
+
+.item_chevron {
+  flex-shrink: 0;
+  font-size: $font-size-14;
+  color: $txt-tertiary;
+  transition: color $transition-duration-normal $transition-easing-default;
+
+  .item:hover & {
+    color: $txt-secondary;
+  }
+}
+
+// ─── Item Content ───────────────────────────────────
+.item_title_row {
+  display: flex;
+  align-items: center;
+  gap: $spacing-4;
+  min-width: 0;
+  overflow: hidden;
+}
+
+.item_title {
+  color: $txt-primary;
+  font-size: $font-size-14;
+  @include ellipsis-multi(1);
+}
+
+.item_meta {
+  display: flex;
+  align-items: center;
+  gap: $spacing-8;
+}
+
+.item_author {
+  @include text-caption;
+}
+
+.item_date {
+  @include text-caption;
+}
+
+// ─── Badges ─────────────────────────────────────────
+.badge_category {
+  flex-shrink: 0;
+  padding: $spacing-4 $spacing-6;
+  font-size: $font-size-11;
+  font-weight: $font-weight-medium;
+  line-height: $line-height-reset;
+  border-radius: $radius-xxs;
+  white-space: nowrap;
+  color: $txt-secondary;
+  background: $cream;
+}
+
+.badge_new {
+  color: $white;
+  font-size: 0.8rem;
+  font-weight: $font-weight-bold;
+  background: $gold;
+  border-radius: $radius-xs;
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: $font-size-13;
+  height: $font-size-13;
+}
+
+// ─── More Button (Mobile Only) ──────────────────────
+.more_button {
+  display: block;
+  width: 100%;
+  padding: $spacing-12 0;
+  border-radius: $radius-xs;
+  border: $spacing-1 solid $border-primary;
+  background: transparent;
+  color: $txt-secondary;
+  font-size: $font-size-13;
+  font-weight: $font-weight-semibold;
+  margin-top: $spacing-12;
+  text-align: center;
+  text-decoration: none;
+  transition:
+    background $transition-duration-normal $transition-easing-default,
+    color $transition-duration-normal $transition-easing-default;
+
+  &:hover {
+    background: $cream;
+    color: $txt-primary;
+  }
+
+  @include respond-up($breakpoint-tablet) {
+    display: none;
+  }
+}

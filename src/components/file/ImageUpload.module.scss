@@ -1,49 +1,49 @@
 .container {
   .label {
-    margin-bottom: $spacing-xs;
-    font-size: $font-size-xl;
+    margin-bottom: $spacing-8;
+    font-size: $font-size-18;
     font-weight: $font-weight-semibold;
   }
 
   .help_text {
-    margin-bottom: $spacing-sm;
+    margin-bottom: $spacing-12;
 
     li {
-      margin-left: $spacing-xl;
-      margin-bottom: $spacing-xxs;
-      font-size: $font-size-sm;
-      color: $color-text-subtle;
+      margin-left: $spacing-24;
+      margin-bottom: $spacing-4;
+      font-size: $font-size-13;
+      color: $txt-tertiary;
       list-style-type: disc;
     }
   }
 }
 
 .status_bar {
-  margin-bottom: $spacing-sm;
+  margin-bottom: $spacing-12;
   display: flex;
   justify-content: space-between;
   align-items: center;
 
   .count_info {
-    font-size: $font-size-sm;
+    font-size: $font-size-13;
 
     strong {
-      color: $color-primary;
+      color: $primary;
       font-weight: $font-weight-semibold;
     }
   }
 
   .clear_button {
-    padding: $spacing-xxs $spacing-xs;
-    border-radius: $border-radius-lg;
-    font-size: $font-size-xs;
+    padding: $spacing-4 $spacing-8;
+    border-radius: $radius-m;
+    font-size: $font-size-12;
     text-decoration: underline;
-    color: $color-status-warning;
+    color: $status-warning;
     transition: opacity 0.2s;
     cursor: pointer;
 
     &:hover {
-      color: $color-status-warning;
+      color: $status-warning;
       text-decoration: none;
     }
   }

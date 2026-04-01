@@ -1,8 +1,23 @@
 .logo {
-  flex: 0 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-4;
+}
 
-  a {
-    font-size: $font-size-lg;
-    font-weight: $font-weight-bold;
-  }
+.logo_kr {
+  display: inline-block;
+  font-size: $font-size-15;
+  font-weight: $font-weight-semibold;
+  font-family: $font-family-secondary;
+  line-height: $line-height-reset;
+}
+
+.logo_en {
+  display: inline-block;
+  font-size: 1rem;
+  font-weight: $font-weight-semibold;
+  font-family: $font-family-secondary;
+  color: $gold;
+  line-height: $line-height-reset;
+  letter-spacing: 0.07rem;
 }

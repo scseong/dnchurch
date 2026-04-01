@@ -1,0 +1,93 @@
+// ─── Section ────────────────────────────────────────
+.section {
+  padding: $section-padding-80 0;
+  background: $bg-dark;
+}
+
+// ─── Header ─────────────────────────────────────────
+.header {
+  display: flex;
+  flex-direction: column;
+  gap: $content-gap-m;
+  margin-bottom: $content-gap-l;
+
+  @include respond-up($breakpoint-mobile-lg) {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: flex-end;
+  }
+}
+
+.header_left {
+  display: flex;
+  flex-direction: column;
+}
+
+.caption {
+  margin-bottom: $spacing-12;
+  display: inline-block;
+  font-size: $font-size-12;
+  font-weight: $font-weight-medium;
+  text-transform: uppercase;
+  letter-spacing: $letter-spacing-wider;
+  color: $gold;
+}
+
+.header h2 {
+  font-family: $font-family-secondary;
+  font-weight: $font-weight-medium;
+  color: $white;
+}
+
+.header_link {
+  padding-bottom: $spacing-2;
+  display: block;
+  width: fit-content;
+  border-bottom: $spacing-1 solid rgba($gold, 0.2);
+  font-size: $font-size-13;
+  font-weight: $font-weight-medium;
+  color: rgba($gold, 0.7);
+  transition:
+    color $transition-duration-normal $transition-easing-default,
+    border-color $transition-duration-normal $transition-easing-default;
+
+  &:hover {
+    color: $gold;
+    border-color: $gold;
+  }
+}
+
+// ─── Grid ───────────────────────────────────────────
+.grid {
+  display: flex;
+  flex-direction: column;
+  gap: $content-gap-s;
+
+  @include respond-up($breakpoint-tablet) {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: $content-gap-s;
+  }
+}
+
+// ─── Sub List (서브 카드 묶음) ──────────────────────
+.sub_list {
+  display: flex;
+  flex-direction: column;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  border-radius: $radius-s;
+  overflow: hidden;
+
+  @include respond-up($breakpoint-tablet) {
+    background: none;
+    border: none;
+    border-radius: 0;
+    overflow: visible;
+
+    // PC: 첫 번째만 표시
+    > :not(:first-child) {
+      display: none;
+    }
+  }
+}

@@ -8,10 +8,10 @@
   dt {
     min-width: 20%;
     flex-basis: 20%;
-    font-size: $font-size-sm;
+    font-size: $font-size-13;
     font-weight: $font-weight-medium;
 
-    @include respond-up($breakpoint-md) {
+    @include respond-up($breakpoint-tablet-sm) {
       flex-basis: auto;
       min-width: 10rem;
     }
@@ -20,40 +20,41 @@
   dd,
   a {
     display: flex;
-    font-size: $font-size-sm;
+    font-size: $font-size-13;
     word-break: break-all;
 
     svg {
-      margin-right: $spacing-xxs;
+      margin-right: $spacing-4;
       width: 1.5rem;
       height: 1.5rem;
     }
 
     & + dd {
-      margin-top: $spacing-xs;
+      margin-top: $spacing-8;
     }
   }
 
   a {
     &:hover {
-      @include link-hover-style;
+      text-decoration: underline;
+      color: $txt-link-active;
     }
   }
 
   .group {
-    padding: $spacing-sm 0 $spacing-sm $spacing-md;
+    padding: $spacing-12 0 $spacing-12 $spacing-16;
     display: flex;
   }
 }
 
 .prev_next {
-  border-bottom: 0.15rem solid $color-black;
+  border-bottom: 0.15rem solid $black;
 
   .group:first-child {
-    border-top: 0.15rem solid $color-black;
+    border-top: 0.15rem solid $black;
   }
 
   .group:last-child {
-    border-top: 0.1rem solid $color-border-default;
+    border-top: 0.1rem solid $border-primary;
   }
 }
