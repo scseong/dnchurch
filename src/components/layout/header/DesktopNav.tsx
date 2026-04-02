@@ -19,7 +19,6 @@ export default function DesktopNav() {
   const lockNav = (el: HTMLElement) => {
     el.classList.add(styles.no_hover);
     el.closest('header')?.setAttribute('data-nav-locked', '');
-    el.closest('header')?.removeAttribute('data-nav-hover');
   };
 
   const unlockNav = (el: HTMLElement) => {
@@ -29,17 +28,12 @@ export default function DesktopNav() {
 
   const handleNavEnter = () => {
     isHoveredRef.current = true;
-    if (!navRef.current?.classList.contains(styles.no_hover)) {
-      navRef.current?.closest('header')?.setAttribute('data-nav-hover', '');
-    }
   };
 
   const handleNavLeave = () => {
     isHoveredRef.current = false;
     hoveredItemRef.current = null;
     lockedItemRef.current = null;
-    const header = navRef.current?.closest('header');
-    header?.removeAttribute('data-nav-hover');
     if (navRef.current) unlockNav(navRef.current);
   };
 
@@ -51,7 +45,6 @@ export default function DesktopNav() {
     if (lockedItemRef.current !== path) {
       lockedItemRef.current = null;
       unlockNav(el);
-      el.closest('header')?.setAttribute('data-nav-hover', '');
     }
   };
 

@@ -12,36 +12,12 @@
     background-color $transition-duration-normal $transition-easing-default,
     color $transition-duration-normal $transition-easing-default,
     box-shadow $transition-duration-normal $transition-easing-default;
-
-  @supports (animation-timeline: scroll()) {
-    animation: header-scroll steps(1) both;
-    animation-timeline: scroll(root);
-    animation-range: 0px 41px;
-  }
 }
 
-// @supports 미지원 브라우저를 위한 JS 폴백
 .scrolled {
   background: $white;
   color: $txt-primary;
   box-shadow: 0 0.1rem 0 0 $gray-200;
-}
-
-.header[data-nav-hover] {
-  background: $white !important;
-  color: $txt-primary !important;
-  box-shadow: 0 0.1rem 0 0 #e7e7e7 !important;
-}
-
-@keyframes header-scroll {
-  from {
-    background: transparent;
-    box-shadow: 0 0.1rem 0 0 rgba(255, 255, 255, 0.2);
-  }
-  to {
-    background: $white;
-    box-shadow: 0 0.1rem 0 0 #e7e7e7;
-  }
 }
 
 .header_wrap {
