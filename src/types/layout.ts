@@ -1,15 +1,7 @@
-export type SitemapChild = {
+export type AppSitemapNode = {
   path: string;
   label: string;
-  title: string;
-  description: string;
-};
-
-export type SitemapItem = {
-  path: string;
-  label: string;
-  title: string;
-  description: string;
-  inNav: boolean;
-  children?: SitemapChild[];
+  /** 동적 상세 라우트 여부 (e.g. /sermons/:id) */
+  detail?: boolean;
+  children?: AppSitemapNode[];
 };
