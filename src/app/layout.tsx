@@ -1,8 +1,8 @@
 import Script from 'next/script';
 import type { Metadata } from 'next';
 import { Nanum_Myeongjo } from 'next/font/google';
-import { Header, Footer } from '@/components/layout';
 import ScrollToTop from '@/components/common/ScrollToTop';
+import { AppHeader, BottomTabBar, Footer, Header } from '@/components/layout';
 import SessionContextProvider from '@/context/SessionContextProvider';
 import KakaoScript from '@/components/lib/KakaoScript';
 import { SCROLL_THRESHOLD } from '@/constants';
@@ -108,7 +108,7 @@ const SCROLL_REVEAL_OBSERVER_SCRIPT = `
         observeAll(nodes[j]);
       }
     }
-  }).observe(document.getElementById('main'),{childList:true,subtree:true});
+  }).observe(document.getElementById('root'),{childList:true,subtree:true});
 })();
 `;
 
@@ -134,13 +134,19 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
         <div id="root">
           <SessionContextProvider>
             <ScrollToTop />
+            <AppHeader />
             <Header />
-            <main id="main">{children}</main>
+            {children}
+            <Footer />
+            <BottomTabBar />
           </SessionContextProvider>
-          <Footer />
         </div>
         <div id="modal-root"></div>
-        <Script id="scroll-reveal-observer" strategy="afterInteractive" dangerouslySetInnerHTML={{ __html: SCROLL_REVEAL_OBSERVER_SCRIPT }} />
+        <Script
+          id="scroll-reveal-observer"
+          strategy="afterInteractive"
+          dangerouslySetInnerHTML={{ __html: SCROLL_REVEAL_OBSERVER_SCRIPT }}
+        />
       </body>
     </html>
   );

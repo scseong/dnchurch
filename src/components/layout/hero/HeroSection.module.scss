@@ -1,11 +1,12 @@
 .hero {
-  margin-top: calc(-1 * $header-height);
-  position: relative;
-  height: calc(20rem + $header-height);
-  overflow: hidden;
+  display: none;
 
-  @include respond-up($breakpoint-tablet) {
+  @include respond-up($breakpoint-pc-sm) {
+    display: block;
+    margin-top: calc(-1 * $header-height);
+    position: relative;
     height: calc(26rem + $header-height);
+    overflow: hidden;
   }
 }
 

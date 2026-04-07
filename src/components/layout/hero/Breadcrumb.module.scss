@@ -1,6 +1,11 @@
 .breadcrumb {
-  width: 100%;
-  border-bottom: 0.1rem solid $border-primary;
+  display: none;
+
+  @include respond-up($breakpoint-pc-sm) {
+    display: block;
+    width: 100%;
+    border-bottom: 0.1rem solid $border-primary;
+  }
 }
 
 .list {

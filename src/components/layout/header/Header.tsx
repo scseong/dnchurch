@@ -6,12 +6,9 @@ import clsx from 'clsx';
 import { useProfile } from '@/context/SessionContextProvider';
 import useModal from '@/hooks/useModal';
 import Logo from '@/components/layout/header/Logo';
-import AuthSection from '@/components/layout/header/AuthSection';
 import DesktopNav from '@/components/layout/header/DesktopNav';
-import MobileToggle from '@/components/layout/header/MobileToggle';
+import AuthSection from '@/components/layout/header/AuthSection';
 import LayoutContainer from '@/components/layout/container/LayoutContainer';
-import Modal from '@/components/common/Modal';
-import Drawer from '@/components/layout/header/Drawer';
 import { SCROLL_THRESHOLD } from '@/constants';
 import styles from './Header.module.scss';
 
@@ -20,7 +17,6 @@ export default function Header() {
   const pathname = usePathname();
 
   const [isScrolled, setIsScrolled] = useState(false);
-  const [mobileOpen, setMobileOpen] = useState(false);
 
   const mobileToggleRef = useRef<HTMLDivElement>(null);
 
@@ -33,16 +29,7 @@ export default function Header() {
 
   useEffect(() => {
     setProfileVisible(false);
-    setMobileOpen(false);
   }, [pathname, setProfileVisible]);
-
-  useEffect(() => {
-    const handleResize = () => {
-      if (window.innerWidth >= 768 && mobileOpen) setMobileOpen(false);
-    };
-    window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
-  }, [mobileOpen]);
 
   useLayoutEffect(() => {
     const handleScroll = () => setIsScrolled(window.scrollY > SCROLL_THRESHOLD);
@@ -53,7 +40,7 @@ export default function Header() {
   }, []);
 
   return (
-    <header className={clsx(styles.header, isScrolled && styles.scrolled)}>
+    <header className={clsx(styles.header, isScrolled && styles.scrolled)} ref={mobileToggleRef}>
       <LayoutContainer>
         <div className={styles.header_wrap}>
           <Logo />
@@ -65,14 +52,8 @@ export default function Header() {
             isVisible={isProfileVisible}
             handleToggle={handleProfileToggle}
           />
-          <MobileToggle ref={mobileToggleRef} handleToggle={() => setMobileOpen(true)} />
         </div>
       </LayoutContainer>
-      {mobileOpen && (
-        <Modal isVisible={mobileOpen} onClose={() => setMobileOpen(false)}>
-          <Drawer isOpen={mobileOpen} onClose={() => setMobileOpen(false)} />
-        </Modal>
-      )}
     </header>
   );
 }

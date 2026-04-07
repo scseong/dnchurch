@@ -14,7 +14,9 @@ export default function DesktopNav() {
   const lockedItemRef = useRef<string | null>(null);
   const hoveredItemRef = useRef<string | null>(null);
 
-  const navItems = sitemap.filter((item) => item.inNav);
+  const navItems = sitemap.filter(
+    (item) => item.path !== '/' && item.path !== '/mypage' && item.path !== '/notifications' && item.path !== '/search'
+  );
 
   const lockNav = (el: HTMLElement) => {
     el.classList.add(styles.no_hover);
@@ -85,9 +87,9 @@ export default function DesktopNav() {
               {item.label}
             </Link>
 
-            {item.children?.length && (
+            {item.children?.filter((c) => !c.detail).length ? (
               <ul className={styles.depth2}>
-                {item.children.map((child) => (
+                {item.children.filter((c) => !c.detail).map((child) => (
                   <li key={child.path}>
                     <Link href={child.path} className={styles.depth2_link}>
                       {child.label}
@@ -95,7 +97,7 @@ export default function DesktopNav() {
                   </li>
                 ))}
               </ul>
-            )}
+            ) : null}
           </li>
         ))}
       </ul>

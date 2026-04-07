@@ -2,26 +2,39 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import Dropdown from '@/components/layout/hero/Dropdown';
 import { sitemap } from '@/constants/sitemap';
-import { resolveCurrentNode } from '@/utils/sitemap';
+import type { AppSitemapNode } from '@/types/layout';
+import Dropdown from '@/components/layout/hero/Dropdown';
 import styles from './Breadcrumb.module.scss';
+
+const EXCLUDED_PATHS = new Set(['/', '/mypage', '/notifications', '/search']);
+
+const navItems = sitemap.filter((item) => !item.detail && !EXCLUDED_PATHS.has(item.path));
+
+/** pathname에 매칭되는 부모/자식 노드를 반환 */
+function resolveCurrentNode(pathname: string) {
+  for (const item of navItems) {
+    if (item.children) {
+      const child = item.children.find((c) => !c.detail && pathname.startsWith(c.path));
+      if (child) return { parent: item, child };
+    }
+    if (pathname.startsWith(item.path)) return { parent: item, child: null };
+  }
+  return { parent: null, child: null };
+}
 
 export default function Breadcrumb() {
   const pathname = usePathname();
   const { parent, child } = resolveCurrentNode(pathname);
 
-  const navItems = sitemap.filter((i) => i.inNav);
-
-  const isParentActive = !!parent && !parent.children;
-  const isChildActive = true;
+  const staticChildren = parent?.children?.filter((c) => !c.detail) ?? [];
+  const isParentActive = !!parent && staticChildren.length === 0;
 
   return (
     <nav className={styles.breadcrumb} aria-label="브레드크럼 내비게이션">
       <ol className={styles.list}>
         <li className={styles.item}>
           <Link href="/" className={styles.link}>
-            {/* <span>Home</span> */}
             <svg
               width="18"
               height="18"
@@ -49,13 +62,13 @@ export default function Breadcrumb() {
           </li>
         )}
 
-        {parent?.children && (
+        {staticChildren.length > 0 && (
           <li className={styles.item}>
             <Dropdown
-              label={child?.label ?? parent.children[0].label}
-              items={parent.children.map((c) => ({ path: c.path, label: c.label }))}
+              label={child?.label ?? staticChildren[0].label}
+              items={staticChildren.map((c: AppSitemapNode) => ({ path: c.path, label: c.label }))}
               currentPath={pathname}
-              isActive={isChildActive}
+              isActive
             />
           </li>
         )}

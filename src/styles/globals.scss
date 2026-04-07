@@ -191,6 +191,11 @@ header:has(#gnb:hover):not([data-nav-locked]) {
 
 #main {
   flex: 1;
+  padding-bottom: $tab-bar-height;
+
+  @include respond-up($breakpoint-pc-sm) {
+    padding-bottom: 0;
+  }
 }
 
 #footer {
