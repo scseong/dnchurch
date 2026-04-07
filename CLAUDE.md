@@ -5,7 +5,7 @@
 ## WHAT
 
 - **Stack**: Next.js (App Router), Supabase, SCSS Modules, Cloudinary, TypeScript
-- **Route Groups**: `(with-navbar)/` — about, news | `(without-navbar)/` — gallery, fellowship
+- **Route Groups**: `(content)/` — HeroSection + Breadcrumb 포함 (about, news, fellowship, sermons, community, next-gen, notifications, search)
 - **Data Flow**: `apis/` (DB 쿼리) → `services/` (비즈니스 로직) → `actions/` (뮤테이션) → `app/` (페이지)
 
 ## HOW (검증 루프)
