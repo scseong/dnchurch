@@ -1,8 +1,8 @@
 import Script from 'next/script';
 import type { Metadata } from 'next';
-import { Nanum_Myeongjo } from 'next/font/google';
+import { Noto_Serif_KR } from 'next/font/google';
 import ScrollToTop from '@/components/common/ScrollToTop';
-import { AppHeader, BottomTabBar, Footer, Header } from '@/components/layout';
+import { Header, Footer, BottomNav } from '@/components/layout';
 import SessionContextProvider from '@/context/SessionContextProvider';
 import KakaoScript from '@/components/lib/KakaoScript';
 import { SCROLL_THRESHOLD } from '@/constants';
@@ -23,10 +23,10 @@ export const metadata: Metadata = {
   }
 };
 
-const myeongjo = Nanum_Myeongjo({
-  weight: ['400', '700', '800'],
+const notoserifKR = Noto_Serif_KR({
+  weight: ['400', '500', '700', '800'],
   subsets: ['latin'],
-  variable: '--font-myeongjo',
+  variable: '--font-notoserifKR',
   display: 'swap'
 });
 
@@ -116,7 +116,7 @@ const API_KEY = `//dapi.kakao.com/v2/maps/sdk.js?appkey=${process.env.NEXT_PUBLI
 
 export default async function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="ko" className={`${myeongjo.variable}`}>
+    <html lang="ko" className={`${notoserifKR.variable}`}>
       <head>
         <link
           rel="stylesheet"
@@ -134,11 +134,10 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
         <div id="root">
           <SessionContextProvider>
             <ScrollToTop />
-            <AppHeader />
             <Header />
-            {children}
+            <main id="main">{children}</main>
             <Footer />
-            <BottomTabBar />
+            <BottomNav />
           </SessionContextProvider>
         </div>
         <div id="modal-root"></div>

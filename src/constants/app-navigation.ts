@@ -1,6 +1,15 @@
 import { sitemap } from '@/constants/sitemap';
 import type { AppSitemapNode } from '@/types/layout';
 
+// ── 내비게이션 공통 필터 ──
+
+const EXCLUDED_PATHS = new Set(['/', '/mypage', '/notifications', '/search']);
+
+/** 내비게이션에 표시할 최상위 메뉴 항목 (detail·유틸 경로 제외) */
+export const NAV_ITEMS = sitemap.filter(
+  (item) => !item.detail && !EXCLUDED_PATHS.has(item.path)
+);
+
 /** 모바일 하단 탭 바 — 5탭 */
 export const TAB_ITEMS = [
   { key: 'home', label: '홈', path: '/' },
@@ -46,11 +55,32 @@ export type HeaderMode =
   | { type: 'back'; label: string; path: string };
 
 /**
- * 현재 경로에 따른 AppHeader 모드를 결정한다.
- * - `/` → logo
- * - 상세 페이지(동적 세그먼트) → back + 부모 섹션 label
- * - 나머지 → 해당 경로의 label을 title로 표시
+ * 현재 경로의 부모 섹션이 가진 non-detail children을 반환한다.
+ * children이 없거나 1개 이하이면 null 반환.
  */
+export const resolveSubNav = (
+  pathname: string
+): { parentLabel: string; items: { path: string; label: string }[] } | null => {
+  for (const node of sitemap) {
+    if (!node.children) continue;
+
+    const staticChildren = node.children.filter((c) => !c.detail);
+    if (staticChildren.length <= 1) continue;
+
+    const isMatch =
+      pathname === node.path ||
+      staticChildren.some((c) => pathname.startsWith(c.path));
+
+    if (isMatch) {
+      return {
+        parentLabel: node.label,
+        items: staticChildren.map((c) => ({ path: c.path, label: c.label })),
+      };
+    }
+  }
+  return null;
+};
+
 export const resolveHeaderMode = (pathname: string): HeaderMode => {
   if (pathname === '/') return { type: 'logo' };
 
@@ -66,14 +96,5 @@ export const resolveHeaderMode = (pathname: string): HeaderMode => {
     if (parentLabel) return { type: 'back', label: parentLabel, path: parentPath };
   }
 
-  return { type: 'back', label: '', path: '/' };
+  return { type: 'back', label: '대구동남교회', path: '/' };
 };
-
-/** PC 상단 네비게이션 — 전체 탭 소멸, 마이페이지 별도 */
-export const PC_NAV_ITEMS = sitemap.filter(
-  (item) =>
-    item.path !== '/' &&
-    item.path !== '/mypage' &&
-    item.path !== '/notifications' &&
-    item.path !== '/search'
-);

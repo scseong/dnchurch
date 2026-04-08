@@ -20,7 +20,7 @@ $responsive-font-vw-map: (
   $breakpoint-768: 1.302083vw,
   $breakpoint-900: 1.111111vw,
   $breakpoint-1024: 0.976563vw,
-  $breakpoint-1280: 0.781250vw,
+  $breakpoint-1280: 0.78125vw,
   $breakpoint-1440: 0.694444vw,
   $breakpoint-1920: 0.520833vw
 );
@@ -45,4 +45,4 @@ $breakpoint-pc: $breakpoint-1280;
 $breakpoint-pc-lg: $breakpoint-1440;
 $breakpoint-pc-xl: $breakpoint-1920;
 
-$header-breakpoint: $breakpoint-pc-sm;
+$header-breakpoint: $breakpoint-tablet;

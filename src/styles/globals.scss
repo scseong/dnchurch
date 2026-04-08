@@ -170,18 +170,6 @@ button {
   cursor: pointer;
 }
 
-html[data-scrolled] header {
-  background-color: $white !important;
-  color: $txt-primary !important;
-  box-shadow: 0 0.1rem 0 0 #e7e7e7 !important;
-}
-
-header:has(#gnb:hover):not([data-nav-locked]) {
-  background-color: $white !important;
-  color: $txt-primary !important;
-  box-shadow: 0 0.1rem 0 0 #e7e7e7 !important;
-}
-
 #root {
   display: flex;
   flex-direction: column;
@@ -193,7 +181,7 @@ header:has(#gnb:hover):not([data-nav-locked]) {
   flex: 1;
   padding-bottom: $tab-bar-height;
 
-  @include respond-up($breakpoint-pc-sm) {
+  @include respond-up($header-breakpoint) {
     padding-bottom: 0;
   }
 }

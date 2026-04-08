@@ -6,7 +6,7 @@
 $font-family-base: 'Pretendard Variable', Pretendard, sans-serif;
 
 /// 강조/헤딩용 세리프 폰트 (나눔명조). 배너 타이틀, 인용문 등 특별한 강조에만 사용
-$font-family-secondary: var(--font-myeongjo);
+$font-family-secondary: var(--font-notoserifKR);
 
 // ══════════════════════════════════════════
 // LINE HEIGHT
@@ -145,5 +145,5 @@ $heading-letter-spacings: (
   'h2': -0.05rem,
   'h3': -0.03rem,
   'h4': -0.03rem,
-  'h5': -0.03rem,
+  'h5': -0.03rem
 );
