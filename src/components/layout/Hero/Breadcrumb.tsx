@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { resolveBreadcrumbSegments } from '@/components/layout/Header/navigation.config';
+import { resolveBreadcrumbSegments } from '@/config/navigation';
 import styles from './Hero.module.scss';
 
 function ChevronIcon() {

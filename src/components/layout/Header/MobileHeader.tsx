@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import { IoChevronBack, IoSearchOutline, IoNotificationsOutline } from 'react-icons/io5';
 import clsx from 'clsx';
-import { resolveMobileHeader, resolveSiblingTabs } from './navigation.config';
+import { resolveMobileHeader, resolveSiblingTabs } from '@/config/navigation';
 import styles from './Header.module.scss';
 
 export default function MobileHeader() {

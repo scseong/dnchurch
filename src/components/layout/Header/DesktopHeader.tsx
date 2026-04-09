@@ -6,7 +6,7 @@ import { useEffect, useLayoutEffect, useState, useCallback } from 'react';
 import { IoSearchOutline, IoNotificationsOutline, IoHeartOutline } from 'react-icons/io5';
 import clsx from 'clsx';
 import LayoutContainer from '@/components/layout/container/LayoutContainer';
-import { GNB_ITEMS, isActiveGnb, type NavItem } from './navigation.config';
+import { GNB_ITEMS, isActiveGnb, type NavItem } from '@/config/navigation';
 import { SCROLL_THRESHOLD } from '@/constants';
 import styles from './Header.module.scss';
 

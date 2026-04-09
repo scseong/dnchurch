@@ -1,4 +1,4 @@
-import { GNB_ITEMS } from '@/components/layout/Header/navigation.config';
+import { GNB_ITEMS } from '@/config/navigation';
 
 export type HeroMeta = {
   title: string;

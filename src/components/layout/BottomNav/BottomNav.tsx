@@ -8,7 +8,7 @@ import {
   BOTTOM_NAV_ITEMS,
   isActiveBottomNav,
   type IconName
-} from '@/components/layout/Header/navigation.config';
+} from '@/config/navigation';
 import Drawer from '@/components/layout/Header/Drawer';
 import styles from './BottomNav.module.scss';
 

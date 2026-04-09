@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useState, useEffect } from 'react';
 import clsx from 'clsx';
-import { GNB_ITEMS, isActiveGnb } from './navigation.config';
+import { GNB_ITEMS, isActiveGnb } from '@/config/navigation';
 import styles from './MobileNavigation.module.scss';
 
 /** pathname이 속하는 최상위 섹션 href를 반환 */
