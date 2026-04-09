@@ -1,7 +1,7 @@
 'use client';
 
 import clsx from 'clsx';
-import MobileNavigation from '@/components/layout/header/MobileNavigation';
+import MobileNavigation from './MobileNavigation';
 import styles from './Drawer.module.scss';
 
 type DrawerProps = {

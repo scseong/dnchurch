@@ -1,0 +1,118 @@
+// ══════════════════════════════════════════
+// HERO — 카테고리 페이지 히어로 섹션
+// 모바일: 숨김, tablet($header-breakpoint)부터 표시
+// ══════════════════════════════════════════
+
+.hero {
+  display: none;
+
+  @include respond-up($header-breakpoint) {
+    position: relative;
+    display: flex;
+    align-items: center;
+    min-height: 26rem;
+    overflow: hidden;
+  }
+
+  @include respond-up($breakpoint-pc-sm) {
+    min-height: 32rem;
+  }
+}
+
+// ── 배경: 그라디언트 ──
+
+.hero_bg {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse at 30% 50%, $navy-mid, transparent 70%),
+    linear-gradient(135deg, $navy 0%, $navy-mid 50%, $navy-light 100%);
+}
+
+// ── 오버레이 ──
+
+.hero_overlay {
+  position: absolute;
+  inset: 0;
+  background: $overlay-dark-light;
+}
+
+// ── 내부 콘텐츠 ──
+
+.hero_inner {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: $spacing-12;
+  padding-top: $spacing-48;
+  padding-bottom: $spacing-48;
+}
+
+.hero_title {
+  font-size: $font-size-34;
+  font-weight: $font-weight-bold;
+  color: $txt-inverse;
+  line-height: $line-height-heading;
+  letter-spacing: $letter-spacing-heading;
+
+  @include respond-up($breakpoint-pc-sm) {
+    font-size: $font-size-42;
+  }
+}
+
+.hero_subtitle {
+  font-size: $font-size-15;
+  font-weight: $font-weight-regular;
+  color: $txt-image-subtle;
+  line-height: $line-height-base;
+
+  @include respond-up($breakpoint-pc-sm) {
+    font-size: $font-size-16;
+  }
+}
+
+// ══════════════════════════════════════════
+// BREADCRUMB — Hero 내부 전용
+// ══════════════════════════════════════════
+
+.breadcrumb {
+  margin-bottom: $spacing-8;
+}
+
+.breadcrumb_list {
+  display: flex;
+  align-items: center;
+  gap: $spacing-6;
+  list-style: none;
+}
+
+.breadcrumb_item {
+  display: flex;
+  align-items: center;
+  gap: $spacing-6;
+  font-size: $font-size-13;
+  color: $txt-image-subtle;
+
+  svg {
+    width: 1.4rem;
+    height: 1.4rem;
+    flex-shrink: 0;
+  }
+}
+
+.breadcrumb_link {
+  color: $txt-image-subtle;
+  text-decoration: none;
+  transition: color $transition-duration-normal $transition-easing-default;
+
+  &:hover {
+    color: $txt-inverse;
+  }
+}
+
+.breadcrumb_current {
+  color: $txt-inverse;
+  font-weight: $font-weight-medium;
+}

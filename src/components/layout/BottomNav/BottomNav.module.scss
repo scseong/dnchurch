@@ -1,0 +1,78 @@
+// ══════════════════════════════════════════
+// BOTTOM NAV — 모바일 하단 탭 바
+// 768px 이상 숨김
+// ══════════════════════════════════════════
+
+.tab_bar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 100;
+  background-color: $white;
+  border-top: 0.1rem solid $border-primary;
+  // iOS 홈 인디케이터 영역만큼 배경을 확장
+  padding-bottom: env(safe-area-inset-bottom, 0);
+
+  @include respond-up($header-breakpoint) {
+    display: none;
+  }
+}
+
+.tab_list {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  padding: $spacing-8 $spacing-12 $spacing-12;
+}
+
+.tab_item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: $spacing-8;
+  min-height: 4.4rem;
+  text-decoration: none;
+  color: $txt-tertiary;
+  transition: color $transition-duration-normal $transition-easing-default;
+}
+
+.tab_icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: $line-height-reset;
+
+  svg {
+    width: 2.2rem;
+    height: 2.2rem;
+  }
+}
+
+.tab_label {
+  font-size: $font-size-11;
+  font-weight: $font-weight-medium;
+  letter-spacing: $letter-spacing-wide;
+  line-height: $line-height-reset;
+}
+
+.active {
+  color: $primary;
+}
+
+// ── Drawer Overlay ──
+
+.drawer_overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  background-color: $overlay-scrim;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity $transition-duration-normal $transition-easing-default;
+}
+
+.drawer_overlay_open {
+  opacity: 1;
+  pointer-events: auto;
+}

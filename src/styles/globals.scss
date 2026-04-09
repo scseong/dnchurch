@@ -47,7 +47,7 @@
   --radius-999: 9999px;
 
   // ── Layout ──
-  --container-padding: 1.6rem;
+  --container-padding: 2rem;
   --container-min: 37.5rem;
   --container-max: 76.8rem;
   --screensize-h-min: 81.2rem;
@@ -170,6 +170,11 @@ button {
   cursor: pointer;
 }
 
+:focus-visible {
+  outline: 0.2rem solid $primary;
+  outline-offset: 0.2rem;
+}
+
 #root {
   display: flex;
   flex-direction: column;
@@ -184,11 +189,6 @@ button {
   @include respond-up($header-breakpoint) {
     padding-bottom: 0;
   }
-}
-
-#footer {
-  width: 100%;
-  border-top: 0.1rem solid $border-primary;
 }
 
 .overlay {

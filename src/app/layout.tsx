@@ -2,7 +2,7 @@ import Script from 'next/script';
 import type { Metadata } from 'next';
 import { Noto_Serif_KR } from 'next/font/google';
 import ScrollToTop from '@/components/common/ScrollToTop';
-import { Header, Footer, BottomNav } from '@/components/layout';
+import { Header, Hero, Footer, BottomNav } from '@/components/layout';
 import SessionContextProvider from '@/context/SessionContextProvider';
 import KakaoScript from '@/components/lib/KakaoScript';
 import { SCROLL_THRESHOLD } from '@/constants';
@@ -135,6 +135,7 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
           <SessionContextProvider>
             <ScrollToTop />
             <Header />
+            <Hero />
             <main id="main">{children}</main>
             <Footer />
             <BottomNav />
