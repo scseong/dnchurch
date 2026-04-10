@@ -71,10 +71,7 @@ export default function DesktopHeader() {
 
           {/* GNB */}
           <nav className={styles.gnb} aria-label="메인 내비게이션">
-            <ul
-              className={clsx(styles.gnb_list, hoverSuppressed && styles.gnb_suppressed)}
-              onMouseLeave={() => setHoverSuppressed(false)}
-            >
+            <ul className={clsx(styles.gnb_list, hoverSuppressed && styles.gnb_suppressed)}>
               {GNB_ITEMS.map((item) => {
                 const active = isActiveGnb(pathname, item);
                 const hasChildren = !!item.children?.length;
@@ -84,7 +81,10 @@ export default function DesktopHeader() {
                   <li
                     key={item.href}
                     className={styles.gnb_item}
-                    onMouseEnter={() => setKeyboardOpen(null)}
+                    onMouseEnter={() => {
+                      setKeyboardOpen(null);
+                      setHoverSuppressed(false);
+                    }}
                   >
                     <Link
                       href={item.href}

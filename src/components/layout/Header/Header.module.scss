@@ -5,7 +5,7 @@
 // ══════════════════════════════════════════
 
 $indicator-height: 0.2rem;
-$mega-min-width: 22rem;
+$mega-padding-x: $spacing-8;
 
 // ══════════════════════════════════════════
 // MOBILE HEADER
@@ -270,7 +270,7 @@ $mega-min-width: 22rem;
 .gnb_list {
   display: flex;
   align-items: stretch;
-  gap: 0;
+  gap: $spacing-8;
 }
 
 .gnb_item {
@@ -284,23 +284,42 @@ $mega-min-width: 22rem;
   align-items: center;
   position: relative;
   padding: 0 $spacing-10;
-  font-size: $font-size-13;
+  font-size: $font-size-15;
   font-weight: $font-weight-medium;
   color: $txt-primary;
   white-space: nowrap;
-  transition:
-    color $transition-duration-normal $transition-easing-default,
-    font-weight $transition-duration-normal $transition-easing-default;
+  transition: color $transition-duration-normal $transition-easing-default;
+
+  // 하단 인디케이터
+  &::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: $spacing-10;
+    right: $spacing-10;
+    height: $indicator-height;
+    background-color: $primary;
+    transform: scaleX(0);
+    transition: transform $transition-duration-normal $transition-easing-default;
+  }
 
   @include respond-up($breakpoint-pc-sm) {
     padding: 0 $spacing-16;
-    font-size: $font-size-14;
+
+    &::after {
+      left: $spacing-16;
+      right: $spacing-16;
+    }
   }
 }
 
 .gnb_link_active {
   color: $primary;
   font-weight: $font-weight-bold;
+
+  &::after {
+    transform: scaleX(1);
+  }
 }
 
 // ── 메가 메뉴 ──
@@ -309,24 +328,21 @@ $mega-min-width: 22rem;
   position: absolute;
   top: 100%;
   left: 50%;
-  transform: translateX(-50%) translateY(-$spacing-4);
-  min-width: $mega-min-width;
-  padding: $spacing-12 0;
+  transform: translateX(-50%);
+  padding: $mega-padding-x;
   background-color: $white;
-  border-radius: $radius-m;
+  border-top: $indicator-height solid $primary;
+  border-radius: 0 0 $radius-s $radius-s;
   box-shadow: $shadow-md;
   opacity: 0;
   pointer-events: none;
-  transition:
-    opacity $transition-duration-normal $transition-easing-default,
-    transform $transition-duration-normal $transition-easing-default;
+  transition: opacity $transition-duration-normal $transition-easing-default;
   z-index: 200;
 }
 
 .gnb_item:hover .gnb_mega,
 .gnb_mega_open {
   opacity: 1;
-  transform: translateX(-50%) translateY(0);
   pointer-events: auto;
 }
 
@@ -335,21 +351,22 @@ $mega-min-width: 22rem;
 .gnb_suppressed .gnb_mega_open {
   opacity: 0;
   pointer-events: none;
-  transform: translateX(-50%) translateY(calc(-1 * $spacing-4));
 }
 
 .gnb_mega_link {
   display: block;
-  padding: $spacing-8 $spacing-20;
-  font-size: $font-size-14;
+  padding: $spacing-8 $spacing-16;
+  font-size: $font-size-13;
+  font-weight: $font-weight-regular;
   color: $txt-secondary;
   white-space: nowrap;
+  border-radius: $radius-xs;
   transition:
-    padding-left $transition-duration-normal $transition-easing-default,
+    background-color $transition-duration-normal $transition-easing-default,
     color $transition-duration-normal $transition-easing-default;
 
   &:hover {
-    padding-left: $spacing-24;
+    background-color: $bg-secondary;
     color: $primary;
   }
 }

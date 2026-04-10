@@ -10,6 +10,7 @@ import {
   type IconName
 } from '@/config/navigation';
 import Drawer from '@/components/layout/Header/Drawer';
+import useScrollLock from '@/hooks/useScrollLock';
 import styles from './BottomNav.module.scss';
 
 type IconProps = { active: boolean };
@@ -111,6 +112,7 @@ const ICON_MAP: Record<IconName, (props: IconProps) => React.ReactNode> = {
 export default function BottomNav() {
   const pathname = usePathname();
   const [drawerOpen, setDrawerOpen] = useState(false);
+  useScrollLock(drawerOpen);
 
   const openDrawer = useCallback(() => setDrawerOpen(true), []);
   const closeDrawer = useCallback(() => setDrawerOpen(false), []);
