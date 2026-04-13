@@ -78,11 +78,11 @@ export const updateBulletinAction = async (formData: FormData) => {
       await Promise.all(deletedImages.map((img) => deleteImage(img.cloudinaryId)));
     }
 
-    revalidatePath('/news/bulletin');
+    revalidatePath('/news/bulletins');
     revalidatePath('/news');
     updateTag('bulletin-detail');
     updateTag('bulletin-detail-nav');
-    redirect(`/news/bulletin/${bulletinId}`);
+    redirect(`/news/bulletins/${bulletinId}`);
   } catch (error) {
     if (isRedirectError(error)) throw error;
     if (newUploadedPublicIds.length > 0) {

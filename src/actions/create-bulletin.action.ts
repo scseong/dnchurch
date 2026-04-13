@@ -42,10 +42,10 @@ export const createBulletinAction = async (formData: FormData) => {
       return { success: false, message: '주보 업로드에 실패했습니다.' };
     }
 
-    revalidatePath('/news/bulletin');
+    revalidatePath('/news/bulletins');
     revalidatePath('/news');
     updateTag('bulletin-nav');
-    redirect('/news/bulletin');
+    redirect('/news/bulletins');
   } catch (error) {
     if (isRedirectError(error)) throw error;
     if (uploadedPublicIds.length > 0) {

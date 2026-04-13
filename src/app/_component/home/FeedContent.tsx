@@ -68,7 +68,7 @@ export default function FeedContent({ notices }: Props) {
               <span className={styles.color_bar_news} />
               교회 소식
             </h3>
-            <Link href="/news/notice" className={styles.more_link}>
+            <Link href="/news/notices" className={styles.more_link}>
               더 보기 →
             </Link>
           </div>
@@ -76,7 +76,7 @@ export default function FeedContent({ notices }: Props) {
             {notices.map((notice, i) => (
               <Link
                 key={notice.id}
-                href={`/news/notice/${notice.id}`}
+                href={`/news/notices/${notice.id}`}
                 className={styles.item}
                 data-reveal
                 style={getRevealStyle(i)}
@@ -134,7 +134,7 @@ export default function FeedContent({ notices }: Props) {
       </div>
 
       <Link
-        href={activeTab === 'news' ? '/news/notice' : '/fellowship'}
+        href={activeTab === 'news' ? '/news/notices' : '/fellowship'}
         className={styles.more_button}
         data-reveal
         style={getRevealStyle(notices.length)}

@@ -1,8 +1,8 @@
 import Script from 'next/script';
 import type { Metadata } from 'next';
-import { Nanum_Myeongjo } from 'next/font/google';
-import { Header, Footer } from '@/components/layout';
+import { Noto_Serif_KR } from 'next/font/google';
 import ScrollToTop from '@/components/common/ScrollToTop';
+import { Header, Hero, Footer, BottomNav } from '@/components/layout';
 import SessionContextProvider from '@/context/SessionContextProvider';
 import KakaoScript from '@/components/lib/KakaoScript';
 import { SCROLL_THRESHOLD } from '@/constants';
@@ -23,23 +23,29 @@ export const metadata: Metadata = {
   }
 };
 
-const myeongjo = Nanum_Myeongjo({
-  weight: ['400', '700', '800'],
+const notoserifKR = Noto_Serif_KR({
+  weight: ['400', '500', '700', '800'],
   subsets: ['latin'],
-  variable: '--font-myeongjo',
+  variable: '--font-notoserifKR',
   display: 'swap'
 });
 
 const SCROLL_REVEAL_OBSERVER_SCRIPT = `
 (function(){
   var STAGGER=0.1;
+  var SECTION_GAP=200;
   var pending=[];
   var rafId=null;
   var revealed={};
 
   function isRevealed(){return !!revealed[location.pathname]}
-
   function markRevealed(){revealed[location.pathname]=true}
+
+  var _push=history.pushState.bind(history);
+  history.pushState=function(state,unused,url){
+    markRevealed();
+    return _push(state,unused,url);
+  };
 
   function revealImmediate(el){
     el.style.transition='none';
@@ -51,8 +57,12 @@ const SCROLL_REVEAL_OBSERVER_SCRIPT = `
     if(!pending.length)return;
     pending.sort(function(a,b){return a.top-b.top});
     var running=0;
+    var prevTop=pending[0].top;
     for(var i=0;i<pending.length;i++){
-      var el=pending[i].el;
+      var item=pending[i];
+      if(item.top-prevTop>SECTION_GAP){running=0}
+      prevTop=item.top;
+      var el=item.el;
       var base=parseFloat(el.style.transitionDelay)||0;
       var eff=Math.max(base,running);
       el.style.transitionDelay=eff+'s';
@@ -61,7 +71,6 @@ const SCROLL_REVEAL_OBSERVER_SCRIPT = `
       running=eff+STAGGER;
     }
     pending=[];
-    markRevealed();
   }
 
   var observer=new IntersectionObserver(function(entries){
@@ -77,9 +86,7 @@ const SCROLL_REVEAL_OBSERVER_SCRIPT = `
   },{threshold:0,rootMargin:'0px 0px 80px 0px'});
 
   function processElement(el){
-    if(isRevealed()){
-      revealImmediate(el);
-    } else if(el.getBoundingClientRect().bottom<0){
+    if(isRevealed()||el.getBoundingClientRect().bottom<0){
       revealImmediate(el);
     } else {
       observer.observe(el);
@@ -101,7 +108,7 @@ const SCROLL_REVEAL_OBSERVER_SCRIPT = `
         observeAll(nodes[j]);
       }
     }
-  }).observe(document.getElementById('main'),{childList:true,subtree:true});
+  }).observe(document.getElementById('root'),{childList:true,subtree:true});
 })();
 `;
 
@@ -109,7 +116,7 @@ const API_KEY = `//dapi.kakao.com/v2/maps/sdk.js?appkey=${process.env.NEXT_PUBLI
 
 export default async function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="ko" className={`${myeongjo.variable}`}>
+    <html lang="ko" className={`${notoserifKR.variable}`}>
       <head>
         <link
           rel="stylesheet"
@@ -128,12 +135,18 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
           <SessionContextProvider>
             <ScrollToTop />
             <Header />
+            <Hero />
             <main id="main">{children}</main>
+            <Footer />
+            <BottomNav />
           </SessionContextProvider>
-          <Footer />
         </div>
         <div id="modal-root"></div>
-        <Script id="scroll-reveal-observer" strategy="afterInteractive" dangerouslySetInnerHTML={{ __html: SCROLL_REVEAL_OBSERVER_SCRIPT }} />
+        <Script
+          id="scroll-reveal-observer"
+          strategy="afterInteractive"
+          dangerouslySetInnerHTML={{ __html: SCROLL_REVEAL_OBSERVER_SCRIPT }}
+        />
       </body>
     </html>
   );

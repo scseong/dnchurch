@@ -19,8 +19,18 @@ $screensize-h-min: var(--screensize-h-min);
 // LAYOUT — 기타 고정 토큰
 // ══════════════════════════════════════════
 
-$header-height: 5.8rem;
-$lnb-min-height: 22rem;
+$top-bar-height: 3.6rem;
+$header-height: 7.2rem;
+$app-header-height: 5.2rem;
+$tab-bar-height: 5.4rem;
+$lnb-min-height: 25rem;
+
+// Header (tablet compact)
+$header-height-compact: 6rem;
+
+// Icon Button
+$icon-button-size: 4rem;
+$icon-button-size-sm: 3.6rem;
 
 // Button
 $button-height-sm: 2.25rem;

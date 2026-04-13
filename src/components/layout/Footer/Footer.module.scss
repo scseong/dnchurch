@@ -1,0 +1,162 @@
+// ══════════════════════════════════════════
+// FOOTER — PC/태블릿 전용 (768px~)
+// 모바일 숨김
+// ══════════════════════════════════════════
+
+.footer {
+  display: none;
+
+  @include respond-up($header-breakpoint) {
+    display: block;
+    background-color: $bg-dark;
+    color: $txt-inverse;
+    padding: 4rem $spacing-24 2.8rem;
+  }
+
+  @include respond-up($breakpoint-pc-sm) {
+    padding: 5.6rem $spacing-24 3.2rem;
+  }
+}
+
+// ── 4컬럼 그리드 ──
+
+.footer_grid {
+  display: grid;
+  grid-template-columns: 1.5fr repeat(3, 1fr);
+  gap: $spacing-32;
+  padding-bottom: $spacing-32;
+}
+
+// ── 브랜드 컬럼 ──
+
+.footer_brand {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-12;
+}
+
+.footer_logo {
+  font-family: $font-family-secondary;
+  font-size: $font-size-20;
+  font-weight: $font-weight-bold;
+  color: $txt-inverse;
+  letter-spacing: $letter-spacing-tight;
+}
+
+.footer_slogan {
+  font-size: $font-size-13;
+  color: $txt-image-subtle;
+  line-height: $line-height-base;
+}
+
+.footer_sns {
+  display: flex;
+  gap: $spacing-8;
+  margin-top: $spacing-8;
+}
+
+.footer_sns_btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 3.6rem;
+  height: 3.6rem;
+  border-radius: $radius-circle;
+  border: 0.1rem solid $border-dark-subtle;
+  color: $txt-image-subtle;
+  transition:
+    background-color $transition-duration-normal $transition-easing-default,
+    color $transition-duration-normal $transition-easing-default,
+    border-color $transition-duration-normal $transition-easing-default;
+
+  &:hover {
+    background-color: $gold;
+    border-color: $gold;
+    color: $txt-inverse;
+  }
+
+  svg {
+    width: 1.8rem;
+    height: 1.8rem;
+  }
+}
+
+// ── 링크 컬럼 ──
+
+.footer_col {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-12;
+}
+
+.footer_col_title {
+  font-size: $font-size-14;
+  font-weight: $font-weight-bold;
+  color: $txt-inverse;
+}
+
+.footer_col_list {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-8;
+  list-style: none;
+}
+
+.footer_col_link {
+  font-size: $font-size-13;
+  color: $txt-dark-muted;
+  text-decoration: none;
+  transition: color $transition-duration-normal $transition-easing-default;
+
+  &:hover {
+    color: $gold;
+  }
+}
+
+// ── Contact ──
+
+.footer_address {
+  font-style: normal;
+  font-size: $font-size-13;
+  color: $txt-dark-muted;
+  line-height: $line-height-base;
+}
+
+// ── 카피라이트 ──
+
+.footer_bottom {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-top: $spacing-24;
+  border-top: 0.1rem solid $border-dark-faint;
+
+  @include respond($breakpoint-pc-sm) {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: $spacing-12;
+  }
+}
+
+.footer_copyright {
+  font-size: $font-size-12;
+  color: $txt-dark-faint;
+}
+
+.footer_bottom_links {
+  display: flex;
+  align-items: center;
+  gap: $spacing-16;
+  font-size: $font-size-12;
+  color: $txt-dark-faint;
+
+  a {
+    color: $txt-dark-faint;
+    text-decoration: none;
+    transition: color $transition-duration-normal $transition-easing-default;
+
+    &:hover {
+      color: $txt-image-subtle;
+    }
+  }
+}
