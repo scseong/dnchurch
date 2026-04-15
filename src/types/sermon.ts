@@ -43,3 +43,14 @@ export interface SermonListParams {
   year?: number;
   search?: string;
 }
+
+export type YearCount = {
+  year: number;
+  count: number;
+};
+
+export type SermonArchiveView = {
+  featured: SermonWithRelations | null;
+  recentSermons: SermonWithRelations[];
+  yearCounts: YearCount[];
+};
