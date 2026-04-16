@@ -1,14 +1,14 @@
 import Link from 'next/link';
 import { LayoutContainer } from '@/components/layout';
 import SermonCard from '@/app/_component/home/SermonCard';
-import { getRecentSermons } from '@/apis/sermons';
+import { getRecentSermons } from '@/services/sermon';
 import { getRevealStyle } from '@/utils/reveal';
 import styles from './RecentSermons.module.scss';
 
 export default async function RecentSermons() {
-  const { data: sermons } = await getRecentSermons(4);
+  const sermons = await getRecentSermons(4);
 
-  if (!sermons?.length) return null;
+  if (!sermons.length) return null;
 
   const [featured, ...rest] = sermons;
 
