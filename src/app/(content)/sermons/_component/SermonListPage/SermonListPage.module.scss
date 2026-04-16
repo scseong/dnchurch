@@ -483,10 +483,6 @@
   @include respond-up($breakpoint-tablet-sm) {
     grid-template-columns: repeat(2, 1fr);
   }
-
-  @include respond-up($breakpoint-pc-sm) {
-    grid-template-columns: repeat(3, 1fr);
-  }
 }
 
 // ── States ──

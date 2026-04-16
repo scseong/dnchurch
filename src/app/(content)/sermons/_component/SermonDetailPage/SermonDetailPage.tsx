@@ -153,9 +153,7 @@ function SermonMeta({
   return (
     <div className={styles.meta_block}>
       <span className={styles.series_tag}>
-        {seriesTitle
-          ? `${seriesTitle} · 제${seriesOrder ?? '?'}편`
-          : '단독 설교'}
+        {seriesTitle ? `${seriesTitle} · 제${seriesOrder ?? '?'}편` : '단독 설교'}
       </span>
       <h1 className={styles.sermon_title}>{title}</h1>
       <div className={styles.meta_row}>
@@ -164,12 +162,6 @@ function SermonMeta({
         <span>{preacher}</span>
         <Dot />
         <span>{serviceType}</span>
-        {duration && (
-          <>
-            <Dot />
-            <span>{duration}</span>
-          </>
-        )}
       </div>
       {scripture && <span className={styles.scripture_tag}>{scripture}</span>}
     </div>
@@ -198,10 +190,7 @@ function TabContent({ activeTab, sermon, resources }: TabContentProps) {
       {activeTab === 'scripture' && (
         <div className={styles.tab_panel}>
           {sermon.scripture ? (
-            <ScriptureBlock
-              scriptureRef={sermon.scripture}
-              scriptureText={sermon.scripture_text}
-            />
+            <ScriptureBlock scriptureRef={sermon.scripture} scriptureText={sermon.scripture_text} />
           ) : (
             <p className={styles.empty}>등록된 본문이 없습니다</p>
           )}
@@ -225,9 +214,7 @@ function TabContent({ activeTab, sermon, resources }: TabContentProps) {
                     <div className={styles.resource_info}>
                       <span className={styles.resource_title}>{res.title}</span>
                       {res.file_type && (
-                        <span className={styles.resource_type}>
-                          {res.file_type.toUpperCase()}
-                        </span>
+                        <span className={styles.resource_type}>{res.file_type.toUpperCase()}</span>
                       )}
                     </div>
                     <IoDownloadOutline className={styles.resource_download} aria-hidden="true" />
