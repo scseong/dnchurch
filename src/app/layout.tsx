@@ -135,8 +135,10 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
           <SessionContextProvider>
             <ScrollToTop />
             <Header />
-            <Hero />
-            <main id="main">{children}</main>
+            <main id="main">
+              <Hero />
+              {children}
+            </main>
             <Footer />
             <BottomNav />
           </SessionContextProvider>
