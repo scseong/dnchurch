@@ -5,7 +5,6 @@
 // ══════════════════════════════════════════
 
 $indicator-height: 0.2rem;
-$mega-padding-x: $spacing-8;
 
 // ══════════════════════════════════════════
 // MOBILE HEADER
@@ -30,6 +29,10 @@ $mega-padding-x: $spacing-8;
   justify-content: space-between;
   height: $app-header-height;
   padding: 0 $container-padding;
+
+  &:last-child {
+    border-bottom: 0.1rem solid $border-primary;
+  }
 }
 
 .mobile_title_area {
@@ -76,14 +79,15 @@ $mega-padding-x: $spacing-8;
   display: flex;
   align-items: center;
   justify-content: center;
-  min-width: 4.4rem;
-  min-height: 4.4rem;
+  min-width: 4.2rem;
+  min-height: 4.2rem;
   border-radius: $radius-circle;
   color: $txt-secondary;
   transition: color $transition-duration-normal $transition-easing-default;
 
   &:hover {
     color: $txt-primary;
+    background-color: $overlay-subtle;
   }
 
   svg {
@@ -329,7 +333,7 @@ $mega-padding-x: $spacing-8;
   top: 100%;
   left: 50%;
   transform: translateX(-50%);
-  padding: $mega-padding-x;
+  padding: $spacing-8;
   background-color: $white;
   border-top: $indicator-height solid $primary;
   border-radius: 0 0 $radius-s $radius-s;
