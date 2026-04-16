@@ -1,0 +1,30 @@
+.toast {
+  position: fixed;
+  left: 50%;
+  bottom: $spacing-24;
+  z-index: 10000;
+  padding: $spacing-12 $spacing-24;
+  max-width: calc(100% - #{$spacing-32});
+  font-size: $font-size-14;
+  font-weight: $font-weight-medium;
+  color: $txt-inverse;
+  background: $txt-primary;
+  border-radius: $radius-circle;
+  box-shadow: $shadow-md;
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  transform: translate(-50%, calc(100% + #{$spacing-24}));
+  transition:
+    transform $transition-duration-normal $transition-easing-default,
+    opacity $transition-duration-normal ease;
+
+  &.show {
+    opacity: 1;
+    transform: translate(-50%, 0);
+  }
+
+  @include respond-up($breakpoint-pc-sm) {
+    bottom: $spacing-40;
+  }
+}
