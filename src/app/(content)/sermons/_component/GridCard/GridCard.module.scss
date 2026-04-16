@@ -1,0 +1,125 @@
+.card {
+  display: flex;
+  flex-direction: column;
+  background: $bg-primary;
+  border: 1px solid $border-primary;
+  border-radius: $radius-s;
+  overflow: hidden;
+  opacity: 0;
+  animation: fadeUp $animation-duration-reveal $transition-easing-default forwards;
+  transition:
+    transform 0.25s $transition-easing-default,
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
+
+  &:hover {
+    transform: translateY(-0.2rem);
+    border-color: $primary;
+    box-shadow: $shadow-md;
+
+    .thumb img,
+    .thumb_placeholder {
+      transform: scale(1.04);
+    }
+
+    .play_btn {
+      opacity: 1;
+    }
+  }
+}
+
+.thumb {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  overflow: hidden;
+  background: $bg-tertiary;
+
+  img,
+  .thumb_placeholder {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.4s $transition-easing-default;
+  }
+
+  .thumb_placeholder {
+    display: block;
+    background: linear-gradient(135deg, $primary-subtle, $bg-tertiary);
+  }
+}
+
+.play_btn {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 4.8rem;
+  height: 4.8rem;
+  font-size: $font-size-22;
+  color: $txt-inverse;
+  background: rgba(0, 0, 0, 0.55);
+  border-radius: $radius-circle;
+  transform: translate(-50%, -50%);
+  opacity: 0;
+  transition: opacity 0.25s ease;
+  pointer-events: none;
+}
+
+.duration {
+  position: absolute;
+  right: $spacing-8;
+  bottom: $spacing-8;
+  padding: $padding-inline-xs;
+  font-size: $font-size-11;
+  font-weight: $font-weight-medium;
+  color: $txt-inverse;
+  background: rgba(0, 0, 0, 0.7);
+  border-radius: $radius-xs;
+}
+
+.info {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-4;
+  padding: $spacing-12 $spacing-16;
+}
+
+.title {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  font-size: $font-size-16;
+  font-weight: $font-weight-semibold;
+  line-height: $line-height-heading;
+  color: $txt-primary;
+}
+
+.meta {
+  display: flex;
+  align-items: center;
+  gap: $spacing-8;
+  font-size: $font-size-13;
+  color: $txt-tertiary;
+}
+
+.dot {
+  width: 0.3rem;
+  height: 0.3rem;
+  background: $txt-tertiary;
+  border-radius: $radius-circle;
+}
+
+.scripture {
+  align-self: flex-start;
+  margin-top: $spacing-4;
+  padding: $padding-inline-xs;
+  font-size: $font-size-12;
+  font-weight: $font-weight-medium;
+  color: $txt-secondary;
+  background: $primary-subtle;
+  border-radius: $radius-xs;
+}
