@@ -25,7 +25,7 @@ export type SermonListItem = Pick<
   | 'title'
   | 'scripture'
   | 'service_type'
-> & { preacher: Pick<Preacher, 'name'> | null };
+> & { preacher: Pick<Preacher, 'name' | 'title'> | null };
 
 export type SermonCardItem = SermonListItem &
   Pick<Sermon, 'summary' | 'duration'> & {

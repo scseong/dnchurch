@@ -19,7 +19,7 @@ const SERMON_WITH_RELATIONS_SELECT = `
 const SERMON_LIST_ITEM_SELECT = `
   id, slug, sermon_date, video_id, video_provider, thumbnail_url,
   title, scripture, service_type,
-  preacher:preachers(name)
+  preacher:preachers(name, title)
 `;
 
 /** 설교 도메인 Supabase 쿼리 계층 */
