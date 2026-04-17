@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
-import { IoChevronBack, IoSearchOutline, IoNotificationsOutline } from 'react-icons/io5';
+import { IoChevronBack, IoSearchOutline } from 'react-icons/io5';
 import clsx from 'clsx';
 import { resolveMobileHeader, resolveSiblingTabs } from '@/config/navigation';
 import styles from './Header.module.scss';
@@ -15,9 +15,9 @@ export default function MobileHeader() {
 
   return (
     <header className={styles.mobile_header}>
-      {/* 상단 행: 타이틀 + 액션 */}
+      {/* 상단 행: 좌측 슬롯 · 타이틀(중앙) · 우측 액션 */}
       <div className={styles.mobile_top}>
-        <div className={styles.mobile_title_area}>
+        <div className={styles.mobile_slot_left}>
           {showBack && (
             <button
               type="button"
@@ -28,16 +28,14 @@ export default function MobileHeader() {
               <IoChevronBack />
             </button>
           )}
-          <h1 className={styles.mobile_title}>{title}</h1>
         </div>
+
+        <h1 className={styles.mobile_title}>{title}</h1>
 
         <div className={styles.mobile_actions}>
           <Link href="/search" className={styles.mobile_action_btn} aria-label="검색">
             <IoSearchOutline />
           </Link>
-          <button type="button" className={styles.mobile_action_btn} aria-label="알림">
-            <IoNotificationsOutline />
-          </button>
         </div>
       </div>
 

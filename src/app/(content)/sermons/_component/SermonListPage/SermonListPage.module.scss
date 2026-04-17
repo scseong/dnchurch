@@ -4,8 +4,13 @@
 
 .body {
   display: flex;
-  gap: $content-gap-xl;
-  padding: $section-padding-40 0 $section-padding-80;
+  gap: $content-gap-l;
+  padding: $section-padding-20 0 $section-padding-80;
+
+  @include respond-up($breakpoint-pc-sm) {
+    gap: $content-gap-xl;
+    padding: $section-padding-40 0;
+  }
 }
 
 // ── Sidebar (PC) ──
@@ -137,6 +142,10 @@
   display: flex;
   gap: $spacing-8;
   margin-bottom: $content-gap-m;
+
+  @include respond-up($breakpoint-pc-sm) {
+    margin-bottom: $content-gap-l;
+  }
 }
 
 .search_form {
@@ -197,8 +206,10 @@
 .filter_btn {
   display: inline-flex;
   align-items: center;
+  justify-content: center;
   gap: $spacing-4;
-  padding: $padding-inline-sm;
+  min-width: 4.4rem;
+  padding: 0 $spacing-12;
   font-size: $font-size-13;
   font-weight: $font-weight-medium;
   color: $txt-secondary;
@@ -207,13 +218,41 @@
   border-radius: $radius-s;
   cursor: pointer;
   white-space: nowrap;
+  flex-shrink: 0;
   transition:
     color 0.15s ease,
     border-color 0.15s ease;
 
+  svg {
+    font-size: $font-size-18;
+  }
+
+  span {
+    @include blind;
+  }
+
   &:hover {
     color: $txt-primary;
     border-color: $primary;
+  }
+
+  @include respond-up($breakpoint-pc-sm) {
+    min-width: 0;
+    padding: $padding-inline-sm;
+
+    svg {
+      font-size: inherit;
+    }
+
+    span {
+      position: static;
+      width: auto;
+      height: auto;
+      margin: 0;
+      overflow: visible;
+      clip: auto;
+      white-space: nowrap;
+    }
   }
 }
 
@@ -243,14 +282,15 @@
 
 .chip {
   flex-shrink: 0;
-  padding: $padding-control;
-  font-size: $font-size-13;
+  padding: $spacing-10 $spacing-16;
+  font-size: $font-size-14;
   font-weight: $font-weight-medium;
   color: $txt-secondary;
   background: $primary-subtle;
   border: 1px solid transparent;
   border-radius: $radius-circle;
   cursor: pointer;
+  white-space: nowrap;
   transition:
     background-color 0.15s ease,
     color 0.15s ease;
@@ -267,14 +307,15 @@
   display: inline-flex;
   align-items: center;
   gap: $spacing-4;
-  padding: $padding-control;
-  font-size: $font-size-13;
+  padding: $spacing-10 $spacing-16;
+  font-size: $font-size-14;
   font-weight: $font-weight-medium;
   color: $primary;
   background: $primary-subtle;
   border: 1px solid transparent;
   border-radius: $radius-circle;
   cursor: pointer;
+  white-space: nowrap;
 }
 
 // ── Series Banner ──
@@ -309,10 +350,16 @@
 }
 
 .series_banner_count {
-  margin-top: $spacing-4;
-  font-size: $font-size-12;
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: baseline;
+  gap: $spacing-4;
+  padding: $padding-control;
+  font-size: $font-size-13;
   font-weight: $font-weight-semibold;
   color: $gold-light;
+  border-radius: $radius-xs;
+  white-space: nowrap;
 }
 
 .series_banner_close {
@@ -392,7 +439,7 @@
 // ── Content sections ──
 
 .featured {
-  margin-bottom: $content-gap-l;
+  margin-bottom: $content-gap-xl;
 }
 
 .year_section {

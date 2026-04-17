@@ -22,9 +22,7 @@ export default function SermonSeriesBanner({ allSeries, standaloneCount }: Props
     );
   }
 
-  const active = activeSeries
-    ? allSeries.find((item) => item.slug === activeSeries)
-    : null;
+  const active = activeSeries ? allSeries.find((item) => item.slug === activeSeries) : null;
 
   if (!active) return null;
 
@@ -40,7 +38,7 @@ export default function SermonSeriesBanner({ allSeries, standaloneCount }: Props
 function BannerLayout({
   title,
   description,
-  count,
+  count
 }: {
   title: string;
   description?: string | null;
@@ -50,11 +48,9 @@ function BannerLayout({
     <section className={styles.series_banner} aria-label="선택된 시리즈">
       <header className={styles.series_banner_info}>
         <h3 className={styles.series_banner_title}>{title}</h3>
-        {description && (
-          <p className={styles.series_banner_desc}>{description}</p>
-        )}
-        <span className={styles.series_banner_count}>{count}편</span>
+        {description && <p className={styles.series_banner_desc}>{description}</p>}
       </header>
+      <span className={styles.series_banner_count}>{count}편</span>
     </section>
   );
 }

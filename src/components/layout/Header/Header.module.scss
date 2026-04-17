@@ -24,9 +24,9 @@ $indicator-height: 0.2rem;
 // ── 상단 행: 타이틀 + 액션 ──
 
 .mobile_top {
-  display: flex;
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
   align-items: center;
-  justify-content: space-between;
   height: $app-header-height;
   padding: 0 $container-padding;
 
@@ -35,20 +35,19 @@ $indicator-height: 0.2rem;
   }
 }
 
-.mobile_title_area {
+.mobile_slot_left {
   display: flex;
   align-items: center;
-  gap: $spacing-4;
-  min-width: 0;
+  justify-self: start;
+  margin-left: calc(-1 * $spacing-10);
 }
 
 .mobile_back {
   display: flex;
   align-items: center;
   justify-content: center;
-  min-width: 4.4rem;
-  min-height: 4.4rem;
-  margin-left: calc(-1 * $spacing-8);
+  min-width: 4.2rem;
+  min-height: 4.2rem;
   flex-shrink: 0;
 
   svg {
@@ -59,10 +58,12 @@ $indicator-height: 0.2rem;
 }
 
 .mobile_title {
+  justify-self: center;
   font-size: $font-size-18;
   font-weight: $font-weight-semibold;
   color: $txt-primary;
   letter-spacing: $letter-spacing-body;
+  text-align: center;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -72,6 +73,8 @@ $indicator-height: 0.2rem;
   display: flex;
   align-items: center;
   gap: $spacing-4;
+  justify-self: end;
+  margin-right: calc(-1 * $spacing-10);
   flex-shrink: 0;
 }
 
