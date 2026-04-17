@@ -1,0 +1,553 @@
+// ══════════════════════════════════════════
+// Body Layout
+// ══════════════════════════════════════════
+
+.body {
+  display: flex;
+  gap: $content-gap-l;
+  padding: $section-padding-20 0 $section-padding-80;
+
+  @include respond-up($breakpoint-pc-sm) {
+    gap: $content-gap-xl;
+    padding: $section-padding-40 0;
+  }
+}
+
+// ── Sidebar (PC) ──
+
+.sidebar {
+  display: none;
+
+  @include respond-up($breakpoint-pc-sm) {
+    display: block;
+    width: 26rem;
+    flex-shrink: 0;
+  }
+}
+
+.sidebar_inner {
+  position: sticky;
+  top: calc(#{$header-height} + #{$spacing-24});
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-4;
+  max-height: calc(100vh - #{$header-height} - #{$spacing-40});
+  overflow-y: auto;
+}
+
+.sidebar_list {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-4;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+
+  ul {
+    display: flex;
+    flex-direction: column;
+    gap: $spacing-4;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+}
+
+.sidebar_heading {
+  margin-bottom: $spacing-8;
+  font-size: $font-size-14;
+  font-weight: $font-weight-bold;
+  color: $txt-primary;
+}
+
+.sidebar_group {
+  margin-top: $content-gap-s;
+}
+
+.sidebar_year {
+  padding: $spacing-8 $spacing-12;
+  font-size: $font-size-12;
+  font-weight: $font-weight-bold;
+  letter-spacing: $letter-spacing-wide;
+  color: $txt-tertiary;
+  text-transform: uppercase;
+}
+
+.sidebar_item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: $spacing-8;
+  width: 100%;
+  padding: $spacing-8 $spacing-12;
+  font-size: $font-size-14;
+  font-weight: $font-weight-medium;
+  color: $txt-secondary;
+  background: transparent;
+  border: none;
+  border-radius: $radius-xs;
+  text-align: left;
+  text-decoration: none;
+  cursor: pointer;
+  transition:
+    background-color 0.15s ease,
+    color 0.15s ease;
+
+  &:hover {
+    background: $primary-subtle;
+  }
+}
+
+.sidebar_item_active {
+  color: $primary;
+  background: $primary-subtle;
+
+  .sidebar_badge {
+    color: $txt-inverse;
+    background: $primary;
+  }
+}
+
+.sidebar_item_title {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.sidebar_badge {
+  flex-shrink: 0;
+  padding: $padding-inline-xs;
+  font-size: $font-size-12;
+  font-weight: $font-weight-medium;
+  color: $primary;
+  background: $primary-subtle;
+  border-radius: $radius-xs;
+}
+
+// ── Main ──
+
+.main {
+  flex: 1;
+  min-width: 0;
+}
+
+// ── Toolbar ──
+
+.toolbar_header {
+  display: flex;
+  flex-direction: column;
+}
+
+.toolbar {
+  display: flex;
+  gap: $spacing-8;
+  margin-bottom: $content-gap-m;
+
+  @include respond-up($breakpoint-pc-sm) {
+    margin-bottom: $content-gap-l;
+  }
+}
+
+.search_form {
+  position: relative;
+  flex: 1;
+}
+
+.search_icon {
+  position: absolute;
+  top: 50%;
+  left: $spacing-12;
+  transform: translateY(-50%);
+  font-size: $font-size-16;
+  color: $txt-tertiary;
+  pointer-events: none;
+}
+
+.search_input {
+  width: 100%;
+  padding: $spacing-12 $spacing-40;
+  font-size: $font-size-14;
+  color: $txt-primary;
+  border: 1px solid $border-primary;
+  border-radius: $radius-s;
+  transition:
+    border-color 0.15s ease,
+    background-color 0.15s ease;
+
+  &::placeholder {
+    color: $txt-tertiary;
+  }
+
+  &:focus {
+    outline: none;
+    background: $bg-primary;
+    border-color: $primary;
+  }
+}
+
+.search_clear {
+  position: absolute;
+  top: 50%;
+  right: $spacing-12;
+  transform: translateY(-50%);
+  display: inline-flex;
+  padding: $spacing-4;
+  font-size: $font-size-16;
+  color: $txt-tertiary;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+
+  &:hover {
+    color: $txt-primary;
+  }
+}
+
+.filter_btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: $spacing-4;
+  min-width: 4.4rem;
+  padding: 0 $spacing-12;
+  font-size: $font-size-13;
+  font-weight: $font-weight-medium;
+  color: $txt-secondary;
+  background: $primary-subtle;
+  border: 1px solid $border-primary;
+  border-radius: $radius-s;
+  cursor: pointer;
+  white-space: nowrap;
+  flex-shrink: 0;
+  transition:
+    color 0.15s ease,
+    border-color 0.15s ease;
+
+  svg {
+    font-size: $font-size-18;
+  }
+
+  span {
+    @include blind;
+  }
+
+  &:hover {
+    color: $txt-primary;
+    border-color: $primary;
+  }
+
+  @include respond-up($breakpoint-pc-sm) {
+    min-width: 0;
+    padding: $padding-inline-sm;
+
+    svg {
+      font-size: inherit;
+    }
+
+    span {
+      position: static;
+      width: auto;
+      height: auto;
+      margin: 0;
+      overflow: visible;
+      clip: auto;
+      white-space: nowrap;
+    }
+  }
+}
+
+// ── Series Chips (Mobile) ──
+
+.chips {
+  margin-bottom: $content-gap-m;
+
+  @include respond-up($breakpoint-pc-sm) {
+    display: none;
+  }
+}
+
+.chip_list {
+  display: flex;
+  gap: $spacing-8;
+  overflow-x: auto;
+  padding-bottom: $spacing-4;
+  list-style: none;
+  margin: 0;
+  padding-left: 0;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+.chip {
+  flex-shrink: 0;
+  padding: $spacing-10 $spacing-16;
+  font-size: $font-size-14;
+  font-weight: $font-weight-medium;
+  color: $txt-secondary;
+  background: $primary-subtle;
+  border: 1px solid transparent;
+  border-radius: $radius-circle;
+  cursor: pointer;
+  white-space: nowrap;
+  transition:
+    background-color 0.15s ease,
+    color 0.15s ease;
+}
+
+.chip_active {
+  color: $txt-inverse;
+  background: $primary;
+  border-color: $primary;
+}
+
+.chip_more {
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: $spacing-4;
+  padding: $spacing-10 $spacing-16;
+  font-size: $font-size-14;
+  font-weight: $font-weight-medium;
+  color: $primary;
+  background: $primary-subtle;
+  border: 1px solid transparent;
+  border-radius: $radius-circle;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+// ── Series Banner ──
+
+.series_banner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: $content-gap-m;
+  padding: $spacing-20;
+  margin-bottom: $content-gap-l;
+  background: linear-gradient(135deg, $navy 0%, $navy-mid 100%);
+  border-radius: $radius-m;
+}
+
+.series_banner_info {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-4;
+}
+
+.series_banner_title {
+  font-family: $font-family-secondary;
+  font-size: $font-size-18;
+  font-weight: $font-weight-bold;
+  color: $txt-inverse;
+}
+
+.series_banner_desc {
+  font-size: $font-size-13;
+  color: $txt-dark-muted;
+}
+
+.series_banner_count {
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: baseline;
+  gap: $spacing-4;
+  padding: $padding-control;
+  font-size: $font-size-13;
+  font-weight: $font-weight-semibold;
+  color: $gold-light;
+  border-radius: $radius-xs;
+  white-space: nowrap;
+}
+
+.series_banner_close {
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 3.2rem;
+  height: 3.2rem;
+  font-size: $font-size-18;
+  color: $txt-dark-muted;
+  background: rgba(255, 255, 255, 0.15);
+  border: none;
+  border-radius: $radius-circle;
+  cursor: pointer;
+  transition: background-color 0.15s ease;
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.25);
+  }
+}
+
+// ── Active Filters ──
+
+.active_filters {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: $spacing-8;
+  margin-bottom: $content-gap-m;
+  list-style: none;
+  padding: 0;
+}
+
+.filter_chip {
+  display: inline-flex;
+  align-items: center;
+  gap: $spacing-4;
+  padding: $padding-control;
+  font-size: $font-size-12;
+  font-weight: $font-weight-medium;
+  color: $primary;
+  background: $primary-subtle;
+  border-radius: $radius-circle;
+
+  button {
+    display: inline-flex;
+    padding: 0;
+    font-size: $font-size-14;
+    color: inherit;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    opacity: 0.7;
+
+    &:hover {
+      opacity: 1;
+    }
+  }
+}
+
+.clear_all {
+  padding: $padding-inline-sm;
+  font-size: $font-size-12;
+  font-weight: $font-weight-medium;
+  color: $txt-tertiary;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  text-decoration: underline;
+
+  &:hover {
+    color: $txt-primary;
+  }
+}
+
+// ── Content sections ──
+
+.featured {
+  margin-bottom: $content-gap-xl;
+}
+
+.year_section {
+  margin-bottom: $content-gap-xl;
+}
+
+.year_heading {
+  margin-bottom: $content-gap-m;
+  font-size: $font-size-22;
+  font-weight: $font-weight-bold;
+  color: $txt-primary;
+}
+
+.past_section {
+  margin-top: $section-padding-40;
+}
+
+.past_heading {
+  margin-bottom: $content-gap-m;
+  font-size: $font-size-22;
+  font-weight: $font-weight-bold;
+  color: $txt-primary;
+}
+
+.year_grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: $spacing-12;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+
+  @include respond-up($breakpoint-tablet-sm) {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  @include respond-up($breakpoint-pc-sm) {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+.year_card {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: $spacing-8;
+  padding: $spacing-20;
+  background: $primary-subtle;
+  border: 1px solid transparent;
+  border-radius: $radius-m;
+  text-decoration: none;
+  transition:
+    background-color 0.15s ease,
+    border-color 0.15s ease,
+    transform 0.15s ease;
+
+  &:hover {
+    background: $primary-subtle;
+    border-color: $primary;
+    transform: translateY(-2px);
+  }
+}
+
+.year_card_year {
+  font-family: $font-family-secondary;
+  font-size: $font-size-22;
+  font-weight: $font-weight-bold;
+  color: $txt-primary;
+}
+
+.year_card_count {
+  font-size: $font-size-13;
+  font-weight: $font-weight-medium;
+  color: $txt-tertiary;
+}
+
+// ── Grid ──
+
+.grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: $content-gap-m;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+
+  @include respond-up($breakpoint-tablet-sm) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+// ── States ──
+
+.loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 16rem;
+  font-size: $font-size-14;
+  color: $txt-tertiary;
+}
+
+.empty {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 24rem;
+  font-size: $font-size-16;
+  color: $txt-tertiary;
+}

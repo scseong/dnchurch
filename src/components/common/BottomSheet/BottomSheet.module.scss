@@ -1,0 +1,108 @@
+.overlay {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  background: $overlay-scrim;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity $transition-duration-normal ease;
+  z-index: 9999;
+
+  &.open {
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  @include respond-up($breakpoint-pc-sm) {
+    align-items: center;
+  }
+}
+
+.sheet {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-height: 80vh;
+  background: $bg-primary;
+  border-radius: $radius-l $radius-l 0 0;
+  padding-bottom: env(safe-area-inset-bottom, 0);
+  transform: translateY(100%);
+  transition: transform $transition-duration-normal $transition-easing-default;
+
+  &.open {
+    transform: translateY(0);
+  }
+
+  @include respond-up($breakpoint-pc-sm) {
+    width: auto;
+    min-width: 40rem;
+    max-width: 56rem;
+    max-height: 70vh;
+    border-radius: $radius-l;
+    padding-bottom: 0;
+    transform: translateY(1.6rem);
+    opacity: 0;
+    transition:
+      transform $transition-duration-normal $transition-easing-default,
+      opacity $transition-duration-normal ease;
+
+    &.open {
+      transform: translateY(0);
+      opacity: 1;
+    }
+  }
+}
+
+.handle {
+  flex-shrink: 0;
+  width: 3.6rem;
+  height: 0.4rem;
+  margin: $spacing-8 auto $spacing-4;
+  background: $border-primary;
+  border-radius: $radius-circle;
+
+  @include respond-up($breakpoint-pc-sm) {
+    display: none;
+  }
+}
+
+.header {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: $content-gap-s;
+  padding: $spacing-12 $spacing-20;
+  border-bottom: 1px solid $border-primary;
+}
+
+.title {
+  font-size: $font-size-16;
+  font-weight: $font-weight-semibold;
+  color: $txt-primary;
+}
+
+.close_btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: $spacing-4;
+  font-size: $font-size-20;
+  color: $txt-secondary;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  transition: color 0.15s ease;
+
+  &:hover {
+    color: $txt-primary;
+  }
+}
+
+.body {
+  flex: 1 1 auto;
+  overflow-y: auto;
+  padding: $spacing-16 $spacing-20;
+}

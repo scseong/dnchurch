@@ -1,0 +1,93 @@
+.section {
+  display: flex;
+  flex-direction: column;
+  gap: $content-gap-s;
+}
+
+.section_title {
+  font-size: $font-size-13;
+  font-weight: $font-weight-semibold;
+  letter-spacing: $letter-spacing-wide;
+  color: $txt-tertiary;
+  text-transform: uppercase;
+}
+
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: $spacing-8;
+}
+
+.chip {
+  padding: $padding-control;
+  font-size: $font-size-13;
+  font-weight: $font-weight-medium;
+  color: $txt-secondary;
+  background: $primary-subtle;
+  border: 1px solid transparent;
+  border-radius: $radius-circle;
+  cursor: pointer;
+  transition:
+    background-color 0.15s ease,
+    color 0.15s ease,
+    border-color 0.15s ease;
+
+  &:hover {
+    border-color: $primary;
+    color: $primary;
+  }
+}
+
+.chip_active {
+  color: $txt-inverse;
+  background: $primary;
+  border-color: $primary;
+
+  &:hover {
+    background: $primary-hover;
+    color: $txt-inverse;
+  }
+}
+
+.footer {
+  display: flex;
+  gap: $spacing-12;
+  margin-top: $content-gap-l;
+  padding-top: $spacing-16;
+  border-top: 1px solid $border-primary;
+}
+
+.btn_reset,
+.btn_apply {
+  flex: 1;
+  padding: $padding-control;
+  font-size: $font-size-14;
+  font-weight: $font-weight-semibold;
+  border-radius: $radius-s;
+  cursor: pointer;
+  transition:
+    background-color 0.15s ease,
+    color 0.15s ease;
+}
+
+.btn_reset {
+  color: $txt-secondary;
+  background: $primary-subtle;
+  border: 1px solid $border-primary;
+
+  &:hover {
+    border-color: $primary;
+    color: $primary;
+  }
+}
+
+.btn_apply {
+  color: $txt-inverse;
+  background: $primary;
+  border: 1px solid $primary;
+
+  &:hover {
+    background: $primary-hover;
+    border-color: $primary-hover;
+  }
+}

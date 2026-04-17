@@ -2,38 +2,33 @@ import Link from 'next/link';
 import clsx from 'clsx';
 import { formattedDate } from '@/utils/date';
 import { getRevealStyle } from '@/utils/reveal';
-import type { RecentSermon } from '@/apis/sermons';
+import { formatPreacherLabel, getSermonThumbnail } from '@/utils/sermon';
+import type { SermonListItem } from '@/types/sermon';
 import styles from './SermonCard.module.scss';
 
-const YT_THUMB = 'https://img.youtube.com/vi';
-const YT_WATCH = 'https://www.youtube.com/watch?v=';
-
 type SermonCardProps = {
-  sermon: RecentSermon;
+  sermon: SermonListItem;
   isLatest?: boolean;
   index?: number;
   isSub?: boolean;
 };
 
 export default function SermonCard({ sermon, isLatest, index, isSub }: SermonCardProps) {
+  const thumbnail = getSermonThumbnail(sermon);
+  const preacherLabel = formatPreacherLabel(sermon.preacher);
+
   return (
     <Link
-      href={sermon.youtube_id ? `${YT_WATCH}${sermon.youtube_id}` : `/sermons/${sermon.id}`}
+      href={`/sermons/${sermon.slug}`}
       className={clsx(styles.card, isSub && styles.card_sub)}
-      target="_blank"
-      rel="noopener noreferrer"
-      aria-label={`${sermon.title} 설교 영상 재생 - ${sermon.preacher}`}
+      aria-label={`${sermon.title} - ${preacherLabel}`}
       data-reveal
       style={getRevealStyle(index)}
     >
       <div className={styles.card_thumb}>
         {/* TODO: Cloudinary 최적화 */}
-        {sermon.youtube_id && (
-          <img
-            src={`${YT_THUMB}/${sermon.youtube_id}/maxresdefault.jpg`}
-            alt={sermonAlt(sermon)}
-            loading="lazy"
-          />
+        {thumbnail && (
+          <img src={thumbnail} alt={sermonAlt(sermon, preacherLabel)} loading="lazy" />
         )}
         {isLatest && <span className={styles.latest_badge}>LATEST</span>}
         <PlayIcon className={styles.thumb_play} />
@@ -48,7 +43,7 @@ export default function SermonCard({ sermon, isLatest, index, isSub }: SermonCar
             <span className={styles.dot} aria-hidden="true" />
             <span className={styles.date}>{formattedDate(sermon.sermon_date, 'YYYY.MM.DD')}</span>
             <span className={styles.dot} aria-hidden="true" />
-            <span className={styles.preacher}>{sermon.preacher}</span>
+            <span className={styles.preacher}>{preacherLabel}</span>
           </div>
         </div>
         <PlayIcon className={styles.play_btn} />
@@ -67,6 +62,9 @@ function PlayIcon({ className }: { className?: string }) {
   );
 }
 
-function sermonAlt(sermon: Pick<RecentSermon, 'title' | 'preacher' | 'sermon_date'>) {
-  return `${sermon.title} - ${sermon.preacher} (${formattedDate(sermon.sermon_date, 'YYYY.MM.DD')})`;
+function sermonAlt(
+  sermon: Pick<SermonListItem, 'title' | 'sermon_date'>,
+  preacherLabel: string
+) {
+  return `${sermon.title} - ${preacherLabel} (${formattedDate(sermon.sermon_date, 'YYYY.MM.DD')})`;
 }

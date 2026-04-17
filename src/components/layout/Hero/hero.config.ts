@@ -36,8 +36,8 @@ export function resolveHeroMeta(pathname: string): HeroMeta | null {
       }
     }
 
-    // 자식이 없는 경우: 부모 href 정확히 매칭
-    if (pathname === item.href) {
+    // 자식이 없는 경우: 부모 href 정확히 매칭 또는 하위 경로
+    if (pathname === item.href || (!item.children && pathname.startsWith(item.href + '/'))) {
       title = item.label;
       categoryKey = item.href.split('/').slice(0, 2).join('/');
       break;

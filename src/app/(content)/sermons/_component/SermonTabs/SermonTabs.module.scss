@@ -1,0 +1,43 @@
+.tab_bar {
+  display: flex;
+  border-bottom: 1px solid $border-primary;
+  gap: $spacing-4;
+}
+
+.tab {
+  position: relative;
+  padding: $spacing-12 $spacing-16;
+  flex: 1;
+  font-size: $font-size-14;
+  font-weight: $font-weight-medium;
+  color: $txt-tertiary;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  transition: color 0.15s ease;
+
+  &::after {
+    content: '';
+    position: absolute;
+    bottom: -1px;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: transparent;
+    border-radius: 1px 1px 0 0;
+    transition: background-color 0.2s $transition-easing-default;
+  }
+
+  &:hover {
+    color: $txt-secondary;
+  }
+}
+
+.tab_active {
+  color: $primary;
+  font-weight: $font-weight-semibold;
+
+  &::after {
+    background: $primary;
+  }
+}

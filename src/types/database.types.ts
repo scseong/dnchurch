@@ -130,6 +130,42 @@ export type Database = {
         }
         Relationships: []
       }
+      preachers: {
+        Row: {
+          bio: string | null
+          created_at: string
+          id: string
+          is_active: boolean
+          name: string
+          photo_url: string | null
+          sort_order: number
+          title: string | null
+          updated_at: string
+        }
+        Insert: {
+          bio?: string | null
+          created_at?: string
+          id?: string
+          is_active?: boolean
+          name: string
+          photo_url?: string | null
+          sort_order?: number
+          title?: string | null
+          updated_at?: string
+        }
+        Update: {
+          bio?: string | null
+          created_at?: string
+          id?: string
+          is_active?: boolean
+          name?: string
+          photo_url?: string | null
+          sort_order?: number
+          title?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
           avatar_url: string | null
@@ -175,33 +211,92 @@ export type Database = {
         }
         Relationships: []
       }
+      sermon_resources: {
+        Row: {
+          created_at: string
+          deleted_at: string | null
+          file_size_bytes: number | null
+          file_type: Database["public"]["Enums"]["sermon_resource_type"] | null
+          file_url: string
+          id: string
+          sermon_id: string
+          sort_order: number | null
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          deleted_at?: string | null
+          file_size_bytes?: number | null
+          file_type?: Database["public"]["Enums"]["sermon_resource_type"] | null
+          file_url: string
+          id?: string
+          sermon_id: string
+          sort_order?: number | null
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          deleted_at?: string | null
+          file_size_bytes?: number | null
+          file_type?: Database["public"]["Enums"]["sermon_resource_type"] | null
+          file_url?: string
+          id?: string
+          sermon_id?: string
+          sort_order?: number | null
+          title?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "sermon_resources_sermon_id_fkey"
+            columns: ["sermon_id"]
+            isOneToOne: false
+            referencedRelation: "sermons"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       sermon_series: {
         Row: {
-          cover_url: string | null
+          cover_image_url: string | null
           created_at: string
           description: string | null
           ended_at: string | null
-          id: number
-          started_at: string | null
+          id: string
+          is_active: boolean
+          slug: string
+          sort_order: number | null
+          started_at: string
           title: string
+          year: number | null
         }
         Insert: {
-          cover_url?: string | null
+          cover_image_url?: string | null
           created_at?: string
           description?: string | null
           ended_at?: string | null
-          id?: number
-          started_at?: string | null
+          id?: string
+          is_active?: boolean
+          slug: string
+          sort_order?: number | null
+          started_at: string
           title: string
+          year?: number | null
         }
         Update: {
-          cover_url?: string | null
+          cover_image_url?: string | null
           created_at?: string
           description?: string | null
           ended_at?: string | null
-          id?: number
-          started_at?: string | null
+          id?: string
+          is_active?: boolean
+          slug?: string
+          sort_order?: number | null
+          started_at?: string
           title?: string
+          year?: number | null
         }
         Relationships: []
       }
@@ -209,58 +304,77 @@ export type Database = {
         Row: {
           created_at: string
           deleted_at: string | null
-          id: number
+          duration: string | null
+          id: string
           is_published: boolean
-          pdf_url: string | null
-          preacher: string
-          scripture: string
-          series_id: number | null
+          preacher_id: string
+          scripture: string | null
+          scripture_text: string | null
+          series_id: string | null
+          series_order: number | null
           sermon_date: string
           service_type: Database["public"]["Enums"]["service_type_enum"]
+          slug: string
           summary: string | null
+          thumbnail_url: string | null
           title: string
           updated_at: string
+          video_id: string | null
+          video_provider: string
           view_count: number
-          youtube_id: string | null
-          youtube_url: string | null
         }
         Insert: {
           created_at?: string
           deleted_at?: string | null
-          id?: number
+          duration?: string | null
+          id?: string
           is_published?: boolean
-          pdf_url?: string | null
-          preacher: string
-          scripture: string
-          series_id?: number | null
+          preacher_id: string
+          scripture?: string | null
+          scripture_text?: string | null
+          series_id?: string | null
+          series_order?: number | null
           sermon_date: string
           service_type?: Database["public"]["Enums"]["service_type_enum"]
+          slug: string
           summary?: string | null
+          thumbnail_url?: string | null
           title: string
           updated_at?: string
+          video_id?: string | null
+          video_provider?: string
           view_count?: number
-          youtube_id?: string | null
-          youtube_url?: string | null
         }
         Update: {
           created_at?: string
           deleted_at?: string | null
-          id?: number
+          duration?: string | null
+          id?: string
           is_published?: boolean
-          pdf_url?: string | null
-          preacher?: string
-          scripture?: string
-          series_id?: number | null
+          preacher_id?: string
+          scripture?: string | null
+          scripture_text?: string | null
+          series_id?: string | null
+          series_order?: number | null
           sermon_date?: string
           service_type?: Database["public"]["Enums"]["service_type_enum"]
+          slug?: string
           summary?: string | null
+          thumbnail_url?: string | null
           title?: string
           updated_at?: string
+          video_id?: string | null
+          video_provider?: string
           view_count?: number
-          youtube_id?: string | null
-          youtube_url?: string | null
         }
         Relationships: [
+          {
+            foreignKeyName: "sermons_preacher_id_fkey"
+            columns: ["preacher_id"]
+            isOneToOne: false
+            referencedRelation: "preachers"
+            referencedColumns: ["id"]
+          },
           {
             foreignKeyName: "sermons_series_id_fkey"
             columns: ["series_id"]
@@ -408,6 +522,10 @@ export type Database = {
           prev_title: string
         }[]
       }
+      increment_sermon_views: {
+        Args: { sermon_id: string }
+        Returns: undefined
+      }
       update_bulletin: {
         Args: {
           p_bulletin_id: number
@@ -448,6 +566,7 @@ export type Database = {
         | "기타"
       profile_status_enum: "pending" | "approved" | "rejected"
       role_enum: "admin" | "dept_manager" | "member"
+      sermon_resource_type: "pdf" | "audio" | "video" | "link" | "hwp" | "txt"
       service_type_enum:
         | "주일오전예배"
         | "주일저녁예배"
@@ -596,6 +715,7 @@ export const Constants = {
       ],
       profile_status_enum: ["pending", "approved", "rejected"],
       role_enum: ["admin", "dept_manager", "member"],
+      sermon_resource_type: ["pdf", "audio", "video", "link", "hwp", "txt"],
       service_type_enum: [
         "주일오전예배",
         "주일저녁예배",
