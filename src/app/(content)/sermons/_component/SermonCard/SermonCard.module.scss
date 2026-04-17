@@ -140,6 +140,7 @@
 .title {
   font-size: $font-size-20;
   font-weight: $font-weight-bold;
+  font-family: $font-family-secondary;
   line-height: $line-height-heading;
   color: $txt-primary;
 
@@ -157,8 +158,8 @@
 }
 
 .dot {
-  width: 0.3rem;
-  height: 0.3rem;
+  width: 0.2rem;
+  height: 0.2rem;
   background: $txt-tertiary;
   border-radius: $radius-circle;
 }
