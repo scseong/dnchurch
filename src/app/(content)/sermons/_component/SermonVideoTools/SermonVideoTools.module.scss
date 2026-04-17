@@ -1,10 +1,17 @@
 .tools {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
+  margin: calc(-1 * $content-gap-m) calc(-1 * $container-padding) 0;
   background: $bg-primary;
-  border: 1px solid $border-primary;
-  border-radius: $radius-m;
+  border-top: 1px solid $border-primary;
+  border-bottom: 1px solid $border-primary;
   overflow: visible;
+
+  @include respond-up($breakpoint-tablet) {
+    margin: 0;
+    border: 1px solid $border-primary;
+    border-radius: $radius-m;
+  }
 }
 
 .tool_wrap {

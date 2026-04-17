@@ -2,8 +2,14 @@
   position: sticky;
   top: $app-header-height;
   z-index: 10;
+  margin: 0 calc(-1 * $container-padding);
+
+  @include respond-up($breakpoint-tablet) {
+    margin: 0;
+  }
 
   @include respond-up($header-breakpoint) {
+    position: relative;
     top: 0;
   }
 }
@@ -13,8 +19,11 @@
   width: 100%;
   aspect-ratio: 16 / 9;
   background: $bg-invert;
-  border-radius: $radius-m;
   overflow: hidden;
+
+  @include respond-up($breakpoint-tablet) {
+    border-radius: $radius-m;
+  }
 
   iframe {
     width: 100%;
@@ -33,7 +42,10 @@
   aspect-ratio: 16 / 9;
   background: linear-gradient(135deg, $primary-subtle, $bg-tertiary);
   border: 1px dashed $border-primary;
-  border-radius: $radius-m;
+
+  @include respond-up($breakpoint-tablet) {
+    border-radius: $radius-m;
+  }
 }
 
 .placeholder_icon {

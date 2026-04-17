@@ -6,7 +6,11 @@
   display: flex;
   flex-direction: column;
   gap: $content-gap-l;
-  padding: $section-padding-40 0 $section-padding-80;
+  padding: 0 0 $section-padding-80;
+
+  @include respond-up($breakpoint-tablet) {
+    padding-top: $section-padding-40;
+  }
 }
 
 .main {
