@@ -1,5 +1,4 @@
 import SermonCard from '../SermonCard/SermonCard';
-import SermonCardMobile from '../SermonCardMobile/SermonCardMobile';
 import GridCard from '../GridCard/GridCard';
 import SermonYearGrid from './SermonYearGrid';
 import type { SermonArchiveView } from '@/types/sermon';
@@ -17,7 +16,6 @@ export default function SermonArchive({ archive }: Props) {
       {featured && (
         <section className={styles.featured} aria-label="이번 주 말씀">
           <SermonCard sermon={featured} />
-          <SermonCardMobile sermon={featured} />
         </section>
       )}
 

@@ -13,7 +13,7 @@ export default function SermonCard({ sermon }: Props) {
   const thumbnail = getSermonThumbnail(sermon);
   const preacherLabel = formatPreacherLabel(sermon.preacher);
   const duration = formatSermonDuration(sermon.duration);
-  const seriesTitle = sermon.sermon_series?.title ?? '단독 설교';
+  const seriesTitle = sermon.sermon_series?.title;
 
   return (
     <Link
@@ -27,12 +27,11 @@ export default function SermonCard({ sermon }: Props) {
         ) : (
           <div className={styles.thumb_placeholder} aria-hidden="true" />
         )}
+        {seriesTitle && <span className={styles.series}>{seriesTitle}</span>}
         <span className={styles.play_btn} aria-hidden="true">
           <IoPlay />
         </span>
-        {duration && (
-          <span className={styles.duration}>{duration}</span>
-        )}
+        {duration && <span className={styles.duration}>{duration}</span>}
       </div>
 
       <div className={styles.info}>
@@ -44,10 +43,9 @@ export default function SermonCard({ sermon }: Props) {
           <span>{preacherLabel}</span>
         </div>
         {sermon.summary && <p className={styles.summary}>{sermon.summary}</p>}
-        <div className={styles.tags}>
-          {sermon.scripture && <span className={styles.tag}>{sermon.scripture}</span>}
-          <span className={styles.tag_series}>{seriesTitle}</span>
-        </div>
+        {sermon.scripture && (
+          <span className={styles.scripture}>{sermon.scripture}</span>
+        )}
       </div>
     </Link>
   );

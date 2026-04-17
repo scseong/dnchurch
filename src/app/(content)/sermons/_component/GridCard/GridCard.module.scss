@@ -49,6 +49,22 @@
   }
 }
 
+.series {
+  position: absolute;
+  top: $spacing-8;
+  left: $spacing-8;
+  max-width: calc(100% - #{$spacing-16});
+  padding: $padding-inline-xs;
+  font-size: $font-size-11;
+  font-weight: $font-weight-semibold;
+  color: $txt-inverse;
+  background: rgba(0, 0, 0, 0.6);
+  border-radius: $radius-xs;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
 .play_btn {
   position: absolute;
   top: 50%;
@@ -76,7 +92,7 @@
   font-size: $font-size-11;
   font-weight: $font-weight-medium;
   color: $txt-inverse;
-  background: rgba(0, 0, 0, 0.7);
+  background: rgba(0, 0, 0, 0.6);
   border-radius: $radius-xs;
 }
 
