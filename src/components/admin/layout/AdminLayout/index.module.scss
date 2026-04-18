@@ -1,0 +1,70 @@
+.shell {
+  --admin-bg: #f7f8fa;
+  --admin-bg-card: #fff;
+  --admin-bg-hover: #eef0f4;
+  --admin-t1: #1a1d23;
+  --admin-t2: #4b5563;
+  --admin-t3: #8a94a3;
+  --admin-bd: #e5e8ed;
+  --admin-accent: #5b6ba5;
+  --admin-accent-bg: rgba(91, 107, 165, 0.08);
+  --admin-pri: #2e3440;
+  --admin-sidebar-bg: #1f2329;
+  --admin-sidebar-t1: #e6e8ec;
+  --admin-sidebar-t2: #9ba2ae;
+  --admin-sidebar-t3: #6b7280;
+  --admin-sidebar-hover: #2a2f36;
+  --admin-sidebar-active: #3b434d;
+  --admin-sidebar-border: #2a2f36;
+  --header-h: 56px;
+  --sidebar-w: 240px;
+  --sidebar-w-collapsed: 64px;
+  --admin-ease: cubic-bezier(0.4, 0, 0.2, 1);
+
+  position: relative;
+  min-height: 100vh;
+  background: var(--admin-bg);
+  color: var(--admin-t1);
+  font-family: 'Pretendard', sans-serif;
+
+  @media (min-width: 1024px) {
+    display: flex;
+    align-items: flex-start;
+  }
+}
+
+.main_area {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  min-width: 0;
+
+  @media (min-width: 1024px) {
+    flex: 1;
+  }
+}
+
+.content {
+  flex: 1;
+  padding: 24px;
+}
+
+.overlay {
+  display: none;
+
+  @media (max-width: 1023px) {
+    display: block;
+    position: fixed;
+    inset: 0;
+    z-index: 40;
+    background: rgba(15, 20, 30, 0.5);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.18s var(--admin-ease);
+
+    &.open {
+      opacity: 1;
+      pointer-events: auto;
+    }
+  }
+}

@@ -1,0 +1,255 @@
+.sidebar {
+  display: flex;
+  flex-direction: column;
+  width: var(--sidebar-w);
+  background: var(--admin-sidebar-bg);
+  color: var(--admin-sidebar-t1);
+
+  @media (min-width: 1024px) {
+    position: sticky;
+    top: 0;
+    align-self: stretch;
+    height: 100vh;
+    flex-shrink: 0;
+    transition: width 0.18s var(--admin-ease);
+
+    &.collapsed {
+      width: var(--sidebar-w-collapsed);
+
+      .title,
+      .label,
+      .badge,
+      .section_title,
+      .info,
+      .toggle_label {
+        display: none;
+      }
+
+      .item,
+      .brand,
+      .user,
+      .toggle {
+        justify-content: center;
+      }
+
+      .brand {
+        padding: 0;
+      }
+    }
+  }
+
+  @media (max-width: 1023px) {
+    position: fixed;
+    inset: 0 auto 0 0;
+    z-index: 50;
+    transform: translateX(-100%);
+    transition: transform 0.18s var(--admin-ease);
+
+    &.mobile_open {
+      transform: translateX(0);
+    }
+
+    .toggle {
+      display: none;
+    }
+  }
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  height: var(--header-h);
+  padding: 0 16px;
+  border-bottom: 1px solid var(--admin-sidebar-border);
+}
+
+.logo {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  background: var(--admin-accent);
+  color: #fff;
+  font-size: 18px;
+}
+
+.title {
+  overflow: hidden;
+  white-space: nowrap;
+  font-family: var(--font-notoserifKR), 'Noto Serif KR', serif;
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--admin-sidebar-t1);
+}
+
+.nav {
+  flex: 1;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding: 14px 10px;
+}
+
+.section {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.section_title {
+  margin: 0;
+  padding: 4px 10px 6px;
+  font-size: 10px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--admin-sidebar-t3);
+}
+
+.items {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.item {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 9px 10px;
+  border: 0;
+  border-radius: 6px;
+  background: transparent;
+  color: var(--admin-sidebar-t2);
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition:
+    background 0.15s,
+    color 0.15s;
+
+  &:hover {
+    background: var(--admin-sidebar-hover);
+    color: var(--admin-sidebar-t1);
+  }
+
+  &.on {
+    background: var(--admin-sidebar-active);
+    color: var(--admin-sidebar-t1);
+    font-weight: 600;
+  }
+}
+
+.icon {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  font-size: 18px;
+}
+
+.label {
+  flex: 1;
+  overflow: hidden;
+  white-space: nowrap;
+  text-align: left;
+}
+
+.badge {
+  padding: 2px 7px;
+  border-radius: 100px;
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--admin-sidebar-t2);
+  font-size: 10px;
+  font-weight: 600;
+
+  .item.on & {
+    background: rgba(255, 255, 255, 0.14);
+    color: var(--admin-sidebar-t1);
+  }
+}
+
+.footer {
+  display: flex;
+  flex-direction: column;
+  border-top: 1px solid var(--admin-sidebar-border);
+}
+
+.user {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 14px;
+}
+
+.avatar {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: var(--admin-sidebar-active);
+  color: var(--admin-sidebar-t1);
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.info {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.name {
+  line-height: 1.2;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--admin-sidebar-t1);
+}
+
+.email {
+  line-height: 1.2;
+  font-size: 10px;
+  color: var(--admin-sidebar-t3);
+}
+
+.toggle {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 14px;
+  border: 0;
+  border-top: 1px solid var(--admin-sidebar-border);
+  background: transparent;
+  color: var(--admin-sidebar-t2);
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+
+  &:hover {
+    background: var(--admin-sidebar-hover);
+    color: var(--admin-sidebar-t1);
+  }
+}
+
+.toggle_icon {
+  display: flex;
+  align-items: center;
+  font-size: 16px;
+}
+
+.toggle_label {
+  overflow: hidden;
+  white-space: nowrap;
+}
