@@ -1,0 +1,468 @@
+.wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  max-width: 1400px;
+  margin: 16px auto 0;
+
+  @media (min-width: 1280px) {
+    display: grid;
+    grid-template-columns: 1fr 360px;
+    align-items: start;
+  }
+}
+
+.form_col {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.pv_col {
+  display: none;
+
+  @media (min-width: 1280px) {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    position: sticky;
+    top: calc(var(--header-h) + 24px);
+  }
+}
+
+// Section Card — 5개 섹션 카드가 공유하는 공통 쉘.
+// sections/*.tsx 에서 ../index.module.scss 경유로 소비.
+.card {
+  background: var(--admin-bg-card);
+  border: 1px solid var(--admin-bd);
+  border-radius: 10px;
+}
+
+.card_h {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 16px 20px 12px;
+  border-bottom: 1px solid var(--admin-bd);
+}
+
+.card_num {
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: var(--admin-bg-w);
+  color: var(--admin-t2);
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.card_ht {
+  margin: 0;
+  font-family: var(--font-notoserifKR), 'Noto Serif KR', serif;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--admin-t1);
+}
+
+.card_hd {
+  margin: 3px 0 0;
+  font-size: 12px;
+  color: var(--admin-t3);
+}
+
+.card_b {
+  padding: 18px 20px 20px;
+  color: var(--admin-t3);
+  font-size: 13px;
+}
+
+// 카드 본문 내부에서 필드들을 세로 스택할 때 사용.
+.fields {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+// 한 줄에 여러 Field를 가로로 배치. 모바일에서는 세로.
+.field_row {
+  display: flex;
+  gap: 12px;
+
+  > * {
+    flex: 1;
+    min-width: 0;
+  }
+
+  > .f2 {
+    flex: 2;
+  }
+
+  @media (max-width: 767px) {
+    flex-direction: column;
+  }
+}
+
+// 폭을 제한한 단일 필드 (예: 재생 시간). 모바일에서는 전폭.
+.field_short {
+  max-width: 220px;
+
+  @media (max-width: 767px) {
+    max-width: none;
+  }
+}
+
+// 이미지/파일 업로드 빈 상태 영역. VideoCard 썸네일, ResourcesCard 공용.
+.upload {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  padding: 22px 18px;
+  border: 1.5px dashed var(--admin-bd-s);
+  border-radius: 10px;
+  background: var(--admin-bg);
+  font-family: inherit;
+  text-align: center;
+  cursor: pointer;
+  transition:
+    border-color 0.15s,
+    background 0.15s;
+
+  &:hover {
+    border-color: var(--admin-accent);
+    background: var(--admin-accent-bg);
+  }
+}
+
+.upload_ic {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: var(--admin-bg-card);
+  color: var(--admin-accent);
+  font-size: 20px;
+}
+
+.upload_t {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--admin-t2);
+}
+
+.upload_accent {
+  color: var(--admin-accent);
+}
+
+.upload_d {
+  font-size: 11px;
+  color: var(--admin-t3);
+}
+
+// 파일 추가 dashed 버튼 (ResourcesCard — 파일 있을 때 표시).
+.add_btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  width: 100%;
+  margin-top: 10px;
+  padding: 10px;
+  border: 1px dashed var(--admin-bd-s);
+  border-radius: 8px;
+  background: transparent;
+  color: var(--admin-t2);
+  font-family: inherit;
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  transition:
+    border-color 0.15s,
+    color 0.15s;
+
+  &:hover {
+    border-color: var(--admin-accent);
+    color: var(--admin-accent);
+  }
+}
+
+// VideoCard — YouTube / Vimeo provider 탭.
+.prov_tabs {
+  display: flex;
+  gap: 6px;
+}
+
+.prov_tab {
+  padding: 7px 14px;
+  border: 1px solid var(--admin-bd);
+  border-radius: 6px;
+  background: var(--admin-bg-card);
+  color: var(--admin-t2);
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition:
+    background 0.15s,
+    border-color 0.15s,
+    color 0.15s;
+
+  &:hover {
+    border-color: var(--admin-t3);
+    color: var(--admin-t1);
+  }
+
+  &.on {
+    border-color: var(--admin-accent);
+    background: var(--admin-accent-bg);
+    color: var(--admin-accent);
+    font-weight: 600;
+  }
+}
+
+// PublishCard — 공개 상태 토글 (초안 / 발행 세그먼티드 컨트롤).
+.toggle_row {
+  display: flex;
+  gap: 4px;
+  padding: 4px;
+  border-radius: 10px;
+  background: var(--admin-bg-w);
+}
+
+.toggle {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  padding: 10px 14px;
+  border: 0;
+  border-radius: 8px;
+  background: transparent;
+  color: var(--admin-t2);
+  font-family: inherit;
+  cursor: pointer;
+  transition:
+    background 0.15s,
+    color 0.15s,
+    box-shadow 0.15s;
+
+  &.on {
+    background: var(--admin-bg-card);
+    box-shadow: var(--admin-sh-s);
+    color: var(--admin-t1);
+
+    .main {
+      font-weight: 600;
+    }
+  }
+}
+
+.main {
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.sub {
+  font-size: 11px;
+  color: var(--admin-t3);
+}
+
+// 안내 박스 — PublishCard 발행 조건 안내 등.
+.warn_box {
+  margin-top: 14px;
+  padding: 10px 12px;
+  border: 1px solid var(--admin-warn);
+  border-radius: 6px;
+  background: var(--admin-warn-bg);
+  color: var(--admin-warn);
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.ok_box {
+  margin-top: 14px;
+  padding: 10px 12px;
+  border: 1px solid var(--admin-ok);
+  border-radius: 6px;
+  background: var(--admin-ok-bg);
+  color: var(--admin-ok);
+  font-size: 12px;
+  font-weight: 500;
+}
+
+// ── 모바일 하단 액션 바 ──
+// PC에서는 PageHeader 액션(임시저장/발행)을 우측에 두고, 모바일(<640px)에서 outline은 숨긴다.
+// 본 바는 숨겨진 임시저장을 복원하고 미리보기 시트 토글 버튼을 제공한다.
+.mb_bar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 30;
+  display: flex;
+  gap: 6px;
+  padding: 10px 16px;
+  background: var(--admin-bg-card);
+  border-top: 1px solid var(--admin-bd);
+
+  @media (min-width: 1024px) {
+    display: none;
+  }
+}
+
+.mb_pv_btn {
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 42px;
+  height: 42px;
+  border: 1px solid var(--admin-bd);
+  border-radius: 6px;
+  background: var(--admin-bg-card);
+  color: var(--admin-t2);
+  font-size: 18px;
+  cursor: pointer;
+  transition:
+    border-color 0.15s,
+    color 0.15s;
+
+  &:hover {
+    border-color: var(--admin-t3);
+    color: var(--admin-t1);
+  }
+}
+
+.mb_btn {
+  flex: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 42px;
+  padding: 0 14px;
+  border-radius: 6px;
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition:
+    background 0.15s,
+    border-color 0.15s,
+    color 0.15s;
+
+  &.outline {
+    border: 1px solid var(--admin-bd);
+    background: var(--admin-bg-card);
+    color: var(--admin-t2);
+
+    &:hover {
+      border-color: var(--admin-t3);
+      color: var(--admin-t1);
+    }
+  }
+
+  &.pri {
+    border: 0;
+    background: var(--admin-pri);
+    color: #fff;
+
+    &:hover {
+      background: color-mix(in srgb, var(--admin-pri), #fff 8%);
+    }
+  }
+}
+
+// ── 미리보기 바텀시트 ──
+// PC(1024px+)에서는 우측 PreviewCard가 역할을 하므로 시트 자체가 불필요.
+.pv_ov {
+  position: fixed;
+  inset: 0;
+  z-index: 300;
+  display: none;
+  align-items: flex-end;
+  justify-content: center;
+  background: rgba(15, 20, 30, 0.5);
+
+  &.open {
+    display: flex;
+  }
+
+  @media (min-width: 1024px) {
+    display: none;
+  }
+}
+
+.pv_sh {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-height: 90vh;
+  border-radius: 14px 14px 0 0;
+  background: var(--admin-bg);
+}
+
+.pv_sh_bar {
+  flex-shrink: 0;
+  width: 32px;
+  height: 3px;
+  margin: 8px auto 0;
+  border-radius: 999px;
+  background: var(--admin-bd-s);
+}
+
+.pv_sh_h {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 20px 10px;
+  border-bottom: 1px solid var(--admin-bd);
+}
+
+.pv_sh_title {
+  margin: 0;
+  font-family: var(--font-notoserifKR), 'Noto Serif KR', serif;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--admin-t1);
+}
+
+.pv_sh_close {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border: 0;
+  border-radius: 6px;
+  background: transparent;
+  color: var(--admin-t2);
+  font-size: 18px;
+  cursor: pointer;
+  transition:
+    background 0.15s,
+    color 0.15s;
+
+  &:hover {
+    background: var(--admin-bg-hover);
+    color: var(--admin-t1);
+  }
+}
+
+.pv_sh_b {
+  flex: 1;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding: 18px;
+}
+

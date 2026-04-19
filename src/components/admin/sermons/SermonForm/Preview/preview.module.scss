@@ -1,0 +1,174 @@
+// PreviewCard + Checklist 공유 모듈.
+// 단일 파일 + prefix 네이밍(pv_*, cl_*)으로 sprawl 방지.
+
+// ── PreviewCard ──
+
+.pv_head {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--admin-bd);
+  color: var(--admin-t2);
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.pv_body {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 12px 16px 16px;
+}
+
+.pv_thumb {
+  position: relative;
+  overflow: hidden;
+  aspect-ratio: 16 / 9;
+  border-radius: 6px;
+  background: var(--admin-bg);
+}
+
+.pv_thumb_empty {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  color: var(--admin-t3);
+  font-size: 12px;
+
+  svg {
+    font-size: 24px;
+  }
+}
+
+.pv_thumb_tag {
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  padding: 3px 8px;
+  border-radius: 100px;
+  background: rgba(15, 20, 30, 0.72);
+  color: #fff;
+  font-size: 10px;
+  font-weight: 600;
+}
+
+.pv_meta {
+  margin: 0;
+  color: var(--admin-t3);
+  font-size: 11px;
+}
+
+.pv_title {
+  margin: 0;
+  font-family: var(--font-notoserifKR), 'Noto Serif KR', serif;
+  font-size: 15px;
+  font-weight: 700;
+  line-height: 1.4;
+  color: var(--admin-t1);
+}
+
+.pv_title_empty {
+  color: var(--admin-t3);
+  font-style: italic;
+}
+
+.pv_summary_block {
+  margin-top: 4px;
+  padding-top: 10px;
+  border-top: 1px solid var(--admin-bd);
+}
+
+.pv_summary {
+  display: -webkit-box;
+  overflow: hidden;
+  margin: 0;
+  color: var(--admin-t3);
+  font-size: 12px;
+  font-style: italic;
+  line-height: 1.5;
+  -webkit-line-clamp: 4;
+  -webkit-box-orient: vertical;
+}
+
+// ── Checklist ──
+
+.cl_head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--admin-bd);
+}
+
+.cl_title {
+  color: var(--admin-t2);
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.cl_progress {
+  color: var(--admin-t3);
+  font-size: 11px;
+  font-variant-numeric: tabular-nums;
+}
+
+.cl_items {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin: 0;
+  padding: 10px 16px 14px;
+  list-style: none;
+}
+
+.cl_item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.cl_badge {
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  font-size: 10px;
+  font-weight: 700;
+}
+
+.cl_empty {
+  background: var(--admin-bg);
+  color: var(--admin-t3);
+}
+
+.cl_err {
+  background: rgba(192, 57, 43, 0.12);
+  color: var(--admin-err);
+}
+
+.cl_ok {
+  background: rgba(46, 125, 91, 0.12);
+  color: var(--admin-ok);
+}
+
+.cl_label {
+  color: var(--admin-t1);
+  font-size: 12px;
+}
+
+.cl_required {
+  margin-left: 2px;
+  color: #ef4444;
+}
