@@ -100,6 +100,12 @@
       border-color: var(--admin-t3);
       color: var(--admin-t1);
     }
+
+    // 640px 이하에서는 outline 액션을 숨기고 primary만 노출.
+    // 숨긴 기능(임시저장)은 추후 모바일 하단 액션 바에서 복원한다.
+    @media (max-width: 640px) {
+      display: none;
+    }
   }
 
   &.pri {

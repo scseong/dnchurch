@@ -1,6 +1,8 @@
 'use client';
 
 import { ReactNode } from 'react';
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 import clsx from 'clsx';
 import {
   HiCheck,
@@ -13,42 +15,21 @@ import {
   HiOutlineUser,
   HiOutlineUsers
 } from 'react-icons/hi';
+import {
+  ADMIN_NAV_SECTIONS,
+  AdminIconName,
+  isActiveAdminNav
+} from '@/config/adminNavigation';
 import styles from './index.module.scss';
 
-interface SidebarItem {
-  label: string;
-  icon: ReactNode;
-  active?: boolean;
-  badge?: string;
-}
-
-interface SidebarSection {
-  title: string;
-  items: SidebarItem[];
-}
-
-const SECTIONS: SidebarSection[] = [
-  {
-    title: '메인',
-    items: [{ label: '대시보드', icon: <HiOutlineHome /> }]
-  },
-  {
-    title: '설교',
-    items: [
-      { label: '설교 관리', icon: <HiOutlinePlay />, active: true, badge: '128' },
-      { label: '시리즈 관리', icon: <HiOutlineFolder />, badge: '24' },
-      { label: '설교자 관리', icon: <HiOutlineUser /> }
-    ]
-  },
-  {
-    title: '멤버',
-    items: [{ label: '멤버 관리', icon: <HiOutlineUsers /> }]
-  },
-  {
-    title: '시스템',
-    items: [{ label: '설정', icon: <HiOutlineCog /> }]
-  }
-];
+const ICONS: Record<AdminIconName, ReactNode> = {
+  home: <HiOutlineHome />,
+  play: <HiOutlinePlay />,
+  folder: <HiOutlineFolder />,
+  user: <HiOutlineUser />,
+  users: <HiOutlineUsers />,
+  cog: <HiOutlineCog />
+};
 
 interface AdminSidebarProps {
   collapsed: boolean;
@@ -63,6 +44,8 @@ export default function AdminSidebar({
   mobileOpen,
   onMobileClose
 }: AdminSidebarProps) {
+  const pathname = usePathname();
+
   return (
     <aside
       className={clsx(
@@ -79,23 +62,27 @@ export default function AdminSidebar({
       </div>
 
       <nav className={styles.nav} aria-label="관리자 메뉴">
-        {SECTIONS.map((section) => (
+        {ADMIN_NAV_SECTIONS.map((section) => (
           <div key={section.title} className={styles.section}>
             <h3 className={styles.section_title}>{section.title}</h3>
             <ul className={styles.items}>
-              {section.items.map((item) => (
-                <li key={item.label}>
-                  <button
-                    type="button"
-                    className={clsx(styles.item, item.active && styles.on)}
-                    onClick={onMobileClose}
-                  >
-                    <span className={styles.icon}>{item.icon}</span>
-                    <span className={styles.label}>{item.label}</span>
-                    {item.badge && <span className={styles.badge}>{item.badge}</span>}
-                  </button>
-                </li>
-              ))}
+              {section.items.map((item) => {
+                const active = isActiveAdminNav(pathname, item.href);
+                return (
+                  <li key={item.href}>
+                    <Link
+                      href={item.href}
+                      className={clsx(styles.item, active && styles.on)}
+                      onClick={onMobileClose}
+                      aria-current={active ? 'page' : undefined}
+                    >
+                      <span className={styles.icon}>{ICONS[item.icon]}</span>
+                      <span className={styles.label}>{item.label}</span>
+                      {item.badge && <span className={styles.badge}>{item.badge}</span>}
+                    </Link>
+                  </li>
+                );
+              })}
             </ul>
           </div>
         ))}
