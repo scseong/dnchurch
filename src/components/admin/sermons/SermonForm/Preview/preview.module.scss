@@ -1,9 +1,9 @@
 // PreviewCard + Checklist 공유 모듈.
-// 단일 파일 + prefix 네이밍(pv_*, cl_*)으로 sprawl 방지.
+// 단일 파일 + prefix 네이밍(preview_*, checklist_*)으로 sprawl 방지.
 
 // ── PreviewCard ──
 
-.pv_head {
+.preview_head {
   display: flex;
   align-items: center;
   gap: 6px;
@@ -16,14 +16,14 @@
   letter-spacing: 0.04em;
 }
 
-.pv_body {
+.preview_body {
   display: flex;
   flex-direction: column;
   gap: 10px;
   padding: 12px 16px 16px;
 }
 
-.pv_thumb {
+.preview_thumb {
   position: relative;
   overflow: hidden;
   aspect-ratio: 16 / 9;
@@ -31,7 +31,7 @@
   background: var(--admin-bg);
 }
 
-.pv_thumb_empty {
+.preview_thumb_empty {
   position: absolute;
   inset: 0;
   display: flex;
@@ -47,7 +47,7 @@
   }
 }
 
-.pv_thumb_tag {
+.preview_thumb_tag {
   position: absolute;
   top: 8px;
   left: 8px;
@@ -59,13 +59,13 @@
   font-weight: 600;
 }
 
-.pv_meta {
+.preview_meta {
   margin: 0;
   color: var(--admin-t3);
   font-size: 11px;
 }
 
-.pv_title {
+.preview_title {
   margin: 0;
   font-family: var(--font-notoserifKR), 'Noto Serif KR', serif;
   font-size: 15px;
@@ -74,18 +74,18 @@
   color: var(--admin-t1);
 }
 
-.pv_title_empty {
+.preview_title_empty {
   color: var(--admin-t3);
   font-style: italic;
 }
 
-.pv_summary_block {
+.preview_summary_block {
   margin-top: 4px;
   padding-top: 10px;
   border-top: 1px solid var(--admin-bd);
 }
 
-.pv_summary {
+.preview_summary {
   display: -webkit-box;
   overflow: hidden;
   margin: 0;
@@ -99,7 +99,7 @@
 
 // ── Checklist ──
 
-.cl_head {
+.checklist_head {
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -107,7 +107,7 @@
   border-bottom: 1px solid var(--admin-bd);
 }
 
-.cl_title {
+.checklist_title {
   color: var(--admin-t2);
   font-size: 12px;
   font-weight: 700;
@@ -115,13 +115,13 @@
   letter-spacing: 0.04em;
 }
 
-.cl_progress {
+.checklist_progress {
   color: var(--admin-t3);
   font-size: 11px;
   font-variant-numeric: tabular-nums;
 }
 
-.cl_items {
+.checklist_items {
   display: flex;
   flex-direction: column;
   gap: 8px;
@@ -130,13 +130,13 @@
   list-style: none;
 }
 
-.cl_item {
+.checklist_item {
   display: flex;
   align-items: center;
   gap: 10px;
 }
 
-.cl_badge {
+.checklist_badge {
   flex-shrink: 0;
   display: inline-flex;
   align-items: center;
@@ -148,27 +148,27 @@
   font-weight: 700;
 }
 
-.cl_empty {
+.checklist_empty {
   background: var(--admin-bg);
   color: var(--admin-t3);
 }
 
-.cl_err {
+.checklist_err {
   background: rgba(192, 57, 43, 0.12);
   color: var(--admin-err);
 }
 
-.cl_ok {
+.checklist_ok {
   background: rgba(46, 125, 91, 0.12);
   color: var(--admin-ok);
 }
 
-.cl_label {
+.checklist_label {
   color: var(--admin-t1);
   font-size: 12px;
 }
 
-.cl_required {
+.checklist_required {
   margin-left: 2px;
   color: #ef4444;
 }

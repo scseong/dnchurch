@@ -1,7 +1,7 @@
 import { InputHTMLAttributes, ReactNode } from 'react';
 import styles from './primitives.module.scss';
 
-interface InputGroupProps extends InputHTMLAttributes<HTMLInputElement> {
+interface InputGroupProps extends Omit<InputHTMLAttributes<HTMLInputElement>, 'prefix'> {
   prefix: ReactNode;
 }
 

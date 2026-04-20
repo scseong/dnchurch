@@ -18,7 +18,7 @@
   gap: 14px;
 }
 
-.pv_col {
+.preview_col {
   display: none;
 
   @media (min-width: 1280px) {
@@ -38,7 +38,7 @@
   border-radius: 10px;
 }
 
-.card_h {
+.card_header {
   display: flex;
   align-items: flex-start;
   gap: 12px;
@@ -46,7 +46,7 @@
   border-bottom: 1px solid var(--admin-bd);
 }
 
-.card_num {
+.card_number {
   flex-shrink: 0;
   display: inline-flex;
   align-items: center;
@@ -60,7 +60,7 @@
   font-weight: 700;
 }
 
-.card_ht {
+.card_heading_title {
   margin: 0;
   font-family: var(--font-notoserifKR), 'Noto Serif KR', serif;
   font-size: 14px;
@@ -68,13 +68,13 @@
   color: var(--admin-t1);
 }
 
-.card_hd {
+.card_heading_desc {
   margin: 3px 0 0;
   font-size: 12px;
   color: var(--admin-t3);
 }
 
-.card_b {
+.card_body {
   padding: 18px 20px 20px;
   color: var(--admin-t3);
   font-size: 13px;
@@ -97,7 +97,7 @@
     min-width: 0;
   }
 
-  > .f2 {
+  > .flex_2 {
     flex: 2;
   }
 
@@ -139,7 +139,7 @@
   }
 }
 
-.upload_ic {
+.upload_icon {
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -151,7 +151,7 @@
   font-size: 20px;
 }
 
-.upload_t {
+.upload_text {
   font-size: 13px;
   font-weight: 600;
   color: var(--admin-t2);
@@ -161,13 +161,13 @@
   color: var(--admin-accent);
 }
 
-.upload_d {
+.upload_desc {
   font-size: 11px;
   color: var(--admin-t3);
 }
 
 // 파일 추가 dashed 버튼 (ResourcesCard — 파일 있을 때 표시).
-.add_btn {
+.add_button {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -194,12 +194,12 @@
 }
 
 // VideoCard — YouTube / Vimeo provider 탭.
-.prov_tabs {
+.provider_tabs {
   display: flex;
   gap: 6px;
 }
 
-.prov_tab {
+.provider_tab {
   padding: 7px 14px;
   border: 1px solid var(--admin-bd);
   border-radius: 6px;
@@ -301,7 +301,7 @@
 // ── 모바일 하단 액션 바 ──
 // PC에서는 PageHeader 액션(임시저장/발행)을 우측에 두고, 모바일(<640px)에서 outline은 숨긴다.
 // 본 바는 숨겨진 임시저장을 복원하고 미리보기 시트 토글 버튼을 제공한다.
-.mb_bar {
+.mobile_bar {
   position: fixed;
   bottom: 0;
   left: 0;
@@ -318,7 +318,7 @@
   }
 }
 
-.mb_pv_btn {
+.mobile_preview_button {
   flex-shrink: 0;
   display: inline-flex;
   align-items: center;
@@ -341,7 +341,7 @@
   }
 }
 
-.mb_btn {
+.mobile_button {
   flex: 1;
   display: inline-flex;
   align-items: center;
@@ -369,7 +369,7 @@
     }
   }
 
-  &.pri {
+  &.primary {
     border: 0;
     background: var(--admin-pri);
     color: #fff;
@@ -382,8 +382,8 @@
 
 // ── 미리보기 바텀시트 ──
 // PC(1024px+)에서는 우측 PreviewCard가 역할을 하므로 시트 자체가 불필요.
-.pv_ov {
-  position: fixed;
+.preview_overlay {
+  // position: fixed;  TODO: 모바일에서 바텀시트로 구현할 때 활성화
   inset: 0;
   z-index: 300;
   display: none;
@@ -400,7 +400,7 @@
   }
 }
 
-.pv_sh {
+.preview_sheet {
   display: flex;
   flex-direction: column;
   width: 100%;
@@ -409,7 +409,7 @@
   background: var(--admin-bg);
 }
 
-.pv_sh_bar {
+.preview_sheet_bar {
   flex-shrink: 0;
   width: 32px;
   height: 3px;
@@ -418,7 +418,7 @@
   background: var(--admin-bd-s);
 }
 
-.pv_sh_h {
+.preview_sheet_header {
   flex-shrink: 0;
   display: flex;
   align-items: center;
@@ -427,7 +427,7 @@
   border-bottom: 1px solid var(--admin-bd);
 }
 
-.pv_sh_title {
+.preview_sheet_title {
   margin: 0;
   font-family: var(--font-notoserifKR), 'Noto Serif KR', serif;
   font-size: 14px;
@@ -435,7 +435,7 @@
   color: var(--admin-t1);
 }
 
-.pv_sh_close {
+.preview_sheet_close {
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -457,7 +457,7 @@
   }
 }
 
-.pv_sh_b {
+.preview_sheet_body {
   flex: 1;
   overflow-y: auto;
   display: flex;
@@ -465,4 +465,3 @@
   gap: 14px;
   padding: 18px;
 }
-

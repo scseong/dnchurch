@@ -22,9 +22,9 @@ const ITEMS: ChecklistItem[] = [
 ];
 
 const STATUS_CLASS: Record<Status, string> = {
-  empty: styles.cl_empty,
-  err: styles.cl_err,
-  ok: styles.cl_ok
+  empty: styles.checklist_empty,
+  err: styles.checklist_err,
+  ok: styles.checklist_ok
 };
 
 export default function Checklist() {
@@ -32,23 +32,23 @@ export default function Checklist() {
 
   return (
     <section className={parent.card}>
-      <header className={styles.cl_head}>
-        <span className={styles.cl_title}>발행 준비 상태</span>
-        <span className={styles.cl_progress}>
+      <header className={styles.checklist_head}>
+        <span className={styles.checklist_title}>발행 준비 상태</span>
+        <span className={styles.checklist_progress}>
           {completed}/{ITEMS.length}
         </span>
       </header>
-      <ul className={styles.cl_items}>
+      <ul className={styles.checklist_items}>
         {ITEMS.map((item) => (
-          <li key={item.label} className={styles.cl_item}>
-            <span className={clsx(styles.cl_badge, STATUS_CLASS[item.status])}>
+          <li key={item.label} className={styles.checklist_item}>
+            <span className={clsx(styles.checklist_badge, STATUS_CLASS[item.status])}>
               {item.status === 'ok' && <HiCheck />}
               {item.status === 'err' && '!'}
             </span>
-            <span className={styles.cl_label}>
+            <span className={styles.checklist_label}>
               {item.label}
               {item.required && (
-                <span className={styles.cl_required} aria-hidden>
+                <span className={styles.checklist_required} aria-hidden>
                   *
                 </span>
               )}

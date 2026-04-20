@@ -6,24 +6,24 @@ import styles from './preview.module.scss';
 export default function PreviewCard() {
   return (
     <section className={parent.card}>
-      <header className={styles.pv_head}>
+      <header className={styles.preview_head}>
         <HiOutlineEye />
         <span>실시간 미리보기</span>
       </header>
-      <div className={styles.pv_body}>
-        <div className={styles.pv_thumb}>
-          <div className={styles.pv_thumb_empty}>
+      <div className={styles.preview_body}>
+        <div className={styles.preview_thumb}>
+          <div className={styles.preview_thumb_empty}>
             <HiOutlinePhotograph />
             <span>썸네일 없음</span>
           </div>
-          <span className={styles.pv_thumb_tag}>단독 설교</span>
+          <span className={styles.preview_thumb_tag}>단독 설교</span>
         </div>
-        <p className={styles.pv_meta}>2026년 3월 29일 (일) · 김은혜 목사</p>
-        <h4 className={clsx(styles.pv_title, styles.pv_title_empty)}>
+        <p className={styles.preview_meta}>2026년 3월 29일 (일) · 김은혜 목사</p>
+        <h4 className={clsx(styles.preview_title, styles.preview_title_empty)}>
           설교 제목을 입력하세요
         </h4>
-        <div className={styles.pv_summary_block}>
-          <p className={styles.pv_summary}>설교 요약이 여기에 표시됩니다</p>
+        <div className={styles.preview_summary_block}>
+          <p className={styles.preview_summary}>설교 요약이 여기에 표시됩니다</p>
         </div>
       </div>
     </section>

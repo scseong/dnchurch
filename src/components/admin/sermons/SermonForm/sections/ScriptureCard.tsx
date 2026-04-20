@@ -1,26 +1,31 @@
 import Field from '../primitives/Field';
 import Input from '../primitives/Input';
 import Textarea from '../primitives/Textarea';
+import type { SermonCardProps } from '@/types/sermon-form';
 import styles from '../index.module.scss';
 
-export default function ScriptureCard() {
+export default function ScriptureCard({ data, setData }: SermonCardProps) {
   return (
     <section className={styles.card}>
-      <header className={styles.card_h}>
-        <span className={styles.card_num}>3</span>
+      <header className={styles.card_header}>
+        <span className={styles.card_number}>3</span>
         <div>
-          <h3 className={styles.card_ht}>말씀</h3>
-          <p className={styles.card_hd}>본문 구절과 설교 요약을 입력합니다</p>
+          <h3 className={styles.card_heading_title}>말씀</h3>
+          <p className={styles.card_heading_desc}>본문 구절과 설교 요약을 입력합니다</p>
         </div>
       </header>
-      <div className={styles.card_b}>
+      <div className={styles.card_body}>
         <div className={styles.fields}>
           <Field
             label="성경 구절"
             optional
             hint="본문 구절을 입력하면 설교 카드에 태그로 표시됩니다"
           >
-            <Input placeholder="예: 마가복음 4:35-41" />
+            <Input
+              placeholder="예: 마가복음 4:35-41"
+              value={data.scripture}
+              onChange={(e) => setData((d) => ({ ...d, scripture: e.target.value }))}
+            />
           </Field>
 
           <Field label="성경 본문" optional counter="0자">
