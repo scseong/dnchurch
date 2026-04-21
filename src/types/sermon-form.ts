@@ -57,11 +57,13 @@ export type SermonCardProps = {
   setData: Dispatch<SetStateAction<SermonFormData>>;
 };
 
-export type SermonFormPatch = Partial<SermonFormData>;
+// 파생 필드(videoId, thumbnailUrl)는 applyPatch에서만 계산되어야 하므로 외부 패치 대상에서 제외.
+type SermonFormInputKey = Exclude<keyof SermonFormData, 'videoId' | 'thumbnailUrl'>;
+export type SermonFormPatch = Partial<Pick<SermonFormData, SermonFormInputKey>>;
 
 export type BasicInfoCardProps = Pick<
   SermonFormData,
-  'title' | 'sermonDate' | 'preacherId' | 'seriesId'
+  'title' | 'sermonDate' | 'preacherId' | 'seriesId' | 'serviceType'
 > & {
   onChange: (patch: SermonFormPatch) => void;
 };
@@ -75,6 +77,6 @@ export type VideoCardProps = Pick<
 
 export type ResourcesCardProps = {
   resources: SermonResourceInput[];
-  onAdd: (files: FileList) => void;
+  onAdd: (inputs: SermonResourceInput[]) => void;
   onRemove: (id: string) => void;
 };

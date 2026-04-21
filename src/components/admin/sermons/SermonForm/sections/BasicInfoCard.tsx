@@ -2,13 +2,24 @@ import Field from '../primitives/Field';
 import Input from '../primitives/Input';
 import Select from '../primitives/Select';
 import type { BasicInfoCardProps } from '@/types/sermon-form';
+import type { ServiceType } from '@/types/sermon';
 import styles from '../index.module.scss';
+
+const SERVICE_TYPES: ServiceType[] = [
+  '주일오전예배',
+  '주일저녁예배',
+  '수요기도회',
+  '금요기도회',
+  '새벽예배',
+  '특별예배'
+];
 
 export default function BasicInfoCard({
   title,
   sermonDate,
   preacherId,
   seriesId,
+  serviceType,
   onChange
 }: BasicInfoCardProps) {
   return (
@@ -54,18 +65,35 @@ export default function BasicInfoCard({
             </Field>
           </div>
 
-          <Field label="설교 시리즈" optional>
-            <Select
-              value={seriesId}
-              onChange={(e) => onChange({ seriesId: e.target.value })}
-            >
-              <option value="">단독 설교</option>
-              <option value="마가복음 강해">마가복음 강해</option>
-              <option value="산상수훈">산상수훈</option>
-              <option value="시편 묵상">시편 묵상</option>
-              <option value="로마서">로마서</option>
-            </Select>
-          </Field>
+          <div className={styles.field_row}>
+            <Field label="설교 시리즈" optional>
+              <Select
+                value={seriesId}
+                onChange={(e) => onChange({ seriesId: e.target.value })}
+              >
+                <option value="">단독 설교</option>
+                <option value="마가복음 강해">마가복음 강해</option>
+                <option value="산상수훈">산상수훈</option>
+                <option value="시편 묵상">시편 묵상</option>
+                <option value="로마서">로마서</option>
+              </Select>
+            </Field>
+            <Field label="예배 종류" required>
+              <Select
+                value={serviceType}
+                onChange={(e) => onChange({ serviceType: e.target.value as ServiceType })}
+              >
+                <option value="" disabled>
+                  예배를 선택하세요
+                </option>
+                {SERVICE_TYPES.map((type) => (
+                  <option key={type} value={type}>
+                    {type}
+                  </option>
+                ))}
+              </Select>
+            </Field>
+          </div>
         </div>
       </div>
     </section>

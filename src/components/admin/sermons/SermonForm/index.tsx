@@ -1,6 +1,6 @@
 'use client';
 
-import { useCallback, useState } from 'react';
+import { useState } from 'react';
 import clsx from 'clsx';
 import { HiOutlineEye, HiOutlineX } from 'react-icons/hi';
 import BasicInfoCard from './sections/BasicInfoCard';
@@ -16,11 +16,8 @@ import {
   type SermonFormPatch,
   type SermonResourceInput
 } from '@/types/sermon-form';
-import { parseVideoId } from '@/lib/video-url';
-import { inferResourceType } from '@/lib/sermon-resource';
+import { applyPatch } from '@/lib/sermon-form';
 import styles from './index.module.scss';
-
-const MAX_RESOURCE_BYTES = 50 * 1024 * 1024;
 
 interface SermonFormProps {
   initialData?: SermonFormData;
@@ -30,43 +27,17 @@ export default function SermonForm({ initialData }: SermonFormProps = {}) {
   const [data, setData] = useState<SermonFormData>(initialData ?? INITIAL_SERMON_FORM_DATA);
   const [previewOpen, setPreviewOpen] = useState(false);
 
-  const handlePatch = useCallback((patch: SermonFormPatch) => {
-    setData((d) => {
-      const next = { ...d, ...patch };
-      const videoChanged =
-        patch.videoUrl !== undefined || patch.videoProvider !== undefined;
-      if (videoChanged) {
-        next.videoId = parseVideoId(next.videoUrl, next.videoProvider);
-      }
-      if (videoChanged && !d.thumbnailManual) {
-        next.thumbnailUrl =
-          next.videoProvider === 'youtube' && next.videoId
-            ? `https://img.youtube.com/vi/${next.videoId}/hqdefault.jpg`
-            : '';
-      }
-      return next;
-    });
-  }, []);
+  const handlePatch = (patch: SermonFormPatch) => {
+    setData((d) => applyPatch(d, patch));
+  };
 
-  const handleAddResources = useCallback((files: FileList) => {
-    const additions: SermonResourceInput[] = [];
-    for (const file of Array.from(files)) {
-      if (file.size > MAX_RESOURCE_BYTES) continue;
-      additions.push({
-        id: crypto.randomUUID(),
-        name: file.name,
-        size: file.size,
-        fileType: inferResourceType(file.name),
-        file
-      });
-    }
-    if (additions.length === 0) return;
-    setData((d) => ({ ...d, resources: [...d.resources, ...additions] }));
-  }, []);
+  const handleAddResources = (inputs: SermonResourceInput[]) => {
+    setData((d) => ({ ...d, resources: [...d.resources, ...inputs] }));
+  };
 
-  const handleRemoveResource = useCallback((id: string) => {
+  const handleRemoveResource = (id: string) => {
     setData((d) => ({ ...d, resources: d.resources.filter((r) => r.id !== id) }));
-  }, []);
+  };
 
   return (
     <>
@@ -77,6 +48,7 @@ export default function SermonForm({ initialData }: SermonFormProps = {}) {
             sermonDate={data.sermonDate}
             preacherId={data.preacherId}
             seriesId={data.seriesId}
+            serviceType={data.serviceType}
             onChange={handlePatch}
           />
           <VideoCard
