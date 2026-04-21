@@ -166,6 +166,125 @@
   color: var(--admin-t3);
 }
 
+// 썸네일 자동 미리보기 (YouTube)
+.thumb_preview {
+  position: relative;
+  overflow: hidden;
+  aspect-ratio: 16 / 9;
+  border: 1px solid var(--admin-bd);
+  border-radius: 8px;
+  background: var(--admin-bg);
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+}
+
+.thumb_badge {
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  padding: 3px 8px;
+  border-radius: 100px;
+  background: rgba(15, 20, 30, 0.72);
+  color: #fff;
+  font-size: 10px;
+  font-weight: 600;
+}
+
+// ResourcesCard — 업로드된 파일 목록.
+.resource_list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.resource_item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 12px;
+  border: 1px solid var(--admin-bd);
+  border-radius: 8px;
+  background: var(--admin-bg);
+}
+
+.resource_icon {
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 6px;
+  background: var(--admin-bg-card);
+  color: var(--admin-t3);
+  font-size: 16px;
+}
+
+.resource_info {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.resource_name {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--admin-t1);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.resource_meta {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 11px;
+  color: var(--admin-t3);
+}
+
+.resource_badge {
+  padding: 2px 6px;
+  border-radius: 4px;
+  background: var(--admin-bg-w);
+  color: var(--admin-t2);
+  font-size: 10px;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.resource_remove {
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border: 0;
+  border-radius: 6px;
+  background: transparent;
+  color: var(--admin-t3);
+  font-size: 16px;
+  cursor: pointer;
+  transition:
+    background 0.15s,
+    color 0.15s;
+
+  &:hover {
+    background: var(--admin-bg-hover);
+    color: var(--admin-warn);
+  }
+}
+
 // 파일 추가 dashed 버튼 (ResourcesCard — 파일 있을 때 표시).
 .add_button {
   display: flex;
@@ -383,7 +502,7 @@
 // ── 미리보기 바텀시트 ──
 // PC(1024px+)에서는 우측 PreviewCard가 역할을 하므로 시트 자체가 불필요.
 .preview_overlay {
-  // position: fixed;  TODO: 모바일에서 바텀시트로 구현할 때 활성화
+  position: fixed;
   inset: 0;
   z-index: 300;
   display: none;

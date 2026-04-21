@@ -11,42 +11,33 @@ export interface SermonResourceInput {
   size: number;
   fileType: SermonResourceType;
   url?: string;
+  file?: File;
 }
 
 export interface SermonFormData {
   title: string;
-  slug: string;
-  slugTouched: boolean;
   sermonDate: string;
   preacherId: string;
   seriesId: string;
-  seriesOrder: number | '';
   serviceType: ServiceType | '';
-
   videoProvider: VideoProvider;
   videoUrl: string;
   videoId: string;
   duration: string;
   thumbnailUrl: string;
   thumbnailManual: boolean;
-
   scripture: string;
   scriptureText: string;
   summary: string;
-
   resources: SermonResourceInput[];
-
   isPublished: boolean;
 }
 
 export const INITIAL_SERMON_FORM_DATA: SermonFormData = {
   title: '',
-  slug: '',
-  slugTouched: false,
   sermonDate: '',
   preacherId: '',
   seriesId: '',
-  seriesOrder: '',
   serviceType: '',
   videoProvider: 'youtube',
   videoUrl: '',
@@ -64,4 +55,26 @@ export const INITIAL_SERMON_FORM_DATA: SermonFormData = {
 export type SermonCardProps = {
   data: SermonFormData;
   setData: Dispatch<SetStateAction<SermonFormData>>;
+};
+
+export type SermonFormPatch = Partial<SermonFormData>;
+
+export type BasicInfoCardProps = Pick<
+  SermonFormData,
+  'title' | 'sermonDate' | 'preacherId' | 'seriesId'
+> & {
+  onChange: (patch: SermonFormPatch) => void;
+};
+
+export type VideoCardProps = Pick<
+  SermonFormData,
+  'videoProvider' | 'videoUrl' | 'videoId' | 'duration' | 'thumbnailUrl'
+> & {
+  onChange: (patch: SermonFormPatch) => void;
+};
+
+export type ResourcesCardProps = {
+  resources: SermonResourceInput[];
+  onAdd: (files: FileList) => void;
+  onRemove: (id: string) => void;
 };
