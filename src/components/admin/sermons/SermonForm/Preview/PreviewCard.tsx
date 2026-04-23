@@ -7,12 +7,12 @@ import parent from '../index.module.scss';
 import styles from './preview.module.scss';
 
 interface PreviewCardProps {
-  data: SermonFormData;
+  formData: SermonFormData;
   series: SeriesWithSermonCount[];
 }
 
-export default function PreviewCard({ data, series }: PreviewCardProps) {
-  const { title, sermonDate, preacherId, seriesId, summary, thumbnailUrl } = data;
+export default function PreviewCard({ formData, series }: PreviewCardProps) {
+  const { title, sermonDate, preacherId, seriesId, summary, thumbnailUrl } = formData;
   const metaParts = [
     sermonDate ? formattedDate(sermonDate, 'YYYY년 M월 D일') : '',
     preacherId

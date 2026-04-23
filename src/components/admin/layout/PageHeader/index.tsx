@@ -9,6 +9,7 @@ interface PageHeaderAction {
   variant?: 'outline' | 'pri';
   icon?: ReactNode;
   onClick?: () => void;
+  disabled?: boolean;
 }
 
 interface PageHeaderProps {
@@ -44,6 +45,7 @@ export default function PageHeader({
               type="button"
               className={clsx(styles.btn, styles[action.variant ?? 'outline'])}
               onClick={action.onClick}
+              disabled={action.disabled}
             >
               {action.icon && <span className={styles.btn_icon}>{action.icon}</span>}
               {action.label}
