@@ -1,17 +1,9 @@
 import clsx from 'clsx';
 import { HiOutlineEye, HiOutlinePhotograph } from 'react-icons/hi';
+import { formattedDate } from '@/utils/date';
 import type { SermonFormData } from '@/types/sermon-form';
 import parent from '../index.module.scss';
 import styles from './preview.module.scss';
-
-const WEEKDAYS = ['일', '월', '화', '수', '목', '금', '토'];
-
-function formatSermonDate(iso: string): string {
-  if (!iso) return '';
-  const date = new Date(iso);
-  if (isNaN(date.getTime())) return '';
-  return `${date.getFullYear()}년 ${date.getMonth() + 1}월 ${date.getDate()}일 (${WEEKDAYS[date.getDay()]})`;
-}
 
 interface PreviewCardProps {
   data: SermonFormData;
@@ -19,7 +11,10 @@ interface PreviewCardProps {
 
 export default function PreviewCard({ data }: PreviewCardProps) {
   const { title, sermonDate, preacherId, seriesId, summary, thumbnailUrl } = data;
-  const metaParts = [formatSermonDate(sermonDate), preacherId].filter(Boolean);
+  const metaParts = [
+    sermonDate ? formattedDate(sermonDate, 'YYYY년 M월 D일') : '',
+    preacherId
+  ].filter(Boolean);
   const seriesLabel = seriesId || '단독 설교';
 
   return (

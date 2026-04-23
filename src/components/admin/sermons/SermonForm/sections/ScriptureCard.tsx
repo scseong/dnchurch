@@ -1,10 +1,10 @@
 import Field from '../primitives/Field';
 import Input from '../primitives/Input';
 import Textarea from '../primitives/Textarea';
-import type { SermonCardProps } from '@/types/sermon-form';
+import type { ScriptureCardProps } from '@/types/sermon-form';
 import styles from '../index.module.scss';
 
-export default function ScriptureCard({ data, setData }: SermonCardProps) {
+export default function ScriptureCard({ scripture, scriptureText, summary, onChange }: ScriptureCardProps) {
   return (
     <section className={styles.card}>
       <header className={styles.card_header}>
@@ -23,22 +23,26 @@ export default function ScriptureCard({ data, setData }: SermonCardProps) {
           >
             <Input
               placeholder="예: 마가복음 4:35-41"
-              value={data.scripture}
-              onChange={(e) => setData((d) => ({ ...d, scripture: e.target.value }))}
+              value={scripture}
+              onChange={(e) => onChange({ scripture: e.target.value })}
             />
           </Field>
 
-          <Field label="성경 본문" optional counter="0자">
+          <Field label="성경 본문" optional counter={`${scriptureText.length}자`}>
             <Textarea
               tall
               placeholder="성경 본문 전체를 입력하세요. 절 번호와 함께 작성하면 좋습니다."
+              value={scriptureText}
+              onChange={(e) => onChange({ scriptureText: e.target.value })}
             />
           </Field>
 
-          <Field label="설교 요약" optional counter="0/500">
+          <Field label="설교 요약" optional counter={`${summary.length}/500`}>
             <Textarea
               placeholder="설교의 핵심 메시지를 2-3 문장으로 요약해주세요"
               maxLength={500}
+              value={summary}
+              onChange={(e) => onChange({ summary: e.target.value })}
             />
           </Field>
         </div>

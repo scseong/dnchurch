@@ -16,6 +16,7 @@ import {
   type SermonFormPatch,
   type SermonResourceInput
 } from '@/types/sermon-form';
+
 import { applyPatch } from '@/lib/sermon-form';
 import styles from './index.module.scss';
 
@@ -59,13 +60,18 @@ export default function SermonForm({ initialData }: SermonFormProps = {}) {
             thumbnailUrl={data.thumbnailUrl}
             onChange={handlePatch}
           />
-          <ScriptureCard data={data} setData={setData} />
+          <ScriptureCard
+            scripture={data.scripture}
+            scriptureText={data.scriptureText}
+            summary={data.summary}
+            onChange={handlePatch}
+          />
           <ResourcesCard
             resources={data.resources}
             onAdd={handleAddResources}
             onRemove={handleRemoveResource}
           />
-          <PublishCard data={data} setData={setData} />
+          <PublishCard isPublished={data.isPublished} onChange={handlePatch} />
         </div>
         <aside className={styles.preview_col} aria-label="미리보기">
           <PreviewCard data={data} />

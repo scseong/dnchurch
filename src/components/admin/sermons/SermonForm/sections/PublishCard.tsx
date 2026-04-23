@@ -1,9 +1,9 @@
 import clsx from 'clsx';
 import Field from '../primitives/Field';
-import type { SermonCardProps } from '@/types/sermon-form';
+import type { PublishCardProps } from '@/types/sermon-form';
 import styles from '../index.module.scss';
 
-export default function PublishCard({ data, setData }: SermonCardProps) {
+export default function PublishCard({ isPublished, onChange }: PublishCardProps) {
   return (
     <section className={styles.card}>
       <header className={styles.card_header}>
@@ -18,16 +18,16 @@ export default function PublishCard({ data, setData }: SermonCardProps) {
           <div className={styles.toggle_row}>
             <button
               type="button"
-              className={clsx(styles.toggle, !data.isPublished && styles.on)}
-              onClick={() => setData((d) => ({ ...d, isPublished: false }))}
+              className={clsx(styles.toggle, !isPublished && styles.on)}
+              onClick={() => onChange({ isPublished: false })}
             >
               <span className={styles.main}>초안</span>
               <span className={styles.sub}>비공개</span>
             </button>
             <button
               type="button"
-              className={clsx(styles.toggle, data.isPublished && styles.on)}
-              onClick={() => setData((d) => ({ ...d, isPublished: true }))}
+              className={clsx(styles.toggle, isPublished && styles.on)}
+              onClick={() => onChange({ isPublished: true })}
             >
               <span className={styles.main}>발행</span>
               <span className={styles.sub}>공개</span>

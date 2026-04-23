@@ -1,4 +1,3 @@
-import type { Dispatch, SetStateAction } from 'react';
 import type { Database } from '@/types/database.types';
 import type { ServiceType } from '@/types/sermon';
 
@@ -52,11 +51,6 @@ export const INITIAL_SERMON_FORM_DATA: SermonFormData = {
   isPublished: false
 };
 
-export type SermonCardProps = {
-  data: SermonFormData;
-  setData: Dispatch<SetStateAction<SermonFormData>>;
-};
-
 // 파생 필드(videoId, thumbnailUrl)는 applyPatch에서만 계산되어야 하므로 외부 패치 대상에서 제외.
 type SermonFormInputKey = Exclude<keyof SermonFormData, 'videoId' | 'thumbnailUrl'>;
 export type SermonFormPatch = Partial<Pick<SermonFormData, SermonFormInputKey>>;
@@ -72,6 +66,14 @@ export type VideoCardProps = Pick<
   SermonFormData,
   'videoProvider' | 'videoUrl' | 'videoId' | 'duration' | 'thumbnailUrl'
 > & {
+  onChange: (patch: SermonFormPatch) => void;
+};
+
+export type ScriptureCardProps = Pick<SermonFormData, 'scripture' | 'scriptureText' | 'summary'> & {
+  onChange: (patch: SermonFormPatch) => void;
+};
+
+export type PublishCardProps = Pick<SermonFormData, 'isPublished'> & {
   onChange: (patch: SermonFormPatch) => void;
 };
 
