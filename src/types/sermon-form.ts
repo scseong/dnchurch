@@ -66,9 +66,11 @@ export type BasicInfoCardProps = Pick<
 
 export type VideoCardProps = Pick<
   SermonFormData,
-  'videoProvider' | 'videoUrl' | 'videoId' | 'duration' | 'thumbnailUrl'
+  'videoProvider' | 'videoUrl' | 'videoId' | 'duration' | 'thumbnailUrl' | 'thumbnailManual'
 > & {
   onChange: (patch: SermonFormPatch) => void;
+  onSetManualThumbnail: (url: string) => void;
+  onRemoveThumbnail: () => void;
 };
 
 export type ScriptureCardProps = Pick<SermonFormData, 'scripture' | 'scriptureText' | 'summary'> & {

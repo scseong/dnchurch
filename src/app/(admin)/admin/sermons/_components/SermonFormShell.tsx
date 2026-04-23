@@ -38,6 +38,10 @@ export default function SermonFormShell({
     setData((d) => ({ ...d, resources: [...d.resources, ...inputs] }));
   const handleRemoveResource = (id: string) =>
     setData((d) => ({ ...d, resources: d.resources.filter((r) => r.id !== id) }));
+  const handleSetManualThumbnail = (url: string) =>
+    setData((d) => ({ ...d, thumbnailUrl: url, thumbnailManual: true }));
+  const handleRemoveThumbnail = () =>
+    setData((d) => ({ ...d, thumbnailUrl: '', thumbnailManual: false }));
 
   const handleSaveDraft = () => {
     startTransition(async () => {
@@ -86,6 +90,8 @@ export default function SermonFormShell({
         onPatch={handlePatch}
         onAddResources={handleAddResources}
         onRemoveResource={handleRemoveResource}
+        onSetManualThumbnail={handleSetManualThumbnail}
+        onRemoveThumbnail={handleRemoveThumbnail}
         onSaveDraft={handleSaveDraft}
         onPublish={handlePublish}
         isPending={isPending}

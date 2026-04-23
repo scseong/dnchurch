@@ -23,6 +23,8 @@ interface SermonFormProps {
   onPatch: (patch: SermonFormPatch) => void;
   onAddResources: (inputs: SermonResourceInput[]) => void;
   onRemoveResource: (id: string) => void;
+  onSetManualThumbnail: (url: string) => void;
+  onRemoveThumbnail: () => void;
   onSaveDraft: () => void;
   onPublish: () => void;
   isPending: boolean;
@@ -36,6 +38,8 @@ export default function SermonForm({
   onPatch,
   onAddResources,
   onRemoveResource,
+  onSetManualThumbnail,
+  onRemoveThumbnail,
   onSaveDraft,
   onPublish,
   isPending,
@@ -65,7 +69,10 @@ export default function SermonForm({
             videoId={formData.videoId}
             duration={formData.duration}
             thumbnailUrl={formData.thumbnailUrl}
+            thumbnailManual={formData.thumbnailManual}
             onChange={onPatch}
+            onSetManualThumbnail={onSetManualThumbnail}
+            onRemoveThumbnail={onRemoveThumbnail}
           />
           <ScriptureCard
             scripture={formData.scripture}
