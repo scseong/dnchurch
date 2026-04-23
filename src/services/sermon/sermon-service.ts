@@ -1,4 +1,6 @@
 import { handleResponse } from '@/services/handle-response';
+import { buildBaseSlug, ensureUniqueSlug } from '@/lib/sermon-slug';
+import type { SermonDbInsert, SermonDbUpdate } from '@/lib/sermon-form-mapper';
 import type { SupabaseClient } from '@supabase/supabase-js';
 import type { Database } from '@/types/database.types';
 import type {
@@ -196,5 +198,69 @@ export const sermonService = (supabase: SupabaseClient<Database>) => ({
     await supabase.rpc('increment_sermon_views', {
       sermon_id: sermonId
     });
+  },
+
+  /** [어드민] 설교 생성 — slug·series_order 서버 자동 계산 */
+  createSermon: async (insert: Omit<SermonDbInsert, 'slug' | 'series_order'>) => {
+    const slug = await ensureUniqueSlug(
+      buildBaseSlug(insert.sermon_date, insert.title),
+      supabase
+    );
+
+    let series_order: number | null = null;
+    if (insert.series_id) {
+      const { count } = await supabase
+        .from('sermons')
+        .select('id', { count: 'exact', head: true })
+        .eq('series_id', insert.series_id)
+        .is('deleted_at', null);
+      series_order = (count ?? 0) + 1;
+    }
+
+    const res = await supabase
+      .from('sermons')
+      .insert({ ...insert, slug, series_order })
+      .select('id, slug')
+      .single();
+
+    return handleResponse(res);
+  },
+
+  /** [어드민] 설교 수정 — slug는 URL 안정성을 위해 변경하지 않음 */
+  updateSermon: async (
+    id: string,
+    update: Omit<SermonDbUpdate, 'slug' | 'series_order' | 'id' | 'created_at'>
+  ) => {
+    const res = await supabase
+      .from('sermons')
+      .update(update)
+      .eq('id', id)
+      .select('id, slug')
+      .single();
+
+    return handleResponse(res);
+  },
+
+  /** [어드민] 설교 소프트 삭제 */
+  softDeleteSermon: async (id: string) => {
+    const res = await supabase
+      .from('sermons')
+      .update({ deleted_at: new Date().toISOString() })
+      .eq('id', id);
+
+    return handleResponse(res);
+  },
+
+  /** [어드민] 수정용 설교 조회 — 초안 포함, 삭제 제외 */
+  getSermonForEdit: async (slug: string) => {
+    const res = await supabase
+      .from('sermons')
+      .select(SERMON_WITH_RELATIONS_SELECT)
+      .eq('slug', slug)
+      .is('deleted_at', null)
+      .maybeSingle();
+
+    const handled = handleResponse(res);
+    return (handled.data as unknown as SermonWithRelations | null) ?? null;
   }
 });

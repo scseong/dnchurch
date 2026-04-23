@@ -69,3 +69,9 @@ export const getSermonYearCounts = () => {
   const supabase = createStaticClient(sermonCache.list());
   return sermonService(supabase).yearCounts();
 };
+
+/** [어드민] 수정용 설교 조회 — 캐시 없음, 초안 포함 */
+export const getSermonForEdit = async (slug: string) => {
+  const supabase = await createServerSideClient();
+  return sermonService(supabase).getSermonForEdit(slug);
+};
