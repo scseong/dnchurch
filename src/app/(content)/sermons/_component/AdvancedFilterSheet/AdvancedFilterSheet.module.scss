@@ -50,9 +50,9 @@
 }
 
 .footer {
+  margin-top: $content-gap-l;
   display: flex;
   gap: $spacing-12;
-  margin-top: $content-gap-l;
   padding-top: $spacing-16;
   border-top: 1px solid $border-primary;
 }
@@ -60,7 +60,7 @@
 .btn_reset,
 .btn_apply {
   flex: 1;
-  padding: $padding-control;
+  padding: $spacing-12 $spacing-16;
   font-size: $font-size-14;
   font-weight: $font-weight-semibold;
   border-radius: $radius-s;

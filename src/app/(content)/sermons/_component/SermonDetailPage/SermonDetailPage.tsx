@@ -59,67 +59,38 @@ export default function SermonDetailPage({ sermon, seriesEpisodes }: Props) {
   return (
     <LayoutContainer>
       <div className={styles.layout}>
-        {/* ── Main column ── */}
-        <div className={styles.main}>
+        <div className={styles.video_section}>
           <SermonVideoPlayer
             videoId={sermon.video_id}
             videoProvider={sermon.video_provider as 'youtube' | 'vimeo'}
             title={sermon.title}
           />
           <SermonVideoTools sermonId={sermon.id} onToast={showToast} />
-
-          {/* Mobile-only info */}
-          <div className={styles.mobile_info}>
-            <SermonMeta
-              seriesTitle={seriesTitle}
-              seriesOrder={sermon.series_order}
-              title={sermon.title}
-              date={sermon.sermon_date}
-              preacher={preacherLabel}
-              scripture={sermon.scripture}
-              duration={duration}
-              serviceType={sermon.service_type}
-            />
-            <SermonTabs activeTab={activeTab} onTabChange={setActiveTab} tabs={TABS} />
-            <TabContent activeTab={activeTab} sermon={sermon} resources={activeResources} />
-            {hasSeriesEpisodes && (
-              <SeriesEpisodeList
-                currentSermonId={sermon.id}
-                sermons={seriesEpisodes}
-                seriesTitle={seriesTitle ?? '시리즈'}
-                onSelect={handleEpisodeSelect}
-                onViewAll={handleViewAllSeries}
-              />
-            )}
-          </div>
         </div>
 
-        {/* ── Side panel (PC only) ── */}
-        <aside className={styles.side}>
-          <div className={styles.side_inner}>
-            <SermonMeta
-              seriesTitle={seriesTitle}
-              seriesOrder={sermon.series_order}
-              title={sermon.title}
-              date={sermon.sermon_date}
-              preacher={preacherLabel}
-              scripture={sermon.scripture}
-              duration={duration}
-              serviceType={sermon.service_type}
+        <div className={styles.info_section}>
+          <SermonMeta
+            seriesTitle={seriesTitle}
+            seriesOrder={sermon.series_order}
+            title={sermon.title}
+            date={sermon.sermon_date}
+            preacher={preacherLabel}
+            scripture={sermon.scripture}
+            duration={duration}
+            serviceType={sermon.service_type}
+          />
+          <SermonTabs activeTab={activeTab} onTabChange={setActiveTab} tabs={TABS} />
+          <TabContent activeTab={activeTab} sermon={sermon} resources={activeResources} />
+          {hasSeriesEpisodes && (
+            <SeriesEpisodeList
+              currentSermonId={sermon.id}
+              sermons={seriesEpisodes}
+              seriesTitle={seriesTitle ?? '시리즈'}
+              onSelect={handleEpisodeSelect}
+              onViewAll={handleViewAllSeries}
             />
-            <SermonTabs activeTab={activeTab} onTabChange={setActiveTab} tabs={TABS} />
-            <TabContent activeTab={activeTab} sermon={sermon} resources={activeResources} />
-            {hasSeriesEpisodes && (
-              <SeriesEpisodeList
-                currentSermonId={sermon.id}
-                sermons={seriesEpisodes}
-                seriesTitle={seriesTitle ?? '시리즈'}
-                onSelect={handleEpisodeSelect}
-                onViewAll={handleViewAllSeries}
-              />
-            )}
-          </div>
-        </aside>
+          )}
+        </div>
       </div>
 
       <Toast message={toast.message} show={toast.show} />
@@ -157,7 +128,7 @@ function SermonMeta({
       </span>
       <h1 className={styles.sermon_title}>{title}</h1>
       <div className={styles.meta_row}>
-        <span>{formattedDate(date, 'YYYY.MM.DD')}</span>
+        <span>{formattedDate(date, 'YYYY년 MM월 DD일')}</span>
         <Dot />
         <span>{preacher}</span>
         <Dot />

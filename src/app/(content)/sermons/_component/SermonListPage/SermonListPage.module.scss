@@ -208,7 +208,7 @@
   align-items: center;
   justify-content: center;
   gap: $spacing-4;
-  min-width: 4.4rem;
+  min-width: 4.2rem;
   padding: 0 $spacing-12;
   font-size: $font-size-13;
   font-weight: $font-weight-medium;
@@ -259,7 +259,7 @@
 // ── Series Chips (Mobile) ──
 
 .chips {
-  margin-bottom: $content-gap-m;
+  margin-bottom: $content-gap-l;
 
   @include respond-up($breakpoint-pc-sm) {
     display: none;
@@ -282,8 +282,8 @@
 
 .chip {
   flex-shrink: 0;
-  padding: $spacing-10 $spacing-16;
-  font-size: $font-size-14;
+  padding: $spacing-8 $spacing-16;
+  font-size: $font-size-13;
   font-weight: $font-weight-medium;
   color: $txt-secondary;
   background: $primary-subtle;
@@ -307,8 +307,8 @@
   display: inline-flex;
   align-items: center;
   gap: $spacing-4;
-  padding: $spacing-10 $spacing-16;
-  font-size: $font-size-14;
+  padding: $spacing-8 $spacing-16;
+  font-size: $font-size-13;
   font-weight: $font-weight-medium;
   color: $primary;
   background: $primary-subtle;
@@ -439,7 +439,7 @@
 // ── Content sections ──
 
 .featured {
-  margin-bottom: $content-gap-xl;
+  margin-bottom: $section-padding-40;
 }
 
 .year_section {

@@ -1,0 +1,160 @@
+.header {
+  position: sticky;
+  top: 0;
+  z-index: 30;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  height: var(--header-h);
+  padding: 0 24px;
+  background: var(--admin-bg-card);
+  border-bottom: 1px solid var(--admin-bd);
+}
+
+.menu_btn {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  border: 0;
+  border-radius: 6px;
+  background: transparent;
+  color: var(--admin-t2);
+  font-size: 20px;
+  cursor: pointer;
+  transition: background 0.15s;
+
+  &:hover {
+    background: var(--admin-bg-hover);
+  }
+
+  @media (max-width: 1024px) {
+    display: flex;
+  }
+}
+
+.crumbs {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  min-width: 0;
+  font-size: 13px;
+}
+
+.crumbs_list {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.group {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.separator {
+  color: var(--admin-t3);
+  font-size: 12px;
+}
+
+.crumb {
+  color: var(--admin-t3);
+  cursor: pointer;
+  transition: color 0.15s;
+
+  &:hover {
+    color: var(--admin-t1);
+  }
+
+  &.current {
+    color: var(--admin-t1);
+    font-weight: 600;
+    cursor: default;
+  }
+}
+
+.search {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 300px;
+  padding: 7px 12px;
+  border: 1px solid var(--admin-bd);
+  border-radius: 6px;
+  background: var(--admin-bg);
+  color: var(--admin-t3);
+  font-size: 13px;
+  cursor: pointer;
+  transition:
+    border-color 0.15s,
+    color 0.15s;
+
+  &:hover,
+  &:focus-visible {
+    border-color: var(--admin-t3);
+    color: var(--admin-t2);
+    outline: none;
+  }
+
+  @media (max-width: 767px) {
+    display: none;
+  }
+}
+
+.search_icon {
+  flex-shrink: 0;
+  font-size: 16px;
+}
+
+.search_text {
+  flex: 1;
+}
+
+.kbd {
+  padding: 2px 6px;
+  border: 1px solid var(--admin-bd);
+  border-radius: 4px;
+  background: var(--admin-bg-card);
+  color: var(--admin-t3);
+  font-family: inherit;
+  font-size: 10px;
+  font-weight: 500;
+}
+
+.bell {
+  position: relative;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  border: 0;
+  border-radius: 6px;
+  background: transparent;
+  color: var(--admin-t2);
+  font-size: 20px;
+  cursor: pointer;
+  transition: background 0.15s;
+
+  &:hover {
+    background: var(--admin-bg-hover);
+  }
+}
+
+.dot {
+  position: absolute;
+  top: 7px;
+  right: 7px;
+  width: 8px;
+  height: 8px;
+  border: 2px solid var(--admin-bg-card);
+  border-radius: 50%;
+  background: #ef4444;
+  box-sizing: content-box;
+}
