@@ -32,7 +32,7 @@ export default function Checklist({ data }: ChecklistProps) {
     { label: '설교자 선택', required: true, status: requiredStatus(data.preacherId !== '') },
     { label: '예배 종류', required: true, status: requiredStatus(data.serviceType !== '') },
     { label: '영상 연결 (YouTube/Vimeo)', status: optionalStatus(Boolean(data.videoId)) },
-    { label: '성경 본문', status: optionalStatus(data.scripture.trim() !== '') },
+    { label: '성경 구절', required: true, status: requiredStatus(data.scripture.trim() !== '') },
     { label: '설교 요약', status: optionalStatus(data.summary.trim() !== '') },
     { label: '썸네일 업로드', status: optionalStatus(Boolean(data.thumbnailUrl)) }
   ];

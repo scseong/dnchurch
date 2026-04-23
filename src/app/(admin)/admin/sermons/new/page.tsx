@@ -1,7 +1,10 @@
 import PageHeader from '@/components/admin/layout/PageHeader';
 import SermonForm from '@/components/admin/sermons/SermonForm';
+import { getAllPreachers, getAllSeries } from '@/services/sermon';
 
-export default function SermonNewPage() {
+export default async function SermonNewPage() {
+  const [preachers, series] = await Promise.all([getAllPreachers(), getAllSeries()]);
+
   return (
     <>
       <PageHeader
@@ -14,7 +17,7 @@ export default function SermonNewPage() {
           { label: '발행', variant: 'pri' }
         ]}
       />
-      <SermonForm />
+      <SermonForm preachers={preachers} series={series} />
     </>
   );
 }

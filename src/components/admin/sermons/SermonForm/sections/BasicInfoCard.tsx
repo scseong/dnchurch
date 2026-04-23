@@ -20,6 +20,8 @@ export default function BasicInfoCard({
   preacherId,
   seriesId,
   serviceType,
+  preachers,
+  series,
   onChange
 }: BasicInfoCardProps) {
   return (
@@ -58,9 +60,11 @@ export default function BasicInfoCard({
                 <option value="" disabled>
                   설교자를 선택하세요
                 </option>
-                <option value="김은혜 목사">김은혜 목사</option>
-                <option value="박성민 목사">박성민 목사</option>
-                <option value="이주영 전도사">이주영 전도사</option>
+                {preachers.map((preacher) => (
+                  <option key={preacher.id} value={preacher.id}>
+                    {preacher.name}{preacher.title ? ` ${preacher.title}` : ''}
+                  </option>
+                ))}
               </Select>
             </Field>
           </div>
@@ -72,10 +76,11 @@ export default function BasicInfoCard({
                 onChange={(e) => onChange({ seriesId: e.target.value })}
               >
                 <option value="">단독 설교</option>
-                <option value="마가복음 강해">마가복음 강해</option>
-                <option value="산상수훈">산상수훈</option>
-                <option value="시편 묵상">시편 묵상</option>
-                <option value="로마서">로마서</option>
+                {series.map((s) => (
+                  <option key={s.id} value={s.id}>
+                    {s.title}
+                  </option>
+                ))}
               </Select>
             </Field>
             <Field label="예배 종류" required>

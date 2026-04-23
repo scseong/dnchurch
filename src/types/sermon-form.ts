@@ -1,5 +1,5 @@
 import type { Database } from '@/types/database.types';
-import type { ServiceType } from '@/types/sermon';
+import type { Preacher, SeriesWithSermonCount, ServiceType } from '@/types/sermon';
 
 export type VideoProvider = 'youtube' | 'vimeo';
 export type SermonResourceType = Database['public']['Enums']['sermon_resource_type'];
@@ -59,6 +59,8 @@ export type BasicInfoCardProps = Pick<
   SermonFormData,
   'title' | 'sermonDate' | 'preacherId' | 'seriesId' | 'serviceType'
 > & {
+  preachers: Preacher[];
+  series: SeriesWithSermonCount[];
   onChange: (patch: SermonFormPatch) => void;
 };
 

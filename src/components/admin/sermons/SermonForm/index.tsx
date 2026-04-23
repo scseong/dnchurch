@@ -10,6 +10,7 @@ import ResourcesCard from './sections/ResourcesCard';
 import PublishCard from './sections/PublishCard';
 import PreviewCard from './Preview/PreviewCard';
 import Checklist from './Preview/Checklist';
+import type { Preacher, SeriesWithSermonCount } from '@/types/sermon';
 import {
   INITIAL_SERMON_FORM_DATA,
   type SermonFormData,
@@ -22,9 +23,11 @@ import styles from './index.module.scss';
 
 interface SermonFormProps {
   initialData?: SermonFormData;
+  preachers: Preacher[];
+  series: SeriesWithSermonCount[];
 }
 
-export default function SermonForm({ initialData }: SermonFormProps = {}) {
+export default function SermonForm({ initialData, preachers, series }: SermonFormProps) {
   const [data, setData] = useState<SermonFormData>(initialData ?? INITIAL_SERMON_FORM_DATA);
   const [previewOpen, setPreviewOpen] = useState(false);
 
@@ -50,6 +53,8 @@ export default function SermonForm({ initialData }: SermonFormProps = {}) {
             preacherId={data.preacherId}
             seriesId={data.seriesId}
             serviceType={data.serviceType}
+            preachers={preachers}
+            series={series}
             onChange={handlePatch}
           />
           <VideoCard
@@ -74,7 +79,7 @@ export default function SermonForm({ initialData }: SermonFormProps = {}) {
           <PublishCard isPublished={data.isPublished} onChange={handlePatch} />
         </div>
         <aside className={styles.preview_col} aria-label="미리보기">
-          <PreviewCard data={data} />
+          <PreviewCard data={data} series={series} />
           <Checklist data={data} />
         </aside>
       </form>
@@ -121,7 +126,7 @@ export default function SermonForm({ initialData }: SermonFormProps = {}) {
             </button>
           </header>
           <div className={styles.preview_sheet_body}>
-            <PreviewCard data={data} />
+            <PreviewCard data={data} series={series} />
             <Checklist data={data} />
           </div>
         </div>
