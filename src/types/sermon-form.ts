@@ -24,7 +24,6 @@ export interface SermonFormData {
   videoId: string;
   duration: string;
   thumbnailUrl: string;
-  thumbnailManual: boolean;
   scripture: string;
   scriptureText: string;
   summary: string;
@@ -43,7 +42,6 @@ export const INITIAL_SERMON_FORM_DATA: SermonFormData = {
   videoId: '',
   duration: '',
   thumbnailUrl: '',
-  thumbnailManual: false,
   scripture: '',
   scriptureText: '',
   summary: '',
@@ -66,12 +64,9 @@ export type BasicInfoCardProps = Pick<
 
 export type VideoCardProps = Pick<
   SermonFormData,
-  'videoProvider' | 'videoUrl' | 'videoId' | 'duration' | 'thumbnailUrl' | 'thumbnailManual'
+  'videoProvider' | 'videoUrl' | 'videoId' | 'duration' | 'thumbnailUrl'
 > & {
-  thumbnailFile?: File;
   onChange: (patch: SermonFormPatch) => void;
-  onSelectThumbnailFile: (file: File | null) => void;
-  onRemoveThumbnail: () => void;
 };
 
 export type ScriptureCardProps = Pick<SermonFormData, 'scripture' | 'scriptureText' | 'summary'> & {

@@ -1,8 +1,6 @@
 'use client';
 
-import { useEffect, useRef, useState } from 'react';
 import clsx from 'clsx';
-import { HiOutlineCloudUpload } from 'react-icons/hi';
 import Field from '../primitives/Field';
 import Input from '../primitives/Input';
 import type { VideoCardProps, VideoProvider } from '@/types/sermon-form';
@@ -13,53 +11,19 @@ const PROVIDERS: { key: VideoProvider; label: string }[] = [
   { key: 'vimeo', label: 'Vimeo' }
 ];
 
-const MAX_FILE_SIZE = 5 * 1024 * 1024;
-
 export default function VideoCard({
   videoProvider,
   videoUrl,
   videoId,
   duration,
   thumbnailUrl,
-  thumbnailManual,
-  thumbnailFile,
-  onChange,
-  onSelectThumbnailFile,
-  onRemoveThumbnail
+  onChange
 }: VideoCardProps) {
-  const fileInputRef = useRef<HTMLInputElement>(null);
-  const [previewUrl, setPreviewUrl] = useState('');
-
-  useEffect(() => {
-    if (!thumbnailFile) {
-      setPreviewUrl('');
-      return;
-    }
-    const url = URL.createObjectURL(thumbnailFile);
-    setPreviewUrl(url);
-    return () => URL.revokeObjectURL(url);
-  }, [thumbnailFile]);
-
   const urlHint = videoUrl
     ? videoId
       ? `인식된 ID: ${videoId}`
       : 'URL을 확인하세요'
     : undefined;
-
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
-    if (file.size > MAX_FILE_SIZE) return;
-    onSelectThumbnailFile(file);
-    if (fileInputRef.current) fileInputRef.current.value = '';
-  };
-
-  const displayUrl = previewUrl || thumbnailUrl;
-  const badgeLabel = thumbnailFile
-    ? '업로드 예정'
-    : thumbnailManual
-      ? '직접 업로드'
-      : 'YouTube 자동 생성';
 
   return (
     <section className={styles.card}>
@@ -67,7 +31,7 @@ export default function VideoCard({
         <span className={styles.card_number}>2</span>
         <div>
           <h3 className={styles.card_heading_title}>영상 정보</h3>
-          <p className={styles.card_heading_desc}>YouTube/Vimeo 영상과 썸네일을 연결합니다</p>
+          <p className={styles.card_heading_desc}>YouTube/Vimeo 영상을 연결합니다</p>
         </div>
       </header>
       <div className={styles.card_body}>
@@ -105,48 +69,16 @@ export default function VideoCard({
             </Field>
           </div>
 
-          <Field label="썸네일" optional>
-            {displayUrl ? (
+          {thumbnailUrl && (
+            <Field label="썸네일 미리보기" optional>
               <div className={styles.thumb_preview}>
-                <img src={displayUrl} alt="썸네일 미리보기" />
-                <span className={styles.thumb_badge}>{badgeLabel}</span>
-                {(thumbnailFile || thumbnailManual) && (
-                  <button
-                    type="button"
-                    className={styles.thumb_remove}
-                    onClick={onRemoveThumbnail}
-                  >
-                    제거
-                  </button>
-                )}
+                <img src={thumbnailUrl} alt="썸네일 미리보기" />
+                <span className={styles.thumb_badge}>
+                  {videoProvider === 'youtube' ? 'YouTube 자동 생성' : 'Vimeo 자동 생성'}
+                </span>
               </div>
-            ) : (
-              <>
-                <input
-                  ref={fileInputRef}
-                  type="file"
-                  accept="image/jpeg,image/png,image/webp"
-                  className={styles.upload_input}
-                  onChange={handleFileChange}
-                />
-                <button
-                  type="button"
-                  className={styles.upload}
-                  onClick={() => fileInputRef.current?.click()}
-                >
-                  <span className={styles.upload_icon}>
-                    <HiOutlineCloudUpload />
-                  </span>
-                  <span className={styles.upload_text}>
-                    <span className={styles.upload_accent}>클릭하여 업로드</span> 또는 드래그
-                  </span>
-                  <span className={styles.upload_desc}>
-                    JPG, PNG, WebP · 최대 5MB · 권장 1280×720
-                  </span>
-                </button>
-              </>
-            )}
-          </Field>
+            </Field>
+          )}
         </div>
       </div>
     </section>

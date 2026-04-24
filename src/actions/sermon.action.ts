@@ -8,7 +8,6 @@ import { createAdminServerClient } from '@/lib/supabase/admin';
 import { sermonService } from '@/services/sermon/sermon-service';
 import { mapFormToDbInsert, mapFormToDbUpdate } from '@/lib/sermon-form-mapper';
 import { checkAdminPermission } from '@/actions/_auth-helpers';
-import { uploadImage, deleteImage } from '@/apis/cloudinary';
 import type { SermonFormData, SermonResourceInput } from '@/types/sermon-form';
 import type { Database } from '@/types/database.types';
 
@@ -17,12 +16,6 @@ const RESOURCE_BUCKET = 'sermon-resources';
 type ResourceRow = Database['public']['Tables']['sermon_resources']['Insert'];
 
 // ─── 내부 업로드 헬퍼 ────────────────────────────────────────────────────────
-
-async function uploadThumbnail(file: File): Promise<{ url: string; publicId: string }> {
-  const filename = `${Date.now()}-${file.name.replace(/\s+/g, '-')}`;
-  const result = await uploadImage({ file, folder: 'dnchurch/sermon-thumbnails', filename });
-  return { url: result.secure_url, publicId: result.public_id };
-}
 
 async function uploadResourceFiles(
   resources: SermonResourceInput[]
@@ -56,17 +49,14 @@ async function uploadResourceFiles(
   return { resolved, paths };
 }
 
-async function rollbackUploads(thumbnailPublicId?: string, resourcePaths?: string[]) {
-  if (thumbnailPublicId) {
-    try {
-      await deleteImage(thumbnailPublicId);
-    } catch {}
-  }
+async function rollbackUploads(resourcePaths?: string[]) {
   if (resourcePaths && resourcePaths.length > 0) {
     try {
       const adminClient = createAdminServerClient();
       await adminClient.storage.from(RESOURCE_BUCKET).remove(resourcePaths);
-    } catch {}
+    } catch (e) {
+      console.error('[rollback] Storage 리소스 삭제 실패', e);
+    }
   }
 }
 
@@ -90,7 +80,8 @@ async function insertResourcesToDb(
     }));
 
   if (rows.length > 0) {
-    await supabase.from('sermon_resources').insert(rows);
+    const { error } = await supabase.from('sermon_resources').insert(rows);
+    if (error) throw error;
   }
 }
 
@@ -101,7 +92,7 @@ async function syncResourcesToDb(
 ) {
   const { data: existing } = await supabase
     .from('sermon_resources')
-    .select('id')
+    .select('id, title')
     .eq('sermon_id', sermonId)
     .is('deleted_at', null);
 
@@ -114,6 +105,20 @@ async function syncResourcesToDb(
       .from('sermon_resources')
       .update({ deleted_at: new Date().toISOString() })
       .in('id', toDelete);
+
+    const deletedRows = (existing ?? []).filter((r) => toDelete.includes(r.id));
+    const storagePaths = deletedRows.map((r) => {
+      const ext = r.title.split('.').pop() ?? 'bin';
+      return `${r.id}.${ext}`;
+    });
+    if (storagePaths.length > 0) {
+      try {
+        const adminClient = createAdminServerClient();
+        await adminClient.storage.from(RESOURCE_BUCKET).remove(storagePaths);
+      } catch (e) {
+        console.error('[sync] Storage 리소스 삭제 실패', e);
+      }
+    }
   }
 
   const remainingCount = dbIds.size - toDelete.length;
@@ -130,38 +135,32 @@ async function syncResourcesToDb(
     }));
 
   if (toInsert.length > 0) {
-    await supabase.from('sermon_resources').insert(toInsert);
+    const { error } = await supabase.from('sermon_resources').insert(toInsert);
+    if (error) throw error;
   }
 }
 
 // ─── Server Actions ───────────────────────────────────────────────────────────
 
 export async function createSermonAction(
-  data: SermonFormData,
-  thumbnailFile?: File
+  data: SermonFormData
 ): Promise<{ success: boolean; message: string }> {
   const { user, isAdmin } = await checkAdminPermission();
   if (!user) return { success: false, message: '로그인이 필요합니다.' };
   if (!isAdmin) return { success: false, message: '권한이 없습니다.' };
 
-  let thumbnailPublicId: string | undefined;
+  if (!data.title || !data.sermonDate || !data.preacherId || !data.serviceType) {
+    return { success: false, message: '필수 항목(제목, 날짜, 설교자, 예배 종류)을 입력해주세요.' };
+  }
+
   let resourcePaths: string[] = [];
 
   try {
-    let thumbnailUrl = data.thumbnailUrl;
-    if (thumbnailFile) {
-      const uploaded = await uploadThumbnail(thumbnailFile);
-      thumbnailUrl = uploaded.url;
-      thumbnailPublicId = uploaded.publicId;
-    }
-
     const { resolved: resolvedResources, paths } = await uploadResourceFiles(data.resources);
     resourcePaths = paths;
 
     const supabase = await createServerSideClient();
-    const result = await sermonService(supabase).createSermon(
-      mapFormToDbInsert({ ...data, thumbnailUrl })
-    );
+    const result = await sermonService(supabase).createSermon(mapFormToDbInsert(data));
     if (!result.data) throw new Error('sermon insert failed');
 
     await insertResourcesToDb(supabase, result.data.id, resolvedResources);
@@ -170,7 +169,7 @@ export async function createSermonAction(
     redirect(`/admin/sermons/${result.data.slug}`);
   } catch (error) {
     if (isRedirectError(error)) throw error;
-    await rollbackUploads(thumbnailPublicId, resourcePaths);
+    await rollbackUploads(resourcePaths);
     console.error(error);
     return { success: false, message: '서버 오류가 발생했습니다.' };
   }
@@ -178,35 +177,30 @@ export async function createSermonAction(
 
 export async function updateSermonAction(
   id: string,
-  data: SermonFormData,
-  thumbnailFile?: File
+  data: SermonFormData
 ): Promise<{ success: boolean; message: string }> {
   const { user, isAdmin } = await checkAdminPermission();
   if (!user) return { success: false, message: '로그인이 필요합니다.' };
   if (!isAdmin) return { success: false, message: '권한이 없습니다.' };
 
-  let thumbnailPublicId: string | undefined;
+  if (!data.title || !data.sermonDate || !data.preacherId || !data.serviceType) {
+    return { success: false, message: '필수 항목(제목, 날짜, 설교자, 예배 종류)을 입력해주세요.' };
+  }
+
   let resourcePaths: string[] = [];
 
   try {
-    let thumbnailUrl = data.thumbnailUrl;
-    if (thumbnailFile) {
-      const uploaded = await uploadThumbnail(thumbnailFile);
-      thumbnailUrl = uploaded.url;
-      thumbnailPublicId = uploaded.publicId;
-    }
-
     const { resolved: resolvedResources, paths } = await uploadResourceFiles(data.resources);
     resourcePaths = paths;
 
     const supabase = await createServerSideClient();
-    await sermonService(supabase).updateSermon(id, mapFormToDbUpdate({ ...data, thumbnailUrl }));
+    await sermonService(supabase).updateSermon(id, mapFormToDbUpdate(data));
     await syncResourcesToDb(supabase, id, resolvedResources);
 
     updateTag('sermon');
     return { success: true, message: '저장되었습니다.' };
   } catch (error) {
-    await rollbackUploads(thumbnailPublicId, resourcePaths);
+    await rollbackUploads(resourcePaths);
     console.error(error);
     return { success: false, message: '서버 오류가 발생했습니다.' };
   }

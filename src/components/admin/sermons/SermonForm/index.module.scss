@@ -194,34 +194,6 @@
   font-weight: 600;
 }
 
-.thumb_remove {
-  position: absolute;
-  top: 8px;
-  right: 8px;
-  padding: 4px 10px;
-  border: none;
-  border-radius: 100px;
-  background: rgba(15, 20, 30, 0.72);
-  color: #fff;
-  font-size: 10px;
-  font-weight: 600;
-  font-family: inherit;
-  cursor: pointer;
-
-  &:hover {
-    background: rgba(15, 20, 30, 0.9);
-  }
-}
-
-.upload_input {
-  position: absolute;
-  width: 1px;
-  height: 1px;
-  overflow: hidden;
-  clip: rect(0 0 0 0);
-  white-space: nowrap;
-}
-
 // ResourcesCard — 업로드된 파일 목록.
 .resource_list {
   display: flex;

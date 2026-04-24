@@ -57,7 +57,6 @@ export function mapSermonToFormData(sermon: SermonWithRelations): SermonFormData
     videoId: sermon.video_id ?? '',
     duration: sermon.duration ?? '',
     thumbnailUrl: sermon.thumbnail_url ?? '',
-    thumbnailManual: !!sermon.thumbnail_url,
     scripture: sermon.scripture ?? '',
     scriptureText: sermon.scripture_text ?? '',
     summary: sermon.summary ?? '',

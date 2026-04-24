@@ -13,7 +13,7 @@ export function applyPatch(
     next.videoId = parseVideoId(next.videoUrl, next.videoProvider);
   }
 
-  if (videoChanged && !current.thumbnailManual) {
+  if (videoChanged) {
     next.thumbnailUrl =
       next.videoProvider === 'youtube' && next.videoId
         ? `https://img.youtube.com/vi/${next.videoId}/hqdefault.jpg`
