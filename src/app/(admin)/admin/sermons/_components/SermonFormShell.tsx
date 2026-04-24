@@ -31,6 +31,7 @@ export default function SermonFormShell({
   series
 }: SermonFormShellProps) {
   const [formData, setData] = useState<SermonFormData>(initialData ?? INITIAL_SERMON_FORM_DATA);
+  const [thumbnailFile, setThumbnailFile] = useState<File | null>(null);
   const [isPending, startTransition] = useTransition();
 
   const handlePatch = (patch: SermonFormPatch) => setData((d) => applyPatch(d, patch));
@@ -38,18 +39,23 @@ export default function SermonFormShell({
     setData((d) => ({ ...d, resources: [...d.resources, ...inputs] }));
   const handleRemoveResource = (id: string) =>
     setData((d) => ({ ...d, resources: d.resources.filter((r) => r.id !== id) }));
-  const handleSetManualThumbnail = (url: string) =>
-    setData((d) => ({ ...d, thumbnailUrl: url, thumbnailManual: true }));
-  const handleRemoveThumbnail = () =>
+
+  const handleSelectThumbnailFile = (file: File | null) => {
+    setThumbnailFile(file);
+    setData((d) => ({ ...d, thumbnailManual: file !== null }));
+  };
+  const handleRemoveThumbnail = () => {
+    setThumbnailFile(null);
     setData((d) => ({ ...d, thumbnailUrl: '', thumbnailManual: false }));
+  };
 
   const handleSaveDraft = () => {
     startTransition(async () => {
       const result =
         mode === 'new'
-          ? await createSermonAction({ ...formData, isPublished: false })
+          ? await createSermonAction({ ...formData, isPublished: false }, thumbnailFile ?? undefined)
           : sermonId
-            ? await updateSermonAction(sermonId, { ...formData, isPublished: false })
+            ? await updateSermonAction(sermonId, { ...formData, isPublished: false }, thumbnailFile ?? undefined)
             : null;
       if (result && !result.success) console.error(result.message);
     });
@@ -59,9 +65,9 @@ export default function SermonFormShell({
     startTransition(async () => {
       const result =
         mode === 'new'
-          ? await createSermonAction({ ...formData, isPublished: true })
+          ? await createSermonAction({ ...formData, isPublished: true }, thumbnailFile ?? undefined)
           : sermonId
-            ? await updateSermonAction(sermonId, { ...formData, isPublished: true })
+            ? await updateSermonAction(sermonId, { ...formData, isPublished: true }, thumbnailFile ?? undefined)
             : null;
       if (result && !result.success) console.error(result.message);
     });
@@ -87,10 +93,11 @@ export default function SermonFormShell({
       />
       <SermonForm
         formData={formData}
+        thumbnailFile={thumbnailFile ?? undefined}
         onPatch={handlePatch}
         onAddResources={handleAddResources}
         onRemoveResource={handleRemoveResource}
-        onSetManualThumbnail={handleSetManualThumbnail}
+        onSelectThumbnailFile={handleSelectThumbnailFile}
         onRemoveThumbnail={handleRemoveThumbnail}
         onSaveDraft={handleSaveDraft}
         onPublish={handlePublish}

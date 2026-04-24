@@ -20,10 +20,11 @@ import styles from './index.module.scss';
 
 interface SermonFormProps {
   formData: SermonFormData;
+  thumbnailFile?: File;
   onPatch: (patch: SermonFormPatch) => void;
   onAddResources: (inputs: SermonResourceInput[]) => void;
   onRemoveResource: (id: string) => void;
-  onSetManualThumbnail: (url: string) => void;
+  onSelectThumbnailFile: (file: File | null) => void;
   onRemoveThumbnail: () => void;
   onSaveDraft: () => void;
   onPublish: () => void;
@@ -35,10 +36,11 @@ interface SermonFormProps {
 
 export default function SermonForm({
   formData,
+  thumbnailFile,
   onPatch,
   onAddResources,
   onRemoveResource,
-  onSetManualThumbnail,
+  onSelectThumbnailFile,
   onRemoveThumbnail,
   onSaveDraft,
   onPublish,
@@ -70,8 +72,9 @@ export default function SermonForm({
             duration={formData.duration}
             thumbnailUrl={formData.thumbnailUrl}
             thumbnailManual={formData.thumbnailManual}
+            thumbnailFile={thumbnailFile}
             onChange={onPatch}
-            onSetManualThumbnail={onSetManualThumbnail}
+            onSelectThumbnailFile={onSelectThumbnailFile}
             onRemoveThumbnail={onRemoveThumbnail}
           />
           <ScriptureCard

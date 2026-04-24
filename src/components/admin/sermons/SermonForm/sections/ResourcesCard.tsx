@@ -1,11 +1,9 @@
+'use client';
+
 import { useRef, useState } from 'react';
 import { HiOutlinePaperClip, HiPlus, HiX } from 'react-icons/hi';
 import type { ResourcesCardProps, SermonResourceInput } from '@/types/sermon-form';
-import {
-  MAX_RESOURCE_BYTES,
-  formatBytes,
-  inferResourceType
-} from '@/lib/sermon-resource';
+import { MAX_RESOURCE_BYTES, formatBytes, inferResourceType } from '@/lib/sermon-resource';
 import styles from '../index.module.scss';
 
 interface RejectedFile {
@@ -16,7 +14,6 @@ interface RejectedFile {
 export default function ResourcesCard({ resources, onAdd, onRemove }: ResourcesCardProps) {
   const inputRef = useRef<HTMLInputElement>(null);
   const [rejected, setRejected] = useState<RejectedFile[]>([]);
-  const hasFiles = resources.length > 0;
 
   const openPicker = () => inputRef.current?.click();
 
@@ -46,6 +43,8 @@ export default function ResourcesCard({ resources, onAdd, onRemove }: ResourcesC
     if (accepted.length > 0) onAdd(accepted);
     setRejected(rejections);
   };
+
+  const hasFiles = resources.length > 0;
 
   return (
     <section className={styles.card}>

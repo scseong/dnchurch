@@ -61,13 +61,15 @@ export function mapSermonToFormData(sermon: SermonWithRelations): SermonFormData
     scripture: sermon.scripture ?? '',
     scriptureText: sermon.scripture_text ?? '',
     summary: sermon.summary ?? '',
-    resources: sermon.sermon_resources.map((r) => ({
-      id: r.id,
-      name: r.title,
-      size: r.file_size_bytes ?? 0,
-      fileType: r.file_type ?? 'pdf',
-      url: r.file_url
-    })),
+    resources: sermon.sermon_resources
+      .filter((r) => !r.deleted_at)
+      .map((r) => ({
+        id: r.id,
+        name: r.title,
+        size: r.file_size_bytes ?? 0,
+        fileType: r.file_type ?? 'pdf',
+        url: r.file_url
+      })),
     isPublished: sermon.is_published
   };
 }

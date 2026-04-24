@@ -68,8 +68,9 @@ export type VideoCardProps = Pick<
   SermonFormData,
   'videoProvider' | 'videoUrl' | 'videoId' | 'duration' | 'thumbnailUrl' | 'thumbnailManual'
 > & {
+  thumbnailFile?: File;
   onChange: (patch: SermonFormPatch) => void;
-  onSetManualThumbnail: (url: string) => void;
+  onSelectThumbnailFile: (file: File | null) => void;
   onRemoveThumbnail: () => void;
 };
 
