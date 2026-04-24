@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import { Noto_Serif_KR } from 'next/font/google';
 import ScrollToTop from '@/components/common/ScrollToTop';
+import ToastContainer from '@/components/common/Toast/ToastContainer';
 import SessionContextProvider from '@/context/SessionContextProvider';
 import '@/styles/globals.scss';
 import 'photoswipe/dist/photoswipe.css';
@@ -39,6 +40,7 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
         <div id="root">
           <SessionContextProvider>
             <ScrollToTop />
+            <ToastContainer />
             {children}
           </SessionContextProvider>
         </div>

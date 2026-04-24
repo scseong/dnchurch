@@ -5,6 +5,7 @@ import PageHeader from '@/components/admin/layout/PageHeader';
 import SermonForm from '@/components/admin/sermons/SermonForm';
 import { createSermonAction, updateSermonAction } from '@/actions/sermon.action';
 import { applyPatch } from '@/lib/sermon-form';
+import { useToastStore } from '@/store/toast.store';
 import type { Preacher, SeriesWithSermonCount } from '@/types/sermon';
 import {
   INITIAL_SERMON_FORM_DATA,
@@ -32,6 +33,7 @@ export default function SermonFormShell({
 }: SermonFormShellProps) {
   const [formData, setData] = useState<SermonFormData>(initialData ?? INITIAL_SERMON_FORM_DATA);
   const [isPending, startTransition] = useTransition();
+  const toast = useToastStore();
 
   const handlePatch = (patch: SermonFormPatch) => setData((d) => applyPatch(d, patch));
   const handleAddResources = (inputs: SermonResourceInput[]) =>
@@ -47,7 +49,8 @@ export default function SermonFormShell({
           : sermonId
             ? await updateSermonAction(sermonId, { ...formData, isPublished: false })
             : null;
-      if (result && !result.success) console.error(result.message);
+      if (result?.success) toast.success('임시저장되었습니다.');
+      else if (result && !result.success) toast.error(result.message);
     });
   };
 
@@ -59,7 +62,8 @@ export default function SermonFormShell({
           : sermonId
             ? await updateSermonAction(sermonId, { ...formData, isPublished: true })
             : null;
-      if (result && !result.success) console.error(result.message);
+      if (result?.success) toast.success('저장되었습니다.');
+      else if (result && !result.success) toast.error(result.message);
     });
   };
 

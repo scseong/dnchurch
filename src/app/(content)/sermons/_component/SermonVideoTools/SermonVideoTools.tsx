@@ -9,6 +9,7 @@ import {
   IoSpeedometerOutline,
   IoTvOutline
 } from 'react-icons/io5';
+import { useToastStore } from '@/store/toast.store';
 import styles from './SermonVideoTools.module.scss';
 
 const BOOKMARK_KEY = 'bookmarked-sermons';
@@ -17,7 +18,6 @@ const DEFAULT_SPEED = 1;
 
 type Props = {
   sermonId: string;
-  onToast: (message: string) => void;
   onSpeedChange?: (speed: number) => void;
 };
 
@@ -40,7 +40,8 @@ function saveBookmarks(list: string[]) {
   }
 }
 
-export default function SermonVideoTools({ sermonId, onToast, onSpeedChange }: Props) {
+export default function SermonVideoTools({ sermonId, onSpeedChange }: Props) {
+  const { info } = useToastStore();
   const [speedOpen, setSpeedOpen] = useState(false);
   const [speed, setSpeed] = useState<number>(DEFAULT_SPEED);
   const [bookmarked, setBookmarked] = useState(false);
@@ -64,11 +65,11 @@ export default function SermonVideoTools({ sermonId, onToast, onSpeedChange }: P
     setSpeed(value);
     setSpeedOpen(false);
     onSpeedChange?.(value);
-    onToast(`재생 속도 ${value}x`);
+    info(`재생 속도 ${value}x`);
   };
 
   const handlePip = () => {
-    onToast('PIP 모드는 이 영상에서 지원되지 않습니다');
+    info('PIP 모드는 이 영상에서 지원되지 않습니다');
   };
 
   const handleBookmark = () => {
@@ -78,18 +79,18 @@ export default function SermonVideoTools({ sermonId, onToast, onSpeedChange }: P
       : [...list, sermonId];
     saveBookmarks(next);
     setBookmarked(!bookmarked);
-    onToast(bookmarked ? '북마크가 해제되었습니다' : '북마크에 저장되었습니다');
+    info(bookmarked ? '북마크가 해제되었습니다' : '북마크에 저장되었습니다');
   };
 
   const handleShare = useCallback(async () => {
     const url = typeof window !== 'undefined' ? window.location.href : '';
     try {
       await navigator.clipboard.writeText(url);
-      onToast('링크가 복사되었습니다');
+      info('링크가 복사되었습니다');
     } catch {
-      onToast('링크 복사에 실패했습니다');
+      info('링크 복사에 실패했습니다');
     }
-  }, [onToast]);
+  }, [info]);
 
   return (
     <div className={styles.tools} role="toolbar" aria-label="영상 도구">

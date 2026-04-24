@@ -1,0 +1,15 @@
+.container {
+  position: fixed;
+  bottom: $spacing-24;
+  left: 50%;
+  z-index: 10000;
+  display: flex;
+  flex-direction: column-reverse;
+  gap: $spacing-8;
+  transform: translateX(-50%);
+  pointer-events: none;
+
+  @include respond-up($breakpoint-pc-sm) {
+    bottom: $spacing-40;
+  }
+}
