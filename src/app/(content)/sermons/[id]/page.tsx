@@ -1,17 +1,17 @@
 import { notFound } from 'next/navigation';
 import type { Metadata } from 'next';
-import { getSermonBySlug, getSermonsBySeries, incrementSermonViewCount } from '@/services/sermon';
+import { getSermonById, getSermonsBySeries, incrementSermonViewCount } from '@/services/sermon';
 import { getSermonThumbnail } from '@/utils/sermon';
 import type { SermonWithRelations } from '@/types/sermon';
 import SermonDetailPage from '../_component/SermonDetailPage/SermonDetailPage';
 
 type PageProps = {
-  params: Promise<{ slug: string }>;
+  params: Promise<{ id: string }>;
 };
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
-  const { slug } = await params;
-  const sermon = await getSermonBySlug(slug);
+  const { id } = await params;
+  const sermon = await getSermonById(Number(id));
   if (!sermon) return {};
 
   const title = sermon.title;
@@ -47,13 +47,9 @@ function buildJsonLd(sermon: SermonWithRelations) {
   const thumbnail = getSermonThumbnail(sermon);
   if (thumbnail) base.thumbnailUrl = thumbnail;
 
-  if (sermon.video_id) {
-    if (sermon.video_provider === 'youtube') {
-      base.embedUrl = `https://www.youtube.com/embed/${sermon.video_id}`;
-      base.contentUrl = `https://www.youtube.com/watch?v=${sermon.video_id}`;
-    } else if (sermon.video_provider === 'vimeo') {
-      base.embedUrl = `https://player.vimeo.com/video/${sermon.video_id}`;
-    }
+  if (sermon.video_id && sermon.video_provider === 'youtube') {
+    base.embedUrl = `https://www.youtube.com/embed/${sermon.video_id}`;
+    base.contentUrl = `https://www.youtube.com/watch?v=${sermon.video_id}`;
   }
 
   if (sermon.duration) base.duration = sermon.duration;
@@ -62,8 +58,8 @@ function buildJsonLd(sermon: SermonWithRelations) {
 }
 
 export default async function SermonDetail({ params }: PageProps) {
-  const { slug } = await params;
-  const sermon = await getSermonBySlug(slug);
+  const { id } = await params;
+  const sermon = await getSermonById(Number(id));
 
   if (!sermon) notFound();
 
@@ -72,7 +68,7 @@ export default async function SermonDetail({ params }: PageProps) {
     seriesEpisodes = await getSermonsBySeries(sermon.sermon_series.slug);
   }
 
-  incrementSermonViewCount(String(sermon.id)).catch(() => {});
+  incrementSermonViewCount(sermon.id).catch(() => {});
 
   const jsonLd = buildJsonLd(sermon);
 

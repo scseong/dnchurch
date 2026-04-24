@@ -219,7 +219,7 @@ export type Database = {
           file_type: Database["public"]["Enums"]["sermon_resource_type"] | null
           file_url: string
           id: string
-          sermon_id: string
+          sermon_id: number
           sort_order: number | null
           title: string
           updated_at: string
@@ -231,7 +231,7 @@ export type Database = {
           file_type?: Database["public"]["Enums"]["sermon_resource_type"] | null
           file_url: string
           id?: string
-          sermon_id: string
+          sermon_id: number
           sort_order?: number | null
           title: string
           updated_at?: string
@@ -243,7 +243,7 @@ export type Database = {
           file_type?: Database["public"]["Enums"]["sermon_resource_type"] | null
           file_url?: string
           id?: string
-          sermon_id?: string
+          sermon_id?: number
           sort_order?: number | null
           title?: string
           updated_at?: string
@@ -305,7 +305,7 @@ export type Database = {
           created_at: string
           deleted_at: string | null
           duration: string | null
-          id: string
+          id: number
           is_published: boolean
           preacher_id: string
           scripture: string | null
@@ -327,7 +327,7 @@ export type Database = {
           created_at?: string
           deleted_at?: string | null
           duration?: string | null
-          id?: string
+          id?: never
           is_published?: boolean
           preacher_id: string
           scripture?: string | null
@@ -349,7 +349,7 @@ export type Database = {
           created_at?: string
           deleted_at?: string | null
           duration?: string | null
-          id?: string
+          id?: never
           is_published?: boolean
           preacher_id?: string
           scripture?: string | null
@@ -522,10 +522,19 @@ export type Database = {
           prev_title: string
         }[]
       }
-      increment_sermon_views: {
-        Args: { sermon_id: string }
-        Returns: undefined
-      }
+      increment_sermon_views:
+        | {
+            Args: { sermon_id: number }
+            Returns: {
+              error: true
+            } & "Could not choose the best candidate function between: public.increment_sermon_views(sermon_id => int8), public.increment_sermon_views(sermon_id => uuid). Try renaming the parameters or the function itself in the database so function overloading can be resolved"
+          }
+        | {
+            Args: { sermon_id: string }
+            Returns: {
+              error: true
+            } & "Could not choose the best candidate function between: public.increment_sermon_views(sermon_id => int8), public.increment_sermon_views(sermon_id => uuid). Try renaming the parameters or the function itself in the database so function overloading can be resolved"
+          }
       update_bulletin: {
         Args: {
           p_bulletin_id: number

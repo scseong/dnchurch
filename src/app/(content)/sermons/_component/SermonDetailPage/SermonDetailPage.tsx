@@ -40,7 +40,7 @@ export default function SermonDetailPage({ sermon, seriesEpisodes }: Props) {
   const activeResources = sermon.sermon_resources.filter((r) => !r.deleted_at);
 
   const handleEpisodeSelect = (ep: SermonWithRelations) => {
-    router.push(`/sermons/${ep.slug}`);
+    router.push(`/sermons/${ep.id}`);
   };
 
   const handleViewAllSeries = () => {
@@ -57,7 +57,7 @@ export default function SermonDetailPage({ sermon, seriesEpisodes }: Props) {
             videoId={sermon.video_id}
             title={sermon.title}
           />
-          <SermonVideoTools sermonId={sermon.id} />
+          <SermonVideoTools sermonId={String(sermon.id)} />
         </div>
 
         <div className={styles.info_section}>
@@ -192,7 +192,7 @@ function TabContent({ activeTab, sermon, resources }: TabContentProps) {
 
       {activeTab === 'notes' && (
         <div className={styles.tab_panel}>
-          <SermonNoteEditor sermonId={sermon.id} />
+          <SermonNoteEditor sermonId={String(sermon.id)} />
         </div>
       )}
     </div>

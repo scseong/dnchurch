@@ -18,8 +18,7 @@ import {
 
 interface SermonFormShellProps {
   mode: 'new' | 'edit';
-  sermonId?: string;
-  slug?: string;
+  sermonId?: number;
   initialTitle?: string;
   initialData?: SermonFormData;
   preachers: Preacher[];
@@ -29,7 +28,6 @@ interface SermonFormShellProps {
 export default function SermonFormShell({
   mode,
   sermonId,
-  slug,
   initialTitle = '새 설교 등록',
   initialData,
   preachers,
@@ -65,7 +63,7 @@ export default function SermonFormShell({
         const result = await updateSermonAction(sermonId, { ...formData, isPublished: true });
         if (result.success) {
           setIsDirty(false);
-          router.push(`/admin/sermons/${slug}`);
+          router.push(`/admin/sermons/${sermonId}/edit`);
         } else {
           toast.error(result.message);
         }

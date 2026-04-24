@@ -17,7 +17,7 @@ export default function SermonCard({ sermon }: Props) {
 
   return (
     <Link
-      href={`/sermons/${sermon.slug}`}
+      href={`/sermons/${sermon.id}`}
       className={styles.card}
       aria-label={`${sermon.title} - ${preacherLabel}`}
     >

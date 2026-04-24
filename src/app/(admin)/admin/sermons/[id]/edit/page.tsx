@@ -4,13 +4,13 @@ import { getAllPreachers, getAllSeries, getSermonForEdit } from '@/services/serm
 import { mapSermonToFormData } from '@/lib/sermon-form-mapper';
 
 interface Props {
-  params: Promise<{ slug: string }>;
+  params: Promise<{ id: string }>;
 }
 
 export default async function SermonEditPage({ params }: Props) {
-  const { slug } = await params;
+  const { id } = await params;
   const [sermon, preachers, series] = await Promise.all([
-    getSermonForEdit(slug),
+    getSermonForEdit(Number(id)),
     getAllPreachers(),
     getAllSeries()
   ]);
@@ -21,7 +21,6 @@ export default async function SermonEditPage({ params }: Props) {
     <SermonFormShell
       mode="edit"
       sermonId={sermon.id}
-      slug={slug}
       initialTitle={sermon.title}
       initialData={mapSermonToFormData(sermon)}
       preachers={preachers}

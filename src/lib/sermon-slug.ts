@@ -18,7 +18,7 @@ export function buildBaseSlug(sermonDate: string, title: string): string {
 export async function ensureUniqueSlug(
   base: string,
   supabase: SupabaseClient<Database>,
-  excludeId?: string
+  excludeId?: number
 ): Promise<string> {
   let slug = base;
   let counter = 2;

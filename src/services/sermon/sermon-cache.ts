@@ -7,8 +7,8 @@ export const sermonCache = {
     tags: [ROOT, 'sermon-list'],
     revalidate: 86400
   }),
-  detail: (slug: string): NextCacheOptions => ({
-    tags: [ROOT, 'sermon-detail', `sermon-detail-${slug}`]
+  detail: (id: number): NextCacheOptions => ({
+    tags: [ROOT, 'sermon-detail', `sermon-detail-${id}`]
   }),
   seriesList: (): NextCacheOptions => ({
     tags: [ROOT, 'sermon-series-list'],

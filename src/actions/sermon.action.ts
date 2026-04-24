@@ -64,7 +64,7 @@ async function rollbackUploads(resourcePaths?: string[]) {
 
 async function insertResourcesToDb(
   supabase: Awaited<ReturnType<typeof createServerSideClient>>,
-  sermonId: string,
+  sermonId: number,
   resources: SermonResourceInput[]
 ) {
   const rows: ResourceRow[] = resources
@@ -87,7 +87,7 @@ async function insertResourcesToDb(
 
 async function syncResourcesToDb(
   supabase: Awaited<ReturnType<typeof createServerSideClient>>,
-  sermonId: string,
+  sermonId: number,
   resources: SermonResourceInput[]
 ) {
   const { data: existing } = await supabase
@@ -166,7 +166,7 @@ export async function createSermonAction(
     await insertResourcesToDb(supabase, result.data.id, resolvedResources);
 
     updateTag('sermon');
-    redirect(`/admin/sermons/${result.data.slug}`);
+    redirect(`/admin/sermons/${result.data.id}/edit`);
   } catch (error) {
     if (isRedirectError(error)) throw error;
     await rollbackUploads(resourcePaths);
@@ -176,7 +176,7 @@ export async function createSermonAction(
 }
 
 export async function updateSermonAction(
-  id: string,
+  id: number,
   data: SermonFormData
 ): Promise<{ success: boolean; message: string }> {
   const { user, isAdmin } = await checkAdminPermission();
@@ -207,7 +207,7 @@ export async function updateSermonAction(
 }
 
 export async function deleteSermonAction(
-  id: string
+  id: number
 ): Promise<{ success: boolean; message: string }> {
   const { user, isAdmin } = await checkAdminPermission();
   if (!user) return { success: false, message: '로그인이 필요합니다.' };

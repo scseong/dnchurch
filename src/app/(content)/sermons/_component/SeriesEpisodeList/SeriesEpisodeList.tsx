@@ -9,7 +9,7 @@ import styles from './SeriesEpisodeList.module.scss';
 const MAX_VISIBLE = 5;
 
 type Props = {
-  currentSermonId: string;
+  currentSermonId: number;
   sermons: SermonWithRelations[];
   seriesTitle: string;
   onSelect: (sermon: SermonWithRelations) => void;

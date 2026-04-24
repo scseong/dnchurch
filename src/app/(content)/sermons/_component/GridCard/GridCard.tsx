@@ -20,7 +20,7 @@ export default function GridCard({ sermon, index = 0 }: Props) {
 
   return (
     <Link
-      href={`/sermons/${sermon.slug}`}
+      href={`/sermons/${sermon.id}`}
       className={styles.card}
       style={{ animationDelay: `${index * ANIMATION_STEP_MS}ms` }}
       aria-label={`${sermon.title} - ${preacherLabel}`}
