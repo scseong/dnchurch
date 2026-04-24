@@ -8,6 +8,7 @@ import { createAdminServerClient } from '@/lib/supabase/admin';
 import { sermonService } from '@/services/sermon/sermon-service';
 import { mapFormToDbInsert, mapFormToDbUpdate } from '@/lib/sermon-form-mapper';
 import { checkAdminPermission } from '@/actions/_auth-helpers';
+import { formattedDate } from '@/utils/date';
 import type { SermonFormData, SermonResourceInput } from '@/types/sermon-form';
 import type { Database } from '@/types/database.types';
 
@@ -17,8 +18,29 @@ type ResourceRow = Database['public']['Tables']['sermon_resources']['Insert'];
 
 // ─── 내부 업로드 헬퍼 ────────────────────────────────────────────────────────
 
+function buildResourcePath(sermonDate: string, originalName: string): string {
+  const folder = formattedDate(sermonDate, 'YYYY/MM');
+  const ext = originalName.split('.').pop() ?? 'bin';
+  const baseName = originalName.replace(/\.[^.]+$/, '');
+  const sanitized =
+    baseName
+      .replace(/\s+/g, '-')
+      .replace(/[^a-zA-Z0-9-]/g, '')
+      .replace(/-+/g, '-')
+      .replace(/^-|-$/g, '') || 'file';
+  return `${folder}/${sanitized}-${Date.now()}.${ext}`;
+}
+
+function extractStoragePath(fileUrl: string): string | null {
+  const marker = `/public/${RESOURCE_BUCKET}/`;
+  const idx = fileUrl.indexOf(marker);
+  if (idx === -1) return null;
+  return decodeURIComponent(fileUrl.substring(idx + marker.length));
+}
+
 async function uploadResourceFiles(
-  resources: SermonResourceInput[]
+  resources: SermonResourceInput[],
+  sermonDate: string
 ): Promise<{ resolved: SermonResourceInput[]; paths: string[] }> {
   const adminClient = createAdminServerClient();
   const paths: string[] = [];
@@ -27,8 +49,7 @@ async function uploadResourceFiles(
     resources.map(async (resource) => {
       if (!resource.file) return resource;
 
-      const ext = resource.name.split('.').pop() ?? 'bin';
-      const path = `${resource.id}.${ext}`;
+      const path = buildResourcePath(sermonDate, resource.name);
 
       const { error } = await adminClient.storage
         .from(RESOURCE_BUCKET)
@@ -92,38 +113,43 @@ async function syncResourcesToDb(
 ) {
   const { data: existing } = await supabase
     .from('sermon_resources')
-    .select('id, title')
+    .select('id, file_url')
     .eq('sermon_id', sermonId)
     .is('deleted_at', null);
 
-  const dbIds = new Set((existing ?? []).map((r) => r.id));
+  const existingRows = existing ?? [];
   const formIds = new Set(resources.map((r) => r.id));
 
-  const toDelete = [...dbIds].filter((id) => !formIds.has(id));
+  // 삭제 대상: DB에 있으나 폼에 없는 것 — 단일 패스로 id/경로 동시 수집
+  const toDelete: string[] = [];
+  const pathsToDelete: string[] = [];
+  for (const row of existingRows) {
+    if (formIds.has(row.id)) continue;
+    toDelete.push(row.id);
+    const path = extractStoragePath(row.file_url);
+    if (path) pathsToDelete.push(path);
+  }
+
   if (toDelete.length > 0) {
     await supabase
       .from('sermon_resources')
       .update({ deleted_at: new Date().toISOString() })
       .in('id', toDelete);
 
-    const deletedRows = (existing ?? []).filter((r) => toDelete.includes(r.id));
-    const storagePaths = deletedRows.map((r) => {
-      const ext = r.title.split('.').pop() ?? 'bin';
-      return `${r.id}.${ext}`;
-    });
-    if (storagePaths.length > 0) {
+    if (pathsToDelete.length > 0) {
       try {
         const adminClient = createAdminServerClient();
-        await adminClient.storage.from(RESOURCE_BUCKET).remove(storagePaths);
+        await adminClient.storage.from(RESOURCE_BUCKET).remove(pathsToDelete);
       } catch (e) {
         console.error('[sync] Storage 리소스 삭제 실패', e);
       }
     }
   }
 
-  const remainingCount = dbIds.size - toDelete.length;
+  const existingIds = new Set(existingRows.map((r) => r.id));
+  const remainingCount = existingRows.length - toDelete.length;
   const toInsert: ResourceRow[] = resources
-    .filter((r) => !dbIds.has(r.id) && r.url)
+    .filter((r) => !existingIds.has(r.id) && r.url)
     .map((r, index) => ({
       id: r.id,
       sermon_id: sermonId,
@@ -156,7 +182,7 @@ export async function createSermonAction(
   let resourcePaths: string[] = [];
 
   try {
-    const { resolved: resolvedResources, paths } = await uploadResourceFiles(data.resources);
+    const { resolved: resolvedResources, paths } = await uploadResourceFiles(data.resources, data.sermonDate);
     resourcePaths = paths;
 
     const supabase = await createServerSideClient();
@@ -190,7 +216,7 @@ export async function updateSermonAction(
   let resourcePaths: string[] = [];
 
   try {
-    const { resolved: resolvedResources, paths } = await uploadResourceFiles(data.resources);
+    const { resolved: resolvedResources, paths } = await uploadResourceFiles(data.resources, data.sermonDate);
     resourcePaths = paths;
 
     const supabase = await createServerSideClient();
