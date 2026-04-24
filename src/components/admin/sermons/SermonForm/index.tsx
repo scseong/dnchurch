@@ -23,7 +23,6 @@ interface SermonFormProps {
   onPatch: (patch: SermonFormPatch) => void;
   onAddResources: (inputs: SermonResourceInput[]) => void;
   onRemoveResource: (id: string) => void;
-  onSaveDraft: () => void;
   onPublish: () => void;
   isPending: boolean;
   publishLabel: string;
@@ -36,7 +35,6 @@ export default function SermonForm({
   onPatch,
   onAddResources,
   onRemoveResource,
-  onSaveDraft,
   onPublish,
   isPending,
   publishLabel,
@@ -94,14 +92,6 @@ export default function SermonForm({
           onClick={() => setPreviewOpen(true)}
         >
           <HiOutlineEye />
-        </button>
-        <button
-          type="button"
-          className={clsx(styles.mobile_button, styles.outline)}
-          disabled={isPending}
-          onClick={onSaveDraft}
-        >
-          임시저장
         </button>
         <button
           type="button"

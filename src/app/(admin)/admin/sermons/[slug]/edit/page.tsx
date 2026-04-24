@@ -21,6 +21,7 @@ export default async function SermonEditPage({ params }: Props) {
     <SermonFormShell
       mode="edit"
       sermonId={sermon.id}
+      slug={slug}
       initialTitle={sermon.title}
       initialData={mapSermonToFormData(sermon)}
       preachers={preachers}

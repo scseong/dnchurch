@@ -1,6 +1,8 @@
 'use client';
 
 import { useState, useTransition } from 'react';
+import { useRouter } from 'next/navigation';
+import { useUnsavedChanges } from '@/hooks/useUnsavedChanges';
 import PageHeader from '@/components/admin/layout/PageHeader';
 import SermonForm from '@/components/admin/sermons/SermonForm';
 import { createSermonAction, updateSermonAction } from '@/actions/sermon.action';
@@ -17,6 +19,7 @@ import {
 interface SermonFormShellProps {
   mode: 'new' | 'edit';
   sermonId?: string;
+  slug?: string;
   initialTitle?: string;
   initialData?: SermonFormData;
   preachers: Preacher[];
@@ -26,44 +29,47 @@ interface SermonFormShellProps {
 export default function SermonFormShell({
   mode,
   sermonId,
+  slug,
   initialTitle = '새 설교 등록',
   initialData,
   preachers,
   series
 }: SermonFormShellProps) {
+  const router = useRouter();
   const [formData, setData] = useState<SermonFormData>(initialData ?? INITIAL_SERMON_FORM_DATA);
   const [isPending, startTransition] = useTransition();
+  const [isDirty, setIsDirty] = useState(false);
   const toast = useToastStore();
 
-  const handlePatch = (patch: SermonFormPatch) => setData((d) => applyPatch(d, patch));
-  const handleAddResources = (inputs: SermonResourceInput[]) =>
-    setData((d) => ({ ...d, resources: [...d.resources, ...inputs] }));
-  const handleRemoveResource = (id: string) =>
-    setData((d) => ({ ...d, resources: d.resources.filter((r) => r.id !== id) }));
+  useUnsavedChanges(isDirty);
 
-  const handleSaveDraft = () => {
-    startTransition(async () => {
-      const result =
-        mode === 'new'
-          ? await createSermonAction({ ...formData, isPublished: false })
-          : sermonId
-            ? await updateSermonAction(sermonId, { ...formData, isPublished: false })
-            : null;
-      if (result?.success) toast.success('임시저장되었습니다.');
-      else if (result && !result.success) toast.error(result.message);
-    });
+  const handlePatch = (patch: SermonFormPatch) => {
+    setIsDirty(true);
+    setData((d) => applyPatch(d, patch));
+  };
+  const handleAddResources = (inputs: SermonResourceInput[]) => {
+    setIsDirty(true);
+    setData((d) => ({ ...d, resources: [...d.resources, ...inputs] }));
+  };
+  const handleRemoveResource = (id: string) => {
+    setIsDirty(true);
+    setData((d) => ({ ...d, resources: d.resources.filter((r) => r.id !== id) }));
   };
 
   const handlePublish = () => {
     startTransition(async () => {
-      const result =
-        mode === 'new'
-          ? await createSermonAction({ ...formData, isPublished: true })
-          : sermonId
-            ? await updateSermonAction(sermonId, { ...formData, isPublished: true })
-            : null;
-      if (result?.success) toast.success('저장되었습니다.');
-      else if (result && !result.success) toast.error(result.message);
+      if (mode === 'new') {
+        const result = await createSermonAction({ ...formData, isPublished: true });
+        if (result && !result.success) toast.error(result.message);
+      } else if (sermonId) {
+        const result = await updateSermonAction(sermonId, { ...formData, isPublished: true });
+        if (result.success) {
+          setIsDirty(false);
+          router.push(`/admin/sermons/${slug}`);
+        } else {
+          toast.error(result.message);
+        }
+      }
     });
   };
 
@@ -81,7 +87,6 @@ export default function SermonFormShell({
         title={mode === 'new' ? '새 설교 등록' : initialTitle}
         description={description}
         actions={[
-          { label: '임시저장', variant: 'outline', onClick: handleSaveDraft, disabled: isPending },
           { label: publishLabel, variant: 'pri', onClick: handlePublish, disabled: isPending }
         ]}
       />
@@ -90,7 +95,6 @@ export default function SermonFormShell({
         onPatch={handlePatch}
         onAddResources={handleAddResources}
         onRemoveResource={handleRemoveResource}
-        onSaveDraft={handleSaveDraft}
         onPublish={handlePublish}
         isPending={isPending}
         publishLabel={publishLabel}
