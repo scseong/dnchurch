@@ -60,7 +60,6 @@ export default function SermonForm({
             onChange={onPatch}
           />
           <VideoCard
-            videoProvider={formData.videoProvider}
             videoUrl={formData.videoUrl}
             videoId={formData.videoId}
             duration={formData.duration}

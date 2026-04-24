@@ -1,7 +1,6 @@
 import type { Database } from '@/types/database.types';
 import type { Preacher, SeriesWithSermonCount, ServiceType } from '@/types/sermon';
 
-export type VideoProvider = 'youtube' | 'vimeo';
 export type SermonResourceType = Database['public']['Enums']['sermon_resource_type'];
 
 export interface SermonResourceInput {
@@ -19,7 +18,6 @@ export interface SermonFormData {
   preacherId: string;
   seriesId: string;
   serviceType: ServiceType | '';
-  videoProvider: VideoProvider;
   videoUrl: string;
   videoId: string;
   duration: string;
@@ -37,7 +35,6 @@ export const INITIAL_SERMON_FORM_DATA: SermonFormData = {
   preacherId: '',
   seriesId: '',
   serviceType: '',
-  videoProvider: 'youtube',
   videoUrl: '',
   videoId: '',
   duration: '',
@@ -64,7 +61,7 @@ export type BasicInfoCardProps = Pick<
 
 export type VideoCardProps = Pick<
   SermonFormData,
-  'videoProvider' | 'videoUrl' | 'videoId' | 'duration' | 'thumbnailUrl'
+  'videoUrl' | 'videoId' | 'duration' | 'thumbnailUrl'
 > & {
   onChange: (patch: SermonFormPatch) => void;
 };

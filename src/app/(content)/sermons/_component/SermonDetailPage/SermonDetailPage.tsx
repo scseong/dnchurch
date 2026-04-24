@@ -62,7 +62,6 @@ export default function SermonDetailPage({ sermon, seriesEpisodes }: Props) {
         <div className={styles.video_section}>
           <SermonVideoPlayer
             videoId={sermon.video_id}
-            videoProvider={sermon.video_provider as 'youtube' | 'vimeo'}
             title={sermon.title}
           />
           <SermonVideoTools sermonId={sermon.id} onToast={showToast} />
