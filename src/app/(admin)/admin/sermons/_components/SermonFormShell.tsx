@@ -57,10 +57,10 @@ export default function SermonFormShell({
   const handlePublish = () => {
     startTransition(async () => {
       if (mode === 'new') {
-        const result = await createSermonAction({ ...formData, isPublished: true });
+        const result = await createSermonAction(formData);
         if (result && !result.success) toast.error(result.message);
       } else if (sermonId) {
-        const result = await updateSermonAction(sermonId, { ...formData, isPublished: true });
+        const result = await updateSermonAction(sermonId, formData);
         if (result.success) {
           setIsDirty(false);
           router.push(`/admin/sermons/${sermonId}/edit`);
@@ -71,7 +71,11 @@ export default function SermonFormShell({
     });
   };
 
-  const publishLabel = mode === 'new' ? '발행' : '수정 저장';
+  const publishLabel = formData.isPublished
+    ? mode === 'new'
+      ? '발행'
+      : '발행 저장'
+    : '초안 저장';
   const description =
     mode === 'new'
       ? '영상, 본문, 자료를 입력하고 발행하세요'
