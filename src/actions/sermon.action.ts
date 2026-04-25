@@ -111,11 +111,12 @@ async function syncResourcesToDb(
   sermonId: number,
   resources: SermonResourceInput[]
 ) {
-  const { data: existing } = await supabase
+  const { data: existing, error: fetchError } = await supabase
     .from('sermon_resources')
-    .select('id, file_url')
+    .select('id, file_url, sort_order')
     .eq('sermon_id', sermonId)
     .is('deleted_at', null);
+  if (fetchError) throw fetchError;
 
   const existingRows = existing ?? [];
   const formIds = new Set(resources.map((r) => r.id));
@@ -131,10 +132,11 @@ async function syncResourcesToDb(
   }
 
   if (toDelete.length > 0) {
-    await supabase
+    const { error: deleteError } = await supabase
       .from('sermon_resources')
       .update({ deleted_at: new Date().toISOString() })
       .in('id', toDelete);
+    if (deleteError) throw deleteError;
 
     if (pathsToDelete.length > 0) {
       try {
@@ -147,7 +149,10 @@ async function syncResourcesToDb(
   }
 
   const existingIds = new Set(existingRows.map((r) => r.id));
-  const remainingCount = existingRows.length - toDelete.length;
+  const deletedIds = new Set(toDelete);
+  const maxSurvivingOrder = existingRows
+    .filter((r) => !deletedIds.has(r.id))
+    .reduce((max, r) => Math.max(max, r.sort_order ?? 0), 0);
   const toInsert: ResourceRow[] = resources
     .filter((r) => !existingIds.has(r.id) && r.url)
     .map((r, index) => ({
@@ -157,7 +162,7 @@ async function syncResourcesToDb(
       file_url: r.url!,
       file_type: r.fileType as ResourceRow['file_type'],
       file_size_bytes: r.size,
-      sort_order: remainingCount + index + 1
+      sort_order: maxSurvivingOrder + index + 1
     }));
 
   if (toInsert.length > 0) {
@@ -169,25 +174,34 @@ async function syncResourcesToDb(
 // ─── Server Actions ───────────────────────────────────────────────────────────
 
 export async function createSermonAction(
-  data: SermonFormData
+  sermonFormData: SermonFormData
 ): Promise<{ success: boolean; message: string }> {
   const { user, isAdmin } = await checkAdminPermission();
   if (!user) return { success: false, message: '로그인이 필요합니다.' };
   if (!isAdmin) return { success: false, message: '권한이 없습니다.' };
 
-  if (!data.title || !data.sermonDate || !data.preacherId || !data.serviceType) {
+  if (
+    !sermonFormData.title ||
+    !sermonFormData.sermonDate ||
+    !sermonFormData.preacherId ||
+    !sermonFormData.serviceType
+  ) {
     return { success: false, message: '필수 항목(제목, 날짜, 설교자, 예배 종류)을 입력해주세요.' };
   }
 
   let resourcePaths: string[] = [];
 
   try {
-    const { resolved: resolvedResources, paths } = await uploadResourceFiles(data.resources, data.sermonDate);
+    const { resolved: resolvedResources, paths } = await uploadResourceFiles(
+      sermonFormData.resources,
+      sermonFormData.sermonDate
+    );
     resourcePaths = paths;
 
     const supabase = await createServerSideClient();
-    const result = await sermonService(supabase).createSermon(mapFormToDbInsert(data));
-    if (!result.data) throw new Error('sermon insert failed');
+    const result = await sermonService(supabase).createSermon(mapFormToDbInsert(sermonFormData));
+    if (result.error) throw result.error;
+    if (!result.data) throw new Error('sermon insert returned no data');
 
     await insertResourcesToDb(supabase, result.data.id, resolvedResources);
 
@@ -203,24 +217,37 @@ export async function createSermonAction(
 
 export async function updateSermonAction(
   id: number,
-  data: SermonFormData
+  sermonFormData: SermonFormData
 ): Promise<{ success: boolean; message: string }> {
   const { user, isAdmin } = await checkAdminPermission();
   if (!user) return { success: false, message: '로그인이 필요합니다.' };
   if (!isAdmin) return { success: false, message: '권한이 없습니다.' };
 
-  if (!data.title || !data.sermonDate || !data.preacherId || !data.serviceType) {
+  if (
+    !sermonFormData.title ||
+    !sermonFormData.sermonDate ||
+    !sermonFormData.preacherId ||
+    !sermonFormData.serviceType
+  ) {
     return { success: false, message: '필수 항목(제목, 날짜, 설교자, 예배 종류)을 입력해주세요.' };
   }
 
   let resourcePaths: string[] = [];
 
   try {
-    const { resolved: resolvedResources, paths } = await uploadResourceFiles(data.resources, data.sermonDate);
+    const { resolved: resolvedResources, paths } = await uploadResourceFiles(
+      sermonFormData.resources,
+      sermonFormData.sermonDate
+    );
     resourcePaths = paths;
 
     const supabase = await createServerSideClient();
-    await sermonService(supabase).updateSermon(id, mapFormToDbUpdate(data));
+    const updateResult = await sermonService(supabase).updateSermon(
+      id,
+      mapFormToDbUpdate(sermonFormData)
+    );
+    if (updateResult.error) throw updateResult.error;
+
     await syncResourcesToDb(supabase, id, resolvedResources);
 
     updateTag('sermon');
@@ -241,7 +268,8 @@ export async function deleteSermonAction(
 
   try {
     const supabase = await createServerSideClient();
-    await sermonService(supabase).softDeleteSermon(id);
+    const deleteResult = await sermonService(supabase).softDeleteSermon(id);
+    if (deleteResult.error) throw deleteResult.error;
 
     updateTag('sermon');
     redirect('/admin/sermons');

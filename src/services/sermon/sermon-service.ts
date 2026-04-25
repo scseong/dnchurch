@@ -209,21 +209,22 @@ export const sermonService = (supabase: SupabaseClient<Database>) => ({
 
     let series_order: number | null = null;
     if (insert.series_id) {
-      const { count } = await supabase
+      const { count, error: countError } = await supabase
         .from('sermons')
         .select('id', { count: 'exact', head: true })
         .eq('series_id', insert.series_id)
         .is('deleted_at', null);
+      if (countError) throw countError;
       series_order = (count ?? 0) + 1;
     }
 
-    const res = await supabase
+    const insertResponse = await supabase
       .from('sermons')
       .insert({ ...insert, slug, series_order })
       .select('id, slug')
       .single();
 
-    return handleResponse(res);
+    return handleResponse(insertResponse);
   },
 
   /** [어드민] 설교 수정 */

@@ -33,7 +33,8 @@ export async function ensureUniqueSlug(
         .neq('id', excludeId)
         .maybeSingle();
     }
-    const { data } = await query;
+    const { data, error } = await query;
+    if (error) throw error;
     if (!data) return slug;
     slug = `${base}-${counter++}`;
   }
