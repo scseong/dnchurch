@@ -10,72 +10,76 @@ import ResourcesCard from './sections/ResourcesCard';
 import PublishCard from './sections/PublishCard';
 import PreviewCard from './Preview/PreviewCard';
 import Checklist from './Preview/Checklist';
+import type { Preacher, SeriesWithSermonCount } from '@/types/sermon';
 import {
-  INITIAL_SERMON_FORM_DATA,
   type SermonFormData,
   type SermonFormPatch,
   type SermonResourceInput
 } from '@/types/sermon-form';
-
-import { applyPatch } from '@/lib/sermon-form';
 import styles from './index.module.scss';
 
 interface SermonFormProps {
-  initialData?: SermonFormData;
+  formData: SermonFormData;
+  onPatch: (patch: SermonFormPatch) => void;
+  onAddResources: (inputs: SermonResourceInput[]) => void;
+  onRemoveResource: (id: string) => void;
+  onPublish: () => void;
+  isPending: boolean;
+  publishLabel: string;
+  preachers: Preacher[];
+  series: SeriesWithSermonCount[];
 }
 
-export default function SermonForm({ initialData }: SermonFormProps = {}) {
-  const [data, setData] = useState<SermonFormData>(initialData ?? INITIAL_SERMON_FORM_DATA);
+export default function SermonForm({
+  formData,
+  onPatch,
+  onAddResources,
+  onRemoveResource,
+  onPublish,
+  isPending,
+  publishLabel,
+  preachers,
+  series
+}: SermonFormProps) {
   const [previewOpen, setPreviewOpen] = useState(false);
-
-  const handlePatch = (patch: SermonFormPatch) => {
-    setData((d) => applyPatch(d, patch));
-  };
-
-  const handleAddResources = (inputs: SermonResourceInput[]) => {
-    setData((d) => ({ ...d, resources: [...d.resources, ...inputs] }));
-  };
-
-  const handleRemoveResource = (id: string) => {
-    setData((d) => ({ ...d, resources: d.resources.filter((r) => r.id !== id) }));
-  };
 
   return (
     <>
       <form className={styles.wrap}>
         <div className={styles.form_col}>
           <BasicInfoCard
-            title={data.title}
-            sermonDate={data.sermonDate}
-            preacherId={data.preacherId}
-            seriesId={data.seriesId}
-            serviceType={data.serviceType}
-            onChange={handlePatch}
+            title={formData.title}
+            sermonDate={formData.sermonDate}
+            preacherId={formData.preacherId}
+            seriesId={formData.seriesId}
+            serviceType={formData.serviceType}
+            preachers={preachers}
+            series={series}
+            onChange={onPatch}
           />
           <VideoCard
-            videoProvider={data.videoProvider}
-            videoUrl={data.videoUrl}
-            videoId={data.videoId}
-            duration={data.duration}
-            thumbnailUrl={data.thumbnailUrl}
-            onChange={handlePatch}
+            videoUrl={formData.videoUrl}
+            videoId={formData.videoId}
+            duration={formData.duration}
+            thumbnailUrl={formData.thumbnailUrl}
+            onChange={onPatch}
           />
           <ScriptureCard
-            scripture={data.scripture}
-            scriptureText={data.scriptureText}
-            summary={data.summary}
-            onChange={handlePatch}
+            scripture={formData.scripture}
+            scriptureText={formData.scriptureText}
+            summary={formData.summary}
+            onChange={onPatch}
           />
           <ResourcesCard
-            resources={data.resources}
-            onAdd={handleAddResources}
-            onRemove={handleRemoveResource}
+            resources={formData.resources}
+            onAdd={onAddResources}
+            onRemove={onRemoveResource}
           />
-          <PublishCard isPublished={data.isPublished} onChange={handlePatch} />
+          <PublishCard isPublished={formData.isPublished} onChange={onPatch} />
         </div>
         <aside className={styles.preview_col} aria-label="미리보기">
-          <PreviewCard data={data} />
-          <Checklist data={data} />
+          <PreviewCard formData={formData} series={series} />
+          <Checklist formData={formData} />
         </aside>
       </form>
 
@@ -89,11 +93,13 @@ export default function SermonForm({ initialData }: SermonFormProps = {}) {
         >
           <HiOutlineEye />
         </button>
-        <button type="button" className={clsx(styles.mobile_button, styles.outline)}>
-          임시저장
-        </button>
-        <button type="button" className={clsx(styles.mobile_button, styles.primary)}>
-          발행
+        <button
+          type="button"
+          className={clsx(styles.mobile_button, styles.primary)}
+          disabled={isPending}
+          onClick={onPublish}
+        >
+          {publishLabel}
         </button>
       </div>
 
@@ -121,8 +127,8 @@ export default function SermonForm({ initialData }: SermonFormProps = {}) {
             </button>
           </header>
           <div className={styles.preview_sheet_body}>
-            <PreviewCard data={data} />
-            <Checklist data={data} />
+            <PreviewCard formData={formData} series={series} />
+            <Checklist formData={formData} />
           </div>
         </div>
       </div>

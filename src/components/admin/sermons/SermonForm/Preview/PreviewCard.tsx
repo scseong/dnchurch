@@ -1,21 +1,23 @@
 import clsx from 'clsx';
 import { HiOutlineEye, HiOutlinePhotograph } from 'react-icons/hi';
 import { formattedDate } from '@/utils/date';
+import type { SeriesWithSermonCount } from '@/types/sermon';
 import type { SermonFormData } from '@/types/sermon-form';
 import parent from '../index.module.scss';
 import styles from './preview.module.scss';
 
 interface PreviewCardProps {
-  data: SermonFormData;
+  formData: SermonFormData;
+  series: SeriesWithSermonCount[];
 }
 
-export default function PreviewCard({ data }: PreviewCardProps) {
-  const { title, sermonDate, preacherId, seriesId, summary, thumbnailUrl } = data;
+export default function PreviewCard({ formData, series }: PreviewCardProps) {
+  const { title, sermonDate, preacherId, seriesId, summary, thumbnailUrl } = formData;
   const metaParts = [
     sermonDate ? formattedDate(sermonDate, 'YYYY년 M월 D일') : '',
     preacherId
   ].filter(Boolean);
-  const seriesLabel = seriesId || '단독 설교';
+  const seriesLabel = series.find((s) => s.id === seriesId)?.title ?? '단독 설교';
 
   return (
     <section className={parent.card}>

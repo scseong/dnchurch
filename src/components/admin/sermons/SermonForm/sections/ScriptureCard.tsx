@@ -18,7 +18,7 @@ export default function ScriptureCard({ scripture, scriptureText, summary, onCha
         <div className={styles.fields}>
           <Field
             label="성경 구절"
-            optional
+            required
             hint="본문 구절을 입력하면 설교 카드에 태그로 표시됩니다"
           >
             <Input

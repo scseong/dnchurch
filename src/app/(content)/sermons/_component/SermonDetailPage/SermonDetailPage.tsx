@@ -1,6 +1,6 @@
 'use client';
 
-import { useCallback, useState } from 'react';
+import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { IoDocumentTextOutline, IoDownloadOutline } from 'react-icons/io5';
 import { LayoutContainer } from '@/components/layout';
@@ -10,7 +10,6 @@ import SermonTabs from '../SermonTabs/SermonTabs';
 import ScriptureBlock from '../ScriptureBlock/ScriptureBlock';
 import SermonNoteEditor from '../SermonNoteEditor/SermonNoteEditor';
 import SeriesEpisodeList from '../SeriesEpisodeList/SeriesEpisodeList';
-import Toast from '@/components/common/Toast/Toast';
 import { formattedDate } from '@/utils/date';
 import { formatSermonDuration } from '@/utils/sermon';
 import type { SermonWithRelations, SermonResource } from '@/types/sermon';
@@ -31,7 +30,6 @@ type Props = {
 export default function SermonDetailPage({ sermon, seriesEpisodes }: Props) {
   const router = useRouter();
   const [activeTab, setActiveTab] = useState('summary');
-  const [toast, setToast] = useState({ message: '', show: false });
 
   const preacherLabel = sermon.preacher
     ? `${sermon.preacher.name}${sermon.preacher.title ? ` ${sermon.preacher.title}` : ''}`
@@ -41,13 +39,8 @@ export default function SermonDetailPage({ sermon, seriesEpisodes }: Props) {
   const hasSeriesEpisodes = seriesEpisodes.length > 0;
   const activeResources = sermon.sermon_resources.filter((r) => !r.deleted_at);
 
-  const showToast = useCallback((message: string) => {
-    setToast({ message, show: true });
-    setTimeout(() => setToast((t) => ({ ...t, show: false })), 2500);
-  }, []);
-
   const handleEpisodeSelect = (ep: SermonWithRelations) => {
-    router.push(`/sermons/${ep.slug}`);
+    router.push(`/sermons/${ep.id}`);
   };
 
   const handleViewAllSeries = () => {
@@ -62,10 +55,9 @@ export default function SermonDetailPage({ sermon, seriesEpisodes }: Props) {
         <div className={styles.video_section}>
           <SermonVideoPlayer
             videoId={sermon.video_id}
-            videoProvider={sermon.video_provider as 'youtube' | 'vimeo'}
             title={sermon.title}
           />
-          <SermonVideoTools sermonId={sermon.id} onToast={showToast} />
+          <SermonVideoTools sermonId={String(sermon.id)} />
         </div>
 
         <div className={styles.info_section}>
@@ -93,7 +85,6 @@ export default function SermonDetailPage({ sermon, seriesEpisodes }: Props) {
         </div>
       </div>
 
-      <Toast message={toast.message} show={toast.show} />
     </LayoutContainer>
   );
 }
@@ -201,7 +192,7 @@ function TabContent({ activeTab, sermon, resources }: TabContentProps) {
 
       {activeTab === 'notes' && (
         <div className={styles.tab_panel}>
-          <SermonNoteEditor sermonId={sermon.id} />
+          <SermonNoteEditor sermonId={String(sermon.id)} />
         </div>
       )}
     </div>

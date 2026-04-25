@@ -16,9 +16,9 @@ export const getSermons = (params: SermonListParams = {}) => {
   return sermonService(supabase).list(params);
 };
 
-export const getSermonBySlug = (slug: string) => {
-  const supabase = createStaticClient(sermonCache.detail(slug));
-  return sermonService(supabase).detailBySlug(slug);
+export const getSermonById = (id: number) => {
+  const supabase = createStaticClient(sermonCache.detail(id));
+  return sermonService(supabase).detailById(id);
 };
 
 export const getAllSeries = () => {
@@ -41,7 +41,7 @@ export const getRecentSermons = (limit = 4) => {
   return sermonService(supabase).recent(limit);
 };
 
-export const incrementSermonViewCount = async (sermonId: string) => {
+export const incrementSermonViewCount = async (sermonId: number) => {
   const supabase = await createServerSideClient();
   return sermonService(supabase).incrementViewCount(sermonId);
 };
@@ -68,4 +68,10 @@ export const getSermonsTotalCount = () => {
 export const getSermonYearCounts = () => {
   const supabase = createStaticClient(sermonCache.list());
   return sermonService(supabase).yearCounts();
+};
+
+/** [어드민] 수정용 설교 조회 — 캐시 없음, 초안 포함 */
+export const getSermonForEdit = async (id: number) => {
+  const supabase = await createServerSideClient();
+  return sermonService(supabase).getSermonForEdit(id);
 };

@@ -19,7 +19,7 @@ export default function SermonCard({ sermon, isLatest, index, isSub }: SermonCar
 
   return (
     <Link
-      href={`/sermons/${sermon.slug}`}
+      href={`/sermons/${sermon.id}`}
       className={clsx(styles.card, isSub && styles.card_sub)}
       aria-label={`${sermon.title} - ${preacherLabel}`}
       data-reveal

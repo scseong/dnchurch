@@ -285,6 +285,10 @@
   }
 }
 
+.resource_uploading {
+  color: var(--admin-accent);
+}
+
 // 업로드 거부 파일 경고 (ResourcesCard — 크기 초과·미지원 확장자).
 .resource_rejected {
   margin: 10px 0 0;
