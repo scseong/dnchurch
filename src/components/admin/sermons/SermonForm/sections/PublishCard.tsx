@@ -1,5 +1,4 @@
 import clsx from 'clsx';
-import Field from '../primitives/Field';
 import type { PublishCardProps } from '@/types/sermon-form';
 import styles from '../index.module.scss';
 
@@ -14,26 +13,33 @@ export default function PublishCard({ isPublished, onChange }: PublishCardProps)
         </div>
       </header>
       <div className={styles.card_body}>
-        <Field label="공개 상태">
+        <fieldset className={styles.fieldset}>
+          <legend className={styles.legend}>공개 상태</legend>
           <div className={styles.toggle_row}>
-            <button
-              type="button"
-              className={clsx(styles.toggle, !isPublished && styles.on)}
-              onClick={() => onChange({ isPublished: false })}
-            >
+            <label className={clsx(styles.toggle, !isPublished && styles.on)}>
+              <input
+                type="radio"
+                name="isPublished"
+                className={styles.sr_only}
+                checked={!isPublished}
+                onChange={() => onChange({ isPublished: false })}
+              />
               <span className={styles.main}>초안</span>
               <span className={styles.sub}>비공개</span>
-            </button>
-            <button
-              type="button"
-              className={clsx(styles.toggle, isPublished && styles.on)}
-              onClick={() => onChange({ isPublished: true })}
-            >
+            </label>
+            <label className={clsx(styles.toggle, isPublished && styles.on)}>
+              <input
+                type="radio"
+                name="isPublished"
+                className={styles.sr_only}
+                checked={isPublished}
+                onChange={() => onChange({ isPublished: true })}
+              />
               <span className={styles.main}>발행</span>
               <span className={styles.sub}>공개</span>
-            </button>
+            </label>
           </div>
-        </Field>
+        </fieldset>
         <div className={styles.warn_box}>
           발행하려면 제목, 날짜, 설교자, 영상 연결이 필요합니다
         </div>
