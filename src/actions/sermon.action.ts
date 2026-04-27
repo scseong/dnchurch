@@ -5,18 +5,14 @@ import { updateTag } from 'next/cache';
 import { isRedirectError } from 'next/dist/client/components/redirect-error';
 import { createServerSideClient } from '@/lib/supabase/server';
 import { createAdminServerClient } from '@/lib/supabase/admin';
-import { sermonService } from '@/services/sermon/sermon-service';
+import { sermonService, type SermonResourceRpcInput } from '@/services/sermon/sermon-service';
 import { mapFormToDbInsert, mapFormToDbUpdate } from '@/lib/sermon-form-mapper';
 import { checkAdminPermission } from '@/actions/_auth-helpers';
+import { extractStoragePath, RESOURCE_BUCKET } from '@/lib/sermon-resource';
 import { formattedDate } from '@/utils/date';
 import type { SermonFormData, SermonResourceInput } from '@/types/sermon-form';
-import type { Database } from '@/types/database.types';
 
-const RESOURCE_BUCKET = 'sermon-resources';
-
-type ResourceRow = Database['public']['Tables']['sermon_resources']['Insert'];
-
-// ─── 내부 업로드 헬퍼 ────────────────────────────────────────────────────────
+// ─── Storage 헬퍼 ────────────────────────────────────────────────────────────
 
 function buildResourcePath(sermonDate: string, originalName: string): string {
   const folder = formattedDate(sermonDate, 'YYYY/MM');
@@ -31,144 +27,83 @@ function buildResourcePath(sermonDate: string, originalName: string): string {
   return `${folder}/${sanitized}-${Date.now()}.${ext}`;
 }
 
-function extractStoragePath(fileUrl: string): string | null {
-  const marker = `/public/${RESOURCE_BUCKET}/`;
-  const idx = fileUrl.indexOf(marker);
-  if (idx === -1) return null;
-  return decodeURIComponent(fileUrl.substring(idx + marker.length));
-}
-
 async function uploadResourceFiles(
   resources: SermonResourceInput[],
   sermonDate: string
 ): Promise<{ resolved: SermonResourceInput[]; paths: string[] }> {
   const adminClient = createAdminServerClient();
-  const paths: string[] = [];
 
-  const resolved = await Promise.all(
-    resources.map(async (resource) => {
-      if (!resource.file) return resource;
+  // allSettled로 일괄 시도 → 부분 실패 시에도 성공한 모든 path를 정확히 수집하여 cleanup
+  const results = await Promise.allSettled(
+    resources.map(
+      async (
+        resource
+      ): Promise<{ resource: SermonResourceInput; path: string | null }> => {
+        if (!resource.file) return { resource, path: null };
 
-      const path = buildResourcePath(sermonDate, resource.name);
+        const path = buildResourcePath(sermonDate, resource.name);
 
-      const { error } = await adminClient.storage
-        .from(RESOURCE_BUCKET)
-        .upload(path, resource.file, { upsert: false });
+        const { error } = await adminClient.storage
+          .from(RESOURCE_BUCKET)
+          .upload(path, resource.file, { upsert: false });
 
-      if (error) throw error;
+        if (error) throw error;
 
-      paths.push(path);
-      const {
-        data: { publicUrl }
-      } = adminClient.storage.from(RESOURCE_BUCKET).getPublicUrl(path);
+        const {
+          data: { publicUrl }
+        } = adminClient.storage.from(RESOURCE_BUCKET).getPublicUrl(path);
 
-      const { file: _, ...rest } = resource;
-      return { ...rest, url: publicUrl };
-    })
+        const { file: _, ...rest } = resource;
+        return { resource: { ...rest, url: publicUrl }, path };
+      }
+    )
   );
 
-  return { resolved, paths };
-}
+  const resolved: SermonResourceInput[] = [];
+  const uploadedPaths: string[] = [];
+  let failure: unknown;
 
-async function rollbackUploads(resourcePaths?: string[]) {
-  if (resourcePaths && resourcePaths.length > 0) {
-    try {
-      const adminClient = createAdminServerClient();
-      await adminClient.storage.from(RESOURCE_BUCKET).remove(resourcePaths);
-    } catch (e) {
-      console.error('[rollback] Storage 리소스 삭제 실패', e);
-    }
-  }
-}
-
-// ─── DB 헬퍼 ─────────────────────────────────────────────────────────────────
-
-async function insertResourcesToDb(
-  supabase: Awaited<ReturnType<typeof createServerSideClient>>,
-  sermonId: number,
-  resources: SermonResourceInput[]
-) {
-  const rows: ResourceRow[] = resources
-    .filter((r) => r.url)
-    .map((r, index) => ({
-      id: r.id,
-      sermon_id: sermonId,
-      title: r.name,
-      file_url: r.url!,
-      file_type: r.fileType as ResourceRow['file_type'],
-      file_size_bytes: r.size,
-      sort_order: index + 1
-    }));
-
-  if (rows.length > 0) {
-    const { error } = await supabase.from('sermon_resources').insert(rows);
-    if (error) throw error;
-  }
-}
-
-async function syncResourcesToDb(
-  supabase: Awaited<ReturnType<typeof createServerSideClient>>,
-  sermonId: number,
-  resources: SermonResourceInput[]
-) {
-  const { data: existing, error: fetchError } = await supabase
-    .from('sermon_resources')
-    .select('id, file_url, sort_order')
-    .eq('sermon_id', sermonId)
-    .is('deleted_at', null);
-  if (fetchError) throw fetchError;
-
-  const existingRows = existing ?? [];
-  const formIds = new Set(resources.map((r) => r.id));
-
-  // 삭제 대상: DB에 있으나 폼에 없는 것 — 단일 패스로 id/경로 동시 수집
-  const toDelete: string[] = [];
-  const pathsToDelete: string[] = [];
-  for (const row of existingRows) {
-    if (formIds.has(row.id)) continue;
-    toDelete.push(row.id);
-    const path = extractStoragePath(row.file_url);
-    if (path) pathsToDelete.push(path);
-  }
-
-  if (toDelete.length > 0) {
-    const { error: deleteError } = await supabase
-      .from('sermon_resources')
-      .update({ deleted_at: new Date().toISOString() })
-      .in('id', toDelete);
-    if (deleteError) throw deleteError;
-
-    if (pathsToDelete.length > 0) {
-      try {
-        const adminClient = createAdminServerClient();
-        await adminClient.storage.from(RESOURCE_BUCKET).remove(pathsToDelete);
-      } catch (e) {
-        console.error('[sync] Storage 리소스 삭제 실패', e);
-      }
+  for (const r of results) {
+    if (r.status === 'fulfilled') {
+      resolved.push(r.value.resource);
+      if (r.value.path) uploadedPaths.push(r.value.path);
+    } else if (failure === undefined) {
+      failure = r.reason;
     }
   }
 
-  const existingIds = new Set(existingRows.map((r) => r.id));
-  const deletedIds = new Set(toDelete);
-  const maxSurvivingOrder = existingRows
-    .filter((r) => !deletedIds.has(r.id))
-    .reduce((max, r) => Math.max(max, r.sort_order ?? 0), 0);
-  const toInsert: ResourceRow[] = resources
-    .filter((r) => !existingIds.has(r.id) && r.url)
-    .map((r, index) => ({
-      id: r.id,
-      sermon_id: sermonId,
-      title: r.name,
-      file_url: r.url!,
-      file_type: r.fileType as ResourceRow['file_type'],
-      file_size_bytes: r.size,
-      sort_order: maxSurvivingOrder + index + 1
-    }));
-
-  if (toInsert.length > 0) {
-    const { error } = await supabase.from('sermon_resources').insert(toInsert);
-    if (error) throw error;
+  if (failure !== undefined) {
+    await removeStorageObjects(uploadedPaths);
+    throw failure;
   }
+
+  return { resolved, paths: uploadedPaths };
+}
+
+async function removeStorageObjects(paths: string[]) {
+  if (paths.length === 0) return;
+  try {
+    const adminClient = createAdminServerClient();
+    await adminClient.storage.from(RESOURCE_BUCKET).remove(paths);
+  } catch (e) {
+    console.error('[storage] 리소스 삭제 실패', e);
+  }
+}
+
+function pathsFromUrls(urls: string[]): string[] {
+  return urls.map(extractStoragePath).filter((p): p is string => p !== null);
+}
+
+// ─── 매핑 헬퍼 ────────────────────────────────────────────────────────────────
+
+function toRpcResource(resource: SermonResourceInput): SermonResourceRpcInput {
+  return {
+    id: resource.id,
+    title: resource.name,
+    file_url: resource.url!,
+    file_type: resource.fileType,
+    file_size_bytes: resource.size || null
+  };
 }
 
 // ─── Server Actions ───────────────────────────────────────────────────────────
@@ -192,24 +127,27 @@ export async function createSermonAction(
   let resourcePaths: string[] = [];
 
   try {
-    const { resolved: resolvedResources, paths } = await uploadResourceFiles(
+    const { resolved, paths } = await uploadResourceFiles(
       sermonFormData.resources,
       sermonFormData.sermonDate
     );
     resourcePaths = paths;
 
-    const supabase = await createServerSideClient();
-    const result = await sermonService(supabase).createSermon(mapFormToDbInsert(sermonFormData));
-    if (result.error) throw result.error;
-    if (!result.data) throw new Error('sermon insert returned no data');
+    const rpcResources = resolved.filter((r) => r.url).map(toRpcResource);
 
-    await insertResourcesToDb(supabase, result.data.id, resolvedResources);
+    const supabase = await createServerSideClient();
+    const result = await sermonService(supabase).createSermon(
+      mapFormToDbInsert(sermonFormData),
+      rpcResources
+    );
+    if (result.error) throw result.error;
+    if (!result.data) throw new Error('create_sermon RPC returned no data');
 
     updateTag('sermon');
     redirect(`/admin/sermons/${result.data.id}/edit`);
   } catch (error) {
     if (isRedirectError(error)) throw error;
-    await rollbackUploads(resourcePaths);
+    await removeStorageObjects(resourcePaths);
     console.error(error);
     return { success: false, message: '서버 오류가 발생했습니다.' };
   }
@@ -232,28 +170,40 @@ export async function updateSermonAction(
     return { success: false, message: '필수 항목(제목, 날짜, 설교자, 예배 종류)을 입력해주세요.' };
   }
 
-  let resourcePaths: string[] = [];
+  // 신규 업로드 대상(file 있는 것)과 기존 보존 대상(url만 있는 것)을 분리
+  const newCandidates = sermonFormData.resources.filter((r) => r.file);
+  const keepResourceIds = sermonFormData.resources
+    .filter((r) => !r.file && r.url)
+    .map((r) => r.id);
+
+  let newResourcePaths: string[] = [];
 
   try {
-    const { resolved: resolvedResources, paths } = await uploadResourceFiles(
-      sermonFormData.resources,
+    const { resolved, paths } = await uploadResourceFiles(
+      newCandidates,
       sermonFormData.sermonDate
     );
-    resourcePaths = paths;
+    newResourcePaths = paths;
+
+    const rpcNewResources = resolved.filter((r) => r.url).map(toRpcResource);
 
     const supabase = await createServerSideClient();
-    const updateResult = await sermonService(supabase).updateSermon(
+    const result = await sermonService(supabase).updateSermon(
       id,
-      mapFormToDbUpdate(sermonFormData)
+      mapFormToDbUpdate(sermonFormData),
+      keepResourceIds,
+      rpcNewResources
     );
-    if (updateResult.error) throw updateResult.error;
+    if (result.error) throw result.error;
 
-    await syncResourcesToDb(supabase, id, resolvedResources);
+    const payload = result.data as unknown as { sermon: unknown; deleted_urls: string[] } | null;
+    const deletedUrls = payload?.deleted_urls ?? [];
+    await removeStorageObjects(pathsFromUrls(deletedUrls));
 
     updateTag('sermon');
     return { success: true, message: '저장되었습니다.' };
   } catch (error) {
-    await rollbackUploads(resourcePaths);
+    await removeStorageObjects(newResourcePaths);
     console.error(error);
     return { success: false, message: '서버 오류가 발생했습니다.' };
   }
@@ -268,8 +218,11 @@ export async function deleteSermonAction(
 
   try {
     const supabase = await createServerSideClient();
-    const deleteResult = await sermonService(supabase).softDeleteSermon(id);
-    if (deleteResult.error) throw deleteResult.error;
+    const result = await sermonService(supabase).softDeleteSermon(id);
+    if (result.error) throw result.error;
+
+    const urls = result.data ?? [];
+    await removeStorageObjects(pathsFromUrls(urls));
 
     updateTag('sermon');
     redirect('/admin/sermons');

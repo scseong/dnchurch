@@ -14,9 +14,11 @@ export async function updateSession(request: NextRequest) {
   const isAuthPage = (path: string) => {
     const exactMatches = ['/mypage', '/news/bulletins/create'];
     const dynamicPattern = /^\/news\/bulletins\/[^/]+\/update$/;
+    const adminPattern = /^\/admin(\/|$)/;
 
     if (exactMatches.includes(path)) return true;
     if (dynamicPattern.test(path)) return true;
+    if (adminPattern.test(path)) return true;
     return false;
   };
 

@@ -371,6 +371,35 @@
 }
 
 // PublishCard — 공개 상태 토글 (초안 / 발행 세그먼티드 컨트롤).
+.fieldset {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  min-inline-size: 0;
+}
+
+.legend {
+  padding: 0;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--admin-t1);
+}
+
+.sr_only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
 .toggle_row {
   display: flex;
   gap: 4px;

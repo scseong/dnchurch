@@ -513,6 +513,38 @@ export type Database = {
           isSetofReturn: true
         }
       }
+      create_sermon: {
+        Args: { p_payload: Json; p_resources?: Json }
+        Returns: {
+          created_at: string
+          deleted_at: string | null
+          duration: string | null
+          id: number
+          is_published: boolean
+          preacher_id: string
+          scripture: string | null
+          scripture_text: string | null
+          series_id: string | null
+          series_order: number | null
+          sermon_date: string
+          service_type: Database["public"]["Enums"]["service_type_enum"]
+          slug: string
+          summary: string | null
+          thumbnail_url: string | null
+          title: string
+          updated_at: string
+          video_id: string | null
+          video_provider: string
+          view_count: number
+        }[]
+        SetofOptions: {
+          from: "*"
+          to: "sermons"
+          isOneToOne: false
+          isSetofReturn: true
+        }
+      }
+      delete_sermon: { Args: { p_id: number }; Returns: string[] }
       get_adjacent_bulletins: {
         Args: { target_id: number }
         Returns: {
@@ -560,6 +592,15 @@ export type Database = {
           isOneToOne: false
           isSetofReturn: true
         }
+      }
+      update_sermon: {
+        Args: {
+          p_id: number
+          p_keep_resource_ids?: string[]
+          p_new_resources?: Json
+          p_payload: Json
+        }
+        Returns: Json
       }
     }
     Enums: {
