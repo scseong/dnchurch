@@ -1,0 +1,18 @@
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  max-width: 1600px;
+  margin: 16px auto 0;
+}
+
+.placeholder {
+  margin: 0;
+  padding: 56px 20px;
+  text-align: center;
+  color: var(--admin-t3);
+  font-size: 13px;
+  background: var(--admin-bg-card);
+  border: 1px solid var(--admin-bd);
+  border-radius: 10px;
+}
