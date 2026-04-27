@@ -8,10 +8,9 @@ import { createAdminServerClient } from '@/lib/supabase/admin';
 import { sermonService, type SermonResourceRpcInput } from '@/services/sermon/sermon-service';
 import { mapFormToDbInsert, mapFormToDbUpdate } from '@/lib/sermon-form-mapper';
 import { checkAdminPermission } from '@/actions/_auth-helpers';
+import { extractStoragePath, RESOURCE_BUCKET } from '@/lib/sermon-resource';
 import { formattedDate } from '@/utils/date';
 import type { SermonFormData, SermonResourceInput } from '@/types/sermon-form';
-
-const RESOURCE_BUCKET = 'sermon-resources';
 
 // ─── Storage 헬퍼 ────────────────────────────────────────────────────────────
 
@@ -26,13 +25,6 @@ function buildResourcePath(sermonDate: string, originalName: string): string {
       .replace(/-+/g, '-')
       .replace(/^-|-$/g, '') || 'file';
   return `${folder}/${sanitized}-${Date.now()}.${ext}`;
-}
-
-function extractStoragePath(fileUrl: string): string | null {
-  const marker = `/public/${RESOURCE_BUCKET}/`;
-  const idx = fileUrl.indexOf(marker);
-  if (idx === -1) return null;
-  return decodeURIComponent(fileUrl.substring(idx + marker.length));
 }
 
 async function uploadResourceFiles(
