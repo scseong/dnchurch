@@ -1,5 +1,5 @@
 import { handleResponse } from '@/services/handle-response';
-import { buildBaseSlug, ensureUniqueSlug } from '@/lib/sermon-slug';
+import { buildBaseSlug } from '@/lib/sermon-slug';
 import type { SermonDbInsert, SermonDbUpdate } from '@/lib/sermon-form-mapper';
 import type { SupabaseClient } from '@supabase/supabase-js';
 import type { Database } from '@/types/database.types';
@@ -10,6 +10,15 @@ import type {
   SeriesWithSermonCount,
   YearCount
 } from '@/types/sermon';
+
+/** RPC create_sermon / update_sermon에 전달하는 리소스 행 형식 */
+export type SermonResourceRpcInput = {
+  id: string;
+  title: string;
+  file_url: string;
+  file_type: Database['public']['Enums']['sermon_resource_type'];
+  file_size_bytes: number | null;
+};
 
 const SERMON_WITH_RELATIONS_SELECT = `
   *,
@@ -200,55 +209,40 @@ export const sermonService = (supabase: SupabaseClient<Database>) => ({
     });
   },
 
-  /** [어드민] 설교 생성 — slug·series_order 서버 자동 계산 */
-  createSermon: async (insert: Omit<SermonDbInsert, 'slug' | 'series_order'>) => {
-    const slug = await ensureUniqueSlug(
-      buildBaseSlug(insert.sermon_date, insert.title),
-      supabase
-    );
-
-    let series_order: number | null = null;
-    if (insert.series_id) {
-      const { count, error: countError } = await supabase
-        .from('sermons')
-        .select('id', { count: 'exact', head: true })
-        .eq('series_id', insert.series_id)
-        .is('deleted_at', null);
-      if (countError) throw countError;
-      series_order = (count ?? 0) + 1;
-    }
-
-    const insertResponse = await supabase
-      .from('sermons')
-      .insert({ ...insert, slug, series_order })
-      .select('id, slug')
-      .single();
-
-    return handleResponse(insertResponse);
-  },
-
-  /** [어드민] 설교 수정 */
-  updateSermon: async (
-    id: number,
-    update: Omit<SermonDbUpdate, 'slug' | 'series_order' | 'id' | 'created_at'>
+  /** [어드민] 설교 생성 — RPC create_sermon으로 sermon + resources 원자 INSERT */
+  createSermon: async (
+    insert: Omit<SermonDbInsert, 'slug' | 'series_order'>,
+    resources: SermonResourceRpcInput[]
   ) => {
+    const payload = {
+      ...insert,
+      base_slug: buildBaseSlug(insert.sermon_date, insert.title)
+    };
     const res = await supabase
-      .from('sermons')
-      .update(update)
-      .eq('id', id)
-      .select('id')
-      .single();
-
+      .rpc('create_sermon', { p_payload: payload, p_resources: resources })
+      .maybeSingle();
     return handleResponse(res);
   },
 
-  /** [어드민] 설교 소프트 삭제 */
-  softDeleteSermon: async (id: number) => {
-    const res = await supabase
-      .from('sermons')
-      .update({ deleted_at: new Date().toISOString() })
-      .eq('id', id);
+  /** [어드민] 설교 수정 — RPC update_sermon으로 sermon + resources sync 원자 처리 */
+  updateSermon: async (
+    id: number,
+    update: Omit<SermonDbUpdate, 'slug' | 'series_order' | 'id' | 'created_at'>,
+    keepResourceIds: string[],
+    newResources: SermonResourceRpcInput[]
+  ) => {
+    const res = await supabase.rpc('update_sermon', {
+      p_id: id,
+      p_payload: update,
+      p_keep_resource_ids: keepResourceIds,
+      p_new_resources: newResources
+    });
+    return handleResponse(res);
+  },
 
+  /** [어드민] 설교 소프트 삭제 — RPC delete_sermon이 삭제할 storage URL 배열을 반환 */
+  softDeleteSermon: async (id: number) => {
+    const res = await supabase.rpc('delete_sermon', { p_id: id });
     return handleResponse(res);
   },
 
