@@ -16,3 +16,228 @@
   border: 1px solid var(--admin-bd);
   border-radius: 10px;
 }
+
+.status_tabs {
+  display: flex;
+  gap: 4px;
+  padding: 4px;
+  background: var(--admin-bg-card);
+  border: 1px solid var(--admin-bd);
+  border-radius: 8px;
+  overflow-x: auto;
+  scrollbar-width: none;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+.tab {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 14px;
+  border: 0;
+  border-radius: 5px;
+  background: transparent;
+  color: var(--admin-t2);
+  font-size: 13px;
+  font-weight: 500;
+  white-space: nowrap;
+  cursor: pointer;
+  transition:
+    background 0.15s var(--admin-ease),
+    color 0.15s var(--admin-ease);
+
+  &:hover {
+    background: var(--admin-bg-w);
+    color: var(--admin-t1);
+  }
+}
+
+.tab_active {
+  background: var(--admin-bg-w);
+  color: var(--admin-t1);
+  font-weight: 600;
+}
+
+.dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--admin-t3);
+
+  &.published {
+    background: var(--admin-ok);
+  }
+
+  &.draft {
+    background: var(--admin-t3);
+  }
+
+  &.scheduled {
+    background: var(--admin-accent);
+  }
+}
+
+.count {
+  padding: 1px 8px;
+  border-radius: 100px;
+  background: var(--admin-bg-w);
+  color: var(--admin-t3);
+  font-size: 11px;
+  font-weight: 600;
+
+  .tab_active & {
+    background: var(--admin-pri);
+    color: #fff;
+  }
+}
+
+.active_filters {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+  padding: 10px 12px;
+  background: var(--admin-accent-bg);
+  border: 1px solid color-mix(in srgb, var(--admin-accent), transparent 80%);
+  border-radius: 6px;
+}
+
+.pill_list {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.active_label {
+  color: var(--admin-accent);
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 3px 4px 3px 10px;
+  background: var(--admin-bg-card);
+  border: 1px solid var(--admin-bd);
+  border-radius: 100px;
+  color: var(--admin-t2);
+  font-size: 11.5px;
+  font-weight: 500;
+}
+
+.pill_remove {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 16px;
+  height: 16px;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: none;
+  color: var(--admin-t3);
+  font-size: 12px;
+  cursor: pointer;
+  transition:
+    background 0.15s var(--admin-ease),
+    color 0.15s var(--admin-ease);
+
+  &:hover {
+    background: var(--admin-bg-w);
+    color: var(--admin-err);
+  }
+}
+
+.clear_all {
+  margin-left: auto;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--admin-accent);
+  font-size: 11.5px;
+  font-weight: 600;
+  cursor: pointer;
+
+  &:hover {
+    text-decoration: underline;
+  }
+}
+
+.toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+}
+
+.search_box {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex: 1;
+  min-width: 240px;
+  max-width: 420px;
+  padding: 8px 12px;
+  background: var(--admin-bg-card);
+  border: 1px solid var(--admin-bd);
+  border-radius: 6px;
+  transition:
+    border-color 0.15s var(--admin-ease),
+    box-shadow 0.15s var(--admin-ease);
+
+  &:focus-within {
+    border-color: var(--admin-accent);
+    box-shadow: 0 0 0 3px var(--admin-accent-bg);
+  }
+}
+
+.search_icon {
+  flex-shrink: 0;
+  color: var(--admin-t3);
+  font-size: 16px;
+}
+
+.search_input {
+  flex: 1;
+  min-width: 0;
+  border: 0;
+  outline: none;
+  background: none;
+  color: var(--admin-t1);
+  font-size: 13px;
+
+  &::placeholder {
+    color: var(--admin-t3);
+  }
+}
+
+.search_clear {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  padding: 0;
+  border: 0;
+  border-radius: 4px;
+  background: none;
+  color: var(--admin-t3);
+  cursor: pointer;
+  transition:
+    background 0.15s var(--admin-ease),
+    color 0.15s var(--admin-ease);
+
+  &:hover {
+    background: var(--admin-bg-w);
+    color: var(--admin-t1);
+  }
+}
