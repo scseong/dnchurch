@@ -225,9 +225,8 @@ export async function deleteSermonAction(
     await removeStorageObjects(pathsFromUrls(urls));
 
     updateTag('sermon');
-    redirect('/admin/sermons');
+    return { success: true, message: '설교가 삭제되었습니다.' };
   } catch (error) {
-    if (isRedirectError(error)) throw error;
     console.error(error);
     return { success: false, message: '서버 오류가 발생했습니다.' };
   }

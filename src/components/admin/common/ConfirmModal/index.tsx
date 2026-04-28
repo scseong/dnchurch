@@ -13,6 +13,8 @@ interface ConfirmModalProps {
   confirmLabel?: string;
   cancelLabel?: string;
   danger?: boolean;
+  isLoading?: boolean;
+  loadingLabel?: string;
   onConfirm: () => void;
 }
 
@@ -32,6 +34,8 @@ export default function ConfirmModal({
   confirmLabel = '확인',
   cancelLabel = '취소',
   danger = false,
+  isLoading = false,
+  loadingLabel = '처리 중...',
   onConfirm
 }: ConfirmModalProps) {
   // 닫히는 transition 동안 마지막 컨텐츠 유지 — prop이 즉시 비워져도 시각적 깜빡임 없음
@@ -49,12 +53,16 @@ export default function ConfirmModal({
     ? { title, description, confirmLabel, cancelLabel, danger }
     : snapshotRef.current;
 
+  // 로딩 중에는 ESC/overlay click으로 닫히지 않도록 onClose 차단
+  const handleClose = isLoading ? () => {} : onClose;
+
   return (
-    <Modal isVisible={open} onClose={onClose}>
+    <Modal isVisible={open} onClose={handleClose}>
       <div
         className={styles.panel}
         role="alertdialog"
         aria-modal="true"
+        aria-busy={isLoading || undefined}
         aria-labelledby="confirm-modal-title"
         aria-describedby={content.description ? 'confirm-modal-description' : undefined}
       >
@@ -71,15 +79,21 @@ export default function ConfirmModal({
           </div>
         )}
         <footer className={styles.footer}>
-          <button type="button" className={styles.cancel} onClick={onClose}>
+          <button
+            type="button"
+            className={styles.cancel}
+            onClick={onClose}
+            disabled={isLoading}
+          >
             {content.cancelLabel}
           </button>
           <button
             type="button"
             className={clsx(styles.confirm, content.danger && styles.danger)}
             onClick={onConfirm}
+            disabled={isLoading}
           >
-            {content.confirmLabel}
+            {isLoading ? loadingLabel : content.confirmLabel}
           </button>
         </footer>
       </div>

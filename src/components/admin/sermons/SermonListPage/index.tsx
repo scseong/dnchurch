@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState, useTransition } from 'react';
 import { useRouter } from 'next/navigation';
 import { HiPlus } from 'react-icons/hi';
 import PageHeader from '@/components/admin/layout/PageHeader';
@@ -9,6 +9,7 @@ import { useClickOutside } from '@/hooks/useClickOutside';
 import { useDebounce } from '@/hooks/useDebounce';
 import { useMediaQuery } from '@/hooks/useMediaQuery';
 import { useToastStore } from '@/store/toast.store';
+import { deleteSermonAction } from '@/actions/sermon.action';
 import type {
   AdminSermon,
   AdminSermonListParams,
@@ -51,6 +52,7 @@ export default function SermonListPage({
   const isDesktop = useMediaQuery('(min-width: 1024px)');
   const [openDropdown, setOpenDropdown] = useState<DropdownKey | null>(null);
   const [deleteTarget, setDeleteTarget] = useState<AdminSermon | null>(null);
+  const [isDeleting, startDeleteTransition] = useTransition();
 
   const [searchInput, setSearchInput] = useState(filters.search);
   const debouncedSearch = useDebounce(searchInput, 300);
@@ -87,11 +89,23 @@ export default function SermonListPage({
   const handleDeleteRequest = (sermon: AdminSermon) => setDeleteTarget(sermon);
 
   const handleDeleteConfirm = () => {
-    if (!deleteTarget) return;
-    // TODO Phase 3-3: 실제 삭제 API 연결
-    console.info('[delete sermon]', deleteTarget.id, deleteTarget.title);
-    toast.success('설교가 삭제되었습니다');
-    setDeleteTarget(null);
+    if (!deleteTarget || isDeleting) return;
+    const target = deleteTarget;
+    startDeleteTransition(async () => {
+      try {
+        const result = await deleteSermonAction(target.id);
+        if (result.success) {
+          toast.success(result.message);
+          setDeleteTarget(null);
+          router.refresh();
+        } else {
+          toast.error(result.message);
+        }
+      } catch (error) {
+        console.error('[delete sermon]', error);
+        toast.error('삭제 중 오류가 발생했습니다');
+      }
+    });
   };
 
   useClickOutside({
@@ -191,7 +205,9 @@ export default function SermonListPage({
             : ''
         }
         confirmLabel="삭제"
+        loadingLabel="삭제 중..."
         danger
+        isLoading={isDeleting}
         onConfirm={handleDeleteConfirm}
       />
     </>
