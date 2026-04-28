@@ -1,18 +1,24 @@
 'use client';
 
-import { HiOutlineSearch, HiX } from 'react-icons/hi';
+import clsx from 'clsx';
+import { HiOutlineRefresh, HiOutlineSearch, HiX } from 'react-icons/hi';
 import styles from '../index.module.scss';
 
 interface SearchBoxProps {
   value: string;
   onChange: (value: string) => void;
   onClear: () => void;
+  isPending?: boolean;
 }
 
-export default function SearchBox({ value, onChange, onClear }: SearchBoxProps) {
+export default function SearchBox({ value, onChange, onClear, isPending }: SearchBoxProps) {
+  const Icon = isPending ? HiOutlineRefresh : HiOutlineSearch;
   return (
     <div className={styles.search_box}>
-      <HiOutlineSearch className={styles.search_icon} aria-hidden />
+      <Icon
+        className={clsx(styles.search_icon, isPending && styles.search_icon_pending)}
+        aria-hidden
+      />
       <input
         type="text"
         className={styles.search_input}

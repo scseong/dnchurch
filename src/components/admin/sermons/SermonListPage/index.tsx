@@ -1,10 +1,11 @@
 'use client';
 
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { HiPlus } from 'react-icons/hi';
 import PageHeader from '@/components/admin/layout/PageHeader';
 import { useClickOutside } from '@/hooks/useClickOutside';
+import { useDebounce } from '@/hooks/useDebounce';
 import { MOCK_ADMIN_SERMONS } from '@/lib/mocks/sermons-admin';
 import {
   countByStatus,
@@ -28,6 +29,32 @@ export default function SermonListPage() {
   const router = useRouter();
   const filters = useListFilters();
   const [openDropdown, setOpenDropdown] = useState<DropdownKey | null>(null);
+
+  const [searchInput, setSearchInput] = useState(filters.search);
+  const debouncedSearch = useDebounce(searchInput, 300);
+  const lastExternalSearchRef = useRef(filters.search);
+
+  // URL/외부 변경 → 입력값 동기화 (디바운스 우회)
+  useEffect(() => {
+    if (filters.search === lastExternalSearchRef.current) return;
+    lastExternalSearchRef.current = filters.search;
+    setSearchInput(filters.search);
+  }, [filters.search]);
+
+  // 디바운스된 입력 → 필터 (외부 sync로 들어온 값은 skip)
+  useEffect(() => {
+    if (debouncedSearch === lastExternalSearchRef.current) return;
+    lastExternalSearchRef.current = debouncedSearch;
+    filters.setSearch(debouncedSearch);
+  }, [debouncedSearch, filters.setSearch]);
+
+  const isSearchPending = searchInput !== debouncedSearch;
+
+  const handleSearchClear = () => {
+    setSearchInput('');
+    lastExternalSearchRef.current = '';
+    filters.setSearch('');
+  };
 
   const toggleDropdown = (key: DropdownKey) =>
     setOpenDropdown((current) => (current === key ? null : key));
@@ -95,9 +122,10 @@ export default function SermonListPage() {
         />
         <div className={styles.toolbar}>
           <SearchBox
-            value={filters.search}
-            onChange={filters.setSearch}
-            onClear={() => filters.setSearch('')}
+            value={searchInput}
+            onChange={setSearchInput}
+            onClear={handleSearchClear}
+            isPending={isSearchPending}
           />
           <PreacherFilter
             preachers={MOCK_PREACHERS}
@@ -131,7 +159,7 @@ export default function SermonListPage() {
           seriesData={MOCK_SERIES}
           onRemovePreacher={filters.togglePreacher}
           onRemoveSeries={filters.toggleSeries}
-          onClearSearch={() => filters.setSearch('')}
+          onClearSearch={handleSearchClear}
           onClearDate={filters.clearDate}
           onClearAll={filters.clearAll}
         />
