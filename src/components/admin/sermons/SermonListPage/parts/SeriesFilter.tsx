@@ -2,7 +2,8 @@
 
 import FilterDropdown from './FilterDropdown';
 import DropdownItem from './DropdownItem';
-import { NONE_SERIES_ID, type MockSeries } from './mockData';
+import { NONE_SERIES_ID } from '@/lib/utils/sermon-filter';
+import type { MockSeries } from './mockData';
 import dropdownStyles from '../dropdown.module.scss';
 
 interface SeriesFilterProps {

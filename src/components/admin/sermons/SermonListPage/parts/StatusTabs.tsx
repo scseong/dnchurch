@@ -1,17 +1,16 @@
 'use client';
 
 import clsx from 'clsx';
+import type { SermonStatusTab } from '@/lib/mocks/sermons-admin';
 import styles from '../index.module.scss';
 
-export type SermonStatus = 'all' | 'published' | 'draft' | 'scheduled';
-
 interface StatusTabsProps {
-  activeStatus: SermonStatus;
-  counts: Record<SermonStatus, number>;
-  onChange: (status: SermonStatus) => void;
+  activeStatus: SermonStatusTab;
+  counts: Record<SermonStatusTab, number>;
+  onChange: (status: SermonStatusTab) => void;
 }
 
-const TABS: { value: SermonStatus; label: string }[] = [
+const TABS: { value: SermonStatusTab; label: string }[] = [
   { value: 'all', label: '전체' },
   { value: 'published', label: '발행' },
   { value: 'draft', label: '초안' },

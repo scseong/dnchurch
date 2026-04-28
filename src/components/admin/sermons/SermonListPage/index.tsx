@@ -1,17 +1,25 @@
 'use client';
 
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { HiPlus } from 'react-icons/hi';
 import PageHeader from '@/components/admin/layout/PageHeader';
 import { useClickOutside } from '@/hooks/useClickOutside';
-import StatusTabs, { type SermonStatus } from './parts/StatusTabs';
+import { MOCK_ADMIN_SERMONS, type SermonStatusTab } from '@/lib/mocks/sermons-admin';
+import {
+  countByStatus,
+  filterSermons,
+  sortSermons,
+  type SermonSortKey,
+  type SermonSortState
+} from '@/lib/utils/sermon-filter';
+import StatusTabs from './parts/StatusTabs';
 import SearchBox from './parts/SearchBox';
 import PreacherFilter from './parts/PreacherFilter';
 import SeriesFilter from './parts/SeriesFilter';
 import DateRangeFilter from './parts/DateRangeFilter';
 import ActiveFilters from './parts/ActiveFilters';
-import SermonTable, { type SortKey, type SortState } from './parts/SermonTable';
+import SermonTable from './parts/SermonTable';
 import { MOCK_PREACHERS, MOCK_SERIES } from './parts/mockData';
 import styles from './index.module.scss';
 
@@ -20,41 +28,67 @@ type DropdownKey = 'preacher' | 'series' | 'date';
 export default function SermonListPage() {
   const router = useRouter();
   const [search, setSearch] = useState('');
+  const [statusTab, setStatusTab] = useState<SermonStatusTab>('all');
   const [openDropdown, setOpenDropdown] = useState<DropdownKey | null>(null);
   const [selectedPreachers, setSelectedPreachers] = useState<string[]>([]);
   const [selectedSeries, setSelectedSeries] = useState<string[]>([]);
   const [dateFrom, setDateFrom] = useState('');
   const [dateTo, setDateTo] = useState('');
-  const [sort, setSort] = useState<SortState | null>(null);
-  const [currentPage, setCurrentPage] = useState(1);
+  const [sort, setSort] = useState<SermonSortState | null>(null);
+  const [page, setPage] = useState(1);
   const [pageSize, setPageSize] = useState(20);
+
+  const resetPage = () => setPage(1);
 
   const toggleDropdown = (key: DropdownKey) =>
     setOpenDropdown((current) => (current === key ? null : key));
 
-  const togglePreacher = (id: string) =>
+  const togglePreacher = (id: string) => {
     setSelectedPreachers((current) =>
       current.includes(id) ? current.filter((value) => value !== id) : [...current, id]
     );
+    resetPage();
+  };
 
-  const toggleSeries = (id: string) =>
+  const toggleSeries = (id: string) => {
     setSelectedSeries((current) =>
       current.includes(id) ? current.filter((value) => value !== id) : [...current, id]
     );
+    resetPage();
+  };
+
+  const handleSearchChange = (value: string) => {
+    setSearch(value);
+    resetPage();
+  };
+
+  const handleStatusChange = (value: SermonStatusTab) => {
+    setStatusTab(value);
+    resetPage();
+  };
+
+  const handleDateChange = ({ from, to }: { from: string; to: string }) => {
+    setDateFrom(from);
+    setDateTo(to);
+    resetPage();
+  };
 
   const clearDate = () => {
     setDateFrom('');
     setDateTo('');
+    resetPage();
   };
 
   const clearAll = () => {
     setSearch('');
     setSelectedPreachers([]);
     setSelectedSeries([]);
-    clearDate();
+    setDateFrom('');
+    setDateTo('');
+    resetPage();
   };
 
-  const handleSortChange = (key: SortKey) => {
+  const handleSortChange = (key: SermonSortKey) => {
     setSort((current) => {
       if (current?.key !== key) return { key, direction: 'asc' };
       if (current.direction === 'asc') return { key, direction: 'desc' };
@@ -68,13 +102,31 @@ export default function SermonListPage() {
     onClickOutside: () => setOpenDropdown(null)
   });
 
-  const activeStatus: SermonStatus = 'all';
-  const counts: Record<SermonStatus, number> = {
-    all: 42,
-    published: 38,
-    draft: 3,
-    scheduled: 1
-  };
+  const filtered = useMemo(
+    () =>
+      sortSermons(
+        filterSermons(MOCK_ADMIN_SERMONS, {
+          statusTab,
+          search,
+          selectedPreachers,
+          selectedSeries,
+          dateFrom,
+          dateTo
+        }),
+        sort
+      ),
+    [statusTab, search, selectedPreachers, selectedSeries, dateFrom, dateTo, sort]
+  );
+
+  const statusCounts = useMemo(() => countByStatus(MOCK_ADMIN_SERMONS), []);
+
+  const total = filtered.length;
+  const totalPages = Math.max(1, Math.ceil(total / pageSize));
+  const safePage = Math.min(page, totalPages);
+  const paginated = useMemo(
+    () => filtered.slice((safePage - 1) * pageSize, safePage * pageSize),
+    [filtered, safePage, pageSize]
+  );
 
   return (
     <>
@@ -92,9 +144,17 @@ export default function SermonListPage() {
         ]}
       />
       <div className={styles.wrapper}>
-        <StatusTabs activeStatus={activeStatus} counts={counts} onChange={() => {}} />
+        <StatusTabs
+          activeStatus={statusTab}
+          counts={statusCounts}
+          onChange={handleStatusChange}
+        />
         <div className={styles.toolbar}>
-          <SearchBox value={search} onChange={setSearch} onClear={() => setSearch('')} />
+          <SearchBox
+            value={search}
+            onChange={handleSearchChange}
+            onClear={() => handleSearchChange('')}
+          />
           <PreacherFilter
             preachers={MOCK_PREACHERS}
             selected={selectedPreachers}
@@ -112,10 +172,7 @@ export default function SermonListPage() {
           <DateRangeFilter
             dateFrom={dateFrom}
             dateTo={dateTo}
-            onChange={({ from, to }) => {
-              setDateFrom(from);
-              setDateTo(to);
-            }}
+            onChange={handleDateChange}
             isOpen={openDropdown === 'date'}
             onToggleOpen={() => toggleDropdown('date')}
           />
@@ -130,20 +187,21 @@ export default function SermonListPage() {
           seriesData={MOCK_SERIES}
           onRemovePreacher={togglePreacher}
           onRemoveSeries={toggleSeries}
-          onClearSearch={() => setSearch('')}
+          onClearSearch={() => handleSearchChange('')}
           onClearDate={clearDate}
           onClearAll={clearAll}
         />
         <SermonTable
+          sermons={paginated}
           sort={sort}
           onSortChange={handleSortChange}
-          total={42}
-          currentPage={currentPage}
+          total={total}
+          currentPage={safePage}
           pageSize={pageSize}
-          onPageChange={setCurrentPage}
+          onPageChange={setPage}
           onPageSizeChange={(size) => {
             setPageSize(size);
-            setCurrentPage(1);
+            setPage(1);
           }}
         />
       </div>

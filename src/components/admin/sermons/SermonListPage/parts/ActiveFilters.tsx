@@ -1,7 +1,8 @@
 'use client';
 
 import { HiX } from 'react-icons/hi';
-import { NONE_SERIES_ID, type MockPreacher, type MockSeries } from './mockData';
+import { NONE_SERIES_ID } from '@/lib/utils/sermon-filter';
+import type { MockPreacher, MockSeries } from './mockData';
 import styles from '../index.module.scss';
 
 interface ActiveFiltersProps {
