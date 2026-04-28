@@ -11,6 +11,7 @@ import PreacherFilter from './parts/PreacherFilter';
 import SeriesFilter from './parts/SeriesFilter';
 import DateRangeFilter from './parts/DateRangeFilter';
 import ActiveFilters from './parts/ActiveFilters';
+import SermonTable, { type SortKey, type SortState } from './parts/SermonTable';
 import { MOCK_PREACHERS, MOCK_SERIES } from './parts/mockData';
 import styles from './index.module.scss';
 
@@ -24,6 +25,9 @@ export default function SermonListPage() {
   const [selectedSeries, setSelectedSeries] = useState<string[]>([]);
   const [dateFrom, setDateFrom] = useState('');
   const [dateTo, setDateTo] = useState('');
+  const [sort, setSort] = useState<SortState | null>(null);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [pageSize, setPageSize] = useState(20);
 
   const toggleDropdown = (key: DropdownKey) =>
     setOpenDropdown((current) => (current === key ? null : key));
@@ -48,6 +52,14 @@ export default function SermonListPage() {
     setSelectedPreachers([]);
     setSelectedSeries([]);
     clearDate();
+  };
+
+  const handleSortChange = (key: SortKey) => {
+    setSort((current) => {
+      if (current?.key !== key) return { key, direction: 'asc' };
+      if (current.direction === 'asc') return { key, direction: 'desc' };
+      return null;
+    });
   };
 
   useClickOutside({
@@ -122,7 +134,18 @@ export default function SermonListPage() {
           onClearDate={clearDate}
           onClearAll={clearAll}
         />
-        <p className={styles.placeholder}>설교 목록 테이블이 여기에 들어갑니다</p>
+        <SermonTable
+          sort={sort}
+          onSortChange={handleSortChange}
+          total={42}
+          currentPage={currentPage}
+          pageSize={pageSize}
+          onPageChange={setCurrentPage}
+          onPageSizeChange={(size) => {
+            setPageSize(size);
+            setCurrentPage(1);
+          }}
+        />
       </div>
     </>
   );
