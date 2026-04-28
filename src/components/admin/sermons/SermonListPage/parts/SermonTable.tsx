@@ -11,6 +11,7 @@ import {
 } from 'react-icons/hi';
 import { formattedDate, formatRelativeTime } from '@/utils/date';
 import { MOCK_ROWS, SERMON_STATUS_LABEL } from './mockData';
+import MobileCardList from './MobileCardList';
 import Pagination from './Pagination';
 import styles from '../table.module.scss';
 
@@ -85,7 +86,8 @@ export default function SermonTable({
   };
 
   return (
-    <div className={styles.table_wrap}>
+    <>
+      <div className={styles.table_wrap}>
         <div className={styles.table_scroll}>
           <table className={styles.table}>
             <thead>
@@ -211,6 +213,13 @@ export default function SermonTable({
           onPageChange={onPageChange}
           onPageSizeChange={onPageSizeChange}
         />
-    </div>
+      </div>
+      <MobileCardList
+        total={total}
+        currentPage={currentPage}
+        pageSize={pageSize}
+        onPageChange={onPageChange}
+      />
+    </>
   );
 }
