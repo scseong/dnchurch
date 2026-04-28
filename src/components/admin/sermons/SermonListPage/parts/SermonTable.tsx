@@ -50,6 +50,8 @@ interface SermonTableProps {
   pageSize: number;
   onPageChange: (page: number) => void;
   onPageSizeChange: (size: number) => void;
+  onEdit: (sermon: AdminSermon) => void;
+  onDelete: (sermon: AdminSermon) => void;
 }
 
 export default function SermonTable({
@@ -60,7 +62,9 @@ export default function SermonTable({
   currentPage,
   pageSize,
   onPageChange,
-  onPageSizeChange
+  onPageSizeChange,
+  onEdit,
+  onDelete
 }: SermonTableProps) {
   const renderSortIcon = (columnKey: SermonSortKey) => {
     const isActive = sort?.key === columnKey;
@@ -140,7 +144,7 @@ export default function SermonTable({
                 sermons.map((sermon) => {
                   const status = deriveSermonStatus(sermon);
                   return (
-                    <tr key={sermon.id}>
+                    <tr key={sermon.id} onClick={() => onEdit(sermon)}>
                       <td className={styles.col_thumb}>
                         <div className={styles.row_thumb}>
                           <HiOutlineFilm aria-hidden />
@@ -192,6 +196,7 @@ export default function SermonTable({
                             className={styles.action_button}
                             title="수정"
                             aria-label={`${sermon.title} 수정`}
+                            onClick={() => onEdit(sermon)}
                           >
                             <HiOutlinePencil aria-hidden />
                           </button>
@@ -200,6 +205,7 @@ export default function SermonTable({
                             className={clsx(styles.action_button, styles.danger)}
                             title="삭제"
                             aria-label={`${sermon.title} 삭제`}
+                            onClick={() => onDelete(sermon)}
                           >
                             <HiOutlineTrash aria-hidden />
                           </button>
@@ -226,6 +232,8 @@ export default function SermonTable({
         currentPage={currentPage}
         pageSize={pageSize}
         onPageChange={onPageChange}
+        onEdit={onEdit}
+        onDelete={onDelete}
       />
     </>
   );

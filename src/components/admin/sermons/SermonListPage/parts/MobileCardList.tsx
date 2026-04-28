@@ -22,6 +22,8 @@ interface MobileCardListProps {
   currentPage: number;
   pageSize: number;
   onPageChange: (page: number) => void;
+  onEdit: (sermon: AdminSermon) => void;
+  onDelete: (sermon: AdminSermon) => void;
 }
 
 export default function MobileCardList({
@@ -29,7 +31,9 @@ export default function MobileCardList({
   total,
   currentPage,
   pageSize,
-  onPageChange
+  onPageChange,
+  onEdit,
+  onDelete
 }: MobileCardListProps) {
   const totalPages = Math.max(1, Math.ceil(total / pageSize));
   const isFirst = currentPage === 1;
@@ -41,7 +45,11 @@ export default function MobileCardList({
         {sermons.map((sermon) => {
           const status = deriveSermonStatus(sermon);
           return (
-            <article key={sermon.id} className={styles.mobile_card}>
+            <article
+              key={sermon.id}
+              className={styles.mobile_card}
+              onClick={() => onEdit(sermon)}
+            >
               <div className={styles.mobile_card_top}>
                 <div className={clsx(styles.row_thumb, styles.mobile_thumb)}>
                   <HiOutlineFilm aria-hidden />
@@ -79,6 +87,7 @@ export default function MobileCardList({
                     type="button"
                     className={styles.action_button}
                     aria-label={`${sermon.title} 수정`}
+                    onClick={() => onEdit(sermon)}
                   >
                     <HiOutlinePencil aria-hidden />
                   </button>
@@ -86,6 +95,7 @@ export default function MobileCardList({
                     type="button"
                     className={clsx(styles.action_button, styles.danger)}
                     aria-label={`${sermon.title} 삭제`}
+                    onClick={() => onDelete(sermon)}
                   >
                     <HiOutlineTrash aria-hidden />
                   </button>

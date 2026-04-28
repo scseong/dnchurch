@@ -1,0 +1,99 @@
+.panel {
+  display: flex;
+  flex-direction: column;
+  width: min(440px, 100%);
+  max-height: 80vh;
+  background: $white;
+  border-radius: $radius-m;
+  box-shadow: $shadow-md;
+  overflow: hidden;
+  animation: panel_in 0.2s $transition-easing-default;
+}
+
+@keyframes panel_in {
+  from {
+    opacity: 0;
+    transform: translateY($spacing-8) scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.header {
+  padding: $spacing-24 $spacing-24 0;
+}
+
+.title {
+  margin: 0;
+  font-size: $font-size-18;
+  font-weight: $font-weight-bold;
+  color: $txt-primary;
+  line-height: $line-height-heading;
+}
+
+.body {
+  padding: $spacing-12 $spacing-24 0;
+  overflow-y: auto;
+}
+
+.description {
+  margin: 0;
+  font-size: $font-size-14;
+  line-height: $line-height-base;
+  color: $txt-secondary;
+  white-space: pre-line;
+}
+
+.footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: $spacing-8;
+  padding: $spacing-24;
+}
+
+.cancel,
+.confirm {
+  height: 44px;
+  padding: 0 $spacing-20;
+  border-radius: $radius-xs;
+  font-size: $font-size-14;
+  font-weight: $font-weight-semibold;
+  cursor: pointer;
+  transition:
+    background 0.15s $transition-easing-default,
+    border-color 0.15s $transition-easing-default,
+    color 0.15s $transition-easing-default;
+}
+
+.cancel {
+  background: transparent;
+  border: 1px solid $border-primary;
+  color: $txt-primary;
+
+  &:hover {
+    background: $bg-secondary;
+    border-color: $border-secondary;
+  }
+}
+
+.confirm {
+  background: $primary;
+  border: 1px solid $primary;
+  color: $txt-inverse;
+
+  &:hover {
+    background: $primary-hover;
+    border-color: $primary-hover;
+  }
+}
+
+.confirm.danger {
+  background: $status-negative;
+  border-color: $status-negative;
+
+  &:hover {
+    filter: brightness(0.92);
+  }
+}

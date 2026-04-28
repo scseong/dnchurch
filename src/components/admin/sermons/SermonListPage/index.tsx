@@ -4,9 +4,11 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { HiPlus } from 'react-icons/hi';
 import PageHeader from '@/components/admin/layout/PageHeader';
+import ConfirmModal from '@/components/admin/common/ConfirmModal';
 import { useClickOutside } from '@/hooks/useClickOutside';
 import { useDebounce } from '@/hooks/useDebounce';
-import { MOCK_ADMIN_SERMONS } from '@/lib/mocks/sermons-admin';
+import { useToastStore } from '@/store/toast.store';
+import { MOCK_ADMIN_SERMONS, type AdminSermon } from '@/lib/mocks/sermons-admin';
 import {
   countByStatus,
   filterSermons,
@@ -28,7 +30,9 @@ type DropdownKey = 'preacher' | 'series' | 'date';
 export default function SermonListPage() {
   const router = useRouter();
   const filters = useListFilters();
+  const toast = useToastStore();
   const [openDropdown, setOpenDropdown] = useState<DropdownKey | null>(null);
+  const [deleteTarget, setDeleteTarget] = useState<AdminSermon | null>(null);
 
   const [searchInput, setSearchInput] = useState(filters.search);
   const debouncedSearch = useDebounce(searchInput, 300);
@@ -58,6 +62,19 @@ export default function SermonListPage() {
 
   const toggleDropdown = (key: DropdownKey) =>
     setOpenDropdown((current) => (current === key ? null : key));
+
+  const handleEdit = (sermon: AdminSermon) =>
+    router.push(`/admin/sermons/${sermon.id}/edit`);
+
+  const handleDeleteRequest = (sermon: AdminSermon) => setDeleteTarget(sermon);
+
+  const handleDeleteConfirm = () => {
+    if (!deleteTarget) return;
+    // TODO Phase 3: 실제 삭제 API 연결
+    console.info('[delete sermon]', deleteTarget.id, deleteTarget.title);
+    toast.success('설교가 삭제되었습니다');
+    setDeleteTarget(null);
+  };
 
   useClickOutside({
     enabled: openDropdown !== null,
@@ -172,8 +189,23 @@ export default function SermonListPage() {
           pageSize={filters.pageSize}
           onPageChange={filters.setPage}
           onPageSizeChange={filters.setPageSize}
+          onEdit={handleEdit}
+          onDelete={handleDeleteRequest}
         />
       </div>
+      <ConfirmModal
+        open={deleteTarget !== null}
+        onClose={() => setDeleteTarget(null)}
+        title="설교 삭제"
+        description={
+          deleteTarget
+            ? `"${deleteTarget.title}"을(를) 삭제하시겠습니까?\n연결된 첨부 자료도 함께 삭제됩니다.`
+            : ''
+        }
+        confirmLabel="삭제"
+        danger
+        onConfirm={handleDeleteConfirm}
+      />
     </>
   );
 }
