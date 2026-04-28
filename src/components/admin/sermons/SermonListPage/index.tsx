@@ -7,6 +7,7 @@ import PageHeader from '@/components/admin/layout/PageHeader';
 import ConfirmModal from '@/components/admin/common/ConfirmModal';
 import { useClickOutside } from '@/hooks/useClickOutside';
 import { useDebounce } from '@/hooks/useDebounce';
+import { useMediaQuery } from '@/hooks/useMediaQuery';
 import { useToastStore } from '@/store/toast.store';
 import { MOCK_ADMIN_SERMONS, type AdminSermon } from '@/lib/mocks/sermons-admin';
 import {
@@ -31,6 +32,7 @@ export default function SermonListPage() {
   const router = useRouter();
   const filters = useListFilters();
   const toast = useToastStore();
+  const isDesktop = useMediaQuery('(min-width: 1024px)');
   const [openDropdown, setOpenDropdown] = useState<DropdownKey | null>(null);
   const [deleteTarget, setDeleteTarget] = useState<AdminSermon | null>(null);
 
@@ -77,7 +79,7 @@ export default function SermonListPage() {
   };
 
   useClickOutside({
-    enabled: openDropdown !== null,
+    enabled: openDropdown !== null && isDesktop,
     selector: '[data-dropdown]',
     onClickOutside: () => setOpenDropdown(null)
   });
