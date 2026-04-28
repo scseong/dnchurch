@@ -5,13 +5,11 @@ import { useRouter } from 'next/navigation';
 import { HiPlus } from 'react-icons/hi';
 import PageHeader from '@/components/admin/layout/PageHeader';
 import { useClickOutside } from '@/hooks/useClickOutside';
-import { MOCK_ADMIN_SERMONS, type SermonStatusTab } from '@/lib/mocks/sermons-admin';
+import { MOCK_ADMIN_SERMONS } from '@/lib/mocks/sermons-admin';
 import {
   countByStatus,
   filterSermons,
-  sortSermons,
-  type SermonSortKey,
-  type SermonSortState
+  sortSermons
 } from '@/lib/utils/sermon-filter';
 import StatusTabs from './parts/StatusTabs';
 import SearchBox from './parts/SearchBox';
@@ -21,80 +19,18 @@ import DateRangeFilter from './parts/DateRangeFilter';
 import ActiveFilters from './parts/ActiveFilters';
 import SermonTable from './parts/SermonTable';
 import { MOCK_PREACHERS, MOCK_SERIES } from './parts/mockData';
+import { useListFilters } from './hooks/useListFilters';
 import styles from './index.module.scss';
 
 type DropdownKey = 'preacher' | 'series' | 'date';
 
 export default function SermonListPage() {
   const router = useRouter();
-  const [search, setSearch] = useState('');
-  const [statusTab, setStatusTab] = useState<SermonStatusTab>('all');
+  const filters = useListFilters();
   const [openDropdown, setOpenDropdown] = useState<DropdownKey | null>(null);
-  const [selectedPreachers, setSelectedPreachers] = useState<string[]>([]);
-  const [selectedSeries, setSelectedSeries] = useState<string[]>([]);
-  const [dateFrom, setDateFrom] = useState('');
-  const [dateTo, setDateTo] = useState('');
-  const [sort, setSort] = useState<SermonSortState | null>(null);
-  const [page, setPage] = useState(1);
-  const [pageSize, setPageSize] = useState(20);
-
-  const resetPage = () => setPage(1);
 
   const toggleDropdown = (key: DropdownKey) =>
     setOpenDropdown((current) => (current === key ? null : key));
-
-  const togglePreacher = (id: string) => {
-    setSelectedPreachers((current) =>
-      current.includes(id) ? current.filter((value) => value !== id) : [...current, id]
-    );
-    resetPage();
-  };
-
-  const toggleSeries = (id: string) => {
-    setSelectedSeries((current) =>
-      current.includes(id) ? current.filter((value) => value !== id) : [...current, id]
-    );
-    resetPage();
-  };
-
-  const handleSearchChange = (value: string) => {
-    setSearch(value);
-    resetPage();
-  };
-
-  const handleStatusChange = (value: SermonStatusTab) => {
-    setStatusTab(value);
-    resetPage();
-  };
-
-  const handleDateChange = ({ from, to }: { from: string; to: string }) => {
-    setDateFrom(from);
-    setDateTo(to);
-    resetPage();
-  };
-
-  const clearDate = () => {
-    setDateFrom('');
-    setDateTo('');
-    resetPage();
-  };
-
-  const clearAll = () => {
-    setSearch('');
-    setSelectedPreachers([]);
-    setSelectedSeries([]);
-    setDateFrom('');
-    setDateTo('');
-    resetPage();
-  };
-
-  const handleSortChange = (key: SermonSortKey) => {
-    setSort((current) => {
-      if (current?.key !== key) return { key, direction: 'asc' };
-      if (current.direction === 'asc') return { key, direction: 'desc' };
-      return null;
-    });
-  };
 
   useClickOutside({
     enabled: openDropdown !== null,
@@ -106,26 +42,34 @@ export default function SermonListPage() {
     () =>
       sortSermons(
         filterSermons(MOCK_ADMIN_SERMONS, {
-          statusTab,
-          search,
-          selectedPreachers,
-          selectedSeries,
-          dateFrom,
-          dateTo
+          statusTab: filters.statusTab,
+          search: filters.search,
+          selectedPreachers: filters.selectedPreachers,
+          selectedSeries: filters.selectedSeries,
+          dateFrom: filters.dateFrom,
+          dateTo: filters.dateTo
         }),
-        sort
+        filters.sort
       ),
-    [statusTab, search, selectedPreachers, selectedSeries, dateFrom, dateTo, sort]
+    [
+      filters.statusTab,
+      filters.search,
+      filters.selectedPreachers,
+      filters.selectedSeries,
+      filters.dateFrom,
+      filters.dateTo,
+      filters.sort
+    ]
   );
 
   const statusCounts = useMemo(() => countByStatus(MOCK_ADMIN_SERMONS), []);
 
   const total = filtered.length;
-  const totalPages = Math.max(1, Math.ceil(total / pageSize));
-  const safePage = Math.min(page, totalPages);
+  const totalPages = Math.max(1, Math.ceil(total / filters.pageSize));
+  const safePage = Math.min(filters.page, totalPages);
   const paginated = useMemo(
-    () => filtered.slice((safePage - 1) * pageSize, safePage * pageSize),
-    [filtered, safePage, pageSize]
+    () => filtered.slice((safePage - 1) * filters.pageSize, safePage * filters.pageSize),
+    [filtered, safePage, filters.pageSize]
   );
 
   return (
@@ -145,64 +89,61 @@ export default function SermonListPage() {
       />
       <div className={styles.wrapper}>
         <StatusTabs
-          activeStatus={statusTab}
+          activeStatus={filters.statusTab}
           counts={statusCounts}
-          onChange={handleStatusChange}
+          onChange={filters.setStatusTab}
         />
         <div className={styles.toolbar}>
           <SearchBox
-            value={search}
-            onChange={handleSearchChange}
-            onClear={() => handleSearchChange('')}
+            value={filters.search}
+            onChange={filters.setSearch}
+            onClear={() => filters.setSearch('')}
           />
           <PreacherFilter
             preachers={MOCK_PREACHERS}
-            selected={selectedPreachers}
-            onToggle={togglePreacher}
+            selected={filters.selectedPreachers}
+            onToggle={filters.togglePreacher}
             isOpen={openDropdown === 'preacher'}
             onToggleOpen={() => toggleDropdown('preacher')}
           />
           <SeriesFilter
             series={MOCK_SERIES}
-            selected={selectedSeries}
-            onToggle={toggleSeries}
+            selected={filters.selectedSeries}
+            onToggle={filters.toggleSeries}
             isOpen={openDropdown === 'series'}
             onToggleOpen={() => toggleDropdown('series')}
           />
           <DateRangeFilter
-            dateFrom={dateFrom}
-            dateTo={dateTo}
-            onChange={handleDateChange}
+            dateFrom={filters.dateFrom}
+            dateTo={filters.dateTo}
+            onChange={filters.setDateRange}
             isOpen={openDropdown === 'date'}
             onToggleOpen={() => toggleDropdown('date')}
           />
         </div>
         <ActiveFilters
-          search={search}
-          preachers={selectedPreachers}
-          series={selectedSeries}
-          dateFrom={dateFrom}
-          dateTo={dateTo}
+          search={filters.search}
+          preachers={filters.selectedPreachers}
+          series={filters.selectedSeries}
+          dateFrom={filters.dateFrom}
+          dateTo={filters.dateTo}
           preachersData={MOCK_PREACHERS}
           seriesData={MOCK_SERIES}
-          onRemovePreacher={togglePreacher}
-          onRemoveSeries={toggleSeries}
-          onClearSearch={() => handleSearchChange('')}
-          onClearDate={clearDate}
-          onClearAll={clearAll}
+          onRemovePreacher={filters.togglePreacher}
+          onRemoveSeries={filters.toggleSeries}
+          onClearSearch={() => filters.setSearch('')}
+          onClearDate={filters.clearDate}
+          onClearAll={filters.clearAll}
         />
         <SermonTable
           sermons={paginated}
-          sort={sort}
-          onSortChange={handleSortChange}
+          sort={filters.sort}
+          onSortChange={filters.handleSortChange}
           total={total}
           currentPage={safePage}
-          pageSize={pageSize}
-          onPageChange={setPage}
-          onPageSizeChange={(size) => {
-            setPageSize(size);
-            setPage(1);
-          }}
+          pageSize={filters.pageSize}
+          onPageChange={filters.setPage}
+          onPageSizeChange={filters.setPageSize}
         />
       </div>
     </>
