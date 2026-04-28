@@ -117,6 +117,22 @@ export default function SermonListPage({
   const totalPages = Math.max(1, Math.ceil(total / filters.pageSize));
   const safePage = Math.min(filters.page, totalPages);
 
+  const hasActiveFilters = Boolean(
+    filters.statusTab !== 'all' ||
+      filters.search ||
+      filters.selectedPreachers.length > 0 ||
+      filters.selectedSeries.length > 0 ||
+      filters.dateFrom ||
+      filters.dateTo
+  );
+
+  const handleClearFilters = () => {
+    filters.setStatusTab('all');
+    filters.clearAll();
+  };
+
+  const handleCreateNew = () => router.push('/admin/sermons/new');
+
   return (
     <>
       <PageHeader
@@ -192,6 +208,9 @@ export default function SermonListPage({
           onPageSizeChange={filters.setPageSize}
           onEdit={handleEdit}
           onDelete={handleDeleteRequest}
+          hasActiveFilters={hasActiveFilters}
+          onClearFilters={handleClearFilters}
+          onCreateNew={handleCreateNew}
           isLoading={filters.isPending}
         />
       </div>

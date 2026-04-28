@@ -5,7 +5,10 @@ import {
   HiChevronLeft,
   HiChevronRight,
   HiOutlineFilm,
+  HiOutlineInbox,
   HiOutlinePencil,
+  HiOutlinePlus,
+  HiOutlineSearch,
   HiOutlineTrash
 } from 'react-icons/hi';
 import { formattedDate, formatRelativeTime } from '@/utils/date';
@@ -24,6 +27,9 @@ interface MobileCardListProps {
   onPageChange: (page: number) => void;
   onEdit: (sermon: AdminSermon) => void;
   onDelete: (sermon: AdminSermon) => void;
+  hasActiveFilters: boolean;
+  onClearFilters: () => void;
+  onCreateNew: () => void;
   isLoading?: boolean;
 }
 
@@ -35,11 +41,15 @@ export default function MobileCardList({
   onPageChange,
   onEdit,
   onDelete,
+  hasActiveFilters,
+  onClearFilters,
+  onCreateNew,
   isLoading = false
 }: MobileCardListProps) {
   const totalPages = Math.max(1, Math.ceil(total / pageSize));
   const isFirst = currentPage === 1;
   const isLast = currentPage === totalPages;
+  const isEmpty = sermons.length === 0;
 
   return (
     <>
@@ -48,6 +58,38 @@ export default function MobileCardList({
         aria-busy={isLoading || undefined}
       >
         {isLoading && <div className={styles.loading_overlay} aria-hidden />}
+        {isEmpty &&
+          (hasActiveFilters ? (
+            <div className={styles.empty}>
+              <span className={styles.empty_icon}>
+                <HiOutlineSearch aria-hidden />
+              </span>
+              <p className={styles.empty_title}>결과가 없습니다</p>
+              <p className={styles.empty_desc}>검색어나 필터 조건을 바꿔보세요</p>
+              <button
+                type="button"
+                className={styles.empty_action}
+                onClick={onClearFilters}
+              >
+                필터 초기화
+              </button>
+            </div>
+          ) : (
+            <div className={styles.empty}>
+              <span className={styles.empty_icon}>
+                <HiOutlineInbox aria-hidden />
+              </span>
+              <p className={styles.empty_title}>아직 등록된 설교가 없습니다</p>
+              <p className={styles.empty_desc}>첫 설교를 등록해보세요</p>
+              <button
+                type="button"
+                className={clsx(styles.empty_action, styles.primary)}
+                onClick={onCreateNew}
+              >
+                <HiOutlinePlus aria-hidden />첫 설교 등록하기
+              </button>
+            </div>
+          ))}
         {sermons.map((sermon) => {
           const status = deriveSermonStatus(sermon);
           return (
@@ -111,29 +153,31 @@ export default function MobileCardList({
           );
         })}
       </div>
-      <div className={styles.mobile_pagination}>
-        <button
-          type="button"
-          className={styles.page_button}
-          disabled={isFirst}
-          onClick={() => onPageChange(currentPage - 1)}
-          aria-label="이전 페이지"
-        >
-          <HiChevronLeft aria-hidden />
-        </button>
-        <span>
-          {currentPage} / {totalPages}
-        </span>
-        <button
-          type="button"
-          className={styles.page_button}
-          disabled={isLast}
-          onClick={() => onPageChange(currentPage + 1)}
-          aria-label="다음 페이지"
-        >
-          <HiChevronRight aria-hidden />
-        </button>
-      </div>
+      {!isEmpty && (
+        <div className={styles.mobile_pagination}>
+          <button
+            type="button"
+            className={styles.page_button}
+            disabled={isFirst}
+            onClick={() => onPageChange(currentPage - 1)}
+            aria-label="이전 페이지"
+          >
+            <HiChevronLeft aria-hidden />
+          </button>
+          <span>
+            {currentPage} / {totalPages}
+          </span>
+          <button
+            type="button"
+            className={styles.page_button}
+            disabled={isLast}
+            onClick={() => onPageChange(currentPage + 1)}
+            aria-label="다음 페이지"
+          >
+            <HiChevronRight aria-hidden />
+          </button>
+        </div>
+      )}
     </>
   );
 }
