@@ -13,7 +13,7 @@ import {
   deriveSermonStatus,
   SERMON_STATUS_LABEL,
   type AdminSermon
-} from '@/lib/mocks/sermons-admin';
+} from '@/types/sermon';
 import styles from '../table.module.scss';
 
 interface MobileCardListProps {
@@ -24,6 +24,7 @@ interface MobileCardListProps {
   onPageChange: (page: number) => void;
   onEdit: (sermon: AdminSermon) => void;
   onDelete: (sermon: AdminSermon) => void;
+  isLoading?: boolean;
 }
 
 export default function MobileCardList({
@@ -33,7 +34,8 @@ export default function MobileCardList({
   pageSize,
   onPageChange,
   onEdit,
-  onDelete
+  onDelete,
+  isLoading = false
 }: MobileCardListProps) {
   const totalPages = Math.max(1, Math.ceil(total / pageSize));
   const isFirst = currentPage === 1;
@@ -41,7 +43,11 @@ export default function MobileCardList({
 
   return (
     <>
-      <div className={styles.mobile_list}>
+      <div
+        className={clsx(styles.mobile_list, isLoading && styles.is_loading)}
+        aria-busy={isLoading || undefined}
+      >
+        {isLoading && <div className={styles.loading_overlay} aria-hidden />}
         {sermons.map((sermon) => {
           const status = deriveSermonStatus(sermon);
           return (

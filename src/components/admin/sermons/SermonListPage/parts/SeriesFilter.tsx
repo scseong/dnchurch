@@ -3,11 +3,11 @@
 import FilterDropdown from './FilterDropdown';
 import DropdownItem from './DropdownItem';
 import { NONE_SERIES_ID } from '@/lib/utils/sermon-filter';
-import type { MockSeries } from './mockData';
+import type { SeriesWithSermonCount } from '@/types/sermon';
 import dropdownStyles from '../dropdown.module.scss';
 
 interface SeriesFilterProps {
-  series: MockSeries[];
+  series: SeriesWithSermonCount[];
   selected: string[];
   onToggle: (id: string) => void;
   isOpen: boolean;
@@ -23,7 +23,11 @@ export default function SeriesFilter({
 }: SeriesFilterProps) {
   const items: { id: string; label: string; count: number | null }[] = [
     { id: NONE_SERIES_ID, label: '단독 설교', count: null },
-    ...series.map(({ id, title, count }) => ({ id, label: title, count }))
+    ...series.map(({ id, title, sermon_count }) => ({
+      id,
+      label: title,
+      count: sermon_count
+    }))
   ];
 
   return (

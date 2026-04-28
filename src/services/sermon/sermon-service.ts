@@ -8,7 +8,10 @@ import type {
   SermonWithRelations,
   SermonListItem,
   SeriesWithSermonCount,
-  YearCount
+  YearCount,
+  AdminSermon,
+  AdminSermonListParams,
+  SermonStatusTab
 } from '@/types/sermon';
 
 /** RPC create_sermon / update_sermon에 전달하는 리소스 행 형식 */
@@ -32,6 +35,18 @@ const SERMON_LIST_ITEM_SELECT = `
   title, scripture, service_type,
   preacher:preachers(name, title)
 `;
+
+const ADMIN_SERMON_SELECT = `
+  *,
+  preacher:preachers(id, name),
+  sermon_series(id, title)
+`;
+
+const NONE_SERIES_SENTINEL = '__none';
+
+function escapeOrToken(value: string): string {
+  return value.replace(/[(),]/g, ' ');
+}
 
 /** 설교 도메인 Supabase 쿼리 계층 */
 export const sermonService = (supabase: SupabaseClient<Database>) => ({
@@ -257,6 +272,86 @@ export const sermonService = (supabase: SupabaseClient<Database>) => ({
 
     const handled = handleResponse(res);
     return (handled.data as unknown as SermonWithRelations | null) ?? null;
+  },
+
+  /** [어드민] 발행 상태별 카운트 — is_published projection만 가져와 JS 집계 */
+  adminStatusCounts: async (): Promise<Record<SermonStatusTab, number>> => {
+    const res = await supabase
+      .from('sermons')
+      .select('is_published')
+      .is('deleted_at', null);
+    const handled = handleResponse(res);
+    const rows = (handled.data ?? []) as Array<{ is_published: boolean }>;
+    let published = 0;
+    let draft = 0;
+    for (const row of rows) {
+      if (row.is_published) published += 1;
+      else draft += 1;
+    }
+    return { all: published + draft, published, draft };
+  },
+
+  /** [어드민] 필터/정렬/페이지네이션 적용 목록 — is_published 디폴트 필터 없음 */
+  adminList: async (
+    params: AdminSermonListParams
+  ): Promise<{ sermons: AdminSermon[]; total: number }> => {
+    let query = supabase
+      .from('sermons')
+      .select(ADMIN_SERMON_SELECT, { count: 'exact' })
+      .is('deleted_at', null);
+
+    if (params.statusTab === 'published') {
+      query = query.eq('is_published', true);
+    } else if (params.statusTab === 'draft') {
+      query = query.eq('is_published', false);
+    }
+
+    if (params.selectedPreachers.length > 0) {
+      query = query.in('preacher_id', params.selectedPreachers);
+    }
+
+    if (params.selectedSeries.length > 0) {
+      const includesNone = params.selectedSeries.includes(NONE_SERIES_SENTINEL);
+      const realIds = params.selectedSeries.filter(
+        (id) => id !== NONE_SERIES_SENTINEL
+      );
+      if (includesNone && realIds.length === 0) {
+        query = query.is('series_id', null);
+      } else if (!includesNone && realIds.length > 0) {
+        query = query.in('series_id', realIds);
+      } else {
+        query = query.or(
+          `series_id.is.null,series_id.in.(${realIds.join(',')})`
+        );
+      }
+    }
+
+    if (params.dateFrom) query = query.gte('sermon_date', params.dateFrom);
+    if (params.dateTo) query = query.lte('sermon_date', params.dateTo);
+
+    const search = params.search.trim();
+    if (search) {
+      const safe = escapeOrToken(search);
+      query = query.or(`title.ilike.%${safe}%,scripture.ilike.%${safe}%`);
+    }
+
+    if (params.sort) {
+      query = query.order(params.sort.key, {
+        ascending: params.sort.direction === 'asc'
+      });
+    } else {
+      query = query.order('sermon_date', { ascending: false });
+    }
+
+    const from = (params.page - 1) * params.pageSize;
+    const to = from + params.pageSize - 1;
+    const res = await query.range(from, to);
+    const handled = handleResponse(res);
+
+    return {
+      sermons: (handled.data ?? []) as unknown as AdminSermon[],
+      total: handled.count ?? 0
+    };
   },
 
   /** 공개 설교 상세 조회 — id 기반 */

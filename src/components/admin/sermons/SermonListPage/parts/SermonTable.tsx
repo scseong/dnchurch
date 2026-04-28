@@ -13,18 +13,17 @@ import { formattedDate, formatRelativeTime } from '@/utils/date';
 import {
   deriveSermonStatus,
   SERMON_STATUS_LABEL,
-  type AdminSermon
-} from '@/lib/mocks/sermons-admin';
-import type { SermonSortKey, SermonSortState } from '@/lib/utils/sermon-filter';
+  type AdminSermon,
+  type AdminSermonSortKey,
+  type AdminSermonSortState
+} from '@/types/sermon';
 import MobileCardList from './MobileCardList';
 import Pagination from './Pagination';
 import styles from '../table.module.scss';
 
-export type { SermonSortKey as SortKey, SermonSortState as SortState } from '@/lib/utils/sermon-filter';
-
 interface ColumnDef {
   id: string;
-  key: SermonSortKey | null;
+  key: AdminSermonSortKey | null;
   label: string;
   srLabel?: string;
   className?: string;
@@ -43,8 +42,8 @@ const COLUMNS: ColumnDef[] = [
 
 interface SermonTableProps {
   sermons: AdminSermon[];
-  sort: SermonSortState | null;
-  onSortChange: (key: SermonSortKey) => void;
+  sort: AdminSermonSortState | null;
+  onSortChange: (key: AdminSermonSortKey) => void;
   total: number;
   currentPage: number;
   pageSize: number;
@@ -52,6 +51,7 @@ interface SermonTableProps {
   onPageSizeChange: (size: number) => void;
   onEdit: (sermon: AdminSermon) => void;
   onDelete: (sermon: AdminSermon) => void;
+  isLoading?: boolean;
 }
 
 export default function SermonTable({
@@ -64,9 +64,10 @@ export default function SermonTable({
   onPageChange,
   onPageSizeChange,
   onEdit,
-  onDelete
+  onDelete,
+  isLoading = false
 }: SermonTableProps) {
-  const renderSortIcon = (columnKey: SermonSortKey) => {
+  const renderSortIcon = (columnKey: AdminSermonSortKey) => {
     const isActive = sort?.key === columnKey;
     const isAsc = isActive && sort.direction === 'asc';
     const isDesc = isActive && sort.direction === 'desc';
@@ -92,7 +93,11 @@ export default function SermonTable({
 
   return (
     <>
-      <div className={styles.table_wrap}>
+      <div
+        className={clsx(styles.table_wrap, isLoading && styles.is_loading)}
+        aria-busy={isLoading || undefined}
+      >
+        {isLoading && <div className={styles.loading_overlay} aria-hidden />}
         <div className={styles.table_scroll}>
           <table className={styles.table}>
             <thead>
@@ -111,7 +116,7 @@ export default function SermonTable({
                       className={clsx(column.className, isSortable && styles.sortable)}
                       onClick={
                         isSortable && column.key
-                          ? () => onSortChange(column.key as SermonSortKey)
+                          ? () => onSortChange(column.key as AdminSermonSortKey)
                           : undefined
                       }
                       aria-sort={ariaSort}
@@ -234,6 +239,7 @@ export default function SermonTable({
         onPageChange={onPageChange}
         onEdit={onEdit}
         onDelete={onDelete}
+        isLoading={isLoading}
       />
     </>
   );

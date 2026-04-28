@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { HiPlus } from 'react-icons/hi';
 import PageHeader from '@/components/admin/layout/PageHeader';
@@ -9,12 +9,13 @@ import { useClickOutside } from '@/hooks/useClickOutside';
 import { useDebounce } from '@/hooks/useDebounce';
 import { useMediaQuery } from '@/hooks/useMediaQuery';
 import { useToastStore } from '@/store/toast.store';
-import { MOCK_ADMIN_SERMONS, type AdminSermon } from '@/lib/mocks/sermons-admin';
-import {
-  countByStatus,
-  filterSermons,
-  sortSermons
-} from '@/lib/utils/sermon-filter';
+import type {
+  AdminSermon,
+  AdminSermonListParams,
+  Preacher,
+  SeriesWithSermonCount,
+  SermonStatusTab
+} from '@/types/sermon';
 import StatusTabs from './parts/StatusTabs';
 import SearchBox from './parts/SearchBox';
 import PreacherFilter from './parts/PreacherFilter';
@@ -22,15 +23,30 @@ import SeriesFilter from './parts/SeriesFilter';
 import DateRangeFilter from './parts/DateRangeFilter';
 import ActiveFilters from './parts/ActiveFilters';
 import SermonTable from './parts/SermonTable';
-import { MOCK_PREACHERS, MOCK_SERIES } from './parts/mockData';
 import { useListFilters } from './hooks/useListFilters';
 import styles from './index.module.scss';
 
 type DropdownKey = 'preacher' | 'series' | 'date';
 
-export default function SermonListPage() {
+interface SermonListPageProps {
+  sermons: AdminSermon[];
+  total: number;
+  statusCounts: Record<SermonStatusTab, number>;
+  initialParams: AdminSermonListParams;
+  preachers: Preacher[];
+  series: SeriesWithSermonCount[];
+}
+
+export default function SermonListPage({
+  sermons,
+  total,
+  statusCounts,
+  initialParams,
+  preachers,
+  series
+}: SermonListPageProps) {
   const router = useRouter();
-  const filters = useListFilters();
+  const filters = useListFilters(initialParams);
   const toast = useToastStore();
   const isDesktop = useMediaQuery('(min-width: 1024px)');
   const [openDropdown, setOpenDropdown] = useState<DropdownKey | null>(null);
@@ -72,7 +88,7 @@ export default function SermonListPage() {
 
   const handleDeleteConfirm = () => {
     if (!deleteTarget) return;
-    // TODO Phase 3: 실제 삭제 API 연결
+    // TODO Phase 3-3: 실제 삭제 API 연결
     console.info('[delete sermon]', deleteTarget.id, deleteTarget.title);
     toast.success('설교가 삭제되었습니다');
     setDeleteTarget(null);
@@ -84,39 +100,8 @@ export default function SermonListPage() {
     onClickOutside: () => setOpenDropdown(null)
   });
 
-  const filtered = useMemo(
-    () =>
-      sortSermons(
-        filterSermons(MOCK_ADMIN_SERMONS, {
-          statusTab: filters.statusTab,
-          search: filters.search,
-          selectedPreachers: filters.selectedPreachers,
-          selectedSeries: filters.selectedSeries,
-          dateFrom: filters.dateFrom,
-          dateTo: filters.dateTo
-        }),
-        filters.sort
-      ),
-    [
-      filters.statusTab,
-      filters.search,
-      filters.selectedPreachers,
-      filters.selectedSeries,
-      filters.dateFrom,
-      filters.dateTo,
-      filters.sort
-    ]
-  );
-
-  const statusCounts = useMemo(() => countByStatus(MOCK_ADMIN_SERMONS), []);
-
-  const total = filtered.length;
   const totalPages = Math.max(1, Math.ceil(total / filters.pageSize));
   const safePage = Math.min(filters.page, totalPages);
-  const paginated = useMemo(
-    () => filtered.slice((safePage - 1) * filters.pageSize, safePage * filters.pageSize),
-    [filtered, safePage, filters.pageSize]
-  );
 
   return (
     <>
@@ -147,14 +132,14 @@ export default function SermonListPage() {
             isPending={isSearchPending}
           />
           <PreacherFilter
-            preachers={MOCK_PREACHERS}
+            preachers={preachers}
             selected={filters.selectedPreachers}
             onToggle={filters.togglePreacher}
             isOpen={openDropdown === 'preacher'}
             onToggleOpen={() => toggleDropdown('preacher')}
           />
           <SeriesFilter
-            series={MOCK_SERIES}
+            series={series}
             selected={filters.selectedSeries}
             onToggle={filters.toggleSeries}
             isOpen={openDropdown === 'series'}
@@ -174,8 +159,8 @@ export default function SermonListPage() {
           series={filters.selectedSeries}
           dateFrom={filters.dateFrom}
           dateTo={filters.dateTo}
-          preachersData={MOCK_PREACHERS}
-          seriesData={MOCK_SERIES}
+          preachersData={preachers}
+          seriesData={series}
           onRemovePreacher={filters.togglePreacher}
           onRemoveSeries={filters.toggleSeries}
           onClearSearch={handleSearchClear}
@@ -183,7 +168,7 @@ export default function SermonListPage() {
           onClearAll={filters.clearAll}
         />
         <SermonTable
-          sermons={paginated}
+          sermons={sermons}
           sort={filters.sort}
           onSortChange={filters.handleSortChange}
           total={total}
@@ -193,6 +178,7 @@ export default function SermonListPage() {
           onPageSizeChange={filters.setPageSize}
           onEdit={handleEdit}
           onDelete={handleDeleteRequest}
+          isLoading={filters.isPending}
         />
       </div>
       <ConfirmModal

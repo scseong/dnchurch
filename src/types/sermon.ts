@@ -54,3 +54,53 @@ export type SermonArchiveView = {
   recentSermons: SermonWithRelations[];
   yearCounts: YearCount[];
 };
+
+// ─── Admin: 발행 상태 + 목록 응답 타입 ───────────────────────────────────────
+
+export type SermonStatus = 'published' | 'draft';
+export type SermonStatusTab = 'all' | SermonStatus;
+
+export const SERMON_STATUS_LABEL: Record<SermonStatus, string> = {
+  published: '발행',
+  draft: '초안'
+};
+
+export type AdminSermon = Sermon & {
+  preacher: Pick<Preacher, 'id' | 'name'>;
+  sermon_series: Pick<SermonSeries, 'id' | 'title'> | null;
+};
+
+export type AdminSermonSortKey =
+  | 'title'
+  | 'sermon_date'
+  | 'view_count'
+  | 'updated_at';
+
+export interface AdminSermonSortState {
+  key: AdminSermonSortKey;
+  direction: 'asc' | 'desc';
+}
+
+export interface AdminSermonListParams {
+  statusTab: SermonStatusTab;
+  search: string;
+  selectedPreachers: string[];
+  selectedSeries: string[];
+  dateFrom: string;
+  dateTo: string;
+  sort: AdminSermonSortState | null;
+  page: number;
+  pageSize: number;
+}
+
+export interface AdminSermonListResult {
+  sermons: AdminSermon[];
+  total: number;
+  statusCounts: Record<SermonStatusTab, number>;
+}
+
+export function deriveSermonStatus(
+  sermon: Pick<Sermon, 'is_published'>
+): SermonStatus {
+  return sermon.is_published ? 'published' : 'draft';
+}

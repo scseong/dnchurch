@@ -1,7 +1,7 @@
 'use client';
 
 import clsx from 'clsx';
-import type { SermonStatusTab } from '@/lib/mocks/sermons-admin';
+import type { SermonStatusTab } from '@/types/sermon';
 import styles from '../index.module.scss';
 
 interface StatusTabsProps {
@@ -13,8 +13,7 @@ interface StatusTabsProps {
 const TABS: { value: SermonStatusTab; label: string }[] = [
   { value: 'all', label: '전체' },
   { value: 'published', label: '발행' },
-  { value: 'draft', label: '초안' },
-  { value: 'scheduled', label: '예약' }
+  { value: 'draft', label: '초안' }
 ];
 
 export default function StatusTabs({ activeStatus, counts, onChange }: StatusTabsProps) {
