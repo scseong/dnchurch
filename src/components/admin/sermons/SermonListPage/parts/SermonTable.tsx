@@ -5,10 +5,7 @@ import {
   HiChevronDown,
   HiChevronUp,
   HiOutlineFilm,
-  HiOutlineInbox,
   HiOutlinePencil,
-  HiOutlinePlus,
-  HiOutlineSearch,
   HiOutlineTrash
 } from 'react-icons/hi';
 import { formattedDate, formatRelativeTime } from '@/utils/date';
@@ -21,6 +18,7 @@ import {
 } from '@/types/sermon';
 import MobileCardList from './MobileCardList';
 import Pagination from './Pagination';
+import SermonEmptyState from './SermonEmptyState';
 import styles from '../table.module.scss';
 
 interface ColumnDef {
@@ -144,38 +142,11 @@ export default function SermonTable({
               {sermons.length === 0 ? (
                 <tr>
                   <td colSpan={COLUMNS.length}>
-                    {hasActiveFilters ? (
-                      <div className={styles.empty}>
-                        <span className={styles.empty_icon}>
-                          <HiOutlineSearch aria-hidden />
-                        </span>
-                        <p className={styles.empty_title}>결과가 없습니다</p>
-                        <p className={styles.empty_desc}>검색어나 필터 조건을 바꿔보세요</p>
-                        <button
-                          type="button"
-                          className={styles.empty_action}
-                          onClick={onClearFilters}
-                        >
-                          필터 초기화
-                        </button>
-                      </div>
-                    ) : (
-                      <div className={styles.empty}>
-                        <span className={styles.empty_icon}>
-                          <HiOutlineInbox aria-hidden />
-                        </span>
-                        <p className={styles.empty_title}>아직 등록된 설교가 없습니다</p>
-                        <p className={styles.empty_desc}>첫 설교를 등록해보세요</p>
-                        <button
-                          type="button"
-                          className={clsx(styles.empty_action, styles.primary)}
-                          onClick={onCreateNew}
-                        >
-                          <HiOutlinePlus aria-hidden />
-                          첫 설교 등록하기
-                        </button>
-                      </div>
-                    )}
+                    <SermonEmptyState
+                      hasActiveFilters={hasActiveFilters}
+                      onClearFilters={onClearFilters}
+                      onCreateNew={onCreateNew}
+                    />
                   </td>
                 </tr>
               ) : (
