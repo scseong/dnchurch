@@ -2,6 +2,10 @@
   position: relative;
 }
 
+// ──────────────────────────────────────────────
+// Trigger — admin layout scope (admin 토큰)
+// ──────────────────────────────────────────────
+
 .filter_trigger {
   display: inline-flex;
   align-items: center;
@@ -49,6 +53,11 @@
   font-weight: 700;
 }
 
+// ──────────────────────────────────────────────
+// PC absolute panel — globals 토큰
+// (모바일은 BottomSheet에 같은 children 클래스로 렌더)
+// ──────────────────────────────────────────────
+
 .dropdown_panel {
   position: absolute;
   top: calc(100% + 4px);
@@ -57,11 +66,11 @@
   min-width: 240px;
   max-width: 300px;
   padding: 12px;
-  background: var(--admin-bg-card);
-  border: 1px solid var(--admin-bd);
-  border-radius: 8px;
-  box-shadow: 0 8px 28px rgba(15, 20, 30, 0.09);
-  animation: dropdown_in 0.15s var(--admin-ease);
+  background: $white;
+  border: 1px solid $border-primary;
+  border-radius: $radius-xs;
+  box-shadow: $shadow-md;
+  animation: dropdown_in 0.15s $transition-easing-default;
 }
 
 @keyframes dropdown_in {
@@ -76,52 +85,68 @@
 }
 
 .dropdown_title {
-  margin: 0 0 8px;
-  color: var(--admin-t3);
-  font-size: 11px;
-  font-weight: 700;
-  letter-spacing: 0.05em;
-  text-transform: uppercase;
+  display: none;
+
+  @include respond-up($breakpoint-pc-sm) {
+    display: block;
+    margin: 0 0 8px;
+    color: $txt-tertiary;
+    font-size: 11px;
+    font-weight: $font-weight-bold;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+  }
 }
 
 .dropdown_list {
   display: flex;
   flex-direction: column;
-  gap: 2px;
-  max-height: 280px;
-  overflow-y: auto;
+  gap: 4px;
+
+  @include respond-up($breakpoint-pc-sm) {
+    gap: 2px;
+    max-height: 280px;
+    overflow-y: auto;
+  }
 }
 
 .dropdown_item {
   display: flex;
   align-items: center;
-  gap: 8px;
-  padding: 7px 10px;
+  gap: 10px;
+  padding: 12px;
   border: 0;
-  border-radius: 5px;
+  border-radius: 6px;
   background: none;
-  color: var(--admin-t2);
-  font-size: 13px;
+  color: $txt-secondary;
+  font-size: $font-size-14;
   text-align: left;
   cursor: pointer;
   transition:
-    background 0.15s var(--admin-ease),
-    color 0.15s var(--admin-ease);
+    background 0.15s $transition-easing-default,
+    color 0.15s $transition-easing-default;
 
   &:hover {
-    background: var(--admin-bg-w);
-    color: var(--admin-t1);
+    background: $bg-secondary;
+    color: $txt-primary;
+  }
+
+  @include respond-up($breakpoint-pc-sm) {
+    gap: 8px;
+    padding: 7px 10px;
+    border-radius: 5px;
+    font-size: $font-size-13;
   }
 }
 
 .dropdown_item_active {
-  background: var(--admin-accent-bg);
-  color: var(--admin-accent);
-  font-weight: 600;
+  background: $primary-subtle;
+  color: $primary;
+  font-weight: $font-weight-semibold;
 
   &:hover {
-    background: var(--admin-accent-bg);
-    color: var(--admin-accent);
+    background: $primary-subtle;
+    color: $primary;
   }
 }
 
@@ -138,73 +163,102 @@
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
-  width: 14px;
-  height: 14px;
-  border: 1.5px solid var(--admin-bd-s);
-  border-radius: 3px;
+  width: 16px;
+  height: 16px;
+  border: 1.5px solid $border-secondary;
+  border-radius: 4px;
   color: transparent;
-  font-size: 10px;
+  font-size: 11px;
   transition:
-    background 0.15s var(--admin-ease),
-    border-color 0.15s var(--admin-ease),
-    color 0.15s var(--admin-ease);
+    background 0.15s $transition-easing-default,
+    border-color 0.15s $transition-easing-default,
+    color 0.15s $transition-easing-default;
+
+  @include respond-up($breakpoint-pc-sm) {
+    width: 14px;
+    height: 14px;
+    border-radius: 3px;
+    font-size: 10px;
+  }
 }
 
 .checkbox_checked {
-  background: var(--admin-accent);
-  border-color: var(--admin-accent);
-  color: #fff;
+  background: $primary;
+  border-color: $primary;
+  color: $txt-inverse;
 }
 
 .item_count {
   margin-left: auto;
-  color: var(--admin-t3);
-  font-size: 10px;
+  color: $txt-tertiary;
+  font-size: 12px;
 
   .dropdown_item_active & {
-    color: var(--admin-accent);
+    color: $primary;
+  }
+
+  @include respond-up($breakpoint-pc-sm) {
+    font-size: 10px;
   }
 }
 
 .date_row {
   display: flex;
-  align-items: center;
-  gap: 6px;
-  color: var(--admin-t3);
-  font-size: 12px;
+  flex-direction: column;
+  gap: 8px;
+  color: $txt-tertiary;
+  font-size: $font-size-13;
+
+  @include respond-up($breakpoint-pc-sm) {
+    flex-direction: row;
+    align-items: center;
+    gap: 6px;
+    font-size: $font-size-12;
+  }
 }
 
 .date_input {
   flex: 1;
   min-width: 0;
-  padding: 7px 10px;
-  border: 1px solid var(--admin-bd);
-  border-radius: 5px;
-  background: var(--admin-bg-card);
-  color: var(--admin-t1);
-  font-size: 12px;
+  padding: 11px 12px;
+  border: 1px solid $border-primary;
+  border-radius: 6px;
+  background: $white;
+  color: $txt-primary;
+  font-size: $font-size-14;
   transition:
-    border-color 0.15s var(--admin-ease),
-    box-shadow 0.15s var(--admin-ease);
+    border-color 0.15s $transition-easing-default,
+    box-shadow 0.15s $transition-easing-default;
 
   &:focus {
     outline: none;
-    border-color: var(--admin-accent);
-    box-shadow: 0 0 0 3px var(--admin-accent-bg);
+    border-color: $primary;
+    box-shadow: 0 0 0 3px $primary-subtle;
+  }
+
+  @include respond-up($breakpoint-pc-sm) {
+    padding: 7px 10px;
+    border-radius: 5px;
+    font-size: $font-size-12;
   }
 }
 
 .date_clear {
-  margin-top: 8px;
+  margin-top: 12px;
   padding: 0;
   border: 0;
   background: none;
-  color: var(--admin-accent);
-  font-size: 11.5px;
-  font-weight: 600;
+  color: $primary;
+  font-size: $font-size-13;
+  font-weight: $font-weight-semibold;
   cursor: pointer;
 
   &:hover {
     text-decoration: underline;
+  }
+
+  @include respond-up($breakpoint-pc-sm) {
+    margin-top: 8px;
+    font-size: 11.5px;
   }
 }

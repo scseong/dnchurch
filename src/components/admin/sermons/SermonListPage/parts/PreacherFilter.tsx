@@ -2,11 +2,11 @@
 
 import FilterDropdown from './FilterDropdown';
 import DropdownItem from './DropdownItem';
-import type { MockPreacher } from './mockData';
+import type { Preacher } from '@/types/sermon';
 import dropdownStyles from '../dropdown.module.scss';
 
 interface PreacherFilterProps {
-  preachers: MockPreacher[];
+  preachers: Preacher[];
   selected: string[];
   onToggle: (id: string) => void;
   isOpen: boolean;
@@ -34,7 +34,6 @@ export default function PreacherFilter({
             key={preacher.id}
             selected={selected.includes(preacher.id)}
             label={preacher.name}
-            count={preacher.count}
             onSelect={() => onToggle(preacher.id)}
           />
         ))}

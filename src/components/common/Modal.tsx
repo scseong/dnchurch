@@ -16,15 +16,24 @@ export default function Modal({ children, onClose, isVisible }: Props) {
   const overlayRef = useRef<HTMLDivElement>(null);
   useScrollLock(isVisible);
 
-  const handleOverlayClick = (e: React.MouseEvent<HTMLDivElement>) => {
-    if (e.target === overlayRef.current) {
-      onClose?.();
-    }
-  };
-
   useEffect(() => {
     setMounted(true);
   }, []);
+
+  useEffect(() => {
+    if (!isVisible) return;
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') onClose?.();
+    };
+    document.addEventListener('keydown', handleKeyDown);
+    return () => document.removeEventListener('keydown', handleKeyDown);
+  }, [isVisible, onClose]);
+
+  const handleOverlayClick = (event: React.MouseEvent<HTMLDivElement>) => {
+    if (event.target === overlayRef.current) {
+      onClose?.();
+    }
+  };
 
   if (!mounted) return null;
 

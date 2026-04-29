@@ -1,7 +1,8 @@
 'use client';
 
 import { HiX } from 'react-icons/hi';
-import { NONE_SERIES_ID, type MockPreacher, type MockSeries } from './mockData';
+import { NONE_SERIES_ID } from '@/lib/utils/sermon-filter';
+import type { Preacher, SeriesWithSermonCount } from '@/types/sermon';
 import styles from '../index.module.scss';
 
 interface ActiveFiltersProps {
@@ -10,8 +11,8 @@ interface ActiveFiltersProps {
   series: string[];
   dateFrom: string;
   dateTo: string;
-  preachersData: MockPreacher[];
-  seriesData: MockSeries[];
+  preachersData: Preacher[];
+  seriesData: SeriesWithSermonCount[];
   onRemovePreacher: (id: string) => void;
   onRemoveSeries: (id: string) => void;
   onClearSearch: () => void;
