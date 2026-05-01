@@ -29,17 +29,6 @@ errors 분포 재분석 결과 (작성 중 발견된 정정 사항):
 | `@typescript-eslint/no-require-imports` | 1 | `next.config.ts` | ✅ 룰 disable (Next.js 공식 예제도 require 사용) |
 | **본 phase 합계** | **13** | | |
 
-## ESLint errors 정확한 분포
-
-| 룰 | 건수 | 위치 |
-| --- | --- | --- |
-| `react-hooks/set-state-in-effect` | 10 | `components/admin/common/ConfirmModal/index.tsx` (한 파일) |
-| `react-hooks/refs` | 10 | `components/admin/common/ConfirmModal/index.tsx` (한 파일) |
-| `prefer-const` | 1 | `lib/supabase/middleware.ts` (자동 수정 가능) |
-| `react-hooks/immutability` | 1 | `hooks/useTimer.tsx` (잠재 버그 — `stop` 선언 전 사용) |
-| `@typescript-eslint/no-require-imports` | 1 | `next.config.ts` |
-| **합계** | **23** |  |
-
 ## 영향받는 파일
 
 - `src/lib/supabase/middleware.ts` — `let` → `const` (자동 수정)
@@ -89,6 +78,9 @@ errors 분포 재분석 결과 (작성 중 발견된 정정 사항):
 - 2026-05-01: **set-state-in-effect 10건은 phase1.5로 분리** — 케이스별 검토 필요(정당한 사용일 수도). 본 phase는 안전·즉시 가능한 13건만.
 - 2026-05-01: ConfirmModal `react-hooks/refs`는 **룰 disable + 주석으로 의도 명시** — snapshot 패턴이 의도된 디자인(transition 중 깜빡임 방지). useState로 바꾸면 set-state-in-effect 룰을 다시 위반하는 함정.
 - 2026-05-01: `useTimer`는 진짜 버그가 아닌 **함수 hoisting 의존**으로 확인 — 함수 순서 재정렬만으로 안전 수정 가능, 동작 변경 없음.
+- 2026-05-01: **Codex 리뷰 반영** — ConfirmModal을 `useState` + `useLayoutEffect` 패턴으로 재구현. 사유: ref render-time mutation은 React 19 Concurrent Mode에서 버려진 렌더 데이터가 누출될 수 있음. 한 프레임 지연 비용은 모달 사용 패턴(props가 거의 변하지 않음)에서 무시 가능.
+- 2026-05-01: **Codex 리뷰 일부 철회** — layer 룰 상대 경로 보강(`**/<layer>/**`)은 `next/dist/client/components/...` 등 외부 패키지 false positive 발생. alias만 유지로 후퇴. 상대 경로 보강은 `eslint-plugin-import`의 `no-relative-parent-imports` 등으로 별도 처리 후보.
+- 2026-05-01: **app/ → apis/ 룰 격상** — `warn` → `error`. 기존 위반 10건은 line-level disable + tech-debt-tracker 등록. 신규 위반은 즉시 차단됨.
 
 ## 리뷰 (완료 직전)
 

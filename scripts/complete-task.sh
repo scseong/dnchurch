@@ -12,6 +12,13 @@ if [[ -z "$PATTERN" ]]; then
   exit 1
 fi
 
+# glob/path 문자 차단 — find -name에 그대로 전달되어 의도치 않은 매치 방지
+if [[ "$PATTERN" =~ [^a-zA-Z0-9_.-] ]]; then
+  echo "Error: PATTERN은 영숫자·_·.·-만 허용 (slug 또는 그 일부)." >&2
+  echo "  입력: $PATTERN" >&2
+  exit 1
+fi
+
 REPO_ROOT="$(git rev-parse --show-toplevel)"
 ACTIVE_DIR="$REPO_ROOT/docs/exec-plans/active"
 COMPLETED_DIR="$REPO_ROOT/docs/exec-plans/completed"

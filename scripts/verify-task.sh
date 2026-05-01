@@ -31,10 +31,24 @@ run_step() {
   fi
 }
 
-run_step "ESLint"          yarn lint
-run_step "stylelint"       yarn lint:styles
-run_step "Build (next)"    yarn build
-run_step "Knip (미사용 코드)" yarn knip || WARNED+=("Knip")
+# 비차단 단계 — 실패 시 FAILED가 아닌 WARNED에 기록 (전체 종료 코드는 0 유지)
+run_warning_step() {
+  local label="$1"; shift
+  echo ""
+  echo "${BOLD}━━━ $label ━━━${RESET}"
+  if "$@"; then
+    echo "${GREEN}✓ $label 통과${RESET}"
+  else
+    local code=$?
+    echo "${YELLOW}⚠ $label 경고 (exit $code)${RESET}"
+    WARNED+=("$label")
+  fi
+}
+
+run_step         "ESLint"            yarn lint
+run_step         "stylelint"         yarn lint:styles
+run_step         "Build (next)"      yarn build
+run_warning_step "Knip (미사용 코드)" yarn knip
 
 echo ""
 echo "${BOLD}━━━ 결과 요약 ━━━${RESET}"

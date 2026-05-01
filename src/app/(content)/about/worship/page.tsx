@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import MainContainer from '@/components/layout/container/MainContainer';
 import WorshipSchedule from './_component/WorshipSchedule';
+// eslint-disable-next-line no-restricted-imports -- 점진 마이그레이션 대상 (tech-debt-tracker.md)
 import { getWorshipSchedules } from '@/apis/worship-schedules';
 import styles from './page.module.scss';
 

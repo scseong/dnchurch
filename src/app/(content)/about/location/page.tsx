@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import MainContainer from '@/components/layout/container/MainContainer';
+// eslint-disable-next-line no-restricted-imports -- 점진 마이그레이션 대상 (tech-debt-tracker.md)
 import { getSiteSettings } from '@/apis/site-settings';
 import styles from './page.module.scss';
 import { MdDirectionsBus, MdLocationOn } from 'react-icons/md';
