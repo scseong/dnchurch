@@ -27,7 +27,7 @@ AI 코딩 에이전트(Claude Code, Codex, Gemini 등)의 활용이 일반화되
 | 에이전트 | 책임 | 사용 빈도 |
 | --- | --- | --- |
 | **Claude Code** (이 에이전트) | 오케스트레이터, 메인 개발 작업, 컨텍스트 통합·기록, 위임 판단 | 항상 (사용자가 직접 대화) |
-| **Codex** (`codex:rescue` 스킬) | 깊은 추론, 설계 판단, 트레이드오프 분석, 막힌 디버깅, 큰 변경 후 리뷰 | 트리거 충족 시 |
+| **Codex** (`codex:rescue` 스킬 / `.codex/`) | 깊은 추론, 설계 판단, 계획 리뷰, 트레이드오프 분석, 막힌 디버깅, 큰 변경 후 리뷰 | 트리거 충족 시 |
 
 ### Codex 위임 트리거 (MUST)
 
@@ -42,6 +42,7 @@ AI 코딩 에이전트(Claude Code, Codex, Gemini 등)의 활용이 일반화되
 - 단순 파일 수정 (오타, 한 줄 변경, rename)
 - 표준 작업 (`git commit`, lint, build)
 - 답이 명확한 코드 수정
+- 명시적 요청 없는 Codex 직접 구현 (기본 구현자는 Claude Code)
 
 ### 운영 원칙
 
@@ -101,11 +102,13 @@ AI 코딩 에이전트(Claude Code, Codex, Gemini 등)의 활용이 일반화되
    - `scripts/` 워크플로우 자동화 (start-task, complete-task, verify-task)
    - 언어 프로토콜 명시 (CLAUDE.md)
    - 멀티 세션 리뷰 패턴 (exec-plan 템플릿)
+   - Codex 진입점 `AGENTS.md`와 `.codex/skills/context-loader/`
+   - Claude Hook 자동 제안 인프라 `.claude/hooks/` + `.claude/settings.json`
 
 2. **다음 EXEC_PLAN**:
-   - `harness-agent-roles` (예정) — CLAUDE.md에 역할 분담 + Codex 위임 트리거 섹션 추가
-   - `harness-context-autoload` (예정) — 작업 시작 시 핵심 docs 자동 로딩 (start-task.sh 강화 또는 SessionStart hook)
-   - `harness-claude-hooks` (예정) — Hooks로 자동 위임 제안 (`agent-router`, `post-test-analysis` 등)
+   - `verify-task-rework` — 기존 부채와 신규 회귀를 분리해 검증 루프를 안정화
+   - `codex-plan-review-dogfood` — 실제 기능 작업에서 "Claude 계획 → Codex 리뷰 → Claude 구현" 루프 검증
+   - `harness-hook-threshold-tuning` — Hook 제안 빈도와 임계값 조정
 
 3. **장기**:
    - `/checkpointing` 패턴 — 작업 패턴 분석·재사용 가능 스킬 추출
