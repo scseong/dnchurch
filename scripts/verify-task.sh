@@ -2,7 +2,6 @@
 # verify-task.sh — 커밋·머지 전 전체 검증 + 증적 기록
 # 사용법: TASK_ID=<slug> bash scripts/verify-task.sh
 #         또는 bash scripts/verify-task.sh <task-id>
-#         또는 yarn verify
 
 set -uo pipefail
 
@@ -15,26 +14,21 @@ if [[ ! "$TASK_ID" =~ ^[a-zA-Z0-9][a-zA-Z0-9_.-]*$ ]]; then
   exit 1
 fi
 
+DATE_PREFIX="$(date +%Y-%m-%d)"
 RUN_ID="$(date +%Y%m%d-%H%M%S)"
-LOG_DIR="$REPO_ROOT/logs/$TASK_ID"
+LOG_DIR="$REPO_ROOT/logs/${DATE_PREFIX}-${TASK_ID}"
 RUN_DIR="$LOG_DIR/$RUN_ID"
 mkdir -p "$RUN_DIR"
 
-SUMMARY_LOG="$RUN_DIR/summary.log"
-MANIFEST="$RUN_DIR/manifest.json"
-LATEST="$LOG_DIR/latest.json"
-CURRENT_PATCH="$RUN_DIR/current.patch"
-STAGED_PATCH="$RUN_DIR/staged.patch"
-
-git diff --binary > "$CURRENT_PATCH"
-git diff --cached --binary > "$STAGED_PATCH"
+SUMMARY_LOG="$RUN_DIR/summary.log"   # 사람용: 모든 단계 출력 통합
+MANIFEST="$RUN_DIR/manifest.json"    # 기계용: status·hash (enforce-verification이 참조)
+LATEST="$LOG_DIR/latest.json"        # task 루트 포인터 (enforce-verification이 직접 읽음)
 
 CURRENT_HASH="$(git diff --binary | git hash-object --stdin)"
 STAGED_HASH="$(git diff --cached --binary | git hash-object --stdin)"
 HEAD_SHA="$(git rev-parse HEAD 2>/dev/null || echo unknown)"
 BRANCH="$(git rev-parse --abbrev-ref HEAD 2>/dev/null || echo unknown)"
 
-# ANSI 색상 (TTY일 때만)
 if [[ -t 1 ]]; then
   RED=$'\033[31m'; GREEN=$'\033[32m'; YELLOW=$'\033[33m'; BOLD=$'\033[1m'; RESET=$'\033[0m'
 else
@@ -48,9 +42,7 @@ json_array() {
   local first=1
   printf '['
   for item in "$@"; do
-    if [[ $first -eq 0 ]]; then
-      printf ','
-    fi
+    [[ $first -eq 0 ]] && printf ','
     first=0
     printf '"%s"' "$item"
   done
@@ -59,8 +51,6 @@ json_array() {
 
 write_manifest() {
   local status="$1"
-  local finished_at
-  finished_at="$(date -Iseconds)"
   cat > "$MANIFEST" <<EOF
 {
   "taskId": "$TASK_ID",
@@ -71,56 +61,45 @@ write_manifest() {
   "currentDiffHash": "$CURRENT_HASH",
   "stagedDiffHash": "$STAGED_HASH",
   "startedAt": "$STARTED_AT",
-  "finishedAt": "$finished_at",
+  "finishedAt": "$(date -Iseconds)",
   "failed": $(json_array "${FAILED[@]}"),
   "warned": $(json_array "${WARNED[@]}"),
-  "logs": {
-    "summary": "logs/$TASK_ID/$RUN_ID/summary.log",
-    "eslint": "logs/$TASK_ID/$RUN_ID/eslint.log",
-    "stylelint": "logs/$TASK_ID/$RUN_ID/stylelint.log",
-    "build": "logs/$TASK_ID/$RUN_ID/build.log",
-    "knip": "logs/$TASK_ID/$RUN_ID/knip.log",
-    "currentPatch": "logs/$TASK_ID/$RUN_ID/current.patch",
-    "stagedPatch": "logs/$TASK_ID/$RUN_ID/staged.patch"
-  }
+  "log": "logs/${DATE_PREFIX}-${TASK_ID}/${RUN_ID}/summary.log"
 }
 EOF
   cp "$MANIFEST" "$LATEST"
 }
 
 run_step() {
-  local label="$1"; local logfile="$2"; shift 2
+  local label="$1"; shift
   echo ""
   echo "${BOLD}━━━ $label ━━━${RESET}"
+  echo "" >> "$SUMMARY_LOG"
   echo "━━━ $label ━━━" >> "$SUMMARY_LOG"
-  if "$@" > "$logfile" 2>&1; then
-    cat "$logfile"
+  "$@" 2>&1 | tee -a "$SUMMARY_LOG"
+  if [[ "${PIPESTATUS[0]}" -eq 0 ]]; then
     echo "${GREEN}✓ $label 통과${RESET}"
-    echo "PASS $label" >> "$SUMMARY_LOG"
+    echo "✓ $label 통과" >> "$SUMMARY_LOG"
   else
-    local code=$?
-    cat "$logfile"
-    echo "${RED}✗ $label 실패 (exit $code)${RESET}"
-    echo "FAIL $label exit=$code" >> "$SUMMARY_LOG"
+    echo "${RED}✗ $label 실패${RESET}"
+    echo "✗ $label 실패" >> "$SUMMARY_LOG"
     FAILED+=("$label")
   fi
 }
 
-# 비차단 단계 — 실패 시 FAILED가 아닌 WARNED에 기록 (전체 종료 코드는 0 유지)
 run_warning_step() {
-  local label="$1"; local logfile="$2"; shift 2
+  local label="$1"; shift
   echo ""
   echo "${BOLD}━━━ $label ━━━${RESET}"
+  echo "" >> "$SUMMARY_LOG"
   echo "━━━ $label ━━━" >> "$SUMMARY_LOG"
-  if "$@" > "$logfile" 2>&1; then
-    cat "$logfile"
+  "$@" 2>&1 | tee -a "$SUMMARY_LOG"
+  if [[ "${PIPESTATUS[0]}" -eq 0 ]]; then
     echo "${GREEN}✓ $label 통과${RESET}"
-    echo "PASS $label" >> "$SUMMARY_LOG"
+    echo "✓ $label 통과" >> "$SUMMARY_LOG"
   else
-    local code=$?
-    cat "$logfile"
-    echo "${YELLOW}⚠ $label 경고 (exit $code)${RESET}"
-    echo "WARN $label exit=$code" >> "$SUMMARY_LOG"
+    echo "${YELLOW}⚠ $label 경고${RESET}"
+    echo "⚠ $label 경고" >> "$SUMMARY_LOG"
     WARNED+=("$label")
   fi
 }
@@ -131,35 +110,30 @@ STARTED_AT="$(date -Iseconds)"
   echo "RUN_ID=$RUN_ID"
   echo "BRANCH=$BRANCH"
   echo "HEAD=$HEAD_SHA"
-  echo "CURRENT_DIFF_HASH=$CURRENT_HASH"
-  echo "STAGED_DIFF_HASH=$STAGED_HASH"
   echo "STARTED_AT=$STARTED_AT"
-} > "$SUMMARY_LOG"
+} | tee "$SUMMARY_LOG"
 
-run_step         "ESLint"            "$RUN_DIR/eslint.log"    yarn lint
-run_step         "stylelint"         "$RUN_DIR/stylelint.log" yarn lint:styles
-run_step         "Build (next)"      "$RUN_DIR/build.log"     yarn build
-run_warning_step "Knip (미사용 코드)" "$RUN_DIR/knip.log"      yarn knip
+run_step         "ESLint"            yarn lint
+run_step         "stylelint"         yarn lint:styles
+run_step         "Build (next)"      yarn build
+run_warning_step "Knip (미사용 코드)" yarn knip
 
 echo ""
 echo "${BOLD}━━━ 결과 요약 ━━━${RESET}"
+echo "" >> "$SUMMARY_LOG"
+echo "━━━ 결과 요약 ━━━" >> "$SUMMARY_LOG"
+
+LOG_PATH="logs/${DATE_PREFIX}-${TASK_ID}/${RUN_ID}/summary.log"
+
 if [[ ${#FAILED[@]} -eq 0 ]]; then
-  echo "${GREEN}✓ 모든 검증 통과${RESET}"
-  echo "RESULT=pass" >> "$SUMMARY_LOG"
-  if [[ ${#WARNED[@]} -gt 0 ]]; then
-    echo "${YELLOW}⚠ 경고: ${WARNED[*]}${RESET}"
-    echo "WARNED=${WARNED[*]}" >> "$SUMMARY_LOG"
-  fi
+  echo "${GREEN}✓ 모든 검증 통과${RESET}" | tee -a "$SUMMARY_LOG"
+  [[ ${#WARNED[@]} -gt 0 ]] && echo "${YELLOW}⚠ 경고: ${WARNED[*]}${RESET}" | tee -a "$SUMMARY_LOG"
   write_manifest "pass"
-  echo "검증 로그: logs/$TASK_ID/$RUN_ID"
+  echo "검증 로그: $LOG_PATH"
   exit 0
 else
-  echo "${RED}✗ 실패: ${FAILED[*]}${RESET}"
-  echo ""
-  echo "각 단계 출력 위 내용 확인 후 수정하세요."
-  echo "RESULT=fail" >> "$SUMMARY_LOG"
-  echo "FAILED=${FAILED[*]}" >> "$SUMMARY_LOG"
+  echo "${RED}✗ 실패: ${FAILED[*]}${RESET}" | tee -a "$SUMMARY_LOG"
   write_manifest "fail"
-  echo "검증 로그: logs/$TASK_ID/$RUN_ID"
+  echo "검증 로그: $LOG_PATH"
   exit 1
 fi

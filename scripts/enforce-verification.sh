@@ -18,34 +18,37 @@ current_hash=$(git diff --binary | git hash-object --stdin 2>/dev/null || echo "
 staged_hash=$(git diff --cached --binary | git hash-object --stdin 2>/dev/null || echo "")
 
 # 검사할 latest.json 목록 구성
+# 폴더명 형식: logs/<YYYY-MM-DD>-<task-id>/latest.json
 candidates=()
 if [[ -n "$TASK_ID" ]]; then
-  candidates=("$LOGS_ROOT/$TASK_ID/latest.json")
+  while IFS= read -r -d '' f; do
+    candidates+=("$f")
+  done < <(find "$LOGS_ROOT" -maxdepth 2 -name "latest.json" -path "*-${TASK_ID}/latest.json" -print0 2>/dev/null)
 elif [[ -d "$LOGS_ROOT" ]]; then
-  while IFS= read -r -d '' dir; do
-    [[ -f "$dir/latest.json" ]] && candidates+=("$dir/latest.json")
-  done < <(find "$LOGS_ROOT" -mindepth 1 -maxdepth 1 -type d -print0 2>/dev/null)
+  while IFS= read -r -d '' f; do
+    candidates+=("$f")
+  done < <(find "$LOGS_ROOT" -maxdepth 2 -name "latest.json" -print0 2>/dev/null)
 fi
 
-# 각 manifest에서 status·hash 읽기 (node -e로 JSON 파싱)
+# 각 manifest에서 status·hash 읽기
 for manifest in "${candidates[@]}"; do
   [[ -f "$manifest" ]] || continue
   info=$(node -e "
     try {
       const m = JSON.parse(require('fs').readFileSync(process.argv[2], 'utf8'));
-      process.stdout.write([m.status||'', m.currentDiffHash||'', m.stagedDiffHash||'', m.taskId||'', m.runId||''].join('\t'));
+      process.stdout.write([m.status||'', m.currentDiffHash||'', m.stagedDiffHash||'', m.log||''].join('\t'));
     } catch {}
   " "" "$manifest" 2>/dev/null) || continue
-  IFS=$'\t' read -r status m_current m_staged task_id run_id <<< "$info"
+  IFS=$'\t' read -r status m_current m_staged log_path <<< "$info"
   [[ "$status" == "pass" ]] || continue
   if [[ "$m_current" == "$current_hash" && "$m_staged" == "$staged_hash" ]]; then
-    echo "✓ 검증 기록 확인: logs/$task_id/$run_id"
+    echo "✓ 검증 기록 확인: $log_path"
     exit 0
   fi
 done
 
 if [[ -n "$TASK_ID" ]]; then
-  hint="TASK_ID=$TASK_ID bash scripts/verify-task.sh"
+  hint="bash scripts/verify-task.sh $TASK_ID"
 else
   hint="TASK_ID=<task-id> bash scripts/verify-task.sh"
 fi
