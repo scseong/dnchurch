@@ -2,40 +2,60 @@
 // FONT FAMILY
 // ══════════════════════════════════════════
 
-/// 본문 기본 폰트 (Pretendard Variable)
+/// 본문 기본 폰트 (Pretendard Variable) — 모든 헤딩·본문·UI 텍스트
 $font-family-base: 'Pretendard Variable', Pretendard, sans-serif;
 
-/// 강조/헤딩용 세리프 폰트 (나눔명조). 배너 타이틀, 인용문 등 특별한 강조에만 사용
+/// 강조용 세리프 (Noto Serif KR) — 교회 로고타입·이름, 성경 인용구 전용
 $font-family-secondary: var(--font-notoserifKR);
 
 // ══════════════════════════════════════════
-// LINE HEIGHT
+// LINE HEIGHT — 6단계 체계
+// tight → snug → normal → base → relaxed → loose
 // ══════════════════════════════════════════
 
-/// 1 — 아이콘, 뱃지 등 단일 줄 요소. 줄간격 제거
+/// 1 — 아이콘, 뱃지 등 단일 줄 요소
 $line-height-reset: 1;
 
-/// 1.35 — 헤딩 전용. h1~h5에 사용
-$line-height-heading: 1.35;
+/// 1.3 — 대형 헤딩 (h1~h2). 글자가 클수록 줄간격 좁게
+$line-height-tight: 1.3;
 
-/// 1.5 — 본문 기본. 대부분의 텍스트에 사용
+/// 1.35 — 중형 헤딩 (h3~h5)
+$line-height-snug: 1.35;
+
+/// 1.45 — UI 레이블, 버튼, 탭 등 단문 요소
+$line-height-normal: 1.45;
+
+/// 1.5 — 본문 기본 ★. 대부분의 텍스트에 사용
 $line-height-base: 1.5;
 
+/// 1.6 — 카드 설명, 공지 본문 등 중간 길이 텍스트
+$line-height-relaxed: 1.6;
+
 /// 1.8 — 긴 본문, 설교 내용 등 가독성이 중요한 장문 텍스트
-$line-height-wide: 1.8;
+$line-height-loose: 1.8;
+
+// @deprecated — Use $line-height-snug / $line-height-loose
+$line-height-heading: $line-height-snug;
+$line-height-wide:    $line-height-loose;
+
+// Body 컨텍스트별 의미적 별칭 (Wanted DS Body-Normal/Reading 패턴 참조)
+$line-height-body-ui:      $line-height-normal;    // 1.45 — 버튼·레이블 등 compact UI
+$line-height-body-default: $line-height-base;      // 1.5 — 일반 본문
+$line-height-body-reading: $line-height-relaxed;   // 1.6 — 공지·카드 설명 등 중간 길이
+$line-height-body-prose:   $line-height-loose;     // 1.8 — 설교·긴 게시글 장문
 
 // ══════════════════════════════════════════
 // FONT WEIGHT
-// 선택 기준: default → regular, 구분 필요 → medium, 강조 → semibold, 헤딩 → bold
+// default → regular, 구분 필요 → medium, 강조 → semibold, 헤딩 → bold
 // ══════════════════════════════════════════
 
 /// 400 — 본문 텍스트 기본
 $font-weight-regular: 400;
 
-/// 500 — 라벨, 네비게이션, 본문 내 살짝 강조. regular과 구분이 필요할 때
+/// 500 — 라벨, 네비게이션, 본문 내 살짝 강조
 $font-weight-medium: 500;
 
-/// 600 — 카드 제목, 리스트 타이틀, 버튼 텍스트. 명확한 강조
+/// 600 — 카드 제목, 리스트 타이틀, 버튼 텍스트
 $font-weight-semibold: 600;
 
 /// 700 — 페이지/섹션 헤딩(h1~h3). 최상위 제목에만 사용
@@ -43,18 +63,19 @@ $font-weight-bold: 700;
 
 // ══════════════════════════════════════════
 // LETTER SPACING
+// 큰 글자 → 음수(tight), 작은 글자 → 양수(loose)
 // ══════════════════════════════════════════
 
-/// -0.03rem — 본문 기본값. body 기본 letter-spacing
+/// -0.03rem — 본문 기본값
 $letter-spacing-body: -0.03rem;
 
-/// -0.15rem — 대형 헤딩(h1~h2)에서 글자 간 간격 축소
+/// -0.15rem — 대형 헤딩(h1~h2)
 $letter-spacing-heading: -0.15rem;
 
 /// -0.1rem — 중형 헤딩(h3~h5)
 $letter-spacing-tight: -0.1rem;
 
-/// 0.05rem — 라벨, 캡션 등 소형 텍스트의 가독성 향상                  │
+/// 0.1rem — 라벨, 캡션 등 소형 텍스트 가독성
 $letter-spacing-wide: 0.1rem;
 
 /// 0.2rem — 영문 대문자, 뱃지, 섹션 제목 등 강한 트래킹
@@ -63,7 +84,6 @@ $letter-spacing-wider: 0.2rem;
 // ══════════════════════════════════════════
 // FONT SIZE — 숫자 기반 네이밍
 // 토큰명의 숫자 = px 크기 (1rem = 10px 기준)
-// 오름차순: 11 · 12 · 13 · 14 · 15 · 16 · 18 · 20 · 22 · 24 · 26 · 28 · 32 · 34 · 42
 // ══════════════════════════════════════════
 
 /// 1.1rem (11px) — 특수 케이스에만. 가독성 주의 필요
@@ -81,10 +101,10 @@ $font-size-14: 1.4rem;
 /// 1.5rem (15px) — ✦ 본문 기본 크기. 대부분의 텍스트에 사용
 $font-size-15: 1.5rem;
 
-/// 1.6rem (16px) — 서브 헤딩 보조, 큰 본문
+/// 1.6rem (16px) — 서브 헤딩 보조, 큰 본문 (시각 구분이 필요할 때만)
 $font-size-16: 1.6rem;
 
-/// 1.8rem (18px) — 본문 중 가장 큰 텍스트. 리드 문단, 강조 인트로. h5 모바일
+/// 1.8rem (18px) — 리드 문단, 강조 인트로. h5 모바일
 $font-size-18: 1.8rem;
 
 /// 2rem (20px) — h5 PC / h4 모바일
@@ -133,11 +153,11 @@ $heading-sizes-mobile: (
 );
 
 $heading-line-heights: (
-  'h1': 1.3,
-  'h2': 1.3,
-  'h3': 1.4,
-  'h4': 1.4,
-  'h5': 1.5
+  'h1': $line-height-tight,
+  'h2': $line-height-tight,
+  'h3': $line-height-snug,
+  'h4': $line-height-normal,
+  'h5': $line-height-base
 );
 
 $heading-letter-spacings: (

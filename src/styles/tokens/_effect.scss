@@ -1,30 +1,64 @@
 // ══════════════════════════════════════════
 // BORDER RADIUS
 // Primitive: globals.scss의 CSS custom properties (--radius-*) — 반응형
-// Semantic: _semantic.scss의 $radius-xs ~ $radius-circle 사용
+// Semantic: _semantic.scss의 $radius-xxs ~ $radius-circle 사용
 // ══════════════════════════════════════════
 
 // ══════════════════════════════════════════
-// BOX SHADOW
+// BOX SHADOW — 절제된 값 (3단계)
 // ══════════════════════════════════════════
 
-/// 얕은 그림자 — 카드, 드롭다운 기본
-$shadow-sm: 0 1px 2px 0 rgba($gray-900, 0.05);
+/// 얕은 그림자 — 카드 기본, 드롭다운
+$shadow-sm: 0 1px 3px 0 rgba($gray-900, 0.06);
 
 /// 중간 그림자 — 호버된 카드, 플로팅 요소
 $shadow-md:
-  0 4px 6px -1px rgba($gray-900, 0.1),
-  0 2px 4px -2px rgba($gray-900, 0.1);
+  0 3px 8px -1px rgba($gray-900, 0.08),
+  0 1px 3px -1px rgba($gray-900, 0.06);
+
+/// 큰 그림자 — 모달, 드로어 패널
+$shadow-lg:
+  0 6px 16px -2px rgba($gray-900, 0.1),
+  0 2px 6px -2px rgba($gray-900, 0.06);
+
+/// 최대 그림자 — 풀스크린에 가까운 시트, 토스트 스택
+$shadow-xl:
+  0 8px 32px rgba($gray-900, 0.12),
+  0 4px 16px rgba($gray-900, 0.08);
 
 // ══════════════════════════════════════════
-// TRANSITION
+// TRANSITION EASING
 // ══════════════════════════════════════════
-
-/// 0.28s — 일반 트랜지션 지속 시간
-$transition-duration-normal: 0.28s;
 
 /// cubic-bezier(0.4, 0, 0.2, 1) — 기본 이징 함수
 $transition-easing-default: cubic-bezier(0.4, 0, 0.2, 1);
+
+/// cubic-bezier(0.34, 1.56, 0.64, 1) — 살짝 overshoot하는 스프링 (카드 lift, 아이콘 등장)
+$transition-easing-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+
+/// cubic-bezier(0.25, 0, 0, 1) — 빠르고 자연스러운 감속 (패널·모달·시트 진입)
+$transition-easing-snappy: cubic-bezier(0.25, 0, 0, 1);
+
+// ══════════════════════════════════════════
+// TRANSITION DURATION
+// ══════════════════════════════════════════
+
+/// 0.22s — 범용 트랜지션 (버튼, 링크, 색상 변화)
+$transition-duration-normal: 0.22s;
+
+// ══════════════════════════════════════════
+// TRANSITION SHORTHAND — 범용 단축 값
+// 사용: transition: $transition-base;
+// ══════════════════════════════════════════
+
+/// 버튼·링크·색상 변화 등 범용
+$transition-base:   all 0.22s #{$transition-easing-default};
+
+/// 카드 lift, 아이콘 등장 등 탄력 있는 인터랙션
+$transition-spring: all 0.24s #{$transition-easing-spring};
+
+/// 패널·모달·시트 진입 — 빠르고 자연스러운 감속
+$transition-enter:  all 0.36s #{$transition-easing-snappy};
 
 // ══════════════════════════════════════════
 // ANIMATION

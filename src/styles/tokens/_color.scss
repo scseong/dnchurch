@@ -17,11 +17,16 @@ $gray-100: #f3f4f6;
 $gray-50:  #f9fafb;
 $white:    #faf9f6;
 
-// ── Navy (Brand) ──
+// ── Navy (Brand) — 숫자 기반 통일 ──
 
-$navy:       #1c2b3a; // 다크 배경, 헤더/푸터
-$navy-mid:   #2c3e50; // 서브 배경, 보조 요소
-$navy-light: #3d5166; // hover 상태, 보조 UI
+$navy-950: #1c2b3a;
+$navy-800: #2c3e50;
+$navy-600: #3d5166;
+
+// @deprecated — Use $navy-950 / $navy-800 / $navy-600
+$navy:       $navy-950;
+$navy-mid:   $navy-800;
+$navy-light: $navy-600;
 
 // ── Navy-Blue (Primary Action) ──
 // 밝은 배경 위 WCAG AA 이상 대비
@@ -33,19 +38,31 @@ $navy-blue-100: #e1e8f0;
 
 // ── Gold (Accent) ──
 
-$gold:       #c4924a; // CTA 강조, 브랜드 액센트
-$gold-light: #d9a96a; // hover 상태, 보조 강조
+$gold-600: #c4924a;
+$gold-400: #d9a96a;
+$gold-100: #f5ead6;
+
+// @deprecated — Use $gold-600 / $gold-400
+$gold:       $gold-600;
+$gold-light: $gold-400;
 
 // ── Cream (Warm Surface) ──
 
-$cream:      #f5f0e6; // 섹션/카드 따뜻한 배경
-$cream-deep: #ede6d7; // 강조 배경, hover
+$cream-200: #f5f0e6;
+$cream-300: #ede6d7;
 
-// ── Utility (Status) ──
+// @deprecated — Use $cream-200 / $cream-300
+$cream:      $cream-200;
+$cream-deep: $cream-300;
 
-$green-500:  #10b981;
-$red-500:    #ef4444;
+// ── Status ──
+
+$green-500: #10b981;
+$green-100: #d1fae5;
+$red-500:   #ef4444;
+$red-100:   #fee2e2;
 $orange-600: #f68b28;
+$orange-100: #ffedd5;
 
 // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 // 2. SEMANTIC TOKENS
@@ -54,29 +71,45 @@ $orange-600: #f68b28;
 
 // ── Text ──
 
-$txt-primary:     $gray-900;       // 제목, 본문
-$txt-secondary:   $gray-700;       // 부연 설명, 서브타이틀
-$txt-tertiary:    $gray-500;       // 날짜, 메타, 캡션
-$txt-link:        $navy-blue-700;  // 링크
-$txt-link-active: $navy-blue-900;  // 링크 활성
-$txt-disabled:    $gray-400;       // 비활성
-$txt-inverse:     $white;          // 다크 배경/이미지 위
+$txt-primary:      $gray-900;      // 제목, 본문
+$txt-secondary:    $gray-700;      // 부연 설명, 서브타이틀
+$txt-tertiary:     $gray-500;      // 날짜, 메타, 캡션
+$txt-link:         $navy-blue-700; // 링크
+$txt-link-active:  $navy-blue-900; // 링크 활성
+$txt-disabled:     $gray-400;      // 비활성
+$txt-inverse:      $white;         // 다크 배경/이미지 위
+
+// 이미지·다크 배경 위 텍스트 (이전 _semantic.scss에서 통합)
+$txt-image-subtle: rgba(255, 255, 255, 0.7); // 이미지 위 보조 텍스트
+$txt-dark-muted:   rgba(255, 255, 255, 0.6); // 다크 배경 보조 텍스트/링크
+$txt-dark-faint:   rgba(255, 255, 255, 0.4); // 다크 배경 약한 텍스트 (카피라이트 등)
 
 // ── Background ──
 
-$bg-primary:   $gray-50;    // 페이지 전체
-$bg-secondary: $cream;      // 카드/섹션
-$bg-tertiary:  $cream-deep; // hover, 강조
-$bg-invert:    $black;      // 푸터 등 다크
-$bg-dark:      #0f1820;     // 다크 섹션 배경
-$bg-dark-card: #1a2535;     // 다크 섹션 내 카드
+$bg-primary:        $gray-50;                  // 페이지 전체 기본 배경
+$bg-secondary:      $cream-200;                // 섹션·카드 1순위 배경 ★
+$bg-tertiary:       $cream-300;                // hover 피드백, 강조 배경
+$bg-accent-subtle:  rgba(196, 146, 74, 0.12);  // CTA 섹션·환영 배너 (Gold 12% tint)
+$bg-dark:           #0f1820;                   // 다크 섹션 (페이지당 최대 1회)
+$bg-dark-card:      #1a2535;                   // 다크 섹션 내 카드
+$bg-dark-nav:       $navy-950;                 // 헤더·푸터·사이드바 전용
+
+// @deprecated — Use $bg-dark or $bg-dark-nav
+$bg-invert: $black;
 
 // ── Border ──
 
-$border-primary:   $gray-300;  // input, 구분선, 카드 테두리
-$border-secondary: $gray-500;  // input focus
-$border-inverse:   $white;     // 다크 배경 위
-$border-warm:      #64503226;  // cream 배경 위 구분선
+$border-primary:     $gray-300;               // 기본 구분선, input
+$border-subtle:      rgba($gray-500, 0.22);    // 얕은 구분선 — 중립 배경 위 가벼운 분리
+$border-strong:      rgba($gray-500, 0.44);    // 강한 구분선 — 강조 테두리, 선택 상태
+$border-focus:       $navy-blue-700;           // focus 링 (구: $border-secondary)
+$border-warm:        rgba(100, 80, 50, 0.15);  // cream·gold 배경 위 테두리
+$border-inverse:     $white;                   // 다크 배경 위
+$border-dark-subtle: rgba(255, 255, 255, 0.2); // 다크 카드 테두리
+$border-dark-faint:  rgba(255, 255, 255, 0.1); // 다크 구분선
+
+// @deprecated — Use $border-focus
+$border-secondary: $gray-500;
 
 // ── Primary Action ──
 
@@ -85,8 +118,17 @@ $primary-hover:  $navy-blue-800; // 호버
 $primary-active: $navy-blue-900; // 클릭/활성
 $primary-subtle: $navy-blue-100; // 연한 배경
 
+// ── Accent (Gold) ──
+
+$accent:        $gold-600; // Gold CTA, eyebrow 텍스트
+$accent-hover:  $gold-400; // Gold hover
+$accent-subtle: $gold-100; // Gold 연한 배경
+
 // ── Status ──
 
-$status-positive: $green-500;  // 성공
-$status-negative: $red-500;    // 에러
-$status-warning:  $orange-600; // 경고
+$status-positive:    $green-500; // 성공
+$status-positive-bg: $green-100; // 성공 배경
+$status-negative:    $red-500;   // 에러
+$status-negative-bg: $red-100;   // 에러 배경
+$status-warning:     $orange-600; // 경고
+$status-warning-bg:  $orange-100; // 경고 배경
