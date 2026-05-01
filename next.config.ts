@@ -1,5 +1,7 @@
 import type { NextConfig } from 'next';
 
+// @next/bundle-analyzer는 CommonJS 모듈로 export 되어 있어 require 사용. Next.js 공식 예제도 같은 패턴.
+// eslint-disable-next-line @typescript-eslint/no-require-imports
 const withBundleAnalyzer = require('@next/bundle-analyzer')({
   enabled: process.env.ANALYZE === 'true'
 });

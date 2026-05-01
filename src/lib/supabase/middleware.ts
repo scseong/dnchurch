@@ -2,7 +2,7 @@ import { createMiddlewareClient } from '@/lib/supabase/server';
 import { NextResponse, type NextRequest } from 'next/server';
 
 export async function updateSession(request: NextRequest) {
-  let response = NextResponse.next({ request });
+  const response = NextResponse.next({ request });
   const supabase = await createMiddlewareClient(request, response);
   const { pathname, search } = request.nextUrl;
 

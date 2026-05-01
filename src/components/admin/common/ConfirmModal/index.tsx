@@ -38,7 +38,8 @@ export default function ConfirmModal({
   loadingLabel = '처리 중...',
   onConfirm
 }: ConfirmModalProps) {
-  // 닫히는 transition 동안 마지막 컨텐츠 유지 — prop이 즉시 비워져도 시각적 깜빡임 없음
+  // 닫히는 transition 동안 마지막 컨텐츠 유지 — prop이 즉시 비워져도 시각적 깜빡임 없음.
+  // snapshotRef는 의도적으로 render 중 mutate/read 한다 (useState로 바꾸면 effect가 추가되어 한 프레임 늦게 반영됨).
   const snapshotRef = useRef<ContentSnapshot>({
     title,
     description,
@@ -47,10 +48,12 @@ export default function ConfirmModal({
     danger
   });
   if (open) {
+    // eslint-disable-next-line react-hooks/refs
     snapshotRef.current = { title, description, confirmLabel, cancelLabel, danger };
   }
   const content = open
     ? { title, description, confirmLabel, cancelLabel, danger }
+    // eslint-disable-next-line react-hooks/refs
     : snapshotRef.current;
 
   // 로딩 중에는 ESC/overlay click으로 닫히지 않도록 onClose 차단
