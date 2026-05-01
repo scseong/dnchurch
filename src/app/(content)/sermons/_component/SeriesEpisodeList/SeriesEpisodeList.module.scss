@@ -1,0 +1,149 @@
+.container {
+  background: $bg-primary;
+  border: 1px solid $border-primary;
+  border-radius: $radius-m;
+  overflow: hidden;
+}
+
+.heading {
+  padding: $spacing-16 $spacing-20;
+  font-size: $font-size-16;
+  font-weight: $font-weight-bold;
+  color: $txt-primary;
+  border-bottom: 1px solid $border-primary;
+}
+
+.list {
+  display: flex;
+  flex-direction: column;
+}
+
+.row {
+  display: flex;
+  align-items: center;
+  gap: $content-gap-s;
+  width: 100%;
+  padding: $spacing-12 $spacing-20;
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid $border-primary;
+  text-align: left;
+  cursor: pointer;
+  transition: background-color 0.15s ease;
+
+  &:hover {
+    background: $primary-subtle;
+  }
+
+  li:last-child & {
+    border-bottom: none;
+  }
+}
+
+.row_current {
+  background: $primary-subtle;
+
+  &:hover {
+    background: $primary-subtle;
+  }
+}
+
+.order_col {
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: $spacing-4;
+  width: 4.8rem;
+}
+
+.order_label {
+  font-size: $font-size-11;
+  font-weight: $font-weight-medium;
+  color: $txt-tertiary;
+  white-space: nowrap;
+}
+
+.order_badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.8rem;
+  height: 2.8rem;
+  font-size: $font-size-12;
+  font-weight: $font-weight-semibold;
+  color: $txt-secondary;
+  background: $primary-subtle;
+  border-radius: $radius-circle;
+}
+
+.badge_current {
+  color: $txt-inverse;
+  background: $primary;
+  font-size: $font-size-16;
+}
+
+.info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-4;
+  min-width: 0;
+}
+
+.title {
+  font-size: $font-size-14;
+  font-weight: $font-weight-semibold;
+  color: $txt-primary;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: $spacing-8;
+  font-size: $font-size-12;
+  color: $txt-tertiary;
+}
+
+.dot {
+  width: 0.2rem;
+  height: 0.2rem;
+  background: $txt-tertiary;
+  border-radius: $radius-circle;
+}
+
+.now_label {
+  font-size: $font-size-11;
+  font-weight: $font-weight-semibold;
+  color: $primary;
+}
+
+.duration {
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: $spacing-4;
+  font-size: $font-size-12;
+  color: $txt-tertiary;
+}
+
+.view_all {
+  width: 100%;
+  padding: $spacing-12 $spacing-20;
+  font-size: $font-size-13;
+  font-weight: $font-weight-medium;
+  color: $primary;
+  background: transparent;
+  border: none;
+  border-top: 1px solid $border-primary;
+  cursor: pointer;
+  transition: background-color 0.15s ease;
+
+  &:hover {
+    background: $primary-subtle;
+  }
+}

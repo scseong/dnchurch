@@ -4,10 +4,16 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  padding: $spacing-16;
   background-color: rgba(0, 0, 0, 0);
+  backdrop-filter: blur(0);
   opacity: 0;
   z-index: 9999;
   pointer-events: none;
+  transition:
+    opacity 0.2s $transition-easing-default,
+    background-color 0.2s $transition-easing-default,
+    backdrop-filter 0.2s $transition-easing-default;
 
   &::-webkit-scrollbar {
     display: none;
@@ -16,6 +22,7 @@
 
 .show {
   opacity: 1;
-  background-color: rgba(0, 0, 0, 0.6);
+  background-color: $overlay-scrim;
+  backdrop-filter: blur(4px);
   pointer-events: auto;
 }

@@ -12,11 +12,13 @@ export async function updateSession(request: NextRequest) {
 
   const noAuthPages = ['/login', '/sign-up', '/forget-password'];
   const isAuthPage = (path: string) => {
-    const exactMatches = ['/mypage', '/news/bulletin/create'];
-    const dynamicPattern = /^\/news\/bulletin\/[^/]+\/update$/;
+    const exactMatches = ['/mypage', '/news/bulletins/create'];
+    const dynamicPattern = /^\/news\/bulletins\/[^/]+\/update$/;
+    const adminPattern = /^\/admin(\/|$)/;
 
     if (exactMatches.includes(path)) return true;
     if (dynamicPattern.test(path)) return true;
+    if (adminPattern.test(path)) return true;
     return false;
   };
 

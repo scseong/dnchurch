@@ -1,0 +1,127 @@
+.wrapper {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 16px;
+  padding: 20px 24px;
+  border: 1px solid var(--admin-bd);
+  border-radius: 10px;
+  background: var(--admin-bg-card);
+
+  @media (max-width: 767px) {
+    flex-direction: column;
+    padding: 16px;
+  }
+}
+
+.head {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 0;
+}
+
+.eyebrow {
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--admin-t3);
+}
+
+.title_row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.title {
+  margin: 0;
+  font-family: var(--font-notoserifKR), 'Noto Serif KR', serif;
+  font-size: 22px;
+  font-weight: 800;
+  line-height: 1.25;
+  color: var(--admin-t1);
+
+  @media (max-width: 767px) {
+    font-size: 19px;
+  }
+}
+
+.badge {
+  padding: 2px 8px;
+  border-radius: 100px;
+  background: var(--admin-accent-bg);
+  color: var(--admin-accent);
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.description {
+  margin: 0;
+  font-size: 13px;
+  color: var(--admin-t2);
+}
+
+.actions {
+  flex-shrink: 0;
+  display: flex;
+  gap: 8px;
+
+  @media (max-width: 767px) {
+    align-self: stretch;
+
+    .btn {
+      flex: 1;
+    }
+  }
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  height: 36px;
+  padding: 0 14px;
+  border-radius: 6px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition:
+    background 0.15s,
+    border-color 0.15s,
+    color 0.15s;
+
+  &.outline {
+    border: 1px solid var(--admin-bd);
+    background: var(--admin-bg-card);
+    color: var(--admin-t2);
+
+    &:hover {
+      border-color: var(--admin-t3);
+      color: var(--admin-t1);
+    }
+
+    // 640px 이하에서는 outline 액션을 숨기고 primary만 노출.
+    // 숨긴 기능(임시저장)은 추후 모바일 하단 액션 바에서 복원한다.
+    @media (max-width: 640px) {
+      display: none;
+    }
+  }
+
+  &.pri {
+    border: 0;
+    background: var(--admin-pri);
+    color: #fff;
+
+    &:hover {
+      background: color-mix(in srgb, var(--admin-pri), #fff 8%);
+    }
+  }
+}
+
+.btn_icon {
+  display: inline-flex;
+  align-items: center;
+  margin-right: 6px;
+  font-size: 16px;
+}

@@ -1,0 +1,109 @@
+.tools {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  margin: calc(-1 * $content-gap-m) calc(-1 * $container-padding) 0;
+  background: $bg-primary;
+  border-top: 1px solid $border-primary;
+  border-bottom: 1px solid $border-primary;
+  overflow: visible;
+
+  @include respond-up($breakpoint-tablet) {
+    margin: 0;
+    border: 1px solid $border-primary;
+    border-radius: $radius-m;
+  }
+}
+
+.tool_wrap {
+  position: relative;
+}
+
+.tool {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: $spacing-4;
+  width: 100%;
+  padding: $spacing-12 $spacing-8;
+  font-size: $font-size-12;
+  font-weight: $font-weight-medium;
+  color: $txt-secondary;
+  background: transparent;
+  border: none;
+  border-right: 1px solid $border-primary;
+  cursor: pointer;
+  transition:
+    color 0.15s ease,
+    background-color 0.15s ease;
+
+  svg {
+    font-size: $font-size-20;
+  }
+
+  &:last-child {
+    border-right: none;
+  }
+
+  &:hover {
+    color: $txt-primary;
+    background: $primary-subtle;
+  }
+}
+
+.tool_wrap .tool {
+  border-right: 1px solid $border-primary;
+}
+
+.tool_active {
+  color: $primary;
+
+  &:hover {
+    color: $primary-hover;
+  }
+}
+
+.speed_popup {
+  position: absolute;
+  bottom: calc(100% + #{$spacing-8});
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  min-width: 8rem;
+  padding: $spacing-4;
+  background: $bg-primary;
+  border: 1px solid $border-primary;
+  border-radius: $radius-s;
+  box-shadow: $shadow-md;
+  z-index: 10;
+}
+
+.speed_option {
+  width: 100%;
+  padding: $spacing-8 $spacing-12;
+  font-size: $font-size-13;
+  font-weight: $font-weight-medium;
+  color: $txt-secondary;
+  background: transparent;
+  border: none;
+  border-radius: $radius-xs;
+  text-align: center;
+  cursor: pointer;
+  transition:
+    color 0.15s ease,
+    background-color 0.15s ease;
+
+  &:hover {
+    background: $primary-subtle;
+  }
+}
+
+.speed_option_active {
+  color: $txt-inverse;
+  background: $primary;
+
+  &:hover {
+    background: $primary-hover;
+  }
+}

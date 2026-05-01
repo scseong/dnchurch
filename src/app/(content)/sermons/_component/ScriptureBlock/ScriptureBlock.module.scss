@@ -1,0 +1,63 @@
+.block {
+  padding: $spacing-20;
+  background: $primary-subtle;
+  border-left: 3px solid $primary;
+  border-radius: 0 $radius-s $radius-s 0;
+}
+
+.ref {
+  margin-bottom: $content-gap-s;
+  font-family: $font-family-secondary;
+  font-size: $font-size-16;
+  font-weight: $font-weight-bold;
+  color: $txt-primary;
+}
+
+.text_wrap {
+  position: relative;
+}
+
+.text {
+  font-size: $font-size-14;
+  line-height: $line-height-wide;
+  color: $txt-secondary;
+  white-space: pre-line;
+}
+
+.text_collapsed {
+  max-height: 12rem;
+  overflow: hidden;
+}
+
+.fade {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 4.8rem;
+  background: linear-gradient(to bottom, transparent, $primary-subtle);
+  pointer-events: none;
+}
+
+.toggle {
+  display: inline-block;
+  margin-top: $spacing-8;
+  padding: 0;
+  font-size: $font-size-13;
+  font-weight: $font-weight-medium;
+  color: $primary;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  transition: color 0.15s ease;
+
+  &:hover {
+    color: $primary-hover;
+  }
+}
+
+.empty {
+  font-size: $font-size-14;
+  color: $txt-tertiary;
+  font-style: italic;
+}

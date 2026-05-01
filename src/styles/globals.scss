@@ -47,7 +47,7 @@
   --radius-999: 9999px;
 
   // ── Layout ──
-  --container-padding: 1.6rem;
+  --container-padding: 2rem;
   --container-min: 37.5rem;
   --container-max: 76.8rem;
   --screensize-h-min: 81.2rem;
@@ -170,16 +170,9 @@ button {
   cursor: pointer;
 }
 
-html[data-scrolled] header {
-  background-color: $white !important;
-  color: $txt-primary !important;
-  box-shadow: 0 0.1rem 0 0 #e7e7e7 !important;
-}
-
-header:has(#gnb:hover):not([data-nav-locked]) {
-  background-color: $white !important;
-  color: $txt-primary !important;
-  box-shadow: 0 0.1rem 0 0 #e7e7e7 !important;
+:focus-visible {
+  outline: 0.2rem solid $primary;
+  outline-offset: 0.2rem;
 }
 
 #root {
@@ -191,11 +184,11 @@ header:has(#gnb:hover):not([data-nav-locked]) {
 
 #main {
   flex: 1;
-}
+  padding-bottom: $tab-bar-height;
 
-#footer {
-  width: 100%;
-  border-top: 0.1rem solid $border-primary;
+  @include respond-up($header-breakpoint) {
+    padding-bottom: 0;
+  }
 }
 
 .overlay {

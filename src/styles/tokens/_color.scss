@@ -1,8 +1,12 @@
-// ══════════════════════════════════════════
-// PRIMITIVE: Gray Palette
-// ══════════════════════════════════════════
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+// 1. PRIMITIVE TOKENS
+//    원시 색상값. 의미 없이 색상만 정의
+//    직접 사용 금지 — 반드시 Semantic 토큰을 통해 참조
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-$black: #000000;
+// ── Gray ──
+
+$black:    #000000;
 $gray-900: #111827;
 $gray-700: #374151;
 $gray-500: #6b7280;
@@ -10,155 +14,79 @@ $gray-400: #9ca3af;
 $gray-300: #d1d5db;
 $gray-200: #e5e7eb;
 $gray-100: #f3f4f6;
-$gray-50: #f9fafb;
-$white: #faf9f6;
+$gray-50:  #f9fafb;
+$white:    #faf9f6;
 
-// ══════════════════════════════════════════
-// PRIMITIVE: Brand Palette — 교회 아이덴티티
-// ══════════════════════════════════════════
+// ── Navy (Brand) ──
 
-/// 교회 네이비. 다크 배경, 헤더/푸터, 강한 브랜드 표현
-$navy: #1c2b3a;
+$navy:       #1c2b3a; // 다크 배경, 헤더/푸터
+$navy-mid:   #2c3e50; // 서브 배경, 보조 요소
+$navy-light: #3d5166; // hover 상태, 보조 UI
 
-/// 네이비 중간 톤. 서브 배경, 구분선, 보조 요소
-$navy-mid: #2c3e50;
+// ── Navy-Blue (Primary Action) ──
+// 밝은 배경 위 WCAG AA 이상 대비
 
-/// 네이비 연한 톤. hover 상태, 보조 UI 요소
-$navy-light: #3d5166;
+$navy-blue-900: #1e3a5f;
+$navy-blue-800: #254770;
+$navy-blue-700: #2b4c7e;
+$navy-blue-100: #e1e8f0;
 
-/// 포인트 컬러. CTA 강조, 브랜드 액센트
-$gold: #c4924a;
+// ── Gold (Accent) ──
 
-/// 골드 연한 톤. hover 상태, 보조 강조
-$gold-light: #d9a96a;
+$gold:       #c4924a; // CTA 강조, 브랜드 액센트
+$gold-light: #d9a96a; // hover 상태, 보조 강조
 
-/// 섹션/카드 배경. 따뜻한 톤의 배경
-$cream: #f5f0e6;
+// ── Cream (Warm Surface) ──
 
-/// 강조 배경, hover. cream과 구분이 필요할 때
-$cream-deep: #ede6d7;
+$cream:      #f5f0e6; // 섹션/카드 따뜻한 배경
+$cream-deep: #ede6d7; // 강조 배경, hover
 
-// ══════════════════════════════════════════
-// PRIMITIVE: Blue Palette — Primary 액션 전용
-// ══════════════════════════════════════════
+// ── Utility (Status) ──
 
-$blue-900: #0969b6;
-$blue-800: #116eb9;
-$blue-700: #1a73bb;
-$blue-100: #d5e5f2;
-
-// ══════════════════════════════════════════
-// PRIMITIVE: Utility — 상태 전용
-// ══════════════════════════════════════════
-
-$green-500: #10b981;
-$red-500: #ef4444;
+$green-500:  #10b981;
+$red-500:    #ef4444;
 $orange-600: #f68b28;
 
-// ══════════════════════════════════════════
-// SEMANTIC: Text (`txt-`)
-//
-// "가장 중요한 텍스트인가?"    → $txt-primary
-// "부연 설명인가?"            → $txt-secondary
-// "날짜/메타/캡션인가?"       → $txt-tertiary
-// "클릭 가능한 링크인가?"      → $txt-link
-// "비활성 상태인가?"          → $txt-disabled
-// "다크 배경 위인가?"         → $txt-inverse
-// ══════════════════════════════════════════
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+// 2. SEMANTIC TOKENS
+//    용도별 의미를 부여. 컴포넌트에서 직접 사용
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-/// 기본 텍스트. 제목, 본문 등 대부분의 텍스트
-$txt-primary: $gray-900;
+// ── Text ──
 
-/// 보조 텍스트. 부연 설명, 서브타이틀
-$txt-secondary: $gray-700;
+$txt-primary:     $gray-900;       // 제목, 본문
+$txt-secondary:   $gray-700;       // 부연 설명, 서브타이틀
+$txt-tertiary:    $gray-500;       // 날짜, 메타, 캡션
+$txt-link:        $navy-blue-700;  // 링크
+$txt-link-active: $navy-blue-900;  // 링크 활성
+$txt-disabled:    $gray-400;       // 비활성
+$txt-inverse:     $white;          // 다크 배경/이미지 위
 
-/// 약한 텍스트. 날짜, 메타 정보, 캡션
-$txt-tertiary: $gray-500;
+// ── Background ──
 
-/// 링크 텍스트
-$txt-link: $blue-700;
+$bg-primary:   $gray-50;    // 페이지 전체
+$bg-secondary: $cream;      // 카드/섹션
+$bg-tertiary:  $cream-deep; // hover, 강조
+$bg-invert:    $black;      // 푸터 등 다크
+$bg-dark:      #0f1820;     // 다크 섹션 배경
+$bg-dark-card: #1a2535;     // 다크 섹션 내 카드
 
-/// 링크 활성 상태
-$txt-link-active: $blue-900;
+// ── Border ──
 
-/// 비활성 텍스트
-$txt-disabled: $gray-400;
+$border-primary:   $gray-300;  // input, 구분선, 카드 테두리
+$border-secondary: $gray-500;  // input focus
+$border-inverse:   $white;     // 다크 배경 위
+$border-warm:      #64503226;  // cream 배경 위 구분선
 
-/// 반전 텍스트. 다크 배경/이미지 위
-$txt-inverse: $white;
+// ── Primary Action ──
 
-// ══════════════════════════════════════════
-// SEMANTIC: Background (`bg-`)
-//
-// "페이지 전체 배경?"         → $bg-primary
-// "카드/섹션 배경?"           → $bg-secondary
-// "hover 배경?"              → $bg-tertiary
-// "다크 영역?"               → $bg-invert
-// ══════════════════════════════════════════
+$primary:        $navy-blue-700; // 기본 (링크, CTA, 선택된 탭)
+$primary-hover:  $navy-blue-800; // 호버
+$primary-active: $navy-blue-900; // 클릭/활성
+$primary-subtle: $navy-blue-100; // 연한 배경
 
-/// 페이지 전체 배경
-$bg-primary: $gray-50;
+// ── Status ──
 
-/// 카드/섹션 기본 배경
-$bg-secondary: $cream;
-
-/// hover 배경, 강조 배경
-$bg-tertiary: $cream-deep;
-
-/// 푸터 등 다크 배경
-$bg-invert: $black;
-
-/// 다크 섹션 배경 (이미지/영상 위 콘텐츠 영역)
-$bg-dark: #0f1820;
-
-/// 다크 섹션 내 카드 배경
-$bg-dark-card: #1a2535;
-
-// ══════════════════════════════════════════
-// SEMANTIC: Border (`border-`)
-//
-// "기본 경계선?"              → $border-primary
-// "강조 경계선? (focus 등)"    → $border-secondary
-// "다크 배경 위 경계선?"       → $border-inverse
-// ══════════════════════════════════════════
-
-/// 기본 경계선. input, 구분선, 카드 테두리, 리스트 구분
-$border-primary: $gray-300;
-
-/// 강조 경계선. input focus 등
-$border-secondary: $gray-500;
-
-/// 반전 경계선. 다크 배경 위
-$border-inverse: $white;
-
-/// 따뜻한 경계선. cream 배경 위 구분선
-$border-warm: #64503226;
-
-// ══════════════════════════════════════════
-// SEMANTIC: Primary Action
-// ══════════════════════════════════════════
-
-/// 주요 액션 기본 색상 (링크, CTA 버튼, 선택된 탭)
-$primary: $blue-700;
-
-/// 주요 액션 클릭/활성 상태
-$primary-active: $blue-900;
-
-/// 주요 액션 호버 상태
-$primary-hover: $blue-800;
-
-/// 주요 액션 연한 배경 (선택된 탭 배경)
-$primary-subtle: $blue-100;
-
-// ══════════════════════════════════════════
-// SEMANTIC: Status
-// ══════════════════════════════════════════
-
-/// 성공 상태
-$status-positive: $green-500;
-
-/// 위험/에러 상태
-$status-negative: $red-500;
-
-/// 경고 상태
-$status-warning: $orange-600;
+$status-positive: $green-500;  // 성공
+$status-negative: $red-500;    // 에러
+$status-warning:  $orange-600; // 경고

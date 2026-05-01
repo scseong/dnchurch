@@ -7,7 +7,7 @@ import styles from './QuickAccess.module.scss';
 
 const ITEMS = [
   {
-    href: '/about',
+    href: '/about/worship',
     label: '예배 안내',
     desc: '주일 및 평일 예배 시간 안내',
     Icon: PiCalendarLight
