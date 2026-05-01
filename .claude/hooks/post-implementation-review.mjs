@@ -37,7 +37,7 @@ function emitContext(message) {
 
 function changedFiles(cwd) {
   try {
-    const output = execFileSync("git", ["diff", "--name-only"], {
+    const output = execFileSync("git", ["diff", "--cached", "--name-only"], {
       cwd,
       encoding: "utf8",
       timeout: 3000,
