@@ -51,6 +51,17 @@ SOURCE="${MATCHES[0]}"
 FILENAME="${SOURCE##*/}"
 TARGET="$COMPLETED_DIR/$FILENAME"
 
+if grep -q "^- YYYY-MM-DD: \.\.\.$" "$SOURCE"; then
+  echo "Error: 의사결정 로그 placeholder가 남아 있습니다." >&2
+  echo "       결정이 없었다면 '- 해당 없음'으로 명시하세요: $FILENAME" >&2
+  exit 1
+fi
+
+if grep -q "^- 잘된 것:$" "$SOURCE" || grep -q "^- 다음에 할 것:$" "$SOURCE" || grep -q "^- 발견된 부채 (→ tech-debt-tracker.md 옮길 것):$" "$SOURCE"; then
+  echo "⚠ 회고 섹션이 비어 있습니다: $FILENAME" >&2
+  echo "  이동 후 바로 completed/ 파일에 회고를 작성하세요." >&2
+fi
+
 if [[ -f "$TARGET" ]]; then
   echo "Error: completed/ 에 동일 파일 존재: $FILENAME" >&2
   exit 1

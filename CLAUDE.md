@@ -10,9 +10,9 @@
 - **Route Groups**: `(content)/` — HeroSection + Breadcrumb 포함 (about, news, fellowship, sermons, community, next-gen, notifications, search)
 - **Data Flow**: `apis/` (DB 쿼리) → `services/` (비즈니스 로직) → `actions/` (뮤테이션) → `app/` (페이지)
 
-## Workflow (필수 순서: EXPLORE → PLAN → WORK → COMMIT)
+## Workflow (필수 순서: EXPLORE → PLAN → WORK → VERIFY → COMMIT)
 
-어느 단계도 건너뛰지 않는다. 단순 변경(typo, 한 줄 수정, rename)은 PLAN을 생략할 수 있으나 **EXPLORE/COMMIT은 항상 필수**.
+어느 단계도 건너뛰지 않는다. 단순 변경(typo, 한 줄 수정, rename)은 PLAN을 생략할 수 있으나 **EXPLORE/VERIFY/COMMIT은 항상 필수**.
 
 ### 1. EXPLORE — 컨텍스트 수집
 - 순서: `CLAUDE.md` → 관련 skill (`.claude/skills/`) → 관련 기존 코드
@@ -31,9 +31,16 @@
 - 한 번에 한 가지 관심사만 — 무관한 정리·리팩터 섞지 않는다
 - 계획을 벗어나는 변경이 필요하면 코드 전에 plan부터 갱신
 
-### 4. COMMIT — 검증 후 커밋
-- 검증 필수: `yarn verify` (lint + lint:styles + build + knip 묶음, 모두 통과해야 진행)
-- pre-commit 훅이 변경된 파일에 한해 자동으로 ESLint·stylelint 검사 — `--no-verify`로 우회 금지
+### 4. VERIFY — 검증 및 증적 기록
+- 필수 명령: `TASK_ID=<slug> bash scripts/verify-task.sh` 또는 `bash scripts/verify-task.sh <slug>`
+- 수행 항목: ESLint + stylelint + build + knip
+- 모든 결과는 `logs/<task-id>/<run-id>/`에 저장된다. `logs/`는 로컬 증적이며 커밋하지 않는다.
+- 실패하면 원인을 해결하거나 기존 부채인지 `docs/tech-debt-tracker.md`와 대조한다. 원인 불명 또는 반복 실패 시 Codex 분석을 검토한다.
+
+### 5. COMMIT — 승인 후 커밋
+- 커밋 전 pre-commit 훅이 변경 파일 lint와 최신 검증 기록을 확인한다.
+- `VERIFY_ENFORCE=1` 환경에서는 검증 기록이 없거나 diff가 바뀌면 커밋이 차단된다.
+- `--no-verify`로 우회 금지
 - **사용자 승인 후 커밋한다. 자동 커밋 금지.**
 - prefix는 6개만: Feat · Fix · Style · Refactor · Docs · Chore
 - 머지 후 `bash scripts/complete-task.sh <slug>`로 exec-plan을 `completed/`로 이동, 회고 작성
@@ -59,7 +66,7 @@
 
 ```bash
 yarn dev              # 개발 서버
-yarn verify           # 커밋 전 전체 검증 (lint + lint:styles + build + knip)
+bash scripts/verify-task.sh <task-id>  # 커밋·머지 전 전체 검증 + logs/<task-id>/ 증적 기록
 yarn build            # 빌드만
 yarn lint             # ESLint (레이어 의존성 포함)
 yarn lint:styles      # stylelint (SCSS 토큰·네이밍)
@@ -87,7 +94,7 @@ pre-commit 훅은 lint-staged로 변경 파일만 자동 검사 — error는 차
 - `className` 2개 이상: 반드시 `clsx` 사용
 - 스타일 작성: **모바일 퍼스트** — 기본값이 모바일, `respond-up($width)`으로 상위 뷰포트 확장
 - 커밋 메시지 본문은 **bullet(`-`)으로 항목 구분**
-- 외부 에이전트(Codex 등) 호출 시 **질의·응답은 영어**로 정확도 확보, 사용자에게 보고는 한국어로 한다
+- 외부 에이전트(Codex 등) 호출 시 **질의는 영어(정확도 확보), 응답은 한국어로 요청** — `codex:rescue`는 stdout을 verbatim 출력하므로 한국어 응답이 곧 사용자 보고가 된다. 위임 프롬프트 말미에 "Respond in Korean." 명시 필수.
 
 ## ⚠️ Gotchas
 
@@ -114,6 +121,9 @@ pre-commit 훅은 lint-staged로 변경 파일만 자동 검사 — error는 차
 | 자동 생성 (DB 스키마 등) — **수정 금지** | `docs/generated/` | 스크립트 실행 시만 |
 | 외부 라이브러리 참조 (llms.txt) | `docs/references/` | 라이브러리 업데이트 시 |
 | 작업별 외부 자료 발췌 (일회성) | `docs/research/` | EXEC_PLAN 진행 중 |
+| Codex CLI 진입점 | `AGENTS.md` | Codex 작업 시작 시 |
+| Codex 컨텍스트 로더 | `.codex/skills/context-loader/` | 컨텍스트 라우팅 변경 시 |
+| Claude Hook 자동 제안 | `.claude/hooks/` + `.claude/settings.json` | 협업 타이밍 변경 시 |
 | 워크플로우 자동화 스크립트 | `scripts/` | 스크립트 추가/변경 시 |
 | 작업별 how-to (자동 로딩) | `.claude/skills/{supabase,styles,file-structure}/` | 트리거 시 자동 |
 
