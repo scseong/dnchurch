@@ -1,9 +1,10 @@
 # harness-hooks-orchestration (Phase 1: 글 변경만)
 
-- **상태**: ⏸️ 일시 보류 (tech-debt-cleanup-phase1 완료 대기)
+- **상태**: ⏸️ 일시 보류 (verify-task-rework 또는 phase1-5 완료 대기)
 - **시작일**: 2026-05-01
-- **브랜치**: develop
+- **브랜치**: feat/harness-engineering (Step 1~3는 본 브랜치에 통합 커밋됨)
 - **범위**: Step 1~3 + SSOT 동기화 (Hooks 도입은 별도 EXEC_PLAN으로 분리)
+- **선행 의존성**: `yarn verify` 통과가 DoD 항목 — phase1.5(set-state-in-effect 10건) 또는 verify-task-rework 중 하나가 완료되면 재개 가능
 
 ## 목표
 

@@ -97,6 +97,23 @@
 - **마이그레이션 경로**: `verify-task-rework` EXEC_PLAN — 변경 파일만 검사하는 모드 또는 baseline 인정 모드 추가
 - **발견일**: 2026-05-01 (`harness-hooks-orchestration` 진행 중 발견)
 
+### 🟢 `complete-task.sh` 패턴 매칭 부정확
+
+- **무엇**: `phase1` 입력 시 `phase1-5`도 매치되어 다중 매칭 차단됨. `phase1.md` 입력은 `*phase1.md*.md`로 깨짐
+- **왜**: `find -name "*${PATTERN}*.md"` 단순 substring 매치
+- **마이그레이션 경로**: 정확 매치 모드(끝 anchor) 추가, `.md` suffix 자동 제거, 또는 prefix 매치로 변경
+- **확인**: 2026-05-01 phase1 → completed/ 이동 시연 중 발견 (수동 mv로 우회)
+- **영향 범위**: `scripts/complete-task.sh`
+- **발견일**: 2026-05-01
+
+### 🟢 layer 룰 상대 경로 미커버
+
+- **무엇**: ESLint `no-restricted-imports` 룰이 alias(`@/<layer>/...`)만 검사. 상대 경로(`../<layer>/...`)로 layer 의존성 우회 가능
+- **왜**: `**/<layer>/**` 보강 시도했으나 외부 패키지(`next/dist/client/components/...`) false positive로 부분 철회됨
+- **현재 상태**: 코드베이스에 상대 경로 layer crossing은 0건. 위험은 미래 방지용
+- **마이그레이션 경로**: `eslint-plugin-import`의 `no-relative-parent-imports` 또는 `eslint-plugin-boundaries` 도입 검토 (별도 EXEC_PLAN)
+- **발견일**: 2026-05-01 (Codex 리뷰)
+
 ---
 
 ## 해결된 항목

@@ -1,8 +1,10 @@
 # tech-debt-cleanup-phase1
 
-- **상태**: ✅ 구현+검증 완료 (커밋 대기)
+- **상태**: ✅ 완료
 - **시작일**: 2026-05-01
+- **종료일**: 2026-05-01 (당일 완료)
 - **브랜치**: feat/harness-engineering
+- **커밋**: `9a159f6` (구현) + `e67801b` (Codex 리뷰 반영)
 - **트리거**: `harness-hooks-orchestration` EXEC_PLAN이 사전 부채에 막혀 일시 보류됨
 
 ## 목표
@@ -87,8 +89,29 @@ errors 분포 재분석 결과 (작성 중 발견된 정정 사항):
 - [ ] 셀프 리뷰: ConfirmModal 수정이 기존 동작을 그대로 유지하는가? (회귀 테스트 없음, 수동 검증 필수)
 - [ ] **멀티 세션 리뷰** (권장): `useTimer`·`ConfirmModal`은 동작 변경 가능성이 있어 별도 세션 또는 `codex:rescue`로 객관적 검토 권장.
 
-## 회고 (머지 후 작성, completed/로 이동 시)
+## 회고
 
-- 잘된 것:
-- 다음에 할 것:
-- 발견된 부채 (→ tech-debt-tracker.md 옮길 것):
+### 잘된 것
+
+- **사실 기반 분류로 작업량 정확히 산정** — `eslint --format=json` 출력으로 룰별 분포 확인 → 막연한 "23건 청산" 대신 "ConfirmModal 10건은 패턴 disable, 함수 hoisting 1건은 안전 재정렬" 처럼 정확한 처리 방향 결정
+- **위험 분리** — 안전 13건은 본 phase, 케이스별 검토 필요한 10건(set-state-in-effect)은 phase1.5로 분리. 머지 단위가 작아 회귀 위험 ↓
+- **중간에 정정** — 처음 "ConfirmModal 한 파일에 20건 집중"이라고 분석했는데 실측에서 set-state 10건이 다른 파일들에 분산임을 발견하고 plan 갱신 (의사결정 로그 기록)
+- **사용자 동작 검증 통과** — `/admin/sermons` 삭제 모달, `/forget-password` 이메일 인증 타이머 두 화면 회귀 없음
+- **Codex 객관 리뷰로 추가 결함 발견** — render-time ref mutation의 Concurrent Mode 위험 등. ADR 0001 첫 dogfooding으로 가치 입증
+
+### 다음에 할 것 (배운 것)
+
+- **`yarn verify`는 부채 baseline 인정 모드 필요** — 본 phase 끝나도 phase1.5의 set-state-in-effect 10건 때문에 verify 통과 못 함. `verify-task-rework` EXEC_PLAN으로 분리됨
+- **Codex 위임 시 실행 환경 정보 전달 강화** — minimatch glob 동작·외부 패키지 매치 등 사전 알리면 false positive 제안 줄어듬
+- **`complete-task.sh`의 패턴 매칭이 너무 단순** — `phase1`이 `phase1-5`도 매치, `phase1.md`로 입력해도 `*phase1.md*.md`로 깨짐. 시연 도중 발견. 별도 부채로 등록
+
+### 발견된 부채 (→ tech-debt-tracker.md)
+
+| 항목 | 처리 |
+| --- | --- |
+| ESLint errors set-state-in-effect 10건 | `tech-debt-cleanup-phase1-5` (이미 분리) |
+| ESLint warnings 30건 | `tech-debt-cleanup-phase2` 후보 |
+| Knip ~50건 | `tech-debt-cleanup-knip` 후보 |
+| `verify-task.sh` baseline 부재 | `verify-task-rework` 후보 |
+| `complete-task.sh` 패턴 매칭 부정확 | tech-debt-tracker에 신규 등록 |
+| layer 룰 상대 경로 미커버 | 본 phase에서 시도 후 false positive로 보류, 별도 EXEC_PLAN 검토 |
