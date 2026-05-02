@@ -49,7 +49,8 @@ export default function SermonVideoTools({ sermonId, onSpeedChange }: Props) {
 
   useEffect(() => {
     const list = loadBookmarks();
-    queueMicrotask(() => setBookmarked(list.includes(sermonId)));
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    setBookmarked(list.includes(sermonId));
   }, [sermonId]);
 
   useEffect(() => {

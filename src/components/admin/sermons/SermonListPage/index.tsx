@@ -62,7 +62,8 @@ export default function SermonListPage({
   useEffect(() => {
     if (filters.search === lastExternalSearchRef.current) return;
     lastExternalSearchRef.current = filters.search;
-    queueMicrotask(() => setSearchInput(filters.search));
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    setSearchInput(filters.search);
   }, [filters.search]);
 
   // 디바운스된 입력 → 필터 (외부 sync로 들어온 값은 skip)

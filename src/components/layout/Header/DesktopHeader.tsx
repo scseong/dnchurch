@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { useEffect, useLayoutEffect, useState, useCallback } from 'react';
+import { useLayoutEffect, useState, useCallback } from 'react';
 import { IoSearchOutline, IoNotificationsOutline, IoHeartOutline } from 'react-icons/io5';
 import clsx from 'clsx';
 import LayoutContainer from '@/components/layout/container/LayoutContainer';
@@ -15,14 +15,14 @@ export default function DesktopHeader() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [keyboardOpen, setKeyboardOpen] = useState<string | null>(null);
   const [hoverSuppressed, setHoverSuppressed] = useState(false);
+  const [prevPathname, setPrevPathname] = useState(pathname);
 
   // pathname 변경 시 mega menu 닫기 + hover 억제
-  useEffect(() => {
-    queueMicrotask(() => {
-      setKeyboardOpen(null);
-      setHoverSuppressed(true);
-    });
-  }, [pathname]);
+  if (prevPathname !== pathname) {
+    setPrevPathname(pathname);
+    setKeyboardOpen(null);
+    setHoverSuppressed(true);
+  }
 
   useLayoutEffect(() => {
     const handleScroll = () => setIsScrolled(window.scrollY > SCROLL_THRESHOLD);

@@ -17,7 +17,8 @@ export default function Modal({ children, onClose, isVisible }: Props) {
   useScrollLock(isVisible);
 
   useEffect(() => {
-    queueMicrotask(() => setMounted(true));
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    setMounted(true);
   }, []);
 
   useEffect(() => {
