@@ -106,7 +106,7 @@ AI 코딩 에이전트(Claude Code, Codex, Gemini 등)의 활용이 일반화되
    - Claude Hook 자동 제안 인프라 `.claude/hooks/` + `.claude/settings.json`
 
 2. **다음 EXEC_PLAN**:
-   - `verify-task-rework` — 기존 부채와 신규 회귀를 분리해 검증 루프를 안정화
+   - `harness-engineering-dogfood` — 검증 증적, Node-first workflow script, merge/release gate를 실제 하네스 변경에 적용
    - `codex-plan-review-dogfood` — 실제 기능 작업에서 "Claude 계획 → Codex 리뷰 → Claude 구현" 루프 검증
    - `harness-hook-threshold-tuning` — Hook 제안 빈도와 임계값 조정
 

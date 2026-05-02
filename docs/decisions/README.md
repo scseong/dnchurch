@@ -31,5 +31,6 @@
 | 번호 | 제목 | 상태 | 날짜 |
 | --- | --- | --- | --- |
 | [0001](0001-codex-orchestration-strategy.md) | Codex 오케스트레이션 전략 채택 | Accepted | 2026-05-01 |
+| [0002](0002-node-first-harness-gate.md) | Node-first 하네스 자동화와 merge/release gate 채택 | Accepted | 2026-05-01 |
 
 <!-- last-audit: 2026-05-01 -->

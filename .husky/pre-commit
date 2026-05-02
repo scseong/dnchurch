@@ -1,3 +1,3 @@
 npx lint-staged
-bash scripts/prevent-main-src-commit.sh
-bash scripts/enforce-verification.sh
+node scripts/prevent-main-src-commit.mjs
+node scripts/enforce-verification.mjs

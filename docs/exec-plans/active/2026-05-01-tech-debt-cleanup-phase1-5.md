@@ -44,7 +44,7 @@
 
 ## 완료 기준 (DoD)
 
-- [ ] `yarn verify` 통과 (lint + lint:styles + build + knip)
+- [ ] `node scripts/verify-task.mjs tech-debt-cleanup-phase1-5` 통과 (lint + lint:styles + build + knip)
 - [ ] 사용자 승인 후 커밋
 - [ ] (필요 시) 마이그레이션 적용
 - [ ] (필요 시) ADR 또는 tech-debt-tracker 업데이트

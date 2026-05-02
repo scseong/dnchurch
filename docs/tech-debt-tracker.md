@@ -90,20 +90,13 @@
 - **확인**: `yarn knip`
 - **발견일**: 2026-05-01
 
-### 🟡 `verify-task.sh` 결함 — 부채에 항상 막힘
-
-- **무엇**: `yarn verify`(scripts/verify-task.sh)가 전체 lint·knip 검사를 수행해 사전 부채가 있으면 항상 fail
-- **왜**: 점진 강화 패턴(부채=warn/baseline, 신규=error)과 충돌. pre-commit hook은 변경 파일만 검사로 해결되어 있으나 verify는 그렇지 않음
-- **마이그레이션 경로**: `verify-task-rework` EXEC_PLAN — 변경 파일만 검사하는 모드 또는 baseline 인정 모드 추가
-- **발견일**: 2026-05-01 (`harness-hooks-orchestration` 진행 중 발견)
-
-### 🟢 `complete-task.sh` 패턴 매칭 부정확
+### 🟢 `complete-task.mjs` 패턴 매칭 부정확
 
 - **무엇**: `phase1` 입력 시 `phase1-5`도 매치되어 다중 매칭 차단됨. `phase1.md` 입력은 `*phase1.md*.md`로 깨짐
 - **왜**: `find -name "*${PATTERN}*.md"` 단순 substring 매치
 - **마이그레이션 경로**: 정확 매치 모드(끝 anchor) 추가, `.md` suffix 자동 제거, 또는 prefix 매치로 변경
 - **확인**: 2026-05-01 phase1 → completed/ 이동 시연 중 발견 (수동 mv로 우회)
-- **영향 범위**: `scripts/complete-task.sh`
+- **영향 범위**: `scripts/complete-task.mjs`
 - **발견일**: 2026-05-01
 
 ### 🟢 layer 룰 상대 경로 미커버
@@ -117,6 +110,12 @@
 ---
 
 ## 해결된 항목
+
+### ✅ `verify-task.mjs` 전체 검증이 사전 부채에 항상 막히던 문제 (2026-05-01)
+
+- `verify-task.mjs`는 ESLint/stylelint/build를 필수 통과 조건으로 유지하고, Knip은 현재 부채를 경고로 기록한다.
+- 결과는 `logs/<task-id>/<run-id>/`에 증적으로 남고, `enforce-verification.mjs`와 `harness-gate.mjs`가 현재 diff와 PASS 기록의 일치 여부를 확인한다.
+- 확인: `node scripts/verify-task.mjs harness-engineering-dogfood` 통과, `node scripts/harness-gate.mjs harness-engineering-dogfood` 통과.
 
 ### ✅ ESLint errors 13건 청산 (2026-05-01)
 

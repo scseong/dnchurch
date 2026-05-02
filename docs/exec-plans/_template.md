@@ -25,7 +25,7 @@
 
 ## 완료 기준 (DoD)
 
-- [ ] `yarn verify` 통과 (lint + lint:styles + build + knip)
+- [ ] `node scripts/verify-task.mjs <task-id>` 통과 (lint + lint:styles + build + knip)
 - [ ] 사용자 승인 후 커밋
 - [ ] (필요 시) 마이그레이션 적용
 - [ ] (필요 시) ADR 또는 tech-debt-tracker 업데이트
@@ -41,6 +41,35 @@
 (중간에 plan을 벗어나거나 새 결정이 생기면 여기에 추가. 날짜 + 한 줄 사유)
 
 - YYYY-MM-DD: ...
+
+## ADR 판단
+
+- **필요 여부**: 미검토
+- **결정 링크**:
+- **사유**:
+
+## Codex 계획 검증
+
+- **상태**: 미요청
+- **요청 시점**:
+- **결론**: 미요청 / PASS / CHANGE_REQUEST / BLOCK
+- **핵심 지적**:
+- **반영 내용**:
+
+## Codex 1차 검증
+
+- **상태**: 미요청
+- **요청 시점**:
+- **결론**: 미요청 / PASS / FIX_APPLIED / CHANGE_REQUEST / BLOCK
+- **수정 파일**:
+- **핵심 지적**:
+- **남은 리스크**:
+
+## Claude 2차 검증
+
+- **검토 내용**:
+- **실행한 검증**:
+- **최종 판단**:
 
 ## 리뷰 (완료 직전)
 
