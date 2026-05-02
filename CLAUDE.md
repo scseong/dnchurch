@@ -66,6 +66,7 @@
 - **사용자 승인 후 커밋한다. 자동 커밋 금지.**
 - prefix는 6개만: Feat · Fix · Style · Refactor · Docs · Chore
 - 머지 후 `node scripts/complete-task.mjs <slug>`로 exec-plan을 `completed/`로 이동, 회고 작성
+- PR 생성 시 `--assignee "@me"`와 `--label <name>` 은 **항상 필수** — 누락 시 GitHub Actions(`pr-required-fields`) 체크 실패로 머지 차단됨
 
 ## 에이전트 역할 분담
 
