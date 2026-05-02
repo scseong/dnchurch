@@ -47,25 +47,20 @@ const completedDir = path.join(repoRoot, "docs", "exec-plans", "completed");
 
 if (!existsSync(activeDir)) fail(`Error: active/ 디렉토리 없음: ${activeDir}`);
 
-const matches = readdirSync(activeDir)
-  .filter((name) => name.endsWith(".md") && name.includes(pattern))
-  .sort();
-
-if (matches.length === 0) {
-  const activeFiles = readdirSync(activeDir).filter((name) => name.endsWith(".md")).sort();
-  console.error(`Error: 매칭되는 EXEC_PLAN 없음: *${pattern}*.md`);
-  console.error("");
-  console.error("현재 active/ 내용:");
-  if (activeFiles.length === 0) console.error("  (없음)");
-  for (const file of activeFiles) console.error(`  ${file}`);
-  process.exit(1);
+function slugFromFilename(name) {
+  return name.replace(/^\d{4}-\d{2}-\d{2}-/, "").replace(/\.md$/, "");
 }
 
-if (matches.length > 1) {
-  console.error("Error: 여러 파일이 매칭됨. 더 구체적인 패턴이 필요합니다.");
+const allMd = readdirSync(activeDir).filter((name) => name.endsWith(".md")).sort();
+const matches = allMd.filter((name) => slugFromFilename(name) === pattern);
+
+if (matches.length === 0) {
+  const available = allMd.map(slugFromFilename);
+  console.error(`Error: 매칭되는 EXEC_PLAN 없음: ${pattern}`);
   console.error("");
-  console.error("매칭 결과:");
-  for (const file of matches) console.error(`  ${file}`);
+  console.error("현재 active slugs:");
+  if (available.length === 0) console.error("  (없음)");
+  for (const slug of available) console.error(`  - ${slug}`);
   process.exit(1);
 }
 

@@ -43,17 +43,20 @@ function sectionBody(markdown, heading) {
   return markdown.slice(bodyStart + 1, bodyEnd).trim();
 }
 
+function slugFromFilename(name) {
+  return name.replace(/^\d{4}-\d{2}-\d{2}-/, "").replace(/\.md$/, "");
+}
+
 function findActivePlan(repoRoot, pattern) {
   const activeDir = path.join(repoRoot, "docs", "exec-plans", "active");
   if (!existsSync(activeDir)) fail(`active exec-plan 디렉토리가 없습니다: ${activeDir}`);
 
-  const matches = readdirSync(activeDir)
-    .filter((name) => name.endsWith(".md") && name.includes(pattern))
-    .sort();
+  const allMd = readdirSync(activeDir).filter((name) => name.endsWith(".md")).sort();
+  const matches = allMd.filter((name) => slugFromFilename(name) === pattern);
 
-  if (matches.length === 0) fail(`매칭되는 active exec-plan이 없습니다: *${pattern}*.md`);
-  if (matches.length > 1) {
-    fail(`여러 active exec-plan이 매칭됩니다. 더 구체적인 task id를 사용하세요:\n${matches.map((name) => `  - ${name}`).join("\n")}`);
+  if (matches.length === 0) {
+    const available = allMd.map(slugFromFilename).join("\n  - ");
+    fail(`매칭되는 active exec-plan이 없습니다: ${pattern}\n현재 active slugs:\n  - ${available}`);
   }
 
   return path.join(activeDir, matches[0]);

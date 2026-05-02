@@ -46,7 +46,7 @@ let repoRoot;
 try {
   repoRoot = String(git(["rev-parse", "--show-toplevel"])).trim();
 } catch {
-  warn("⚠ git 저장소 루트를 확인할 수 없어 검증 기록을 확인하지 못했습니다.");
+  warn("[UNKNOWN] git 저장소 루트를 확인할 수 없어 검증 기록을 확인하지 못했습니다.");
   process.exit(0);
 }
 
@@ -56,9 +56,17 @@ try {
   currentHash = diffHash(["diff", "--binary"]);
   stagedHash = diffHash(["diff", "--cached", "--binary"]);
 } catch (error) {
-  warn(`⚠ diff hash 계산에 실패했습니다: ${error.message}`);
+  warn(`[UNKNOWN] diff hash 계산에 실패했습니다: ${error.message}`);
   process.exit(0);
 }
+
+let headSha = "";
+try {
+  headSha = String(git(["rev-parse", "HEAD"])).trim();
+} catch { /* HEAD 없는 빈 저장소 등 예외 상황 */ }
+
+const EMPTY_HASH = "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391";
+const isCleanTree = currentHash === EMPTY_HASH && stagedHash === EMPTY_HASH;
 
 const logsRoot = path.join(repoRoot, "logs");
 const candidates = latestCandidates(logsRoot);
@@ -69,6 +77,10 @@ for (const manifestPath of candidates) {
     if (manifest.status !== "pass") continue;
     if (manifest.currentDiffHash === currentHash && manifest.stagedDiffHash === stagedHash) {
       console.log(`✓ 검증 기록 확인: ${manifest.log ?? manifestPath}`);
+      process.exit(0);
+    }
+    if (isCleanTree && headSha && manifest.head === headSha) {
+      console.log(`✓ 검증 기록 확인 (clean tree, HEAD ${headSha.slice(0, 8)}): ${manifest.log ?? manifestPath}`);
       process.exit(0);
     }
   } catch {
