@@ -115,7 +115,7 @@ Claude Code 오케스트레이터 / Codex 서브 에이전트 분업, Node-first
 ## Claude 2차 검증
 
 - **검토 내용**: `verify-task.mjs` 실행, PASS manifest/diff hash 대조, Hook JSON 출력, `.claude/settings.json` 등록 상태, exec-plan 템플릿 섹션을 확인했다.
-- **실행한 검증**: `node --check scripts/*.mjs`, `node --check .claude/hooks/*.mjs`, `node scripts/verify-task.mjs verification-cleanup`, `node scripts/enforce-verification.mjs verification-cleanup`, 최종 `node scripts/verify-task.mjs harness-engineering-dogfood`, 최종 `node scripts/harness-gate.mjs harness-engineering-dogfood`.
+- **실행한 검증**: `scripts/` 및 `.claude/hooks/` 내 각 `.mjs` 파일 syntax 체크(`node --check <file>`), `node scripts/verify-task.mjs verification-cleanup`, `node scripts/enforce-verification.mjs verification-cleanup`, 최종 `node scripts/verify-task.mjs harness-engineering-dogfood`, 최종 `node scripts/harness-gate.mjs harness-engineering-dogfood`.
 - **최종 판단**: 하네스 v1은 실사용 가능하다. 최종 dogfood 증적은 `logs/harness-engineering-dogfood/latest.json`이 가리키는 PASS 실행과 `harness-gate.mjs` 통과 결과를 기준으로 삼는다.
 
 ## 리뷰 (완료 직전)
@@ -125,6 +125,6 @@ Claude Code 오케스트레이터 / Codex 서브 에이전트 분업, Node-first
 
 ## 회고 (머지 후 작성, completed/로 이동 시)
 
-- 잘된 것:
-- 다음에 할 것:
-- 발견된 부채 (→ tech-debt-tracker.md 옮길 것):
+- 잘된 것: 하네스 v1 전체 사이클(exec-plan → Codex 계획 검증 → 구현 → 1차 검증 → verify-task → harness-gate → complete-task)을 실제 작업에 처음 적용하면서 구조 문제를 실시간으로 발견하고 수정했다. scripts/_shared-config.mjs(ADR SSOT), slugFromFilename 정확 매칭, clean-tree 검증 경로 등 핵심 신뢰성 문제가 이 dogfood 사이클에서 모두 식별·수정됐다.
+- 다음에 할 것: CI gate(GitHub Actions) — 로컬 harness-gate와 동일한 검사를 PR merge 전에 강제한다(Work Unit C, 명시적으로 보류 중).
+- 발견된 부채 (→ tech-debt-tracker.md 옮길 것): ESLint warning 30개 / stylelint warning 61개 / Knip unused export — 기존 등록 항목과 동일, 신규 없음.

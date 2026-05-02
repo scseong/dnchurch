@@ -82,9 +82,9 @@ Hooks 도입은 "사용자 입력 stream에 끼어드는 동작"이라 신중한
 
 ## 회고 (머지 후 작성, completed/로 이동 시)
 
-- 잘된 것:
-- 다음에 할 것:
-- 발견된 부채 (→ tech-debt-tracker.md 옮길 것):
+- 잘된 것: 범위를 "글 변경만"으로 좁혀 즉시 효과(언어 프로토콜, research/ 디렉토리, 템플릿 명확화)를 얻고, 위험한 Hooks 도입은 별도 EXEC_PLAN으로 분리한 판단이 옳았다. 실제로 Hooks 도입 과정에서 여러 구조 문제가 발견됐는데, 이 EXEC_PLAN이 분리됐기 때문에 본 작업은 깔끔하게 완료됐다.
+- 다음에 할 것: harness-claude-hooks EXEC_PLAN — `agent-router` + `check-before-write` Hook 2개 도입 (별도 사이클).
+- 발견된 부채 (→ tech-debt-tracker.md 옮길 것): 해당 없음.
 
 ## 리뷰 (완료 직전)
 
