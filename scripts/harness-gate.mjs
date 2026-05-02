@@ -70,6 +70,9 @@ function assertReviewSections(content, filename) {
     const body = sectionBody(content, heading);
     if (!body) fail(`${filename}: ## ${heading} 섹션이 없습니다.`);
     if (pendingPattern.test(body)) fail(`${filename}: ## ${heading} 섹션이 미작성 상태입니다.`);
+    if (/\*\*결론\*\*:\s*BLOCK/.test(body)) {
+      fail(`${filename}: ## ${heading} 섹션에 BLOCK이 기록되어 있습니다. exec-plan을 재작성하고 Codex 재요청 후 진행하세요.`);
+    }
   }
 }
 
