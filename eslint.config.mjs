@@ -15,6 +15,9 @@ const LAYER_VIOLATION_MESSAGE =
 const layerPatterns = (layers) => layers.map((layer) => `@/${layer}/**`);
 
 export default defineConfig([
+    {
+        ignores: ["docs/**"],
+    },
     ...nextCoreWebVitals,
     ...nextTypescript,
     prettier,

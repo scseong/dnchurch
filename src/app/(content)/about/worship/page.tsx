@@ -1,8 +1,9 @@
 import type { Metadata } from 'next';
 import MainContainer from '@/components/layout/container/MainContainer';
-import WorshipSchedule from './_component/WorshipSchedule';
-// eslint-disable-next-line no-restricted-imports -- 점진 마이그레이션 대상 (tech-debt-tracker.md)
-import { getWorshipSchedules } from '@/apis/worship-schedules';
+import { getWorshipScheduleGroups } from '@/services/worship';
+import WorshipCard from './_component/WorshipCard';
+import SchoolGrid from './_component/SchoolGrid';
+import AboutWorship from './_component/AboutWorship';
 import styles from './page.module.scss';
 
 export const metadata: Metadata = {
@@ -17,24 +18,47 @@ export const metadata: Metadata = {
 };
 
 export default async function Worship() {
-  const { data } = await getWorshipSchedules();
-  const schedules = data ?? [];
-
-  const mainSchedules = schedules.filter((s) => s.category === 'main');
-  const churchSchoolSchedules = schedules.filter((s) => s.category === 'church_school');
+  const { sunday, weekday, school } = await getWorshipScheduleGroups();
 
   return (
     <MainContainer title="예배안내">
-      <div className={styles.container}>
-        <div className={styles.schedule}>
-          <h4>예배시간</h4>
-          <WorshipSchedule schedule={mainSchedules} />
-        </div>
-        <div className={styles.schedule}>
-          <h4>교회학교 예배시간</h4>
-          <WorshipSchedule schedule={churchSchoolSchedules} />
-        </div>
-      </div>
+      <section className={styles.section}>
+        <header className={styles.section_head}>
+          <p className={styles.eyebrow}>Sunday</p>
+          <h3>주일예배</h3>
+        </header>
+        <ol className={styles.sunday_list}>
+          {sunday.map((schedule) => (
+            <li key={schedule.id}>
+              <WorshipCard variant="sunday" schedule={schedule} />
+            </li>
+          ))}
+        </ol>
+      </section>
+
+      <section className={styles.section}>
+        <header className={styles.section_head}>
+          <p className={styles.eyebrow}>Weekday</p>
+          <h3>평일예배</h3>
+        </header>
+        <ol className={styles.weekday_list}>
+          {weekday.map((schedule) => (
+            <li key={schedule.id}>
+              <WorshipCard variant="weekday" schedule={schedule} />
+            </li>
+          ))}
+        </ol>
+      </section>
+
+      <section className={styles.section}>
+        <header className={styles.section_head}>
+          <p className={styles.eyebrow}>Sunday School</p>
+          <h3>교회학교 예배</h3>
+        </header>
+        <SchoolGrid schedules={school} />
+      </section>
+
+      <AboutWorship />
     </MainContainer>
   );
 }

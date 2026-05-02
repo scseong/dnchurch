@@ -1,0 +1,110 @@
+.grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: $spacing-12;
+}
+
+.card {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-8;
+  padding: $spacing-20 $spacing-16;
+  background-color: $white;
+  border: 1px solid $border-warm;
+  border-radius: $radius-m;
+
+  h5 {
+    font-family: $font-family-secondary;
+    font-size: $font-size-16;
+    font-weight: $font-weight-bold;
+  }
+}
+
+.age {
+  align-self: flex-start;
+  padding: $padding-inline-sm;
+  font-size: $font-size-11;
+  font-weight: $font-weight-bold;
+  letter-spacing: $letter-spacing-wide;
+  color: $gold-600;
+  background-color: $gold-100;
+  border-radius: $radius-circle;
+}
+
+.time {
+  font-family: $font-family-secondary;
+  font-size: $font-size-16;
+  font-weight: $font-weight-medium;
+  letter-spacing: $letter-spacing-body;
+  font-variant-numeric: tabular-nums;
+  color: $txt-primary;
+}
+
+.place {
+  margin-top: auto;
+  padding-top: $spacing-8;
+  font-size: $font-size-12;
+  color: $txt-tertiary;
+  border-top: 1px solid $border-warm;
+}
+
+.banner {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: center;
+  gap: $spacing-12;
+  margin-top: $spacing-12;
+  padding: $spacing-16 $spacing-20;
+  background-color: $bg-tertiary;
+  border: 1px solid $border-warm;
+  border-radius: $radius-m;
+  transition: $transition-base;
+
+  h5 {
+    margin-bottom: $spacing-4;
+    font-family: $font-family-secondary;
+    font-size: $font-size-15;
+    font-weight: $font-weight-bold;
+    color: $txt-primary;
+  }
+
+  p {
+    font-size: $font-size-12;
+    color: $txt-tertiary;
+  }
+
+  &:hover {
+    background-color: $cream-300;
+  }
+}
+
+.arrow {
+  width: $icon-button-size;
+  height: $icon-button-size;
+  display: grid;
+  place-items: center;
+  background-color: $white;
+  border: 1px solid $border-warm;
+  border-radius: 50%;
+  font-size: $font-size-16;
+  font-weight: $font-weight-bold;
+  color: $txt-primary;
+}
+
+@include respond-up($breakpoint-tablet) {
+  .grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+
+  .card {
+    padding: $spacing-24 $spacing-20;
+
+    h5 {
+      font-size: $font-size-18;
+    }
+  }
+
+  .time {
+    font-size: $font-size-18;
+  }
+}
