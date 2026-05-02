@@ -100,5 +100,5 @@ workflow 자동화의 실제 로직은 Node.js `.mjs`로 통일한다.
 ## References
 
 - 관련 ADR: [0001 — Codex 오케스트레이션 전략 채택](0001-codex-orchestration-strategy.md)
-- 관련 exec-plan: [harness-engineering-dogfood](../exec-plans/active/2026-05-01-harness-engineering-dogfood.md)
+- 관련 exec-plan: [harness-engineering-dogfood](../exec-plans/completed/2026-05-01-harness-engineering-dogfood.md)
 - 검증 증적: `logs/verification-cleanup/20260501-194612/summary.log`

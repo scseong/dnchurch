@@ -124,6 +124,6 @@ AI 코딩 에이전트(Claude Code, Codex, Gemini 등)의 활용이 일반화되
   - 6 Hooks 자동 제안 패턴 (우리에게 맞게 압축 예정)
   - Skills 기반 vs MCP 기반 비교
 - 관련 EXEC_PLAN:
-  - `docs/exec-plans/active/2026-05-01-harness-hooks-orchestration.md` (Phase 1: 글 변경)
-  - `docs/exec-plans/active/2026-05-01-tech-debt-cleanup-phase1.md` (검사 도구 정상화)
+  - `docs/exec-plans/completed/2026-05-01-harness-hooks-orchestration.md` (Phase 1: 글 변경)
+  - `docs/exec-plans/completed/2026-05-01-tech-debt-cleanup-phase1.md` (검사 도구 정상화)
 - 관련 스킬: `codex:rescue` (이미 설치됨)
