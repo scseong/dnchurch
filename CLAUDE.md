@@ -10,6 +10,15 @@
 - **Route Groups**: `(content)/` — HeroSection + Breadcrumb 포함 (about, news, fellowship, sermons, community, next-gen, notifications, search)
 - **Data Flow**: `apis/` (DB 쿼리) → `services/` (비즈니스 로직) → `actions/` (뮤테이션) → `app/` (페이지)
 
+## 행동 가드레일 (LLM 공통 실수 방지)
+
+> 모든 워크플로우 단계에 공통 적용. 트레이드오프: 속도보다 정확성 우선. 단순 변경은 자체 판단으로 생략 가능.
+
+- **코딩 전 사고**: 가정과 모호성을 명시한다. 해석이 여럿이면 묻거나 채택한 해석을 exec-plan/응답에 기록한다 — 조용히 선택하지 않는다.
+- **단순함 우선**: 작업을 만족하는 최소 변경을 선택한다. 추측성 추상화·옵션·"유연성"·요청 외 정리 금지. 200줄로 쓴 것이 50줄로 가능하면 다시 쓴다.
+- **외과적 변경**: 변경된 모든 줄은 현재 작업으로 추적되어야 한다. 인접 코드·주석·포맷 "개선" 금지. 로컬 스타일을 따른다. 내 변경이 만든 unused import/변수만 제거하고, 기존 dead code는 발견 시 보고만 한다.
+- **검증 가능한 목표**: 구현 전 성공 기준을 정의하고, 가장 좁은 신뢰 명령으로 먼저 검증한 뒤 `verify-task.mjs`로 마무리한다. "동작하게 만들어" 같은 약한 기준은 시작 전에 구체화한다.
+
 ## Workflow (필수 순서: EXPLORE → PLAN → CODEX_PLAN_REVIEW → WORK → CODEX_FIRST_PASS → VERIFY → COMMIT)
 
 어느 단계도 건너뛰지 않는다. 단순 변경(typo, 한 줄 수정, rename)은 PLAN을 생략할 수 있으나 **EXPLORE/VERIFY/COMMIT은 항상 필수**.

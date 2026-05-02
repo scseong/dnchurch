@@ -108,9 +108,11 @@ if (files.length >= 8 || critical.length >= 2) {
   emitContext(
     "[hook:post-implementation-review]\n" +
       `현재 diff가 넓거나 위험 파일을 포함합니다. 변경 파일 수: ${files.length}, 고위험 파일 수: ${critical.length}.\n` +
-      "Claude 구현 이후 Codex 1차 검증을 요청할 타이밍입니다. Codex에는 버그, 레이어 경계, 누락된 검증, 타입/엣지 케이스를 확인하게 하세요.\n" +
+      "Claude 구현 이후 Codex 1차 검증을 요청할 타이밍입니다. Codex에는 버그, 레이어 경계, 누락된 검증, 타입/엣지 케이스에 더해 " +
+      "**외과적 변경(surgical changes)**을 확인하게 하세요: 변경된 각 파일이 현재 task와 직접 관련 있는가, 인접 코드 정리·포맷·이름 변경이 섞여 있는가, " +
+      "이번 변경으로 생긴 unused import/변수만 제거되었고 기존 dead code는 보존되었는가. 인접 정리가 섞여 있으면 별도 작업 분리를 요청하세요.\n" +
       "Codex가 직접 수정할 수 있는 범위는 명백한 버그, 타입 오류, 누락 guard, 테스트 실패 원인의 국소 수정까지입니다. " +
-      "계획 변경, 새 라이브러리, 데이터 흐름 변경, 인증/캐시/배포 정책 변경은 Claude Code 2차 검증으로 반환해야 합니다.\n" +
+      "계획 변경, 새 라이브러리, 데이터 흐름 변경, 인증/캐시/배포 정책 변경, 외과적 변경 위반은 Claude Code 2차 검증으로 반환해야 합니다.\n" +
       "검증 후 active exec-plan의 `## Codex 1차 검증` 섹션에 결론, 수정 파일, 핵심 지적, 남은 리스크를 기록하세요. " +
       "Claude Code는 이어서 `## Claude 2차 검증` 섹션에 교차 확인과 최종 판단을 남겨야 합니다.",
   );
