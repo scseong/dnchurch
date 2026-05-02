@@ -59,10 +59,18 @@ node scripts/start-task.mjs <task-id>
 
 구현 전 Codex 계획 검증을 요청한다. 질문은 영어로 작성하고 마지막에 `Respond in Korean.`을 붙인다.
 
+Codex가 결론을 내기 전에 다음 5체크를 수행하도록 프롬프트에 포함한다.
+
+1. 가정(Assumptions)이 명시되어 있는가?
+2. 비목표(Non-goals)가 명시되어 있는가?
+3. 변경 범위가 요청과 직접 연결되는가? (창발적 추가가 없는가)
+4. 성공 기준(Success Criteria)과 검증 명령이 구체적인가?
+5. 새 추상화·새 라이브러리·데이터 흐름 변경이 과한가? (없어야 정상)
+
 Codex 결론은 `PASS`, `CHANGE_REQUEST`, `BLOCK` 중 하나로 해석한다.
 
 - `PASS`: 구현 진행
-- `CHANGE_REQUEST`: exec-plan 수정 후 구현 진행
+- `CHANGE_REQUEST`: exec-plan 수정 후 구현 진행 (5체크 중 어느 하나라도 미충족이면 기본적으로 CHANGE_REQUEST)
 - `BLOCK`: exec-plan 재작성 후 Codex 재요청 필수. 재요청도 BLOCK이면 사용자에게 에스컬레이션 — 최종 판단은 사용자가 내린다.
 
 결과는 exec-plan의 `## Codex 계획 검증`에 기록한다.
@@ -76,6 +84,12 @@ Codex 결론은 `PASS`, `CHANGE_REQUEST`, `BLOCK` 중 하나로 해석한다.
 ### 5. CODEX_FIRST_PASS
 
 구현 diff가 생기면 Codex 1차 검증을 요청한다.
+
+Codex가 우선 확인할 항목:
+
+- 버그·타입 오류·누락 guard·엣지 케이스
+- 레이어 경계 위반
+- **외과적 변경 (surgical changes)** — 변경된 각 파일이 현재 task와 직접 관련 있는가? 인접 코드 정리·포맷·이름 변경이 섞여 있는가? 이번 변경으로 생긴 unused import/변수만 제거되었고 기존 dead code는 보존되었는가? (인접 정리가 섞여 있으면 별도 작업 분리 요청)
 
 Codex가 직접 수정 가능한 범위:
 
@@ -91,6 +105,7 @@ Codex가 직접 수정하지 않고 Claude Code에 반환해야 하는 범위:
 - 데이터 흐름 변경
 - 인증/캐시/배포 정책 변경
 - 여러 모듈 책임 경계 재설계
+- 인접 코드 리팩터·포맷·이름 변경 등 외과적 변경 위반 (Claude Code가 별도 작업으로 처리)
 
 결과는 exec-plan의 `## Codex 1차 검증`에 기록한다.
 
