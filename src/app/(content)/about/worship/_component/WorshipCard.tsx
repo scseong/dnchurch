@@ -30,18 +30,15 @@ function SundayCard({ schedule }: { schedule: WorshipScheduleType }) {
         <h4>{schedule.name}</h4>
         <time className={styles.time}>{schedule.time}</time>
       </header>
-      <dl className={styles.meta}>
-        <div>
-          <dt>장소</dt>
-          <dd>{schedule.location}</dd>
-        </div>
+      <p className={styles.meta}>
+        <span>{schedule.location}</span>
         {schedule.duration ? (
-          <div>
-            <dt>소요시간</dt>
-            <dd>{schedule.duration}</dd>
-          </div>
+          <>
+            <span className={styles.dot} aria-hidden />
+            <span>{schedule.duration}</span>
+          </>
         ) : null}
-      </dl>
+      </p>
       {schedule.description ? <p className={styles.desc}>{schedule.description}</p> : null}
     </article>
   );

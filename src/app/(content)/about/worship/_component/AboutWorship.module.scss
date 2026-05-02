@@ -1,6 +1,6 @@
 .band {
   margin-top: $spacing-64;
-  padding: $spacing-64 $spacing-20;
+  padding: $spacing-64 $spacing-20 $spacing-40;
   background-color: $bg-dark;
   color: $txt-inverse;
 }
@@ -13,7 +13,7 @@
     margin-bottom: $spacing-12;
     font-family: $font-family-secondary;
     color: $txt-inverse;
-    letter-spacing: $letter-spacing-tight;
+    letter-spacing: $letter-spacing-heading;
   }
 }
 
@@ -27,13 +27,13 @@
 }
 
 .lead {
-  font-size: $font-size-14;
+  font-size: $font-size-13;
   line-height: $line-height-loose;
   color: $txt-image-subtle;
 }
 
 .scripture {
-  padding: $spacing-32 $spacing-20;
+  padding: $spacing-24 $spacing-20;
   margin-bottom: $spacing-40;
   text-align: center;
   background-color: $bg-dark-card;
@@ -65,6 +65,9 @@
 }
 
 .item {
+  display: grid;
+  grid-template-columns: 5.2rem 1fr;
+  gap: $spacing-12;
   padding: $spacing-20 $spacing-0;
   border-top: 1px solid $border-dark-faint;
 
@@ -73,11 +76,26 @@
   }
 }
 
+.icon {
+  width: 5.2rem;
+  height: 5.2rem;
+  display: grid;
+  place-items: center;
+  background-color: rgba($gold-600, 0.12);
+  border: 1px solid rgba($gold-600, 0.25);
+  border-radius: $radius-s;
+  color: $gold-400;
+}
+
+.body_col {
+  min-width: 0;
+}
+
 .head {
   display: flex;
   align-items: baseline;
   gap: $spacing-8;
-  margin-bottom: $spacing-8;
+  margin-bottom: $spacing-6;
 
   h4 {
     font-family: $font-family-secondary;
@@ -102,7 +120,7 @@
 }
 
 .body {
-  font-size: $font-size-14;
+  font-size: $font-size-13;
   line-height: $line-height-loose;
   color: $txt-image-subtle;
   word-break: keep-all;
@@ -110,11 +128,11 @@
 
 @include respond-up($breakpoint-tablet) {
   .band {
-    padding: $spacing-80 $spacing-40;
+    padding: $spacing-80 $spacing-40 $spacing-48;
   }
 
   .intro h3 {
-    font-size: $font-size-28;
+    font-size: $font-size-24;
   }
 
   .scripture {
@@ -122,14 +140,14 @@
   }
 
   .verse {
-    font-size: $font-size-20;
+    font-size: $font-size-18;
   }
 
   .head h4 {
-    font-size: $font-size-20;
+    font-size: $font-size-18;
   }
 
   .body {
-    font-size: $font-size-15;
+    font-size: $font-size-14;
   }
 }

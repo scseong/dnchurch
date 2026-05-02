@@ -2,7 +2,7 @@
 
 .sunday {
   position: relative;
-  padding: $spacing-24 $spacing-24 $spacing-20;
+  padding: $spacing-20;
   background-color: $white;
   border: 1px solid $border-warm;
   border-radius: $radius-m;
@@ -44,12 +44,12 @@
   display: flex;
   justify-content: space-between;
   align-items: baseline;
-  gap: $spacing-12;
-  margin-bottom: $spacing-16;
+  gap: $spacing-10;
+  margin-bottom: $spacing-12;
 
   h4 {
     font-family: $font-family-secondary;
-    font-size: $font-size-20;
+    font-size: $font-size-18;
     font-weight: $font-weight-bold;
     letter-spacing: $letter-spacing-tight;
   }
@@ -57,9 +57,9 @@
 
 .time {
   font-family: $font-family-secondary;
-  font-size: $font-size-22;
+  font-size: $font-size-18;
   font-weight: $font-weight-bold;
-  letter-spacing: $letter-spacing-tight;
+  letter-spacing: $letter-spacing-body;
   font-variant-numeric: tabular-nums;
   color: $txt-primary;
   white-space: nowrap;
@@ -67,34 +67,30 @@
 
 .meta {
   display: flex;
-  gap: $spacing-24;
-  padding: $spacing-16 $spacing-0;
-  border-top: 1px solid $border-warm;
-  margin-bottom: $spacing-12;
+  align-items: center;
+  gap: $spacing-8;
+  padding-bottom: $spacing-12;
+  border-bottom: 1px dashed $border-warm;
+  margin-bottom: $spacing-10;
+  font-size: $font-size-12;
+  color: $txt-tertiary;
 
-  div {
-    display: flex;
-    flex-direction: column;
-    gap: $spacing-4;
-  }
-
-  dt {
-    font-size: $font-size-11;
-    font-weight: $font-weight-semibold;
-    letter-spacing: $letter-spacing-wide;
-    color: $txt-tertiary;
-    text-transform: uppercase;
-  }
-
-  dd {
-    font-size: $font-size-14;
-    font-weight: $font-weight-semibold;
-    color: $txt-primary;
+  span {
+    white-space: nowrap;
   }
 }
 
+.dot {
+  width: $spacing-4;
+  height: $spacing-4;
+  border-radius: 50%;
+  background-color: $accent;
+  opacity: 0.7;
+  flex-shrink: 0;
+}
+
 .desc {
-  font-size: $font-size-14;
+  font-size: $font-size-13;
   line-height: $line-height-body-reading;
   color: $txt-secondary;
 }
@@ -158,7 +154,7 @@
 
 .place {
   margin-bottom: $spacing-8;
-  font-size: $font-size-13;
+  font-size: $font-size-12;
   color: $txt-tertiary;
 }
 
@@ -172,7 +168,7 @@
   }
 
   .time {
-    font-size: $font-size-28;
+    font-size: $font-size-22;
   }
 
   .weekday {
@@ -180,7 +176,7 @@
   }
 
   .hour {
-    font-size: $font-size-24;
+    font-size: $font-size-22;
   }
 
   .info_col h4 {
