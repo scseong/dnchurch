@@ -1,3 +1,5 @@
+> ⚠️ 이 계획은 ADR 0002 이후 Node.js 기반 하네스(`verify-task.mjs`, `complete-task.mjs`)로 대체됐습니다. 역사 기록용입니다.
+
 # tech-debt-cleanup-phase1
 
 - **상태**: ✅ 완료

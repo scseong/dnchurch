@@ -1,3 +1,5 @@
+> ⚠️ 이 계획은 ADR 0002 이후 Node.js 기반 하네스(`verify-task.mjs`)로 대체됐습니다. 역사 기록용입니다.
+
 # verify-evidence-enforcement
 
 - **상태**: 🟡 진행 중
