@@ -119,7 +119,8 @@ export default function BottomNav() {
 
   // pathname 변경 시 Drawer 닫기
   useEffect(() => {
-    queueMicrotask(() => setDrawerOpen(false));
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    setDrawerOpen(false);
   }, [pathname]);
 
   return (

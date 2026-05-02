@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useCallback, useEffect } from 'react';
+import { useState, useCallback } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import clsx from 'clsx';
 import { IoSearchOutline, IoCloseCircle, IoClose } from 'react-icons/io5';
@@ -21,10 +21,12 @@ export default function NoticeControlBar({ total, currentCategory, currentSearch
   const searchParams = useSearchParams();
   const [query, setQuery] = useState(currentSearch ?? '');
   const [showCategorySheet, setShowCategorySheet] = useState(false);
+  const [prevSearch, setPrevSearch] = useState(currentSearch ?? '');
 
-  useEffect(() => {
-    queueMicrotask(() => setQuery(currentSearch ?? ''));
-  }, [currentSearch]);
+  if (prevSearch !== (currentSearch ?? '')) {
+    setPrevSearch(currentSearch ?? '');
+    setQuery(currentSearch ?? '');
+  }
 
   const updateParams = useCallback(
     (updates: Record<string, string | null>) => {

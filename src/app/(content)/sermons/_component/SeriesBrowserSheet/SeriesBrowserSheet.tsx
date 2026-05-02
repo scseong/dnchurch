@@ -31,7 +31,8 @@ export default function SeriesBrowserSheet({
   const [keyword, setKeyword] = useState('');
 
   useEffect(() => {
-    if (open) queueMicrotask(() => setKeyword(''));
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    if (open) setKeyword('');
   }, [open]);
 
   const filteredSeries = useMemo(() => {

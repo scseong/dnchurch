@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import clsx from 'clsx';
 import BottomSheet from '@/components/common/BottomSheet/BottomSheet';
 import type { Preacher } from '@/types/sermon';
@@ -26,10 +26,14 @@ export default function AdvancedFilterSheet({
   const [selected, setSelected] = useState<string | typeof ALL_KEY>(
     activePreacher ?? ALL_KEY
   );
+  const [prevOpen, setPrevOpen] = useState(open);
+  const [prevPreacher, setPrevPreacher] = useState(activePreacher);
 
-  useEffect(() => {
-    if (open) queueMicrotask(() => setSelected(activePreacher ?? ALL_KEY));
-  }, [open, activePreacher]);
+  if (prevOpen !== open || prevPreacher !== activePreacher) {
+    setPrevOpen(open);
+    setPrevPreacher(activePreacher);
+    if (open) setSelected(activePreacher ?? ALL_KEY);
+  }
 
   const handleReset = () => setSelected(ALL_KEY);
 
