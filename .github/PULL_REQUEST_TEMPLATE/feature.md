@@ -9,10 +9,10 @@
 
 ## 🔗 개발 컨텍스트
 
-- **Task ID**: `<slug>`
-- **Exec Plan**: `docs/exec-plans/active/<YYYY-MM-DD>-<slug>.md`
-- **관련 ADR**: `docs/decisions/<ADR-file.md>` / 해당 없음
-- **관련 tech debt**: `docs/tech-debt-tracker.md#<섹션>` / 해당 없음
+- **Task ID**: `slug`
+- **Exec Plan**: `docs/exec-plans/active/YYYY-MM-DD-slug.md`
+- **관련 ADR**: `docs/decisions/NNNN-slug.md` / 해당 없음
+- **관련 tech debt**: [docs/tech-debt-tracker.md](docs/tech-debt-tracker.md) / 해당 없음
 - **작업 범위**: <!-- 포함한 것 -->
 - **제외한 범위**: <!-- 의도적으로 뺀 것 -->
 
@@ -78,7 +78,7 @@ flowchart TD
 | Codex 계획 검증 | PASS / CHANGE_REQUEST(반영 링크) / BLOCK(머지 불가) / N/A |
 | Codex 1차 검증 | PASS / FIX_APPLIED / N/A |
 | Claude 2차 검증 | 완료 / N/A |
-| ADR 판단 | 불필요 / `docs/decisions/…` |
+| ADR 판단 | 불필요 / `docs/decisions/NNNN-slug.md` |
 | 남은 warning | 기존 부채 (ESLint N건 / Knip) / 없음 |
 
 ---

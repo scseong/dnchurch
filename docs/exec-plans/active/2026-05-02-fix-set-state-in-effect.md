@@ -49,15 +49,15 @@
 - [x] 5. 패턴 A — AdvancedFilterSheet 렌더 중 업데이트 패턴 적용
 - [x] 6. 패턴 A — SermonListPage: React Compiler ref-in-render 오류로 Pattern B 전환 (eslint-disable)
 - [x] 7. 패턴 A — DesktopHeader 렌더 중 업데이트 패턴 적용
-- [ ] 8. CODEX_FIRST_PASS (사용자 요청으로 skip)
+- [x] 8. CODEX_FIRST_PASS — N/A (사용자 요청으로 skip)
 - [x] 9. VERIFY (`node scripts/verify-task.mjs fix-set-state-in-effect`) — pass
-- [ ] 10. 사용자 승인 후 커밋
+- [x] 10. 사용자 승인 후 커밋 — `fix/set-state-in-effect` 브랜치, `7354b9f`
 
 ## 완료 기준 (DoD)
 
-- [ ] `node scripts/verify-task.mjs fix-set-state-in-effect` 통과 (lint + lint:styles + build + knip)
-- [ ] `queueMicrotask` 사용 0건 (전체 tsx 검색 기준)
-- [ ] 사용자 승인 후 커밋
+- [x] `node scripts/verify-task.mjs fix-set-state-in-effect` 통과 (lint + lint:styles + build + knip)
+- [x] `queueMicrotask` 사용 0건 (전체 tsx 검색 기준)
+- [x] 사용자 승인 후 커밋
 
 ## 참고 자료
 
@@ -86,24 +86,19 @@
 
 ## Codex 1차 검증
 
-- **상태**: 사용자 요청으로 skip
-- **결론**: 미요청
+- **상태**: N/A
+- **결론**: N/A (사용자 요청으로 skip)
 
 ## Claude 2차 검증
 
-- **검토 내용**:
-  - 패턴 A (NoticeControlBar, AdvancedFilterSheet, DesktopHeader): 렌더 중 업데이트 패턴 정상 적용. `prevProp` 비교 후 동기 업데이트, `useEffect`/`useEffect` import 제거 확인.
-  - 패턴 A → B 전환 (SermonListPage): React Compiler "Cannot access refs during render" 에러로 `useEffect` + `eslint-disable-next-line` 방식으로 전환. `lastExternalSearchRef` guard 완전 보존.
-  - 패턴 B (SeriesBrowserSheet, BottomNav, SermonVideoTools, Modal): `queueMicrotask` 래퍼 제거, `eslint-disable-next-line react-hooks/set-state-in-effect` 주석 추가.
-  - `queueMicrotask` 0건 잔존 확인 (전체 tsx grep 기준)
+- **검토 내용**: 패턴 A 3건(렌더 중 업데이트), 패턴 B 5건(eslint-disable) 의도 보존 확인. SermonListPage는 React Compiler ref-in-render 제약으로 Pattern B 전환. queueMicrotask 0건 잔존 확인.
 - **실행한 검증**: `node scripts/verify-task.mjs fix-set-state-in-effect` — **pass** (ESLint error 0, Knip warning은 기존 부채)
 - **최종 판단**: 머지 가능
 
 ## 리뷰 (완료 직전)
 
-- [ ] 셀프 리뷰: 이 PR을 처음 보는 사람도 EXEC_PLAN만으로 변경 의도를 이해할 수 있는가?
-- [ ] **멀티 세션 리뷰** (권장): 같은 세션의 구현자는 무의식적 바이어스가 생긴다.
-      별도 Claude 세션 또는 `codex:rescue`로 객관적 검토를 요청해 시선을 분리한다.
+- [x] 셀프 리뷰: 이 PR을 처음 보는 사람도 EXEC_PLAN만으로 변경 의도를 이해할 수 있는가?
+- [x] **멀티 세션 리뷰**: Codex 계획 검증(CHANGE_REQUEST 반영)으로 대체
 
 ## 회고 (머지 후 작성, completed/로 이동 시)
 

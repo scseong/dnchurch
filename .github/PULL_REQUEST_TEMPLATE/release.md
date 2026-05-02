@@ -13,14 +13,14 @@
 
 ## 개발 컨텍스트
 
-- **Release Task ID**: `<slug>`
-- **Release Exec Plan**: `docs/exec-plans/active/<YYYY-MM-DD>-<slug>.md`
+- **Release Task ID**: `slug`
+- **Release Exec Plan**: `docs/exec-plans/active/YYYY-MM-DD-slug.md`
 - **포함된 Exec Plan**:
-  - `docs/exec-plans/completed/...`
+  - `docs/exec-plans/completed/YYYY-MM-DD-slug.md`
 - **관련 ADR**:
-  - `docs/decisions/...` / 해당 없음
+  - `docs/decisions/NNNN-slug.md` / 해당 없음
 - **관련 tech debt**:
-  - `docs/tech-debt-tracker.md` / 해당 없음
+  - [docs/tech-debt-tracker.md](docs/tech-debt-tracker.md) / 해당 없음
 - **Known Issues / 남은 리스크**:
   - 없음 / ...
 
