@@ -46,3 +46,7 @@ next-env.d.ts
 
 # Claude Code local settings (machine-specific permissions)
 .claude/settings.local.json
+
+# 디자인 핸드오프 자료 (커밋 대상 아님 — 로컬 참고용)
+docs/references/*.html
+docs/references/*.jsx
