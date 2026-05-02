@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import useTimer from '@/hooks/useTimer';
 import { FormField, FormAlertMessage, FormSubmitButton } from '@/components/form';
+// eslint-disable-next-line no-restricted-imports -- 점진 마이그레이션 대상 (tech-debt-tracker.md)
 import { requestPasswordResetEmail } from '@/apis/auth';
 import { EMAIL_RESEND_DELAY_SECONDS } from '@/constants/auth';
 import { FORM_VALIDATIONS } from '@/constants/validation';

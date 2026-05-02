@@ -119,7 +119,7 @@ export default function BottomNav() {
 
   // pathname 변경 시 Drawer 닫기
   useEffect(() => {
-    setDrawerOpen(false);
+    queueMicrotask(() => setDrawerOpen(false));
   }, [pathname]);
 
   return (

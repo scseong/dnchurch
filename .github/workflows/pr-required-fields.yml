@@ -1,0 +1,22 @@
+name: PR Required Fields
+
+on:
+  pull_request:
+    types: [opened, edited, labeled, unlabeled, assigned, unassigned]
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    permissions:
+      pull-requests: read
+    steps:
+      - uses: actions/github-script@v7
+        with:
+          script: |
+            const pr = context.payload.pull_request;
+            const missing = [];
+            if (!pr.assignees.length) missing.push('Assignee');
+            if (!pr.labels.length) missing.push('Label');
+            if (missing.length) {
+              core.setFailed(`PR 필수 항목 누락: ${missing.join(', ')}`);
+            }

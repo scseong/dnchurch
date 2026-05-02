@@ -28,7 +28,7 @@ export default function AdvancedFilterSheet({
   );
 
   useEffect(() => {
-    if (open) setSelected(activePreacher ?? ALL_KEY);
+    if (open) queueMicrotask(() => setSelected(activePreacher ?? ALL_KEY));
   }, [open, activePreacher]);
 
   const handleReset = () => setSelected(ALL_KEY);

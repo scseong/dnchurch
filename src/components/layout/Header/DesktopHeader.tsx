@@ -18,8 +18,10 @@ export default function DesktopHeader() {
 
   // pathname 변경 시 mega menu 닫기 + hover 억제
   useEffect(() => {
-    setKeyboardOpen(null);
-    setHoverSuppressed(true);
+    queueMicrotask(() => {
+      setKeyboardOpen(null);
+      setHoverSuppressed(true);
+    });
   }, [pathname]);
 
   useLayoutEffect(() => {

@@ -31,7 +31,7 @@ export default function SeriesBrowserSheet({
   const [keyword, setKeyword] = useState('');
 
   useEffect(() => {
-    if (open) setKeyword('');
+    if (open) queueMicrotask(() => setKeyword(''));
   }, [open]);
 
   const filteredSeries = useMemo(() => {

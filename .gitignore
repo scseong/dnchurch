@@ -29,6 +29,9 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 
+# local verification logs
+/logs/
+
 # env files (can opt-in for commiting if needed)
 .env*
 
@@ -40,6 +43,6 @@ yarn-error.log*
 next-env.d.ts
 
 /supabase
-.claude/settings.local.json
 
-/docs
+# Claude Code local settings (machine-specific permissions)
+.claude/settings.local.json

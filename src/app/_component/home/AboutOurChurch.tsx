@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import { LayoutContainer } from '@/components/layout';
 import CloudinaryImage from '@/components/common/CloudinaryImage';
+// eslint-disable-next-line no-restricted-imports -- 점진 마이그레이션 대상 (tech-debt-tracker.md)
 import { getSiteSettings } from '@/apis/site-settings';
 import { revealStyle } from '@/utils/reveal';
 import styles from './AboutOurChurch.module.scss';

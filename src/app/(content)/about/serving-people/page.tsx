@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import React from 'react';
 import MainContainer from '@/components/layout/container/MainContainer';
+// eslint-disable-next-line no-restricted-imports -- 점진 마이그레이션 대상 (tech-debt-tracker.md)
 import { getActiveStaff } from '@/apis/staff';
 import type { StaffType } from '@/types/common';
 import styles from './page.module.scss';

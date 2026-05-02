@@ -6,10 +6,15 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint",
+    "lint": "eslint .",
+    "lint:strict": "eslint . --max-warnings=0",
+    "lint:styles": "stylelint \"src/**/*.scss\"",
+    "verify": "node scripts/verify-task.mjs",
+    "harness:gate": "node scripts/harness-gate.mjs",
     "generate:types": "supabase gen types typescript --project-id mficogrxekuahjqborxw --schema public > src/types/database.types.ts",
     "knip": "knip",
-    "analyze": "cross-env ANALYZE=true next build --webpack"
+    "analyze": "cross-env ANALYZE=true next build --webpack",
+    "prepare": "husky"
   },
   "dependencies": {
     "@supabase/ssr": "^0.8.0",
@@ -29,6 +34,14 @@
     "server-only": "^0.0.1",
     "zustand": "^5.0.12"
   },
+  "lint-staged": {
+    "*.{ts,tsx}": [
+      "eslint"
+    ],
+    "*.scss": [
+      "stylelint"
+    ]
+  },
   "devDependencies": {
     "@next/bundle-analyzer": "^16.1.6",
     "@types/node": "^20",
@@ -38,9 +51,13 @@
     "eslint": "^9.39.1",
     "eslint-config-next": "^16.0.3",
     "eslint-config-prettier": "^9.1.0",
+    "husky": "^9.1.7",
     "knip": "^5.85.0",
+    "lint-staged": "^16.4.0",
     "prettier": "^3.3.3",
     "sass": "^1.94.0",
+    "stylelint": "^17.9.1",
+    "stylelint-config-standard-scss": "^17.0.0",
     "supabase": "^2.0.0",
     "typescript": "^5"
   }

@@ -4,6 +4,7 @@ import { useSearchParams } from 'next/navigation';
 import { useState } from 'react';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { FormField, FormAlertMessage, FormSubmitButton } from '@/components/form';
+// eslint-disable-next-line no-restricted-imports -- 점진 마이그레이션 대상 (tech-debt-tracker.md)
 import { signInWithPassword } from '@/apis/auth';
 import { FORM_VALIDATIONS } from '@/constants/validation';
 import { generateErrorMessage } from '@/utils/error';
