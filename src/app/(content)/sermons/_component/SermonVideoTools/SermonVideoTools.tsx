@@ -49,7 +49,7 @@ export default function SermonVideoTools({ sermonId, onSpeedChange }: Props) {
 
   useEffect(() => {
     const list = loadBookmarks();
-    setBookmarked(list.includes(sermonId));
+    queueMicrotask(() => setBookmarked(list.includes(sermonId)));
   }, [sermonId]);
 
   useEffect(() => {

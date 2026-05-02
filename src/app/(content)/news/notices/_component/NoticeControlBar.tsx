@@ -23,7 +23,7 @@ export default function NoticeControlBar({ total, currentCategory, currentSearch
   const [showCategorySheet, setShowCategorySheet] = useState(false);
 
   useEffect(() => {
-    setQuery(currentSearch ?? '');
+    queueMicrotask(() => setQuery(currentSearch ?? ''));
   }, [currentSearch]);
 
   const updateParams = useCallback(

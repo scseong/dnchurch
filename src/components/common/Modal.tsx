@@ -17,7 +17,7 @@ export default function Modal({ children, onClose, isVisible }: Props) {
   useScrollLock(isVisible);
 
   useEffect(() => {
-    setMounted(true);
+    queueMicrotask(() => setMounted(true));
   }, []);
 
   useEffect(() => {
