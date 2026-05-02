@@ -26,7 +26,7 @@ function emitContext(message) {
 const payload = await readInput();
 const command = String((payload.tool_input ?? {}).command ?? "");
 
-if (!command.includes("verify-task.mjs")) process.exit(0);
+if (!/\bnode\b.*verify-task\.mjs/.test(command)) process.exit(0);
 
 const match = command.match(/verify-task\.mjs\s+([a-z0-9-]+)/);
 const taskId = match ? match[1] : "<task-id>";
