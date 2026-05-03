@@ -239,17 +239,9 @@ UPDATE worship_schedules SET age_group='20–30대' WHERE name='청년부';
 
 ## Claude 2차 검증
 
-- **검토 내용**:
-  - Codex 1차 지적 2건 모두 반영 확인 — WorshipCard/SchoolGrid/AboutWorship 모듈 SCSS의 하드코딩 값이 토큰으로 교체됨 (`$radius-m`, `$radius-circle`, `$icon-button-size`, `$transition-base`, `$letter-spacing-*` 등). SF Mono 폰트 제거하여 Pretendard로 통일 (단순화).
-  - WorshipCard.tsx의 WEEKDAY_LABELS 미일치 시 빈 `<span>` → 조건부 렌더링으로 회피.
-  - 신규 unused export 1건(`WorshipScheduleGroups` type) → internal type으로 변경하여 knip 신규 회귀 0건 달성.
-  - lint 추가 작업: `eslint.config.mjs`에 `docs/**` ignore 추가 (정적 자료 디렉토리, 빌드/런타임 대상 아님).
-- **실행한 검증**:
-  - `node scripts/verify-task.mjs worship-redesign` → "필수 검증 통과" (ESLint 0 오류, stylelint 0 오류, Next build 통과)
-  - Knip 경고는 기존 tech-debt baseline 그대로 — 신규 파일 introduce된 미사용 export 0건
-  - DB 마이그레이션 적용 확인: `yarn generate:types` 결과 새 5개 컬럼(`description`, `duration`, `age_group`, `is_featured`, `sub_category`) 반영됨 (database.types.ts 라인 450-499).
-  - Orphan reference: `rg "WorshipSchedule|worship_schedules"` 결과 의도된 위치만 매칭 (services/worship/, components, types, migrations).
-- **최종 판단**: ✅ 머지 가능. 사용자 승인 후 커밋.
+- **검토 내용**: Codex 1차 지적 2건(SCSS 하드코딩 + WEEKDAY guard) 모두 반영 후 추가 작업 — knip 신규 회귀(`WorshipScheduleGroups` export) 1건을 internal type으로 변경, `eslint.config.mjs`에 `docs/**` ignore 추가, 사용자 피드백 반영하여 worship.html 레퍼런스에 맞춰 카드/About 섹션 미세 조정(meta 인라인, About 아이콘 열, Sunday time 18로 라운딩).
+- **실행한 검증**: `node scripts/verify-task.mjs worship-redesign` 필수 검증 통과 (ESLint 0 오류, stylelint 0 오류, Next build 통과, 최신 RUN_ID `20260503-231300`, HEAD `ee9c858`). Knip 경고는 기존 tech-debt baseline 그대로 — 신규 파일 introduce된 미사용 export 0건. DB 마이그레이션 적용 후 `yarn generate:types`로 새 5개 컬럼(`description`/`duration`/`age_group`/`is_featured`/`sub_category`) 반영 확인. Orphan reference grep(`rg "WorshipSchedule|worship_schedules"`)에서 의도된 위치만 매칭.
+- **최종 판단**: ✅ 머지 가능. 사용자 승인 후 develop으로 PR 생성.
 
 ## 리뷰 (완료 직전)
 
