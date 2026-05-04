@@ -187,3 +187,52 @@
   line-height: $line-height-base;
   color: $color;
 }
+
+// ══════════════════════════════════════════
+// TEXT — 강조 변형 (-emphasis / -small / -strong)
+// 컨벤션:
+//   -emphasis : 같은 사이즈에서 weight 강조 (regular→medium / medium→semibold)
+//   -small    : 같은 컨텍스트에서 한 단계 작은 사이즈
+//   -strong   : 가장 강한 강조 (작고 굵음)
+// 본 그룹은 ADR 0003 — design-system-v3 typography hierarchy 참조
+// ══════════════════════════════════════════
+
+/// 본문 강조 — 본문 기본 사이즈에서 weight 강조 (15 medium, body-default lh)
+@mixin text-body-emphasis($color: $txt-primary) {
+  font-size: $font-size-15;
+  font-weight: $font-weight-medium;
+  line-height: $line-height-body-default;
+  color: $color;
+}
+
+/// 보조 본문 강조 — 보조 본문에서 weight 강조 (14 medium, body-default lh)
+@mixin text-sub-emphasis($color: $txt-secondary) {
+  font-size: $font-size-14;
+  font-weight: $font-weight-medium;
+  line-height: $line-height-body-default;
+  color: $color;
+}
+
+/// 라벨 강조 — 라벨에서 weight 강조 (13 semibold, body-ui lh)
+@mixin text-label-emphasis($color: $txt-secondary) {
+  font-size: $font-size-13;
+  font-weight: $font-weight-semibold;
+  line-height: $line-height-body-ui;
+  color: $color;
+}
+
+/// 작은 캡션 — 메타·미세 라벨 (12 medium, body-ui lh)
+@mixin text-caption-small($color: $txt-tertiary) {
+  font-size: $font-size-12;
+  font-weight: $font-weight-medium;
+  line-height: $line-height-body-ui;
+  color: $color;
+}
+
+/// 강조 캡션 — 뱃지·태그·미세 강조 (11 semibold, body-ui lh)
+@mixin text-caption-strong($color: $txt-tertiary) {
+  font-size: $font-size-11;
+  font-weight: $font-weight-semibold;
+  line-height: $line-height-body-ui;
+  color: $color;
+}
