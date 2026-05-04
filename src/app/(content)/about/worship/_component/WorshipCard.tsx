@@ -59,7 +59,7 @@ function WeekdayCard({ schedule }: { schedule: WorshipScheduleType }) {
       <div className={styles.time_col}>
         {day ? <span className={styles.day}>{day}</span> : null}
         <span className={styles.hour}>{hour}</span>
-        <span className={styles.ampm}>{ampm}</span>
+        {ampm ? <span className={styles.ampm}>{ampm}</span> : null}
       </div>
       <div className={styles.info_col}>
         <h4>{schedule.name}</h4>
@@ -70,9 +70,9 @@ function WeekdayCard({ schedule }: { schedule: WorshipScheduleType }) {
   );
 }
 
-function parseTime(rawTime: string) {
+function parseTime(rawTime: string): { hour: string; ampm: 'AM' | 'PM' | null } {
   const cleaned = rawTime.replace(/^매일\s*/, '').trim();
-  const isAm = cleaned.startsWith('오전');
+  const ampm = cleaned.startsWith('오전') ? 'AM' : cleaned.startsWith('오후') ? 'PM' : null;
   const hour = cleaned.replace(/^오전\s*/, '').replace(/^오후\s*/, '').trim();
-  return { hour, ampm: isAm ? 'AM' : 'PM' };
+  return { hour, ampm };
 }
