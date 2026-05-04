@@ -200,6 +200,29 @@ Wanted DS의 *의미 계층 구조*만 차용한다. ADR 0003 참조.
 - **남은 리스크**:
   - BottomSheet shadow 신규 추가 — 4개 호출처(`CategoryBottomSheet`, `SortBottomSheet`, `AdvancedFilterSheet`, `SeriesBrowserSheet`)에서 PC/Mobile 시각 비교 권장.
 
+### Step 3 — PASS
+
+- **요청 시점**: 2026-05-04 (Step 3 구현 직후)
+- **결론**: **PASS** — 외과적 변경 OK, 토큰 유효성 OK, 잉여 속성 0건, 회귀 위험 낮음.
+- **수정 파일 9건** (`src/app/_component/home/*.module.scss`):
+  - Banner, QuickAccess, NewHere, RecentSermons, SermonCard, FeedSection, FeedContent, AboutOurChurch, ChurchVision
+- **변경 분류**:
+  - Group A — deprecated alias 치환: `$gold` → `$gold-600` (다수), `$gold-light` → `$gold-400` (Banner 1건), `rgba($gold,` → `rgba($gold-600,` (rgba 다수), `$line-height-wide` → `$line-height-loose` (5건), `font-size: 3.2rem` → `$font-size-32` (NewHere 1건)
+  - Group B — 신규 mixin 적용 5건: QuickAccess `.desc` → `text-caption-small`, NewHere `.caption` → `text-caption-small($color: $gold-600)`, SermonCard `.title` → `text-body-emphasis($color: $white)`, AboutOurChurch `.about_info > span` → `text-body-emphasis($color: $primary)` (semibold→medium 사용자 합의), ChurchVision `.title .caption` → `text-body-emphasis($color: $primary)` (semibold→medium 사용자 합의)
+- **핵심 지적**:
+  - 외과적 변경 OK — 인접 rename/선택자/구조 변경 0.
+  - mixin 적용 후 잉여 `font-size/font-weight/color` 속성 0건 — 모든 5건에서 mixin이 완전 대체.
+  - 토큰 유효성 — `$gold-600/-400`, `$line-height-loose`, `$font-size-32` 모두 정의 확인.
+  - home 영역에 `$gold`, `$gold-light`, `$line-height-wide`, `font-size: 3.2rem` 잔존 0.
+- **의도적 보류** (Codex 확인):
+  - FeedContent `.badge_category` (line-height: reset 의도 충돌) — mixin 미적용
+  - SermonCard:46 `0.9rem`, FeedContent:223 `0.8rem` (토큰 부재) — tech-debt
+  - NewHere:2 `$bg-section: #fdfaf5` (정합 토큰 없음) — tech-debt
+- **남은 리스크**:
+  - 미세 시각 변화: NewHere `.caption` line-height 미설정 → body-ui(1.45), SermonCard `.title` 미설정 → body-default(1.5). Plan 허용 범위.
+  - AboutOurChurch/ChurchVision span weight semibold→medium — 사용자 합의된 트레이드오프.
+  - 시각 회귀 검증은 PR 단계에서 홈(`/`) PC/Tablet/Mobile 3 viewport 비교 권장.
+
 ## Claude 2차 검증
 
 ### Step 1 — PASS
@@ -228,6 +251,20 @@ Wanted DS의 *의미 계층 구조*만 차용한다. ADR 0003 참조.
   - `node scripts/verify-task.mjs design-system-v3` → 필수 검증 통과 (exit 0)
   - 검증 로그: `logs/design-system-v3/<run-id>/summary.log` (Step 2 run)
 - **최종 판단**: **PASS** — Step 2 커밋 가능. 시각 회귀 검증은 PR 단계에서 BottomSheet 4개 호출처 + Toast 띄우기로 PC/Mobile 비교 (회고 섹션에 스크린샷 첨부 권장).
+
+### Step 3 — PASS
+
+- **검토 내용**:
+  - 9개 home SCSS 모듈 변경 모두 Group A(deprecated alias 치환) + Group B(신규 mixin 5건 적용) 범위 내. 인접 정리·rename·포맷 드리프트 0 (Codex 1차 확인).
+  - mixin 적용 후 잉여 typography 속성(font-size/weight/color) 0건 — Codex가 5건 모두 검증.
+  - home 영역 grep으로 `$gold`, `$gold-light`, `$line-height-wide`, `font-size: 3.2rem` 잔존 0건 — Step 4 grep이 home 부분 0건 보장.
+  - 토큰 유효성: `$gold-600`, `$gold-400`, `$line-height-loose`, `$font-size-32` 모두 정의 확인.
+  - 의도적 보류 항목(FeedContent `.badge_category` line-height: reset, 0.8/0.9rem 리터럴, NewHere `$bg-section`)은 모두 tech-debt 또는 후속 보류로 명시.
+  - 사용자 합의된 weight 트레이드오프(AboutOurChurch/ChurchVision span semibold→medium)는 ADR 0003·exec-plan 의사결정 로그에 기록됨.
+- **실행한 검증**:
+  - Codex 1차 PASS — 외과적 변경, 토큰, mixin 동등성, 회귀 위험 모두 검토 통과.
+  - `node scripts/verify-task.mjs design-system-v3` → 필수 검증 통과 (exit 0).
+- **최종 판단**: **PASS** — Step 3 커밋 가능. PR 단계에서 홈(`/`) PC(1280)·Tablet(768)·Mobile(375) 3 viewport 시각 비교 필수 — 변경 전후 스크린샷 PR description에 첨부.
 
 ## 리뷰 (완료 직전)
 
