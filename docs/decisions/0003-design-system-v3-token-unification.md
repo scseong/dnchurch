@@ -34,20 +34,22 @@
 
 | mixin 이름 | size (mobile / tablet+) | weight | line-height | 컨텍스트 | 본 task 도입 |
 | --- | --- | --- | --- | --- | --- |
-| `text-hero` | 32 / 42 | bold | h1 (tight) | 히어로 타이틀 | (기존 유지) |
+| ~~`text-hero`~~ | 32 / 42 | bold | h1 (tight) | 히어로 타이틀 | ✗ 제거됨 — Step 4 (사용처 0) |
 | `text-page-title` | 26 / 34 | bold | h2 (tight) | 페이지 타이틀 | (기존 유지) |
-| `text-section-title` | 22 / 28 | bold | h3 (snug) | 섹션 타이틀 | (기존 유지) |
-| `text-sub-section-title` | 20 / 24 | semibold | h4 (normal) | 서브 섹션 타이틀 | (기존 유지) |
+| ~~`text-section-title`~~ | 22 / 28 | bold | h3 (snug) | 섹션 타이틀 | ✗ 제거됨 — Step 4 (사용처 0) |
+| ~~`text-sub-section-title`~~ | 20 / 24 | semibold | h4 (normal) | 서브 섹션 타이틀 | ✗ 제거됨 — Step 4 (사용처 0) |
 | `text-card-title` | 18 / 20 | semibold | h5 (base) | 카드 타이틀 | (기존 유지) |
-| `text-body` | 15 | regular | base (1.5) | 본문 기본 | (기존 유지) |
+| ~~`text-body`~~ | 15 | regular | base (1.5) | 본문 기본 | ✗ 제거됨 — Step 4 (사용처 0) |
 | **`text-body-emphasis`** | 15 | medium | body-default (1.5) | 본문 강조 | ★ 신규 |
 | `text-sub` | 14 | regular | base (1.5) | 보조 본문 | (기존 유지) |
 | **`text-sub-emphasis`** | 14 | medium | body-default (1.5) | 보조 본문 강조 | ★ 신규 |
-| `text-label` | 13 | medium | base (1.5) | 레이블 기본 | (기존 유지) |
+| ~~`text-label`~~ | 13 | medium | base (1.5) | 레이블 기본 | ✗ 제거됨 — Step 4 (사용처 0) |
 | **`text-label-emphasis`** | 13 | semibold | body-ui (1.45) | 레이블 강조 | ★ 신규 |
 | `text-caption` | 13 | regular | base (1.5) | 캡션 기본 | (기존 유지) |
 | **`text-caption-small`** | 12 | medium | body-ui (1.45) | 작은 캡션·메타 | ★ 신규 |
 | **`text-caption-strong`** | 11 | semibold | body-ui (1.45) | 강조 캡션·뱃지 | ★ 신규 |
+
+**최종 mixin 9종** — 생존 4 (`text-page-title`, `text-card-title`, `text-sub`, `text-caption`) + 신규 5 (`text-body-emphasis`, `text-sub-emphasis`, `text-label-emphasis`, `text-caption-small`, `text-caption-strong`). 제거된 5종은 Step 4 grep 게이팅으로 사용처 0건 확인 후 정의 제거.
 
 **naming 컨벤션**:
 - `-emphasis` — 같은 사이즈에서 weight 강조 (regular→medium 또는 medium→semibold)
