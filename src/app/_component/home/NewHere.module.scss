@@ -62,9 +62,9 @@ $divider-height: 0.2rem;
 
 .year_number {
   font-family: $font-family-secondary;
-  font-size: 3.2rem;
+  font-size: $font-size-32;
   font-weight: $font-weight-regular;
-  color: $gold;
+  color: $gold-600;
   line-height: $line-height-reset;
 }
 
@@ -97,11 +97,9 @@ $divider-height: 0.2rem;
 .caption {
   margin-bottom: $spacing-12;
   display: inline-block;
-  font-size: $font-size-12;
-  font-weight: $font-weight-medium;
+  @include text-caption-small($color: $gold-600);
   text-transform: uppercase;
   letter-spacing: $letter-spacing-wider;
-  color: $gold;
 }
 
 .title {
@@ -118,14 +116,14 @@ $divider-height: 0.2rem;
 .divider {
   width: $divider-width;
   height: $divider-height;
-  background: $gold;
+  background: $gold-600;
   margin: $spacing-16 0;
 }
 
 .desc {
   @include text-sub();
   font-size: $font-size-14;
-  line-height: $line-height-wide;
+  line-height: $line-height-loose;
 }
 
 // ─── FAQ 아코디언 ───────────────────────────────────
@@ -156,7 +154,7 @@ $divider-height: 0.2rem;
   transition: color $transition-duration-normal $transition-easing-default;
 
   &:hover {
-    color: $gold;
+    color: $gold-600;
   }
 
   @include respond-up($breakpoint-tablet) {
@@ -170,7 +168,7 @@ $divider-height: 0.2rem;
 
 .faq_toggle {
   font-size: $font-size-18;
-  color: $gold;
+  color: $gold-600;
   line-height: $line-height-reset;
   flex-shrink: 0;
   transition: transform 0.2s ease;
@@ -199,7 +197,7 @@ $divider-height: 0.2rem;
   padding-bottom: $spacing-16;
   font-size: $font-size-14;
   color: $txt-secondary;
-  line-height: $line-height-wide;
+  line-height: $line-height-loose;
 }
 
 .faq_link {
@@ -208,7 +206,7 @@ $divider-height: 0.2rem;
   padding-bottom: $spacing-2;
   font-size: $font-size-13;
   font-weight: $font-weight-semibold;
-  color: $gold;
+  color: $gold-600;
   text-decoration: none;
   border-bottom: $spacing-1 solid transparent;
   transition:
@@ -216,7 +214,7 @@ $divider-height: 0.2rem;
     opacity $transition-duration-normal $transition-easing-default;
 
   &:hover {
-    border-color: $gold;
+    border-color: $gold-600;
     opacity: 0.8;
   }
 }
@@ -229,16 +227,16 @@ $divider-height: 0.2rem;
   width: fit-content;
   font-size: $font-size-13;
   font-weight: $font-weight-semibold;
-  color: $gold;
+  color: $gold-600;
   text-decoration: none;
   padding-bottom: $spacing-4;
-  border-bottom: 1px solid rgba($gold, 0.3);
+  border-bottom: 1px solid rgba($gold-600, 0.3);
   transition:
     border-color $transition-duration-normal $transition-easing-default,
     opacity $transition-duration-normal $transition-easing-default;
 
   &:hover {
-    border-color: $gold;
+    border-color: $gold-600;
     opacity: 0.8;
   }
 }

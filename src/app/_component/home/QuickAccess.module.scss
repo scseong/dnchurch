@@ -75,7 +75,7 @@ $icon_box_size: 4.2rem;
   background: $navy;
   border-radius: $radius-xs;
   font-size: calc($icon_box_size / 1.8);
-  color: $gold;
+  color: $gold-600;
 
   @include respond-up($breakpoint-tablet) {
     margin-right: $spacing-16;
@@ -105,14 +105,13 @@ $icon_box_size: 4.2rem;
 
 .desc {
   display: block;
-  font-size: $font-size-12;
-  color: $txt-tertiary;
+  @include text-caption-small;
 }
 
 .arrow {
   flex-shrink: 0;
   font-size: $font-size-14;
-  color: $gold;
+  color: $gold-600;
   opacity: 0;
   transition:
     opacity 0.2s ease,
