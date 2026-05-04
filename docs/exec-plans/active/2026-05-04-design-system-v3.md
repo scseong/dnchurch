@@ -266,6 +266,60 @@ Wanted DS의 *의미 계층 구조*만 차용한다. ADR 0003 참조.
   - `node scripts/verify-task.mjs design-system-v3` → 필수 검증 통과 (exit 0).
 - **최종 판단**: **PASS** — Step 3 커밋 가능. PR 단계에서 홈(`/`) PC(1280)·Tablet(768)·Mobile(375) 3 viewport 시각 비교 필수 — 변경 전후 스크린샷 PR description에 첨부.
 
+### Step 4 — Codex 1차 검증 보류 (한도 초과), Claude 2차 단독 PASS
+
+- **사후 Codex 검증 예정**: 2026-05-04 Codex API 한도 초과(Asia/Seoul 13:40 회복)로 1차 검증 비동기로 미룸. 사용자 합의로 `verify-task` 통과·grep 게이팅 통과 + Claude 2차 자체 검증으로 커밋 진행, Codex 회복 후 사후 점검.
+- **수정 파일** (총 25개):
+  - 호출처 22개 SCSS 모듈 (홈 9 + sermons 5 + 레이아웃 3 + admin 2 + form 1 + news 1 + Hero 1)
+  - 정의 파일 3개 (`_color.scss`, `_typography.scss`, `_semantic.scss`)
+  - mixin·가이드 2개 (`_mixins.scss`, `_usage-guide.scss`)
+- **변경 분류**:
+  - (A) Alias 치환 — `$navy/$navy-mid/$navy-light`, `$gold/$gold-light`, `$cream/$cream-deep`, `$bg-invert→$black`, `$border-secondary→$border-strong`, `$line-height-heading/wide`, `$section-padding-*→$section-gap-*`, `$overlay-dark-light→$overlay-image`.
+  - (B) 미사용 mixin 5개 제거: `text-hero`, `text-section-title`, `text-sub-section-title`, `text-body`, `text-label`.
+  - (C) deprecated alias 정의 제거: `_color.scss` 9건, `_typography.scss` 2건, `_semantic.scss` 5건.
+  - (D) `_usage-guide.scss` 주석 갱신: `$border-secondary→$border-focus`, `$section-padding-*→$section-gap-*`, 예시 mixin을 생존 mixin으로 갱신.
+- **운영 인시던트 (자체 보고)**: 초기 `$navy ` (trailing space) replace_all 처리에서 공백 제거로 `$navy-9500%` 손상 발생. `Hero.module.scss:29`, `SermonListPage.module.scss:330` 두 군데 — 즉시 grep 후 수동 핫픽스로 `$navy-950 0%` 복구. verify-task `yarn build` PASS로 잔존 파손 없음 확인.
+- **남은 리스크**:
+  - 한도 회복 후 Codex 1차 검증 사후 실시 필요 — `## Codex 1차 검증 (사후)` 섹션에 결과 추가 예정.
+  - `$border-secondary→$border-strong` 치환은 시각 회귀 가능성 미세 존재(rgba(gray-500, 0.44) vs gray-500). 사용자 결정 반영, PR 단계에서 FormField·Banner·admin dropdown 3곳 시각 비교 권장.
+  - admin 영역(`dropdown.module.scss`, `ConfirmModal/index.module.scss`) 변경은 `$border-secondary` 단일 토큰 치환만이며, `var(--admin-*)` 통합과는 무관 — 후속 ADR 0004 placeholder.
+
+## Claude 2차 검증
+
+### Step 1 — PASS
+
+- **검토 내용**:
+  - Codex 1차 지적(문서 행 수 불일치) 4건을 14행으로 일괄 정정 — exec-plan L35·L85, ADR L33·L63. 검증 섹션의 과거 사실 기록(L62, L159)은 의도적으로 그대로 유지(시점별 의사결정 추적).
+  - `_mixins.scss` diff 교차 확인 — 끝부분(line 191~ 신규 51줄)에 5개 mixin만 추가, 기존 1~189줄 변경 0건. 인접 정리·포맷·rename 없음 (외과적 변경 OK).
+  - 신규 mixin이 참조하는 모든 토큰(`$font-size-{15,14,13,12,11}`, `$font-weight-{medium,semibold}`, `$line-height-body-{default,ui}`, `$txt-{primary,secondary,tertiary}`)은 기존 토큰 파일에 정의됨 — 신규 토큰 추가 없음.
+  - 호출처 변경 없음 — Step 1은 *추가만*. 시각 회귀 위험 0. 호출처 치환은 Step 3.
+- **실행한 검증**:
+  - `yarn lint:styles` → exit 0 ✅
+  - `yarn build` → exit 0 ✅
+  - `node scripts/verify-task.mjs design-system-v3` → 필수 검증 통과
+- **최종 판단**: **PASS**
+
+### Step 2 — PASS (생략, 위 동일 패턴)
+
+### Step 3 — PASS (생략, 위 동일 패턴)
+
+### Step 4 — PASS (Codex 1차 보류 — 사후 점검 예정)
+
+- **검토 내용**:
+  - **Surgical changes**: 25개 파일 diff 모두 Step 4 범위 내 (alias 치환·정의 제거·미사용 mixin 제거·가이드 주석 갱신). 인접 정리·rename 0.
+  - **미사용 mixin 제거 검증**: `_mixins.scss`에 `text-hero`/`text-section-title`/`text-sub-section-title`/`text-body`/`text-label` 정의 0건, 호출처 0건 grep 확인 (Step 4 시작 시 게이팅 명령 기준).
+  - **alias 정의 제거 검증**: `_color.scss`/`_typography.scss`/`_semantic.scss`에서 13개 deprecated alias 모두 제거. `verify-task` build PASS로 호출처 잔존 0건이 컴파일러 수준에서 보장됨.
+  - **gradient 핫픽스 검증**: `Hero.module.scss:29`와 `SermonListPage.module.scss:330` 두 라인 모두 `$navy-950 0%` 복구 확인. build PASS.
+  - **Admin 영역 외과적 검증**: admin 변경은 `$border-secondary→$border-strong` 단일 토큰 치환만. `var(--admin-*)` 미변경 — 후속 ADR 영역 미침범.
+- **실행한 검증**:
+  - `node scripts/verify-task.mjs design-system-v3` → 필수 검증 통과 (lint + lint:styles + build PASS, knip 경고는 기존 부채).
+  - 검증 로그: `logs/design-system-v3/20260504-132536/summary.log`.
+  - pre-commit lint-staged stylelint PASS (호출처 커밋 + 정의 제거 커밋 모두).
+- **남은 리스크**:
+  - Codex 1차 검증 사후 진행 — 한도 회복 후 `\b` boundary 정확도 + admin diff 범위 + gradient 두 라인 점검 받을 예정.
+  - $border-secondary→$border-strong 시각 차이(gray-500 → rgba(gray-500, 0.44)) 가능성 — PR 단계 시각 비교 권장 대상.
+- **최종 판단**: **PASS** — Step 4 커밋 완료. Codex 사후 점검 결과는 본 섹션에 추가 기록.
+
 ## 리뷰 (완료 직전)
 
 - [ ] 셀프 리뷰: 이 PR을 처음 보는 사람도 EXEC_PLAN만으로 변경 의도를 이해할 수 있는가?
