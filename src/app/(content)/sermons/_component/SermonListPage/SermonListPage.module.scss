@@ -5,11 +5,11 @@
 .body {
   display: flex;
   gap: $content-gap-l;
-  padding: $section-padding-20 0 $section-padding-80;
+  padding: $spacing-20 0 $section-gap-80;
 
   @include respond-up($breakpoint-pc-sm) {
     gap: $content-gap-xl;
-    padding: $section-padding-40 0;
+    padding: $section-gap-40 0;
   }
 }
 
@@ -327,7 +327,7 @@
   gap: $content-gap-m;
   padding: $spacing-20;
   margin-bottom: $content-gap-l;
-  background: linear-gradient(135deg, $navy 0%, $navy-mid 100%);
+  background: linear-gradient(135deg, $navy-950 0%, $navy-800 100%);
   border-radius: $radius-m;
 }
 
@@ -357,7 +357,7 @@
   padding: $padding-control;
   font-size: $font-size-13;
   font-weight: $font-weight-semibold;
-  color: $gold-light;
+  color: $gold-400;
   border-radius: $radius-xs;
   white-space: nowrap;
 }
@@ -439,7 +439,7 @@
 // ── Content sections ──
 
 .featured {
-  margin-bottom: $section-padding-40;
+  margin-bottom: $section-gap-40;
 }
 
 .year_section {
@@ -454,7 +454,7 @@
 }
 
 .past_section {
-  margin-top: $section-padding-40;
+  margin-top: $section-gap-40;
 }
 
 .past_heading {

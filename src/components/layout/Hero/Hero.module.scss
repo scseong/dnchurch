@@ -25,8 +25,8 @@
   position: absolute;
   inset: 0;
   background:
-    radial-gradient(ellipse at 30% 50%, $navy-mid, transparent 70%),
-    linear-gradient(135deg, $navy 0%, $navy-mid 50%, $navy-light 100%);
+    radial-gradient(ellipse at 30% 50%, $navy-800, transparent 70%),
+    linear-gradient(135deg, $navy-950 0%, $navy-800 50%, $navy-600 100%);
 }
 
 // ── 오버레이 ──
@@ -34,7 +34,7 @@
 .hero_overlay {
   position: absolute;
   inset: 0;
-  background: $overlay-dark-light;
+  background: $overlay-image;
 }
 
 // ── 내부 콘텐츠 ──
@@ -54,7 +54,7 @@
   font-size: $font-size-34;
   font-weight: $font-weight-bold;
   color: $txt-inverse;
-  line-height: $line-height-heading;
+  line-height: $line-height-snug;
   letter-spacing: $letter-spacing-heading;
 
   @include respond-up($breakpoint-pc-sm) {

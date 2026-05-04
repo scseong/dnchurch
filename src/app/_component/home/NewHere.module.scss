@@ -5,7 +5,7 @@ $divider-height: 0.2rem;
 
 // ─── Section ────────────────────────────────────────
 .section {
-  padding: $section-padding-64 0;
+  padding: $section-gap-64 0;
   background: $bg-section;
 }
 
@@ -52,7 +52,7 @@ $divider-height: 0.2rem;
   bottom: calc(-1 * $spacing-16);
   right: calc(-1 * $spacing-16);
   padding: $spacing-20 $spacing-24;
-  background: $navy;
+  background: $navy-950;
   border-radius: $radius-xs;
   text-align: center;
   display: flex;

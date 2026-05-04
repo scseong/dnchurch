@@ -45,7 +45,7 @@ $thumb-sub-w: 14rem;
   z-index: 1;
   font-size: 0.9rem;
   font-weight: $font-weight-bold;
-  color: $navy;
+  color: $navy-950;
   background: $gold-600;
   padding: $padding-inline-xs;
   border-radius: $radius-xs;
@@ -140,7 +140,7 @@ $thumb-sub-w: 14rem;
 .card:hover .play_btn {
   background: $gold-600;
   border-color: $gold-600;
-  color: $navy;
+  color: $navy-950;
 }
 
 // ─── 썸네일 오버레이 재생 버튼 (PC hover) ───────────
