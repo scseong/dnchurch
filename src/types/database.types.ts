@@ -449,35 +449,50 @@ export type Database = {
       }
       worship_schedules: {
         Row: {
+          age_group: string | null
           category: Database["public"]["Enums"]["worship_category"]
           created_at: string
+          description: string | null
+          duration: string | null
           id: number
           is_active: boolean
+          is_featured: boolean
           location: string
           name: string
           order_index: number
+          sub_category: string | null
           time: string
           updated_at: string
         }
         Insert: {
+          age_group?: string | null
           category: Database["public"]["Enums"]["worship_category"]
           created_at?: string
+          description?: string | null
+          duration?: string | null
           id?: number
           is_active?: boolean
+          is_featured?: boolean
           location: string
           name: string
           order_index?: number
+          sub_category?: string | null
           time: string
           updated_at?: string
         }
         Update: {
+          age_group?: string | null
           category?: Database["public"]["Enums"]["worship_category"]
           created_at?: string
+          description?: string | null
+          duration?: string | null
           id?: number
           is_active?: boolean
+          is_featured?: boolean
           location?: string
           name?: string
           order_index?: number
+          sub_category?: string | null
           time?: string
           updated_at?: string
         }

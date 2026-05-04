@@ -1,31 +1,60 @@
-.container {
-  padding: $spacing-0 $spacing-20;
+.section {
+  margin-top: $spacing-40;
 
-  @include respond($breakpoint-tablet) {
-    padding: $spacing-0;
-  }
-
-  div:first-child {
-    margin-bottom: $spacing-32;
+  &:first-child {
+    margin-top: $spacing-20;
   }
 }
 
-.schedule {
-  h4 {
-    margin-bottom: $spacing-16;
-    padding-left: $spacing-16;
-    position: relative;
+.section_head {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-6;
+  padding-bottom: $spacing-16;
+  margin-bottom: $spacing-20;
+  border-bottom: 1px solid $border-warm;
+
+  h3 {
+    font-family: $font-family-secondary;
+    font-size: $font-size-22;
+    font-weight: $font-weight-bold;
+    letter-spacing: $letter-spacing-tight;
+  }
+}
+
+.eyebrow {
+  font-size: $font-size-11;
+  font-weight: $font-weight-bold;
+  letter-spacing: $letter-spacing-wider;
+  color: $accent;
+  text-transform: uppercase;
+}
+
+.sunday_list,
+.weekday_list {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-12;
+}
+
+@include respond-up($breakpoint-tablet) {
+  .section {
+    margin-top: $spacing-64;
+
+    &:first-child {
+      margin-top: $spacing-32;
+    }
   }
 
-  h4::before {
-    content: '';
-    position: absolute;
-    top: 50%;
-    left: 0;
-    width: $spacing-8;
-    height: $spacing-8;
-    background-color: $primary;
-    border-radius: 50%;
-    transform: translateY(-50%);
+  .sunday_list {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: $spacing-16;
+  }
+
+  .weekday_list {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: $spacing-16;
   }
 }

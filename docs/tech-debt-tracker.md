@@ -25,19 +25,20 @@
 - **영향 범위**: `import { supabase } from ...` 검색으로 추적
 - **발견일**: 미상 (CLAUDE.md Gotchas에 기존 기록)
 
-### 🟡 `app/ → apis/` 직접 호출 (레이어 위반, 10건)
+### 🟡 `app/ → apis/` 직접 호출 (레이어 위반, 9건)
 
 - **무엇**: 페이지·홈 컴포넌트가 `services/` 경유 없이 `apis/`를 직접 import
 - **왜**: 초기 단순 구조에서 services 레이어 도입 전에 작성된 코드
-- **현재 상태**: ESLint 룰 `error`로 격상됨 — 신규 위반은 즉시 차단. 기존 10건은 line-level `eslint-disable-next-line no-restricted-imports` + tech-debt 주석으로 마킹
+- **현재 상태**: ESLint 룰 `error`로 격상됨 — 신규 위반은 즉시 차단. 기존 항목은 line-level `eslint-disable-next-line no-restricted-imports` + tech-debt 주석으로 마킹
 - **마이그레이션 경로**: 각 호출 사이트를 `services/` 또는 Server Component data fetcher 경유로 교체. 모두 해결되면 disable 주석 일괄 제거
-- **영향 범위** (10건):
-  - `src/app/(content)/about/{worship,serving-people,location}/page.tsx`
+- **영향 범위** (9건):
+  - `src/app/(content)/about/{serving-people,location}/page.tsx`
   - `src/app/_component/home/{Banner,AboutOurChurch}.tsx`
   - `src/app/_component/user/UserProfileModal.tsx`
   - `src/app/_component/auth/{SignUpForm,SignInForm,KakaoLoginBtn,EmailVerificationRequestForm}.tsx`
   - (auth는 클라이언트 직접 호출이 정당할 수 있어 정책 결정 필요)
 - **발견일**: 2026-05-01 (ESLint 레이어 룰 도입 시)
+- **2026-05-02**: `worship/page.tsx` 해소 (`services/worship/` 도입, `apis/worship-schedules.ts` 제거) — 10건 → 9건
 
 ### 🟡 SCSS 하드코딩 색상 (49건)
 

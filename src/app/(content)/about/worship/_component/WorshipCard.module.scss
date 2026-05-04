@@ -1,0 +1,185 @@
+/* ─── Sunday card ─── */
+
+.sunday {
+  position: relative;
+  padding: $spacing-20;
+  background-color: $white;
+  border: 1px solid $border-warm;
+  border-radius: $radius-m;
+  overflow: hidden;
+}
+
+.sunday.featured {
+  border-left: 3px solid $accent;
+}
+
+.flag,
+.label {
+  display: inline-flex;
+  align-items: center;
+  gap: $spacing-6;
+  margin-bottom: $spacing-10;
+  font-size: $font-size-12;
+  font-weight: $font-weight-bold;
+  letter-spacing: $letter-spacing-wide;
+}
+
+.flag {
+  color: $accent;
+}
+
+.flag::before {
+  content: '';
+  width: $spacing-6;
+  height: $spacing-6;
+  border-radius: 50%;
+  background-color: $accent;
+}
+
+.label {
+  color: $txt-tertiary;
+}
+
+.title_row {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: $spacing-10;
+  margin-bottom: $spacing-12;
+
+  h4 {
+    font-family: $font-family-secondary;
+    font-size: $font-size-18;
+    font-weight: $font-weight-bold;
+    letter-spacing: $letter-spacing-tight;
+  }
+}
+
+.time {
+  font-family: $font-family-secondary;
+  font-size: $font-size-18;
+  font-weight: $font-weight-bold;
+  letter-spacing: $letter-spacing-body;
+  font-variant-numeric: tabular-nums;
+  color: $txt-primary;
+  white-space: nowrap;
+}
+
+.meta {
+  display: flex;
+  align-items: center;
+  gap: $spacing-8;
+  padding-bottom: $spacing-12;
+  border-bottom: 1px dashed $border-warm;
+  margin-bottom: $spacing-10;
+  font-size: $font-size-12;
+  color: $txt-tertiary;
+
+  span {
+    white-space: nowrap;
+  }
+}
+
+.dot {
+  width: $spacing-4;
+  height: $spacing-4;
+  border-radius: 50%;
+  background-color: $accent;
+  opacity: 0.7;
+  flex-shrink: 0;
+}
+
+.desc {
+  font-size: $font-size-13;
+  line-height: $line-height-body-reading;
+  color: $txt-secondary;
+}
+
+/* ─── Weekday card ─── */
+
+.weekday {
+  display: grid;
+  grid-template-columns: 8.4rem 1fr;
+  gap: $spacing-16;
+  padding: $spacing-20;
+  background-color: $white;
+  border: 1px solid $border-warm;
+  border-radius: $radius-m;
+}
+
+.time_col {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding-right: $spacing-12;
+  border-right: 1px solid $border-warm;
+}
+
+.day {
+  font-size: $font-size-11;
+  font-weight: $font-weight-bold;
+  letter-spacing: $letter-spacing-wide;
+  color: $accent;
+  text-transform: uppercase;
+  margin-bottom: $spacing-4;
+}
+
+.hour {
+  font-family: $font-family-secondary;
+  font-size: $font-size-18;
+  font-weight: $font-weight-bold;
+  letter-spacing: $letter-spacing-body;
+  font-variant-numeric: tabular-nums;
+  line-height: $line-height-reset;
+  color: $txt-primary;
+}
+
+.ampm {
+  margin-top: $spacing-4;
+  font-size: $font-size-11;
+  letter-spacing: $letter-spacing-wide;
+  color: $txt-tertiary;
+}
+
+.info_col {
+  h4 {
+    margin-bottom: $spacing-4;
+    font-family: $font-family-secondary;
+    font-size: $font-size-18;
+    font-weight: $font-weight-bold;
+  }
+}
+
+.place {
+  margin-bottom: $spacing-8;
+  font-size: $font-size-12;
+  color: $txt-tertiary;
+}
+
+@include respond-up($breakpoint-tablet) {
+  .sunday {
+    padding: $spacing-32;
+
+    h4 {
+      font-size: $font-size-22;
+    }
+  }
+
+  .time {
+    font-size: $font-size-22;
+  }
+
+  .weekday {
+    padding: $spacing-24;
+  }
+
+  .hour {
+    font-size: $font-size-22;
+  }
+
+  .info_col h4 {
+    font-size: $font-size-20;
+  }
+}
