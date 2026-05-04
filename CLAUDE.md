@@ -23,51 +23,24 @@
 
 어느 단계도 건너뛰지 않는다. 단순 변경(typo, 한 줄 수정, rename)은 PLAN을 생략할 수 있으나 **EXPLORE/VERIFY/COMMIT은 항상 필수**.
 
-### 1. EXPLORE — 컨텍스트 수집
-- 순서: `CLAUDE.md` → 관련 skill (`.claude/skills/`) → 관련 기존 코드
-- 기능 추가, 버그 수정, 리팩터링, 구조 변경, PLAN Mode, task-id, exec-plan, Codex 검증, verify-task, harness-gate 요청은 `.claude/skills/harness-workflow/`를 먼저 로딩한다.
-- 작업 영역의 기존 패턴, 의존 방향(`apis → services → actions → app`), 토큰/믹스인 사용 확인
-- 새 파일을 만들기 전에 비슷한 위치·네이밍이 이미 있는지 검색
+### EXPLORE — 컨텍스트 수집
+
+- 순서: `CLAUDE.md` → 작업 트리거에 맞는 skill(`.claude/skills/`) → 관련 코드
+- 기능 추가·버그 수정·리팩터링·구조 변경·PLAN Mode·task-id·exec-plan·Codex 검증·verify-task·harness-gate 요청은 `.claude/skills/harness-workflow/`가 자동 로딩됨
+- 의존 방향(`apis → services → actions → app`), 토큰/믹스인 사용 확인. 새 파일 전 비슷한 위치·네이밍 검색
 - **컨텍스트 수집 없이 코드를 쓰지 않는다.**
 
-### 2. PLAN — exec plan 작성
-- 다단계 작업은 `node scripts/start-task.mjs <slug>`로 시작 → `docs/exec-plans/active/<YYYY-MM-DD>-<slug>.md` 자동 생성
-- 채울 항목: 목표, 접근법, 단계별 체크리스트, 완료 기준, 영향받는 파일
-- 단순 변경은 생략 가능
-- **다단계 작업에서 계획 없이 코드를 쓰지 않는다.**
+### PLAN · CODEX_PLAN_REVIEW · WORK · CODEX_FIRST_PASS · VERIFY
 
-### 3. CODEX_PLAN_REVIEW — 구현 전 계획 검증
-- 다단계 작업, 구조 변경, `scripts/_shared-config.mjs`의 `ADR_TRIGGER_PARTS` 해당 파일 변경은 구현 전에 Codex 계획 검증을 요청한다.
-- 질문은 영어로 작성하고 마지막에 `Respond in Korean.`을 붙인다.
-- Codex 응답은 `PASS`, `CHANGE_REQUEST`, `BLOCK` 중 하나로 해석한다.
-- `CHANGE_REQUEST`: exec plan 수정 후 구현 진행.
-- `BLOCK`: exec plan 재작성 후 Codex 재요청 필수. 재요청도 BLOCK이면 사용자에게 에스컬레이션 — 최종 판단은 사용자가 내린다.
-- Hook: `.claude/hooks/check-codex-after-plan.mjs`가 active exec plan 작성/수정 후 이 단계를 제안한다.
-- 결과는 exec plan의 `Codex 계획 검증` 섹션에 기록한다.
-- 구조·라이브러리·정책 결정이 포함되면 exec plan의 `ADR 판단` 섹션에 필요 여부와 사유를 기록한다.
+상세 절차·5체크·외과적 변경 체크는 `.claude/skills/harness-workflow/SKILL.md`. 항상 알아야 할 트리거·명령:
 
-### 4. WORK — Claude Code 구현
-- exec plan 단계 순서대로 진행, 각 단계 완료 시 체크박스 업데이트
-- 한 번에 한 가지 관심사만 — 무관한 정리·리팩터 섞지 않는다
-- 계획을 벗어나는 변경이 필요하면 코드 전에 plan부터 갱신
+- **PLAN**: `node scripts/start-task.mjs <slug>` → `docs/exec-plans/active/<YYYY-MM-DD>-<slug>.md`. 다단계 작업 필수
+- **CODEX_PLAN_REVIEW** 트리거: 다단계 / 구조 변경 / `scripts/_shared-config.mjs`의 `ADR_TRIGGER_PARTS` 해당 파일. 결론 `PASS` / `CHANGE_REQUEST` / `BLOCK`. 재요청도 BLOCK이면 사용자 에스컬레이션
+- **WORK**: 한 번에 한 관심사. 계획 벗어나면 plan부터 갱신
+- **CODEX_FIRST_PASS**: 구현 diff 생성 시 Codex에 1차 검증 요청. 결과는 exec-plan `## Codex 1차 검증`에 기록
+- **VERIFY**: `node scripts/verify-task.mjs <slug>` → `logs/<task-id>/<run-id>/` (커밋 X). 실패 시 `docs/tech-debt-tracker.md` 대조. Codex가 1차 수정했으면 diff 교차 확인 후 `## Claude 2차 검증`에 기록
 
-### 5. CODEX_FIRST_PASS — Codex 1차 검증 및 제한적 수정
-- 구현 diff가 생기면 Codex에 1차 검증을 요청한다.
-- Codex는 버그, 레이어 위반, 누락된 검증, 타입/엣지 케이스를 우선 확인한다.
-- Codex가 직접 수정할 수 있는 범위는 명백한 버그, 타입 오류, 누락 guard, 테스트 실패 원인의 국소 수정까지다.
-- 계획 변경, 새 라이브러리, 데이터 흐름 변경, 인증/캐시/배포 정책 변경은 Codex가 직접 수정하지 않고 Claude Code에 반환한다.
-- Hook: `.claude/hooks/post-implementation-review.mjs`가 큰 diff 또는 위험 파일 변경 후 이 단계를 제안한다.
-- 결과는 exec plan의 `Codex 1차 검증` 섹션에 기록한다.
-
-### 6. VERIFY — Claude Code 2차 검증 및 증적 기록
-- 필수 명령: `node scripts/verify-task.mjs <slug>`
-- 수행 항목: ESLint + stylelint + build + knip
-- 모든 결과는 `logs/<task-id>/<run-id>/`에 저장된다. `logs/`는 로컬 증적이며 커밋하지 않는다.
-- 실패하면 원인을 해결하거나 기존 부채인지 `docs/tech-debt-tracker.md`와 대조한다. 원인 불명 또는 반복 실패 시 Codex 분석을 검토한다.
-- Codex가 1차 수정한 경우 Claude Code는 diff를 다시 읽고 의도·범위·검증 결과를 교차 확인한다.
-- 교차 확인 결과는 exec plan의 `Claude 2차 검증` 섹션에 기록한다.
-
-### 7. COMMIT — 승인 후 커밋
+### COMMIT — 승인 후 커밋
 - 커밋 전 pre-commit 훅이 변경 파일 lint와 최신 검증 기록을 확인한다.
 - `VERIFY_ENFORCE=1` 환경에서는 검증 기록이 없거나 diff가 바뀌면 커밋이 차단된다.
 - 머지/릴리스 전에는 `node scripts/harness-gate.mjs <slug>`로 검증 증적, Codex/Claude 검증 기록, ADR 판단을 강제 확인한다.
