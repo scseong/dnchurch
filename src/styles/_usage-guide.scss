@@ -124,7 +124,7 @@
 // │ input, select   │ $padding-control       │
 // │                 │ $radius-xs        │
 // │                 │ $border-primary  │
-// │                 │ focus: $border-secondary │
+// │                 │ focus: $border-focus     │
 // ├─────────────────┼───────────────────────┤
 // │ button          │ $padding-control       │
 // │                 │ $radius-xs        │
@@ -167,9 +167,9 @@
 //   $content-gap-xs  (8px)  — 같은 줄 요소 간
 //
 // ── Section Gap (섹션 간 여백) ──
-//   $section-padding-80  (80px) — 페이지 대형 섹션
-//   $section-padding-64  (64px) — 기본 섹션 상하
-//   $section-padding-40  (40px) — 소형 섹션
+//   $section-gap-80  (80px) — 페이지 대형 섹션
+//   $section-gap-64  (64px) — 기본 섹션 상하
+//   $section-gap-40  (40px) — 소형 섹션
 //
 //
 // ══════════════════════════════════════════
@@ -187,9 +187,9 @@
 //   헤딩 계열 $color의 default는 null (미전달 시 부모 상속).
 //   본문 계열 $color의 default는 역할별 기본 색상.
 //
-//   // 다크 배경 위 섹션 제목
-//   .dark_section_title {
-//     @include text-section-title($color: $txt-image);
+//   // 다크 배경 위 페이지 제목
+//   .dark_page_title {
+//     @include text-page-title($color: $txt-image-subtle);
 //   }
 //
 //   // 강조 카드 제목
@@ -197,9 +197,9 @@
 //     @include text-card-title($weight: $font-weight-bold);
 //   }
 //
-//   // 본문 색상 변경
+//   // 보조 텍스트 색상 변경
 //   .muted_text {
-//     @include text-body($color: $txt-secondary);
+//     @include text-sub($color: $txt-secondary);
 //   }
 //
 // 3순위: 시맨틱/primitive 토큰 직접 조합

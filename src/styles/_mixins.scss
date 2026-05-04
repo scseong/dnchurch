@@ -76,26 +76,11 @@
 //   $weight — font-weight. 각 역할의 기본 굵기
 //
 // 사용법:
-//   @include text-section-title;                              // 기본값
-//   @include text-section-title($color: $txt-image);      // 다크 배경
+//   @include text-page-title;                                 // 기본값
+//   @include text-page-title($color: $txt-image-subtle);      // 다크 배경
 //   @include text-card-title($weight: $font-weight-bold);     // 강조
-//   @include text-body($color: $txt-secondary);        // 색상 변경
+//   @include text-sub($color: $txt-secondary);                // 색상 변경
 // ══════════════════════════════════════════
-
-/// 히어로 타이틀 — 배너, 랜딩 최상단 (h1 반응형)
-@mixin text-hero($color: null, $weight: $font-weight-bold) {
-  font-size: $font-size-32;
-  font-weight: $weight;
-  line-height: map-get($heading-line-heights, 'h1');
-  letter-spacing: $letter-spacing-heading;
-  @if $color {
-    color: $color;
-  }
-
-  @include respond-up($breakpoint-tablet) {
-    font-size: $font-size-42;
-  }
-}
 
 /// 페이지 타이틀 — 각 페이지 최상위 제목 (h2 반응형)
 @mixin text-page-title($color: null, $weight: $font-weight-bold) {
@@ -109,36 +94,6 @@
 
   @include respond-up($breakpoint-tablet) {
     font-size: $font-size-34;
-  }
-}
-
-/// 섹션 타이틀 — 페이지 내 구역 제목 (h3 반응형)
-@mixin text-section-title($color: null, $weight: $font-weight-bold) {
-  font-size: $font-size-22;
-  font-weight: $weight;
-  line-height: map-get($heading-line-heights, 'h3');
-  letter-spacing: $letter-spacing-tight;
-  @if $color {
-    color: $color;
-  }
-
-  @include respond-up($breakpoint-tablet) {
-    font-size: $font-size-28;
-  }
-}
-
-/// 서브 섹션 타이틀 — 섹션 내 하위 제목 (h4 반응형)
-@mixin text-sub-section-title($color: null, $weight: $font-weight-semibold) {
-  font-size: $font-size-20;
-  font-weight: $weight;
-  line-height: map-get($heading-line-heights, 'h4');
-  letter-spacing: $letter-spacing-tight;
-  @if $color {
-    color: $color;
-  }
-
-  @include respond-up($breakpoint-tablet) {
-    font-size: $font-size-24;
   }
 }
 
@@ -156,14 +111,6 @@
   }
 }
 
-/// 본문 — 일반 텍스트 (기본 크기, 반응형 변경 없음)
-@mixin text-body($color: $txt-primary) {
-  font-size: $font-size-15;
-  font-weight: $font-weight-regular;
-  line-height: $line-height-base;
-  color: $color;
-}
-
 /// 보조 텍스트 — 부연 설명, 서브 텍스트
 @mixin text-sub($color: $txt-secondary) {
   font-size: $font-size-14;
@@ -176,14 +123,6 @@
 @mixin text-caption($color: $txt-tertiary) {
   font-size: $font-size-13;
   font-weight: $font-weight-regular;
-  line-height: $line-height-base;
-  color: $color;
-}
-
-/// 라벨 — 폼 라벨, 카테고리 이름, 네비게이션
-@mixin text-label($color: $txt-secondary) {
-  font-size: $font-size-13;
-  font-weight: $font-weight-medium;
   line-height: $line-height-base;
   color: $color;
 }

@@ -34,10 +34,6 @@ $line-height-relaxed: 1.6;
 /// 1.8 — 긴 본문, 설교 내용 등 가독성이 중요한 장문 텍스트
 $line-height-loose: 1.8;
 
-// @deprecated — Use $line-height-snug / $line-height-loose
-$line-height-heading: $line-height-snug;
-$line-height-wide:    $line-height-loose;
-
 // Body 컨텍스트별 의미적 별칭 (Wanted DS Body-Normal/Reading 패턴 참조)
 $line-height-body-ui:      $line-height-normal;    // 1.45 — 버튼·레이블 등 compact UI
 $line-height-body-default: $line-height-base;      // 1.5 — 일반 본문
