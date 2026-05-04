@@ -1,8 +1,8 @@
 # design-system-v3
 
-- **상태**: 🟡 진행 중
+- **상태**: 🟢 구현 완료 (PR/머지 대기)
 - **시작일**: 2026-05-04
-- **브랜치**: develop (작업 시작 시점) — 코드 구현 단계에서 별도 feature 브랜치 분기 검토
+- **브랜치**: `feat/design-system-v3` (9 commits, develop 기준)
 
 ## 목표
 
@@ -96,12 +96,12 @@ Wanted DS의 *의미 계층 구조*만 차용한다. ADR 0003 참조.
 ## 단계별 체크리스트
 
 - [x] **Step 0** — exec-plan + ADR 0003 작성
-- [ ] **Step 0.5** — Codex 계획 검증 결과 반영 (CHANGE_REQUEST → 본 갱신 적용 후 PASS 재요청 또는 사용자 최종 승인)
-- [ ] **Step 1** — 홈 사용처 분석 + 즉시 소비 mixin 추가 + ADR에 전체 계약·naming 확정 (1 PR)
-- [ ] **Step 2** — Shadow lg/xl 정상화 — 모달·드로어·토스트·Header inline rgba 토큰화 (1 PR)
-- [ ] **Step 3** — 홈 페이지 9개 모듈 hex·font-size 리터럴·inline rgba 정리 + 신규 mixin 적용 (1 PR)
-- [ ] **Step 4** — 미사용 mixin / deprecated alias 토큰 grep·게이팅 통과분 일괄 제거 (1 PR)
-- [ ] **Step 5** — 회고 + tech-debt-tracker 후속 작업 등록 (admin 통합·다크모드·about/·타 페이지 mixin 도입)
+- [x] **Step 0.5** — Codex 계획 검증 PASS (3차)
+- [x] **Step 1** — 홈 즉시 소비 mixin 5개 추가 + ADR Decision #1 14행 확정
+- [x] **Step 2** — Toast `$shadow-xl` / BottomSheet `$shadow-lg` 적용
+- [x] **Step 3** — 홈 9개 모듈 alias 치환 + 신규 mixin 5건 적용
+- [x] **Step 4** — 호출처 22개 모듈 일괄 치환 + 미사용 mixin 5종 / deprecated alias 13건 정의 제거
+- [x] **Step 5** — 회고 + tech-debt 후속 등록 (본 커밋)
 
 ## 완료 기준 (DoD)
 
@@ -325,8 +325,32 @@ Wanted DS의 *의미 계층 구조*만 차용한다. ADR 0003 참조.
 - [ ] 셀프 리뷰: 이 PR을 처음 보는 사람도 EXEC_PLAN만으로 변경 의도를 이해할 수 있는가?
 - [ ] **멀티 세션 리뷰**: 별도 Claude 세션 또는 `codex:rescue`로 객관적 검토를 요청해 시선을 분리한다.
 
-## 회고 (머지 후 작성, completed/로 이동 시)
+## 회고 (구현 완료, 머지 대기)
 
-- 잘된 것:
-- 다음에 할 것:
-- 발견된 부채 (→ tech-debt-tracker.md 옮길 것):
+### 잘된 것
+
+- **3차 Codex 계획 검증 흐름 작동**: 1차 CHANGE_REQUEST(Q1~Q4) → 2차 작은 보정 → 3차 PASS. admin 통합 분리·홈 즉시 소비분만 추가·alias 게이팅 강화 등 사용자 합의된 결정이 plan에 모두 반영된 뒤 구현 진입 — plan 단계에서 scope creep 차단.
+- **컨텍스트 기반 mixin 명명 합의**: Wanted DS의 `1n/1r`도, 단순 weight 명명도 가독성 부족하다는 사용자 피드백을 반영해 `-emphasis`/`-small`/`-strong` 컨벤션으로 ADR 0003 Decision #1 14행 정착.
+- **외과적 변경 원칙 유지**: 22개 호출처 모듈 + 4개 정의 파일 + 가이드 1개 모두 본 task 범위 내 변경만. 인접 정리·rename·포맷 드리프트 0건 — Codex 1차 검증에서 모든 Step 외과 OK 확인.
+- **Step 단위 PR/검증/커밋**: 9 커밋이 Step 단위로 깔끔히 분할 — 한 Step 회귀 시 부분 revert 가능, 검증 로그도 Step별 분리(`logs/design-system-v3/<run-id>/`).
+- **gradient 핫픽스 자체 발견·복구**: `replace_all`로 인한 `$navy ` (trailing space) 손상이 Hero/SermonListPage 두 군데 발생했으나 build 단계 전에 grep + Read로 자체 발견, 즉시 수동 Edit으로 복구. `yarn build` PASS로 잔존 파손 없음 확인. 운영 인시던트로 자체 보고.
+
+### 다음에 할 것
+
+- **`replace_all` 사용 시 boundary 정확성 재확인**: trailing space 패턴(`$navy ` 등)은 실제 토큰의 다음 토큰(0%, 색상 stop) 직전을 잘라내므로 위험. `\b` boundary 또는 명시 파일 단위 Edit 우선.
+- **Codex API 한도 회복 후 Step 4 사후 1차 검증**: 13:40 KST 회복 시점에 `\b` boundary 정확도 + admin diff 범위 + gradient 두 라인 점검 받고 본 exec-plan에 결과 추가.
+- **시각 회귀 PR 단계 검증**: 홈 PC/Tablet/Mobile 3 viewport, Toast/BottomSheet 4개 호출처, FormField/Banner/admin dropdown(`$border-strong` 차이), Hero/SermonListPage gradient 변경 전후 비교를 PR description에 첨부.
+- **신규 mixin 점진 도입 (타 페이지)**: 본 task 범위는 홈 9개 모듈 한정. sermons/news/fellowship/community/next-gen/notifications/search 페이지에서 `text-page-title`/`text-card-title`/`text-sub`/`text-caption` + 신규 5종을 점진 적용 — 작업할 페이지 발생 시점에 통합.
+- **knip 경고 분석 분리**: 본 task verify-task knip 경고는 *기존 부채*(prettier devDep, kakao.maps unresolved, 20+ unused exports). 별도 cleanup task로 인벤토리·정리.
+
+### 발견된 부채 (→ tech-debt-tracker.md로 이동)
+
+- **🟡 admin 토큰 통합 ADR placeholder**: `var(--admin-*)` 25종 → 메인 토큰 통합. 본 task에서 분리 결정. 후속 ADR 0004로 처리.
+- **🟢 다크모드 토큰 분리**: 사용자 결정으로 본 task 제외. 도입 결정 시 별도 ADR.
+- **🟢 about/ 경로 SCSS 정리**: 디자인·내용 미확정으로 본 task 제외. 디자인 확정 후 별도 작업.
+- **🟢 0.8rem / 0.9rem 토큰 부재**: SermonCard:46 `0.9rem`, FeedContent:223 `0.8rem` 잔존. `$font-size-9`/`$font-size-8` 도입 또는 텍스트 사이즈 재설계.
+- **🟢 NewHere `$bg-section: #fdfaf5` 로컬 hex**: cream 톤에 정합하는 시맨틱 토큰 없음. `$bg-section` 또는 `$bg-cream-subtle` 신규 토큰 검토.
+- **🟢 FeedContent `.badge_category` mixin 미적용**: line-height: reset 의도와 신규 caption mixin의 line-height-body-ui(1.45)가 충돌해 보류. 뱃지 전용 mixin(`text-badge`) 검토 또는 `text-caption-strong($line-height: 1)` 파라미터 확장.
+- **🟢 AboutOurChurch/ChurchVision span weight 트레이드오프**: 사용자 합의로 semibold→medium 전환. 디자인 검토 시 강조 강도 재확인.
+- **🟢 신규 mixin 타 페이지 도입**: sermons/news/fellowship/community/next-gen/notifications/search 모든 페이지가 점진 도입 대상. 페이지 작업 시점에 통합 권장.
+- **🟢 `$border-strong` 시각 회귀 검증 보류**: rgba(gray-500, 0.44) → gray-500 차이 미세. PR 단계에서 FormField/Banner/admin dropdown 3곳 시각 비교 권장.
