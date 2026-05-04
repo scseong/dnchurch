@@ -163,7 +163,8 @@ Wanted DS의 *의미 계층 구조*만 차용한다. ADR 0003 참조.
 
 ## Codex 1차 검증
 
-- **상태**: 응답 수신 — CHANGE_REQUEST → Claude 정정 적용
+### Step 1 — CHANGE_REQUEST → Claude 정정 적용
+
 - **요청 시점**: 2026-05-04 (Step 1 구현 직후)
 - **결론**: **CHANGE_REQUEST** (코드 PASS, 문서 행 수 불일치만)
 - **수정 파일** (Codex 자체 수정 없음 — Claude 책임으로 반환):
@@ -183,7 +184,25 @@ Wanted DS의 *의미 계층 구조*만 차용한다. ADR 0003 참조.
   - L62 "이전 버전 ADR 표 20행은 desktop 단일 사이즈 청사진" — 과거 버전 사실 기록이라 그대로 유지.
   - 검증 섹션의 과거 기록(L159 "ADR Decision #1 표(20행)를 source of truth로 통일")도 당시 사실 그대로 유지.
 
+### Step 2 — PASS
+
+- **요청 시점**: 2026-05-04 (Step 2 구현 직후)
+- **결론**: **PASS** ("두 변경 모두 이상 없습니다.")
+- **수정 파일** (Codex 자체 수정 없음 — 검토만):
+  - `src/components/common/Toast/Toast.module.scss:11` — `$shadow-md` → `$shadow-xl`
+  - `src/components/common/BottomSheet/BottomSheet.module.scss:30` — `box-shadow: $shadow-lg;` 신규 1줄 추가
+- **핵심 지적**:
+  - Toast `$shadow-xl`은 `_effect.scss:24` "토스트 스택" 의도와 정확히 일치.
+  - BottomSheet `$shadow-lg`은 `_effect.scss:19` "모달, 드로어 패널" 의도와 정확히 일치.
+  - 두 파일 모두 인접 정리·rename·포맷 드리프트 없음 — 외과적 변경 기준 충족.
+  - BottomSheet PC 중앙 패널 변형(`respond-up` 블록)에도 동일한 `$shadow-lg` 유지 적절. PC별 override 불필요.
+  - Step 2 성공 기준("$shadow-lg 또는 $shadow-xl이 모달·드로어·토스트 중 1곳 이상에 실제 적용") 충족.
+- **남은 리스크**:
+  - BottomSheet shadow 신규 추가 — 4개 호출처(`CategoryBottomSheet`, `SortBottomSheet`, `AdvancedFilterSheet`, `SeriesBrowserSheet`)에서 PC/Mobile 시각 비교 권장.
+
 ## Claude 2차 검증
+
+### Step 1 — PASS
 
 - **검토 내용**:
   - Codex 1차 지적(문서 행 수 불일치) 4건을 14행으로 일괄 정정 — exec-plan L35·L85, ADR L33·L63. 검증 섹션의 과거 사실 기록(L62, L159)은 의도적으로 그대로 유지(시점별 의사결정 추적).
@@ -196,6 +215,19 @@ Wanted DS의 *의미 계층 구조*만 차용한다. ADR 0003 참조.
   - `node scripts/verify-task.mjs design-system-v3` → 필수 검증 통과 (knip 경고는 *기존 부채* — prettier devDep, kakao.maps.d.ts unresolved, 20+개 unused exports + 14개 unused types — 본 task와 무관, 커밋 차단 X)
   - 검증 로그: `logs/design-system-v3/20260504-123344/summary.log`
 - **최종 판단**: **PASS** — Step 1 커밋 가능. Codex 1차 코드 PASS + 문서 정합성 정정 완료 + verify-task 필수 검증 통과 + 외과적 변경 원칙 준수. Step 2~5는 별도 PR로 진행.
+
+### Step 2 — PASS
+
+- **검토 내용**:
+  - Toast diff 단일 라인(`$shadow-md` → `$shadow-xl`), BottomSheet diff 단일 라인(`box-shadow: $shadow-lg;` 신규 1줄 추가). 인접 정리·rename·포맷 드리프트 0.
+  - 토큰 정의(`tokens/_effect.scss:12-27`) 의도와 정합 확인 — Toast = highest elevation(토스트 스택), BottomSheet = 모달/드로어 패널.
+  - BottomSheet PC respond-up 블록(line 38-50)은 transform/opacity·radius만 변경하고 shadow는 `.sheet` 본체에서 상속 — PC override 불필요.
+  - Modal·Drawer는 본 Step에서 변경 없음 (Modal 본체 wrapper는 호출처 정의, Drawer는 풀-높이로 shadow 가치 적음 — Codex 권장 일치).
+- **실행한 검증**:
+  - Codex 1차 PASS
+  - `node scripts/verify-task.mjs design-system-v3` → 필수 검증 통과 (exit 0)
+  - 검증 로그: `logs/design-system-v3/<run-id>/summary.log` (Step 2 run)
+- **최종 판단**: **PASS** — Step 2 커밋 가능. 시각 회귀 검증은 PR 단계에서 BottomSheet 4개 호출처 + Toast 띄우기로 PC/Mobile 비교 (회고 섹션에 스크린샷 첨부 권장).
 
 ## 리뷰 (완료 직전)
 
