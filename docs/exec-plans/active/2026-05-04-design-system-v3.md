@@ -1,0 +1,209 @@
+# design-system-v3
+
+- **상태**: 🟡 진행 중
+- **시작일**: 2026-05-04
+- **브랜치**: develop (작업 시작 시점) — 코드 구현 단계에서 별도 feature 브랜치 분기 검토
+
+## 목표
+
+Wanted DS의 의미 계층(Display/Title/Heading/Headline/Body/Label/Caption)을 흡수해 SCSS mixin 시스템을 정돈하고, 홈 페이지를 pilot으로 신규 mixin·shadow 토큰을 적용한다. 본 task 내에서 사용처 0인 deprecated alias를 일괄 제거한다.
+
+**범위 축소 (Codex 검토 반영)**: admin 토큰 통합은 본 task에서 분리, 후속 ADR/exec-plan으로 이동한다.
+
+## Assumptions
+
+- Wanted DS는 *구조 패턴*만 차용한다 — 컬러 팔레트(blue/cool-neutral)·px 단위·Pretendard JP는 채택하지 않는다.
+- 다크모드 도입은 본 작업에서 제외 (사용자 결정).
+- 홈(`src/app/_component/home/*`)이 pilot. about/ 경로는 디자인·내용 미확정으로 제외.
+- 기존 `_mixins.scss`의 `text-*` mixin과 `_color/_typography/_semantic/_spacing.scss`의 `@deprecated` alias 중 **사용처 0인 항목만** 제거한다 — 사용처가 남은 항목은 본 task 내 PR에서 신규로 치환한 뒤 제거한다.
+- 신규 mixin naming은 "weight 기반(medium/regular)" 또는 "외래 접미사(1n/1r)" 둘 다 사용자 가독성이 낮아, **컨텍스트 기반 명명**(예: `text-body-ui`, `text-body-reading`)을 우선 검토한다. 최종 결정은 Step 1에서 홈 사용처 분석 후 ADR 0003에 확정 기록.
+- 시각 회귀 허용 범위: 픽셀 단위 미세 차이는 허용, 텍스트 줄 수·박스 크기·색감 변동은 0건 목표. 컴퍼넌트 간 정렬 깨짐도 0건 목표.
+- alias inventory는 Step 4 시작 시 grep으로 직접 산정한다 — 현 시점에 완전한 inventory는 아직 없다.
+
+## Non-goals
+
+- **Admin 토큰 통합** — 본 task 분리 (Codex Q1 반영). `var(--admin-*)` 제거는 후속 ADR + 별도 exec-plan에서 처리.
+- 다크모드 토큰 분리 (별도 ADR로 보류)
+- about/ 경로 SCSS 정리 (디자인 확정 후 별도 작업)
+- 컬러 16-step 펼침, px 단위 전환, Pretendard JP 교체 — Wanted DS의 형식적 차용 거부
+- Form/Input·Button 컴포넌트 통합 (별도 컴포넌트 통합 작업)
+- knip 미사용 코드 검사의 SCSS 외 부분 정리
+- 전체 mixin 일괄 추가 — 홈 즉시 소비분만 추가 (Codex Q3 반영). 전체 계약(ADR 0003 Decision #1 표)은 ADR에 명시, 점진 도입.
+
+## Success Criteria
+
+- [ ] ADR 0003에 mixin 전체 명명 체계와 매핑 테이블(Decision #1 표 — 14행)이 명시되어 있다.
+- [ ] `_mixins.scss`에 **홈 페이지에서 즉시 사용되는 신규 mixin**(Step 1 분석 후 확정 — 예상 6~10개)이 추가되어 있다.
+- [ ] 홈 페이지 9개 모듈에서 hex 컬러·font-size 리터럴·inline rgba가 0건이다 (단, dark 컨텍스트 토큰 `$txt-dark-*`/`$bg-dark-*`는 허용).
+- [ ] `$shadow-lg` 또는 `$shadow-xl`이 모달·드로어·토스트 중 1곳 이상에 실제 적용되어 있다.
+- [ ] `_mixins.scss`의 기존 `text-*` mixin 중 **본 task 내 grep 사용처 0인 항목**이 제거되어 있다.
+- [ ] `tokens/_color.scss`, `_typography.scss`, `_semantic.scss`, `_spacing.scss`의 `@deprecated` 표시 alias 중 **사용처 0인 항목**이 제거되어 있다.
+- [ ] `node scripts/verify-task.mjs design-system-v3`가 PASS한다 (lint + lint:styles + build + knip).
+- [ ] 시각 회귀 — 홈/모달/토스트/Header에서 PC/Tablet/Mobile 비교 OK.
+
+## Verification
+
+```bash
+yarn lint:styles                                # SCSS 토큰·네이밍
+yarn lint                                       # ESLint
+yarn build                                      # Next.js 빌드
+node scripts/verify-task.mjs design-system-v3   # 통합 검증 + logs/ 증적
+node scripts/harness-gate.mjs design-system-v3  # 머지·릴리스 전 게이트
+```
+
+**시각 QA — 구체 대상 (Codex 보강 반영)**:
+
+| Step | 페이지/컴포넌트 | URL | viewport |
+| --- | --- | --- | --- |
+| 2 | Modal·Drawer 띄움 | (ConfirmModal·BottomSheet 사용 페이지) | PC 1280·Tablet 768·Mobile 375 |
+| 2 | Toast 띄움 | (toast 트리거 페이지 — admin 외) | PC 1280·Mobile 375 |
+| 2 | Header inline rgba 변경분 | `/` (홈) | PC·Mobile |
+| 3 | 홈 Banner·QuickAccess·NewHere·RecentSermons·SermonCard·FeedSection·FeedContent·AboutOurChurch·ChurchVision | `/` | PC 1280·Tablet 768·Mobile 375 (3 viewport 필수) |
+| 4 | mixin/alias 제거 후 홈 + 모달 회귀 | `/` + 모달 띄움 | PC·Mobile |
+
+스크린샷은 변경 전후 모두 PR description 또는 본 exec-plan 회고 섹션에 첨부.
+
+**alias/mixin 제거 게이팅 (Codex Q2 반영)**:
+
+- 검색 명령 (ripgrep — Step 4에서 후보가 추가/축소되면 패턴 갱신):
+  ```bash
+  # (1) 기존 text-* mixin 사용처
+  rg -nE '@include\s+(text-hero|text-page-title|text-section-title|text-sub-section-title|text-card-title|text-body|text-sub|text-caption|text-label)\b' -g '*.{scss,tsx,ts}' src/
+
+  # (2) deprecated alias 사용처
+  rg -nE '\$(navy|navy-mid|navy-light|gold|gold-light|cream|cream-deep|bg-invert|border-secondary|line-height-heading|line-height-wide|section-padding-(80|64|40|20)|overlay-dark-light)\b' -g '*.{scss,tsx,ts}' src/
+  ```
+- 검색 확장자: `.scss`(`*.module.scss` 포함), `.tsx`, `.ts` (className 동적 사용 가능성).
+- 게이팅 조건: **두 명령 모두 결과 0건일 때만 본 task 내 일괄 제거**. 1건이라도 남으면 (a) 본 task 내 신규 mixin/토큰으로 치환 후 다시 grep해 0건 확인, 또는 (b) `docs/tech-debt-tracker.md`에 잔존 항목·이유·후속 처리 시점을 등록.
+
+## 접근법
+
+Wanted DS의 *의미 계층 구조*만 차용한다. ADR 0003 참조.
+
+핵심 결정:
+1. 신규 mixin은 의미 계층(Display→Title→Heading→Headline→Body→Label→Caption)으로 명명. **naming 컨벤션은 컨텍스트 기반**(예: `text-body-ui`/`text-body-reading`)을 우선 검토 — Step 1에서 홈 사용처 분석 후 ADR에 확정.
+2. Step 1은 전체 일괄이 아니라 홈 즉시 소비분(예상 6~10개)만 추가. 나머지는 실제 소비자 PR에서 점진 추가. 전체 명명 체계는 ADR 0003 Decision #1 표(14행)가 source of truth.
+3. 기존 `text-hero` 등 mixin은 동일 task 내 호출처 치환 후 Step 4에서 사용처 0 확인 시 제거 (alias 유예 X).
+4. admin 통합은 본 task 제외, ADR 0003 References에 후속 ADR placeholder 명시.
+
+## 영향받는 파일
+
+- `src/styles/_mixins.scss` (Step 1·4)
+- `src/styles/tokens/_color.scss` / `_typography.scss` / `_semantic.scss` / `_spacing.scss` (Step 4: deprecated alias 제거)
+- 모달·토스트·Header SCSS 4~6개 (Step 2)
+- `src/app/_component/home/*.module.scss` 9개 (Step 3)
+
+## 단계별 체크리스트
+
+- [x] **Step 0** — exec-plan + ADR 0003 작성
+- [ ] **Step 0.5** — Codex 계획 검증 결과 반영 (CHANGE_REQUEST → 본 갱신 적용 후 PASS 재요청 또는 사용자 최종 승인)
+- [ ] **Step 1** — 홈 사용처 분석 + 즉시 소비 mixin 추가 + ADR에 전체 계약·naming 확정 (1 PR)
+- [ ] **Step 2** — Shadow lg/xl 정상화 — 모달·드로어·토스트·Header inline rgba 토큰화 (1 PR)
+- [ ] **Step 3** — 홈 페이지 9개 모듈 hex·font-size 리터럴·inline rgba 정리 + 신규 mixin 적용 (1 PR)
+- [ ] **Step 4** — 미사용 mixin / deprecated alias 토큰 grep·게이팅 통과분 일괄 제거 (1 PR)
+- [ ] **Step 5** — 회고 + tech-debt-tracker 후속 작업 등록 (admin 통합·다크모드·about/·타 페이지 mixin 도입)
+
+## 완료 기준 (DoD)
+
+- [ ] `node scripts/verify-task.mjs design-system-v3` 통과 (lint + lint:styles + build + knip)
+- [ ] 사용자 승인 후 커밋 (각 Step별)
+- [ ] ADR 0003 Accepted로 전환
+- [ ] tech-debt-tracker.md 후속 항목 등록 (admin 통합 ADR placeholder, 다크모드, about/, 타 페이지 신규 mixin 도입)
+
+## 참고 자료
+
+- `docs/references/colors_and_type.css` — Wanted DS 토큰 정의 (참조 원본)
+- `docs/references/Wanted UI Kit.html` — 컴포넌트 시각 예시 (대용량 — 발췌 필요 시 docs/research/로 분리)
+- 사용자 의향 plan 파일: `~/.claude/plans/scalable-sleeping-llama.md` (세션 한정 산출물)
+
+## 의사결정 로그
+
+- 2026-05-04: Wanted DS는 *구조 패턴*만 차용 결정. 컬러·단위·폰트는 거절.
+- 2026-05-04: 다크모드는 본 작업 제외, 별도 ADR로 보류 (사용자 결정).
+- 2026-05-04: Pilot 대상 about/ → 홈으로 변경 (about/ 디자인·내용 미확정 — 사용자 결정).
+- 2026-05-04: deprecated alias 유예 단계 폐지, 호출처 일괄 치환 후 즉시 제거 (사용자 지시).
+- 2026-05-04: **Codex 계획 검증 CHANGE_REQUEST 반영** — admin 통합 본 task에서 분리(Q1), Step 1은 홈 즉시 소비분만 추가(Q3), naming은 컨텍스트 기반 우선 검토(Q4), alias 게이팅 강화(Q2), Verification 시각 QA 대상 구체화, Assumptions 보강.
+
+## ADR 판단
+
+- **필요 여부**: 필요
+- **결정 링크**: [ADR 0003 — design-system-v3 token unification](../../decisions/0003-design-system-v3-token-unification.md)
+- **사유**: typography mixin 의미 계층 도입은 여러 작업에서 반복될 패턴 정의에 해당. ADR 트리거 충족. (admin 통합은 본 task 분리, 후속 ADR로 이관)
+
+## Codex 계획 검증
+
+- **상태**: 3차 응답 수신 — **PASS**
+- **요청 시점**: 2026-05-04 (1차·2차·3차)
+- **최종 결론**: **PASS** — "구현 진행 가능한 계획으로 봅니다."
+
+### 1차 — CHANGE_REQUEST
+- 핵심 지적:
+  - Q1: Step 3 admin 통합을 본 task에서 분리. typography·home pilot과 의존 관계 없음.
+  - Q2: alias/mixin 제거 성공 기준에 검색 pattern·확장자·게이팅 조건 명시 필요.
+  - Q3: 전체 mixin 일괄 추가는 과함. 홈 즉시 소비분만 추가.
+  - Q4: Wanted naming(`text-body1n`) 그대로는 불투명. 로컬 컨벤션 번역 권장.
+  - 추가: scope 과함, 시각 QA 구체 대상·Assumptions 보강 필요.
+- 반영:
+  - Q1: ✅ admin 통합을 Non-goals로 이동, 본 plan 제거, 후속 ADR `0004-admin-token-unification` placeholder.
+  - Q2: ✅ 게이팅 조건 1차 명시 (placeholder 패턴 사용 — 2차에서 보완).
+  - Q3: ✅ Step 1을 "홈 즉시 소비분만 추가"로 갱신.
+  - Q4: ⚠️ 사용자 의견 반영 — Wanted naming도 단순 weight 명명도 가독성 부족, **컨텍스트 기반 명명**(`text-body-ui`/`text-body-reading`) 우선 검토. Step 1에서 홈 사용처 분석 후 ADR 확정.
+  - 추가: ✅ Assumptions·Verification·시각 QA 표 보강.
+
+### 2차 — CHANGE_REQUEST (작은 보정)
+- 핵심 지적:
+  - Item 1: 게이팅 명령에 placeholder 패턴(`기존-mixin-이름` 등)이 잔존. 실제 후보로 alternation 패턴 교체 필요.
+  - Item 2: mixin 개수 불일치 — exec-plan "18개" vs ADR 표 합계 20개. 일치시킬 것.
+- 반영:
+  - Item 1: ✅ ripgrep 실행 가능 명령 2개로 교체 — `text-*` mixin alternation + deprecated alias alternation, `-g '*.{scss,tsx,ts}'` 확장자 한정.
+  - Item 2: ✅ exec-plan에서 "18개" 표현 모두 제거, ADR Decision #1 표(20행)를 source of truth로 통일. ADR Alternative C도 "전체 mixin(20개)"로 갱신.
+
+### 3차 — PASS
+- "두 항목 모두 문서에 올바르게 반영되어 있습니다. 구현 진행 가능한 계획으로 봅니다."
+
+## Codex 1차 검증
+
+- **상태**: 응답 수신 — CHANGE_REQUEST → Claude 정정 적용
+- **요청 시점**: 2026-05-04 (Step 1 구현 직후)
+- **결론**: **CHANGE_REQUEST** (코드 PASS, 문서 행 수 불일치만)
+- **수정 파일** (Codex 자체 수정 없음 — Claude 책임으로 반환):
+  - `src/styles/_mixins.scss` (검토만)
+  - `docs/decisions/0003-design-system-v3-token-unification.md` (검토만)
+  - `docs/exec-plans/active/2026-05-04-design-system-v3.md` (검토만)
+- **핵심 지적**:
+  - 코드(`_mixins.scss`) 자체 PASS — 신규 mixin 5개만 추가, 기존 mixin·alias 미변경, 토큰 참조 모두 valid(`$line-height-body-default/-ui`, `$font-size-15/14/13/12/11`, `$font-weight-medium/semibold`), 레이어 위반 없음, 외과적 변경 OK.
+  - 문서 정합성: ADR Decision #1 표는 14행인데 exec-plan(L35, L85)·ADR 본문(L33, L63)에 "16행" / "20행" 표현 잔존. 행 수를 실제 표(14)와 일치시킬 것.
+- **남은 리스크**:
+  - 행 수 정정 후 시각 회귀 위험 0 — Step 1은 *추가만*. Step 3에서 호출처 치환 시 색·weight 변동을 다시 검증 필요.
+- **반영(Claude 정정)**:
+  - exec-plan L35 "Decision #1 표 — 20행" → "14행"
+  - exec-plan L85 "ADR 0003 Decision #1 표(20행)" → "14행"
+  - ADR L33 "Step 1 홈 사용처 분석 후 확정 — 16행" → "14행"
+  - ADR L63 "16행으로 축소" → "14행으로 축소"
+  - L62 "이전 버전 ADR 표 20행은 desktop 단일 사이즈 청사진" — 과거 버전 사실 기록이라 그대로 유지.
+  - 검증 섹션의 과거 기록(L159 "ADR Decision #1 표(20행)를 source of truth로 통일")도 당시 사실 그대로 유지.
+
+## Claude 2차 검증
+
+- **검토 내용**:
+  - Codex 1차 지적(문서 행 수 불일치) 4건을 14행으로 일괄 정정 — exec-plan L35·L85, ADR L33·L63. 검증 섹션의 과거 사실 기록(L62, L159)은 의도적으로 그대로 유지(시점별 의사결정 추적).
+  - `_mixins.scss` diff 교차 확인 — 끝부분(line 191~ 신규 51줄)에 5개 mixin만 추가, 기존 1~189줄 변경 0건. 인접 정리·포맷·rename 없음 (외과적 변경 OK).
+  - 신규 mixin이 참조하는 모든 토큰(`$font-size-{15,14,13,12,11}`, `$font-weight-{medium,semibold}`, `$line-height-body-{default,ui}`, `$txt-{primary,secondary,tertiary}`)은 기존 토큰 파일에 정의됨 — 신규 토큰 추가 없음.
+  - 호출처 변경 없음 — Step 1은 *추가만*. 시각 회귀 위험 0. 호출처 치환은 Step 3.
+- **실행한 검증**:
+  - `yarn lint:styles` → exit 0 ✅
+  - `yarn build` → exit 0 ✅
+  - `node scripts/verify-task.mjs design-system-v3` → 필수 검증 통과 (knip 경고는 *기존 부채* — prettier devDep, kakao.maps.d.ts unresolved, 20+개 unused exports + 14개 unused types — 본 task와 무관, 커밋 차단 X)
+  - 검증 로그: `logs/design-system-v3/20260504-123344/summary.log`
+- **최종 판단**: **PASS** — Step 1 커밋 가능. Codex 1차 코드 PASS + 문서 정합성 정정 완료 + verify-task 필수 검증 통과 + 외과적 변경 원칙 준수. Step 2~5는 별도 PR로 진행.
+
+## 리뷰 (완료 직전)
+
+- [ ] 셀프 리뷰: 이 PR을 처음 보는 사람도 EXEC_PLAN만으로 변경 의도를 이해할 수 있는가?
+- [ ] **멀티 세션 리뷰**: 별도 Claude 세션 또는 `codex:rescue`로 객관적 검토를 요청해 시선을 분리한다.
+
+## 회고 (머지 후 작성, completed/로 이동 시)
+
+- 잘된 것:
+- 다음에 할 것:
+- 발견된 부채 (→ tech-debt-tracker.md 옮길 것):
