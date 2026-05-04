@@ -45,8 +45,8 @@ $thumb-sub-w: 14rem;
   z-index: 1;
   font-size: 0.9rem;
   font-weight: $font-weight-bold;
-  color: $navy;
-  background: $gold;
+  color: $navy-950;
+  background: $gold-600;
   padding: $padding-inline-xs;
   border-radius: $radius-xs;
   text-transform: uppercase;
@@ -75,9 +75,7 @@ $thumb-sub-w: 14rem;
 }
 
 .title {
-  font-size: $font-size-15;
-  font-weight: $font-weight-medium;
-  color: $white;
+  @include text-body-emphasis($color: $white);
   @include ellipsis-multi(1);
 }
 
@@ -120,9 +118,9 @@ $thumb-sub-w: 14rem;
   width: $play-btn-size;
   height: $play-btn-size;
   border-radius: $radius-circle;
-  background: rgba($gold, 0.18);
-  border: 1px solid rgba($gold, 0.35);
-  color: $gold;
+  background: rgba($gold-600, 0.18);
+  border: 1px solid rgba($gold-600, 0.35);
+  color: $gold-600;
   transition:
     background 0.2s ease,
     border-color 0.2s ease,
@@ -140,9 +138,9 @@ $thumb-sub-w: 14rem;
 }
 
 .card:hover .play_btn {
-  background: $gold;
-  border-color: $gold;
-  color: $navy;
+  background: $gold-600;
+  border-color: $gold-600;
+  color: $navy-950;
 }
 
 // ─── 썸네일 오버레이 재생 버튼 (PC hover) ───────────
@@ -159,9 +157,9 @@ $thumb-sub-w: 14rem;
     width: $play-btn-size-lg;
     height: $play-btn-size-lg;
     border-radius: $radius-circle;
-    background: rgba($gold, 0.25);
-    border: 1px solid rgba($gold, 0.5);
-    color: $gold;
+    background: rgba($gold-600, 0.25);
+    border: 1px solid rgba($gold-600, 0.5);
+    color: $gold-600;
     align-items: center;
     justify-content: center;
     opacity: 0;

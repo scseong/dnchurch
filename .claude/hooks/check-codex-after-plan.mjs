@@ -57,14 +57,8 @@ const isActivePlan = PLAN_PATH_RE.test(normalizedPath);
 if (isActivePlan && !isAlreadyReviewed(candidatePath)) {
   emitContext(
     "[hook:check-codex-after-plan]\n" +
-      `active EXEC_PLAN이 작성 또는 수정되었습니다: ${normalizedPath}.\n` +
-      "구현 전에 Codex 계획 검증을 요청하세요. 기대 흐름은 `Claude 계획 -> Codex 계획 검증 -> Claude 구현`입니다.\n\n" +
-      "권장 Codex 요청:\n" +
-      "Please review this implementation plan before coding. Apply the 5-criterion guardrail lens: " +
-      "(1) Are assumptions explicit? (2) Are non-goals listed? (3) Does change scope link directly to the request without creeping additions? " +
-      "(4) Are success criteria and verification commands concrete? (5) Are new abstractions, libraries, or data-flow changes excessive? " +
-      "Also check architecture boundaries, step order, hidden risks, missing verification, and whether the plan should be split. " +
-      "Return one of PASS, CHANGE_REQUEST, or BLOCK. Respond in Korean.\n\n" +
-      "검증 후 exec-plan의 `## Codex 계획 검증` 섹션에 결론, 핵심 지적, 반영 내용을 기록하세요.",
+      `active EXEC_PLAN 작성/수정: ${normalizedPath}.\n` +
+      "구현 전 Codex 계획 검증 권장. 결론은 PASS/CHANGE_REQUEST/BLOCK.\n" +
+      "기록: exec-plan `## Codex 계획 검증`.",
   );
 }

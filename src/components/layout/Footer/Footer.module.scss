@@ -70,8 +70,8 @@
     border-color $transition-duration-normal $transition-easing-default;
 
   &:hover {
-    background-color: $gold;
-    border-color: $gold;
+    background-color: $gold-600;
+    border-color: $gold-600;
     color: $txt-inverse;
   }
 
@@ -109,7 +109,7 @@
   transition: color $transition-duration-normal $transition-easing-default;
 
   &:hover {
-    color: $gold;
+    color: $gold-600;
   }
 }
 

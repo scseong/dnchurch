@@ -165,7 +165,7 @@ $indicator-height: 0.2rem;
 // ── Top Bar ──
 
 .top_bar {
-  background-color: $navy;
+  background-color: $navy-950;
   color: $txt-inverse;
 }
 
@@ -249,7 +249,7 @@ $indicator-height: 0.2rem;
 .logo_icon {
   width: 2.4rem;
   height: 2.4rem;
-  color: $navy;
+  color: $navy-950;
 }
 
 .logo_text {
@@ -429,12 +429,12 @@ $indicator-height: 0.2rem;
   width: $icon-button-size-sm;
   height: $icon-button-size-sm;
   border-radius: $radius-circle;
-  background-color: $gold;
+  background-color: $gold-600;
   color: $white;
   transition: background-color $transition-duration-normal $transition-easing-default;
 
   &:hover {
-    background-color: $gold-light;
+    background-color: $gold-400;
   }
 
   @include respond-up($breakpoint-pc-sm) {

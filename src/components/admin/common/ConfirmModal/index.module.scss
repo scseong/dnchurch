@@ -30,7 +30,7 @@
   font-size: $font-size-18;
   font-weight: $font-weight-bold;
   color: $txt-primary;
-  line-height: $line-height-heading;
+  line-height: $line-height-snug;
 }
 
 .body {
@@ -80,7 +80,7 @@
 
   &:hover {
     background: $bg-secondary;
-    border-color: $border-secondary;
+    border-color: $border-strong;
   }
 }
 

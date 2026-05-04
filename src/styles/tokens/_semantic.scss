@@ -48,12 +48,6 @@ $section-gap-80: $spacing-80; // 대형 섹션
 $section-gap-64: $spacing-64; // 기본 섹션
 $section-gap-40: $spacing-40; // 소형 섹션
 
-// @deprecated — Use $section-gap-*
-$section-padding-80: $section-gap-80;
-$section-padding-64: $section-gap-64;
-$section-padding-40: $section-gap-40;
-$section-padding-20: $spacing-20;
-
 // ══════════════════════════════════════════
 // BORDER-RADIUS: Semantic (XXS ~ XL + circle)
 // Primitive CSS custom properties(--radius-*)를 크기 체계로 변환
@@ -89,9 +83,6 @@ $overlay-scrim: rgba(0, 0, 0, 0.5);
 
 /// rgba(0,0,0,0.15) — Hero 등 이미지 위 얇은 오버레이
 $overlay-image: rgba(0, 0, 0, 0.15);
-
-// @deprecated — Use $overlay-image
-$overlay-dark-light: $overlay-image;
 
 /// rgba(0,0,0,0.04) — 호버/포커스 시 미세한 시각 피드백
 $overlay-subtle: rgba(0, 0, 0, 0.04);

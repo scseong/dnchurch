@@ -50,9 +50,7 @@
   & > span {
     margin-bottom: $spacing-8;
     display: inline-block;
-    font-size: $font-size-15;
-    font-weight: $font-weight-semibold;
-    color: $primary;
+    @include text-body-emphasis($color: $primary);
   }
 
   h2 {
@@ -66,7 +64,7 @@
 
     p {
       letter-spacing: -0.05rem;
-      line-height: $line-height-wide;
+      line-height: $line-height-loose;
     }
   }
 

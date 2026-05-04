@@ -107,6 +107,15 @@ const color = {
   reset: useColor ? "\u001b[0m" : "",
 };
 
+const VERBOSE = process.env.VERIFY_VERBOSE === "1";
+const TAIL_LINES = 100;
+
+function tailLines(text, n) {
+  const lines = text.split(/\r?\n/);
+  if (lines.length <= n) return text;
+  return lines.slice(-n).join("\n");
+}
+
 const failed = [];
 const warned = [];
 const startedAt = isoNow();
@@ -142,6 +151,7 @@ function writeManifest(status) {
 function runStep(label, args, warningOnly = false) {
   const logName = label.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "") || "step";
   const stepLog = path.join(runDir, `${logName}.log`);
+  const stepLogRel = `logs/${taskId}/${runId}/${logName}.log`;
 
   logBoth("");
   logBoth(`${color.bold}━━━ ${label} ━━━${color.reset}`);
@@ -156,8 +166,15 @@ function runStep(label, args, warningOnly = false) {
   const output = `${result.stdout ?? ""}${result.stderr ?? ""}`;
   writeFileSync(stepLog, output, "utf8");
   if (output) {
-    process.stdout.write(output);
     writeFileSync(summaryLog, output, { encoding: "utf8", flag: "a" });
+  }
+
+  if (VERBOSE && output) {
+    process.stdout.write(output);
+  } else if (!VERBOSE && output && result.status !== 0) {
+    const tail = tailLines(output, TAIL_LINES);
+    process.stdout.write(`${color.yellow}--- 최근 ${TAIL_LINES}줄 (전체: ${stepLogRel}) ---${color.reset}\n`);
+    process.stdout.write(tail.endsWith("\n") ? tail : `${tail}\n`);
   }
 
   if (result.status === 0) {
@@ -166,12 +183,12 @@ function runStep(label, args, warningOnly = false) {
   }
 
   if (warningOnly) {
-    logBoth(`${color.yellow}⚠ ${label} 경고${color.reset}`);
+    logBoth(`${color.yellow}⚠ ${label} 경고${color.reset} (${stepLogRel})`);
     warned.push(label);
     return;
   }
 
-  logBoth(`${color.red}✗ ${label} 실패${color.reset}`);
+  logBoth(`${color.red}✗ ${label} 실패${color.reset} (${stepLogRel})`);
   failed.push(label);
 }
 

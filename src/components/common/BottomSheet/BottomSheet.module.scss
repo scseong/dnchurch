@@ -27,6 +27,7 @@
   max-height: 80vh;
   background: $bg-primary;
   border-radius: $radius-l $radius-l 0 0;
+  box-shadow: $shadow-lg;
   padding-bottom: env(safe-area-inset-bottom, 0);
   transform: translateY(100%);
   transition: transform $transition-duration-normal $transition-easing-default;

@@ -111,15 +111,17 @@ Codex가 직접 수정하지 않고 Claude Code에 반환해야 하는 범위:
 
 ### 6. VERIFY
 
-Claude Code가 2차 검증을 수행하고 exec-plan의 `## Claude 2차 검증`에 기록한다.
-
-검증 증적을 생성한다.
+Claude Code가 2차 검증을 수행한다. 수행 항목: ESLint, stylelint, build, knip.
 
 ```bash
 node scripts/verify-task.mjs <task-id>
 ```
 
-결과는 `logs/<task-id>/<run-id>/`에 저장된다.
+결과는 `logs/<task-id>/<run-id>/`에 저장된다 (커밋 X — 로컬 증적).
+
+실패 시 신규 회귀인지 기존 부채인지 `docs/tech-debt-tracker.md`와 대조한다. 원인 불명·반복 실패 시 Codex 분석 검토.
+
+Codex가 1차 수정한 경우 Claude Code는 diff를 다시 읽고 의도·범위·검증 결과를 교차 확인한다. 결과는 exec-plan의 `## Claude 2차 검증`에 기록.
 
 ### 7. COMMIT / GATE
 

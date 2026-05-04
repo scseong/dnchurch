@@ -76,26 +76,11 @@
 //   $weight — font-weight. 각 역할의 기본 굵기
 //
 // 사용법:
-//   @include text-section-title;                              // 기본값
-//   @include text-section-title($color: $txt-image);      // 다크 배경
+//   @include text-page-title;                                 // 기본값
+//   @include text-page-title($color: $txt-image-subtle);      // 다크 배경
 //   @include text-card-title($weight: $font-weight-bold);     // 강조
-//   @include text-body($color: $txt-secondary);        // 색상 변경
+//   @include text-sub($color: $txt-secondary);                // 색상 변경
 // ══════════════════════════════════════════
-
-/// 히어로 타이틀 — 배너, 랜딩 최상단 (h1 반응형)
-@mixin text-hero($color: null, $weight: $font-weight-bold) {
-  font-size: $font-size-32;
-  font-weight: $weight;
-  line-height: map-get($heading-line-heights, 'h1');
-  letter-spacing: $letter-spacing-heading;
-  @if $color {
-    color: $color;
-  }
-
-  @include respond-up($breakpoint-tablet) {
-    font-size: $font-size-42;
-  }
-}
 
 /// 페이지 타이틀 — 각 페이지 최상위 제목 (h2 반응형)
 @mixin text-page-title($color: null, $weight: $font-weight-bold) {
@@ -112,36 +97,6 @@
   }
 }
 
-/// 섹션 타이틀 — 페이지 내 구역 제목 (h3 반응형)
-@mixin text-section-title($color: null, $weight: $font-weight-bold) {
-  font-size: $font-size-22;
-  font-weight: $weight;
-  line-height: map-get($heading-line-heights, 'h3');
-  letter-spacing: $letter-spacing-tight;
-  @if $color {
-    color: $color;
-  }
-
-  @include respond-up($breakpoint-tablet) {
-    font-size: $font-size-28;
-  }
-}
-
-/// 서브 섹션 타이틀 — 섹션 내 하위 제목 (h4 반응형)
-@mixin text-sub-section-title($color: null, $weight: $font-weight-semibold) {
-  font-size: $font-size-20;
-  font-weight: $weight;
-  line-height: map-get($heading-line-heights, 'h4');
-  letter-spacing: $letter-spacing-tight;
-  @if $color {
-    color: $color;
-  }
-
-  @include respond-up($breakpoint-tablet) {
-    font-size: $font-size-24;
-  }
-}
-
 /// 카드 타이틀 — 카드, 리스트 아이템 제목 (h5 반응형)
 @mixin text-card-title($color: null, $weight: $font-weight-semibold) {
   font-size: $font-size-18;
@@ -154,14 +109,6 @@
   @include respond-up($breakpoint-tablet) {
     font-size: $font-size-20;
   }
-}
-
-/// 본문 — 일반 텍스트 (기본 크기, 반응형 변경 없음)
-@mixin text-body($color: $txt-primary) {
-  font-size: $font-size-15;
-  font-weight: $font-weight-regular;
-  line-height: $line-height-base;
-  color: $color;
 }
 
 /// 보조 텍스트 — 부연 설명, 서브 텍스트
@@ -180,10 +127,51 @@
   color: $color;
 }
 
-/// 라벨 — 폼 라벨, 카테고리 이름, 네비게이션
-@mixin text-label($color: $txt-secondary) {
-  font-size: $font-size-13;
+// ══════════════════════════════════════════
+// TEXT — 강조 변형 (-emphasis / -small / -strong)
+// 컨벤션:
+//   -emphasis : 같은 사이즈에서 weight 강조 (regular→medium / medium→semibold)
+//   -small    : 같은 컨텍스트에서 한 단계 작은 사이즈
+//   -strong   : 가장 강한 강조 (작고 굵음)
+// 본 그룹은 ADR 0003 — design-system-v3 typography hierarchy 참조
+// ══════════════════════════════════════════
+
+/// 본문 강조 — 본문 기본 사이즈에서 weight 강조 (15 medium, body-default lh)
+@mixin text-body-emphasis($color: $txt-primary) {
+  font-size: $font-size-15;
   font-weight: $font-weight-medium;
-  line-height: $line-height-base;
+  line-height: $line-height-body-default;
+  color: $color;
+}
+
+/// 보조 본문 강조 — 보조 본문에서 weight 강조 (14 medium, body-default lh)
+@mixin text-sub-emphasis($color: $txt-secondary) {
+  font-size: $font-size-14;
+  font-weight: $font-weight-medium;
+  line-height: $line-height-body-default;
+  color: $color;
+}
+
+/// 라벨 강조 — 라벨에서 weight 강조 (13 semibold, body-ui lh)
+@mixin text-label-emphasis($color: $txt-secondary) {
+  font-size: $font-size-13;
+  font-weight: $font-weight-semibold;
+  line-height: $line-height-body-ui;
+  color: $color;
+}
+
+/// 작은 캡션 — 메타·미세 라벨 (12 medium, body-ui lh)
+@mixin text-caption-small($color: $txt-tertiary) {
+  font-size: $font-size-12;
+  font-weight: $font-weight-medium;
+  line-height: $line-height-body-ui;
+  color: $color;
+}
+
+/// 강조 캡션 — 뱃지·태그·미세 강조 (11 semibold, body-ui lh)
+@mixin text-caption-strong($color: $txt-tertiary) {
+  font-size: $font-size-11;
+  font-weight: $font-weight-semibold;
+  line-height: $line-height-body-ui;
   color: $color;
 }

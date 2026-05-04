@@ -27,8 +27,8 @@
 
 .tab_active {
   font-weight: $font-weight-semibold;
-  color: $gold;
-  border-bottom-color: $gold;
+  color: $gold-600;
+  border-bottom-color: $gold-600;
 }
 
 .tab_inactive {
@@ -95,28 +95,28 @@
 }
 
 .color_bar_news {
-  background: $gold;
+  background: $gold-600;
 }
 
 .color_bar_sharing {
-  background: $gold;
+  background: $gold-600;
 }
 
 .more_link {
   padding-bottom: $spacing-2;
   display: block;
   width: fit-content;
-  border-bottom: $spacing-1 solid rgba($gold, 0.2);
+  border-bottom: $spacing-1 solid rgba($gold-600, 0.2);
   font-size: $font-size-13;
   font-weight: $font-weight-medium;
-  color: rgba($gold, 0.8);
+  color: rgba($gold-600, 0.8);
   transition:
     color $transition-duration-normal $transition-easing-default,
     border-color $transition-duration-normal $transition-easing-default;
 
   &:hover {
-    color: $gold;
-    border-color: $gold;
+    color: $gold-600;
+    border-color: $gold-600;
   }
 }
 
@@ -141,7 +141,7 @@
   }
 
   &:hover {
-    background: $cream;
+    background: $cream-200;
   }
 
   @include respond-up($breakpoint-tablet) {
@@ -215,14 +215,14 @@
   border-radius: $radius-xxs;
   white-space: nowrap;
   color: $txt-secondary;
-  background: $cream;
+  background: $cream-200;
 }
 
 .badge_new {
   color: $white;
   font-size: 0.8rem;
   font-weight: $font-weight-bold;
-  background: $gold;
+  background: $gold-600;
   border-radius: $radius-xs;
   flex-shrink: 0;
   display: inline-flex;
@@ -251,7 +251,7 @@
     color $transition-duration-normal $transition-easing-default;
 
   &:hover {
-    background: $cream;
+    background: $cream-200;
     color: $txt-primary;
   }
 

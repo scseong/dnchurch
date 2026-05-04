@@ -32,5 +32,6 @@
 | --- | --- | --- | --- |
 | [0001](0001-codex-orchestration-strategy.md) | Codex 오케스트레이션 전략 채택 | Accepted | 2026-05-01 |
 | [0002](0002-node-first-harness-gate.md) | Node-first 하네스 자동화와 merge/release gate 채택 | Accepted | 2026-05-01 |
+| [0003](0003-design-system-v3-token-unification.md) | design-system-v3 token unification | Proposed | 2026-05-04 |
 
 <!-- last-audit: 2026-05-01 -->

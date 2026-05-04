@@ -6,10 +6,10 @@
   display: flex;
   flex-direction: column;
   gap: $content-gap-m;
-  padding: 0 0 $section-padding-80;
+  padding: 0 0 $section-gap-80;
 
   @include respond-up($breakpoint-tablet) {
-    padding-top: $section-padding-40;
+    padding-top: $section-gap-40;
   }
 
   @include respond-up($breakpoint-pc-sm) {
@@ -49,7 +49,7 @@
   font-family: $font-family-secondary;
   font-size: $font-size-22;
   font-weight: $font-weight-bold;
-  line-height: $line-height-heading;
+  line-height: $line-height-snug;
   color: $txt-primary;
 
   @include respond-up($breakpoint-pc-sm) {
@@ -98,7 +98,7 @@
 
 .summary_text {
   font-size: $font-size-14;
-  line-height: $line-height-wide;
+  line-height: $line-height-loose;
   color: $txt-secondary;
   white-space: pre-line;
 }
