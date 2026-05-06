@@ -1,6 +1,6 @@
 'use client';
 
-import { PropsWithChildren, useEffect, useRef, useState } from 'react';
+import { PropsWithChildren, useEffect, useRef } from 'react';
 import { createPortal } from 'react-dom';
 import clsx from 'clsx';
 import useScrollLock from '@/hooks/useScrollLock';
@@ -12,13 +12,8 @@ type Props = PropsWithChildren<{
 }>;
 
 export default function Modal({ children, onClose, isVisible }: Props) {
-  const [mounted, setMounted] = useState(false);
   const overlayRef = useRef<HTMLDivElement>(null);
   useScrollLock(isVisible);
-
-  useEffect(() => {
-    queueMicrotask(() => setMounted(true));
-  }, []);
 
   useEffect(() => {
     if (!isVisible) return;
@@ -35,7 +30,7 @@ export default function Modal({ children, onClose, isVisible }: Props) {
     }
   };
 
-  if (!mounted) return null;
+  if (typeof window === 'undefined') return null;
 
   return createPortal(
     <div

@@ -1,0 +1,24 @@
+@keyframes shimmer {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+.skeleton {
+  display: block;
+  background: linear-gradient(90deg, $bg-secondary 25%, $border-primary 50%, $bg-secondary 75%);
+  background-size: 400% 100%;
+  animation: shimmer 1.5s ease-in-out infinite;
+  border-radius: $radius-xs;
+}
+
+.text {
+  height: 1em;
+}
+
+.circle {
+  border-radius: $radius-circle;
+}

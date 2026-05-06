@@ -249,28 +249,6 @@
   }
 }
 
-.chip {
-  flex-shrink: 0;
-  padding: $spacing-8 $spacing-16;
-  font-size: $font-size-13;
-  font-weight: $font-weight-medium;
-  color: $txt-secondary;
-  background: $primary-subtle;
-  border: 1px solid transparent;
-  border-radius: $radius-circle;
-  cursor: pointer;
-  white-space: nowrap;
-  transition:
-    background-color 0.15s ease,
-    color 0.15s ease;
-}
-
-.chip_active {
-  color: $txt-inverse;
-  background: $primary;
-  border-color: $primary;
-}
-
 .chip_more {
   flex-shrink: 0;
   display: inline-flex;
@@ -361,33 +339,6 @@
   margin-bottom: $content-gap-m;
   list-style: none;
   padding: 0;
-}
-
-.filter_chip {
-  display: inline-flex;
-  align-items: center;
-  gap: $spacing-4;
-  padding: $padding-control;
-  font-size: $font-size-12;
-  font-weight: $font-weight-medium;
-  color: $primary;
-  background: $primary-subtle;
-  border-radius: $radius-circle;
-
-  button {
-    display: inline-flex;
-    padding: 0;
-    font-size: $font-size-14;
-    color: inherit;
-    background: transparent;
-    border: none;
-    cursor: pointer;
-    opacity: 0.7;
-
-    &:hover {
-      opacity: 1;
-    }
-  }
 }
 
 .clear_all {
@@ -498,20 +449,3 @@
 
 // ── States ──
 
-.loading {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  min-height: 16rem;
-  font-size: $font-size-14;
-  color: $txt-tertiary;
-}
-
-.empty {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  min-height: 24rem;
-  font-size: $font-size-16;
-  color: $txt-tertiary;
-}

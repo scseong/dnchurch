@@ -1,9 +1,9 @@
 'use client';
 
 import { useState } from 'react';
-import clsx from 'clsx';
 import { IoLibraryOutline } from 'react-icons/io5';
 import SeriesBrowserSheet from '../SeriesBrowserSheet/SeriesBrowserSheet';
+import { Pill } from '@/components/ui/Pill/Pill';
 import useSermonFilter from '@/hooks/useSermonFilter';
 import type { SeriesWithSermonCount } from '@/types/sermon';
 import styles from './SermonListPage.module.scss';
@@ -27,23 +27,21 @@ export default function SermonSeriesChips({ allSeries, totalCount, standaloneCou
       <nav aria-label="시리즈 바로가기" className={styles.chips}>
         <ul role="list" className={styles.chip_list}>
           <li>
-            <button
-              type="button"
-              className={clsx(styles.chip, !activeSeries && styles.chip_active)}
+            <Pill
+              active={!activeSeries}
               onClick={() => setFilter({ series: null, preacher: null, q: null, year: null })}
             >
               전체
-            </button>
+            </Pill>
           </li>
           {topSeries.map((series) => (
             <li key={series.id}>
-              <button
-                type="button"
-                className={clsx(styles.chip, activeSeries === series.slug && styles.chip_active)}
+              <Pill
+                active={activeSeries === series.slug}
                 onClick={() => setFilter({ series: series.slug })}
               >
                 {series.title}
-              </button>
+              </Pill>
             </li>
           ))}
           <li>

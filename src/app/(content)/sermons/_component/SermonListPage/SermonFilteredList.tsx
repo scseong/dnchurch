@@ -1,4 +1,5 @@
 import GridCard from '../GridCard/GridCard';
+import { EmptyState } from '@/components/ui/EmptyState/EmptyState';
 import type { SermonWithRelations } from '@/types/sermon';
 import styles from './SermonListPage.module.scss';
 
@@ -9,9 +10,10 @@ type Props = {
 export default function SermonFilteredList({ sermons }: Props) {
   if (sermons.length === 0) {
     return (
-      <p className={styles.empty} role="status">
-        검색 결과가 없습니다
-      </p>
+      <EmptyState
+        title="검색 결과가 없습니다"
+        description="다른 검색어나 필터를 사용해 보세요"
+      />
     );
   }
 
