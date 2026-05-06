@@ -13,7 +13,11 @@ jobs:
       - uses: actions/github-script@v7
         with:
           script: |
-            const pr = context.payload.pull_request;
+            const { data: pr } = await github.rest.pulls.get({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              pull_number: context.payload.pull_request.number,
+            });
             const missing = [];
             if (!pr.assignees.length) missing.push('Assignee');
             if (!pr.labels.length) missing.push('Label');
