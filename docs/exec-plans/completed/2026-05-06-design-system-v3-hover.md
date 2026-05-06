@@ -1,7 +1,8 @@
 # design-system-v3-hover
 
-- **상태**: 🟡 진행 중
+- **상태**: ✅ 완료 (로컬 커밋 a7357f2, 미머지 — 멀티 Phase 통합 PR 예정)
 - **시작일**: 2026-05-06
+- **완료일**: 2026-05-06
 - **브랜치**: feat/design-system-v3
 
 ## 목표
@@ -147,8 +148,25 @@ mixin 시그니처는 연구 v2의 형태를 그대로 차용 — 이미 디자�
 - [ ] **멀티 세션 리뷰** (권장): 같은 세션의 구현자는 무의식적 바이어스가 생긴다.
       별도 Claude 세션 또는 `codex:rescue`로 객관적 검토를 요청해 시선을 분리한다.
 
-## 회고 (머지 후 작성, completed/로 이동 시)
+## 회고 (2026-05-06 작성)
 
 - 잘된 것:
-- 다음에 할 것:
+  - **YAGNI 적용** — Codex가 `hover-outline-dark`를 consumer 0건 + 3원칙 충돌 위험으로 지적 → 수용. 실제 다크 outline 버튼 consumer가 발견될 Phase 3에서 예외 정책과 함께 도입하는 게 안전.
+  - **Foundation-only scope 유지** — 60+ 컴포넌트 hover 위반은 Phase 3로 분리. 본 PR은 mixin 정의 + 가이드 회수만, 빌드/lint 영향 최소화.
+  - **3원칙을 mixin이 강제** — `hover-bg-shift`/`-color-shift`는 단일 속성 transition + 단일 속성 hover. 컴포넌트가 mixin을 채택하기만 하면 3원칙이 자동으로 보장됨.
+  - **SKILL.md SSOT 회수** — Hover 3원칙 + 패턴 표 + 사용 예시 + Transition caveat을 같은 자리에 배치. Phase 3 작업자가 어디를 봐야 할지 명확.
+  - **Codex FIX_APPLIED 직접 활용** — markdown 정확도 fix(Featured shadow → 토큰화, Card 주석 명확화) 2건을 Codex가 직접 수정하고 Claude는 교차 확인만. 검토 비용 절감.
+
+- 다음에 할 것 (Phase 3):
+  - `node scripts/start-task.mjs design-system-v3-components` — 컴포넌트별 hover 위반 정리 + mixin 채택.
+  - `_effect.scss` `$transition-base/spring/enter` shorthand의 `all` 정합화 — SchoolGrid 1건과 함께 동시 처리(전체 영향 1 컨슈머 + 모든 신규 컴포넌트 권고 변경).
+  - 코드베이스에 산재한 `hover에 $primary-active 직접 사용` 패턴(예: Pagination, ConfirmModal) 정합화 — `$primary-hover` 사용으로 통일하여 다크 navy lift affordance 구조에 맞춤.
+  - 다크 outline 버튼 consumer 발견 시 `hover-outline-dark` mixin 도입 — 3원칙 #3의 명시적 예외 정책과 함께 SKILL.md에 반영.
+  - 하버 60+ 위반 일괄 정리: `:hover` 안의 `border*` 명시 제거, `background:` shorthand → `background-color:` 또는 mixin 채택.
+
 - 발견된 부채 (→ tech-debt-tracker.md 옮길 것):
+  - **컴포넌트별 hover 위반 60+ 건** — Phase 3가 next step이라 별도 트래커 등록 불필요.
+  - **`_effect.scss` shorthand 토큰의 `all`** — Phase 3 범위. 이미 SKILL.md Transition 토큰 섹션에 caveat 추가.
+  - **`hover-outline-dark` 부재** — 다크 outline 버튼 consumer 발생 시 도입 필요. Phase 3에서 트리거.
+  - **`hover-lift`의 transform=spring + box-shadow=default 분리 easing** — 시각 검증 시 의도와 다른 느낌이면 단일 easing으로 통합 검토. 우선 의도된 디자인 결정으로 진행.
+
