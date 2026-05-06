@@ -47,7 +47,7 @@
 
   &:hover {
     color: $txt-primary;
-    background: $primary-subtle;
+    background-color: $primary-subtle;
   }
 }
 
@@ -95,7 +95,7 @@
     background-color 0.15s ease;
 
   &:hover {
-    background: $primary-subtle;
+    background-color: $primary-subtle;
   }
 }
 
@@ -104,6 +104,6 @@
   background: $primary;
 
   &:hover {
-    background: $primary-hover;
+    background-color: $primary-hover;
   }
 }

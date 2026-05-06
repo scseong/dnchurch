@@ -130,7 +130,7 @@
   transition: background-color 0.12s ease;
 
   &:hover {
-    background: $bg-secondary;
+    background-color: $bg-secondary;
   }
 
   &:focus-visible {
@@ -242,7 +242,7 @@
   transition: background-color 0.12s ease;
 
   &:hover:not(.disabled) {
-    background: $bg-secondary;
+    background-color: $bg-secondary;
   }
 
   &:first-child {

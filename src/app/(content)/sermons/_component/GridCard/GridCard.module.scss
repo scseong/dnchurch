@@ -9,12 +9,10 @@
   animation: fadeUp $animation-duration-reveal $transition-easing-default forwards;
   transition:
     transform 0.25s $transition-easing-default,
-    border-color 0.2s ease,
     box-shadow 0.2s ease;
 
   &:hover {
     transform: translateY(-0.2rem);
-    border-color: $primary;
     box-shadow: $shadow-md;
 
     .thumb img,

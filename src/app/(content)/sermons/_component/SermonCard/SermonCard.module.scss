@@ -5,9 +5,7 @@
   border: 1px solid $border-primary;
   border-radius: $radius-l;
   overflow: hidden;
-  transition:
-    border-color 0.2s ease,
-    box-shadow 0.2s ease;
+  transition: box-shadow 0.2s ease;
 
   @include respond-up($breakpoint-pc-sm) {
     flex-direction: row;
@@ -15,7 +13,6 @@
     border-radius: $radius-s;
 
     &:hover {
-      border-color: $primary;
       box-shadow: $shadow-md;
 
       .thumb img,

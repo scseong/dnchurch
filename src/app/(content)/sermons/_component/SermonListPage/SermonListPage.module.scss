@@ -94,7 +94,7 @@
     color 0.15s ease;
 
   &:hover {
-    background: $primary-subtle;
+    background-color: $primary-subtle;
   }
 }
 
@@ -219,9 +219,7 @@
   cursor: pointer;
   white-space: nowrap;
   flex-shrink: 0;
-  transition:
-    color 0.15s ease,
-    border-color 0.15s ease;
+  transition: color 0.15s ease;
 
   svg {
     font-size: $font-size-18;
@@ -233,7 +231,6 @@
 
   &:hover {
     color: $txt-primary;
-    border-color: $primary;
   }
 
   @include respond-up($breakpoint-pc-sm) {
@@ -492,14 +489,9 @@
   border: 1px solid transparent;
   border-radius: $radius-m;
   text-decoration: none;
-  transition:
-    background-color 0.15s ease,
-    border-color 0.15s ease,
-    transform 0.15s ease;
+  transition: transform 0.15s ease;
 
   &:hover {
-    background: $primary-subtle;
-    border-color: $primary;
     transform: translateY(-2px);
   }
 }
