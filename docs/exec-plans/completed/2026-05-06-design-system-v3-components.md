@@ -1,7 +1,8 @@
 # design-system-v3-components
 
-- **상태**: 🟡 진행 중
+- **상태**: ✅ 완료 (로컬 커밋 9ca9507, 미머지 — 멀티 Phase 통합 PR 예정)
 - **시작일**: 2026-05-06
+- **완료일**: 2026-05-06
 - **브랜치**: feat/design-system-v3
 
 ## 목표
@@ -127,8 +128,25 @@ rg -nU --multiline ':hover\s*\{[^}]*?(border|background:\s*(\$|rgba))' src --glo
 - [ ] 셀프 리뷰
 - [ ] 멀티 세션 리뷰(권장) — `codex:rescue`로 시선 분리
 
-## 회고 (머지 후 작성, completed/로 이동 시)
+## 회고 (2026-05-06 작성)
 
 - 잘된 것:
-- 다음에 할 것:
+  - **외과적 변경 일관성** — 15 파일 전부 hover 정리만 변경, unrelated cleanup 0건 (Codex 1차 PASS).
+  - **Affordance 보존** — SermonCard/GridCard nested image scale·play btn opacity, QuickAccess `.arrow` translate 모두 유지.
+  - **Pagination 의미 정정** — Phase 1 hover direction(navy primary lighter on hover)을 가장 명백하게 위반하던 패턴을 hover/active 분리로 깔끔하게 수정.
+  - **Deferred 카테고리 명확화** — 작업 중 발견된 underline link 패턴(5건)과 rgba shorthand(1건)를 임시 처리하지 않고 Non-goals에 명시 → 후속 PR로 분리.
+  - **Codex 2-pass 효과** — CHANGE_REQUEST 5건(admin 기준 단일화/non-goal 보강/affordance 보존/grep 보강/active 처리) 즉시 반영, 1차 검증은 PASS 일발 통과.
+
+- 다음에 할 것 (Phase 4 이후 후보):
+  - **Underline link 처리** — `hover-underline-shift` mixin 또는 `text-decoration-color` 전환 정책 결정 후 5 파일 일괄 정리. 예: RecentSermons `.header_link`, NewHere `.cta_link`/`.faq_link`, FeedContent `.more_link`, AboutOurChurch `.about_link`.
+  - **Admin scope hover 정리** — `--admin-*` 토큰 정책 확인 후 admin 5 파일 (dropdown, table, ConfirmModal, SermonForm, PageHeader) 검토.
+  - **Phase 4 — 페이지/인라인 hex 정리** — `notice.ts` 카테고리 뱃지(의도) vs `app/(content)/about/page.module.scss` `#fde5cf` 등 일반 영역 정리.
+  - **`_effect.scss` shorthand `all`** — SchoolGrid 1건 정합화와 함께 Phase 4 또는 별도 PR.
+  - **UX 강화 검토 (Codex non-blocking 코멘트)** — Banner.btn_secondary 시각 강도 / SermonListPage.year_card affordance.
+
 - 발견된 부채 (→ tech-debt-tracker.md 옮길 것):
+  - **Underline link 5 파일** — Phase 4 또는 별도 PR.
+  - **rgba shorthand 1건** (SermonListPage `.series_banner_close`) — Phase 4 검토.
+  - **Banner.btn_secondary 시각 강도** — base border 승격 가능성 검토.
+  - **SermonListPage.year_card affordance** — selected/hover 디자인 강화 여부 검토.
+
