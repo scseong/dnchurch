@@ -1,0 +1,96 @@
+.tabs {
+  display: flex;
+}
+
+.scrollable {
+  overflow-x: auto;
+  scrollbar-width: none;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+// ── Underline variant ──
+
+.underline {
+  border-bottom: 1px solid $border-primary;
+  gap: $spacing-4;
+
+  .tab {
+    position: relative;
+    padding: $spacing-12 $spacing-16;
+    font-size: $font-size-14;
+    font-weight: $font-weight-medium;
+    color: $txt-tertiary;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: color 0.15s ease;
+
+    &::after {
+      content: '';
+      position: absolute;
+      bottom: -1px;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background-color: transparent;
+      border-radius: 1px 1px 0 0;
+      transition: background-color 0.2s $transition-easing-default;
+    }
+
+    &:hover {
+      color: $txt-secondary;
+    }
+
+    &.active {
+      color: $primary;
+      font-weight: $font-weight-semibold;
+
+      &::after {
+        background-color: $primary;
+      }
+    }
+  }
+}
+
+// ── Pill variant ──
+
+.pill {
+  gap: $spacing-4;
+
+  .tab {
+    padding: $spacing-8 $spacing-12;
+    font-size: $font-size-13;
+    font-weight: $font-weight-semibold;
+    color: $txt-secondary;
+    background: transparent;
+    border: none;
+    border-radius: $radius-circle;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: background-color 0.15s ease, color 0.15s ease;
+
+    &:hover:not(.active) {
+      background-color: $bg-hover;
+    }
+
+    &.active {
+      color: $txt-inverse;
+      background-color: $primary;
+    }
+  }
+}
+
+// ── Count badge ──
+
+.count {
+  margin-left: $spacing-4;
+  font-size: $font-size-11;
+  font-weight: $font-weight-medium;
+  color: inherit;
+  opacity: 0.7;
+  font-variant-numeric: tabular-nums;
+}
