@@ -1,7 +1,8 @@
 # design-system-v3-tokens
 
-- **상태**: 🟡 진행 중
+- **상태**: ✅ 완료 (로컬 커밋 e217674, 미머지 — 멀티 Phase 통합 PR 예정)
 - **시작일**: 2026-05-06
+- **완료일**: 2026-05-06
 - **브랜치**: feat/design-system-v3
 
 ## 목표
@@ -184,8 +185,26 @@ yarn dev
 - [ ] **멀티 세션 리뷰** (권장): 같은 세션의 구현자는 무의식적 바이어스가 생긴다.
       별도 Claude 세션 또는 `codex:rescue`로 객관적 검토를 요청해 시선을 분리한다.
 
-## 회고 (머지 후 작성, completed/로 이동 시)
+## 회고 (2026-05-06 작성)
 
 - 잘된 것:
-- 다음에 할 것:
+  - **외과적 변경 준수** — 단일 파일(`_color.scss`)에 12줄 변경 + SKILL.md 동기화 4줄. 인접 정리·드리프트 0건.
+  - **Phase 0 사전 인벤토리 효과** — grep 6종으로 사전에 navy-blue 외부 직접 참조 0건을 확인하여, 컴포넌트 코드 수정 없이 시맨틱 레이어만 변경하는 안전한 경로 확인.
+  - **Codex 2-pass 검증의 가치** — 1차 PASS 후 사용자 피드백("cream 도드라짐")을 반영한 scope 변경에 대해 2차 검증을 거쳐 hover 방향성 모호성을 발견. 의도(다크 면 lift affordance)를 SKILL.md에 명시함으로써 후속 컴포넌트 작업의 혼동 방지.
+  - **사용자 메모리 정합** — 토큰 단순화 선호(`feedback_design_tokens.md`)에 따라 베이지 5레벨 일괄 도입을 보류하고 단일 `$beige-200`만 도입. 필요 시 확장 방침을 주석에 명시.
+  - **하네스 게이트 효과** — verify-task 로그 stale 감지가 두 차례 작동하여 `완료 직전 추가 편집`을 빠뜨리지 않도록 강제. 마크다운 변경에도 일관성 보장.
+
+- 다음에 할 것 (Phase 2):
+  - `node scripts/start-task.mjs design-system-v3-hover` — Hover 3원칙 정립.
+  - `_mixins.scss`에 `hover-bg-shift / hover-color-shift / hover-lift / hover-outline-dark` 4 mixin 추가.
+  - `_effect.scss`의 `$transition-base/spring/enter`가 `all` shorthand인 이슈 정합화 — 명시 속성 transition 토큰으로 분리하거나 경고 추가.
+  - 하버 위반 60+ 건 일괄 정리 (Phase 0 grep으로 식별됨): `:hover` 안의 `border*` 명시, `background:` shorthand, `transition: all` 흔적.
+  - 코드베이스에 산재한 `hover에 $primary-active 직접 사용` 패턴(예: `Pagination.module.scss`)을 `$primary-hover`로 정합 — 다크 navy의 lift affordance 구조에 맞춤.
+
 - 발견된 부채 (→ tech-debt-tracker.md 옮길 것):
+  - **하버 3원칙 위반 60+ 건** — `:hover` 안의 `border*`/`background:` shorthand. Phase 2에서 일괄 정리 예정. (이미 Phase 2가 next step이라 별도 트래커 등록 불필요)
+  - **`_effect.scss`의 transition shorthand 토큰** — `$transition-base/spring/enter`가 `all`을 포함. Phase 2 범위.
+  - **navy-blue Primitive 4종 정의 자체 잔존** — 본 PR에서는 deprecated 마킹만. 사용처 0건 확정 후속 PR(예: Phase 5 또는 별도)에서 정의 삭제.
+  - **인라인 hex 30+건** — `notice.ts`(카테고리 뱃지) 9건은 의도, admin scope 17건도 의도, 일반 영역 ~10건은 Phase 4(페이지 마이그레이션)에서 정리.
+  - **컴포넌트 일부의 `$primary-active` hover 직접 사용** — 새 mapping에서 darker hover 의도 컴포넌트는 `$primary-hover` 사용으로 통일. Phase 2/3에서 정합화.
+
