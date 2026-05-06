@@ -45,32 +45,6 @@
   overflow-y: auto;
 }
 
-.option {
-  padding: 1.5rem 2rem;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  width: 100%;
-  font-size: $font-size-14;
-  color: $txt-primary;
-  cursor: pointer;
-  transition: background-color 0.12s ease;
-
-  &:hover {
-    background-color: $bg-secondary;
-  }
-
-  &.selected {
-    font-weight: $font-weight-semibold;
-  }
-
-  &:focus-visible {
-    outline: 2px solid $primary-active;
-    outline-offset: -2px;
-  }
-}
-
 .check {
   font-size: $font-size-16;
-  color: $primary;
 }

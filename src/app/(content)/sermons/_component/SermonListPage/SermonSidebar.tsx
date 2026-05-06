@@ -1,5 +1,5 @@
-import Link from 'next/link';
 import clsx from 'clsx';
+import { ListItem } from '@/components/ui/ListItem/ListItem';
 import { buildSermonHref, getSeriesByYearEntries } from '@/utils/sermon';
 import type { SearchParams } from '@/utils/search-params';
 import type { SeriesWithSermonCount } from '@/types/sermon';
@@ -66,15 +66,15 @@ function SidebarItem(props: { href: string; active: boolean; label: string; coun
   const { href, active, label, count } = props;
 
   return (
-    <Link
+    <ListItem
       href={href}
-      aria-current={active ? 'page' : undefined}
-      className={clsx(styles.sidebar_item, active && styles.sidebar_item_active)}
+      selected={active}
       scroll={false}
+      className={clsx(styles.sidebar_item, active && styles.sidebar_item_active)}
+      trailing={<span className={styles.sidebar_badge}>{count}</span>}
     >
-      <span className={styles.sidebar_item_title}>{label}</span>
-      <span className={styles.sidebar_badge}>{count}</span>
-    </Link>
+      {label}
+    </ListItem>
   );
 }
 

@@ -32,7 +32,7 @@
     outline 0.2s ease;
 
   &:hover:not(.current):not(.disabled) {
-    background-color: $primary-subtle;
+    background-color: $bg-hover;
   }
 
   &:focus {

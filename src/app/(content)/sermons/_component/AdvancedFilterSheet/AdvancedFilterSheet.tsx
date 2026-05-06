@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react';
 import clsx from 'clsx';
 import BottomSheet from '@/components/common/BottomSheet/BottomSheet';
+import { Button } from '@/components/ui/Button/Button';
 import type { Preacher } from '@/types/sermon';
 import styles from './AdvancedFilterSheet.module.scss';
 
@@ -64,12 +65,12 @@ export default function AdvancedFilterSheet({
       </section>
 
       <div className={styles.footer}>
-        <button type="button" className={styles.btn_reset} onClick={handleReset}>
+        <Button variant="secondary" size="md" fullWidth onClick={handleReset}>
           초기화
-        </button>
-        <button type="button" className={styles.btn_apply} onClick={handleApply}>
+        </Button>
+        <Button variant="primary" size="md" fullWidth onClick={handleApply}>
           적용
-        </button>
+        </Button>
       </div>
     </BottomSheet>
   );

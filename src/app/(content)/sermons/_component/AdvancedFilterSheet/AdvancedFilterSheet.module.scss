@@ -52,36 +52,3 @@
   padding-top: $spacing-16;
   border-top: 1px solid $border-primary;
 }
-
-.btn_reset,
-.btn_apply {
-  flex: 1;
-  padding: $spacing-12 $spacing-16;
-  font-size: $font-size-14;
-  font-weight: $font-weight-semibold;
-  border-radius: $radius-s;
-  cursor: pointer;
-  transition:
-    background-color 0.15s ease,
-    color 0.15s ease;
-}
-
-.btn_reset {
-  color: $txt-secondary;
-  background: $primary-subtle;
-  border: 1px solid $border-primary;
-
-  &:hover {
-    color: $primary;
-  }
-}
-
-.btn_apply {
-  color: $txt-inverse;
-  background: $primary;
-  border: 1px solid $primary;
-
-  &:hover {
-    background-color: $primary-hover;
-  }
-}

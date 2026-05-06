@@ -31,7 +31,7 @@
   width: 100%;
   aspect-ratio: 16 / 9;
   overflow: hidden;
-  background: $bg-tertiary;
+  background: $bg-secondary;
 
   img,
   .thumb_placeholder {
@@ -43,7 +43,7 @@
 
   .thumb_placeholder {
     display: block;
-    background: linear-gradient(135deg, $primary-subtle, $bg-tertiary);
+    background: linear-gradient(135deg, $cream-200, $cream-300);
   }
 }
 

@@ -74,44 +74,16 @@
 }
 
 .sidebar_item {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: $spacing-8;
-  width: 100%;
   padding: $spacing-8 $spacing-12;
-  font-size: $font-size-14;
-  font-weight: $font-weight-medium;
   color: $txt-secondary;
-  background: transparent;
-  border: none;
   border-radius: $radius-xs;
-  text-align: left;
-  text-decoration: none;
-  cursor: pointer;
-  transition:
-    background-color 0.15s ease,
-    color 0.15s ease;
-
-  &:hover {
-    background-color: $primary-subtle;
-  }
 }
 
 .sidebar_item_active {
-  color: $primary;
-  background: $primary-subtle;
-
   .sidebar_badge {
     color: $txt-inverse;
     background: $primary;
   }
-}
-
-.sidebar_item_title {
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
 }
 
 .sidebar_badge {

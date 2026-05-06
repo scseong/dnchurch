@@ -78,10 +78,12 @@ $txt-dark-muted:   rgba(255, 255, 255, 0.6); // 다크 배경 보조 텍스트/�
 $txt-dark-faint:   rgba(255, 255, 255, 0.4); // 다크 배경 약한 텍스트 (카피라이트 등)
 
 // ── Background ──
+// v4: warm(decorative) vs cool(interactive) 역할 분리.
+// 정적 면(섹션·카드 bg) = warm. 인터랙션 피드백(hover/active) = cool.
 
 $bg-primary:        $gray-50;                  // 페이지 전체 기본 배경
-$bg-secondary:      $cream-200;                // 섹션·카드 1순위 배경 ★
-$bg-tertiary:       $cream-300;                // hover 피드백, 강조 배경
+$bg-secondary:      $cream-200;                // 섹션·카드 정적 면 (decorative warm) ★
+$bg-hover:          rgba($navy-800, 0.06);     // 인터랙티브 hover 피드백 (cool, 면 종류 무관) — v4
 $bg-accent-subtle:  rgba(196, 146, 74, 0.12);  // CTA 섹션·환영 배너 (Gold 12% tint)
 $bg-dark:           #0f1820;                   // 다크 섹션 (페이지당 최대 1회)
 $bg-dark-card:      #1a2535;                   // 다크 섹션 내 카드
@@ -100,10 +102,10 @@ $border-dark-faint:  rgba(255, 255, 255, 0.1); // 다크 구분선
 
 // ── Primary Action ──
 
-$primary:        $navy-800;  // 기본 (링크, CTA, 선택된 탭) — v3: navy 재매핑
-$primary-hover:  $navy-600;  // 호버 — v3: navy 재매핑
-$primary-active: $navy-950;  // 클릭/활성 — v3: navy 재매핑
-$primary-subtle: $beige-200; // 연한 배경 — v3: 중성 베이지 (cream 노란기 회피)
+$primary:        $navy-800;                 // 기본 (링크, CTA, 선택된 탭)
+$primary-hover:  $navy-600;                 // 호버
+$primary-active: $navy-950;                 // 클릭/활성
+$primary-subtle: rgba($navy-800, 0.08);     // active/selected 항목의 cool 강조 면 — v4: warm beige → cool navy tint
 
 // ── Accent (Gold) ──
 

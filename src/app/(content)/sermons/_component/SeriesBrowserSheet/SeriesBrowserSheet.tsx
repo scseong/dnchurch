@@ -1,9 +1,9 @@
 'use client';
 
 import { useEffect, useMemo, useState } from 'react';
-import clsx from 'clsx';
 import { IoClose, IoSearch } from 'react-icons/io5';
 import BottomSheet from '@/components/common/BottomSheet/BottomSheet';
+import { ListItem } from '@/components/ui/ListItem/ListItem';
 import { getSeriesByYearEntries } from '@/utils/sermon';
 import type { SeriesWithSermonCount } from '@/types/sermon';
 import styles from './SeriesBrowserSheet.module.scss';
@@ -79,30 +79,30 @@ export default function SeriesBrowserSheet({
 
       <ul className={styles.list}>
         <li>
-          <button
-            type="button"
-            className={clsx(styles.item, activeSeries === null && styles.active)}
+          <ListItem
+            selected={activeSeries === null}
             onClick={() => handleSelect(null)}
+            className={styles.item}
+            trailing={<span className={styles.badge}>{totalCount}편</span>}
           >
-            <div className={styles.item_main}>
+            <span className={styles.item_main}>
               <span className={styles.item_title}>전체 보기</span>
               <span className={styles.item_desc}>모든 설교를 표시합니다</span>
-            </div>
-            <span className={styles.badge}>{totalCount}편</span>
-          </button>
+            </span>
+          </ListItem>
         </li>
         <li>
-          <button
-            type="button"
-            className={clsx(styles.item, activeSeries === 'none' && styles.active)}
+          <ListItem
+            selected={activeSeries === 'none'}
             onClick={() => handleSelect('none')}
+            className={styles.item}
+            trailing={<span className={styles.badge}>{standaloneCount}편</span>}
           >
-            <div className={styles.item_main}>
+            <span className={styles.item_main}>
               <span className={styles.item_title}>단독 설교</span>
               <span className={styles.item_desc}>시리즈에 속하지 않은 설교</span>
-            </div>
-            <span className={styles.badge}>{standaloneCount}편</span>
-          </button>
+            </span>
+          </ListItem>
         </li>
       </ul>
 
@@ -114,19 +114,19 @@ export default function SeriesBrowserSheet({
           <ul className={styles.list}>
             {items.map((item) => (
               <li key={item.slug}>
-                <button
-                  type="button"
-                  className={clsx(styles.item, activeSeries === item.slug && styles.active)}
+                <ListItem
+                  selected={activeSeries === item.slug}
                   onClick={() => handleSelect(item.slug)}
+                  className={styles.item}
+                  trailing={<span className={styles.badge}>{item.sermon_count}편</span>}
                 >
-                  <div className={styles.item_main}>
+                  <span className={styles.item_main}>
                     <span className={styles.item_title}>{item.title}</span>
                     {item.description && (
                       <span className={styles.item_desc}>{item.description}</span>
                     )}
-                  </div>
-                  <span className={styles.badge}>{item.sermon_count}편</span>
-                </button>
+                  </span>
+                </ListItem>
               </li>
             ))}
           </ul>

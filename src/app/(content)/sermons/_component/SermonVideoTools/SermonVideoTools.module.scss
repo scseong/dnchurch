@@ -47,7 +47,7 @@
 
   &:hover {
     color: $txt-primary;
-    background-color: $primary-subtle;
+    background-color: $bg-hover;
   }
 }
 
@@ -80,30 +80,8 @@
 }
 
 .speed_option {
-  width: 100%;
   padding: $spacing-8 $spacing-12;
   font-size: $font-size-13;
-  font-weight: $font-weight-medium;
-  color: $txt-secondary;
-  background: transparent;
-  border: none;
-  border-radius: $radius-xs;
+  justify-content: center;
   text-align: center;
-  cursor: pointer;
-  transition:
-    color 0.15s ease,
-    background-color 0.15s ease;
-
-  &:hover {
-    background-color: $primary-subtle;
-  }
-}
-
-.speed_option_active {
-  color: $txt-inverse;
-  background: $primary;
-
-  &:hover {
-    background-color: $primary-hover;
-  }
 }

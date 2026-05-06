@@ -373,7 +373,7 @@ $indicator-height: 0.2rem;
     color $transition-duration-normal $transition-easing-default;
 
   &:hover {
-    background-color: $bg-secondary;
+    background-color: $bg-hover;
     color: $primary;
   }
 }

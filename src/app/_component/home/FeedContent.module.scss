@@ -141,7 +141,7 @@
   }
 
   &:hover {
-    background-color: $cream-200;
+    background-color: $bg-hover;
   }
 
   @include respond-up($breakpoint-tablet) {
@@ -251,7 +251,7 @@
     color $transition-duration-normal $transition-easing-default;
 
   &:hover {
-    background-color: $cream-200;
+    background-color: $bg-hover;
     color: $txt-primary;
   }
 

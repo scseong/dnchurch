@@ -47,14 +47,26 @@ description: SCSS 파일 생성/수정, 스타일 작성, 디자인 토큰 사�
 
 ## 컬러 토큰 체계
 
+### Warm vs Cool 역할 분리 (v4 — 가장 먼저 읽기)
+
+색상은 **온도(warm/cool)** 와 **역할(decorative/interactive)** 두 축으로 나뉜다. 두 축이 어긋나면 navy ↔ beige가 무작위 인접해 시각이 부서진다.
+
+| 역할 | 온도 | 용도 | 토큰 |
+|---|---|---|---|
+| **Decorative surface** | warm | 페이지·섹션·카드 정적 면 | `$bg-secondary` (cream), `$bg-accent-subtle` (gold tint) |
+| **Interactive feedback** | cool | hover/active/selected | `$bg-hover` (navy 6% rgba), `$primary-subtle` (navy 8% rgba), `$primary` |
+| **Brand action** | cool | CTA·링크·focus | `$primary`, `$primary-hover`, `$primary-active` |
+| **Accent action** | warm | Featured/eyebrow/Gold CTA | `$accent`, `$accent-hover`, `$accent-subtle` |
+
+**규칙**: hover/active 안에서 warm primitive(`$beige-*` `$cream-*`)나 warm semantic(`$bg-secondary`)을 직접 면 색으로 쓰지 않는다. 인터랙션 신호는 cool tint로만 표현한다(예외: 정적 warm 카드 위에서 또 다른 warm 카드로 강조하는 디자인 명시 케이스).
+
 ### Primitive (순수 색상값 — 직접 사용 금지, Semantic 토큰을 통해서만 참조)
 
 - **Gray**: `$gray-900` `$gray-700` `$gray-500` `$gray-400` `$gray-300` `$gray-200` `$gray-100` `$gray-50` `$black` `$white`
-- **Navy (Brand · Primary Action)**: `$navy-950` `$navy-800` `$navy-600`
+- **Navy (Brand · Primary Action · Interactive cool)**: `$navy-950` `$navy-800` `$navy-600`
 - **Navy-Blue** _@deprecated_: `$navy-blue-900` `$navy-blue-800` `$navy-blue-700` `$navy-blue-100` (사용 금지 — Primary Action은 Navy 계열)
 - **Gold (Accent)**: `$gold-600` `$gold-400` `$gold-100`
-- **Cream (Warm Surface)**: `$cream-200` `$cream-300`
-- **Beige (Neutral Surface)**: `$beige-200`
+- **Cream / Beige (Warm Decorative Surface)**: `$cream-200` `$cream-300` `$beige-200` — 정적 면 전용. 인터랙션 토큰에 직접 매핑하지 않는다.
 - **Status**: `$green-500` `$green-100` `$red-500` `$red-100` `$orange-600` `$orange-100`
 
 ### Semantic (역할 기반 — 컴포넌트에서 직접 사용)
@@ -64,17 +76,22 @@ description: SCSS 파일 생성/수정, 스타일 작성, 디자인 토큰 사�
 `$txt-image-subtle` (이미지 위 보조) `$txt-dark-muted` (다크배경 보조) `$txt-dark-faint` (다크배경 약한)
 
 **Background**
-`$bg-primary`(gray-50) `$bg-secondary`(cream-200) `$bg-tertiary`(cream-300) `$bg-accent-subtle`(gold 12% tint)
-`$bg-dark` `$bg-dark-card` `$bg-dark-nav`(헤더·푸터)
+- 정적 warm: `$bg-primary`(gray-50) `$bg-secondary`(cream-200) `$bg-accent-subtle`(gold 12% tint)
+- 인터랙티브 cool: `$bg-hover`(navy 6% rgba) — 면 종류 무관, hover/active 피드백 전용 ★
+- 다크: `$bg-dark` `$bg-dark-card` `$bg-dark-nav`(헤더·푸터)
+
+> v4: `$bg-tertiary`(cream-300) **삭제**. hover 피드백은 `$bg-hover`로, 정적 deeper-warm 면은 `$bg-secondary` 재사용 또는 명시적 cream primitive로 한정.
 
 **Border**
 `$border-primary` `$border-subtle` `$border-strong` `$border-focus` `$border-warm`(cream·gold 배경 위)
 `$border-inverse` `$border-dark-subtle` `$border-dark-faint`
 
-**Primary Action (Navy)**
-`$primary`(navy-800) `$primary-hover`(navy-600 — _lighter_) `$primary-active`(navy-950 — _darker_) `$primary-subtle`(beige-200)
+**Primary Action (Navy · Cool)**
+`$primary`(navy-800) `$primary-hover`(navy-600 — _lighter_) `$primary-active`(navy-950 — _darker_) `$primary-subtle`(navy 8% rgba — active/selected 면)
 
-> **Hover 방향 의도**: 다크 navy primary는 hover에서 **밝아진다**(lift affordance). 클릭 시 active로 한 단계 어두워진다. 이는 다크 면 위 가독성 제공이 목적이며, 일반 light surface의 "darken on hover" 관행과 다르므로 컴포넌트 작성 시 `$primary-hover` 와 `$primary-active` 의 명도 방향을 혼동하지 않는다.
+> **Hover 방향 의도**: 다크 navy primary는 hover에서 **밝아진다**(lift affordance). 클릭 시 active로 한 단계 어두워진다.
+>
+> **`$primary-subtle` v4**: warm beige가 아닌 **cool navy tint(rgba 8%)**. 칩의 `.active`, 선택 패널 등에서 `$primary` 텍스트/보더와 같은 온도로 짝을 이룬다. warm 면 위·cool 면 위 모두에서 자연스러운 강조를 만든다.
 
 **Accent (Gold)**
 `$accent` `$accent-hover` `$accent-subtle`
@@ -133,7 +150,8 @@ Hover 패턴은 **3원칙**을 예외 없이 따른다 — 다른 곳에서 `tra
 | 컴포넌트 | hover 의도 | 사용 |
 |---|---|---|
 | Primary 버튼 (light/dark surface 모두) | bg navy-800 → navy-600 (lighter) | `@include hover-bg-shift($primary-hover);` + `&:active { background-color: $primary-active; }` |
-| Secondary 버튼 (베이지 보더) | bg-primary → bg-secondary | `@include hover-bg-shift($bg-secondary);` (border는 절대 건드리지 X) |
+| Secondary 버튼 / 아이콘 버튼 / 드롭다운 항목 | 정적 면 → cool tint | `@include hover-bg-shift($bg-hover);` (border는 절대 건드리지 X) |
+| 칩 / 리스트 항목 (선택 가능) | hover → cool tint, active/selected → cool 강조 | hover: `@include hover-bg-shift($bg-hover);` · active: `background-color: $primary-subtle;` |
 | 텍스트 링크 | color $txt-link → $primary | `@include hover-color-shift($primary);` |
 | 다크 위 링크 | color → $accent | `@include hover-color-shift($accent);` |
 | 카드 (clickable) | translateY + box-shadow | `@include hover-lift;` (기본 `$shadow-md`) |

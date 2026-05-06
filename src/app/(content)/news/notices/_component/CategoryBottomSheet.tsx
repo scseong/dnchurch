@@ -5,6 +5,7 @@ import { createPortal } from 'react-dom';
 import clsx from 'clsx';
 import { IoCheckmark } from 'react-icons/io5';
 import useScrollLock from '@/hooks/useScrollLock';
+import { ListItem } from '@/components/ui/ListItem/ListItem';
 import { NOTICE_CATEGORIES } from '@/constants/notice';
 import type { NoticeCategory } from '@/types/notice';
 import styles from './CategoryBottomSheet.module.scss';
@@ -55,27 +56,23 @@ export default function CategoryBottomSheet({
         <div className={styles.handle} />
         <ul className={styles.option_list}>
           <li>
-            <button
-              type="button"
-              className={clsx(styles.option, !currentCategory && styles.selected)}
+            <ListItem
+              selected={!currentCategory}
               onClick={() => onSelect('')}
+              trailing={!currentCategory ? <IoCheckmark className={styles.check} aria-hidden="true" /> : undefined}
             >
-              <span>전체 분류</span>
-              {!currentCategory && <IoCheckmark className={styles.check} aria-hidden="true" />}
-            </button>
+              전체 분류
+            </ListItem>
           </li>
           {Object.entries(NOTICE_CATEGORIES).map(([key, label]) => (
             <li key={key}>
-              <button
-                type="button"
-                className={clsx(styles.option, currentCategory === key && styles.selected)}
+              <ListItem
+                selected={currentCategory === key}
                 onClick={() => onSelect(key)}
+                trailing={currentCategory === key ? <IoCheckmark className={styles.check} aria-hidden="true" /> : undefined}
               >
-                <span>{label}</span>
-                {currentCategory === key && (
-                  <IoCheckmark className={styles.check} aria-hidden="true" />
-                )}
-              </button>
+                {label}
+              </ListItem>
             </li>
           ))}
         </ul>

@@ -130,7 +130,7 @@
   transition: background-color 0.12s ease;
 
   &:hover {
-    background-color: $bg-secondary;
+    background-color: $bg-hover;
   }
 
   &:focus-visible {
@@ -230,33 +230,18 @@
 
 .nav_btn {
   flex: 1;
-  display: flex;
-  align-items: center;
   justify-content: center;
   gap: $spacing-4;
   padding: $spacing-16;
+  border-radius: 0;
   font-size: $font-size-13;
-  font-weight: $font-weight-medium;
-  color: $txt-primary;
-  cursor: pointer;
-  transition: background-color 0.12s ease;
-
-  &:hover:not(.disabled) {
-    background-color: $bg-secondary;
-  }
 
   &:first-child {
     border-right: 1px solid $gray-200;
   }
 
-  &.disabled {
-    color: $txt-tertiary;
+  &[disabled],
+  &[aria-disabled='true'] {
     opacity: 0.4;
-    cursor: not-allowed;
-  }
-
-  &:focus-visible {
-    outline: 2px solid $primary-active;
-    outline-offset: -2px;
   }
 }
