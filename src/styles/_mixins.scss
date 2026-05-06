@@ -175,3 +175,53 @@
   line-height: $line-height-body-ui;
   color: $color;
 }
+
+// ══════════════════════════════════════════
+// HOVER PATTERNS — v3 디자인 시스템
+//
+// 3원칙 (예외 없이 적용):
+//   1. transition: all 금지 — 변하는 속성만 명시 (인라인 스타일과 충돌 방지)
+//   2. shorthand background: 금지 — :hover에서는 background-color: 만 사용
+//   3. hover 안에서 border* 일절 명시 X (다크 outline 버튼 예외는 Phase 3에서 별도 mixin)
+//
+// 다크 navy primary는 hover에서 밝아진다(`$primary-hover` = navy-600 < `$primary` = navy-800).
+// 색 의도 자세히는 .claude/skills/styles/SKILL.md "Primary Action (Navy)" 참조.
+// ══════════════════════════════════════════
+
+/// 배경색 변경 hover — 버튼·카드·드롭다운 항목
+@mixin hover-bg-shift($hover-bg, $duration: 0.18s) {
+  transition: background-color $duration $transition-easing-default;
+
+  &:hover {
+    background-color: $hover-bg;
+  }
+}
+
+/// 텍스트 색상 변경 hover — 링크·텍스트 버튼·네비 항목
+@mixin hover-color-shift($hover-color, $duration: 0.18s) {
+  transition: color $duration $transition-easing-default;
+
+  &:hover {
+    color: $hover-color;
+  }
+}
+
+/// Lift 효과 hover — 카드·다크 영역 CTA. transform(spring) + box-shadow(default).
+/// 모바일(:hover 미지원) 환경에서는 :active로 미세한 scale 피드백 제공.
+@mixin hover-lift($shadow: $shadow-md, $lift: 2px, $duration: 0.22s) {
+  transition:
+    transform $duration $transition-easing-spring,
+    box-shadow $duration $transition-easing-default;
+  cursor: pointer;
+
+  &:hover {
+    transform: translateY(calc(-1 * #{$lift}));
+    box-shadow: $shadow;
+  }
+
+  @media (hover: none) {
+    &:active {
+      transform: scale(0.985);
+    }
+  }
+}

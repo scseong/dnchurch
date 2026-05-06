@@ -41,6 +41,9 @@ description: SCSS 파일 생성/수정, 스타일 작성, 디자인 토큰 사�
 | `text-label-emphasis($color)` | 라벨 강조 (13px + semibold + `$txt-secondary`) |
 | `text-caption-small($color)` | 작은 캡션 (12px + medium + `$txt-tertiary`) |
 | `text-caption-strong($color)` | 강조 캡션/뱃지 (11px + semibold + `$txt-tertiary`) |
+| `hover-bg-shift($hover-bg, $duration: 0.18s)` | 배경색 hover (`background-color`만) — 버튼·드롭다운 |
+| `hover-color-shift($hover-color, $duration: 0.18s)` | 텍스트 색 hover (`color`만) — 링크·텍스트 버튼 |
+| `hover-lift($shadow: $shadow-md, $lift: 2px, $duration: 0.22s)` | Lift 효과 hover (`transform` + `box-shadow`, 모바일 `:active` 분기 포함) — 카드·CTA |
 
 ## 컬러 토큰 체계
 
@@ -115,17 +118,79 @@ background: $navy-950;  // 헤더·다크 섹션
 
 상세 매핑은 `src/styles/_usage-guide.scss` 참조.
 
-## Transition 토큰 (`_effect.scss`)
+## Hover 시스템
+
+Hover 패턴은 **3원칙**을 예외 없이 따른다 — 다른 곳에서 `transition: all`/shorthand `background:`/hover 안 `border-color`를 쓰면 인라인 스타일 충돌·border 흔들림·다른 색면과의 부조화가 발생.
+
+| 원칙 | 금지 | 권장 |
+|---|---|---|
+| **#1** | `transition: all 0.18s` | 변하는 속성만 명시 (`transition: background-color 0.18s ease`) — 또는 `hover-*` mixin 사용 |
+| **#2** | `:hover { background: $primary-hover; }` shorthand | `:hover { background-color: $primary-hover; }` — 또는 `@include hover-bg-shift($primary-hover);` |
+| **#3** | `:hover { border-color: $primary; }` 또는 hover에서 `border:` 명시 | hover에서 border 관련 코드 자체를 작성하지 않음 (다크 outline 버튼은 Phase 3 별도 mixin) |
+
+### 패턴별 mixin 매핑
+
+| 컴포넌트 | hover 의도 | 사용 |
+|---|---|---|
+| Primary 버튼 (light/dark surface 모두) | bg navy-800 → navy-600 (lighter) | `@include hover-bg-shift($primary-hover);` + `&:active { background-color: $primary-active; }` |
+| Secondary 버튼 (베이지 보더) | bg-primary → bg-secondary | `@include hover-bg-shift($bg-secondary);` (border는 절대 건드리지 X) |
+| 텍스트 링크 | color $txt-link → $primary | `@include hover-color-shift($primary);` |
+| 다크 위 링크 | color → $accent | `@include hover-color-shift($accent);` |
+| 카드 (clickable) | translateY + box-shadow | `@include hover-lift;` (기본 `$shadow-md`) |
+| Featured/Dark CTA 카드 | translateY + 강조 shadow | `@include hover-lift($shadow: $shadow-lg);` |
+| Tab 비활성 | color → $txt-primary | `@include hover-color-shift($txt-primary);` |
+
+### 사용 예시
 
 ```scss
-// ✅ 범용 (버튼·링크·색상)
+@use '@/styles/_variables.scss' as *;
+@use '@/styles/_mixins.scss' as *;
+
+.button_primary {
+  background-color: $primary;
+  color: $txt-inverse;
+  padding: $padding-control;
+  border-radius: $radius-xs;
+
+  @include text-label-emphasis($color: $txt-inverse);
+  @include hover-bg-shift($primary-hover);
+
+  &:active {
+    background-color: $primary-active;
+  }
+}
+
+.card {
+  background-color: $white;
+  border: 1px solid $border-primary;
+  border-radius: $radius-m;
+  padding: $padding-card;
+
+  @include hover-lift;
+  // base border는 허용. hover 안에서 border 관련 코드 작성 X
+}
+```
+
+## Transition 토큰 (`_effect.scss`)
+
+> **주의**: 아래 shorthand 토큰은 내부에 `all`을 포함한다. **hover 인터랙션에서는 사용하지 말고** `hover-*` mixin을 쓴다(Hover 3원칙 #1). 셔터 진입·일회성 등장 등 비-hover 영역에서만 사용.
+
+```scss
+// 비-hover 범용 (예: SchoolGrid 카드 등장)
 transition: $transition-base;    // all 0.22s ease
 
-// ✅ 탄력 있는 인터랙션 (카드 lift, 아이콘 등장)
+// 비-hover 탄력 (아이콘 등장)
 transition: $transition-spring;  // all 0.24s spring
 
-// ✅ 패널·모달·시트 진입
+// 패널·모달·시트 진입
 transition: $transition-enter;   // all 0.36s snappy
+```
+
+hover에서 색·배경 한 속성만 변경하려면 직접 명시 또는 mixin 사용:
+
+```scss
+transition: background-color 0.18s ease;  // 직접 명시
+@include hover-bg-shift($primary-hover);  // mixin (권장)
 ```
 
 ## 폰트
