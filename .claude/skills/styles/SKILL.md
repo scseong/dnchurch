@@ -47,10 +47,11 @@ description: SCSS 파일 생성/수정, 스타일 작성, 디자인 토큰 사�
 ### Primitive (순수 색상값 — 직접 사용 금지, Semantic 토큰을 통해서만 참조)
 
 - **Gray**: `$gray-900` `$gray-700` `$gray-500` `$gray-400` `$gray-300` `$gray-200` `$gray-100` `$gray-50` `$black` `$white`
-- **Navy (Brand)**: `$navy-950` `$navy-800` `$navy-600`
-- **Navy-Blue (Primary Action)**: `$navy-blue-900` `$navy-blue-800` `$navy-blue-700` `$navy-blue-100`
+- **Navy (Brand · Primary Action)**: `$navy-950` `$navy-800` `$navy-600`
+- **Navy-Blue** _@deprecated_: `$navy-blue-900` `$navy-blue-800` `$navy-blue-700` `$navy-blue-100` (사용 금지 — Primary Action은 Navy 계열)
 - **Gold (Accent)**: `$gold-600` `$gold-400` `$gold-100`
 - **Cream (Warm Surface)**: `$cream-200` `$cream-300`
+- **Beige (Neutral Surface)**: `$beige-200`
 - **Status**: `$green-500` `$green-100` `$red-500` `$red-100` `$orange-600` `$orange-100`
 
 ### Semantic (역할 기반 — 컴포넌트에서 직접 사용)
@@ -67,8 +68,10 @@ description: SCSS 파일 생성/수정, 스타일 작성, 디자인 토큰 사�
 `$border-primary` `$border-subtle` `$border-strong` `$border-focus` `$border-warm`(cream·gold 배경 위)
 `$border-inverse` `$border-dark-subtle` `$border-dark-faint`
 
-**Primary Action (Navy-Blue)**
-`$primary` `$primary-hover` `$primary-active` `$primary-subtle`
+**Primary Action (Navy)**
+`$primary`(navy-800) `$primary-hover`(navy-600 — _lighter_) `$primary-active`(navy-950 — _darker_) `$primary-subtle`(beige-200)
+
+> **Hover 방향 의도**: 다크 navy primary는 hover에서 **밝아진다**(lift affordance). 클릭 시 active로 한 단계 어두워진다. 이는 다크 면 위 가독성 제공이 목적이며, 일반 light surface의 "darken on hover" 관행과 다르므로 컴포넌트 작성 시 `$primary-hover` 와 `$primary-active` 의 명도 방향을 혼동하지 않는다.
 
 **Accent (Gold)**
 `$accent` `$accent-hover` `$accent-subtle`
