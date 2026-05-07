@@ -24,6 +24,12 @@ export default defineConfig([
     {
         rules: {
             "@typescript-eslint/no-explicit-any": "off",
+            "@typescript-eslint/no-unused-vars": ["warn", {
+                argsIgnorePattern: "^_",
+                varsIgnorePattern: "^_",
+                destructuredArrayIgnorePattern: "^_",
+                caughtErrorsIgnorePattern: "^_",
+            }],
         },
     },
     // apis/는 다른 src/ 레이어를 import 할 수 없음 (가장 하위)

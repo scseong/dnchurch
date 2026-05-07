@@ -57,23 +57,15 @@
 - **확인**: `yarn lint:styles` (warning)
 - **발견일**: 2026-05-01
 
-### 🟡 ESLint `react-hooks/set-state-in-effect` (10건)
+### 🟢 ESLint `react-hooks/set-state-in-effect` (1건, 9건 청산)
 
 - **무엇**: useEffect 내 setState 직접 호출 (cascading rerender 가능성)
-- **왜**: React Compiler 신규 룰. 일부는 정당한 사용일 수도, 일부는 진짜 안티패턴
-- **마이그레이션 경로**: 케이스별 검토 — 이벤트 핸들러로 이동, derived state로 변환, 또는 룰 disable + 사유 주석. `tech-debt-cleanup-phase1.5` EXEC_PLAN에서 처리
-- **영향 범위** (10개 파일, 1건씩):
-  - `src/app/(content)/news/notices/_component/NoticeControlBar.tsx`
-  - `src/app/(content)/sermons/_component/AdvancedFilterSheet/AdvancedFilterSheet.tsx`
-  - `src/app/(content)/sermons/_component/SeriesBrowserSheet/SeriesBrowserSheet.tsx`
-  - `src/app/(content)/sermons/_component/SermonVideoTools/SermonVideoTools.tsx`
-  - `src/components/admin/sermons/SermonListPage/hooks/useListFilters.ts`
-  - `src/components/admin/sermons/SermonListPage/index.tsx`
-  - `src/components/common/Modal.tsx`
-  - `src/components/layout/BottomNav/BottomNav.tsx`
-  - `src/components/layout/Header/DesktopHeader.tsx`
-  - `src/hooks/useMediaQuery.ts`
+- **왜**: React Compiler 신규 룰. 9건은 후속 컴포넌트 리팩터(useDialog 통합·SermonListPage 재구조 등) 과정에서 자연 청산, 1건은 외부 prop 동기화 패턴(Modal portal transition snapshot)으로 line-disable + 사유 주석 유지
+- **마이그레이션 경로**: 잔여 1건은 `ConfirmModal/index.tsx:48` — portal transition 중 prop 동기화 표준 패턴. `useDialog` 통합 작업 시 재검토
+- **영향 범위** (1개 파일):
+  - `src/components/admin/common/ConfirmModal/index.tsx:48` — line-disable 처리됨
 - **발견일**: 2026-05-01
+- **재확인일**: 2026-05-07
 
 ### 🟡 ESLint warnings (40건)
 
