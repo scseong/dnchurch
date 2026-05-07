@@ -20,23 +20,23 @@
 
 // ── Sizes ──
 .sm {
-  padding: $spacing-6 $spacing-12;
+  padding: $spacing-8 $spacing-12;
   border-radius: $radius-xs;
   font-size: $font-size-12;
   font-weight: $font-weight-semibold;
 }
 
 .md {
-  padding: $padding-control;
+  padding: $spacing-12 $spacing-16;
   border-radius: $radius-xs;
-  font-size: $font-size-14;
+  font-size: $font-size-13;
   font-weight: $font-weight-semibold;
 }
 
 .lg {
-  padding: $padding-control-wide;
+  padding: $spacing-16 $spacing-24;
   border-radius: $radius-s;
-  font-size: $font-size-15;
+  font-size: $font-size-14;
   font-weight: $font-weight-bold;
 }
 
@@ -81,5 +81,20 @@
   &[aria-pressed='true'] {
     color: $primary;
     background-color: $primary-subtle;
+  }
+}
+
+// Danger — destructive action
+.danger {
+  background-color: $status-negative;
+  color: $txt-inverse;
+  transition: filter 0.18s $transition-easing-default;
+
+  &:hover:not(:disabled) {
+    filter: brightness(0.9);
+  }
+
+  &:active:not(:disabled) {
+    filter: brightness(0.8);
   }
 }
