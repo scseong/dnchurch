@@ -59,7 +59,8 @@
   background-color: $bg-secondary;
   border: 1px solid $border-warm;
   border-radius: $radius-m;
-  transition: $transition-base;
+
+  @include hover-bg-shift($bg-hover);
 
   h5 {
     margin-bottom: $spacing-4;
@@ -74,9 +75,6 @@
     color: $txt-tertiary;
   }
 
-  &:hover {
-    background-color: $bg-hover;
-  }
 }
 
 .arrow {
