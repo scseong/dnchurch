@@ -154,13 +154,6 @@
 - **확인**: 페이지별 `rg -n '@include\s+text-'  -g '*.module.scss' src/app/(content)/<route>/`
 - **발견일**: 2026-05-04 (design-system-v3 Step 5 회고)
 
-### 🟢 design-system-v3 Step 4 Codex 사후 1차 검증
-
-- **무엇**: design-system-v3 Step 4 커밋(81e5c4c, 89f6850, a635df8) 시점에 Codex API 한도 초과로 1차 검증 비동기 보류
-- **왜**: 한도 회복(13:40 KST) 시점이 사용자 승인 후 커밋 결정과 어긋남. `verify-task` PASS + Claude 2차 자체 검증으로 커밋 진행
-- **마이그레이션 경로**: 한도 회복 후 `codex:rescue`로 Step 4 diff(`git show 89f6850 81e5c4c`) 검토 — `\b` boundary 정확도 + admin diff 범위 + gradient 두 라인(Hero:29, SermonListPage:330) 점검. 결과를 exec-plan `## Codex 1차 검증 (Step 4 사후)` 섹션에 추가
-- **발견일**: 2026-05-04 (design-system-v3 Step 4)
-
 ### 🟢 layer 룰 상대 경로 미커버
 
 - **무엇**: ESLint `no-restricted-imports` 룰이 alias(`@/<layer>/...`)만 검사. 상대 경로(`../<layer>/...`)로 layer 의존성 우회 가능
@@ -189,4 +182,13 @@
   - `no-require-imports` 1: next.config.ts `require()` 라인 룰 disable (Next.js 공식 패턴)
 - 처리 EXEC_PLAN: `tech-debt-cleanup-phase1`
 
-<!-- last-audit: 2026-05-01 -->
+### ✅ design-system-v3 Step 4 Codex 사후 1차 검증 (2026-05-07)
+
+- **사후 검증 대상**: design-system-v3 Step 4 커밋 3개 — `89f6850` (호출처 22개 alias 치환), `81e5c4c` (미사용 mixin·alias 정의 제거), `a635df8` (검증 기록 docs)
+- **검증 항목 3가지 모두 PASS**:
+  - (1) boundary 정확도 — `rg '\$[[:alnum:]_-]+[0-9]+%' src` 0건. prefix collision (`$navy/$navy-mid/$navy-light` 등) 모두 canonical token으로 정상 종결.
+  - (2) admin diff 범위 — admin 변경은 `$line-height-heading→snug` (1) + `$border-secondary→$border-strong` (2) 단일 토큰 치환만. `var(--admin-*)` 미변경 — 후속 ADR 0004 영역 미침범.
+  - (3) gradient 복구 — `Hero.module.scss:29`, `SermonListPage.module.scss:277(원 :330)` 모두 `$navy-950 0%` 정상 형태로 복구.
+- **결과 기록**: `docs/exec-plans/completed/2026-05-04-design-system-v3.md` "Codex 1차 검증 → Step 4 (사후)" 섹션
+
+<!-- last-audit: 2026-05-07 -->
