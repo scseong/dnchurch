@@ -75,32 +75,11 @@
 }
 
 .item {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: $content-gap-s;
-  width: 100%;
-  padding: $spacing-12 $spacing-16;
-  background: transparent;
+  // ListItem default 위에 selected 시 강조 보더만 추가(시각 회귀 최소화)
   border: 1px solid transparent;
-  border-radius: $radius-s;
-  text-align: left;
-  cursor: pointer;
-  transition:
-    background-color 0.15s ease,
-    border-color 0.15s ease;
 
-  &:hover {
-    background: $primary-subtle;
-  }
-
-  &.active {
-    background: $primary-subtle;
+  &[aria-current='true'] {
     border-color: $primary;
-
-    .item_title {
-      color: $primary-active;
-    }
 
     .badge {
       color: $txt-inverse;

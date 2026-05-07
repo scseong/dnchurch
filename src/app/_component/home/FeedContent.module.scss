@@ -134,14 +134,14 @@
   padding: $padding-card-compact;
   text-decoration: none;
   cursor: pointer;
-  transition: background $transition-duration-normal $transition-easing-default;
+  transition: background-color $transition-duration-normal $transition-easing-default;
 
   &:not(:last-child) {
     border-bottom: $spacing-1 solid $gray-200;
   }
 
   &:hover {
-    background: $cream-200;
+    background-color: $bg-hover;
   }
 
   @include respond-up($breakpoint-tablet) {
@@ -247,11 +247,11 @@
   text-align: center;
   text-decoration: none;
   transition:
-    background $transition-duration-normal $transition-easing-default,
+    background-color $transition-duration-normal $transition-easing-default,
     color $transition-duration-normal $transition-easing-default;
 
   &:hover {
-    background: $cream-200;
+    background-color: $bg-hover;
     color: $txt-primary;
   }
 

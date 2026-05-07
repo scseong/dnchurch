@@ -19,32 +19,12 @@
 }
 
 .row {
-  display: flex;
-  align-items: center;
-  gap: $content-gap-s;
-  width: 100%;
   padding: $spacing-12 $spacing-20;
-  background: transparent;
-  border: none;
+  border-radius: 0;
   border-bottom: 1px solid $border-primary;
-  text-align: left;
-  cursor: pointer;
-  transition: background-color 0.15s ease;
-
-  &:hover {
-    background: $primary-subtle;
-  }
 
   li:last-child & {
     border-bottom: none;
-  }
-}
-
-.row_current {
-  background: $primary-subtle;
-
-  &:hover {
-    background: $primary-subtle;
   }
 }
 
@@ -132,18 +112,9 @@
 }
 
 .view_all {
-  width: 100%;
   padding: $spacing-12 $spacing-20;
+  border-top: 1px solid $border-primary;
+  border-radius: 0;
   font-size: $font-size-13;
   font-weight: $font-weight-medium;
-  color: $primary;
-  background: transparent;
-  border: none;
-  border-top: 1px solid $border-primary;
-  cursor: pointer;
-  transition: background-color 0.15s ease;
-
-  &:hover {
-    background: $primary-subtle;
-  }
 }

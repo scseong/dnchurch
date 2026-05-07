@@ -1,0 +1,85 @@
+.button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: $spacing-6;
+  font-family: inherit;
+  border: none;
+  cursor: pointer;
+  white-space: nowrap;
+
+  &:disabled {
+    cursor: not-allowed;
+    opacity: 0.5;
+  }
+}
+
+.full_width {
+  width: 100%;
+}
+
+// ── Sizes ──
+.sm {
+  padding: $spacing-6 $spacing-12;
+  border-radius: $radius-xs;
+  font-size: $font-size-12;
+  font-weight: $font-weight-semibold;
+}
+
+.md {
+  padding: $padding-control;
+  border-radius: $radius-xs;
+  font-size: $font-size-14;
+  font-weight: $font-weight-semibold;
+}
+
+.lg {
+  padding: $padding-control-wide;
+  border-radius: $radius-s;
+  font-size: $font-size-15;
+  font-weight: $font-weight-bold;
+}
+
+// ── Variants ──
+
+// Primary — Navy CTA
+.primary {
+  background-color: $primary;
+  color: $txt-inverse;
+
+  @include hover-bg-shift($primary-hover);
+
+  &:active:not(:disabled) {
+    background-color: $primary-active;
+  }
+}
+
+// Secondary — light surface 위 outlined
+.secondary {
+  background-color: $bg-primary;
+  border: 1px solid $border-primary;
+  color: $txt-primary;
+
+  @include hover-bg-shift($bg-hover);
+
+  &:active:not(:disabled) {
+    background-color: $primary-subtle;
+  }
+}
+
+// Ghost — transparent + primary color
+.ghost {
+  background-color: transparent;
+  color: $primary;
+
+  @include hover-color-shift($primary-hover);
+
+  &:active:not(:disabled) {
+    background-color: $primary-subtle;
+  }
+
+  &[aria-pressed='true'] {
+    color: $primary;
+    background-color: $primary-subtle;
+  }
+}

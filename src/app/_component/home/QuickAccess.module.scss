@@ -38,7 +38,7 @@ $icon_box_size: 4.2rem;
   align-items: center;
   padding: $spacing-24;
   border-bottom: $spacing-1 solid $border-warm;
-  transition: background $transition-duration-normal $transition-easing-default;
+  transition: background-color $transition-duration-normal $transition-easing-default;
 
   @include respond-up($breakpoint-mobile) {
     padding: $spacing-20 $spacing-24;
@@ -55,7 +55,7 @@ $icon_box_size: 4.2rem;
   }
 
   &:hover {
-    background: $cream-200;
+    background-color: $bg-hover;
 
     .arrow {
       opacity: 1;

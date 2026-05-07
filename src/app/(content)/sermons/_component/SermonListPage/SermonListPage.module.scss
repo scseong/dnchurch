@@ -74,44 +74,16 @@
 }
 
 .sidebar_item {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: $spacing-8;
-  width: 100%;
   padding: $spacing-8 $spacing-12;
-  font-size: $font-size-14;
-  font-weight: $font-weight-medium;
   color: $txt-secondary;
-  background: transparent;
-  border: none;
   border-radius: $radius-xs;
-  text-align: left;
-  text-decoration: none;
-  cursor: pointer;
-  transition:
-    background-color 0.15s ease,
-    color 0.15s ease;
-
-  &:hover {
-    background: $primary-subtle;
-  }
 }
 
 .sidebar_item_active {
-  color: $primary;
-  background: $primary-subtle;
-
   .sidebar_badge {
     color: $txt-inverse;
     background: $primary;
   }
-}
-
-.sidebar_item_title {
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
 }
 
 .sidebar_badge {
@@ -219,9 +191,7 @@
   cursor: pointer;
   white-space: nowrap;
   flex-shrink: 0;
-  transition:
-    color 0.15s ease,
-    border-color 0.15s ease;
+  transition: color 0.15s ease;
 
   svg {
     font-size: $font-size-18;
@@ -233,7 +203,6 @@
 
   &:hover {
     color: $txt-primary;
-    border-color: $primary;
   }
 
   @include respond-up($breakpoint-pc-sm) {
@@ -278,28 +247,6 @@
   &::-webkit-scrollbar {
     display: none;
   }
-}
-
-.chip {
-  flex-shrink: 0;
-  padding: $spacing-8 $spacing-16;
-  font-size: $font-size-13;
-  font-weight: $font-weight-medium;
-  color: $txt-secondary;
-  background: $primary-subtle;
-  border: 1px solid transparent;
-  border-radius: $radius-circle;
-  cursor: pointer;
-  white-space: nowrap;
-  transition:
-    background-color 0.15s ease,
-    color 0.15s ease;
-}
-
-.chip_active {
-  color: $txt-inverse;
-  background: $primary;
-  border-color: $primary;
 }
 
 .chip_more {
@@ -394,33 +341,6 @@
   padding: 0;
 }
 
-.filter_chip {
-  display: inline-flex;
-  align-items: center;
-  gap: $spacing-4;
-  padding: $padding-control;
-  font-size: $font-size-12;
-  font-weight: $font-weight-medium;
-  color: $primary;
-  background: $primary-subtle;
-  border-radius: $radius-circle;
-
-  button {
-    display: inline-flex;
-    padding: 0;
-    font-size: $font-size-14;
-    color: inherit;
-    background: transparent;
-    border: none;
-    cursor: pointer;
-    opacity: 0.7;
-
-    &:hover {
-      opacity: 1;
-    }
-  }
-}
-
 .clear_all {
   padding: $padding-inline-sm;
   font-size: $font-size-12;
@@ -492,14 +412,9 @@
   border: 1px solid transparent;
   border-radius: $radius-m;
   text-decoration: none;
-  transition:
-    background-color 0.15s ease,
-    border-color 0.15s ease,
-    transform 0.15s ease;
+  transition: transform 0.15s ease;
 
   &:hover {
-    background: $primary-subtle;
-    border-color: $primary;
     transform: translateY(-2px);
   }
 }
@@ -534,20 +449,3 @@
 
 // ── States ──
 
-.loading {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  min-height: 16rem;
-  font-size: $font-size-14;
-  color: $txt-tertiary;
-}
-
-.empty {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  min-height: 24rem;
-  font-size: $font-size-16;
-  color: $txt-tertiary;
-}

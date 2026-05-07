@@ -66,12 +66,10 @@
   color: $txt-image-subtle;
   transition:
     background-color $transition-duration-normal $transition-easing-default,
-    color $transition-duration-normal $transition-easing-default,
-    border-color $transition-duration-normal $transition-easing-default;
+    color $transition-duration-normal $transition-easing-default;
 
   &:hover {
     background-color: $gold-600;
-    border-color: $gold-600;
     color: $txt-inverse;
   }
 

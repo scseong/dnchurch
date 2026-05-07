@@ -9,12 +9,10 @@
   animation: fadeUp $animation-duration-reveal $transition-easing-default forwards;
   transition:
     transform 0.25s $transition-easing-default,
-    border-color 0.2s ease,
     box-shadow 0.2s ease;
 
   &:hover {
     transform: translateY(-0.2rem);
-    border-color: $primary;
     box-shadow: $shadow-md;
 
     .thumb img,
@@ -33,7 +31,7 @@
   width: 100%;
   aspect-ratio: 16 / 9;
   overflow: hidden;
-  background: $bg-tertiary;
+  background: $bg-secondary;
 
   img,
   .thumb_placeholder {
@@ -45,7 +43,7 @@
 
   .thumb_placeholder {
     display: block;
-    background: linear-gradient(135deg, $primary-subtle, $bg-tertiary);
+    background: linear-gradient(135deg, $cream-200, $cream-300);
   }
 }
 
