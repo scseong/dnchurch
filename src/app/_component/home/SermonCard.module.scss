@@ -123,7 +123,6 @@ $thumb-sub-w: 14rem;
   color: $gold-600;
   transition:
     background 0.2s ease,
-    border-color 0.2s ease,
     color 0.2s ease;
 
   svg {
@@ -139,7 +138,6 @@ $thumb-sub-w: 14rem;
 
 .card:hover .play_btn {
   background: $gold-600;
-  border-color: $gold-600;
   color: $navy-950;
 }
 

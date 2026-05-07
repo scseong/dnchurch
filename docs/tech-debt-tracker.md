@@ -132,13 +132,6 @@
 - **확인**: `rg -n '0\.[89]rem' -g '*.module.scss' src/`
 - **발견일**: 2026-05-04 (design-system-v3 Step 3)
 
-### 🟢 home `$bg-section: #fdfaf5` 로컬 hex
-
-- **무엇**: `src/app/_component/home/NewHere.module.scss:2`에 cream 톤 배경색이 로컬 SCSS 변수로 정의됨 (`#fdfaf5`)
-- **왜**: cream 계열에 정합하는 시맨틱 배경 토큰이 없어 로컬 값으로 보류
-- **마이그레이션 경로**: `_color.scss`에 `$bg-cream-subtle` 또는 `$bg-section` 시맨틱 토큰 신규 추가 → NewHere에서 토큰 참조로 교체
-- **발견일**: 2026-05-04 (design-system-v3 Step 3)
-
 ### 🟢 FeedContent `.badge_category` mixin 미적용
 
 - **무엇**: `src/app/_component/home/FeedContent.module.scss`의 카테고리 뱃지가 신규 caption mixin을 적용받지 않은 채 직접 토큰 조합
@@ -190,5 +183,16 @@
   - (2) admin diff 범위 — admin 변경은 `$line-height-heading→snug` (1) + `$border-secondary→$border-strong` (2) 단일 토큰 치환만. `var(--admin-*)` 미변경 — 후속 ADR 0004 영역 미침범.
   - (3) gradient 복구 — `Hero.module.scss:29`, `SermonListPage.module.scss:277(원 :330)` 모두 `$navy-950 0%` 정상 형태로 복구.
 - **결과 기록**: `docs/exec-plans/completed/2026-05-04-design-system-v3.md` "Codex 1차 검증 → Step 4 (사후)" 섹션
+
+### ✅ design-system-v4 home cleanup — `$bg-section` 토큰화 + Hover Border 6건 (2026-05-07)
+
+- **청산 부채 2건**:
+  - (1) `$bg-section: #fdfaf5` 로컬 hex (NewHere.module.scss:2) — `_color.scss`에 `$cream-100: #fdfaf5` primitive + `$bg-cream-subtle: $cream-100` semantic 1쌍 신규 추가, NewHere에서 토큰 참조로 교체.
+  - (2) Hover Border 위반 home 6건 — SKILL Hover 3원칙 #3 위반.
+    - A 그룹 link underline 5건 (FeedContent `.more_link`, RecentSermons `.header_link`, NewHere `.faq_link`/`.cta_link`, AboutOurChurch `.about_link`): `border-bottom + transition border-color`을 `text-decoration: underline + text-decoration-color + text-underline-offset` 패턴으로 일괄 교체.
+    - B 그룹 SermonCard 1건 (`.card:hover .play_btn`): `border-color: $gold-600` hover 라인 + transition list `border-color` 라인 제거. 정적 border는 유지.
+- **검증**: Codex 1차 PASS, Claude 2차 PASS, `verify-task.mjs` 필수 검증 통과 (`logs/design-system-v4-home-cleanup/20260507-232034/`).
+- **참고**: `feat/common-components-v4` 브랜치에 등록된 "Hover Border 위반 — 디자인 시스템 v4 미완 잔여 (10건)" 부채 중 home 5건 + SermonCard 1건 분량을 본 작업으로 청산. admin 5건은 후속 ADR 0004 영역으로 분리 보존.
+- **결과 기록**: `docs/exec-plans/completed/2026-05-07-design-system-v4-home-cleanup.md` (머지 후 이동 예정)
 
 <!-- last-audit: 2026-05-07 -->
