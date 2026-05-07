@@ -16,48 +16,113 @@
   }
 }
 
-.input {
+// ── Input wrapper (border/focus/state owner) ──
+
+.input_wrap {
+  display: flex;
+  align-items: center;
   width: 100%;
-  padding: $spacing-12;
-  font-size: $font-size-14;
-  font-family: inherit;
-  color: $txt-primary;
   background-color: $bg-primary;
   border: 1px solid $border-primary;
   border-radius: $radius-s;
   transition: border-color 0.15s ease;
 
-  &::placeholder {
-    color: $txt-tertiary;
+  &:hover {
+    border-color: $border-strong;
   }
 
-  &:focus {
-    outline: none;
+  &:focus-within {
     border-color: $border-focus;
   }
 }
 
-.input_error {
+.input {
+  flex: 1 1 auto;
+  min-width: 0;
+  padding: $spacing-12;
+  font-size: $font-size-16; // iOS auto-zoom 방지
+  font-family: inherit;
+  color: $txt-primary;
+  background: transparent;
+  border: none;
+  outline: none;
+
+  &::placeholder {
+    color: $txt-tertiary;
+  }
+
+  &:disabled {
+    cursor: not-allowed;
+    color: $txt-disabled;
+  }
+}
+
+.input_with_leading {
+  padding-left: $spacing-8;
+}
+
+.input_with_trailing {
+  padding-right: $spacing-8;
+}
+
+.leading,
+.trailing {
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  color: $txt-tertiary;
+}
+
+.leading {
+  padding-left: $spacing-12;
+}
+
+.trailing {
+  padding-right: $spacing-12;
+}
+
+// ── State variants on wrapper ──
+
+.error_state {
   border-color: $status-negative;
 
-  &:focus {
+  &:hover,
+  &:focus-within {
     border-color: $status-negative;
   }
 }
 
-.input_disabled {
-  color: $txt-disabled;
-  background-color: $bg-secondary;
-  cursor: not-allowed;
+.success_state {
+  border-color: $status-positive;
+
+  &:hover,
+  &:focus-within {
+    border-color: $status-positive;
+  }
 }
 
-.helper {
+.disabled_state {
+  background-color: $bg-secondary;
+  cursor: not-allowed;
+
+  &:hover {
+    border-color: $border-primary;
+  }
+}
+
+// ── Helper / error / success messages ──
+
+.message {
   font-size: $font-size-11;
   color: $txt-tertiary;
 }
 
-.error {
-  font-size: $font-size-11;
+.message_error {
   font-weight: $font-weight-semibold;
   color: $status-negative;
+}
+
+.message_success {
+  font-weight: $font-weight-semibold;
+  color: $status-positive;
 }
