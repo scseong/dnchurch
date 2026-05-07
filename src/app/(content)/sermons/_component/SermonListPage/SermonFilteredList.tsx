@@ -13,6 +13,7 @@ export default function SermonFilteredList({ sermons }: Props) {
       <EmptyState
         title="검색 결과가 없습니다"
         description="다른 검색어나 필터를 사용해 보세요"
+        announce
       />
     );
   }

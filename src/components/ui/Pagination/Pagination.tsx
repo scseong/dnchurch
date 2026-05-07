@@ -40,7 +40,7 @@ export default function Pagination({
   if (!totalCount || totalPages <= 1) return null;
 
   return (
-    <nav className={styles.pagination} aria-label="페이지 네비게이션" role="navigation">
+    <nav className={styles.pagination} aria-label="페이지 네비게이션">
       <ul className={styles.page_list}>
         <li>
           <PrevButton disabled={currentPage <= 1} href={createQueryURL('page', getPrevPage())} />
