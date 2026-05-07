@@ -2,8 +2,7 @@
 
 import clsx from 'clsx';
 import { IoTimeOutline, IoPlayCircle } from 'react-icons/io5';
-import { Button } from '@/components/ui/Button/Button';
-import { ListItem } from '@/components/ui/ListItem/ListItem';
+import { Button, ListItem } from '@/components/ui';
 import { formatSermonDuration } from '@/utils/sermon';
 import type { SermonWithRelations } from '@/types/sermon';
 import styles from './SeriesEpisodeList.module.scss';

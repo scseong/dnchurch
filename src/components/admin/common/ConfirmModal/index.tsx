@@ -1,8 +1,7 @@
 'use client';
 
 import { useState, useLayoutEffect } from 'react';
-import Modal from '@/components/ui/Modal/Modal';
-import { Button } from '@/components/ui/Button/Button';
+import { Modal, Button } from '@/components/ui';
 import styles from './index.module.scss';
 
 interface ConfirmModalProps {

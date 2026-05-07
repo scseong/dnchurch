@@ -2,8 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import clsx from 'clsx';
-import BottomSheet from '@/components/ui/BottomSheet/BottomSheet';
-import { Button } from '@/components/ui/Button/Button';
+import { BottomSheet, Button } from '@/components/ui';
 import type { Preacher } from '@/types/sermon';
 import styles from './AdvancedFilterSheet.module.scss';
 

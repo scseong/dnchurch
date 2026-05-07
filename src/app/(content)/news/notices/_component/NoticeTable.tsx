@@ -5,7 +5,7 @@ import { IoEyeOutline } from 'react-icons/io5';
 import { BsPinAngleFill, BsPaperclip } from 'react-icons/bs';
 import { NOTICE_CATEGORIES, DEFAULT_PAGE_SIZE } from '@/constants/notice';
 import { formattedDate, isRecent } from '@/utils/date';
-import { Label } from '@/components/ui/Label/Label';
+import { Label } from '@/components/ui';
 import type { NoticeType } from '@/types/notice';
 import styles from './NoticeTable.module.scss';
 

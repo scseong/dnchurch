@@ -6,7 +6,7 @@ import { IoDocumentTextOutline, IoDownloadOutline } from 'react-icons/io5';
 import { LayoutContainer } from '@/components/layout';
 import SermonVideoPlayer from '../SermonVideoPlayer/SermonVideoPlayer';
 import SermonVideoTools from '../SermonVideoTools/SermonVideoTools';
-import { Tabs } from '@/components/ui/Tabs/Tabs';
+import { Tabs } from '@/components/ui';
 import ScriptureBlock from '../ScriptureBlock/ScriptureBlock';
 import SermonNoteEditor from '../SermonNoteEditor/SermonNoteEditor';
 import SeriesEpisodeList from '../SeriesEpisodeList/SeriesEpisodeList';

@@ -7,7 +7,7 @@ import { PiCaretRight } from 'react-icons/pi';
 import { revealStyle, REVEAL_STEP, REVEAL_STEP_CONTENT, getRevealStyle } from '@/utils/reveal';
 import { isRecent, formattedDate } from '@/utils/date';
 import { NOTICE_CATEGORY_VARIANT } from '@/constants/notice';
-import { Label } from '@/components/ui/Label/Label';
+import { Label } from '@/components/ui';
 import type { NoticeType } from '@/types/notice';
 import styles from './FeedContent.module.scss';
 
