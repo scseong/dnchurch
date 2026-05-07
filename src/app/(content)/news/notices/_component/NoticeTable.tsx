@@ -5,6 +5,7 @@ import { IoEyeOutline } from 'react-icons/io5';
 import { BsPinAngleFill, BsPaperclip } from 'react-icons/bs';
 import { NOTICE_CATEGORIES, DEFAULT_PAGE_SIZE } from '@/constants/notice';
 import { formattedDate, isRecent } from '@/utils/date';
+import { Label } from '@/components/ui/Label/Label';
 import type { NoticeType } from '@/types/notice';
 import styles from './NoticeTable.module.scss';
 
@@ -81,7 +82,7 @@ export default function NoticeTable({ data, total, currentPage, onRowClick }: Pr
                       {notice.attachment_url && (
                         <BsPaperclip className={styles.clip_icon} aria-hidden="true" />
                       )}
-                      {isRecent(notice.created_at) && <span className={styles.badge_new}>NEW</span>}
+                      {isRecent(notice.created_at) && <Label size="xs" variant="success">NEW</Label>}
                     </span>
                   </div>
                 </td>
@@ -122,7 +123,7 @@ export default function NoticeTable({ data, total, currentPage, onRowClick }: Pr
                   <span className={clsx(styles.mobile_category, isUrgent && styles.urgent)}>
                     {NOTICE_CATEGORIES[notice.category]}
                   </span>
-                  {isRecent(notice.created_at) && <span className={styles.badge_new}>NEW</span>}
+                  {isRecent(notice.created_at) && <Label size="xs" variant="success">NEW</Label>}
                 </div>
                 <span className={styles.mobile_date}>
                   {formattedDate(notice.created_at, 'YY.MM.DD')}

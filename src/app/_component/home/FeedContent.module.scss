@@ -205,33 +205,6 @@
   @include text-caption;
 }
 
-// ─── Badges ─────────────────────────────────────────
-.badge_category {
-  flex-shrink: 0;
-  padding: $spacing-4 $spacing-6;
-  font-size: $font-size-11;
-  font-weight: $font-weight-medium;
-  line-height: $line-height-reset;
-  border-radius: $radius-xxs;
-  white-space: nowrap;
-  color: $txt-secondary;
-  background: $cream-200;
-}
-
-.badge_new {
-  color: $white;
-  font-size: 0.8rem;
-  font-weight: $font-weight-bold;
-  background: $gold-600;
-  border-radius: $radius-xs;
-  flex-shrink: 0;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: $font-size-13;
-  height: $font-size-13;
-}
-
 // ─── More Button (Mobile Only) ──────────────────────
 .more_button {
   display: block;
