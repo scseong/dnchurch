@@ -1,11 +1,13 @@
 'use client';
 
-import { MouseEvent, PropsWithChildren, ReactNode, useCallback, useEffect, useRef } from 'react';
+import { MouseEvent, PropsWithChildren, ReactNode, useRef } from 'react';
 import { createPortal } from 'react-dom';
 import clsx from 'clsx';
 import { IoClose } from 'react-icons/io5';
-import useScrollLock from '@/hooks/useScrollLock';
+import { useDialog } from '@/hooks/useDialog';
 import styles from './Modal.module.scss';
+
+export type ModalSize = 'sm' | 'md' | 'lg';
 
 type Props = PropsWithChildren<{
   open: boolean;
@@ -14,8 +16,13 @@ type Props = PropsWithChildren<{
   title?: string;
   /** `title` 없이 사용할 때 dialog의 접근성 라벨. */
   ariaLabel?: string;
-  /** confirm·destructive에서는 `'alertdialog'`. @default 'dialog' */
+  /** confirm·destructive에서는 `'alertdialog'`. ESC 자동 비활성 (명시적 응답 강제). @default 'dialog' */
   role?: 'dialog' | 'alertdialog';
+  /**
+   * panel max-width: `sm` 32rem (confirm) / `md` 48rem (form 기본) / `lg` 64rem (large form).
+   * @default 'md'
+   */
+  size?: ModalSize;
   /**
    * 헤더 닫기 버튼 노출. footer에 cancel이 있으면 `false` 권장
    * (Codeit "close vs cancel 동시 표시 금지").
@@ -29,6 +36,8 @@ type Props = PropsWithChildren<{
 /**
  * 모달 다이얼로그 (Codeit 디자인 시스템 준거).
  * confirm·alert·form 등 PC 우선 케이스에 사용. 모바일 select 대체에는 `BottomSheet`.
+ *
+ * 동작: open 시 첫 focusable로 자동 포커스 + Tab 트랩, close 시 trigger로 포커스 복귀.
  * dismiss: backdrop 클릭 / ESC / 닫기 버튼.
  *
  * @example
@@ -50,36 +59,25 @@ export default function Modal({
   title,
   ariaLabel,
   role = 'dialog',
+  size = 'md',
   showClose = false,
   footer,
   children
 }: Props) {
   const overlayRef = useRef<HTMLDivElement>(null);
-  useScrollLock(open);
-
-  const handleKeyDown = useCallback(
-    (e: KeyboardEvent) => {
-      if (e.key === 'Escape') onClose();
-    },
-    [onClose]
-  );
-
-  useEffect(() => {
-    if (!open) return;
-    document.addEventListener('keydown', handleKeyDown);
-    return () => document.removeEventListener('keydown', handleKeyDown);
-  }, [open, handleKeyDown]);
+  const { panelRef, trimmedTitle, accessibleLabel } = useDialog({
+    open,
+    onClose,
+    title,
+    ariaLabel,
+    componentName: 'Modal',
+    // alertdialog는 명시적 응답이 필요 (WAI-ARIA) — ESC 닫기 자동 차단
+    disableEscape: role === 'alertdialog'
+  });
 
   if (typeof window === 'undefined') return null;
 
-  const trimmedTitle = title?.trim();
-  const trimmedAria = ariaLabel?.trim();
-  const accessibleLabel = trimmedTitle || trimmedAria || '다이얼로그';
   const showHeader = Boolean(trimmedTitle) || showClose;
-
-  if (process.env.NODE_ENV !== 'production' && !trimmedTitle && !trimmedAria) {
-    console.warn('[Modal] title 또는 ariaLabel을 반드시 지정하세요. 접근성 라벨이 비어있습니다.');
-  }
 
   const handleOverlayClick = (e: MouseEvent<HTMLDivElement>) => {
     if (e.target === overlayRef.current) onClose();
@@ -91,12 +89,15 @@ export default function Modal({
       className={clsx(styles.overlay, open && styles.open)}
       onClick={handleOverlayClick}
       aria-hidden={!open}
+      inert={!open}
     >
       <div
-        className={styles.panel}
+        ref={panelRef}
+        className={clsx(styles.panel, styles[`size_${size}`])}
         role={role}
         aria-modal="true"
         aria-label={accessibleLabel}
+        tabIndex={-1}
       >
         {showHeader && (
           <header className={styles.header}>

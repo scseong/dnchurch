@@ -1,10 +1,10 @@
 'use client';
 
-import { PropsWithChildren, ReactNode, useCallback, useEffect } from 'react';
+import { MouseEvent, PropsWithChildren, ReactNode, useRef } from 'react';
 import { createPortal } from 'react-dom';
 import clsx from 'clsx';
 import { IoClose } from 'react-icons/io5';
-import useScrollLock from '@/hooks/useScrollLock';
+import { useDialog } from '@/hooks/useDialog';
 import styles from './BottomSheet.module.scss';
 
 type Props = PropsWithChildren<{
@@ -22,6 +22,8 @@ type Props = PropsWithChildren<{
 
 /**
  * 모바일 바텀시트. 모바일 select/dropdown 대체용. PC(`pc-sm` 이상)에서는 중앙 모달로 전환됩니다.
+ *
+ * 동작: open 시 첫 focusable로 자동 포커스 + Tab 트랩, close 시 trigger로 포커스 복귀.
  * dismiss: backdrop 클릭 / ESC / 닫기 버튼.
  *
  * @example
@@ -40,44 +42,38 @@ export default function BottomSheet({
   footer,
   children
 }: Props) {
-  useScrollLock(open);
-
-  const handleKeyDown = useCallback(
-    (e: KeyboardEvent) => {
-      if (e.key === 'Escape') onClose();
-    },
-    [onClose]
-  );
-
-  useEffect(() => {
-    if (!open) return;
-    document.addEventListener('keydown', handleKeyDown);
-    return () => document.removeEventListener('keydown', handleKeyDown);
-  }, [open, handleKeyDown]);
+  const overlayRef = useRef<HTMLDivElement>(null);
+  const { panelRef, trimmedTitle, accessibleLabel } = useDialog({
+    open,
+    onClose,
+    title,
+    ariaLabel,
+    componentName: 'BottomSheet'
+  });
 
   if (typeof window === 'undefined') return null;
 
-  const trimmedTitle = title?.trim();
-  const trimmedAria = ariaLabel?.trim();
-  const accessibleLabel = trimmedTitle || trimmedAria || '다이얼로그';
   const showHeader = Boolean(trimmedTitle) || showClose;
 
-  if (process.env.NODE_ENV !== 'production' && !trimmedTitle && !trimmedAria) {
-    console.warn('[BottomSheet] title 또는 ariaLabel을 반드시 지정하세요. 접근성 라벨이 비어있습니다.');
-  }
+  const handleOverlayClick = (e: MouseEvent<HTMLDivElement>) => {
+    if (e.target === overlayRef.current) onClose();
+  };
 
   return createPortal(
     <div
+      ref={overlayRef}
       className={clsx(styles.overlay, open && styles.open)}
-      onClick={onClose}
+      onClick={handleOverlayClick}
       aria-hidden={!open}
+      inert={!open}
     >
       <div
+        ref={panelRef}
         className={clsx(styles.sheet, open && styles.open)}
-        onClick={(e) => e.stopPropagation()}
         role="dialog"
         aria-modal="true"
         aria-label={accessibleLabel}
+        tabIndex={-1}
       >
         <div className={styles.handle} aria-hidden="true" />
         {showHeader && (
