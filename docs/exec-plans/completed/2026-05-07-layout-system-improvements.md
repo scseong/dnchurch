@@ -1,8 +1,10 @@
 # layout-system-improvements
 
-- **상태**: 🟡 진행 중
+- **상태**: 🟢 완료 (PR #80 머지 대기)
 - **시작일**: 2026-05-07
-- **브랜치**: feat/common-components-v4
+- **완료일**: 2026-05-08
+- **브랜치**: feat/design-system-v3 → develop
+- **PR**: https://github.com/scseong/dnchurch/pull/80
 
 ## 목표
 
@@ -185,19 +187,34 @@
 
 ## Claude 2차 검증
 
-- **검토 내용**: Codex 1차 CHANGE_REQUEST(comment churn 2건) 수정 후 diff 재검토. Footer 헤더 주석은 모바일 노출 의의 표현으로 유지(task 직접 연관) — Codex의 strict 외과적 해석은 반영하되 의의 표현은 정당화. hero.config.ts는 strict 적용해 주석 원본 복원. 외부 스크립트 null guard 정상.
+- **검토 내용**: Codex 1차 CHANGE_REQUEST(comment churn 2건) 수정 + PR #80 등록 후 Gemini 자동 리뷰 + Codex 객관 리뷰 추가 처리. Gemini #1(replaceState wrap)·Codex 추가(popstate)·Codex 발견 4건(beige 미사용·README/exec-plan/ADR 깨진 링크) 모두 fix 적용. Gemini #2(#root)는 false positive 확정 — `src/app/layout.tsx:40` 존재 + null guard.
 - **실행한 검증**:
-  - 1회차 `node scripts/verify-task.mjs layout-system-improvements` (run-id: `20260507-230402`) — ESLint·stylelint·Build PASS, Knip 기존 부채만
-  - 2회차 (Hero LAYOUT.md 미세 정합 후) run-id: `20260507-233556` — 동일 PASS, Knip 부채 동등
-- **최종 판단**: 커밋 진행 가능. 사용자 시각 검수(모바일/태블릿/PC)만 남음.
+  - 1회차 run-id: `20260507-230402` — PASS
+  - 2회차 (Hero LAYOUT.md 미세 정합 후) run-id: `20260507-233556` — PASS
+  - 3회차 (모바일 텍스트 중앙 정렬 후) run-id: `20260507-234116` — PASS
+  - 4회차 (PR #80 fix 적용 후) run-id: `20260508-002651` — PASS
+  - 모든 회차 Knip 경고는 기존 부채만, 본 task와 무관
+- **최종 판단**: 머지 가능 (base develop). PR #80에 8 commits 묶음으로 진행.
 
 ## 리뷰 (완료 직전)
 
-- [ ] 셀프 리뷰: 이 PR을 처음 보는 사람도 EXEC_PLAN만으로 변경 의도를 이해할 수 있는가?
-- [ ] 멀티 세션 리뷰 (권장): `codex:rescue`로 객관적 검토 요청
+- [x] 셀프 리뷰: 이 PR을 처음 보는 사람도 EXEC_PLAN만으로 변경 의도를 이해할 수 있는가?
+- [x] 멀티 세션 리뷰: `codex:rescue` 객관 리뷰 완료 — PR fix 4건 반영 후 PASS
 
 ## 회고 (머지 후 작성, completed/로 이동 시)
 
 - 잘된 것:
+  - 컴포넌트 중복 0 — 단일 컴포넌트 + `respond-up` SCSS 분기로 모바일 Footer/Hero 노출 (사용자 가이드 "컴포넌트 중복 금지" 정확 반영)
+  - LAYOUT.md 시각 정합 + 콘텐츠 풍부도 유지 (Header top_bar·Footer 4컬럼 보존, 사용자 결정)
+  - z-index 5개 토큰화로 매직 넘버 제거, 인라인 IIFE 90줄 → 외부 파일 분리 (`#root` null guard + `replaceState`/`popstate` wrap 보강)
+  - 다단계 검증 모두 통과 — Codex 계획·1차·객관 리뷰 + Gemini 자동 리뷰 + verify-task 4회 PASS
 - 다음에 할 것:
-- 발견된 부채 (→ tech-debt-tracker.md 옮길 것):
+  - `/sermons` hub 여부 검증 후 Hero 옵트아웃
+  - Breadcrumb 분리 (Hub/Detail 페이지에서도 활용)
+  - Footer SNS placeholder href 정리
+  - `MobileHeader`/`DesktopHeader` 단일 컴포넌트 통합 (반응형)
+  - `.overlay`(globals z-index:9999) dead style 제거
+  - `PROJECT_GUIDE.md` 별도 작업 머지 시 README plain text 참조도 함께 정리
+- 발견된 부채 (→ tech-debt-tracker.md):
+  - `$beige-50/100/150/300` 4단계 미사용 — `ff1064b`에서 추가, 사용처 0건. 미래 사용 명시 주석 적용했으나 사용자 정책(`feedback_design_tokens` "토큰 단순화 선호")과 충돌 가능성. 미래 사용처 발생 시까지 모니터.
+  - `HeroMeta` export 미사용 (knip 기존 부채)
