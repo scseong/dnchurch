@@ -188,12 +188,11 @@
 ## Claude 2차 검증
 
 - **검토 내용**: Codex 1차 CHANGE_REQUEST(comment churn 2건) 수정 + PR #80 등록 후 Gemini 자동 리뷰 + Codex 객관 리뷰 추가 처리. Gemini #1(replaceState wrap)·Codex 추가(popstate)·Codex 발견 4건(beige 미사용·README/exec-plan/ADR 깨진 링크) 모두 fix 적용. Gemini #2(#root)는 false positive 확정 — `src/app/layout.tsx:40` 존재 + null guard.
-- **실행한 검증**:
+- **실행한 검증**: verify-task.mjs 4회 모두 PASS — ESLint·stylelint·Build 전 회차 통과, Knip은 기존 부채만.
   - 1회차 run-id: `20260507-230402` — PASS
   - 2회차 (Hero LAYOUT.md 미세 정합 후) run-id: `20260507-233556` — PASS
   - 3회차 (모바일 텍스트 중앙 정렬 후) run-id: `20260507-234116` — PASS
   - 4회차 (PR #80 fix 적용 후) run-id: `20260508-002651` — PASS
-  - 모든 회차 Knip 경고는 기존 부채만, 본 task와 무관
 - **최종 판단**: 머지 가능 (base develop). PR #80에 8 commits 묶음으로 진행.
 
 ## 리뷰 (완료 직전)
