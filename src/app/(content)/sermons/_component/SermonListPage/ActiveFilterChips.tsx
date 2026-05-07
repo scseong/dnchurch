@@ -1,6 +1,6 @@
 'use client';
 
-import { Pill } from '@/components/ui/Pill/Pill';
+import { Pill } from '@/components/ui';
 import useSermonFilter from '@/hooks/useSermonFilter';
 import type { SeriesWithSermonCount } from '@/types/sermon';
 import styles from './SermonListPage.module.scss';

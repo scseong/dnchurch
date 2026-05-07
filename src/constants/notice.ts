@@ -6,6 +6,9 @@ export const DEFAULT_PAGE_SIZE = 10;
 
 type NoticeCategoryEnum = Database['public']['Enums']['notice_category_enum'];
 
+// 카테고리별 시각 강조. Label 컴포넌트의 variant union과 짝을 맞춰 인라인 정의 (레이어 경계 차단).
+type NoticeCategoryVariant = 'neutral' | 'info' | 'success' | 'warning' | 'danger' | 'accent';
+
 export const NOTICE_CATEGORIES: Record<NoticeCategoryEnum, string> = {
   예배: '예배',
   행사: '행사',
@@ -18,16 +21,16 @@ export const NOTICE_CATEGORIES: Record<NoticeCategoryEnum, string> = {
   기타: '기타'
 } as const;
 
-export const CATEGORY_STYLE: Record<NoticeCategoryEnum, { color: string; bg: string }> = {
-  예배: { color: '#6d28d9', bg: '#ede9fe' },
-  행사: { color: '#b45309', bg: '#fef3c7' },
-  교육: { color: '#0369a1', bg: '#e0f2fe' },
-  모집: { color: '#065f46', bg: '#d1fae5' },
-  교인소식: { color: '#be185d', bg: '#fce7f3' },
-  선교: { color: '#1d4ed8', bg: '#dbeafe' },
-  행정: { color: '#4b5563', bg: '#f3f4f6' },
-  긴급: { color: '#dc2626', bg: '#fee2e2' },
-  기타: { color: '#6b7280', bg: '#f3f4f6' }
+export const NOTICE_CATEGORY_VARIANT: Record<NoticeCategoryEnum, NoticeCategoryVariant> = {
+  예배: 'accent',
+  행사: 'warning',
+  교육: 'info',
+  모집: 'success',
+  교인소식: 'info',
+  선교: 'info',
+  행정: 'neutral',
+  긴급: 'danger',
+  기타: 'neutral'
 };
 
 export const NOTICE_SORT_OPTIONS = {

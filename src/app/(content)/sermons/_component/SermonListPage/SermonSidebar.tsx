@@ -1,5 +1,5 @@
 import clsx from 'clsx';
-import { ListItem } from '@/components/ui/ListItem/ListItem';
+import { ListItem } from '@/components/ui';
 import { buildSermonHref, getSeriesByYearEntries } from '@/utils/sermon';
 import type { SearchParams } from '@/utils/search-params';
 import type { SeriesWithSermonCount } from '@/types/sermon';

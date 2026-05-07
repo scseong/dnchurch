@@ -6,7 +6,7 @@ import clsx from 'clsx';
 import { IoCloseOutline, IoChevronBack, IoChevronForward, IoEyeOutline } from 'react-icons/io5';
 import { BsPaperclip } from 'react-icons/bs';
 import useScrollLock from '@/hooks/useScrollLock';
-import { ListItem } from '@/components/ui/ListItem/ListItem';
+import { ListItem, Label } from '@/components/ui';
 import { NOTICE_CATEGORIES } from '@/constants/notice';
 import { formattedDate, isRecent } from '@/utils/date';
 import type { NoticeType } from '@/types/notice';
@@ -61,7 +61,7 @@ export default function NoticeDrawer({ notice, onClose, onNavigate, hasPrev, has
               <span className={clsx(styles.category, isUrgent && styles.urgent)}>
                 {NOTICE_CATEGORIES[notice.category]}
               </span>
-              {isNew && <span className={styles.badge_new}>NEW</span>}
+              {isNew && <Label size="xs" variant="success">NEW</Label>}
             </div>
             <button type="button" className={styles.close_btn} onClick={onClose} aria-label="닫기">
               <IoCloseOutline aria-hidden="true" />

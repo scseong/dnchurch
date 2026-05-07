@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import { IoLibraryOutline } from 'react-icons/io5';
 import SeriesBrowserSheet from '../SeriesBrowserSheet/SeriesBrowserSheet';
-import { Pill } from '@/components/ui/Pill/Pill';
+import { Pill } from '@/components/ui';
 import useSermonFilter from '@/hooks/useSermonFilter';
 import type { SeriesWithSermonCount } from '@/types/sermon';
 import styles from './SermonListPage.module.scss';

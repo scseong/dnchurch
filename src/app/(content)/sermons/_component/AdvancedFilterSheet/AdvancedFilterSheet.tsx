@@ -2,8 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import clsx from 'clsx';
-import BottomSheet from '@/components/common/BottomSheet/BottomSheet';
-import { Button } from '@/components/ui/Button/Button';
+import { BottomSheet, Button } from '@/components/ui';
 import type { Preacher } from '@/types/sermon';
 import styles from './AdvancedFilterSheet.module.scss';
 
@@ -40,7 +39,21 @@ export default function AdvancedFilterSheet({
   };
 
   return (
-    <BottomSheet open={open} onClose={onClose} title="상세 필터">
+    <BottomSheet
+      open={open}
+      onClose={onClose}
+      title="상세 필터"
+      footer={
+        <>
+          <Button variant="secondary" fullWidth onClick={handleReset}>
+            초기화
+          </Button>
+          <Button fullWidth onClick={handleApply}>
+            적용
+          </Button>
+        </>
+      }
+    >
       <section className={styles.section}>
         <h3 className={styles.section_title}>설교자</h3>
         <div className={styles.chips}>
@@ -63,15 +76,6 @@ export default function AdvancedFilterSheet({
           ))}
         </div>
       </section>
-
-      <div className={styles.footer}>
-        <Button variant="secondary" size="md" fullWidth onClick={handleReset}>
-          초기화
-        </Button>
-        <Button variant="primary" size="md" fullWidth onClick={handleApply}>
-          적용
-        </Button>
-      </div>
     </BottomSheet>
   );
 }

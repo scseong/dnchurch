@@ -169,6 +169,30 @@
 - **마이그레이션 경로**: `eslint-plugin-import`의 `no-relative-parent-imports` 또는 `eslint-plugin-boundaries` 도입 검토 (별도 EXEC_PLAN)
 - **발견일**: 2026-05-01 (Codex 리뷰)
 
+### 🟢 Hover Border 위반 — 디자인 시스템 v4 미완 잔여 (10건)
+
+- **무엇**: hover 시 `border-color`/`border` 변경 — `.claude/skills/styles/SKILL.md` Hover 3원칙 #3 위반
+- **왜**: v4 마이그레이션이 sermons/news 영역에 한정. home/admin은 후속 phase로 분리
+- **마이그레이션 경로**:
+  - home(5건): hover에서 border 코드 제거, 필요 시 `hover-lift` 또는 shadow 강조로 대체
+  - admin(5건): admin 토큰 ADR 결정 후 일괄
+- **영향 범위**:
+  - home: `src/app/_component/home/{FeedContent,SermonCard,RecentSermons,NewHere,AboutOurChurch}.module.scss`
+  - admin: `src/components/admin/sermons/SermonListPage/{dropdown,table}.module.scss`, `src/components/admin/sermons/SermonForm/index.module.scss`, `src/components/admin/layout/{PageHeader,AdminHeader}/index.module.scss`
+- **발견일**: 2026-05-07 (Codex 디자인 시스템 audit)
+
+### 🟢 토큰 부채 — 디자인 시스템 v4 미완 잔여 (hex/rgba 직접 사용)
+
+- **무엇**: 시맨틱 토큰을 거치지 않은 hex/rgb 값 직접 사용
+- **왜**: v4 마이그레이션이 sermons/news 영역에 한정. about/home/admin은 후속 phase로 분리
+- **마이그레이션 경로**:
+  - hex: 비-admin 우선 시맨틱 토큰 치환
+  - rgba: overlay/scrim은 `$overlay-*`, hover/active는 `$bg-hover`/`$primary-subtle`로 정리
+- **영향 범위 (대표)**:
+  - hex: `src/app/(content)/about/page.module.scss:12,54,247`, `about/serving-people/page.module.scss:72`, `news/bulletins/_component/BulletinForm.module.scss:15,17`, home/admin 다수
+  - rgba: `news/notices/_component/NoticeDrawer.module.scss:27`, `sermons/_component/{SortBottomSheet:4, GridCard:59,77,93, SermonCard:69,87,109}`
+- **발견일**: 2026-05-07 (Codex 디자인 시스템 audit)
+
 ---
 
 ## 해결된 항목

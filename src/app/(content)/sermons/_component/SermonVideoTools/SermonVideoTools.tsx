@@ -9,7 +9,7 @@ import {
   IoSpeedometerOutline,
   IoTvOutline
 } from 'react-icons/io5';
-import { ListItem } from '@/components/ui/ListItem/ListItem';
+import { ListItem } from '@/components/ui';
 import { useToastStore } from '@/store/toast.store';
 import styles from './SermonVideoTools.module.scss';
 

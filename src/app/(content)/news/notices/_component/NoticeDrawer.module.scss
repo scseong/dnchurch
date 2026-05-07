@@ -106,16 +106,6 @@
   }
 }
 
-.badge_new {
-  padding: 0.2rem 0.6rem;
-  border-radius: 0.3rem;
-  font-size: 0.9rem;
-  font-weight: $font-weight-semibold;
-  color: $status-negative;
-  background: rgba($red-500, 0.05);
-  border: 1px solid rgba($red-500, 0.18);
-}
-
 .close_btn {
   display: flex;
   align-items: center;

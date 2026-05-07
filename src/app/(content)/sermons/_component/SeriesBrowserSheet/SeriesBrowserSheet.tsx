@@ -2,8 +2,7 @@
 
 import { useEffect, useMemo, useState } from 'react';
 import { IoClose, IoSearch } from 'react-icons/io5';
-import BottomSheet from '@/components/common/BottomSheet/BottomSheet';
-import { ListItem } from '@/components/ui/ListItem/ListItem';
+import { BottomSheet, ListItem } from '@/components/ui';
 import { getSeriesByYearEntries } from '@/utils/sermon';
 import type { SeriesWithSermonCount } from '@/types/sermon';
 import styles from './SeriesBrowserSheet.module.scss';

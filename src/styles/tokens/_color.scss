@@ -121,3 +121,9 @@ $status-negative:    $red-500;   // 에러
 $status-negative-bg: $red-100;   // 에러 배경
 $status-warning:     $orange-600; // 경고
 $status-warning-bg:  $orange-100; // 경고 배경
+
+// ── Label Neutral ──
+// Label `neutral` variant 전용. 다른 시맨틱 색이 부적절한 분류·메타 표시에 사용.
+
+$label-neutral-fg: $txt-secondary;
+$label-neutral-bg: $gray-200;

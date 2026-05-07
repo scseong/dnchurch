@@ -1,0 +1,72 @@
+.label {
+  display: inline-flex;
+  align-items: center;
+  gap: $spacing-2;
+  font-weight: $font-weight-semibold;
+  white-space: nowrap;
+  letter-spacing: $letter-spacing-wide;
+}
+
+// ── Sizes ──
+
+.xs {
+  padding: $spacing-2 $spacing-6;
+  font-size: $font-size-11;
+}
+
+.sm {
+  padding: $spacing-4 $spacing-8;
+  font-size: $font-size-12;
+}
+
+.md {
+  padding: $spacing-4 $spacing-10;
+  font-size: $font-size-13;
+}
+
+.lg {
+  padding: $spacing-6 $spacing-12;
+  font-size: $font-size-14;
+}
+
+// ── Shapes ──
+
+.rectangle {
+  border-radius: $radius-xs;
+}
+
+.round {
+  border-radius: $radius-circle;
+}
+
+// ── Variants ──
+
+.neutral {
+  color: $label-neutral-fg;
+  background-color: $label-neutral-bg;
+}
+
+.info {
+  color: $primary;
+  background-color: $primary-subtle;
+}
+
+.success {
+  color: $status-positive;
+  background-color: $status-positive-bg;
+}
+
+.warning {
+  color: $status-warning;
+  background-color: $status-warning-bg;
+}
+
+.danger {
+  color: $status-negative;
+  background-color: $status-negative-bg;
+}
+
+.accent {
+  color: $accent;
+  background-color: $accent-subtle;
+}
