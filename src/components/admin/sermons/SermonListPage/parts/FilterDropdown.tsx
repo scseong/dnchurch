@@ -3,7 +3,7 @@
 import { type ReactNode } from 'react';
 import clsx from 'clsx';
 import { HiChevronDown, HiOutlineFilter } from 'react-icons/hi';
-import BottomSheet from '@/components/common/BottomSheet/BottomSheet';
+import BottomSheet from '@/components/ui/BottomSheet/BottomSheet';
 import { useMediaQuery } from '@/hooks/useMediaQuery';
 import dropdownStyles from '../dropdown.module.scss';
 

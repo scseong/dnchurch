@@ -86,6 +86,7 @@
 }
 
 .close_btn {
+  margin-left: auto;
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -106,4 +107,12 @@
   flex: 1 1 auto;
   overflow-y: auto;
   padding: $spacing-16 $spacing-20;
+}
+
+.footer {
+  flex-shrink: 0;
+  display: flex;
+  gap: $spacing-8;
+  padding: $spacing-12 $spacing-20;
+  border-top: 1px solid $border-primary;
 }
