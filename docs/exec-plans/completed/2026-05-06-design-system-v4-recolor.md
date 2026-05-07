@@ -111,8 +111,9 @@ rg -nU --multiline ':hover\s*\{[^}]*?(\$beige|\$cream-|\$bg-tertiary)' src --glo
 
 ## ADR 판단
 
-- **필요 여부**: 검토 중 (likely 필요)
-- **사유**: `src/styles/tokens/_color.scss` semantic 매핑 변경은 ADR_TRIGGER_PARTS. v3 ADR 갱신 또는 v4 별도 ADR.
+- **필요 여부**: 필요
+- **결정 링크**: `docs/decisions/0004-ui-component-foundation.md` (v4 토대 통합)
+- **사유**: `src/styles/tokens/_color.scss` semantic 매핑 변경은 ADR_TRIGGER_PARTS. ADR 0004로 v4 토큰 정합 + 컴포넌트 토대를 통합 기록.
 
 ## Codex 계획 검증
 
@@ -136,13 +137,17 @@ rg -nU --multiline ':hover\s*\{[^}]*?(\$beige|\$cream-|\$bg-tertiary)' src --glo
 
 ## Codex 1차 검증
 
-- **상태**: 미요청
+- **상태**: 사후 정리 — 별도 요청 없이 design-system-v4-button과 통합 PR로 진행
+- **결론**: 해당 없음 (단일 통합 커밋으로 머지)
+- **수정 파일**: -
+- **핵심 지적**: -
+- **남은 리스크**: plan 자체에 단계별 체크리스트·1차 검증 섹션이 미작성된 채로 머지됨 → 회고 부채 항목으로 등록
 
 ## Claude 2차 검증
 
-- **검토 내용**:
-- **실행한 검증**:
-- **최종 판단**:
+- **검토 내용**: 사후 정리. 토큰 재매핑(`$bg-hover` 신설, `$bg-tertiary` 삭제, `$primary-subtle` rgba(navy) 매핑)은 PR #77 (`61ed6d0` "Feat: 디자인 시스템 v4 토대 — 토큰 온도 정합 + Button/ListItem 공통 컴포넌트")로 머지 완료.
+- **실행한 검증**: 머지 시점에 `verify-task.mjs` 통과(PR #77 본체에서 처리). 이번 completed/ 이동은 문서 정리만이라 별도 검증 불필요.
+- **최종 판단**: ✅ 머지 완료(PR #77). plan 갱신 누락은 회고에 부채로 기록.
 
 ## 리뷰 (완료 직전)
 
@@ -151,6 +156,6 @@ rg -nU --multiline ':hover\s*\{[^}]*?(\$beige|\$cream-|\$bg-tertiary)' src --glo
 
 ## 회고 (머지 후 작성)
 
-- 잘된 것:
-- 다음에 할 것:
-- 발견된 부채:
+- 잘된 것: warm decorative vs cool interactive 역할 분리를 토큰 차원에서 강제. `$bg-hover` 신설 + `$bg-tertiary` 삭제 + `$primary-subtle`을 rgba(navy)로 재매핑해 navy ↔ beige 무작위 인접을 시스템적으로 차단. ADR 0004로 결정 기록.
+- 다음에 할 것: admin scope 토큰 통합(ADR 0004 placeholder, tech-debt 항목). `$primary-subtle-strong`은 active 강조가 약하다고 판정될 때 도입(현재 YAGNI).
+- 발견된 부채: plan 자체의 단계별 체크리스트·Codex 1차·Claude 2차 검증 섹션이 미작성된 채로 머지된 점. v4-button과 통합 PR로 진행하면서 plan 갱신이 누락 — 다음 통합 PR 진행 시에는 plan도 함께 갱신 가능하도록 워크플로우 보강 검토.

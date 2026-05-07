@@ -206,13 +206,17 @@ ListItem 적용 (7 패턴):
 
 ## Codex 1차 검증
 
-- **상태**: 미요청
+- **상태**: 사후 정리 — 별도 1차 검증 요청 없이 v4-recolor와 통합 PR로 진행
+- **결론**: 해당 없음 (단일 통합 커밋으로 머지)
+- **수정 파일**: -
+- **핵심 지적**: -
+- **남은 리스크**: plan 단계별 체크리스트·1차 검증 섹션이 미작성된 채로 머지됨 → 회고 부채 항목으로 등록
 
 ## Claude 2차 검증
 
-- **검토 내용**:
-- **실행한 검증**:
-- **최종 판단**:
+- **검토 내용**: 사후 정리. Button(3 variant × 3 size) + ListItem(auto-element 분기) 토대는 PR #77 (`61ed6d0` "Feat: 디자인 시스템 v4 토대 — 토큰 온도 정합 + Button/ListItem 공통 컴포넌트")로 머지. Modal/BottomSheet/Tabs/TextField/Label/Pill/Skeleton/EmptyState 등 후속 ui 흡수는 PR #78에 묶여 진행.
+- **실행한 검증**: 머지 시점에 verify-task 통과(PR #77/#78 본체에서 처리). 이번 completed/ 이동은 문서 정리만이라 별도 검증 불필요.
+- **최종 판단**: ✅ 머지 완료(PR #77/#78). plan 갱신 누락은 회고에 부채로 기록.
 
 ## 리뷰 (완료 직전)
 
@@ -221,6 +225,6 @@ ListItem 적용 (7 패턴):
 
 ## 회고 (머지 후 작성)
 
-- 잘된 것:
-- 다음에 할 것:
-- 발견된 부채:
+- 잘된 것: `src/components/ui/` 디렉토리 신설로 도메인-무관 공용 UI 진입 표면 확립. Button auto-element 분기(href→Link / onClick→button) + ListItem default 시각 + className override로 `selected` opt-in 의미 유지. ADR 0004로 토대 결정 기록. PR #78 후속에서 Modal/BottomSheet/Tabs/TextField/Label/Pill 등 광범위 흡수까지 같은 PR 흐름으로 진행 — 클릭 어휘 통일 효과 가시화.
+- 다음에 할 것: Banner dark CTA / IconButton(닫기·재생) / Chip(ToggleChip) / Pagination 자체 패턴 정립(YAGNI로 미루어둔 항목). v4-recolor에서 발견된 plan 갱신 누락 패턴 재발 방지.
+- 발견된 부채: plan 단계별 체크리스트·Codex 1차·Claude 2차 검증 섹션 미작성. v4-recolor와 통합 PR로 진행하면서 동일 문제 발생 — 통합 PR에서 여러 plan을 동시에 갱신하는 절차 보강 필요.

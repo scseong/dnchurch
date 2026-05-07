@@ -251,6 +251,6 @@ UPDATE worship_schedules SET age_group='20–30대' WHERE name='청년부';
 
 ## 회고 (머지 후 작성, completed/로 이동 시)
 
-- 잘된 것:
-- 다음에 할 것:
-- 발견된 부채 (→ tech-debt-tracker.md 옮길 것):
+- 잘된 것: services/worship/ 레이어 신규 도입으로 `app/ → apis/` 직접 호출 부채 1건 해소(10건 → 9건). DB 5컬럼 확장(description/duration/age_group/is_featured/sub_category)을 nullable + default + CHECK 제약으로 안전 추가, 9개 row 시드 UPDATE까지 마이그레이션에 묶어 적용. Codex 2차 CHANGE_REQUEST 9건 모두 반영하며 plan 품질 상승. PR #76으로 머지(`2aee583`).
+- 다음에 할 것: 서브탭 3개(교회학교 본문 / 온라인 예배 / 처음 오신 분) 별도 작업으로 분리 진행. 어드민 UI에 worship 폼 신설(현재는 직접 SQL 운영). 평일 카드 parseTime 버그(`a5bd970`)는 머지 직후 핫픽스로 처리 — 차후 같은 패턴 회귀 방지를 위한 단위 검증 검토.
+- 발견된 부채 (→ tech-debt-tracker.md 옮길 것): 없음 — 본 PR로 부채 1건 해소. SCSS 하드코딩 토큰화는 Codex 1차 지적 따라 같은 PR에서 정리 완료.
