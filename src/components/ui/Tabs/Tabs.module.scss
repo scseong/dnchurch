@@ -11,6 +11,40 @@
   }
 }
 
+.fitted .tab {
+  flex: 1;
+  justify-content: center;
+}
+
+// ── Tab base ──
+
+.tab {
+  display: inline-flex;
+  align-items: center;
+  gap: $spacing-6;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+// ── Sizes ──
+
+.sm .tab {
+  padding: $spacing-8 $spacing-12;
+  font-size: $font-size-12;
+}
+
+.md .tab {
+  padding: $spacing-12 $spacing-16;
+  font-size: $font-size-14;
+}
+
+.lg .tab {
+  padding: $spacing-16 $spacing-20;
+  font-size: $font-size-16;
+}
+
 // ── Underline variant ──
 
 .underline {
@@ -19,14 +53,8 @@
 
   .tab {
     position: relative;
-    padding: $spacing-12 $spacing-16;
-    font-size: $font-size-14;
     font-weight: $font-weight-medium;
     color: $txt-tertiary;
-    background: transparent;
-    border: none;
-    cursor: pointer;
-    white-space: nowrap;
     transition: color 0.15s ease;
 
     &::after {
@@ -62,16 +90,12 @@
   gap: $spacing-4;
 
   .tab {
-    padding: $spacing-8 $spacing-12;
-    font-size: $font-size-13;
     font-weight: $font-weight-semibold;
     color: $txt-secondary;
-    background: transparent;
-    border: none;
     border-radius: $radius-circle;
-    cursor: pointer;
-    white-space: nowrap;
-    transition: background-color 0.15s ease, color 0.15s ease;
+    transition:
+      background-color 0.15s ease,
+      color 0.15s ease;
 
     &:hover:not(.active) {
       background-color: $bg-hover;
