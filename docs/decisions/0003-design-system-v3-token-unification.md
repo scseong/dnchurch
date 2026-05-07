@@ -1,11 +1,11 @@
 # 0003 — design-system-v3 typography hierarchy
 
-- **Status**: Proposed
+- **Status**: Accepted
 - **Date**: 2026-05-04
 - **Deciders**: 프로젝트 오너
 - **Tags**: frontend, design-system, scss, tokens, typography
 
-> **2026-05-04 갱신**: 초안의 admin 토큰 통합 결정은 Codex 계획 검증 결과 본 ADR 범위에서 분리하기로 했다. admin 통합은 후속 ADR(placeholder — `0004-admin-token-unification` 예정)에서 다룬다. 본 ADR은 typography 의미 계층 도입과 미사용 alias 정리에 한정한다.
+> **2026-05-04 갱신**: 초안의 admin 토큰 통합 결정은 Codex 계획 검증 결과 본 ADR 범위에서 분리하기로 했다. admin 통합은 후속 ADR(placeholder — `0005-admin-token-unification` 예정)에서 다룬다. 본 ADR은 typography 의미 계층 도입과 미사용 alias 정리에 한정한다.
 
 ## Context
 
@@ -87,7 +87,7 @@
 - **다크 모드 토큰 분리** — 본 작업에서 보류. 도입 결정 시 별도 ADR.
 
 **다른 ADR로 이관**:
-- **admin 영역 별도 토큰 시스템 통합** — 본 ADR 초안에 포함했으나 Codex 계획 검증 결과 분리. typography 도입과 의존 관계 없고 admin 회귀 검증 범위가 비대해짐. 후속 ADR `0004-admin-token-unification` (placeholder)에서 다룬다.
+- **admin 영역 별도 토큰 시스템 통합** — 본 ADR 초안에 포함했으나 Codex 계획 검증 결과 분리. typography 도입과 의존 관계 없고 admin 회귀 검증 범위가 비대해짐. 후속 ADR `0005-admin-token-unification` (placeholder)에서 다룬다.
 
 ## Consequences
 
@@ -151,6 +151,6 @@
 - 관련 PR: (Step별 생성 시점에 추가)
 - 관련 exec-plan: [2026-05-04-design-system-v3](../exec-plans/active/2026-05-04-design-system-v3.md)
 - 관련 ADR: [0001 — Codex 오케스트레이션 전략](0001-codex-orchestration-strategy.md)
-- 후속 ADR: `0004-admin-token-unification` (placeholder — admin 토큰 통합 분리)
+- 후속 ADR: `0005-admin-token-unification` (placeholder — admin 토큰 통합 분리)
 - 외부 레퍼런스: `docs/references/colors_and_type.css` (Wanted Design System 토큰 정의)
 - Codex 계획 검증: 2026-05-04 CHANGE_REQUEST 응답 — exec-plan `## Codex 계획 검증` 섹션 참조
