@@ -6,7 +6,7 @@
 
 ## 목표
 
-`docs/references/LAYOUT.md`(외부 참조) 기준으로 dnchurch 레이아웃 5개 갭을 채운다 — 모바일 Footer 노출, 모바일 Hero 컴팩트 노출, z-index 토큰화, Hero eyebrow 라벨, 인라인 스크립트 분리.
+외부 참조(소망교회 디자인 시스템 v2.0, workspace-local 자료) 기준으로 dnchurch 레이아웃 5개 갭을 채운다 — 모바일 Footer 노출, 모바일 Hero 컴팩트 노출, z-index 토큰화, Hero eyebrow 라벨, 인라인 스크립트 분리.
 
 ## Assumptions
 
@@ -128,7 +128,7 @@
 
 ## 참고 자료
 
-- `docs/references/LAYOUT.md` — 소망교회 v2.0 외부 참조 (네이밍은 도입 X)
+- 소망교회 디자인 시스템 v2.0 외부 참조 (`docs/references/LAYOUT.md` — workspace-local, untracked) — 네이밍은 도입 X
 
 ## 의사결정 로그
 
@@ -139,6 +139,7 @@
 - 2026-05-07: Codex CHANGE_REQUEST(impl) 반영 — Footer.module.scss `// ── 컬럼 그리드 ──`는 외과적 churn으로 `// ── 4컬럼 그리드 ──` 원복. hero.config.ts 주석 원본 복원(코드만 변경). Footer 헤더 주석은 모바일 노출 의의 표현으로 유지(task 직접 연관). untracked 문서 2개는 본 task 외 — 커밋 staging 제외.
 - 2026-05-07: 사용자 요청으로 LAYOUT.md 시각 미세 정합 5건 추가 — Hero.module.scss만 수정(콘텐츠 손실 0). 그라디언트 단순화(radial+linear → linear 180deg), padding LAYOUT.md 비율 정합(40/32 모바일·40/48 PC), min-height PC 32rem→24rem(자연 높이 근사), subtitle 색상 `$txt-image-subtle`(0.7)→`$txt-dark-muted`(0.6) + line-height base→relaxed. Header top_bar·Footer 4컬럼은 콘텐츠 풍부도 유지를 위해 적용 안 함(사용자 결정). Codex 1차 검증(incremental) PASS, verify-task 재실행 PASS(run-id 20260507-233556).
 - 2026-05-07: 사용자 요청으로 모바일 Hero 텍스트 중앙 정렬 — `.hero_inner`에 모바일 `text-align: center`, tablet+에서 `text-align: left`로 복귀. LAYOUT.md MBanner 사양과 일치. plan 초안의 `text-align: left` 결정 번복.
+- 2026-05-08: PR #80 Gemini Code Assist + Codex 객관 리뷰 반영 — (1) `scroll-reveal-observer.js`에 `history.replaceState` wrap + `popstate` listener 추가(SPA back/forward 일관성, Codex 추가 권장), (2) `_color.scss` beige 4단계에 미사용 명시 주석(Codex: dead token intent 표시), (3) README line 11에서 untracked `PROJECT_GUIDE.md` 링크 제거, (4) exec-plan line 9·131에서 `LAYOUT.md` path 형식을 외부 참조 표기로, (5) ADR 0003 line 152의 깨진 `active/` 경로를 `completed/`로 정정. Gemini #2 (`#root`) false positive 확정 — `src/app/layout.tsx:40` 존재 + null guard.
 
 ## ADR 판단
 

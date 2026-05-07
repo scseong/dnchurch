@@ -8,7 +8,7 @@
 - **버전**: `0.4.0-beta.1`
 - **개시**: 2024-11-01
 
-> 이 README는 레포 진입점입니다. 아키텍처·데이터·디자인 시스템 등 백과사전 수준 상세는 [`docs/PROJECT_GUIDE.md`](docs/PROJECT_GUIDE.md)에 있고, 일상 작업의 지도는 [`CLAUDE.md`](CLAUDE.md)에 있습니다.
+> 이 README는 레포 진입점입니다. 일상 작업의 지도는 [`CLAUDE.md`](CLAUDE.md)에 있습니다. (백과사전 가이드 `docs/PROJECT_GUIDE.md`는 별도 작업 진행 중)
 
 ## 목차
 

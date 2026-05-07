@@ -149,7 +149,7 @@
 ## References
 
 - 관련 PR: (Step별 생성 시점에 추가)
-- 관련 exec-plan: [2026-05-04-design-system-v3](../exec-plans/active/2026-05-04-design-system-v3.md)
+- 관련 exec-plan: [2026-05-04-design-system-v3](../exec-plans/completed/2026-05-04-design-system-v3.md)
 - 관련 ADR: [0001 — Codex 오케스트레이션 전략](0001-codex-orchestration-strategy.md)
 - 후속 ADR: `0005-admin-token-unification` (placeholder — admin 토큰 통합 분리)
 - 외부 레퍼런스: `docs/references/colors_and_type.css` (Wanted Design System 토큰 정의)

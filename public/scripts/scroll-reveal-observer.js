@@ -14,6 +14,14 @@
     return _push(state, unused, url);
   };
 
+  var _replace = history.replaceState.bind(history);
+  history.replaceState = function (state, unused, url) {
+    markRevealed();
+    return _replace(state, unused, url);
+  };
+
+  window.addEventListener('popstate', markRevealed);
+
   function revealImmediate(el) {
     el.style.transition = 'none';
     el.style.opacity = '1';
