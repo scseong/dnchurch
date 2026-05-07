@@ -1,12 +1,11 @@
 // Local variables
-$bg-section: #fdfaf5;
 $divider-width: 4rem;
 $divider-height: 0.2rem;
 
 // ─── Section ────────────────────────────────────────
 .section {
   padding: $section-gap-64 0;
-  background: $bg-section;
+  background: $bg-cream-subtle;
 }
 
 // ─── Inner Grid ─────────────────────────────────────
@@ -207,14 +206,15 @@ $divider-height: 0.2rem;
   font-size: $font-size-13;
   font-weight: $font-weight-semibold;
   color: $gold-600;
-  text-decoration: none;
-  border-bottom: $spacing-1 solid transparent;
+  text-decoration: underline;
+  text-decoration-color: transparent;
+  text-underline-offset: 0.3rem;
   transition:
-    border-color $transition-duration-normal $transition-easing-default,
+    text-decoration-color $transition-duration-normal $transition-easing-default,
     opacity $transition-duration-normal $transition-easing-default;
 
   &:hover {
-    border-color: $gold-600;
+    text-decoration-color: $gold-600;
     opacity: 0.8;
   }
 }
@@ -228,15 +228,16 @@ $divider-height: 0.2rem;
   font-size: $font-size-13;
   font-weight: $font-weight-semibold;
   color: $gold-600;
-  text-decoration: none;
+  text-decoration: underline;
+  text-decoration-color: rgba($gold-600, 0.3);
+  text-underline-offset: 0.3rem;
   padding-bottom: $spacing-4;
-  border-bottom: 1px solid rgba($gold-600, 0.3);
   transition:
-    border-color $transition-duration-normal $transition-easing-default,
+    text-decoration-color $transition-duration-normal $transition-easing-default,
     opacity $transition-duration-normal $transition-easing-default;
 
   &:hover {
-    border-color: $gold-600;
+    text-decoration-color: $gold-600;
     opacity: 0.8;
   }
 }

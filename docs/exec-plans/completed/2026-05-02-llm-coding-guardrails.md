@@ -150,6 +150,6 @@ LLM(Claude/Codex)의 공통 코딩 실수(가정 누락·과추상화·인접 �
 
 ## 회고 (머지 후 작성, completed/로 이동 시)
 
-- 잘된 것:
-- 다음에 할 것:
-- 발견된 부채 (→ tech-debt-tracker.md 옮길 것):
+- 잘된 것: Karpathy 4원칙을 원문 복사 없이 워크플로우(EXPLORE→…→COMMIT)에 흡수해 한국어 톤·"지도" 철학 유지. CLAUDE.md/template/SKILL/hook 4지점 + AGENTS.md/.codex 거울 적용으로 Claude·Codex 양 진영을 동기화 — 1차 commit(7925557) 후 사용자 지적으로 거울 적용을 즉시 추가한 점이 가드레일 정착 일관성 확보로 이어짐. PR #75로 머지(`af17947`).
+- 다음에 할 것: 가드레일 정착 결과(diff 범위 축소·재작업 빈도 감소 등) 누적 시 별도 ADR로 승격 검토. PR 본문에 5체크 자가 진단 항목 추가 가능성 검토.
+- 발견된 부채 (→ tech-debt-tracker.md 옮길 것): 없음 — 운영 가이드 강화로 분류, 신규 부채 없음.

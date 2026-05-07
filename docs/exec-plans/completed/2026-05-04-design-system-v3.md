@@ -266,9 +266,45 @@ Wanted DS의 *의미 계층 구조*만 차용한다. ADR 0003 참조.
   - `node scripts/verify-task.mjs design-system-v3` → 필수 검증 통과 (exit 0).
 - **최종 판단**: **PASS** — Step 3 커밋 가능. PR 단계에서 홈(`/`) PC(1280)·Tablet(768)·Mobile(375) 3 viewport 시각 비교 필수 — 변경 전후 스크린샷 PR description에 첨부.
 
+### Step 4 (사후) — PASS (2026-05-07)
+
+검증 일시: 2026-05-07 (한도 회복 후 사후 1차 실시)
+
+검증 대상 커밋 3개:
+
+| SHA | 제목 |
+|-----|------|
+| 89f6850 | Refactor: deprecated alias 호출처 일괄 치환 (22 modules) |
+| 81e5c4c | Refactor: 미사용 mixin·deprecated alias 정의 일괄 제거 |
+| a635df8 | Docs: design-system-v3 exec-plan Step 4 검증 기록 |
+
+**CHECK 1 — boundary 정확도**: PASS
+
+- prefix 공유 토큰 치환이 모두 canonical token으로 정상 종결 — `$navy/$navy-mid/$navy-light` → `$navy-950/-800/-600`, `$gold/$gold-light` → `$gold-600/-400`, `$cream/$cream-deep` → `$cream-200/-300`, `$bg-invert` → `$black`, `$border-secondary` → `$border-strong` 모두 collision 없이 치환됨.
+- 잔존 손상 스캔: `rg -n '\$[[:alnum:]_-]+[0-9]+%' src` → **0건**. `$navy-9500%` 같은 `<token><digit>%` 패턴 없음.
+- prefix-collision 후보 스캔 → **0건**. deprecated alias 잔존 → **0건**.
+
+**CHECK 2 — admin diff 범위**: PASS
+
+- `89f6850`에서 admin 변경 파일 2개:
+  - `src/components/admin/common/ConfirmModal/index.module.scss` — `$line-height-heading→$line-height-snug` (L33), `$border-secondary→$border-strong` (L83)
+  - `src/components/admin/sermons/SermonListPage/dropdown.module.scss` — `$border-secondary→$border-strong` (L168)
+- `81e5c4c`에서 admin 변경: **0건**.
+- 두 커밋 모두 `var(--admin-*)` 변경: **0건** — 후속 ADR 0004 영역 미침범 확인.
+
+**CHECK 3 — gradient 두 라인 복구**: PASS
+
+- `Hero.module.scss:29`: `linear-gradient(135deg, $navy-950 0%, $navy-800 50%, $navy-600 100%);` — stop order 정상, 세미콜론 종료.
+- `SermonListPage.module.scss:277` (당시 :330): `linear-gradient(135deg, $navy-950 0%, $navy-800 100%);` — orphan comma 없음, 정상 종료.
+- 89f6850 diff `@@ -330 +330 @@`에서 `$navy 0%→$navy-950 0%` 복구 확인.
+
+**종합 판정**: **PASS** — boundary damage 잔존, admin 범위 초과 변경, gradient 복구 실패 모두 0건.
+
+후속 조치: 없음.
+
 ### Step 4 — Codex 1차 검증 보류 (한도 초과), Claude 2차 단독 PASS
 
-- **사후 Codex 검증 예정**: 2026-05-04 Codex API 한도 초과(Asia/Seoul 13:40 회복)로 1차 검증 비동기로 미룸. 사용자 합의로 `verify-task` 통과·grep 게이팅 통과 + Claude 2차 자체 검증으로 커밋 진행, Codex 회복 후 사후 점검.
+- **사후 Codex 검증 예정**: 2026-05-04 Codex API 한도 초과(Asia/Seoul 13:40 회복)로 1차 검증 비동기로 미룸. 사용자 합의로 `verify-task` 통과·grep 게이팅 통과 + Claude 2차 자체 검증으로 커밋 진행, Codex 회복 후 사후 점검 (2026-05-07 PASS — 본 섹션 위 "Step 4 (사후)" 참고).
 - **수정 파일** (총 25개):
   - 호출처 22개 SCSS 모듈 (홈 9 + sermons 5 + 레이아웃 3 + admin 2 + form 1 + news 1 + Hero 1)
   - 정의 파일 3개 (`_color.scss`, `_typography.scss`, `_semantic.scss`)
@@ -316,9 +352,9 @@ Wanted DS의 *의미 계층 구조*만 차용한다. ADR 0003 참조.
   - 검증 로그: `logs/design-system-v3/20260504-132536/summary.log`.
   - pre-commit lint-staged stylelint PASS (호출처 커밋 + 정의 제거 커밋 모두).
 - **남은 리스크**:
-  - Codex 1차 검증 사후 진행 — 한도 회복 후 `\b` boundary 정확도 + admin diff 범위 + gradient 두 라인 점검 받을 예정.
+  - ~~Codex 1차 검증 사후 진행~~ — 2026-05-07 PASS (boundary·admin·gradient 3개 항목 모두 PASS, 위 "Step 4 (사후) — PASS (2026-05-07)" 섹션 참고).
   - $border-secondary→$border-strong 시각 차이(gray-500 → rgba(gray-500, 0.44)) 가능성 — PR 단계 시각 비교 권장 대상.
-- **최종 판단**: **PASS** — Step 4 커밋 완료. Codex 사후 점검 결과는 본 섹션에 추가 기록.
+- **최종 판단**: **PASS** — Step 4 커밋 완료. Codex 사후 점검 결과 위 섹션에 기록 완료.
 
 ## 리뷰 (완료 직전)
 
@@ -338,7 +374,7 @@ Wanted DS의 *의미 계층 구조*만 차용한다. ADR 0003 참조.
 ### 다음에 할 것
 
 - **`replace_all` 사용 시 boundary 정확성 재확인**: trailing space 패턴(`$navy ` 등)은 실제 토큰의 다음 토큰(0%, 색상 stop) 직전을 잘라내므로 위험. `\b` boundary 또는 명시 파일 단위 Edit 우선.
-- **Codex API 한도 회복 후 Step 4 사후 1차 검증**: 13:40 KST 회복 시점에 `\b` boundary 정확도 + admin diff 범위 + gradient 두 라인 점검 받고 본 exec-plan에 결과 추가.
+- ~~**Codex API 한도 회복 후 Step 4 사후 1차 검증**~~: 2026-05-07 PASS — boundary 정확도·admin 범위·gradient 두 라인 모두 PASS, 위 "Codex 1차 검증 → Step 4 (사후)" 섹션에 기록.
 - **시각 회귀 PR 단계 검증**: 홈 PC/Tablet/Mobile 3 viewport, Toast/BottomSheet 4개 호출처, FormField/Banner/admin dropdown(`$border-strong` 차이), Hero/SermonListPage gradient 변경 전후 비교를 PR description에 첨부.
 - **신규 mixin 점진 도입 (타 페이지)**: 본 task 범위는 홈 9개 모듈 한정. sermons/news/fellowship/community/next-gen/notifications/search 페이지에서 `text-page-title`/`text-card-title`/`text-sub`/`text-caption` + 신규 5종을 점진 적용 — 작업할 페이지 발생 시점에 통합.
 - **knip 경고 분석 분리**: 본 task verify-task knip 경고는 *기존 부채*(prettier devDep, kakao.maps unresolved, 20+ unused exports). 별도 cleanup task로 인벤토리·정리.

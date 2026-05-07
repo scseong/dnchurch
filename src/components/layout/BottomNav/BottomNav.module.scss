@@ -8,7 +8,7 @@
   bottom: 0;
   left: 0;
   right: 0;
-  z-index: 100;
+  z-index: $z-bottom-nav;
   background-color: $white;
   border-top: 0.1rem solid $border-primary;
   // iOS 홈 인디케이터 영역만큼 배경을 확장
@@ -65,7 +65,7 @@
 .drawer_overlay {
   position: fixed;
   inset: 0;
-  z-index: 200;
+  z-index: $z-drawer-backdrop;
   background-color: $overlay-scrim;
   opacity: 0;
   pointer-events: none;

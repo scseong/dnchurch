@@ -66,7 +66,7 @@ description: SCSS 파일 생성/수정, 스타일 작성, 디자인 토큰 사�
 - **Navy (Brand · Primary Action · Interactive cool)**: `$navy-950` `$navy-800` `$navy-600`
 - **Navy-Blue** _@deprecated_: `$navy-blue-900` `$navy-blue-800` `$navy-blue-700` `$navy-blue-100` (사용 금지 — Primary Action은 Navy 계열)
 - **Gold (Accent)**: `$gold-600` `$gold-400` `$gold-100`
-- **Cream / Beige (Warm Decorative Surface)**: `$cream-200` `$cream-300` `$beige-200` — 정적 면 전용. 인터랙션 토큰에 직접 매핑하지 않는다.
+- **Cream / Beige (Warm Decorative Surface)**: `$cream-100` `$cream-200` `$cream-300` `$beige-50` `$beige-100` `$beige-150` `$beige-200` `$beige-300` — 정적 면 전용. 인터랙션 토큰에 직접 매핑하지 않는다. (`$cream-100`/`$beige-50/100/150/300`은 시맨틱 매핑 미정 — 사용처 발생 시 시맨틱 토큰으로 확장)
 - **Status**: `$green-500` `$green-100` `$red-500` `$red-100` `$orange-600` `$orange-100`
 
 ### Semantic (역할 기반 — 컴포넌트에서 직접 사용)
@@ -76,7 +76,7 @@ description: SCSS 파일 생성/수정, 스타일 작성, 디자인 토큰 사�
 `$txt-image-subtle` (이미지 위 보조) `$txt-dark-muted` (다크배경 보조) `$txt-dark-faint` (다크배경 약한)
 
 **Background**
-- 정적 warm: `$bg-primary`(gray-50) `$bg-secondary`(cream-200) `$bg-accent-subtle`(gold 12% tint)
+- 정적 warm: `$bg-primary`(gray-50) `$bg-secondary`(cream-200) `$bg-cream-subtle`(cream-100 — 가장 옅은 cream 면) `$bg-accent-subtle`(gold 12% tint)
 - 인터랙티브 cool: `$bg-hover`(navy 6% rgba) — 면 종류 무관, hover/active 피드백 전용 ★
 - 다크: `$bg-dark` `$bg-dark-card` `$bg-dark-nav`(헤더·푸터)
 

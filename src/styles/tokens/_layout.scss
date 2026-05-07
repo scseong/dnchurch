@@ -36,3 +36,14 @@ $icon-button-size-sm: 3.6rem;
 $button-height-sm: 2.25rem;
 $button-height-md: 2.75rem;
 $button-height-lg: 3.5rem;
+
+// ══════════════════════════════════════════
+// Z-INDEX — 레이어 계층
+// 헤더·하단 네비 < 메가메뉴·드로어 백드롭 < 드로어
+// ══════════════════════════════════════════
+
+$z-header: 100;
+$z-bottom-nav: 100;
+$z-mega-menu: 200;
+$z-drawer-backdrop: 200;
+$z-drawer: 201;

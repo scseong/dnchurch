@@ -57,23 +57,15 @@
 - **확인**: `yarn lint:styles` (warning)
 - **발견일**: 2026-05-01
 
-### 🟡 ESLint `react-hooks/set-state-in-effect` (10건)
+### 🟢 ESLint `react-hooks/set-state-in-effect` (1건, 9건 청산)
 
 - **무엇**: useEffect 내 setState 직접 호출 (cascading rerender 가능성)
-- **왜**: React Compiler 신규 룰. 일부는 정당한 사용일 수도, 일부는 진짜 안티패턴
-- **마이그레이션 경로**: 케이스별 검토 — 이벤트 핸들러로 이동, derived state로 변환, 또는 룰 disable + 사유 주석. `tech-debt-cleanup-phase1.5` EXEC_PLAN에서 처리
-- **영향 범위** (10개 파일, 1건씩):
-  - `src/app/(content)/news/notices/_component/NoticeControlBar.tsx`
-  - `src/app/(content)/sermons/_component/AdvancedFilterSheet/AdvancedFilterSheet.tsx`
-  - `src/app/(content)/sermons/_component/SeriesBrowserSheet/SeriesBrowserSheet.tsx`
-  - `src/app/(content)/sermons/_component/SermonVideoTools/SermonVideoTools.tsx`
-  - `src/components/admin/sermons/SermonListPage/hooks/useListFilters.ts`
-  - `src/components/admin/sermons/SermonListPage/index.tsx`
-  - `src/components/common/Modal.tsx`
-  - `src/components/layout/BottomNav/BottomNav.tsx`
-  - `src/components/layout/Header/DesktopHeader.tsx`
-  - `src/hooks/useMediaQuery.ts`
+- **왜**: React Compiler 신규 룰. 9건은 후속 컴포넌트 리팩터(useDialog 통합·SermonListPage 재구조 등) 과정에서 자연 청산, 1건은 외부 prop 동기화 패턴(Modal portal transition snapshot)으로 line-disable + 사유 주석 유지
+- **마이그레이션 경로**: 잔여 1건은 `ConfirmModal/index.tsx:48` — portal transition 중 prop 동기화 표준 패턴. `useDialog` 통합 작업 시 재검토
+- **영향 범위** (1개 파일):
+  - `src/components/admin/common/ConfirmModal/index.tsx:48` — line-disable 처리됨
 - **발견일**: 2026-05-01
+- **재확인일**: 2026-05-07
 
 ### 🟡 ESLint warnings (40건)
 
@@ -100,11 +92,11 @@
 - **영향 범위**: `scripts/complete-task.mjs`
 - **발견일**: 2026-05-01
 
-### 🟡 admin 토큰 통합 (ADR 0004 placeholder)
+### 🟡 admin 토큰 통합 (ADR 0005 placeholder)
 
 - **무엇**: `src/components/admin/layout/AdminLayout/index.module.scss:1-30`의 `:root` `--admin-*` 25종 변수가 메인 토큰 시스템과 분리된 채 admin 영역 전반에서 호출됨
-- **왜**: design-system-v3 본 task에서 통합 시도했으나 회귀 위험·범위 과대로 분리됨 (Codex 계획 검증 Q1, ADR 0003 References)
-- **마이그레이션 경로**: 후속 ADR `0004-admin-token-unification` 작성 → 25종 변수 → 메인 토큰 매핑표 → admin 영역 SCSS 모듈 일괄 치환 → `:root` 정의 제거. 사이드바 다크 톤은 별도 시맨틱 토큰(`$bg-dark-nav` 계열) 분리 필요
+- **왜**: design-system-v3 본 task에서 통합 시도했으나 회귀 위험·범위 과대로 분리됨 (Codex 계획 검증 Q1, ADR 0003 References). 0004는 UI Component Foundation에 사용되어 본 ADR 번호는 0005로 재할당
+- **마이그레이션 경로**: 후속 ADR `0005-admin-token-unification` 작성 → 25종 변수 → 메인 토큰 매핑표 → admin 영역 SCSS 모듈 일괄 치환 → `:root` 정의 제거. 사이드바 다크 톤은 별도 시맨틱 토큰(`$bg-dark-nav` 계열) 분리 필요
 - **영향 범위**: `src/components/admin/**/*.module.scss` 전체, `src/app/admin/**` 일부
 - **확인**: `rg -n 'var\(--admin-'  -g '*.scss' src/`
 - **발견일**: 2026-05-04 (design-system-v3 task, Codex Q1)
@@ -132,13 +124,6 @@
 - **확인**: `rg -n '0\.[89]rem' -g '*.module.scss' src/`
 - **발견일**: 2026-05-04 (design-system-v3 Step 3)
 
-### 🟢 home `$bg-section: #fdfaf5` 로컬 hex
-
-- **무엇**: `src/app/_component/home/NewHere.module.scss:2`에 cream 톤 배경색이 로컬 SCSS 변수로 정의됨 (`#fdfaf5`)
-- **왜**: cream 계열에 정합하는 시맨틱 배경 토큰이 없어 로컬 값으로 보류
-- **마이그레이션 경로**: `_color.scss`에 `$bg-cream-subtle` 또는 `$bg-section` 시맨틱 토큰 신규 추가 → NewHere에서 토큰 참조로 교체
-- **발견일**: 2026-05-04 (design-system-v3 Step 3)
-
 ### 🟢 FeedContent `.badge_category` mixin 미적용
 
 - **무엇**: `src/app/_component/home/FeedContent.module.scss`의 카테고리 뱃지가 신규 caption mixin을 적용받지 않은 채 직접 토큰 조합
@@ -153,13 +138,6 @@
 - **마이그레이션 경로**: sermons/news/fellowship/community/next-gen/notifications/search 페이지를 작업할 때 ADR 0003 Decision #1 표 매핑에 따라 자연 적용
 - **확인**: 페이지별 `rg -n '@include\s+text-'  -g '*.module.scss' src/app/(content)/<route>/`
 - **발견일**: 2026-05-04 (design-system-v3 Step 5 회고)
-
-### 🟢 design-system-v3 Step 4 Codex 사후 1차 검증
-
-- **무엇**: design-system-v3 Step 4 커밋(81e5c4c, 89f6850, a635df8) 시점에 Codex API 한도 초과로 1차 검증 비동기 보류
-- **왜**: 한도 회복(13:40 KST) 시점이 사용자 승인 후 커밋 결정과 어긋남. `verify-task` PASS + Claude 2차 자체 검증으로 커밋 진행
-- **마이그레이션 경로**: 한도 회복 후 `codex:rescue`로 Step 4 diff(`git show 89f6850 81e5c4c`) 검토 — `\b` boundary 정확도 + admin diff 범위 + gradient 두 라인(Hero:29, SermonListPage:330) 점검. 결과를 exec-plan `## Codex 1차 검증 (Step 4 사후)` 섹션에 추가
-- **발견일**: 2026-05-04 (design-system-v3 Step 4)
 
 ### 🟢 layer 룰 상대 경로 미커버
 
@@ -213,4 +191,24 @@
   - `no-require-imports` 1: next.config.ts `require()` 라인 룰 disable (Next.js 공식 패턴)
 - 처리 EXEC_PLAN: `tech-debt-cleanup-phase1`
 
-<!-- last-audit: 2026-05-01 -->
+### ✅ design-system-v3 Step 4 Codex 사후 1차 검증 (2026-05-07)
+
+- **사후 검증 대상**: design-system-v3 Step 4 커밋 3개 — `89f6850` (호출처 22개 alias 치환), `81e5c4c` (미사용 mixin·alias 정의 제거), `a635df8` (검증 기록 docs)
+- **검증 항목 3가지 모두 PASS**:
+  - (1) boundary 정확도 — `rg '\$[[:alnum:]_-]+[0-9]+%' src` 0건. prefix collision (`$navy/$navy-mid/$navy-light` 등) 모두 canonical token으로 정상 종결.
+  - (2) admin diff 범위 — admin 변경은 `$line-height-heading→snug` (1) + `$border-secondary→$border-strong` (2) 단일 토큰 치환만. `var(--admin-*)` 미변경 — 후속 ADR 0004 영역 미침범.
+  - (3) gradient 복구 — `Hero.module.scss:29`, `SermonListPage.module.scss:277(원 :330)` 모두 `$navy-950 0%` 정상 형태로 복구.
+- **결과 기록**: `docs/exec-plans/completed/2026-05-04-design-system-v3.md` "Codex 1차 검증 → Step 4 (사후)" 섹션
+
+### ✅ design-system-v4 home cleanup — `$bg-section` 토큰화 + Hover Border 6건 (2026-05-07)
+
+- **청산 부채 2건**:
+  - (1) `$bg-section: #fdfaf5` 로컬 hex (NewHere.module.scss:2) — `_color.scss`에 `$cream-100: #fdfaf5` primitive + `$bg-cream-subtle: $cream-100` semantic 1쌍 신규 추가, NewHere에서 토큰 참조로 교체.
+  - (2) Hover Border 위반 home 6건 — SKILL Hover 3원칙 #3 위반.
+    - A 그룹 link underline 5건 (FeedContent `.more_link`, RecentSermons `.header_link`, NewHere `.faq_link`/`.cta_link`, AboutOurChurch `.about_link`): `border-bottom + transition border-color`을 `text-decoration: underline + text-decoration-color + text-underline-offset` 패턴으로 일괄 교체.
+    - B 그룹 SermonCard 1건 (`.card:hover .play_btn`): `border-color: $gold-600` hover 라인 + transition list `border-color` 라인 제거. 정적 border는 유지.
+- **검증**: Codex 1차 PASS, Claude 2차 PASS, `verify-task.mjs` 필수 검증 통과 (`logs/design-system-v4-home-cleanup/20260507-232034/`).
+- **참고**: `feat/common-components-v4` 브랜치에 등록된 "Hover Border 위반 — 디자인 시스템 v4 미완 잔여 (10건)" 부채 중 home 5건 + SermonCard 1건 분량을 본 작업으로 청산. admin 5건은 후속 ADR 0004 영역으로 분리 보존.
+- **결과 기록**: `docs/exec-plans/completed/2026-05-07-design-system-v4-home-cleanup.md` (머지 후 이동 예정)
+
+<!-- last-audit: 2026-05-07 -->
