@@ -132,7 +132,7 @@ pre-commit 훅은 lint-staged로 변경 파일만 자동 검사 — error는 차
 | Codex 컨텍스트 로더 | `.codex/skills/context-loader/` | 컨텍스트 라우팅 변경 시 |
 | Claude Hook 자동 제안 | `.claude/hooks/` + `.claude/settings.json` | 협업 타이밍 변경 시 |
 | 워크플로우 자동화 스크립트 | `scripts/` | 스크립트 추가/변경 시 |
-| 작업별 how-to (자동 로딩) | `.claude/skills/{supabase,styles,file-structure}/` | 트리거 시 자동 |
+| 작업별 how-to (자동 로딩) | `.claude/skills/{supabase,styles,file-structure,ui-components}/` | 트리거 시 자동 |
 
 스킬 트리거:
 
@@ -141,6 +141,7 @@ pre-commit 훅은 lint-staged로 변경 파일만 자동 검사 — error는 차
 | Supabase 클라이언트, 캐싱, revalidateTag, 인증 | `.claude/skills/supabase/`       |
 | SCSS 토큰, 믹스인, 시맨틱 토큰 매핑            | `.claude/skills/styles/`         |
 | 새 파일 위치, 디렉토리 구조, barrel export     | `.claude/skills/file-structure/` |
+| Button·TextField·Modal·BottomSheet·Tabs 등 공용 UI 사용·확장·신규 추가 | `.claude/skills/ui-components/` |
 | 하네스 워크플로우, PLAN Mode, task-id, exec-plan, Codex 검증, harness-gate | `.claude/skills/harness-workflow/` |
 
 <!-- last-audit: 2026-05-01 -->

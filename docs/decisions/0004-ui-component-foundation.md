@@ -40,6 +40,15 @@ v3 디자인 시스템에서 `$primary-subtle = $beige-200` (warm) + `$primary =
 - 코드: `src/styles/tokens/_color.scss`, `.claude/skills/styles/SKILL.md`, `src/components/ui/{Button,ListItem}/`, 비-admin 컴포넌트 ~25 파일.
 - 운영: 시각 변화 — 칩/active 면이 warm beige → cool navy tint, 칩 hover가 색→cool tint 면, 일부 footer/sidebar의 hover 색온도 변경.
 
+## Operational Enforcement
+
+> Updated 2026-05-07 — Phase B 후반(Modal/BottomSheet/Tabs/TextField/Textarea/Label/Pill/Pagination/Skeleton/EmptyState) 통합과 시스템 진입 표면 도입에 맞춰 운영 메커니즘 보강.
+
+- **자동 로딩**: `.claude/skills/ui-components/SKILL.md`가 UI 작업(폼·다이얼로그·탭·뱃지·로딩·빈 상태) 트리거 시 자동 로딩되어, 에이전트는 raw `<button>`/`<input>`/`<dialog>` 직접 작성 전에 `@/components/ui` 카탈로그를 우선 검토한다. 동일 스킬에 컴포넌트 선택 가이드(Modal vs BottomSheet, Label vs Pill 등)와 금지 패턴이 표로 정리됨.
+- **인간 진입점**: `src/components/ui/README.md`(컴포넌트 12종 카탈로그 + 선택 가이드 + a11y/토큰 정책)와 `src/components/ui/index.ts`(barrel). 신규 코드는 `import { Button, ... } from '@/components/ui'` 권장.
+- **신규 컴포넌트 승격 절차**: 재사용 2곳 이상 확인 → `src/components/ui/<Name>/` 배치 → barrel 등록 → README 표 갱신 → JSDoc 작성 → a11y 체크리스트(키보드·focus·ARIA) → 사용처 1곳 이상에서 기능·시각 수기 검증(테스트 환경 부재로 PR 스크린샷 첨부). 다이얼로그류는 `src/hooks/useDialog.ts` 위임.
+- **시그니처 변경 가드**: prop 제거/필수화/이름 변경은 신규 ADR 후보 — 영향 범위(`grep -r '<Button' src/`) 산출 후 결정.
+
 ## Alternatives Considered
 
 ### A안: Pure cool palette (베이지 전면 제거)
