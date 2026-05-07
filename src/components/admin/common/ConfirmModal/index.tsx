@@ -1,8 +1,8 @@
 'use client';
 
 import { useState, useLayoutEffect } from 'react';
-import clsx from 'clsx';
-import Modal from '@/components/common/Modal';
+import Modal from '@/components/ui/Modal/Modal';
+import { Button } from '@/components/ui/Button/Button';
 import styles from './index.module.scss';
 
 interface ConfirmModalProps {
@@ -56,46 +56,29 @@ export default function ConfirmModal({
   const handleClose = isLoading ? () => {} : onClose;
 
   return (
-    <Modal isVisible={open} onClose={handleClose}>
-      <div
-        className={styles.panel}
-        role="alertdialog"
-        aria-modal="true"
-        aria-busy={isLoading || undefined}
-        aria-labelledby="confirm-modal-title"
-        aria-describedby={content.description ? 'confirm-modal-description' : undefined}
-      >
-        <header className={styles.header}>
-          <h2 id="confirm-modal-title" className={styles.title}>
-            {content.title}
-          </h2>
-        </header>
-        {content.description && (
-          <div className={styles.body}>
-            <p id="confirm-modal-description" className={styles.description}>
-              {content.description}
-            </p>
-          </div>
-        )}
-        <footer className={styles.footer}>
-          <button
-            type="button"
-            className={styles.cancel}
-            onClick={onClose}
-            disabled={isLoading}
-          >
+    <Modal
+      open={open}
+      onClose={handleClose}
+      title={content.title}
+      role="alertdialog"
+      footer={
+        <>
+          <Button variant="secondary" onClick={onClose} disabled={isLoading}>
             {content.cancelLabel}
-          </button>
-          <button
-            type="button"
-            className={clsx(styles.confirm, content.danger && styles.danger)}
+          </Button>
+          <Button
+            variant={content.danger ? 'danger' : 'primary'}
             onClick={onConfirm}
             disabled={isLoading}
           >
             {isLoading ? loadingLabel : content.confirmLabel}
-          </button>
-        </footer>
-      </div>
+          </Button>
+        </>
+      }
+    >
+      {content.description && (
+        <p className={styles.description}>{content.description}</p>
+      )}
     </Modal>
   );
 }
