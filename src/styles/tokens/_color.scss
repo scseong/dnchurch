@@ -38,15 +38,8 @@ $gold-600: #c4924a;
 $gold-400: #d9a96a;
 $gold-100: #f5ead6;
 
-// ── Cream (Warm Surface) ──
-
-$cream-100: #fdfaf5;
-$cream-200: #f5f0e6;
-$cream-300: #ede6d7;
-
 // ── Beige (Neutral Surface) ──
-// cream보다 노란기 적은 중성 옅은 면. 5단계 정의, 시맨틱 매핑은 사용처 발생 시.
-// 50/100/150/300은 Hover Border·Drawer surface 미래 사용 예정 (현재 사용처 0건).
+// 노란기 적은 중성 옅은 면. 5단계 (cream 토큰 삭제 후 통합).
 
 $beige-50:  #fafaf8;
 $beige-100: #f5f4f2;
@@ -88,8 +81,8 @@ $txt-dark-faint:   rgba(255, 255, 255, 0.4); // 다크 배경 약한 텍스트 (
 // 정적 면(섹션·카드 bg) = warm. 인터랙션 피드백(hover/active) = cool.
 
 $bg-primary:        $gray-50;                  // 페이지 전체 기본 배경
-$bg-secondary:      $cream-200;                // 섹션·카드 정적 면 (decorative warm) ★
-$bg-cream-subtle:   $cream-100;                // 가장 옅은 cream 섹션 면 (warm, secondary보다 옅음)
+$bg-secondary:      $beige-150;                // 섹션·카드 정적 면 (decorative neutral) ★
+$bg-beige-subtle:   $beige-50;                 // 가장 옅은 beige 섹션 면 (secondary보다 옅음)
 $bg-hover:          rgba($navy-800, 0.06);     // 인터랙티브 hover 피드백 (cool, 면 종류 무관) — v4
 $bg-accent-subtle:  rgba(196, 146, 74, 0.12);  // CTA 섹션·환영 배너 (Gold 12% tint)
 $bg-dark:           #0f1820;                   // 다크 섹션 (페이지당 최대 1회)

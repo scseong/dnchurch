@@ -1,0 +1,424 @@
+// ══════════════════════════════════════════
+// WELCOME — 환영합니다 페이지
+// references/Welcome.jsx 디자인 적용
+// 환영 카드 + 4 STEPS + FAQ(별도 섹션 + CTA)
+// ══════════════════════════════════════════
+
+.container {
+  padding-top: $spacing-32;
+  padding-bottom: $spacing-32;
+
+  @include respond-up($breakpoint-pc-sm) {
+    padding-top: $spacing-64;
+    padding-bottom: $spacing-48;
+  }
+}
+
+// ── 환영 카드 ──
+
+.welcome_card {
+  position: relative;
+  margin-bottom: $spacing-32;
+  padding: $spacing-32 $spacing-24;
+  background: $white;
+  border: 0.1rem solid $beige-200;
+  border-radius: $radius-l;
+  overflow: hidden;
+
+  @include respond-up($breakpoint-pc-sm) {
+    margin-bottom: $spacing-64;
+    padding: $spacing-48;
+  }
+}
+
+.welcome_orb {
+  position: absolute;
+  top: -3rem;
+  right: -3rem;
+  width: 14rem;
+  height: 14rem;
+  border-radius: $radius-circle;
+  background: $accent-subtle;
+  opacity: 0.5;
+
+  @include respond-up($breakpoint-pc-sm) {
+    top: -4rem;
+    right: -4rem;
+    width: 22rem;
+    height: 22rem;
+  }
+}
+
+.welcome_inner {
+  position: relative;
+  max-width: 72rem;
+}
+
+.eyebrow {
+  margin-bottom: $spacing-12;
+  font-size: $font-size-11;
+  font-weight: $font-weight-semibold;
+  color: $accent;
+  letter-spacing: $letter-spacing-wide;
+
+  @include respond-up($breakpoint-pc-sm) {
+    font-size: $font-size-12;
+    margin-bottom: $spacing-16;
+  }
+}
+
+.welcome_title {
+  margin-bottom: $spacing-16;
+  font-size: $font-size-22;
+  font-weight: $font-weight-bold;
+  color: $txt-primary;
+  line-height: $line-height-snug;
+  letter-spacing: $letter-spacing-tight;
+  word-break: keep-all;
+
+  @include respond-up($breakpoint-pc-sm) {
+    font-size: $font-size-32;
+    margin-bottom: $spacing-20;
+  }
+}
+
+.welcome_desc {
+  font-size: $font-size-13;
+  color: $txt-secondary;
+  line-height: $line-height-loose;
+  word-break: keep-all;
+
+  @include respond-up($breakpoint-pc-sm) {
+    font-size: $font-size-15;
+  }
+}
+
+.desc_break_pc {
+  display: none;
+
+  @include respond-up($breakpoint-pc-sm) {
+    display: inline;
+  }
+}
+
+// ── STEPS ──
+
+.steps_section {
+  margin-bottom: $spacing-32;
+
+  @include respond-up($breakpoint-pc-sm) {
+    margin-bottom: $spacing-64;
+  }
+}
+
+.section_label {
+  margin-bottom: $spacing-16;
+  font-size: $font-size-11;
+  font-weight: $font-weight-semibold;
+  color: $primary;
+  letter-spacing: $letter-spacing-wide;
+
+  @include respond-up($breakpoint-pc-sm) {
+    margin-bottom: $spacing-24;
+  }
+}
+
+.steps_list {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-8;
+  list-style: none;
+
+  @include respond-up($breakpoint-pc-sm) {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: $spacing-12;
+  }
+}
+
+.step_card {
+  position: relative;
+  display: flex;
+  align-items: flex-start;
+  gap: $spacing-12;
+  padding: $spacing-16;
+  background: $white;
+  border: 0.1rem solid $beige-200;
+  border-radius: $radius-m;
+
+  @include respond-up($breakpoint-pc-sm) {
+    flex-direction: column;
+    gap: 0;
+    padding: $spacing-24 $spacing-20;
+
+    &:not(:last-child)::after {
+      content: '→';
+      position: absolute;
+      top: 50%;
+      right: -1rem;
+      transform: translateY(-50%);
+      z-index: 1;
+      font-size: $font-size-14;
+      font-weight: $font-weight-bold;
+      color: $txt-tertiary;
+    }
+  }
+}
+
+.step_number {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 4.4rem;
+  height: 4.4rem;
+  border-radius: $radius-m;
+  background: $beige-200;
+  color: $primary;
+  font-size: $font-size-13;
+  font-weight: $font-weight-bold;
+  font-variant-numeric: tabular-nums;
+
+  @include respond-up($breakpoint-pc-sm) {
+    display: none;
+  }
+}
+
+.step_meta {
+  flex: 1;
+  min-width: 0;
+
+  @include respond-up($breakpoint-pc-sm) {
+    width: 100%;
+  }
+}
+
+.step_label {
+  display: none;
+
+  @include respond-up($breakpoint-pc-sm) {
+    display: block;
+    margin-bottom: $spacing-12;
+    font-size: $font-size-11;
+    font-weight: $font-weight-bold;
+    color: $accent;
+    letter-spacing: $letter-spacing-wide;
+  }
+}
+
+.step_title {
+  margin-bottom: $spacing-4;
+  font-size: $font-size-14;
+  font-weight: $font-weight-bold;
+  color: $txt-primary;
+
+  @include respond-up($breakpoint-pc-sm) {
+    margin-bottom: $spacing-8;
+    font-size: $font-size-16;
+    line-height: $line-height-snug;
+  }
+}
+
+.step_desc {
+  font-size: $font-size-12;
+  color: $txt-secondary;
+  line-height: $line-height-relaxed;
+  word-break: keep-all;
+
+  @include respond-up($breakpoint-pc-sm) {
+    font-size: $font-size-13;
+  }
+}
+
+// ── FAQ + CTA (full-width 섹션) ──
+
+.faq_section {
+  padding: $spacing-32 $container-padding;
+  background: $beige-100;
+  border-top: 0.1rem solid $beige-150;
+
+  @include respond-up($breakpoint-pc-sm) {
+    padding: $spacing-80 $container-padding;
+  }
+}
+
+.faq_inner {
+  max-width: 88rem;
+  margin: 0 auto;
+}
+
+.faq_head {
+  margin-bottom: $spacing-24;
+  text-align: center;
+
+  @include respond-up($breakpoint-pc-sm) {
+    margin-bottom: $spacing-40;
+  }
+}
+
+.faq_eyebrow {
+  margin-bottom: $spacing-6;
+  font-size: $font-size-11;
+  font-weight: $font-weight-semibold;
+  color: $accent;
+  letter-spacing: $letter-spacing-wide;
+
+  @include respond-up($breakpoint-pc-sm) {
+    font-size: $font-size-12;
+    margin-bottom: $spacing-8;
+  }
+}
+
+.faq_title {
+  font-size: $font-size-18;
+  font-weight: $font-weight-bold;
+  color: $txt-primary;
+
+  @include respond-up($breakpoint-pc-sm) {
+    font-size: $font-size-26;
+  }
+}
+
+.faq_list {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-8;
+  list-style: none;
+
+  @include respond-up($breakpoint-pc-sm) {
+    gap: $spacing-10;
+  }
+}
+
+.faq_item {
+  padding: $spacing-16;
+  background: $white;
+  border: 0.1rem solid $beige-200;
+  border-radius: $radius-m;
+
+  @include respond-up($breakpoint-pc-sm) {
+    padding: $spacing-24;
+  }
+}
+
+.faq_row {
+  display: flex;
+  align-items: flex-start;
+  gap: $spacing-10;
+
+  & + & {
+    margin-top: $spacing-8;
+
+    @include respond-up($breakpoint-pc-sm) {
+      margin-top: $spacing-12;
+    }
+  }
+}
+
+.faq_q_mark {
+  flex-shrink: 0;
+  padding-top: 0.2rem;
+  font-size: $font-size-12;
+  font-weight: $font-weight-bold;
+  color: $accent;
+  letter-spacing: $letter-spacing-wide;
+
+  @include respond-up($breakpoint-pc-sm) {
+    font-size: $font-size-13;
+  }
+}
+
+.faq_q_text {
+  font-size: $font-size-13;
+  font-weight: $font-weight-bold;
+  color: $txt-primary;
+  line-height: $line-height-snug;
+
+  @include respond-up($breakpoint-pc-sm) {
+    font-size: $font-size-15;
+    line-height: $line-height-normal;
+  }
+}
+
+.faq_a_mark {
+  flex-shrink: 0;
+  padding-top: 0.2rem;
+  font-size: $font-size-12;
+  font-weight: $font-weight-bold;
+  color: $txt-tertiary;
+  letter-spacing: $letter-spacing-wide;
+
+  @include respond-up($breakpoint-pc-sm) {
+    font-size: $font-size-13;
+  }
+}
+
+.faq_a_text {
+  font-size: $font-size-12;
+  color: $txt-secondary;
+  line-height: $line-height-loose;
+  word-break: keep-all;
+
+  @include respond-up($breakpoint-pc-sm) {
+    font-size: $font-size-14;
+  }
+}
+
+// ── CTA ──
+
+.cta_card {
+  margin-top: $spacing-20;
+  padding: $spacing-20;
+  background: $navy-950;
+  border-radius: $radius-m;
+
+  @include respond-up($breakpoint-pc-sm) {
+    margin-top: $spacing-40;
+    padding: $spacing-32;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: $spacing-24;
+  }
+}
+
+.cta_eyebrow {
+  margin-bottom: $spacing-6;
+  font-size: $font-size-11;
+  font-weight: $font-weight-medium;
+  color: $accent;
+  letter-spacing: $letter-spacing-wide;
+}
+
+.cta_title {
+  margin-bottom: $spacing-12;
+  font-size: $font-size-15;
+  font-weight: $font-weight-bold;
+  color: $txt-inverse;
+
+  @include respond-up($breakpoint-pc-sm) {
+    margin-bottom: 0;
+    font-size: $font-size-18;
+  }
+}
+
+.cta_button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: $spacing-8;
+  width: 100%;
+  padding: $spacing-12 $spacing-16;
+  background: $accent-subtle;
+  color: $navy-950;
+  font-size: $font-size-13;
+  font-weight: $font-weight-bold;
+  border-radius: $radius-m;
+  @include hover-lift($shadow: $shadow-md);
+
+  @include respond-up($breakpoint-pc-sm) {
+    width: auto;
+    flex-shrink: 0;
+    padding: $spacing-12 $spacing-24;
+  }
+}

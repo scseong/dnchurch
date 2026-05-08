@@ -1,0 +1,245 @@
+// ══════════════════════════════════════════
+// PASTOR — 인사말 페이지
+// references/Greeting.jsx 디자인 적용 + dnchurch 콘텐츠
+// 좌측(profile + career) / 우측(content) — Grid 2 column (PC) / 세로 스택 (Mobile)
+// ══════════════════════════════════════════
+
+.container {
+  padding-top: $spacing-48;
+  padding-bottom: $spacing-32;
+
+  @include respond-up($breakpoint-pc-sm) {
+    padding-top: $spacing-64;
+    padding-bottom: $spacing-48;
+  }
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-areas:
+    'profile'
+    'content'
+    'career';
+  gap: $spacing-32;
+
+  @include respond-up($breakpoint-pc-sm) {
+    grid-template-columns: 32rem 1fr;
+    grid-template-areas:
+      'profile content'
+      'career  content';
+    column-gap: $spacing-48;
+    row-gap: $spacing-32;
+    align-items: start;
+  }
+}
+
+// ── 좌측 상단: 사진 + 이름 ──
+
+.profile_block {
+  grid-area: profile;
+}
+
+.photo {
+  width: 100%;
+  aspect-ratio: 3 / 4;
+  margin-bottom: $spacing-16;
+  border: 0.1rem solid $beige-200;
+  border-radius: $radius-m;
+  background: linear-gradient(135deg, $beige-100, $beige-150);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: $txt-tertiary;
+  font-size: $font-size-12;
+  font-weight: $font-weight-medium;
+  letter-spacing: $letter-spacing-wide;
+}
+
+.eyebrow {
+  margin-bottom: $spacing-6;
+  font-size: $font-size-11;
+  font-weight: $font-weight-semibold;
+  color: $accent;
+  letter-spacing: $letter-spacing-wide;
+}
+
+.name_line {
+  display: flex;
+  align-items: baseline;
+  gap: $spacing-8;
+  font-weight: $font-weight-bold;
+}
+
+.name {
+  font-size: $font-size-20;
+  color: $txt-primary;
+
+  @include respond-up($breakpoint-pc-sm) {
+    font-size: $font-size-22;
+  }
+}
+
+.role {
+  font-size: $font-size-13;
+  font-weight: $font-weight-medium;
+  color: $txt-secondary;
+}
+
+// ── 좌측 하단(또는 모바일 본문 뒤): 약력 ──
+
+.career_block {
+  grid-area: career;
+  padding: $spacing-16;
+  background: $beige-100;
+  border: 0.1rem solid $beige-150;
+  border-radius: $radius-m;
+
+  @include respond-up($breakpoint-pc-sm) {
+    background: transparent;
+    border: 0;
+    padding: 0;
+    border-top: 0.1rem solid $beige-150;
+    padding-top: $spacing-16;
+  }
+}
+
+.career_label {
+  margin-bottom: $spacing-10;
+  font-size: $font-size-11;
+  font-weight: $font-weight-semibold;
+  color: $accent;
+  letter-spacing: $letter-spacing-wide;
+}
+
+.career_list {
+  list-style: none;
+}
+
+.career_item {
+  display: flex;
+  align-items: flex-start;
+  gap: $spacing-8;
+  padding: $spacing-10 0;
+  font-size: $font-size-13;
+  color: $txt-secondary;
+  word-break: keep-all;
+
+  & + & {
+    border-top: 0.1rem solid $beige-150;
+  }
+}
+
+.career_dot {
+  flex-shrink: 0;
+  width: 0.4rem;
+  height: 0.4rem;
+  margin-top: 0.8rem;
+  border-radius: $radius-circle;
+  background: $accent;
+}
+
+// ── 우측: 본문 ──
+
+.content {
+  grid-area: content;
+}
+
+.verse_card {
+  margin-bottom: $spacing-32;
+  padding: $spacing-24;
+  background: $navy-950;
+  border-radius: $radius-l;
+
+  @include respond-up($breakpoint-pc-sm) {
+    padding: $spacing-32;
+  }
+}
+
+.verse_ref {
+  margin-bottom: $spacing-10;
+  font-size: $font-size-12;
+  font-weight: $font-weight-medium;
+  color: $accent;
+  letter-spacing: $letter-spacing-wide;
+}
+
+.verse_text {
+  font-size: $font-size-16;
+  font-weight: $font-weight-semibold;
+  color: $txt-inverse;
+  line-height: $line-height-relaxed;
+  word-break: keep-all;
+
+  @include respond-up($breakpoint-pc-sm) {
+    font-size: $font-size-18;
+  }
+}
+
+.section_label {
+  margin-bottom: $spacing-12;
+  font-size: $font-size-11;
+  font-weight: $font-weight-semibold;
+  color: $primary;
+  letter-spacing: $letter-spacing-wide;
+}
+
+.lead {
+  margin-bottom: $spacing-24;
+  font-size: $font-size-22;
+  font-weight: $font-weight-bold;
+  color: $txt-primary;
+  line-height: $line-height-snug;
+  letter-spacing: $letter-spacing-tight;
+  word-break: keep-all;
+
+  @include respond-up($breakpoint-pc-sm) {
+    font-size: $font-size-28;
+    margin-bottom: $spacing-32;
+  }
+}
+
+.paragraph {
+  margin-bottom: $spacing-16;
+  font-size: $font-size-14;
+  color: $txt-secondary;
+  line-height: $line-height-loose;
+  word-break: keep-all;
+
+  @include respond-up($breakpoint-pc-sm) {
+    font-size: $font-size-15;
+    margin-bottom: $spacing-20;
+  }
+}
+
+.signature {
+  margin-top: $spacing-32;
+  padding-top: $spacing-24;
+  border-top: 0.1rem solid $beige-150;
+  text-align: right;
+}
+
+.sig_role {
+  margin-bottom: $spacing-4;
+  font-size: $font-size-13;
+  color: $txt-tertiary;
+}
+
+.sig_name {
+  display: inline-flex;
+  gap: $spacing-8;
+  align-items: baseline;
+  font-size: $font-size-16;
+  font-weight: $font-weight-bold;
+  color: $txt-primary;
+
+  @include respond-up($breakpoint-pc-sm) {
+    font-size: $font-size-18;
+  }
+}
+
+.sig_drim {
+  font-size: $font-size-13;
+  font-weight: $font-weight-regular;
+  color: $txt-tertiary;
+}

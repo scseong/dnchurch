@@ -1,85 +1,272 @@
-$svg_size: 4rem;
-$svg_mobile_size: 3rem;
+// ══════════════════════════════════════════
+// LOCATION — 오시는 길 페이지
+// references/Location.jsx 디자인 적용
+// 지도 (LocationMapClient 보존) + ADDRESS·CONTACT (2col) + HOURS·TRANSPORTATION
+// CONTACT/HOURS는 site_settings에 없는 필드라 placeholder + TODO
+// ══════════════════════════════════════════
 
-.directions_info {
-  margin-top: 3rem;
+.container {
+  padding-top: $spacing-32;
+  padding-bottom: $spacing-32;
+
+  @include respond-up($breakpoint-pc-sm) {
+    padding-top: $spacing-64;
+    padding-bottom: $spacing-64;
+  }
+}
+
+// ── 지도 ──
+
+.map_wrap {
+  width: 100%;
+  height: 22rem;
+  margin-bottom: $spacing-12;
+  border: 0.1rem solid $beige-200;
+  border-radius: $radius-l;
+  overflow: hidden;
+
+  @include respond-up($breakpoint-pc-sm) {
+    height: 36rem;
+    margin-bottom: $spacing-24;
+  }
+}
+
+// ── 공용 카드 ──
+
+.card {
+  padding: $spacing-20;
+  background: $beige-100;
+  border: 0.1rem solid $beige-200;
+  border-radius: $radius-m;
+
+  @include respond-up($breakpoint-pc-sm) {
+    padding: $spacing-32;
+  }
+}
+
+.card_eyebrow {
+  margin-bottom: $spacing-10;
+  font-size: $font-size-11;
+  font-weight: $font-weight-semibold;
+  color: $accent;
+  letter-spacing: $letter-spacing-wide;
+}
+
+.section_label {
+  margin-bottom: $spacing-16;
+  font-size: $font-size-11;
+  font-weight: $font-weight-semibold;
+  color: $primary;
+  letter-spacing: $letter-spacing-wide;
+}
+
+// ── 상단 2 cards (Address + Contact) ──
+
+.cards_top {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: $spacing-12;
+  margin-bottom: $spacing-12;
+
+  @include respond-up($breakpoint-pc-sm) {
+    grid-template-columns: 1fr 1fr;
+    gap: $spacing-16;
+    margin-bottom: $spacing-32;
+  }
+}
+
+.address_main {
+  margin-bottom: $spacing-4;
+  font-size: $font-size-15;
+  font-weight: $font-weight-bold;
+  color: $txt-primary;
+
+  @include respond-up($breakpoint-pc-sm) {
+    font-size: $font-size-18;
+  }
+}
+
+.address_sub {
+  margin-bottom: $spacing-16;
+  font-size: $font-size-13;
+  color: $txt-tertiary;
+
+  @include respond-up($breakpoint-pc-sm) {
+    margin-bottom: $spacing-20;
+  }
+}
+
+.address_actions {
   display: flex;
-  gap: 5rem;
+  gap: $spacing-8;
+}
 
-  @include respond($breakpoint-pc-sm) {
-    justify-content: space-between;
-    gap: $spacing-20;
+.btn_secondary {
+  flex: 1;
+  padding: $spacing-10 $spacing-12;
+  background: $bg-primary;
+  border: 0.1rem solid $beige-200;
+  border-radius: $radius-s;
+  color: $txt-primary;
+  font-size: $font-size-12;
+  font-weight: $font-weight-semibold;
+  cursor: pointer;
+  @include hover-bg-shift($beige-100);
+
+  &:disabled {
+    cursor: not-allowed;
+    opacity: 0.6;
   }
+}
 
-  @include respond($breakpoint-tablet) {
-    margin-top: 2rem;
-    padding: 0;
-    flex-direction: column;
-  }
+.btn_primary {
+  flex: 1;
+  padding: $spacing-10 $spacing-12;
+  background: $primary;
+  border-radius: $radius-s;
+  color: $txt-inverse;
+  font-size: $font-size-12;
+  font-weight: $font-weight-semibold;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: $spacing-6;
+  text-decoration: none;
+  @include hover-bg-shift($primary-hover);
+}
 
-  .container {
-    display: flex;
+.contact_row {
+  & + & {
+    margin-top: $spacing-12;
 
-    .icon {
-      margin-right: 0.8em;
-      position: relative;
-
-      svg {
-        font-size: $svg_size;
-        color: $primary;
-      }
-
-      &::after {
-        content: '';
-        position: absolute;
-        top: calc($svg_size / 2);
-        left: 0;
-        width: $svg_size;
-        height: calc($svg_size / 2);
-        border-radius: 50%;
-        background-color: #fde5cf;
-        z-index: -1;
-      }
-
-      @include respond($breakpoint-tablet) {
-        svg {
-          font-size: $svg_mobile_size;
-        }
-
-        &::after {
-          top: calc($svg_mobile_size / 2);
-          width: $svg_mobile_size;
-          height: calc($svg_mobile_size / 2);
-        }
-      }
+    @include respond-up($breakpoint-pc-sm) {
+      margin-top: $spacing-16;
     }
+  }
+}
 
-    .info {
-      h4 {
-        margin-bottom: 0.4rem;
-      }
+.contact_label {
+  margin-bottom: $spacing-4;
+  font-size: $font-size-11;
+  color: $txt-tertiary;
+}
 
-      p {
-        position: relative;
-        line-height: 2;
+.contact_value {
+  font-size: $font-size-15;
+  font-weight: $font-weight-bold;
+  color: $txt-primary;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: $letter-spacing-tight;
 
-        &:has(mark) {
-          padding-left: 6rem;
+  @include respond-up($breakpoint-pc-sm) {
+    font-size: $font-size-18;
+  }
+}
 
-          mark {
-            position: absolute;
-            left: 0;
-            display: inline-block;
-            width: 6rem;
-            font-weight: 500;
-            background-color: transparent;
-          }
-        }
+.contact_value_sm {
+  font-size: $font-size-13;
+  font-weight: $font-weight-semibold;
+  color: $txt-primary;
 
-        strong {
-          font-weight: 500;
-        }
-      }
+  @include respond-up($breakpoint-pc-sm) {
+    font-size: $font-size-14;
+  }
+}
+
+// ── 하단 2 cards (Hours + Transportation) ──
+
+.cards_bottom {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: $spacing-12;
+
+  @include respond-up($breakpoint-pc-sm) {
+    grid-template-columns: 1fr 2fr;
+    gap: $spacing-16;
+  }
+}
+
+.hours_list {
+  list-style: none;
+}
+
+.hours_row {
+  display: flex;
+  justify-content: space-between;
+  padding: $spacing-10 0;
+
+  & + & {
+    border-top: 0.1rem solid $beige-150;
+  }
+}
+
+.hours_label {
+  font-size: $font-size-13;
+  font-weight: $font-weight-semibold;
+  color: $txt-secondary;
+}
+
+.hours_value {
+  font-size: $font-size-13;
+  font-weight: $font-weight-semibold;
+  color: $txt-primary;
+  font-variant-numeric: tabular-nums;
+}
+
+.transit_grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: $spacing-16;
+
+  @include respond-up($breakpoint-pc-sm) {
+    grid-template-columns: repeat(3, 1fr);
+    gap: $spacing-24;
+  }
+}
+
+.transit_item {
+  & + & {
+    padding-top: $spacing-16;
+    border-top: 0.1rem solid $beige-150;
+
+    @include respond-up($breakpoint-pc-sm) {
+      padding-top: 0;
+      padding-left: $spacing-24;
+      border-top: 0;
+      border-left: 0.1rem solid $beige-150;
+    }
+  }
+}
+
+.transit_type {
+  display: flex;
+  align-items: center;
+  gap: $spacing-6;
+  margin-bottom: $spacing-10;
+  font-size: $font-size-13;
+  font-weight: $font-weight-bold;
+  color: $txt-primary;
+}
+
+.transit_dot {
+  width: 0.4rem;
+  height: 0.4rem;
+  border-radius: $radius-circle;
+  background: $accent;
+}
+
+.transit_lines {
+  list-style: none;
+
+  li {
+    padding: $spacing-2 0;
+    font-size: $font-size-12;
+    color: $txt-secondary;
+    line-height: $line-height-relaxed;
+    word-break: keep-all;
+
+    @include respond-up($breakpoint-pc-sm) {
+      font-size: $font-size-13;
     }
   }
 }

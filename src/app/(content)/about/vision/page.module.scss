@@ -1,51 +1,395 @@
-$greeting_text_size: 2.1rem;
-$greeting_text_margin_bottom: 3rem;
+// ══════════════════════════════════════════
+// VISION — 교회의 비전 페이지
+// references/Vision.jsx 디자인 적용 + 우리 5단락 + Cloudinary 이미지 보존
+// ══════════════════════════════════════════
 
-.wrap {
-  display: flex;
+.container {
+  padding-top: $spacing-32;
+  padding-bottom: $spacing-32;
+
+  @include respond-up($breakpoint-pc-sm) {
+    padding-top: $spacing-64;
+    padding-bottom: $spacing-48;
+  }
+}
+
+// ── 슬로건 다크 카드 ──
+
+.slogan_card {
+  margin-bottom: $spacing-32;
+  padding: $spacing-32 $spacing-24;
+  background: $navy-950;
+  border-radius: $radius-l;
+  text-align: center;
+  overflow: hidden;
+
+  @include respond-up($breakpoint-pc-sm) {
+    margin-bottom: $spacing-64;
+    padding: $spacing-64 $spacing-48;
+  }
+}
+
+.slogan_eyebrow {
+  margin-bottom: $spacing-12;
+  font-size: $font-size-11;
+  font-weight: $font-weight-medium;
+  color: $accent;
+  letter-spacing: $letter-spacing-wide;
+
+  @include respond-up($breakpoint-pc-sm) {
+    font-size: $font-size-12;
+    margin-bottom: $spacing-16;
+  }
+}
+
+.slogan_title {
+  font-size: $font-size-22;
+  font-weight: $font-weight-bold;
+  color: $txt-inverse;
+  line-height: $line-height-snug;
+  letter-spacing: $letter-spacing-tight;
+  word-break: keep-all;
+
+  @include respond-up($breakpoint-pc-sm) {
+    font-size: $font-size-34;
+  }
+}
+
+.slogan_underline {
+  display: block;
+  margin: $spacing-16 auto 0;
+  width: 4rem;
+  height: 0.2rem;
+  background: $accent;
+  opacity: 0.6;
+
+  @include respond-up($breakpoint-pc-sm) {
+    margin-top: $spacing-24;
+  }
+}
+
+// ── 공용 섹션 라벨 ──
+
+.section_label {
+  margin-bottom: $spacing-12;
+  font-size: $font-size-11;
+  font-weight: $font-weight-semibold;
+  color: $primary;
+  letter-spacing: $letter-spacing-wide;
+}
+
+// ── VISION STATEMENT — 본문 5단락 + 이미지 ──
+
+.statement_section {
+  margin-bottom: $spacing-32;
+
+  @include respond-up($breakpoint-pc-sm) {
+    margin-bottom: $spacing-64;
+  }
+}
+
+.statement_lead {
+  font-size: $font-size-15;
+  font-weight: $font-weight-semibold;
+  color: $txt-primary;
+  line-height: $line-height-snug;
+  letter-spacing: $letter-spacing-tight;
+  word-break: keep-all;
+
+  @include respond-up($breakpoint-pc-sm) {
+    font-size: $font-size-18;
+  }
+}
+
+.statement_grid {
+  display: grid;
+  grid-template-columns: 1fr;
   gap: $spacing-20;
 
-  @include respond($breakpoint-pc-sm) {
-    flex-direction: column;
-  }
-}
-.vision_text {
-  flex: 2;
-
-  .greeting_text {
-    margin-bottom: $greeting_text_margin_bottom;
-    font-size: $greeting_text_size;
-    line-height: $greeting_text_size;
-
-    em {
-      font-weight: 600;
-      font-style: normal;
-    }
-  }
-
-  p {
-    margin-bottom: 2rem;
-    color: $txt-secondary;
-
-    &:last-child {
-      margin-bottom: 0;
-    }
+  @include respond-up($breakpoint-pc-sm) {
+    grid-template-columns: 1.4fr 1fr;
+    gap: $spacing-48;
+    align-items: start;
   }
 }
 
-.image_wrap {
-  padding-top: calc($greeting_text_size + $greeting_text_margin_bottom);
-  flex: 1;
+.statement_text {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-16;
+}
+
+.statement_paragraph {
+  font-size: $font-size-14;
+  color: $txt-secondary;
+  line-height: $line-height-loose;
+  word-break: keep-all;
+
+  @include respond-up($breakpoint-pc-sm) {
+    font-size: $font-size-15;
+  }
+}
+
+.statement_image {
+  width: 100%;
+  border-radius: $radius-l;
   overflow: hidden;
+  border: 0.1rem solid $beige-200;
 
   img {
     width: 100%;
-    height: 100% !important;
-    object-fit: cover;
-    border-radius: 1rem;
+    height: auto;
+    display: block;
+  }
+}
+
+// ── 3 PILLARS ──
+
+.pillars_section {
+  margin-bottom: $spacing-32;
+
+  @include respond-up($breakpoint-pc-sm) {
+    margin-bottom: $spacing-64;
+  }
+}
+
+.pillars_title {
+  margin-bottom: $spacing-20;
+  font-size: $font-size-20;
+  font-weight: $font-weight-bold;
+  color: $txt-primary;
+
+  @include respond-up($breakpoint-pc-sm) {
+    font-size: $font-size-22;
+    margin-bottom: $spacing-24;
+  }
+}
+
+.pillars_list {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: $spacing-10;
+  list-style: none;
+
+  @include respond-up($breakpoint-pc-sm) {
+    grid-template-columns: repeat(3, 1fr);
+    gap: $spacing-16;
+  }
+}
+
+.pillar_card {
+  display: flex;
+  flex-direction: row;
+  gap: $spacing-12;
+  padding: $spacing-16;
+  background: $white;
+  border: 0.1rem solid $beige-200;
+  border-radius: $radius-m;
+
+  @include respond-up($breakpoint-pc-sm) {
+    flex-direction: column;
+    gap: 0;
+    padding: $spacing-32 $spacing-24;
+  }
+}
+
+.pillar_icon {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 4.4rem;
+  height: 4.4rem;
+  border-radius: $radius-m;
+  font-size: $font-size-20;
+  line-height: $line-height-reset;
+
+  @include respond-up($breakpoint-pc-sm) {
+    width: 5.6rem;
+    height: 5.6rem;
+    font-size: $font-size-26;
+    margin-bottom: $spacing-20;
   }
 
-  @include respond($breakpoint-pc-sm) {
-    padding-top: 0;
+  .pillar_card[data-tone='primary'] & {
+    background: $beige-200;
+  }
+  .pillar_card[data-tone='gold'] & {
+    background: $accent-subtle;
+  }
+  .pillar_card[data-tone='beige'] & {
+    background: $beige-50;
+  }
+}
+
+.pillar_meta {
+  display: flex;
+  align-items: center;
+  gap: $spacing-6;
+  margin-bottom: $spacing-4;
+
+  @include respond-up($breakpoint-pc-sm) {
+    margin-bottom: $spacing-8;
+  }
+}
+
+.pillar_num {
+  font-size: $font-size-11;
+  font-weight: $font-weight-bold;
+  color: $accent;
+}
+
+.pillar_label {
+  font-size: $font-size-11;
+  font-weight: $font-weight-semibold;
+  color: $txt-tertiary;
+  letter-spacing: $letter-spacing-wide;
+}
+
+.pillar_card_title {
+  margin-bottom: $spacing-6;
+  font-size: $font-size-14;
+  font-weight: $font-weight-bold;
+  color: $txt-primary;
+
+  @include respond-up($breakpoint-pc-sm) {
+    font-size: $font-size-18;
+    margin-bottom: $spacing-12;
+  }
+}
+
+.pillar_desc {
+  font-size: $font-size-12;
+  color: $txt-secondary;
+  line-height: $line-height-relaxed;
+  word-break: keep-all;
+
+  @include respond-up($breakpoint-pc-sm) {
+    font-size: $font-size-13;
+    line-height: $line-height-loose;
+  }
+}
+
+// ── HISTORY (full-width 섹션) ──
+
+.history_section {
+  padding: $spacing-32 $container-padding;
+  background: $beige-100;
+  border-top: 0.1rem solid $beige-150;
+
+  @include respond-up($breakpoint-pc-sm) {
+    padding: $spacing-80 $container-padding;
+  }
+}
+
+.history_inner {
+  max-width: 76rem;
+  margin: 0 auto;
+}
+
+.history_head {
+  margin-bottom: $spacing-24;
+  text-align: center;
+
+  @include respond-up($breakpoint-pc-sm) {
+    margin-bottom: $spacing-48;
+  }
+}
+
+.history_eyebrow {
+  margin-bottom: $spacing-6;
+  font-size: $font-size-11;
+  font-weight: $font-weight-semibold;
+  color: $accent;
+  letter-spacing: $letter-spacing-wide;
+
+  @include respond-up($breakpoint-pc-sm) {
+    font-size: $font-size-12;
+    margin-bottom: $spacing-8;
+  }
+}
+
+.history_title {
+  font-size: $font-size-20;
+  font-weight: $font-weight-bold;
+  color: $txt-primary;
+  letter-spacing: $letter-spacing-tight;
+
+  @include respond-up($breakpoint-pc-sm) {
+    font-size: $font-size-28;
+  }
+}
+
+.history_list {
+  position: relative;
+  list-style: none;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0.6rem;
+    bottom: 0.6rem;
+    left: 5.6rem;
+    width: 0.1rem;
+    background: $beige-200;
+
+    @include respond-up($breakpoint-pc-sm) {
+      left: 9.2rem;
+    }
+  }
+}
+
+.history_item {
+  display: grid;
+  grid-template-columns: 5rem 1.8rem 1fr;
+  align-items: flex-start;
+  padding: $spacing-12 0;
+
+  @include respond-up($breakpoint-pc-sm) {
+    grid-template-columns: 8rem 2.4rem 1fr;
+    padding: $spacing-16 0;
+  }
+}
+
+.history_year {
+  font-size: $font-size-13;
+  font-weight: $font-weight-bold;
+  color: $txt-primary;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: $letter-spacing-tight;
+
+  @include respond-up($breakpoint-pc-sm) {
+    font-size: $font-size-18;
+  }
+}
+
+.history_dot {
+  position: relative;
+  width: 1rem;
+  height: 1rem;
+  margin-top: 0.4rem;
+  border-radius: $radius-circle;
+  background: $white;
+  border: 0.2rem solid $accent;
+  justify-self: center;
+
+  @include respond-up($breakpoint-pc-sm) {
+    width: 1.2rem;
+    height: 1.2rem;
+    margin-top: 0.8rem;
+  }
+}
+
+.history_text {
+  padding-left: $spacing-10;
+  font-size: $font-size-12;
+  color: $txt-secondary;
+  line-height: $line-height-relaxed;
+  word-break: keep-all;
+
+  @include respond-up($breakpoint-pc-sm) {
+    padding-left: $spacing-16;
+    font-size: $font-size-14;
+    line-height: $line-height-loose;
   }
 }
