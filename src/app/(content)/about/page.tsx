@@ -1,8 +1,8 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import LayoutContainer from '@/components/layout/container/LayoutContainer';
-// eslint-disable-next-line no-restricted-imports -- 점진 마이그레이션 대상 (tech-debt-tracker.md)
-import { getSiteSettings } from '@/apis/site-settings';
+import { getHubPageData } from '@/services/about';
+import { displaySettingValue } from '@/utils/site-settings';
 import styles from './page.module.scss';
 
 export const metadata: Metadata = {
@@ -13,14 +13,6 @@ export const metadata: Metadata = {
     description: '대구동남교회를 소개합니다'
   }
 };
-
-// TODO: 사역 수·교구 수·기도일 등 실제 값으로 교체
-const STATS = [
-  { num: '1952', label: '설립' },
-  { num: 'TODO', label: '사역' },
-  { num: 'TODO', label: '교구' },
-  { num: 'TODO', label: '기도일' }
-];
 
 const GALLERY = [
   { tag: '본당', caption: '예배의 중심' },
@@ -61,17 +53,26 @@ const HUB_ITEM_CARDS = [
   }
 ];
 
-// TODO: 1952 외 연혁 실제 값으로 교체
-const HISTORY_MINI = [
-  { year: '1952', text: '대구동남교회 설립' },
-  { year: 'TODO', text: 'TODO' },
-  { year: 'TODO', text: 'TODO' },
-  { year: 'TODO', text: 'TODO' }
-];
-
 export default async function AboutHub() {
-  const settings = await getSiteSettings(['church_address']);
-  const address = settings.church_address ?? 'TODO: 주소';
+  const { history, settings } = await getHubPageData();
+
+  const setupYear = history[0]?.year ?? '—';
+  const stats = [
+    { num: setupYear, label: '설립' },
+    // TODO: 사역 수·교구 수·기도일 — admin 입력 시점에 site_settings 또는 새 collection으로
+    { num: 'TODO', label: '사역' },
+    { num: 'TODO', label: '교구' },
+    { num: 'TODO', label: '기도일' }
+  ];
+  const historyMini = history.slice(0, 4);
+
+  const address = displaySettingValue(settings.church_address, '준비 중');
+  const phone = displaySettingValue(settings.church_phone, '');
+  const zipcode = displaySettingValue(settings.church_zipcode, '');
+  const subway = displaySettingValue(settings.directions_subway, '준비 중');
+  const sundayHours = displaySettingValue(settings.opening_hours_sunday, '준비 중');
+
+  const locationMeta = [zipcode, phone].filter(Boolean).join(' · ') || '준비 중';
 
   return (
     <>
@@ -88,7 +89,7 @@ export default async function AboutHub() {
             1952년에 설립되어, 오늘도 같은 자리에서 이웃과 함께합니다.
           </p>
           <div className={styles.stats}>
-            {STATS.map((stat) => (
+            {stats.map((stat) => (
               <div key={stat.label} className={styles.stat_item}>
                 <p className={styles.stat_num}>{stat.num}</p>
                 <p className={styles.stat_label}>{stat.label}</p>
@@ -159,7 +160,7 @@ export default async function AboutHub() {
             </header>
             <ol className={styles.history_timeline}>
               <span className={styles.history_line} aria-hidden="true" />
-              {HISTORY_MINI.map((item, index) => (
+              {historyMini.map((item, index) => (
                 <li key={index} className={styles.history_node}>
                   <span className={styles.history_dot} aria-hidden="true" />
                   <p className={styles.history_year}>{item.year}</p>
@@ -177,11 +178,10 @@ export default async function AboutHub() {
               </Link>
             </header>
             <p className={styles.location_address}>{address}</p>
-            {/* TODO: 전화번호·운영시간 site_settings에 추가 후 노출 */}
-            <p className={styles.location_meta}>TODO: 우편번호 · 전화번호</p>
+            <p className={styles.location_meta}>{locationMeta}</p>
             <div className={styles.location_extra}>
-              <p>🚇 TODO: 지하철 안내</p>
-              <p>🕐 TODO: 운영시간 안내</p>
+              <p>🚇 {subway}</p>
+              <p>🕐 {sundayHours}</p>
             </div>
           </div>
         </section>

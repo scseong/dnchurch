@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import LayoutContainer from '@/components/layout/container/LayoutContainer';
+import { getWelcomePageData } from '@/services/about';
 import styles from './page.module.scss';
 
 export const metadata: Metadata = {
@@ -35,26 +36,9 @@ const WELCOME_STEPS = [
   }
 ];
 
-const WELCOME_FAQ = [
-  {
-    q: '처음 가도 괜찮을까요?',
-    a: '물론입니다. 정해진 복장도, 미리 알려야 할 절차도 없습니다. 그저 오시는 발걸음 자체를 환영합니다. 입구의 「새가족 안내석」에서 안내자가 자리까지 함께 해드립니다.'
-  },
-  {
-    q: '예배 시간에 늦어도 들어갈 수 있나요?',
-    a: '네, 언제든 들어오실 수 있습니다. 문 앞 안내자가 조용히 자리로 안내해 드리며, 늦은 입장이 부담이 되지 않도록 배려하고 있습니다.'
-  },
-  {
-    q: '아이와 함께 가도 되나요?',
-    a: '주일 오전에는 5세 이상 자녀를 위한 교회학교가 운영되며, 영유아실(Cry Room)이 본당 옆에 마련되어 있어 함께 예배드릴 수 있습니다.'
-  },
-  {
-    q: '꼭 등록해야 하나요?',
-    a: '등록은 의무가 아닙니다. 천천히 둘러보시고, 마음이 편해지셨을 때 새가족반을 통해 인사 나누시면 됩니다. 등록 없이 예배만 참석하셔도 전혀 문제없습니다.'
-  }
-];
+export default async function WelcomePage() {
+  const { faq } = await getWelcomePageData();
 
-export default function WelcomePage() {
   return (
     <>
       <LayoutContainer className={styles.container}>
@@ -105,7 +89,7 @@ export default function WelcomePage() {
           </header>
 
           <ul className={styles.faq_list}>
-            {WELCOME_FAQ.map((item, index) => (
+            {faq.map((item, index) => (
               <li key={index} className={styles.faq_item}>
                 <div className={styles.faq_row}>
                   <span className={styles.faq_q_mark}>Q.</span>

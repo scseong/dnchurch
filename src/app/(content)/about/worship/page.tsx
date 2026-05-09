@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import LayoutContainer from '@/components/layout/container/LayoutContainer';
+import { getWorshipPageData } from '@/services/about';
 import styles from './page.module.scss';
 
 export const metadata: Metadata = {
@@ -21,56 +22,17 @@ const WORSHIP_STATEMENT = {
   desc: '대구동남교회는 말씀과 기도, 찬양을 중심으로 모든 세대가 함께 예배합니다.'
 };
 
-type WorshipItem = {
-  name: string;
-  time: string;
-  place: string;
-  age?: string;
-};
-
-type WorshipType = {
-  id: 'sunday' | 'weekday' | 'school';
-  en: string;
-  label: string;
-  items: WorshipItem[];
-  cta?: string;
-  ctaHref?: string;
-};
-
-const WORSHIP_TYPES: WorshipType[] = [
-  {
-    id: 'sunday',
-    en: 'SUNDAY',
-    label: '주일에 함께 모이는 예배',
-    items: [
-      { name: '주일낮예배', time: '오전 11:00', place: '대예배실' },
-      { name: '주일저녁예배', time: '오후 06:00', place: '대예배실' }
-    ]
-  },
-  {
-    id: 'weekday',
-    en: 'WEEKDAY',
-    label: '주중에 드리는 기도회',
-    items: [
-      { name: '새벽기도회', time: '월~토 오전 05:30', place: '소예배실' },
-      { name: '수요기도회', time: '수요일 오후 07:00', place: '대예배실' },
-      { name: '금요기도회', time: '금요일 오후 08:00', place: '대예배실' }
-    ]
-  },
-  {
-    id: 'school',
+// 그룹별 정적 라벨 (페이지 디자인 — DB에 없음)
+const GROUP_META = {
+  sunday: { en: 'SUNDAY', label: '주일에 함께 모이는 예배' },
+  weekday: { en: 'WEEKDAY', label: '주중에 드리는 기도회' },
+  school: {
     en: 'SCHOOL',
     label: '자녀와 함께',
-    items: [
-      { name: '유치부', age: '5–7세', time: '오전 09:00', place: '소예배실' },
-      { name: '초등부', age: '1–6학년', time: '오전 09:00', place: '교육관' },
-      { name: '중고등부', age: '중1–고3', time: '오전 09:00', place: '교육관' },
-      { name: '청년부', age: '20–30대', time: '오후 01:30', place: '대예배실' }
-    ],
     cta: '자세히 보기',
     ctaHref: '/next-gen'
   }
-];
+} as const;
 
 const WELCOME = {
   greeting: '처음 오신 분께',
@@ -84,7 +46,15 @@ const WELCOME = {
   ]
 };
 
-export default function Worship() {
+export default async function Worship() {
+  const { groups } = await getWorshipPageData();
+
+  const worshipGroups = [
+    { id: 'sunday' as const, ...GROUP_META.sunday, items: groups.sunday },
+    { id: 'weekday' as const, ...GROUP_META.weekday, items: groups.weekday },
+    { id: 'school' as const, ...GROUP_META.school, items: groups.school }
+  ];
+
   return (
     <LayoutContainer className={styles.container}>
       {/* 1. 우리가 드리는 예배 */}
@@ -104,29 +74,31 @@ export default function Worship() {
 
       {/* 2. 카드 그리드 */}
       <section className={styles.cards_grid}>
-        {WORSHIP_TYPES.map((type) => (
-          <article key={type.id} className={styles.card} data-type={type.id}>
+        {worshipGroups.map((group) => (
+          <article key={group.id} className={styles.card} data-type={group.id}>
             <header className={styles.card_head}>
               <div className={styles.card_head_meta}>
-                <p className={styles.card_eyebrow}>{type.en}</p>
-                <h3 className={styles.card_title}>{type.label}</h3>
+                <p className={styles.card_eyebrow}>{group.en}</p>
+                <h3 className={styles.card_title}>{group.label}</h3>
               </div>
-              {type.cta && (
-                <Link href={type.ctaHref ?? '#'} className={styles.card_cta}>
-                  {type.cta}
+              {'cta' in group && (
+                <Link href={group.ctaHref} className={styles.card_cta}>
+                  {group.cta}
                   <span aria-hidden="true">→</span>
                 </Link>
               )}
             </header>
             <ul className={styles.schedule_list}>
-              {type.items.map((item, index) => (
-                <li key={index} className={styles.schedule_row}>
+              {group.items.map((item) => (
+                <li key={item.id} className={styles.schedule_row}>
                   <div className={styles.schedule_meta}>
                     <p className={styles.schedule_name}>
                       <span>{item.name}</span>
-                      {item.age && <span className={styles.schedule_age}>{item.age}</span>}
+                      {item.age_group && (
+                        <span className={styles.schedule_age}>{item.age_group}</span>
+                      )}
                     </p>
-                    <p className={styles.schedule_place}>{item.place}</p>
+                    <p className={styles.schedule_place}>{item.location}</p>
                   </div>
                   <p className={styles.schedule_time}>{item.time}</p>
                 </li>

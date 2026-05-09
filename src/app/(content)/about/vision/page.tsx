@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import LayoutContainer from '@/components/layout/container/LayoutContainer';
 import CloudinaryImage from '@/components/common/CloudinaryImage';
+import { getVisionPageData } from '@/services/about';
 import styles from './page.module.scss';
 
 export const metadata: Metadata = {
@@ -42,14 +43,6 @@ const VISION = {
       icon: '🤝',
       iconTone: 'beige' as const
     }
-  ],
-  // TODO: 1952 외 연혁 실제 값으로 교체
-  history: [
-    { year: '1952', text: '대구동남교회 설립' },
-    { year: 'TODO', text: 'TODO: 주요 연혁 입력' },
-    { year: 'TODO', text: 'TODO: 주요 연혁 입력' },
-    { year: 'TODO', text: 'TODO: 주요 연혁 입력' },
-    { year: 'TODO', text: 'TODO: 주요 연혁 입력' }
   ]
 };
 
@@ -61,7 +54,9 @@ const VISION_STATEMENT = [
   '우리의 목표는 각 성도가 하나님과의 깊은 관계를 구축하고, 이웃과 사회에 긍정적인 영향을 미치는 것입니다. 우리는 함께 이 비전을 이루어 나가길 소망하며, 하나님께서 주신 사랑을 세상에 전하기 위해 끊임없이 노력할 것입니다.'
 ];
 
-export default function Vision() {
+export default async function Vision() {
+  const { history } = await getVisionPageData();
+
   return (
     <>
       <LayoutContainer className={styles.container}>
@@ -132,7 +127,7 @@ export default function Vision() {
             <h3 className={styles.history_title}>걸어온 길</h3>
           </header>
           <ol className={styles.history_list}>
-            {VISION.history.map((item, index) => (
+            {history.map((item, index) => (
               <li key={index} className={styles.history_item}>
                 <span className={styles.history_year}>{item.year}</span>
                 <span className={styles.history_dot} aria-hidden="true" />
