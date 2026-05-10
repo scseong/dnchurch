@@ -19,12 +19,12 @@
   }
 }
 
-// ── 배경: 그라디언트 ──
+// ── 배경: 그라디언트 (references/Greeting.jsx PCHero — darkDeep $navy-900 → dark $navy-950) ──
 
 .hero_bg {
   position: absolute;
   inset: 0;
-  background: linear-gradient(180deg, $bg-dark, $navy-950);
+  background: linear-gradient(180deg, $navy-900, $navy-950);
 }
 
 // ── 오버레이 ──
@@ -37,28 +37,29 @@
 
 // ── 내부 콘텐츠 ──
 
+// references/Greeting.jsx PCHero / MBanner — Mobile center / PC left
 .hero_inner {
   position: relative;
   z-index: 1;
   display: flex;
   flex-direction: column;
   justify-content: center;
-  gap: $spacing-8;
-  padding-top: $spacing-40;
-  padding-bottom: $spacing-32;
+  gap: $spacing-6;
+  padding-top: $spacing-32;
+  padding-bottom: $spacing-28;
   text-align: center;
 
   @include respond-up($header-breakpoint) {
-    gap: $spacing-12;
+    gap: $spacing-10;
     padding-top: $spacing-40;
-    padding-bottom: $spacing-48;
+    padding-bottom: $spacing-56;
     text-align: left;
   }
 }
 
 .hero_eyebrow {
   font-size: $font-size-11;
-  font-weight: $font-weight-semibold;
+  font-weight: $font-weight-medium;
   color: $accent;
   letter-spacing: $letter-spacing-wide;
 
@@ -67,34 +68,32 @@
   }
 }
 
+// 모바일 26px / PC 36px (references/Greeting.jsx)
 .hero_title {
   font-size: $font-size-26;
   font-weight: $font-weight-bold;
   color: $txt-inverse;
   line-height: $line-height-snug;
-  letter-spacing: $letter-spacing-heading;
+  letter-spacing: $letter-spacing-tight;
+  word-break: keep-all;
 
   @include respond-up($header-breakpoint) {
-    font-size: $font-size-34;
-  }
-
-  @include respond-up($breakpoint-pc-sm) {
-    font-size: $font-size-42;
+    font-size: $font-size-36;
   }
 }
 
+// 모바일 13px rgba(white,.45) / PC 15px rgba(white,.5)
 .hero_subtitle {
   font-size: $font-size-13;
   font-weight: $font-weight-regular;
-  color: $txt-dark-muted;
+  color: rgba(255, 255, 255, 0.45);
   line-height: $line-height-relaxed;
+  word-break: keep-all;
 
   @include respond-up($header-breakpoint) {
     font-size: $font-size-15;
-  }
-
-  @include respond-up($breakpoint-pc-sm) {
-    font-size: $font-size-16;
+    color: rgba(255, 255, 255, 0.5);
+    line-height: $line-height-loose;
   }
 }
 

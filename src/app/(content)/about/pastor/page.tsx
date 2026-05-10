@@ -12,12 +12,15 @@ export const metadata: Metadata = {
   }
 };
 
-// 정적 라벨·구절은 hardcoded 유지 (ADR 0006)
+// 정적 라벨·구절 — references/Greeting.jsx 100% 적용 (ADR 0006)
 const PASTOR_STATIC = {
   enTitle: 'SENIOR PASTOR',
   verse: '여호와는 나의 목자시니 내게 부족함이 없으리로다',
   verseRef: '시편 23 : 1'
 };
+
+const GREETING_PLACEHOLDER =
+  '담임목사 인사말이 곧 게시될 예정입니다. 잠시만 기다려 주세요.';
 
 export default async function PastorPage() {
   const { pastor } = await getPastorPageData();
@@ -26,11 +29,15 @@ export default async function PastorPage() {
   const title = pastor?.title ?? '담임목사';
   const careerSource = pastor ? [...pastor.education, ...pastor.experience] : [];
   const career = careerSource.length > 0 ? careerSource : ['준비 중'];
-  const greetingParagraphs = pastor?.greetingParagraphs ?? [];
+  const greetingParagraphs =
+    pastor && pastor.greetingParagraphs.length > 0
+      ? pastor.greetingParagraphs
+      : [GREETING_PLACEHOLDER];
 
   return (
     <LayoutContainer className={styles.container}>
       <div className={styles.grid}>
+        {/* 좌측: 사진 + 이름 (+ PC 한정 career) */}
         <aside className={styles.profile_block}>
           <div className={styles.photo} aria-hidden="true">
             PASTOR PHOTO
@@ -40,8 +47,19 @@ export default async function PastorPage() {
             <span className={styles.name}>{name}</span>
             <span className={styles.role}>{title}</span>
           </p>
+
+          {/* PC: career list (profile 하단, references PCGreeting) */}
+          <ul className={styles.career_list_pc}>
+            {career.map((line, index) => (
+              <li key={index} className={styles.career_item_pc}>
+                <span className={styles.career_dot} aria-hidden="true" />
+                {line}
+              </li>
+            ))}
+          </ul>
         </aside>
 
+        {/* 우측 (PC) / 본문 (Mobile): verse + 인사말 + signature */}
         <article className={styles.content}>
           <div className={styles.verse_card}>
             <p className={styles.verse_ref}>{PASTOR_STATIC.verseRef}</p>
@@ -70,7 +88,8 @@ export default async function PastorPage() {
           </footer>
         </article>
 
-        <aside className={styles.career_block}>
+        {/* Mobile 한정: career 별도 카드 (references MGreeting) */}
+        <aside className={styles.career_card_mobile}>
           <p className={styles.career_label}>CAREER</p>
           <ul className={styles.career_list}>
             {career.map((line, index) => (
