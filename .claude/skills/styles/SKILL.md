@@ -17,7 +17,7 @@ description: SCSS 파일 생성/수정, 스타일 작성, 디자인 토큰 사�
 | `tokens/_layout.scss` | `$container-padding/min/max`, `$header-height`, `$button-height-*`, `$icon-button-size-*` |
 | `tokens/_spacing.scss` | `$spacing-{px값}` (숫자=px): `$spacing-0` ~ `$spacing-200`, 4·8 배수 기반 |
 | `tokens/_typography.scss` | `$font-family-*`, `$font-size-{11~42}` (숫자=px), `$font-weight-*`, `$line-height-*`, `$letter-spacing-*`, heading size map |
-| `tokens/_semantic.scss` | `$padding-*`, `$content-gap-{xl~xs}`, `$section-padding-*`, `$radius-xl/l/m/s/xs/xxs/circle`, `$overlay-*` |
+| `tokens/_semantic.scss` | `$padding-*`, `$content-gap-{xl~xs}`, `$section-gap-*`, `$radius-xl/l/m/s/xs/xxs/circle`, `$overlay-*` |
 
 ## 자동 주입 동작 방식
 
@@ -156,12 +156,12 @@ primitive를 쓰려는 순간 이 표를 먼저 확인한다.
 | 소형 카드, 리스트 아이템 | `$padding-card-compact` | `$radius-s` | `$content-gap-s` |
 | 모달, 바텀시트 | `$padding-card` | `$radius-m` | `$overlay-scrim` |
 | 태그, 뱃지 | `$padding-inline-xs` | `$radius-circle` | |
-| 섹션 컨테이너 | `$container-padding` / `$section-padding-*` | — | `$container-max` |
+| 섹션 컨테이너 | `$container-padding` / `$section-gap-*` | — | `$container-max` |
 | 이미지 오버레이 | — | — | `$overlay-scrim`, `$txt-image-subtle` |
 
 **Content Gap** (XL→XS): `$content-gap-xl`(32px) > `$content-gap-l`(24px) > `$content-gap-m`(16px) > `$content-gap-s`(12px) > `$content-gap-xs`(8px)
 
-**Section Gap**: `$section-padding-80` / `$section-padding-64` / `$section-padding-40`
+**Section Gap**: `$section-gap-80` / `$section-gap-64` / `$section-gap-40`
 
 다크 섹션: `$bg-dark`, `$bg-dark-card` / 이미지·영상 위: `$overlay-image`, `$txt-image-subtle`
 
