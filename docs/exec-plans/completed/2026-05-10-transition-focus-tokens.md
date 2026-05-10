@@ -146,6 +146,6 @@
 
 ## 회고 (머지 후 작성, completed/로 이동 시)
 
-- 잘된 것:
-- 다음에 할 것:
-- 발견된 부채 (→ tech-debt-tracker.md 옮길 것):
+- 잘된 것: Codex PASS + 권고사항(SKILL.md transition 포인터 축약, tech-debt 추적성 명령) 선택 반영. 함정 토큰 3개 삭제 + focus-ring 토큰 신설 모두 verify 통과. `$focus-ring-color: $border-focus` 별칭으로 단일 source 유지.
+- 다음에 할 것: 11곳 focus-ring 패턴 통일 영역 PR. 통일 시 focus-ring mixin 신설 검토.
+- 발견된 부채 (→ tech-debt-tracker.md 옮길 것): focus-ring 패턴 통일 (11곳) — tech-debt-tracker 등록 완료

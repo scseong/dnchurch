@@ -203,6 +203,6 @@ about/* 6 페이지의 hardcoded 동적 데이터를 Phase 1 foundation(`site_co
 
 ## 회고 (머지 후 작성)
 
-- 잘된 것:
-- 다음에 할 것:
-- 발견된 부채 (→ tech-debt-tracker.md):
+- 잘된 것: Codex 1차 검증이 `parseFiniteFloat` 누락·subway/bus displaySettingValue·pastor career 빈값 fallback·Hub setupYear `'—'` 4건의 실질 품질 문제를 잡아냄. Phase 1 unused 3건 모두 Phase 2에서 해소. about/* 6 페이지 전부 SSG `○` 정적 prerender 달성.
+- 다음에 할 것: about/serving-people 후속 디자인. Phase 3 admin UI 작업 시 `SiteCollectionType` 실 사용 시작.
+- 발견된 부채 (→ tech-debt-tracker.md): `useDrawerHistory` 라우트 이동 시 history entry 미정리, `services/about` Supabase error silent fallback 로깅 부재 — tech-debt-tracker 등록 완료

@@ -151,6 +151,6 @@
 
 ## 회고 (머지 후 작성, completed/로 이동 시)
 
-- 잘된 것:
-- 다음에 할 것:
-- 발견된 부채 (→ tech-debt-tracker.md 옮길 것):
+- 잘된 것: Codex 1차 BLOCK이 `$beige-300` 사용처 오판을 차단 — scope creep 없이 tech-debt 등록으로 전환. `git mv`로 history 유지하며 `_usage-guide.scss → STYLES_USAGE_GUIDE.md` 이전. Codex 2차 CHANGE_REQUEST로 검증 명령 3건 정확도 개선.
+- 다음에 할 것: `$beige-300` semantic 매핑 부여 (후속 PR). `docs/PROJECT_GUIDE.md:142` 갱신은 사용자 커밋 시 함께 반영.
+- 발견된 부채 (→ tech-debt-tracker.md 옮길 것): `$beige-300 semantic 매핑 부재` — tech-debt-tracker 등록 완료

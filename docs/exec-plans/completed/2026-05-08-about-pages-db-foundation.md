@@ -194,6 +194,6 @@ const [history, settings, pastor] = await Promise.all([
 
 ## 회고 (머지 후 작성, completed/로 이동 시)
 
-- 잘된 것:
-- 다음에 할 것:
-- 발견된 부채 (→ tech-debt-tracker.md 옮길 것):
+- 잘된 것: Phase 1 read-only foundation 구조가 Phase 2 통합을 위한 안정적 기반이 됨. Knip unused 3건이 의도된 dead code로 올바르게 분류되어 빌드·커밋 차단 없이 진행. 타입 자동 생성(`database.types.ts`)이 마이그레이션 후 즉시 반영됨.
+- 다음에 할 것: Phase 3 admin UI에서 `SiteCollectionType` 실 사용 시작. about/serving-people 데이터 연동 후속 작업.
+- 발견된 부채 (→ tech-debt-tracker.md 옮길 것): 없음 (Phase 1 의도된 잔존 3건은 Phase 2에서 해소됨)

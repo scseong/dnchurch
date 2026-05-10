@@ -161,6 +161,6 @@ override에 `src/styles/**` 추가 — 토큰 정의·믹스인·globals 파일�
 
 ## 회고 (머지 후 작성, completed/로 이동 시)
 
-- 잘된 것:
-- 다음에 할 것:
-- 발견된 부채 (→ tech-debt-tracker.md 옮길 것):
+- 잘된 것: Codex 계획 검증이 property regex 누락(`border-{top,right,bottom,left}`, `background-image`)과 값 경계 취약점(`(?![\w-])`)을 사전 차단. warning 143건 검출로 기존 부채 가시화 성공, error 0건으로 빌드·커밋 차단 없음.
+- 다음에 할 것: 영역별 primitive 청소 PR(143건 점진 감소). 부채 소진 후 severity `error` 격상 PR.
+- 발견된 부채 (→ tech-debt-tracker.md 옮길 것): `🟡 SCSS primitive 토큰 직접 사용 (143건)` — tech-debt-tracker 등록 완료

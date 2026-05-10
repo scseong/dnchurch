@@ -232,6 +232,6 @@ references는 `maxWidth: 1200, margin: 0 auto, padding: 56px 48px 24px` 패턴. 
 
 ## 회고 (머지 후 작성, completed/로 이동 시)
 
-- 잘된 것:
-- 다음에 할 것:
-- 발견된 부채 (→ tech-debt-tracker.md 옮길 것):
+- **잘된 것**: Codex 계획 검증(CHANGE_REQUEST 8건 반영)과 1차 검증(vision 5단락 복원, drift revert)이 실제 품질 문제를 잡아냄. DB 통합·디자인·토큰 정비를 한 PR로 처리하면서도 커밋을 관심사별로 분리해 이력 추적 가능. Hero 버그·반투명 blur 제거 등 발견된 부채를 함께 해소.
+- **다음에 할 것**: `about/serving-people` 후속 디자인. worship `_component`(WorshipCard/SchoolGrid/AboutWorship) dead code 정리.
+- **발견된 부채**: useDrawerHistory history entry 미정리, services/about Supabase error 로깅 부재 — 2026-05-10 tech-debt-tracker 등록 완료.

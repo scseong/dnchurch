@@ -123,6 +123,6 @@ docs 잔재 청소(#1)와 mixin 단일소스 정정(#2) 두 변경만 외과적�
 
 ## 회고 (머지 후 작성, completed/로 이동 시)
 
-- 잘된 것:
-- 다음에 할 것:
-- 발견된 부채 (→ tech-debt-tracker.md 옮길 것):
+- 잘된 것: Codex 계획 검증이 토큰 위치 표 잘못된 정정을 차단 — 표 자체는 정확, 토큰명만 치환하는 올바른 범위 확정. diff 총 5줄로 docs 정합화 + `text-page-title` mixin 단일 source 달성.
+- 다음에 할 것: home `NewHere`/`FeedSection` 타이틀 letter-spacing 시각 변화(-1.5px → -0.5px) 사용자 dev 확인. heading typography 전체 통합 리팩터는 별도 PR.
+- 발견된 부채 (→ tech-debt-tracker.md 옮길 것): 없음
