@@ -35,17 +35,34 @@ const patterns = [
   [/리팩터|마이그레이션|migration|refactor|대규모|큰 변경/i, "큰 변경"],
 ];
 
-const signals = [];
+const codexSignals = [];
 for (const [pattern, label] of patterns) {
-  if (pattern.test(text)) signals.push(label);
+  if (pattern.test(text)) codexSignals.push(label);
 }
 
-if (signals.length > 0) {
-  const uniqueSignals = [...new Set(signals)].join(", ");
-  emitContext(
+const styleKeywords = /scss|module\.scss|스타일|색상|컬러|배경|폰트|토큰|token|믹스인|mixin|반응형|레이아웃|border|padding|margin|className|클래스|디자인|UI|ui/i;
+const needsStyleSkill = styleKeywords.test(text);
+
+const messages = [];
+
+if (codexSignals.length > 0) {
+  const uniqueSignals = [...new Set(codexSignals)].join(", ");
+  messages.push(
     "[hook:agent-router]\n" +
       `이 사용자 요청은 Codex 위임 후보입니다. 감지된 신호: ${uniqueSignals}.\n` +
       "ADR 0001 기준으로 구현 전에 `codex:rescue` 상담을 검토하세요. " +
-      "Codex에 질의할 때는 영어로 요청하고, 사용자에게는 한국어로 요약하세요.",
+      "Codex에 질의할 때는 영어로 요청하고, 사용자에게는 한국어로 요약하세요."
   );
+}
+
+if (needsStyleSkill) {
+  messages.push(
+    "[hook:agent-router]\n" +
+      "SCSS/스타일 작업이 감지되었습니다. 구현 전 `.claude/skills/styles/SKILL.md`를 반드시 읽으세요.\n" +
+      "primitive 토큰($beige-*, $gray-*, $gold-*, $navy-*) 직접 사용 금지 — 반드시 semantic 토큰으로 참조하세요."
+  );
+}
+
+if (messages.length > 0) {
+  emitContext(messages.join("\n\n"));
 }

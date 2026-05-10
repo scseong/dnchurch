@@ -66,7 +66,7 @@ description: SCSS 파일 생성/수정, 스타일 작성, 디자인 토큰 사�
 - **Navy (Brand · Primary Action · Interactive cool)**: `$navy-950` `$navy-800` `$navy-600`
 - **Navy-Blue** _@deprecated_: `$navy-blue-900` `$navy-blue-800` `$navy-blue-700` `$navy-blue-100` (사용 금지 — Primary Action은 Navy 계열)
 - **Gold (Accent)**: `$gold-600` `$gold-400` `$gold-100`
-- **Cream / Beige (Warm Decorative Surface)**: `$cream-100` `$cream-200` `$cream-300` `$beige-50` `$beige-100` `$beige-150` `$beige-200` `$beige-300` — 정적 면 전용. 인터랙션 토큰에 직접 매핑하지 않는다. (`$cream-100`/`$beige-50/100/150/300`은 시맨틱 매핑 미정 — 사용처 발생 시 시맨틱 토큰으로 확장)
+- **Beige (Warm Decorative Surface)**: `$beige-50` `$beige-100` `$beige-150` `$beige-200` `$beige-300` — 정적 면 전용. (`$beige-50/100/150/200` = `$bg-primary`/`$bg-beige-subtle`/`$bg-secondary`/`$border-card`로 매핑 완료; `$beige-300`은 미정)
 - **Status**: `$green-500` `$green-100` `$red-500` `$red-100` `$orange-600` `$orange-100`
 
 ### Semantic (역할 기반 — 컴포넌트에서 직접 사용)
@@ -76,11 +76,11 @@ description: SCSS 파일 생성/수정, 스타일 작성, 디자인 토큰 사�
 `$txt-image-subtle` (이미지 위 보조) `$txt-dark-muted` (다크배경 보조) `$txt-dark-faint` (다크배경 약한)
 
 **Background**
-- 정적 warm: `$bg-primary`(gray-50) `$bg-secondary`(cream-200) `$bg-cream-subtle`(cream-100 — 가장 옅은 cream 면) `$bg-accent-subtle`(gold 12% tint)
+- 정적 warm: `$bg-primary`(beige-50, 페이지 배경) `$bg-card`(#fff, 카드·패널) `$bg-secondary`(beige-150, 섹션·카드 정적 면) `$bg-beige-subtle`(beige-100, 가장 옅은 섹션 면) `$bg-accent-subtle`(gold 12% tint, CTA·배너 면)
 - 인터랙티브 cool: `$bg-hover`(navy 6% rgba) — 면 종류 무관, hover/active 피드백 전용 ★
 - 다크: `$bg-dark` `$bg-dark-card` `$bg-dark-nav`(헤더·푸터)
 
-> v4: `$bg-tertiary`(cream-300) **삭제**. hover 피드백은 `$bg-hover`로, 정적 deeper-warm 면은 `$bg-secondary` 재사용 또는 명시적 cream primitive로 한정.
+> v4: `$bg-tertiary` **삭제**. hover 피드백은 `$bg-hover`로, 더 깊은 warm 면이 필요하면 `$bg-secondary` 재사용.
 
 **Border**
 `$border-primary` `$border-subtle` `$border-strong` `$border-focus` `$border-warm`(cream·gold 배경 위)
@@ -100,19 +100,51 @@ description: SCSS 파일 생성/수정, 스타일 작성, 디자인 토큰 사�
 `$status-positive` `$status-positive-bg` `$status-negative` `$status-negative-bg` `$status-warning` `$status-warning-bg`
 
 ```scss
-// ❌ 하드코딩
+// ❌ 금지 — 하드코딩
 color: #1f2937;
 background: #f5f0e6;
 
-// ✅ 시맨틱 토큰 우선
+// ❌ 금지 — primitive 직접 사용
+color: $gold-600;              // → $accent
+background: $navy-950;         // → $bg-dark-nav 또는 $primary-active
+border: 1px solid $beige-200;  // → $border-card
+
+// ✅ 올바른 사용
 color: $txt-primary;
 background: $bg-secondary;
-border-color: $border-primary;
-
-// ✅ 역할이 명확할 때 Primitive도 허용
-color: $gold-600;       // 강조 텍스트
-background: $navy-950;  // 헤더·다크 섹션
+border-color: $border-card;
+color: $accent;                // eyebrow · Gold CTA
+background-color: $bg-dark-nav; // 헤더 · 푸터 다크 nav
 ```
+
+### Primitive → Semantic 치트시트
+
+primitive를 쓰려는 순간 이 표를 먼저 확인한다.
+
+| 쓰려던 primitive | 대신 쓸 semantic | 대표 사용 상황 |
+|---|---|---|
+| `$gold-600` | `$accent` | eyebrow 텍스트, Gold CTA 아이콘·텍스트 |
+| `$gold-400` | `$accent-hover` | Gold 요소 hover 상태 |
+| `$gold-100` | `$accent-subtle` | Gold 연한 배경 |
+| `$navy-800` | `$primary` | CTA 배경, 링크, 선택 탭 |
+| `$navy-600` | `$primary-hover` | Primary hover 상태 |
+| `$navy-950` (active) | `$primary-active` | 클릭·활성 상태 |
+| `$navy-950` (배경) | `$bg-dark-nav` | 헤더·푸터·사이드바 다크 배경 |
+| `$gray-900` | `$txt-primary` | 제목·본문 |
+| `$gray-700` | `$txt-secondary` | 보조 텍스트·부제 |
+| `$gray-500` | `$txt-tertiary` | 캡션·메타·날짜 |
+| `$gray-400` | `$txt-disabled` | 비활성 텍스트 |
+| `$gray-300` | `$border-primary` | 기본 구분선·input 테두리 |
+| `$gray-200` | `$label-neutral-bg` | 중립 라벨·뱃지 배경 |
+| `$beige-50` | `$bg-primary` | 페이지 전체 배경 |
+| `$beige-100` | `$bg-beige-subtle` | 가장 옅은 섹션 면 |
+| `$beige-150` | `$bg-secondary` | 섹션·카드 정적 면 |
+| `$beige-200` | `$border-card` | 카드·섹션 외곽 테두리 |
+| `$white` | `$txt-inverse` / `$bg-card` | 다크 배경 위 텍스트 / 카드·패널 배경 |
+
+**예외 — semantic 미정 (사용처에 로컬 주석 필수)**
+- 다크 그라디언트: `linear-gradient($navy-900, $navy-950)` 등 Hero·배너 전용
+- rgba 투명도 조합: `rgba($gold-600, 0.18)` 등 기존 semantic으로 표현 불가한 케이스
 
 ## Semantic Token 매핑 규칙
 
