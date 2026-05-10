@@ -157,6 +157,7 @@ primitive를 쓰려는 순간 이 표를 먼저 확인한다.
 | 태그, 뱃지 | `$padding-inline-xs` | `$radius-circle` | |
 | 섹션 컨테이너 | `$container-padding` / `$section-gap-*` | — | `$container-max` |
 | 이미지 오버레이 | — | — | `$overlay-scrim`, `$txt-image-subtle` |
+| `:focus-visible` outline | `$focus-ring-width` / `$focus-ring-offset` | — | `$focus-ring-color` |
 
 **Content Gap** (XL→XS): `$content-gap-xl`(32px) > `$content-gap-l`(24px) > `$content-gap-m`(16px) > `$content-gap-s`(12px) > `$content-gap-xs`(8px)
 
@@ -220,27 +221,16 @@ Hover 패턴은 **3원칙**을 예외 없이 따른다 — 다른 곳에서 `tra
 }
 ```
 
-## Transition 토큰 (`_effect.scss`)
+## Transition
 
-> **주의**: 아래 shorthand 토큰은 내부에 `all`을 포함한다. **hover 인터랙션에서는 사용하지 말고** `hover-*` mixin을 쓴다(Hover 3원칙 #1). 셔터 진입·일회성 등장 등 비-hover 영역에서만 사용.
-
-```scss
-// 비-hover 범용 (예: SchoolGrid 카드 등장)
-transition: $transition-base;    // all 0.22s ease
-
-// 비-hover 탄력 (아이콘 등장)
-transition: $transition-spring;  // all 0.24s spring
-
-// 패널·모달·시트 진입
-transition: $transition-enter;   // all 0.36s snappy
-```
-
-hover에서 색·배경 한 속성만 변경하려면 직접 명시 또는 mixin 사용:
+transition shorthand 토큰은 제공하지 않는다(이전 `$transition-base/spring/enter`는 `all` 포함으로 Hover 3원칙 #1 위반이라 삭제). hover는 `hover-*` mixin 또는 변경 속성을 명시한 transition을 직접 작성한다.
 
 ```scss
 transition: background-color 0.18s ease;  // 직접 명시
 @include hover-bg-shift($primary-hover);  // mixin (권장)
 ```
+
+easing·duration이 필요하면 `$transition-easing-{default,spring,snappy}` / `$transition-duration-normal` 토큰을 합성한다.
 
 ## 폰트
 

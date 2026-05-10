@@ -47,20 +47,6 @@ $transition-easing-snappy: cubic-bezier(0.25, 0, 0, 1);
 $transition-duration-normal: 0.22s;
 
 // ══════════════════════════════════════════
-// TRANSITION SHORTHAND — 범용 단축 값
-// 사용: transition: $transition-base;
-// ══════════════════════════════════════════
-
-/// 버튼·링크·색상 변화 등 범용
-$transition-base:   all 0.22s #{$transition-easing-default};
-
-/// 카드 lift, 아이콘 등장 등 탄력 있는 인터랙션
-$transition-spring: all 0.24s #{$transition-easing-spring};
-
-/// 패널·모달·시트 진입 — 빠르고 자연스러운 감속
-$transition-enter:  all 0.36s #{$transition-easing-snappy};
-
-// ══════════════════════════════════════════
 // ANIMATION
 // ══════════════════════════════════════════
 
