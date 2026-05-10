@@ -12,6 +12,9 @@ type DrawerProps = {
 export default function Drawer({ isOpen, onClose }: DrawerProps) {
   return (
     <div
+      role="dialog"
+      aria-modal="true"
+      aria-label="전체 메뉴"
       className={clsx(styles.drawer, isOpen && styles.animate)}
       onClick={(e) => e.stopPropagation()}
     >
