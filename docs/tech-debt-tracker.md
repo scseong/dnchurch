@@ -40,6 +40,15 @@
 - **발견일**: 2026-05-01 (ESLint 레이어 룰 도입 시)
 - **2026-05-02**: `worship/page.tsx` 해소 (`services/worship/` 도입, `apis/worship-schedules.ts` 제거) — 10건 → 9건
 
+### 🟡 SCSS primitive 토큰 직접 사용 (143건)
+
+- **무엇**: `.module.scss`에서 primitive 토큰(`$gray-*`/`$navy-*`/`$gold-*`/`$beige-*`/`$cream-*`/`$black`/`$white`)을 color/border/background 등에 직접 사용. semantic 토큰(`$txt-*`/`$bg-*`/`$border-*`/`$primary`/`$accent`)을 거치지 않음
+- **왜**: ADR 0003(design-system-v3)이 primitive↔semantic 분리를 결정했지만 도구 가시화가 부재했음. 2026-05-10 stylelint guardrail PR에서 `declaration-property-value-disallowed-list` warning 룰 도입으로 가시화됨
+- **마이그레이션 경로**: 영역별 분리 PR(home / about / sermons / news / admin)로 점진 치환. `.claude/skills/styles/SKILL.md`의 "Primitive → Semantic 치트시트" 표 참조. 모두 청산 후 별도 PR에서 룰 severity를 `warning` → `error`로 격상
+- **영향 범위**: `src/app/**/*.module.scss`, `src/components/**/*.module.scss` 다수
+- **확인**: `yarn lint:styles | grep "primitive 토큰 직접 사용"` (현재 143건)
+- **발견일**: 2026-05-10 (stylelint-primitive-guardrail PR 도입 시 정확 카운트)
+
 ### 🟡 SCSS 하드코딩 색상 (49건)
 
 - **무엇**: `.module.scss` 파일 곳곳에서 hex 색상(`#xxxxxx`) 직접 사용. 토큰 변수가 아님
