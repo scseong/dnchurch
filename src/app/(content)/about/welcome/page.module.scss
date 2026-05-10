@@ -117,6 +117,7 @@
   font-weight: $font-weight-semibold;
   color: $primary;
   letter-spacing: $letter-spacing-wide;
+  text-align: center;
 
   @include respond-up($breakpoint-pc-sm) {
     margin-bottom: $spacing-24;
@@ -409,12 +410,12 @@
   gap: $spacing-8;
   width: 100%;
   padding: $spacing-12 $spacing-16;
-  background: $accent-subtle;
-  color: $navy-950;
+  background: $accent;
+  color: $txt-inverse;
   font-size: $font-size-13;
   font-weight: $font-weight-bold;
   border-radius: $radius-m;
-  @include hover-lift($shadow: $shadow-md);
+  @include hover-bg-shift($accent-hover);
 
   @include respond-up($breakpoint-pc-sm) {
     width: auto;

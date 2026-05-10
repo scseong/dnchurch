@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import { LuBookOpen, LuFlame, LuHandshake } from 'react-icons/lu';
 import LayoutContainer from '@/components/layout/container/LayoutContainer';
 import CloudinaryImage from '@/components/common/CloudinaryImage';
 import { getVisionPageData } from '@/services/about';
@@ -24,7 +25,7 @@ const VISION = {
       label: 'WORD',
       title: '말씀 위에 서는 교회',
       desc: '성경의 권위 아래 모든 사역이 세워집니다. 매주 강해 설교와 성경 공부를 통해, 우리는 시대의 흐름이 아닌 영원한 진리 위에 발을 디딥니다.',
-      icon: '📖',
+      Icon: LuBookOpen,
       iconTone: 'primary' as const
     },
     {
@@ -32,7 +33,7 @@ const VISION = {
       label: 'PRAYER',
       title: '기도로 깨어 있는 교회',
       desc: '새벽기도와 중보기도를 통해 하나님의 일하심을 구합니다. 개인의 기도가 모여 공동체의 기도가 되고, 공동체의 기도는 도시를 변화시킵니다.',
-      icon: '🕯️',
+      Icon: LuFlame,
       iconTone: 'gold' as const
     },
     {
@@ -40,7 +41,7 @@ const VISION = {
       label: 'COMMUNITY',
       title: '이웃과 함께하는 교회',
       desc: '교회의 담은 안이 아니라 밖을 향해 있습니다. 지역 사회를 섬기고, 다음 세대를 키우며, 선교지를 품는 일에 우리의 자원을 사용합니다.',
-      icon: '🤝',
+      Icon: LuHandshake,
       iconTone: 'beige' as const
     }
   ]
@@ -105,14 +106,16 @@ export default async function Vision() {
                 data-tone={pillar.iconTone}
               >
                 <span className={styles.pillar_icon} aria-hidden="true">
-                  {pillar.icon}
+                  <pillar.Icon />
                 </span>
-                <p className={styles.pillar_meta}>
-                  <span className={styles.pillar_num}>{pillar.num}</span>
-                  <span className={styles.pillar_label}>· {pillar.label}</span>
-                </p>
-                <h4 className={styles.pillar_card_title}>{pillar.title}</h4>
-                <p className={styles.pillar_desc}>{pillar.desc}</p>
+                <div className={styles.pillar_body}>
+                  <p className={styles.pillar_meta}>
+                    <span className={styles.pillar_num}>{pillar.num}</span>
+                    <span className={styles.pillar_label}>· {pillar.label}</span>
+                  </p>
+                  <h4 className={styles.pillar_card_title}>{pillar.title}</h4>
+                  <p className={styles.pillar_desc}>{pillar.desc}</p>
+                </div>
               </li>
             ))}
           </ol>

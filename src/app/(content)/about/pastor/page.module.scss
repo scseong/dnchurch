@@ -18,19 +18,25 @@
 .grid {
   display: grid;
   grid-template-columns: 1fr;
-  gap: 0;
+  grid-template-areas:
+    'content'
+    'career'
+    'profile';
+  gap: $spacing-32;
 
   @include respond-up($breakpoint-pc-sm) {
     grid-template-columns: 32rem 1fr;
+    grid-template-areas: 'profile content';
     column-gap: $spacing-56;
+    row-gap: 0;
     align-items: start;
   }
 }
 
-// ── 좌측: profile block ──
+// ── profile block ──
 
 .profile_block {
-  margin-bottom: $spacing-20;
+  grid-area: profile;
 
   @include respond-up($breakpoint-pc-sm) {
     margin-bottom: 0;
@@ -52,8 +58,15 @@
   font-weight: $font-weight-medium;
   letter-spacing: $letter-spacing-wide;
 
+  @include respond-up($breakpoint-tablet) {
+    max-width: 32rem;
+    margin-right: auto;
+  }
+
   @include respond-up($breakpoint-pc-sm) {
     aspect-ratio: 3 / 4;
+    max-width: none;
+    margin-right: 0;
     margin-bottom: $spacing-16;
     font-size: $font-size-13;
   }
@@ -120,7 +133,7 @@
 // ── 우측 / Mobile 본문: content ──
 
 .content {
-  // 자동 위치
+  grid-area: content;
 }
 
 .verse_card {
@@ -242,7 +255,7 @@
 // ── Mobile: career 별도 카드 ──
 
 .career_card_mobile {
-  margin-top: $spacing-28;
+  grid-area: career;
   padding: $spacing-16;
   background: $beige-100;
   border: 0.1rem solid $beige-150;

@@ -15,7 +15,7 @@ export const metadata: Metadata = {
 };
 
 export default async function Directions() {
-  const { settings } = await getLocationPageData();
+  const { settings, worship } = await getLocationPageData();
 
   const lat = parseFiniteFloat(settings.church_lat, 35.85262832577055);
   const lng = parseFiniteFloat(settings.church_lng, 128.53467835707838);
@@ -25,11 +25,8 @@ export default async function Directions() {
   const phone = displaySettingValue(settings.church_phone);
   const email = displaySettingValue(settings.church_email);
 
-  const hours = [
-    { label: '주일', value: displaySettingValue(settings.opening_hours_sunday) },
-    { label: '평일', value: displaySettingValue(settings.opening_hours_weekday) },
-    { label: '토요일', value: displaySettingValue(settings.opening_hours_saturday) }
-  ];
+  // OPENING HOURS 대신 주요 예배 시간 표시 — 주일 + 평일(school 제외)
+  const worshipList = [...worship.sunday, ...worship.weekday];
 
   const subwayValue = displaySettingValue(settings.directions_subway, '');
   const subwayLines = subwayValue ? [subwayValue] : ['준비 중'];
@@ -88,15 +85,19 @@ export default async function Directions() {
 
       <div className={styles.cards_bottom}>
         <section className={styles.card}>
-          <p className={styles.section_label}>OPENING HOURS</p>
-          <ul className={styles.hours_list}>
-            {hours.map((item) => (
-              <li key={item.label} className={styles.hours_row}>
-                <span className={styles.hours_label}>{item.label}</span>
-                <span className={styles.hours_value}>{item.value}</span>
-              </li>
-            ))}
-          </ul>
+          <p className={styles.section_label}>WORSHIP SCHEDULE</p>
+          {worshipList.length > 0 ? (
+            <ul className={styles.hours_list}>
+              {worshipList.map((item) => (
+                <li key={item.id} className={styles.hours_row}>
+                  <span className={styles.hours_label}>{item.name}</span>
+                  <span className={styles.hours_value}>{item.time}</span>
+                </li>
+              ))}
+            </ul>
+          ) : (
+            <p className={styles.empty_hint}>준비 중</p>
+          )}
         </section>
 
         <section className={styles.card}>

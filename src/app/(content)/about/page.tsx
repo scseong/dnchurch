@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
+import { LuClock, LuTrainFront } from 'react-icons/lu';
 import LayoutContainer from '@/components/layout/container/LayoutContainer';
 import { getHubPageData } from '@/services/about';
 import { displaySettingValue } from '@/utils/site-settings';
@@ -159,7 +160,6 @@ export default async function AboutHub() {
               </Link>
             </header>
             <ol className={styles.history_timeline}>
-              <span className={styles.history_line} aria-hidden="true" />
               {historyMini.map((item, index) => (
                 <li key={index} className={styles.history_node}>
                   <span className={styles.history_dot} aria-hidden="true" />
@@ -180,8 +180,14 @@ export default async function AboutHub() {
             <p className={styles.location_address}>{address}</p>
             <p className={styles.location_meta}>{locationMeta}</p>
             <div className={styles.location_extra}>
-              <p>🚇 {subway}</p>
-              <p>🕐 {sundayHours}</p>
+              <p>
+                <LuTrainFront aria-hidden="true" />
+                {subway}
+              </p>
+              <p>
+                <LuClock aria-hidden="true" />
+                {sundayHours}
+              </p>
             </div>
           </div>
         </section>

@@ -107,7 +107,10 @@ export const getWorshipPageData = async () => {
   return { groups };
 };
 
-export const getLocationPageData = async (): Promise<{ settings: SiteSettings }> => {
-  const settings = await getSiteSettings([...LOCATION_SETTING_KEYS]);
-  return { settings };
+export const getLocationPageData = async () => {
+  const [settings, worship] = await Promise.all([
+    getSiteSettings([...LOCATION_SETTING_KEYS]),
+    getWorshipGroupsSafe()
+  ]);
+  return { settings, worship };
 };

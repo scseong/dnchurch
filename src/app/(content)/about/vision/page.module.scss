@@ -18,7 +18,8 @@
 .slogan_card {
   margin-bottom: $spacing-32;
   padding: $spacing-32 $spacing-24;
-  background: $navy-950;
+  background: $bg-secondary;
+  border: 0.1rem solid $beige-200;
   border-radius: $radius-l;
   text-align: center;
   overflow: hidden;
@@ -45,7 +46,7 @@
 .slogan_title {
   font-size: $font-size-22;
   font-weight: $font-weight-bold;
-  color: $txt-inverse;
+  color: $txt-primary;
   line-height: $line-height-snug;
   letter-spacing: $letter-spacing-tight;
   word-break: keep-all;
@@ -180,6 +181,7 @@
 .pillar_card {
   display: flex;
   flex-direction: row;
+  align-items: flex-start;
   gap: $spacing-12;
   padding: $spacing-16;
   background: $white;
@@ -188,9 +190,18 @@
 
   @include respond-up($breakpoint-pc-sm) {
     flex-direction: column;
+    align-items: stretch;
     gap: 0;
     padding: $spacing-32 $spacing-24;
   }
+}
+
+// 모바일: icon 좌측, body(meta·title·desc)는 우측 vertical stack
+.pillar_body {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
 }
 
 .pillar_icon {
@@ -201,14 +212,22 @@
   width: 4.4rem;
   height: 4.4rem;
   border-radius: $radius-m;
-  font-size: $font-size-20;
-  line-height: $line-height-reset;
+
+  svg {
+    width: 2rem;
+    height: 2rem;
+    color: $txt-primary;
+  }
 
   @include respond-up($breakpoint-pc-sm) {
     width: 5.6rem;
     height: 5.6rem;
-    font-size: $font-size-26;
     margin-bottom: $spacing-20;
+
+    svg {
+      width: 2.6rem;
+      height: 2.6rem;
+    }
   }
 
   .pillar_card[data-tone='primary'] & {

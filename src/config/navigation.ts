@@ -19,7 +19,7 @@ export type BottomNavItem = {
 export const GNB_ITEMS: NavItem[] = [
   {
     label: '교회 소개',
-    href: '/about/pastor',
+    href: '/about',
     children: [
       { label: '인사말', href: '/about/pastor' },
       { label: '교회의 비전', href: '/about/vision' },

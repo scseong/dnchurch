@@ -190,6 +190,11 @@
   list-style: none;
 }
 
+.empty_hint {
+  font-size: $font-size-13;
+  color: $txt-tertiary;
+}
+
 .hours_row {
   display: flex;
   justify-content: space-between;
