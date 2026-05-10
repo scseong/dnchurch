@@ -5,6 +5,24 @@
       "severity": "warning",
       "message": "색상 하드코딩 금지: src/styles/tokens/_color.scss의 토큰 변수($navy, $gold 등)를 사용하세요. (tech-debt-tracker 참조)"
     }],
+    "declaration-property-value-disallowed-list": [
+      {
+        "/^(color|fill|stroke|background(-color|-image)?|border(-(top|right|bottom|left))?(-color)?|outline(-color)?|box-shadow|text-decoration-color)$/": [
+          "/\\$gray-\\d+(?![\\w-])/",
+          "/\\$navy-\\d+(?![\\w-])/",
+          "/\\$navy-blue-/",
+          "/\\$gold-\\d+(?![\\w-])/",
+          "/\\$beige-\\d+(?![\\w-])/",
+          "/\\$cream-\\d+(?![\\w-])/",
+          "/\\$black(?![\\w-])/",
+          "/\\$white(?![\\w-])/"
+        ]
+      },
+      {
+        "severity": "warning",
+        "message": "primitive 토큰 직접 사용 금지: semantic 토큰($txt-*, $bg-*, $border-*, $primary, $accent 등)을 사용하세요. 매핑 표는 .claude/skills/styles/SKILL.md 참조. (tech-debt-tracker 참조)"
+      }
+    ],
     "selector-class-pattern": [
       "^[a-z][a-z0-9_]*$",
       {
@@ -71,6 +89,12 @@
       "files": ["src/styles/tokens/_color.scss"],
       "rules": {
         "color-no-hex": null
+      }
+    },
+    {
+      "files": ["src/styles/tokens/**", "src/styles/_mixins.scss", "src/styles/globals.scss"],
+      "rules": {
+        "declaration-property-value-disallowed-list": null
       }
     }
   ],

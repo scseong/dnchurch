@@ -1,3 +1,8 @@
+# Styles Usage Guide
+
+> 이전 위치: `src/styles/_usage-guide.scss` (어디에도 import되지 않던 SCSS 주석 docs). 본 PR(2026-05-10 `style-tokens-cleanup`)에서 이전. 텍스트는 원본 형태 그대로 보존(추후 PR에서 markdown 정식화 가능).
+
+```text
 // ══════════════════════════════════════════
 // TEXT ROLE → TOKEN 결정 가이드
 // ══════════════════════════════════════════
@@ -143,7 +148,7 @@
 // │                 │ $radius-circle           │
 // │                 │ $font-size-12          │
 // ├─────────────────┼───────────────────────┤
-// │ 섹션 컨테이너    │ $container-padding / $section-padding-*   │
+// │ 섹션 컨테이너    │ $container-padding / $section-gap-*       │
 // ├─────────────────┼───────────────────────┤
 // │ 리스트 아이템     │ $content-gap-s             │
 // │                 │ $padding-card-compact  │
@@ -213,3 +218,4 @@
 //     line-height: $line-height-base;
 //     color: $txt-secondary;
 //   }
+```

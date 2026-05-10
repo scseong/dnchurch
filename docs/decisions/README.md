@@ -34,5 +34,7 @@
 | [0002](0002-node-first-harness-gate.md) | Node-first 하네스 자동화와 merge/release gate 채택 | Accepted | 2026-05-01 |
 | [0003](0003-design-system-v3-token-unification.md) | design-system-v3 typography hierarchy | Accepted | 2026-05-04 |
 | [0004](0004-ui-component-foundation.md) | UI Component Foundation (디자인 시스템 v4) | Accepted | 2026-05-06 |
+| [0005](0005-about-pages-content-model.md) | about pages content model | Superseded by [0006](0006-about-pages-domain-driven-content.md) | 2026-05-09 |
+| [0006](0006-about-pages-domain-driven-content.md) | about pages domain driven content | Proposed | 2026-05-09 |
 
 <!-- last-audit: 2026-05-01 -->

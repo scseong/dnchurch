@@ -145,6 +145,6 @@
 
 ## 회고 (머지 후 작성, completed/로 이동 시)
 
-- 잘된 것:
-- 다음에 할 것:
-- 발견된 부채 (→ tech-debt-tracker.md 옮길 것):
+- **잘된 것**: Codex 계획·1차 검증 모두 PASS. text-decoration 패턴 교체로 Hover 3원칙 #3 home 위반 0건 달성. 박스 높이 보존 전제를 plan에 명시해 시각 회귀 리스크 사전 관리.
+- **다음에 할 것**: sermons/news/about 등 home 외 Hover Border 위반 영역별 PR로 점진 해소.
+- **발견된 부채**: 없음 (기존 tech-debt-tracker 항목 2건 해결로 이동).

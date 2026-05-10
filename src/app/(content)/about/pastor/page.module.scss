@@ -1,0 +1,254 @@
+// ══════════════════════════════════════════
+// PASTOR — 인사말 페이지
+// references/Greeting.jsx PCGreeting + MGreeting 100% 적용
+//   PC: 좌측 (사진 + 이름 + career) / 우측 (verse + 인사말 + signature)
+//   Mobile: 사진+이름 / verse(center) / 인사말 / signature / career 카드 (별도)
+// ══════════════════════════════════════════
+
+.container {
+  padding-top: $spacing-24;
+  padding-bottom: $spacing-32;
+
+  @include respond-up($breakpoint-pc-sm) {
+    padding-top: $spacing-56;
+    padding-bottom: $spacing-24;
+  }
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-areas:
+    'content'
+    'profile'
+    'career';
+  gap: $spacing-32;
+
+  @include respond-up($breakpoint-pc-sm) {
+    grid-template-columns: 32rem 1fr;
+    grid-template-areas: 'profile content';
+    column-gap: $spacing-56;
+    row-gap: 0;
+    align-items: start;
+  }
+}
+
+// ── profile block ──
+
+.profile_block {
+  grid-area: profile;
+
+  @include respond-up($breakpoint-pc-sm) {
+    margin-bottom: 0;
+  }
+}
+
+.photo {
+  width: 100%;
+  aspect-ratio: 4 / 5;
+  margin-bottom: $spacing-12;
+  background: linear-gradient(135deg, $beige-100, $beige-150);
+  border: 0.1rem solid $border-card;
+  border-radius: $radius-m;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: $txt-tertiary;
+  font-size: $font-size-11;
+  font-weight: $font-weight-medium;
+  letter-spacing: $letter-spacing-wide;
+
+  @include respond-up($breakpoint-tablet) {
+    max-width: 32rem;
+    margin-right: auto;
+  }
+
+  @include respond-up($breakpoint-pc-sm) {
+    aspect-ratio: 3 / 4;
+    max-width: none;
+    margin-right: 0;
+    margin-bottom: $spacing-16;
+    font-size: $font-size-13;
+  }
+}
+
+.eyebrow {
+  margin-bottom: $spacing-4;
+  font-size: $font-size-11;
+  font-weight: $font-weight-semibold;
+  color: $accent;
+  letter-spacing: $letter-spacing-wider;
+
+  @include respond-up($breakpoint-pc-sm) {
+    margin-bottom: $spacing-6;
+  }
+}
+
+.name_line {
+  font-size: $font-size-18;
+  font-weight: $font-weight-bold;
+  color: $txt-primary;
+
+  @include respond-up($breakpoint-pc-sm) {
+    font-size: $font-size-22;
+    margin-bottom: $spacing-4;
+  }
+}
+
+.role {
+  margin-left: $spacing-6;
+  font-size: $font-size-13;
+  font-weight: $font-weight-medium;
+  color: $txt-secondary;
+
+  @include respond-up($breakpoint-pc-sm) {
+    font-size: $font-size-14;
+  }
+}
+
+// ── PC: profile 하단 career list ──
+
+.career_list_pc {
+  display: none;
+
+  @include respond-up($breakpoint-pc-sm) {
+    display: block;
+    list-style: none;
+    margin-top: $spacing-16;
+    border-top: 0.1rem solid $border-card;
+  }
+}
+
+.career_item_pc {
+  display: flex;
+  align-items: flex-start;
+  gap: $spacing-8;
+  padding: $spacing-10 0;
+  border-bottom: 0.1rem solid $border-card;
+  font-size: $font-size-12;
+  color: $txt-secondary;
+  word-break: keep-all;
+}
+
+// ── 우측 / Mobile 본문: content ──
+
+.content {
+  grid-area: content;
+}
+
+.lead {
+  margin-bottom: $spacing-16;
+  font-size: $font-size-20;
+  font-weight: $font-weight-bold;
+  color: $txt-primary;
+  line-height: $line-height-snug;
+  letter-spacing: $letter-spacing-tight;
+  word-break: keep-all;
+
+  @include respond-up($breakpoint-pc-sm) {
+    margin-bottom: $spacing-28;
+    font-size: $font-size-28;
+  }
+}
+
+.paragraph {
+  margin-bottom: $spacing-12;
+  font-size: $font-size-13;
+  color: $txt-secondary;
+  line-height: $line-height-loose;
+  word-break: keep-all;
+
+  @include respond-up($breakpoint-pc-sm) {
+    margin-bottom: $spacing-16;
+    font-size: $font-size-15;
+  }
+}
+
+.signature {
+  margin-top: $spacing-20;
+  padding-top: $spacing-16;
+  border-top: 0.1rem solid $border-card;
+  text-align: right;
+
+  @include respond-up($breakpoint-pc-sm) {
+    margin-top: $spacing-32;
+    padding-top: $spacing-24;
+  }
+}
+
+.sig_role {
+  margin-bottom: $spacing-2;
+  font-size: $font-size-11;
+  color: $txt-tertiary;
+
+  @include respond-up($breakpoint-pc-sm) {
+    margin-bottom: $spacing-4;
+    font-size: $font-size-13;
+  }
+}
+
+.sig_name {
+  font-size: $font-size-15;
+  font-weight: $font-weight-bold;
+  color: $txt-primary;
+
+  @include respond-up($breakpoint-pc-sm) {
+    font-size: $font-size-18;
+    letter-spacing: $letter-spacing-wide;
+  }
+}
+
+.sig_drim {
+  margin-left: $spacing-6;
+  color: $txt-tertiary;
+  font-weight: $font-weight-regular;
+}
+
+// ── Mobile: career 별도 카드 ──
+
+.career_card_mobile {
+  grid-area: career;
+  padding: $spacing-16;
+  background: $beige-100;
+  border: 0.1rem solid $border-card;
+  border-radius: $radius-s;
+
+  @include respond-up($breakpoint-pc-sm) {
+    display: none;
+  }
+}
+
+.career_label {
+  margin-bottom: $spacing-10;
+  font-size: $font-size-11;
+  font-weight: $font-weight-bold;
+  color: $accent;
+  letter-spacing: $letter-spacing-wider;
+}
+
+.career_list {
+  list-style: none;
+}
+
+.career_item {
+  display: flex;
+  align-items: flex-start;
+  gap: $spacing-8;
+  padding: $spacing-8 0;
+  font-size: $font-size-12;
+  color: $txt-secondary;
+  word-break: keep-all;
+
+  & + & {
+    border-top: 0.1rem solid $border-card;
+  }
+}
+
+.career_dot {
+  flex-shrink: 0;
+  width: 0.3rem;
+  height: 0.3rem;
+  margin-top: 0.7rem;
+  border-radius: $radius-circle;
+  background: $accent;
+}

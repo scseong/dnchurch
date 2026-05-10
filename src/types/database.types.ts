@@ -384,6 +384,30 @@ export type Database = {
           },
         ]
       }
+      site_collections: {
+        Row: {
+          description: string | null
+          items: Json
+          key: string
+          updated_at: string
+          updated_by: string | null
+        }
+        Insert: {
+          description?: string | null
+          items: Json
+          key: string
+          updated_at?: string
+          updated_by?: string | null
+        }
+        Update: {
+          description?: string | null
+          items?: Json
+          key?: string
+          updated_at?: string
+          updated_by?: string | null
+        }
+        Relationships: []
+      }
       site_settings: {
         Row: {
           description: string | null
@@ -411,6 +435,7 @@ export type Database = {
           created_at: string
           education: string[]
           experience: string[]
+          greeting_paragraphs: Json
           id: number
           image_url: string | null
           is_active: boolean
@@ -424,6 +449,7 @@ export type Database = {
           created_at?: string
           education?: string[]
           experience?: string[]
+          greeting_paragraphs?: Json
           id?: number
           image_url?: string | null
           is_active?: boolean
@@ -437,6 +463,7 @@ export type Database = {
           created_at?: string
           education?: string[]
           experience?: string[]
+          greeting_paragraphs?: Json
           id?: number
           image_url?: string | null
           is_active?: boolean

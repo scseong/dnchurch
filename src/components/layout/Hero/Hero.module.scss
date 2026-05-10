@@ -19,12 +19,12 @@
   }
 }
 
-// ── 배경: 그라디언트 ──
+// ── 배경: 그라디언트 (references/Greeting.jsx PCHero — darkDeep $navy-900 → dark $navy-950) ──
 
 .hero_bg {
   position: absolute;
   inset: 0;
-  background: linear-gradient(180deg, $bg-dark, $navy-950);
+  background: linear-gradient(180deg, $navy-900, $navy-950);
 }
 
 // ── 오버레이 ──
@@ -42,10 +42,12 @@
   z-index: 1;
   display: flex;
   flex-direction: column;
+  align-items: center;
   justify-content: center;
+  width: 100%;
   gap: $spacing-8;
-  padding-top: $spacing-40;
-  padding-bottom: $spacing-32;
+  padding-top: $spacing-32;
+  padding-bottom: $spacing-28;
   text-align: center;
 
   @include respond-up($header-breakpoint) {
@@ -53,12 +55,13 @@
     padding-top: $spacing-40;
     padding-bottom: $spacing-48;
     text-align: left;
+    align-items: flex-start;
   }
 }
 
 .hero_eyebrow {
   font-size: $font-size-11;
-  font-weight: $font-weight-semibold;
+  font-weight: $font-weight-medium;
   color: $accent;
   letter-spacing: $letter-spacing-wide;
 
@@ -67,34 +70,34 @@
   }
 }
 
+// 모바일 26px / PC 36px (references/Greeting.jsx)
 .hero_title {
+  // max-width: 78rem;
   font-size: $font-size-26;
   font-weight: $font-weight-bold;
   color: $txt-inverse;
   line-height: $line-height-snug;
   letter-spacing: $letter-spacing-heading;
+  word-break: keep-all;
 
   @include respond-up($header-breakpoint) {
-    font-size: $font-size-34;
-  }
-
-  @include respond-up($breakpoint-pc-sm) {
-    font-size: $font-size-42;
+    font-size: $font-size-36;
   }
 }
 
+// 모바일 13px rgba(white,.45) / PC 15px rgba(white,.5)
 .hero_subtitle {
+  // max-width: 58rem;
   font-size: $font-size-13;
   font-weight: $font-weight-regular;
-  color: $txt-dark-muted;
+  color: rgba(255, 255, 255, 0.45);
   line-height: $line-height-relaxed;
+  word-break: keep-all;
 
   @include respond-up($header-breakpoint) {
     font-size: $font-size-15;
-  }
-
-  @include respond-up($breakpoint-pc-sm) {
-    font-size: $font-size-16;
+    color: rgba(255, 255, 255, 0.5);
+    line-height: $line-height-loose;
   }
 }
 

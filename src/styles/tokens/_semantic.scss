@@ -82,7 +82,23 @@ $radius-circle: var(--radius-999);
 $overlay-scrim: rgba(0, 0, 0, 0.5);
 
 /// rgba(0,0,0,0.15) — Hero 등 이미지 위 얇은 오버레이
-$overlay-image: rgba(0, 0, 0, 0.15);
+// $overlay-image: rgba(0, 0, 0, 0.15);
+$overlay-image: linear-gradient($bg-dark, $navy-950);
 
 /// rgba(0,0,0,0.04) — 호버/포커스 시 미세한 시각 피드백
 $overlay-subtle: rgba(0, 0, 0, 0.04);
+
+// ══════════════════════════════════════════
+// FOCUS RING — :focus-visible outline 패턴
+// border-focus와 색상이 같지만 의미 분리 (border vs ring).
+// ring만 고대비로 변경할 가능성을 위해 별칭 유지.
+// ══════════════════════════════════════════
+
+/// 0.2rem — focus-visible outline 두께
+$focus-ring-width: $spacing-2;
+
+/// 0.2rem — focus-visible outline-offset
+$focus-ring-offset: $spacing-2;
+
+/// $border-focus 별칭 — focus ring 색
+$focus-ring-color: $border-focus;

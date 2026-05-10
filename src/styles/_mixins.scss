@@ -87,7 +87,7 @@
   font-size: $font-size-26;
   font-weight: $weight;
   line-height: map-get($heading-line-heights, 'h2');
-  letter-spacing: $letter-spacing-heading;
+  letter-spacing: map-get($heading-letter-spacings, 'h2');
   @if $color {
     color: $color;
   }

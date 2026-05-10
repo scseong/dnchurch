@@ -6,6 +6,7 @@ export type WorshipScheduleType = Tables<'worship_schedules'>;
 export type BulletinType = Tables<'bulletins'>;
 export type BulletinImageType = Tables<'bulletin_images'>;
 export type NoticeType = Tables<'notices'>;
+export type SiteCollectionType = Tables<'site_collections'>;
 
 /** @deprecated Use NoticeType */
 export type PostType = NoticeType;

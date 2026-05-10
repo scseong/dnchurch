@@ -40,6 +40,45 @@
 - **발견일**: 2026-05-01 (ESLint 레이어 룰 도입 시)
 - **2026-05-02**: `worship/page.tsx` 해소 (`services/worship/` 도입, `apis/worship-schedules.ts` 제거) — 10건 → 9건
 
+### 🟢 focus-ring 패턴 통일 (10곳)
+
+- **무엇**: globals 외 10곳의 `:focus-visible` outline이 색·width·offset가 제각각. 색은 `$primary`/`$primary-active`/`$border-focus`/`$border-primary` 4종, width는 `0.2rem`/`2px` 혼재, offset은 양수·음수 혼재
+- **왜**: focus-ring 토큰(`$focus-ring-{width,offset,color}`)이 도입되기 전(2026-05-10 이전) 영역별로 자유롭게 작성됨. globals만 본 PR에서 토큰화 완료
+- **마이그레이션 경로**: 영역별 분리 PR로 새 토큰(또는 신설 mixin) 적용. 음수 offset(NoticeTable)·`$primary-active` 사용(NoticeDrawer/Table/ControlBar)·`$border-primary` 사용(Pagination)이 의도인지 케이스별 검토 후 통일 또는 토큰 다양성 추가
+- **영향 범위** (10곳):
+  - `src/components/ui/Pagination/Pagination.module.scss:39-40` — `$border-primary` 사용 (의도 검토 필요)
+  - `src/components/ui/ListItem/ListItem.module.scss:25-26` — `$border-focus` + negative offset
+  - `src/app/(content)/news/notices/_component/NoticeDrawer.module.scss:127-128, 207-208` — `$primary-active` + 2px
+  - `src/app/(content)/news/notices/_component/NoticeTable.module.scss:48-49, 204-205` — `$primary-active` + negative offset
+  - `src/app/(content)/news/notices/_component/NoticeControlBar.module.scss:51-52, 82-83, 107-108, 169-170` — `$primary-active` + 2px (4곳 동일 패턴)
+- **확인**: `rg ':focus|outline' src -g '*.scss'` (focus-state 전반 추적성 — outline-ring 외 :focus·:focus-within·outline:none 패턴도 함께 노출)
+- **발견일**: 2026-05-10 (transition-focus-tokens PR EXPLORE)
+
+### 🟢 useDrawerHistory: 라우트 이동 시 drawer history entry 미정리
+
+- **무엇**: `useDrawerHistory.ts`에서 drawer 열린 상태로 링크 클릭 등 라우트 이동이 발생하면, `history.pushState({ __drawer: true }, '')` 엔트리가 스택에서 제거되지 않아 뒤로가기 스택에 중복 URL이 남을 수 있음
+- **왜**: 초기 구현에서 `pathname` 변경 시 `setDrawerOpen(false)` 처리만 하고 쌓인 history entry 정리 정책이 미정의
+- **마이그레이션 경로**: `pathname` effect 또는 unmount cleanup에서 `history.back()` 또는 `history.replaceState` 호출로 entry 제거 정책 결정 후 적용
+- **영향 범위**: `src/hooks/useDrawerHistory.ts`, `src/components/layout/BottomNav/BottomNav.tsx`
+- **발견일**: 2026-05-10 (PR #81 Codex 리뷰)
+
+### 🟢 services/about: Supabase error silent fallback 로깅 부재
+
+- **무엇**: `getSiteCollection<T>` 및 `getSiteSettings`가 Supabase `error` 필드를 무시하고 빈 배열/기본값으로 fallback. 운영 중 DB 오류가 발생해도 로그 없이 빈 화면으로 렌더됨
+- **왜**: `worshipService`만 try/catch 보호. 나머지 API 호출은 silent fallback 정책으로 작성 (사용자 결정)
+- **마이그레이션 경로**: `error && console.error(...)` 최소 로깅 추가. 중요도에 따라 Sentry 등 외부 에러 추적 연동 검토
+- **영향 범위**: `src/apis/site-collections.ts`, `src/services/about/index.ts`
+- **발견일**: 2026-05-10 (PR #81 Codex 리뷰)
+
+### 🟡 SCSS primitive 토큰 직접 사용 (143건)
+
+- **무엇**: `.module.scss`에서 primitive 토큰(`$gray-*`/`$navy-*`/`$gold-*`/`$beige-*`/`$cream-*`/`$black`/`$white`)을 color/border/background 등에 직접 사용. semantic 토큰(`$txt-*`/`$bg-*`/`$border-*`/`$primary`/`$accent`)을 거치지 않음
+- **왜**: ADR 0003(design-system-v3)이 primitive↔semantic 분리를 결정했지만 도구 가시화가 부재했음. 2026-05-10 stylelint guardrail PR에서 `declaration-property-value-disallowed-list` warning 룰 도입으로 가시화됨
+- **마이그레이션 경로**: 영역별 분리 PR(home / about / sermons / news / admin)로 점진 치환. `.claude/skills/styles/SKILL.md`의 "Primitive → Semantic 치트시트" 표 참조. 모두 청산 후 별도 PR에서 룰 severity를 `warning` → `error`로 격상
+- **영향 범위**: `src/app/**/*.module.scss`, `src/components/**/*.module.scss` 다수
+- **확인**: `yarn lint:styles | grep "primitive 토큰 직접 사용"` (현재 143건)
+- **발견일**: 2026-05-10 (stylelint-primitive-guardrail PR 도입 시 정확 카운트)
+
 ### 🟡 SCSS 하드코딩 색상 (49건)
 
 - **무엇**: `.module.scss` 파일 곳곳에서 hex 색상(`#xxxxxx`) 직접 사용. 토큰 변수가 아님
@@ -158,6 +197,19 @@
   - home: `src/app/_component/home/{FeedContent,SermonCard,RecentSermons,NewHere,AboutOurChurch}.module.scss`
   - admin: `src/components/admin/sermons/SermonListPage/{dropdown,table}.module.scss`, `src/components/admin/sermons/SermonForm/index.module.scss`, `src/components/admin/layout/{PageHeader,AdminHeader}/index.module.scss`
 - **발견일**: 2026-05-07 (Codex 디자인 시스템 audit)
+
+### 🟢 `$beige-300` semantic 매핑 부재
+
+- **무엇**: `$beige-300: #e8e6e1` primitive가 4 모듈 5건에서 직접 사용 중인데 semantic 토큰 매핑이 부재
+- **왜**: 2026-05-08 about-page-redesign에서 사용자 명시 요청으로 `$cream-300 → $beige-300` 매핑되어 도입됐으나, 같은 plan 시점에 semantic 명명까지 짝지을 시간이 없어 SKILL.md에 *"미정"*으로 기록 후 보류
+- **마이그레이션 경로**: 사용처 4 모듈 패턴(QuickAccess background, sermons gradient `linear-gradient(135deg, $beige-150, $beige-300)`)에서 의미 도출 → `$bg-secondary-deep` 또는 `$bg-gradient-end-warm` 같은 semantic 신설 → 사용처 일괄 치환 → SKILL.md 갱신
+- **영향 범위** (4 파일 5건):
+  - `src/app/_component/home/QuickAccess.module.scss:4` — `background: $beige-300`
+  - `src/app/(content)/sermons/_component/SermonVideoPlayer/SermonVideoPlayer.module.scss:43` — gradient end
+  - `src/app/(content)/sermons/_component/GridCard/GridCard.module.scss:46` — gradient end
+  - `src/app/(content)/sermons/_component/SermonCard/SermonCard.module.scss:47, 55` — gradient end (2건)
+- **확인**: `rg '\$beige-300' src/app src/components` → 5 hits
+- **발견일**: 2026-05-10 (style-tokens-cleanup PR Codex 1차 BLOCK 검증 중 발견)
 
 ### 🟢 토큰 부채 — 디자인 시스템 v4 미완 잔여 (hex/rgba 직접 사용)
 

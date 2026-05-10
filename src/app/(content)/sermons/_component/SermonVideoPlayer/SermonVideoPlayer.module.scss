@@ -40,7 +40,7 @@
   gap: $content-gap-s;
   width: 100%;
   aspect-ratio: 16 / 9;
-  background: linear-gradient(135deg, $cream-200, $cream-300);
+  background: linear-gradient(135deg, $beige-150, $beige-300);
   border: 1px dashed $border-primary;
 
   @include respond-up($breakpoint-tablet) {
