@@ -54,6 +54,22 @@
 - **확인**: `rg ':focus|outline' src -g '*.scss'` (focus-state 전반 추적성 — outline-ring 외 :focus·:focus-within·outline:none 패턴도 함께 노출)
 - **발견일**: 2026-05-10 (transition-focus-tokens PR EXPLORE)
 
+### 🟢 useDrawerHistory: 라우트 이동 시 drawer history entry 미정리
+
+- **무엇**: `useDrawerHistory.ts`에서 drawer 열린 상태로 링크 클릭 등 라우트 이동이 발생하면, `history.pushState({ __drawer: true }, '')` 엔트리가 스택에서 제거되지 않아 뒤로가기 스택에 중복 URL이 남을 수 있음
+- **왜**: 초기 구현에서 `pathname` 변경 시 `setDrawerOpen(false)` 처리만 하고 쌓인 history entry 정리 정책이 미정의
+- **마이그레이션 경로**: `pathname` effect 또는 unmount cleanup에서 `history.back()` 또는 `history.replaceState` 호출로 entry 제거 정책 결정 후 적용
+- **영향 범위**: `src/hooks/useDrawerHistory.ts`, `src/components/layout/BottomNav/BottomNav.tsx`
+- **발견일**: 2026-05-10 (PR #81 Codex 리뷰)
+
+### 🟢 services/about: Supabase error silent fallback 로깅 부재
+
+- **무엇**: `getSiteCollection<T>` 및 `getSiteSettings`가 Supabase `error` 필드를 무시하고 빈 배열/기본값으로 fallback. 운영 중 DB 오류가 발생해도 로그 없이 빈 화면으로 렌더됨
+- **왜**: `worshipService`만 try/catch 보호. 나머지 API 호출은 silent fallback 정책으로 작성 (사용자 결정)
+- **마이그레이션 경로**: `error && console.error(...)` 최소 로깅 추가. 중요도에 따라 Sentry 등 외부 에러 추적 연동 검토
+- **영향 범위**: `src/apis/site-collections.ts`, `src/services/about/index.ts`
+- **발견일**: 2026-05-10 (PR #81 Codex 리뷰)
+
 ### 🟡 SCSS primitive 토큰 직접 사용 (143건)
 
 - **무엇**: `.module.scss`에서 primitive 토큰(`$gray-*`/`$navy-*`/`$gold-*`/`$beige-*`/`$cream-*`/`$black`/`$white`)을 color/border/background 등에 직접 사용. semantic 토큰(`$txt-*`/`$bg-*`/`$border-*`/`$primary`/`$accent`)을 거치지 않음

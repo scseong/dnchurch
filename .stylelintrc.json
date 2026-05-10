@@ -92,7 +92,7 @@
       }
     },
     {
-      "files": ["src/styles/**"],
+      "files": ["src/styles/tokens/**", "src/styles/_mixins.scss", "src/styles/globals.scss"],
       "rules": {
         "declaration-property-value-disallowed-list": null
       }
