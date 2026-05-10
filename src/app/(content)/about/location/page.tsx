@@ -63,10 +63,11 @@ export default async function Directions() {
             <button type="button" className={styles.btn_secondary} disabled>
               주소 복사
             </button>
-            <a href="#" className={styles.btn_primary}>
+            {/* TODO: 외부 지도 길찾기 URL 연동 후 활성화 */}
+            <button type="button" className={styles.btn_primary} disabled>
               길찾기
               <span aria-hidden="true">→</span>
-            </a>
+            </button>
           </div>
         </section>
 

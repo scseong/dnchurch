@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import LayoutContainer from '@/components/layout/container/LayoutContainer';
+import CloudinaryImage from '@/components/common/CloudinaryImage';
 import { getPastorPageData } from '@/services/about';
 import styles from './page.module.scss';
 
@@ -31,8 +32,18 @@ export default async function PastorPage() {
       <div className={styles.grid}>
         {/* 좌측: 사진 + 이름 (+ PC 한정 career) */}
         <aside className={styles.profile_block}>
-          <div className={styles.photo} aria-hidden="true">
-            PASTOR PHOTO
+          <div className={styles.photo}>
+            {pastor?.imageUrl ? (
+              <CloudinaryImage
+                src={pastor.imageUrl}
+                alt={`${name} 담임목사`}
+                fill
+                sizes="(max-width: 768px) 100vw, 20rem"
+                style={{ objectFit: 'cover' }}
+              />
+            ) : (
+              <span aria-hidden="true">PASTOR PHOTO</span>
+            )}
           </div>
           <div>
             <p className={styles.eyebrow}>SENIOR PASTOR</p>

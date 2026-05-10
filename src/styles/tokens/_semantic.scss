@@ -83,7 +83,7 @@ $overlay-scrim: rgba(0, 0, 0, 0.5);
 
 /// rgba(0,0,0,0.15) — Hero 등 이미지 위 얇은 오버레이
 // $overlay-image: rgba(0, 0, 0, 0.15);
-$overlay-image: linear-gradient(#0f1820, #1c2b3a);
+$overlay-image: linear-gradient($bg-dark, $navy-950);
 
 /// rgba(0,0,0,0.04) — 호버/포커스 시 미세한 시각 피드백
 $overlay-subtle: rgba(0, 0, 0, 0.04);

@@ -35,9 +35,11 @@ const LOCATION_SETTING_KEYS = [
   'directions_bus_routes_2'
 ] as const;
 
-// 담임목사 row 추출. staff에 role 컬럼이 없어 title 매칭. 다중 hit는 getActiveStaff가 order_index 정렬이라 첫 번째 우선.
+const SENIOR_PASTOR_TITLE = '담임목사';
+
+// staff에 role 컬럼이 없어 title 매칭. 다중 hit는 getActiveStaff가 order_index 정렬이라 첫 번째 우선.
 const findSeniorPastor = (rows: StaffType[]): StaffType | null =>
-  rows.find((row) => row.title === '담임목사') ?? null;
+  rows.find((row) => row.title === SENIOR_PASTOR_TITLE) ?? null;
 
 // worshipService.list()는 handle-response.ts에서 Supabase error throw — silent wrap으로 정합 (ADR 0006 silent fallback 원칙).
 const getWorshipGroupsSafe = async (): Promise<{

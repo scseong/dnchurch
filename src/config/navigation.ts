@@ -143,6 +143,8 @@ export function resolveMobileHeader(pathname: string): { title: string; showBack
       continue;
     }
 
+    if (pathname === item.href) return { title: item.label, showBack: false };
+
     const matched = item.children.find((c) => pathname.startsWith(c.href));
     if (matched) {
       return { title: item.label, showBack: pathname !== matched.href };
