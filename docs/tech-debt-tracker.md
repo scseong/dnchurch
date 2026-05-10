@@ -40,12 +40,12 @@
 - **발견일**: 2026-05-01 (ESLint 레이어 룰 도입 시)
 - **2026-05-02**: `worship/page.tsx` 해소 (`services/worship/` 도입, `apis/worship-schedules.ts` 제거) — 10건 → 9건
 
-### 🟢 focus-ring 패턴 통일 (11곳)
+### 🟢 focus-ring 패턴 통일 (10곳)
 
-- **무엇**: globals 외 11곳의 `:focus-visible` outline이 색·width·offset가 제각각. 색은 `$primary`/`$primary-active`/`$border-focus`/`$border-primary` 4종, width는 `0.2rem`/`2px` 혼재, offset은 양수·음수 혼재
+- **무엇**: globals 외 10곳의 `:focus-visible` outline이 색·width·offset가 제각각. 색은 `$primary`/`$primary-active`/`$border-focus`/`$border-primary` 4종, width는 `0.2rem`/`2px` 혼재, offset은 양수·음수 혼재
 - **왜**: focus-ring 토큰(`$focus-ring-{width,offset,color}`)이 도입되기 전(2026-05-10 이전) 영역별로 자유롭게 작성됨. globals만 본 PR에서 토큰화 완료
 - **마이그레이션 경로**: 영역별 분리 PR로 새 토큰(또는 신설 mixin) 적용. 음수 offset(NoticeTable)·`$primary-active` 사용(NoticeDrawer/Table/ControlBar)·`$border-primary` 사용(Pagination)이 의도인지 케이스별 검토 후 통일 또는 토큰 다양성 추가
-- **영향 범위** (11곳):
+- **영향 범위** (10곳):
   - `src/components/ui/Pagination/Pagination.module.scss:39-40` — `$border-primary` 사용 (의도 검토 필요)
   - `src/components/ui/ListItem/ListItem.module.scss:25-26` — `$border-focus` + negative offset
   - `src/app/(content)/news/notices/_component/NoticeDrawer.module.scss:127-128, 207-208` — `$primary-active` + 2px

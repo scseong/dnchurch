@@ -12,7 +12,7 @@ description: SCSS 파일 생성/수정, 스타일 작성, 디자인 토큰 사�
 | 파일 | 주요 토큰 |
 |---|---|
 | `tokens/_breakpoint.scss` | Primitive(`$breakpoint-420` ~ `$breakpoint-1920`), Semantic(`$breakpoint-mobile` ~ `$breakpoint-pc-xl`), `$responsive-font-vw-map` |
-| `tokens/_color.scss` | Gray/Navy/Gold/Cream/Status primitive, 시맨틱(`$txt-*` `$bg-*` `$border-*` `$primary` `$accent` `$status-*`) |
+| `tokens/_color.scss` | Gray/Navy/Gold/Beige/Status primitive, 시맨틱(`$txt-*` `$bg-*` `$border-*` `$primary` `$accent` `$status-*`) |
 | `tokens/_effect.scss` | `$shadow-*`, `$transition-*`, `@keyframes fadeUp` |
 | `tokens/_layout.scss` | `$container-padding/min/max`, `$header-height`, `$button-height-*`, `$icon-button-size-*` |
 | `tokens/_spacing.scss` | `$spacing-{px값}` (숫자=px): `$spacing-0` ~ `$spacing-200`, 4·8 배수 기반 |
@@ -63,7 +63,7 @@ description: SCSS 파일 생성/수정, 스타일 작성, 디자인 토큰 사�
 ### Primitive (순수 색상값 — 직접 사용 금지, Semantic 토큰을 통해서만 참조)
 
 - **Gray**: `$gray-900` `$gray-700` `$gray-500` `$gray-400` `$gray-300` `$gray-200` `$gray-100` `$gray-50` `$black` `$white`
-- **Navy (Brand · Primary Action · Interactive cool)**: `$navy-950` `$navy-800` `$navy-600`
+- **Navy (Brand · Primary Action · Interactive cool)**: `$navy-950` `$navy-900` `$navy-800` `$navy-600`
 - **Gold (Accent)**: `$gold-600` `$gold-400` `$gold-100`
 - **Beige (Warm Decorative Surface)**: `$beige-50` `$beige-100` `$beige-150` `$beige-200` `$beige-300` — 정적 면 전용. (`$beige-50/100/150/200` = `$bg-primary`/`$bg-beige-subtle`/`$bg-secondary`/`$border-card`로 매핑 완료; `$beige-300`은 미정)
 - **Status**: `$green-500` `$green-100` `$red-500` `$red-100` `$orange-600` `$orange-100`
