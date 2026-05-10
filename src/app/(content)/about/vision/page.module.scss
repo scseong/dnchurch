@@ -69,18 +69,7 @@
   }
 }
 
-// ── 공용 섹션 라벨 ──
-
-.section_label {
-  margin-bottom: $spacing-12;
-  font-size: $font-size-11;
-  font-weight: $font-weight-semibold;
-  color: $primary;
-  letter-spacing: $letter-spacing-wide;
-}
-
 // ── VISION STATEMENT — 본문 5단락 + 이미지 ──
-
 .statement_section {
   margin-bottom: $spacing-32;
 
@@ -90,16 +79,12 @@
 }
 
 .statement_lead {
-  font-size: $font-size-15;
+  font-size: $font-size-20;
   font-weight: $font-weight-semibold;
-  color: $txt-primary;
+  color: $primary;
   line-height: $line-height-snug;
   letter-spacing: $letter-spacing-tight;
   word-break: keep-all;
-
-  @include respond-up($breakpoint-pc-sm) {
-    font-size: $font-size-18;
-  }
 }
 
 .statement_grid {
@@ -213,6 +198,8 @@
   height: 4.4rem;
   border-radius: $radius-m;
 
+  background: $beige-200;
+
   svg {
     width: 2rem;
     height: 2rem;
@@ -228,16 +215,6 @@
       width: 2.6rem;
       height: 2.6rem;
     }
-  }
-
-  .pillar_card[data-tone='primary'] & {
-    background: $beige-200;
-  }
-  .pillar_card[data-tone='gold'] & {
-    background: $accent-subtle;
-  }
-  .pillar_card[data-tone='beige'] & {
-    background: $beige-50;
   }
 }
 

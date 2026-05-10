@@ -22,27 +22,24 @@ const VISION = {
   pillars: [
     {
       num: '01',
-      label: 'WORD',
-      title: '말씀 위에 서는 교회',
-      desc: '성경의 권위 아래 모든 사역이 세워집니다. 매주 강해 설교와 성경 공부를 통해, 우리는 시대의 흐름이 아닌 영원한 진리 위에 발을 디딥니다.',
+      label: 'TRUTH',
+      title: '진리 위에 세워진 교회',
+      desc: '성경은 하나님의 말씀이며 신앙과 삶의 유일한 표준입니다. 개혁주의 신앙 고백 위에서 하나님을 바르게 알고, 그 진리 위에 모든 사역을 세워갑니다.',
       Icon: LuBookOpen,
-      iconTone: 'primary' as const
     },
     {
       num: '02',
-      label: 'PRAYER',
-      title: '기도로 깨어 있는 교회',
-      desc: '새벽기도와 중보기도를 통해 하나님의 일하심을 구합니다. 개인의 기도가 모여 공동체의 기도가 되고, 공동체의 기도는 도시를 변화시킵니다.',
+      label: 'WORSHIP',
+      title: '말씀과 기도로 하나 되는 교회',
+      desc: '교회는 하나님의 부르심을 받아 모인 언약 공동체입니다. 말씀 선포와 성례, 기도로 드리는 예배를 통해 하나님 앞에 서고, 서로를 향한 사랑으로 그리스도의 몸을 이루어 갑니다.',
       Icon: LuFlame,
-      iconTone: 'gold' as const
     },
     {
       num: '03',
-      label: 'COMMUNITY',
-      title: '이웃과 함께하는 교회',
-      desc: '교회의 담은 안이 아니라 밖을 향해 있습니다. 지역 사회를 섬기고, 다음 세대를 키우며, 선교지를 품는 일에 우리의 자원을 사용합니다.',
+      label: 'LIFE',
+      title: '세상 속에서 빛이 되는 교회',
+      desc: '믿음은 삶 전체를 아우릅니다. 가정과 일터, 지역 사회 안에서 복음으로 살아가며, 다음 세대를 세우고 이웃을 섬기는 것이 우리에게 주어진 소명입니다.',
       Icon: LuHandshake,
-      iconTone: 'beige' as const
     }
   ]
 };
@@ -70,7 +67,7 @@ export default async function Vision() {
 
         {/* VISION STATEMENT — 본문 5단락 + 이미지 */}
         <section className={styles.statement_section}>
-          <p className={styles.section_label}>VISION STATEMENT</p>
+          {/* <p className={styles.section_label}>VISION STATEMENT</p> */}
           <div className={styles.statement_grid}>
             <div className={styles.statement_text}>
               {VISION_STATEMENT.map((paragraph, index) => (
@@ -96,15 +93,10 @@ export default async function Vision() {
 
         {/* 3 PILLARS */}
         <section className={styles.pillars_section}>
-          <p className={styles.section_label}>THREE PILLARS</p>
-          <h3 className={styles.pillars_title}>우리의 세 기둥</h3>
+          <h3 className={styles.pillars_title}>진리 · 공동체 · 삶으로 세워가는 교회</h3>
           <ol className={styles.pillars_list}>
             {VISION.pillars.map((pillar) => (
-              <li
-                key={pillar.num}
-                className={styles.pillar_card}
-                data-tone={pillar.iconTone}
-              >
+              <li key={pillar.num} className={styles.pillar_card}>
                 <span className={styles.pillar_icon} aria-hidden="true">
                   <pillar.Icon />
                 </span>

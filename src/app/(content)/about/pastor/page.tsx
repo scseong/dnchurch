@@ -53,11 +53,10 @@ export default async function PastorPage() {
 
         {/* 우측 (PC) / 본문 (Mobile): 인사말 + signature */}
         <article className={styles.content}>
-          <p className={styles.section_label}>WELCOME MESSAGE</p>
           <h2 className={styles.lead}>
             “복음 위에 서서,
             <br />
-            이웃의 자리에서 함께 걷겠습니다.”
+            이웃의 자리에서 함께 걷겠습니다”
           </h2>
 
           {greetingParagraphs.map((paragraph, index) => (
