@@ -159,6 +159,19 @@
   - admin: `src/components/admin/sermons/SermonListPage/{dropdown,table}.module.scss`, `src/components/admin/sermons/SermonForm/index.module.scss`, `src/components/admin/layout/{PageHeader,AdminHeader}/index.module.scss`
 - **발견일**: 2026-05-07 (Codex 디자인 시스템 audit)
 
+### 🟢 `$beige-300` semantic 매핑 부재
+
+- **무엇**: `$beige-300: #e8e6e1` primitive가 4 모듈 5건에서 직접 사용 중인데 semantic 토큰 매핑이 부재
+- **왜**: 2026-05-08 about-page-redesign에서 사용자 명시 요청으로 `$cream-300 → $beige-300` 매핑되어 도입됐으나, 같은 plan 시점에 semantic 명명까지 짝지을 시간이 없어 SKILL.md에 *"미정"*으로 기록 후 보류
+- **마이그레이션 경로**: 사용처 4 모듈 패턴(QuickAccess background, sermons gradient `linear-gradient(135deg, $beige-150, $beige-300)`)에서 의미 도출 → `$bg-secondary-deep` 또는 `$bg-gradient-end-warm` 같은 semantic 신설 → 사용처 일괄 치환 → SKILL.md 갱신
+- **영향 범위** (4 파일 5건):
+  - `src/app/_component/home/QuickAccess.module.scss:4` — `background: $beige-300`
+  - `src/app/(content)/sermons/_component/SermonVideoPlayer/SermonVideoPlayer.module.scss:43` — gradient end
+  - `src/app/(content)/sermons/_component/GridCard/GridCard.module.scss:46` — gradient end
+  - `src/app/(content)/sermons/_component/SermonCard/SermonCard.module.scss:47, 55` — gradient end (2건)
+- **확인**: `rg '\$beige-300' src/app src/components` → 5 hits
+- **발견일**: 2026-05-10 (style-tokens-cleanup PR Codex 1차 BLOCK 검증 중 발견)
+
 ### 🟢 토큰 부채 — 디자인 시스템 v4 미완 잔여 (hex/rgba 직접 사용)
 
 - **무엇**: 시맨틱 토큰을 거치지 않은 hex/rgb 값 직접 사용

@@ -64,7 +64,6 @@ description: SCSS 파일 생성/수정, 스타일 작성, 디자인 토큰 사�
 
 - **Gray**: `$gray-900` `$gray-700` `$gray-500` `$gray-400` `$gray-300` `$gray-200` `$gray-100` `$gray-50` `$black` `$white`
 - **Navy (Brand · Primary Action · Interactive cool)**: `$navy-950` `$navy-800` `$navy-600`
-- **Navy-Blue** _@deprecated_: `$navy-blue-900` `$navy-blue-800` `$navy-blue-700` `$navy-blue-100` (사용 금지 — Primary Action은 Navy 계열)
 - **Gold (Accent)**: `$gold-600` `$gold-400` `$gold-100`
 - **Beige (Warm Decorative Surface)**: `$beige-50` `$beige-100` `$beige-150` `$beige-200` `$beige-300` — 정적 면 전용. (`$beige-50/100/150/200` = `$bg-primary`/`$bg-beige-subtle`/`$bg-secondary`/`$border-card`로 매핑 완료; `$beige-300`은 미정)
 - **Status**: `$green-500` `$green-100` `$red-500` `$red-100` `$orange-600` `$orange-100`
@@ -165,7 +164,7 @@ primitive를 쓰려는 순간 이 표를 먼저 확인한다.
 
 다크 섹션: `$bg-dark`, `$bg-dark-card` / 이미지·영상 위: `$overlay-image`, `$txt-image-subtle`
 
-상세 매핑은 `src/styles/_usage-guide.scss` 참조.
+상세 매핑은 `docs/references/STYLES_USAGE_GUIDE.md` 참조.
 
 ## Hover 시스템
 
