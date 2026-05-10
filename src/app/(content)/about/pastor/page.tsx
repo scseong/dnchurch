@@ -12,15 +12,7 @@ export const metadata: Metadata = {
   }
 };
 
-// 정적 라벨·구절 — references/Greeting.jsx 100% 적용 (ADR 0006)
-const PASTOR_STATIC = {
-  enTitle: 'SENIOR PASTOR',
-  verse: '여호와는 나의 목자시니 내게 부족함이 없으리로다',
-  verseRef: '시편 23 : 1'
-};
-
-const GREETING_PLACEHOLDER =
-  '담임목사 인사말이 곧 게시될 예정입니다. 잠시만 기다려 주세요.';
+const GREETING_PLACEHOLDER = '담임목사 인사말이 곧 게시될 예정입니다. 잠시만 기다려 주세요.';
 
 export default async function PastorPage() {
   const { pastor } = await getPastorPageData();
@@ -42,30 +34,25 @@ export default async function PastorPage() {
           <div className={styles.photo} aria-hidden="true">
             PASTOR PHOTO
           </div>
-          <p className={styles.eyebrow}>{PASTOR_STATIC.enTitle}</p>
-          <p className={styles.name_line}>
-            <span className={styles.name}>{name}</span>
-            <span className={styles.role}>{title}</span>
-          </p>
-
-          {/* PC: career list (profile 하단, references PCGreeting) */}
-          <ul className={styles.career_list_pc}>
-            {career.map((line, index) => (
-              <li key={index} className={styles.career_item_pc}>
-                <span className={styles.career_dot} aria-hidden="true" />
-                {line}
-              </li>
-            ))}
-          </ul>
+          <div>
+            <p className={styles.eyebrow}>SENIOR PASTOR</p>
+            <p className={styles.name_line}>
+              <span className={styles.name}>{name}</span>
+              <span className={styles.role}>{title}</span>
+            </p>
+            <ul className={styles.career_list_pc}>
+              {career.map((line, index) => (
+                <li key={index} className={styles.career_item_pc}>
+                  <span className={styles.career_dot} aria-hidden="true" />
+                  {line}
+                </li>
+              ))}
+            </ul>
+          </div>
         </aside>
 
-        {/* 우측 (PC) / 본문 (Mobile): verse + 인사말 + signature */}
+        {/* 우측 (PC) / 본문 (Mobile): 인사말 + signature */}
         <article className={styles.content}>
-          <div className={styles.verse_card}>
-            <p className={styles.verse_ref}>{PASTOR_STATIC.verseRef}</p>
-            <p className={styles.verse_text}>“{PASTOR_STATIC.verse}”</p>
-          </div>
-
           <p className={styles.section_label}>WELCOME MESSAGE</p>
           <h2 className={styles.lead}>
             “복음 위에 서서,

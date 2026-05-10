@@ -81,7 +81,8 @@ $txt-dark-faint: rgba(255, 255, 255, 0.4); // 다크 배경 약한 텍스트 (�
 // v4: warm(decorative) vs cool(interactive) 역할 분리.
 // 정적 면(섹션·카드 bg) = warm. 인터랙션 피드백(hover/active) = cool.
 
-$bg-primary: $gray-50; // 페이지 전체 기본 배경
+$bg-primary: $beige-50; // 페이지 전체 기본 배경
+$bg-card: #ffffff; // 카드 배경 — $border-card와 쌍
 $bg-secondary: $beige-150; // 섹션·카드 정적 면 (decorative neutral) ★
 $bg-beige-subtle: $beige-100; // 가장 옅은 beige 섹션 면 (secondary보다 옅음)
 $bg-hover: rgba($navy-800, 0.06); // 인터랙티브 hover 피드백 (cool, 면 종류 무관) — v4
@@ -97,6 +98,7 @@ $border-subtle: rgba($gray-500, 0.22); // 얕은 구분선 — 중립 배경 위
 $border-strong: rgba($gray-500, 0.44); // 강한 구분선 — 강조 테두리, 선택 상태
 $border-focus: $navy-800; // focus 링 — v3: navy 재매핑
 $border-warm: rgba(100, 80, 50, 0.15); // cream·gold 배경 위 테두리
+$border-card: $beige-200; // 카드·섹션 외곽 테두리 (라이트 배경)
 $border-inverse: $white; // 다크 배경 위
 $border-dark-subtle: rgba(255, 255, 255, 0.2); // 다크 카드 테두리
 $border-dark-faint: rgba(255, 255, 255, 0.1); // 다크 구분선

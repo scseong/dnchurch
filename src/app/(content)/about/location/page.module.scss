@@ -21,7 +21,7 @@
   width: 100%;
   height: 22rem;
   margin-bottom: $spacing-12;
-  border: 0.1rem solid $beige-200;
+  border: 0.1rem solid $border-card;
   border-radius: $radius-l;
   overflow: hidden;
 
@@ -36,7 +36,7 @@
 .card {
   padding: $spacing-20;
   background: $beige-100;
-  border: 0.1rem solid $beige-200;
+  border: 0.1rem solid $border-card;
   border-radius: $radius-m;
 
   @include respond-up($breakpoint-pc-sm) {
@@ -105,7 +105,7 @@
   flex: 1;
   padding: $spacing-10 $spacing-12;
   background: $bg-primary;
-  border: 0.1rem solid $beige-200;
+  border: 0.1rem solid $border-card;
   border-radius: $radius-s;
   color: $txt-primary;
   font-size: $font-size-12;
@@ -201,7 +201,7 @@
   padding: $spacing-10 0;
 
   & + & {
-    border-top: 0.1rem solid $beige-150;
+    border-top: 0.1rem solid $border-card;
   }
 }
 
@@ -232,13 +232,13 @@
 .transit_item {
   & + & {
     padding-top: $spacing-16;
-    border-top: 0.1rem solid $beige-150;
+    border-top: 0.1rem solid $border-card;
 
     @include respond-up($breakpoint-pc-sm) {
       padding-top: 0;
       padding-left: $spacing-24;
       border-top: 0;
-      border-left: 0.1rem solid $beige-150;
+      border-left: 0.1rem solid $border-card;
     }
   }
 }

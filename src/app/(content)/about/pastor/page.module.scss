@@ -20,8 +20,8 @@
   grid-template-columns: 1fr;
   grid-template-areas:
     'content'
-    'career'
-    'profile';
+    'profile'
+    'career';
   gap: $spacing-32;
 
   @include respond-up($breakpoint-pc-sm) {
@@ -48,7 +48,7 @@
   aspect-ratio: 4 / 5;
   margin-bottom: $spacing-12;
   background: linear-gradient(135deg, $beige-100, $beige-150);
-  border: 0.1rem solid $beige-200;
+  border: 0.1rem solid $border-card;
   border-radius: $radius-m;
   display: flex;
   align-items: center;
@@ -115,7 +115,7 @@
     display: block;
     list-style: none;
     margin-top: $spacing-16;
-    border-top: 0.1rem solid $beige-150;
+    border-top: 0.1rem solid $border-card;
   }
 }
 
@@ -124,7 +124,7 @@
   align-items: flex-start;
   gap: $spacing-8;
   padding: $spacing-10 0;
-  border-bottom: 0.1rem solid $beige-150;
+  border-bottom: 0.1rem solid $border-card;
   font-size: $font-size-12;
   color: $txt-secondary;
   word-break: keep-all;
@@ -134,46 +134,6 @@
 
 .content {
   grid-area: content;
-}
-
-.verse_card {
-  margin-bottom: $spacing-24;
-  padding: $spacing-20;
-  background: $navy-950;
-  border-radius: $radius-m;
-  text-align: center;
-
-  @include respond-up($breakpoint-pc-sm) {
-    margin-bottom: $spacing-32;
-    padding: $spacing-32 $spacing-32;
-    text-align: left;
-  }
-}
-
-.verse_ref {
-  margin-bottom: $spacing-8;
-  font-size: $font-size-11;
-  font-weight: $font-weight-medium;
-  color: $accent;
-  letter-spacing: $letter-spacing-wider;
-
-  @include respond-up($breakpoint-pc-sm) {
-    margin-bottom: $spacing-10;
-    font-size: $font-size-12;
-  }
-}
-
-.verse_text {
-  font-size: $font-size-14;
-  font-weight: $font-weight-semibold;
-  color: $txt-inverse;
-  line-height: $line-height-loose;
-  word-break: keep-all;
-
-  @include respond-up($breakpoint-pc-sm) {
-    font-size: $font-size-18;
-    letter-spacing: $letter-spacing-tight;
-  }
 }
 
 .section_label {
@@ -215,7 +175,7 @@
 .signature {
   margin-top: $spacing-20;
   padding-top: $spacing-16;
-  border-top: 0.1rem solid $beige-150;
+  border-top: 0.1rem solid $border-card;
   text-align: right;
 
   @include respond-up($breakpoint-pc-sm) {
@@ -258,7 +218,7 @@
   grid-area: career;
   padding: $spacing-16;
   background: $beige-100;
-  border: 0.1rem solid $beige-150;
+  border: 0.1rem solid $border-card;
   border-radius: $radius-s;
 
   @include respond-up($breakpoint-pc-sm) {
@@ -288,7 +248,7 @@
   word-break: keep-all;
 
   & + & {
-    border-top: 0.1rem solid $beige-150;
+    border-top: 0.1rem solid $border-card;
   }
 }
 

@@ -187,7 +187,7 @@
   align-items: flex-end;
   padding: $spacing-12;
   background: linear-gradient(135deg, $beige-100, $beige-150);
-  border: 0.1rem solid $beige-200;
+  border: 0.1rem solid $border-card;
   border-radius: $radius-s;
   overflow: hidden;
   scroll-snap-align: start;
@@ -212,7 +212,7 @@
   margin-bottom: $spacing-4;
   padding: 0.3rem 0.8rem;
   background: $white;
-  border: 0.1rem solid $beige-200;
+  border: 0.1rem solid $border-card;
   border-radius: $radius-circle;
   font-size: $font-size-11;
   font-weight: $font-weight-bold;
@@ -236,7 +236,7 @@
   display: grid;
   grid-template-columns: 1fr;
   background: $beige-50;
-  border: 0.1rem solid $beige-200;
+  border: 0.1rem solid $border-card;
   border-radius: $radius-m;
   overflow: hidden;
 
@@ -256,7 +256,7 @@
   min-height: 12rem;
   padding: $spacing-20;
   text-decoration: none;
-  border-bottom: 0.1rem solid $beige-150;
+  border-bottom: 0.1rem solid $border-card;
 
   &:last-child {
     border-bottom: 0;
@@ -267,7 +267,7 @@
     padding: $spacing-24 $spacing-20;
 
     &:nth-child(odd) {
-      border-right: 0.1rem solid $beige-150;
+      border-right: 0.1rem solid $border-card;
     }
 
     &:nth-last-child(-n + 2) {
@@ -278,7 +278,7 @@
   // 1024+: 4col
   @include respond-up($breakpoint-pc-sm) {
     border-bottom: 0;
-    border-right: 0.1rem solid $beige-150;
+    border-right: 0.1rem solid $border-card;
 
     &:last-child {
       border-right: 0;
@@ -350,7 +350,7 @@
 .bottom_card {
   padding: $spacing-16 $spacing-20;
   background: $white;
-  border: 0.1rem solid $beige-200;
+  border: 0.1rem solid $border-card;
   border-radius: $radius-s;
 }
 
@@ -360,7 +360,7 @@
   align-items: center;
   padding-bottom: $spacing-12;
   margin-bottom: $spacing-16;
-  border-bottom: 0.1rem solid $beige-150;
+  border-bottom: 0.1rem solid $border-card;
 }
 
 .bottom_label {
@@ -445,7 +445,7 @@
   flex-direction: column;
   gap: $spacing-4;
   padding-top: $spacing-10;
-  border-top: 0.1rem solid $beige-150;
+  border-top: 0.1rem solid $border-card;
 
   // 전역 globals.scss의 `p { font-size: $font-size-15 }` reset이
   // 자식 p의 부모 font-size 상속을 막아, 여기에서 명시적으로 지정해야 함.

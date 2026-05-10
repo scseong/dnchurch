@@ -138,7 +138,7 @@
   min-height: 24rem;
   padding: $spacing-20;
   background: $beige-50;
-  border: 0.1rem solid $beige-200;
+  border: 0.1rem solid $border-card;
   border-radius: $radius-m;
   box-shadow: $shadow-sm;
   transition: box-shadow $transition-duration-normal $transition-easing-default;
@@ -234,7 +234,7 @@
   padding: $spacing-10 0;
 
   & + & {
-    border-top: 0.1rem solid $beige-150;
+    border-top: 0.1rem solid $border-card;
   }
 }
 
@@ -349,7 +349,7 @@
   flex-shrink: 0;
   padding: $spacing-8 $spacing-12;
   background: $white;
-  border: 0.1rem solid $beige-200;
+  border: 0.1rem solid $border-card;
   border-radius: $radius-circle;
   font-size: $font-size-12;
   font-weight: $font-weight-semibold;

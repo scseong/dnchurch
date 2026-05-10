@@ -21,7 +21,7 @@
   margin-bottom: $spacing-32;
   padding: $spacing-32 $spacing-24;
   background: $white;
-  border: 0.1rem solid $beige-200;
+  border: 0.1rem solid $border-card;
   border-radius: $radius-l;
   overflow: hidden;
 
@@ -144,7 +144,7 @@
   gap: $spacing-12;
   padding: $spacing-16;
   background: $white;
-  border: 0.1rem solid $beige-200;
+  border: 0.1rem solid $border-card;
   border-radius: $radius-m;
 
   @include respond-up($breakpoint-pc-sm) {
@@ -236,7 +236,7 @@
 .faq_section {
   padding: $spacing-32 $container-padding;
   background: $beige-100;
-  border-top: 0.1rem solid $beige-150;
+  border-top: 0.1rem solid $border-card;
 
   @include respond-up($breakpoint-pc-sm) {
     padding: $spacing-80 $container-padding;
@@ -294,7 +294,7 @@
 .faq_item {
   padding: $spacing-16;
   background: $white;
-  border: 0.1rem solid $beige-200;
+  border: 0.1rem solid $border-card;
   border-radius: $radius-m;
 
   @include respond-up($breakpoint-pc-sm) {
