@@ -1,5 +1,6 @@
 'use client';
 
+import { useRef } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import clsx from 'clsx';
@@ -21,6 +22,7 @@ const ICON_MAP: Record<IconName, IconType> = {
 export default function BottomNav() {
   const pathname = usePathname();
   const { drawerOpen, openDrawer, closeDrawer } = useDrawerHistory();
+  const overlayRef = useRef<HTMLDivElement>(null);
 
   return (
     <>
@@ -70,9 +72,12 @@ export default function BottomNav() {
       </nav>
 
       <div
+        ref={overlayRef}
         className={clsx(styles.drawer_overlay, drawerOpen && styles.drawer_overlay_open)}
-        onClick={closeDrawer}
-        aria-hidden={!drawerOpen}
+        onClick={(e) => {
+          if (e.target === overlayRef.current) closeDrawer();
+        }}
+        inert={!drawerOpen}
       >
         <Drawer isOpen={drawerOpen} onClose={closeDrawer} />
       </div>
