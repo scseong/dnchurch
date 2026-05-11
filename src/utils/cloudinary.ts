@@ -4,10 +4,8 @@ const CLOUD_NAME = process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME;
 const ROOT_FOLDER = process.env.NEXT_PUBLIC_CLOUDINARY_ROOT_FOLDER ?? '';
 const BASE_URL = `https://res.cloudinary.com/${CLOUD_NAME}/image/upload`;
 
-// 입력 public_id에 ROOT prefix가 누락되면 합성, 이미 있으면 그대로 (이중 prefix 방지)
-// full URL(http/https)이 들어오면 변형 없이 통과 — 호출자 misuse를 망가뜨리지 않음
+// ROOT prefix missing from public_id is composed here; full URL passthrough belongs to URL builders.
 const normalizePublicId = (input: string): string => {
-  if (/^https?:\/\//i.test(input)) return input;
   const trimmed = input.replace(/^\/+/, '');
   if (!ROOT_FOLDER) return trimmed;
   const prefix = `${ROOT_FOLDER}/`;
@@ -44,7 +42,8 @@ export const uploadFolder = (domain: string, ...parts: string[]): string => {
 };
 
 // Cloudinary 전송 URL 빌더 — <img>·OG 메타데이터·다운로드 등 <Image> 컴포넌트 외 사용처
-export const getCloudinaryUrl = (publicId: string) => `${BASE_URL}/${normalizePublicId(publicId)}`;
+export const getCloudinaryUrl = (publicId: string) =>
+  /^https?:\/\//i.test(publicId) ? publicId : `${BASE_URL}/${normalizePublicId(publicId)}`;
 
 export const getCloudinaryDownloadUrl = (publicId: string) =>
   `${BASE_URL}/fl_attachment/${normalizePublicId(publicId)}`;
@@ -61,6 +60,7 @@ type CloudinaryLoaderOptions = {
 // next/image의 loader — <CloudinaryImage>가 내부적으로 사용. src에 ROOT가 없으면 자동 합성됨
 export function createCloudinaryLoader({ cropMode, gravity, aspectRatio }: CloudinaryLoaderOptions = {}) {
   return function ({ src, width, quality }: ImageLoaderProps) {
+    if (/^https?:\/\//i.test(src)) return src;
     const params = ['f_auto'];
     if (cropMode) {
       params.push(`c_${cropMode}`);

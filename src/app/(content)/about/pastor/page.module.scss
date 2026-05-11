@@ -24,7 +24,7 @@
 
   @include respond-up($breakpoint-tablet) {
     grid-template-columns: 1fr 30%;
-    grid-template-areas: 'content profile';
+    grid-template-areas: 'profile content';
     column-gap: $spacing-56;
     row-gap: 0;
     align-items: start;
@@ -47,7 +47,7 @@
   aspect-ratio: 4 / 5;
   margin-bottom: $spacing-12;
   overflow: hidden;
-  background: linear-gradient(135deg, $beige-100, $beige-150);
+  background: linear-gradient(135deg, $bg-beige-subtle, $bg-secondary);
   border: 0.1rem solid $border-card;
   border-radius: $radius-m;
   display: flex;
