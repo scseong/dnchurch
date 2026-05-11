@@ -59,12 +59,7 @@ export default async function Directions() {
           <p className={styles.card_eyebrow}>ADDRESS</p>
           <p className={styles.address_main}>{address}</p>
           <p className={styles.address_sub}>{zipcode}</p>
-          <AddressActions
-            address={address}
-            lat={lat}
-            lng={lng}
-            destinationName="대구동남교회"
-          />
+          <AddressActions address={address} destinationName="대구동남교회" />
         </section>
 
         <section className={styles.card}>

@@ -5,12 +5,10 @@ import styles from '../page.module.scss';
 
 type Props = {
   address: string;
-  lat: number;
-  lng: number;
   destinationName: string;
 };
 
-export default function AddressActions({ address, lat, lng, destinationName }: Props) {
+export default function AddressActions({ address, destinationName }: Props) {
   const { success, error } = useToastStore();
 
   const handleCopy = async () => {
@@ -22,7 +20,8 @@ export default function AddressActions({ address, lat, lng, destinationName }: P
     }
   };
 
-  const directionsUrl = `https://map.naver.com/v5/directions/-/${lng},${lat},${encodeURIComponent(destinationName)},PLACE_POI/-/transit`;
+  // 검색 URL — 도착지(교회)에 카메라 포커싱. directions URL은 출발지 미지정 시 사용자 현재 위치로 카메라 이동
+  const placeUrl = `https://map.naver.com/p/search/${encodeURIComponent(`${destinationName} ${address}`)}`;
 
   return (
     <div className={styles.address_actions}>
@@ -30,7 +29,7 @@ export default function AddressActions({ address, lat, lng, destinationName }: P
         주소 복사
       </button>
       <a
-        href={directionsUrl}
+        href={placeUrl}
         target="_blank"
         rel="noopener noreferrer"
         className={styles.btn_primary}
