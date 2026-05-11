@@ -3,6 +3,7 @@ import LayoutContainer from '@/components/layout/container/LayoutContainer';
 import { getLocationPageData } from '@/services/about';
 import { displaySettingValue, parseFiniteFloat } from '@/utils/site-settings';
 import LocationMapClient from './_component/LocationMapClient';
+import AddressActions from './_component/AddressActions';
 import styles from './page.module.scss';
 
 export const metadata: Metadata = {
@@ -58,17 +59,12 @@ export default async function Directions() {
           <p className={styles.card_eyebrow}>ADDRESS</p>
           <p className={styles.address_main}>{address}</p>
           <p className={styles.address_sub}>{zipcode}</p>
-          <div className={styles.address_actions}>
-            {/* TODO: 주소 복사 + 외부 지도 길찾기 링크 연동 */}
-            <button type="button" className={styles.btn_secondary} disabled>
-              주소 복사
-            </button>
-            {/* TODO: 외부 지도 길찾기 URL 연동 후 활성화 */}
-            <button type="button" className={styles.btn_primary} disabled>
-              길찾기
-              <span aria-hidden="true">→</span>
-            </button>
-          </div>
+          <AddressActions
+            address={address}
+            lat={lat}
+            lng={lng}
+            destinationName="대구동남교회"
+          />
         </section>
 
         <section className={styles.card}>
