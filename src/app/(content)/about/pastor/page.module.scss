@@ -1,8 +1,7 @@
 // ══════════════════════════════════════════
 // PASTOR — 인사말 페이지
-// references/Greeting.jsx PCGreeting + MGreeting 100% 적용
-//   PC: 좌측 (사진 + 이름 + career) / 우측 (verse + 인사말 + signature)
-//   Mobile: 사진+이름 / verse(center) / 인사말 / signature / career 카드 (별도)
+//   PC: 좌측 profile (사진 + 이름 + career 카드) / 우측 content (verse + 인사말 + signature)
+//   Mobile: content / profile (사진 + 이름 + career 카드)
 // ══════════════════════════════════════════
 
 .container {
@@ -20,13 +19,12 @@
   grid-template-columns: 1fr;
   grid-template-areas:
     'content'
-    'profile'
-    'career';
+    'profile';
   gap: $spacing-32;
 
-  @include respond-up($breakpoint-pc-sm) {
-    grid-template-columns: 32rem 1fr;
-    grid-template-areas: 'profile content';
+  @include respond-up($breakpoint-tablet) {
+    grid-template-columns: 1fr 30%;
+    grid-template-areas: 'content profile';
     column-gap: $spacing-56;
     row-gap: 0;
     align-items: start;
@@ -44,9 +42,11 @@
 }
 
 .photo {
+  position: relative;
   width: 100%;
   aspect-ratio: 4 / 5;
   margin-bottom: $spacing-12;
+  overflow: hidden;
   background: linear-gradient(135deg, $beige-100, $beige-150);
   border: 0.1rem solid $border-card;
   border-radius: $radius-m;
@@ -106,31 +106,7 @@
   }
 }
 
-// ── PC: profile 하단 career list ──
-
-.career_list_pc {
-  display: none;
-
-  @include respond-up($breakpoint-pc-sm) {
-    display: block;
-    list-style: none;
-    margin-top: $spacing-16;
-    border-top: 0.1rem solid $border-card;
-  }
-}
-
-.career_item_pc {
-  display: flex;
-  align-items: flex-start;
-  gap: $spacing-8;
-  padding: $spacing-10 0;
-  border-bottom: 0.1rem solid $border-card;
-  font-size: $font-size-12;
-  color: $txt-secondary;
-  word-break: keep-all;
-}
-
-// ── 우측 / Mobile 본문: content ──
+// ── 우측 (PC) / Mobile 본문: content ──
 
 .content {
   grid-area: content;
@@ -170,9 +146,10 @@
   border-top: 0.1rem solid $border-card;
   text-align: right;
 
-  @include respond-up($breakpoint-pc-sm) {
+  @include respond-up($breakpoint-tablet) {
     margin-top: $spacing-32;
     padding-top: $spacing-24;
+    text-align: left;
   }
 }
 
@@ -204,18 +181,14 @@
   font-weight: $font-weight-regular;
 }
 
-// ── Mobile: career 별도 카드 ──
+// ── profile_block 하단 career 카드 ──
 
-.career_card_mobile {
-  grid-area: career;
+.career_card {
+  margin-top: $spacing-16;
   padding: $spacing-16;
-  background: $beige-100;
+  background-color: $bg-beige-subtle;
   border: 0.1rem solid $border-card;
   border-radius: $radius-s;
-
-  @include respond-up($breakpoint-pc-sm) {
-    display: none;
-  }
 }
 
 .career_label {
