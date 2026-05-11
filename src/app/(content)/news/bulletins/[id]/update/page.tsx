@@ -22,7 +22,6 @@ export default async function BulletinPage({ params }: { params: Promise<{ id: s
       id: `existing-${img.id}`,
       imageId: img.id,
       cloudinaryId: img.cloudinary_id,
-      url: img.url,
       orderIndex: img.order_index
     }));
 

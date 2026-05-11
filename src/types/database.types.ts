@@ -21,7 +21,6 @@ export type Database = {
           created_at: string
           id: number
           order_index: number
-          url: string
         }
         Insert: {
           bulletin_id: number
@@ -29,7 +28,6 @@ export type Database = {
           created_at?: string
           id?: never
           order_index?: number
-          url: string
         }
         Update: {
           bulletin_id?: number
@@ -37,7 +35,6 @@ export type Database = {
           created_at?: string
           id?: never
           order_index?: number
-          url?: string
         }
         Relationships: [
           {
@@ -816,7 +813,10 @@ export const Constants = {
         "새벽예배",
         "특별예배",
       ],
-      worship_category: ["main", "church_school"],
+      worship_category: [
+        "main",
+        "church_school",
+      ],
     },
   },
 } as const

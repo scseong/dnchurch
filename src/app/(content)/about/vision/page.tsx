@@ -14,7 +14,7 @@ export const metadata: Metadata = {
   }
 };
 
-const IMAGE_URL = 'dnchurch_nxmttl';
+const IMAGE_URL = 'site/about/vision/exterior.jpg';
 
 const VISION = {
   slogan: '복음 위에 서서, 이웃과 함께 자라는 교회',
