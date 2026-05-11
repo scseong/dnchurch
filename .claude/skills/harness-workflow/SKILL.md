@@ -198,25 +198,29 @@ Refactor: ui/ 12 컴포넌트 export 패턴 통일 (3 outlier 정리)
 
 ### PR 제목
 
-위 commit subject 규칙을 PR 제목에도 동일 적용. 추가 규칙:
+위 commit subject의 WHY/IMPACT 원칙을 PR 제목에도 동일 적용. **단 형식은 commit과 다름**:
 
+- **형식**: `[Type] Title` — bracket(`[]`) + 공백 1개. `.github/PULL_REQUEST_TEMPLATE/*.md`에 명시된 컨벤션.
+  - Type 6개는 commit prefix와 동일 (`Feat·Fix·Style·Refactor·Docs·Chore`).
+  - commit은 `Fix: ...` (콜론), PR은 `[Fix] ...` (브래킷) — **혼동 금지**.
 - **유추 가능성 우선** — 제목만 보고 PR 내용을 짐작할 수 있어야 함. 추상 라벨("v3/v4", "통일", "정합", "리팩터")만으로는 부족.
 - **구체 동사 + 결과 명시** — "재설계", "도입", "DB 편집화", "차단", "해소" 같이 무엇을 어떻게 했는지 드러나는 동사 사용.
 - **길이** — 권장 70자, GitHub UI 가시성 한도 80자 정도.
 - **다중 영역 묶음 OK** — PR은 commit과 달리 본문이 별도 채워지므로 `+` 또는 `·`로 여러 영역을 잇는 게 자연스러움.
 
-❌ 나쁨 (무슨 내용일지 유추 불가):
+❌ 나쁨 (잘못된 형식 + 유추 불가):
 
 ```
-Chore: develop → main 릴리스 v0.5.0 (2026-05-11)
-Refactor: 디자인 시스템 v3/v4 통합
+Chore: develop → main 릴리스 v0.5.0 (2026-05-11)   ← Type 형식이 commit 스타일(콜론)
+[Refactor] 디자인 시스템 v3/v4 통합                 ← 형식 OK지만 무슨 변경인지 유추 불가
 ```
 
-✅ 좋음 (영역 + 동사 + 결과):
+✅ 좋음 ([Type] 형식 + 영역 + 동사 + 결과):
 
 ```
-Chore: v0.5.0 — 교회 소개 6 페이지 재설계(DB 편집화) + 디자인 토큰·공용 컴포넌트 통합
-Refactor: ui/ 12 컴포넌트 export 패턴 통일 (3 outlier 정리)
+[Chore] v0.5.0 — 교회 소개 6 페이지 재설계(DB 편집화) + 디자인 토큰·공용 컴포넌트 통합
+[Refactor] ui/ 12 컴포넌트 export 패턴 통일 (3 outlier 정리)
+[Fix] release v0.5.0 QA 9건 — about/news 경로 + a11y + 공용 UI 정합
 ```
 
 ### 검증
