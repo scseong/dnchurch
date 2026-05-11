@@ -14,7 +14,7 @@ type Props = {
   maxVisiblePages?: number;
 };
 
-export default function Pagination({
+export function Pagination({
   totalCount,
   pageSize = 10,
   currentPage,
