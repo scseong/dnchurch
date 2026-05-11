@@ -6,6 +6,7 @@ import clsx from 'clsx';
 import { IoCloseOutline, IoChevronBack, IoChevronForward, IoEyeOutline } from 'react-icons/io5';
 import { BsPaperclip } from 'react-icons/bs';
 import useScrollLock from '@/hooks/useScrollLock';
+import { ListItem, Label } from '@/components/ui';
 import { NOTICE_CATEGORIES } from '@/constants/notice';
 import { formattedDate, isRecent } from '@/utils/date';
 import type { NoticeType } from '@/types/notice';
@@ -60,7 +61,7 @@ export default function NoticeDrawer({ notice, onClose, onNavigate, hasPrev, has
               <span className={clsx(styles.category, isUrgent && styles.urgent)}>
                 {NOTICE_CATEGORIES[notice.category]}
               </span>
-              {isNew && <span className={styles.badge_new}>NEW</span>}
+              {isNew && <Label size="xs" variant="success">NEW</Label>}
             </div>
             <button type="button" className={styles.close_btn} onClick={onClose} aria-label="닫기">
               <IoCloseOutline aria-hidden="true" />
@@ -98,26 +99,24 @@ export default function NoticeDrawer({ notice, onClose, onNavigate, hasPrev, has
 
         {/* 이전/다음 */}
         <footer className={styles.nav}>
-          <button
-            type="button"
-            className={clsx(styles.nav_btn, !hasPrev && styles.disabled)}
+          <ListItem
+            className={styles.nav_btn}
             onClick={() => onNavigate('prev')}
             disabled={!hasPrev}
             aria-label="이전 글"
           >
             <IoChevronBack aria-hidden="true" />
             <span>이전 글</span>
-          </button>
-          <button
-            type="button"
-            className={clsx(styles.nav_btn, !hasNext && styles.disabled)}
+          </ListItem>
+          <ListItem
+            className={styles.nav_btn}
             onClick={() => onNavigate('next')}
             disabled={!hasNext}
             aria-label="다음 글"
           >
             <span>다음 글</span>
             <IoChevronForward aria-hidden="true" />
-          </button>
+          </ListItem>
         </footer>
       </div>
     </div>,

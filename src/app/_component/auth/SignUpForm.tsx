@@ -3,6 +3,7 @@
 import { useSearchParams } from 'next/navigation';
 import { useState, useEffect } from 'react';
 import { useForm, SubmitHandler } from 'react-hook-form';
+// eslint-disable-next-line no-restricted-imports -- 점진 마이그레이션 대상 (tech-debt-tracker.md)
 import { signUp } from '@/apis/auth';
 import { FormField, FormAlertMessage, FormSubmitButton } from '@/components/form';
 import { generateErrorMessage } from '@/utils/error';

@@ -24,8 +24,10 @@ export function useListFilters(initial?: AdminSermonListParams) {
   // URL 변경(뒤로가기/수동 입력) → state
   useEffect(() => {
     const fromUrl = parseListFilterParams(new URLSearchParams(searchParams.toString()));
-    setState((current) =>
-      buildListFilterQuery(current) === buildListFilterQuery(fromUrl) ? current : fromUrl
+    queueMicrotask(() =>
+      setState((current) =>
+        buildListFilterQuery(current) === buildListFilterQuery(fromUrl) ? current : fromUrl
+      )
     );
   }, [searchParams]);
 

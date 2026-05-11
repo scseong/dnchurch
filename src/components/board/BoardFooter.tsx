@@ -45,7 +45,7 @@ export default function BoardFooter({
             <dt>이전글</dt>
             <dd>
               {prev_title ? (
-                <Link href={`/news/bulletin/${prev_id}`}>{prev_title}</Link>
+                <Link href={`/news/bulletins/${prev_id}`}>{prev_title}</Link>
               ) : (
                 '이전글이 없습니다.'
               )}
@@ -55,7 +55,7 @@ export default function BoardFooter({
             <dt>다음글</dt>
             <dd>
               {next_title ? (
-                <Link href={`/news/bulletin/${next_id}`}>{next_title}</Link>
+                <Link href={`/news/bulletins/${next_id}`}>{next_title}</Link>
               ) : (
                 '다음글이 없습니다.'
               )}

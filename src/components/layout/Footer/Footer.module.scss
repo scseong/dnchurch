@@ -1,15 +1,15 @@
 // ══════════════════════════════════════════
-// FOOTER — PC/태블릿 전용 (768px~)
-// 모바일 숨김
+// FOOTER — 모바일 퍼스트
+// 모바일: 단일 컬럼 세로 스택 / tablet+: 4컬럼 그리드
 // ══════════════════════════════════════════
 
 .footer {
-  display: none;
+  display: block;
+  background-color: $bg-dark;
+  color: $txt-inverse;
+  padding: $spacing-48 $container-padding $spacing-32;
 
   @include respond-up($header-breakpoint) {
-    display: block;
-    background-color: $bg-dark;
-    color: $txt-inverse;
     padding: 4rem $spacing-24 2.8rem;
   }
 
@@ -22,9 +22,13 @@
 
 .footer_grid {
   display: grid;
-  grid-template-columns: 1.5fr repeat(3, 1fr);
+  grid-template-columns: 1fr;
   gap: $spacing-32;
   padding-bottom: $spacing-32;
+
+  @include respond-up($header-breakpoint) {
+    grid-template-columns: 1.5fr repeat(3, 1fr);
+  }
 }
 
 // ── 브랜드 컬럼 ──
@@ -66,12 +70,10 @@
   color: $txt-image-subtle;
   transition:
     background-color $transition-duration-normal $transition-easing-default,
-    color $transition-duration-normal $transition-easing-default,
-    border-color $transition-duration-normal $transition-easing-default;
+    color $transition-duration-normal $transition-easing-default;
 
   &:hover {
-    background-color: $gold;
-    border-color: $gold;
+    background-color: $gold-600;
     color: $txt-inverse;
   }
 
@@ -109,7 +111,7 @@
   transition: color $transition-duration-normal $transition-easing-default;
 
   &:hover {
-    color: $gold;
+    color: $gold-600;
   }
 }
 
@@ -145,6 +147,7 @@
 
 .footer_bottom_links {
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
   gap: $spacing-16;
   font-size: $font-size-12;

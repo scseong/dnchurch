@@ -6,6 +6,7 @@ import { PiArrowRight } from 'react-icons/pi';
 import clsx from 'clsx';
 import CloudinaryImage from '@/components/common/CloudinaryImage';
 import { LayoutContainer } from '@/components/layout';
+import { siteAsset } from '@/utils/cloudinary';
 import { getRevealStyle } from '@/utils/reveal';
 import styles from './NewHere.module.scss';
 
@@ -51,7 +52,7 @@ export default function NewHere() {
             <div className={styles.image_sticky}>
               <div className={styles.image_frame}>
                 <CloudinaryImage
-                  src="dnchurch-dev/site/home/sketch"
+                  src={siteAsset('home/sketch')}
                   alt="대구동남교회 전경"
                   width={600}
                   height={800}

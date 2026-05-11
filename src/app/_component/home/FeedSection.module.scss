@@ -1,6 +1,6 @@
 // ─── Section ────────────────────────────────────────
 .section {
-  padding: $section-padding-64 0;
+  padding: $section-gap-64 0;
 }
 
 // ─── Header ─────────────────────────────────────────
@@ -15,7 +15,7 @@
   font-weight: $font-weight-medium;
   text-transform: uppercase;
   letter-spacing: $letter-spacing-wider;
-  color: $gold;
+  color: $gold-600;
 }
 
 .header h2 {

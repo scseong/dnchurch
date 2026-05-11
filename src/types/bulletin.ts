@@ -9,7 +9,6 @@ export type BulletinParams = { year?: number; page?: number; limit?: number };
 
 export type BulletinImageInput = {
   cloudinaryId: string;
-  url: string;
   orderIndex: number;
 };
 
@@ -40,7 +39,6 @@ export type ExistingImageItem = {
   id: string;
   imageId: number;
   cloudinaryId: string;
-  url: string;
   orderIndex: number;
 };
 

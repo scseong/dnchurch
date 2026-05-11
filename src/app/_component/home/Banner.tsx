@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import CloudinaryImage from '@/components/common/CloudinaryImage';
+// eslint-disable-next-line no-restricted-imports -- 점진 마이그레이션 대상 (tech-debt-tracker.md)
 import { getSiteSettings } from '@/apis/site-settings';
 import { getRevealStyle } from '@/utils/reveal';
 import styles from './Banner.module.scss';
@@ -40,7 +41,7 @@ export default async function Banner() {
             <UserIcon />
             처음 오셨나요?
           </Link>
-          <Link href="/news/bulletin" className={styles.btn_secondary}>
+          <Link href="/news/bulletins" className={styles.btn_secondary}>
             <PlayIcon />
             이번 주 말씀 보기
           </Link>

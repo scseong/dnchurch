@@ -18,8 +18,10 @@ export default function DesktopHeader() {
 
   // pathname 변경 시 mega menu 닫기 + hover 억제
   useEffect(() => {
-    setKeyboardOpen(null);
-    setHoverSuppressed(true);
+    queueMicrotask(() => {
+      setKeyboardOpen(null);
+      setHoverSuppressed(true);
+    });
   }, [pathname]);
 
   useLayoutEffect(() => {
@@ -47,7 +49,7 @@ export default function DesktopHeader() {
           <p className={styles.top_bar_slogan}>주님의 사랑으로 하나 되는 공동체</p>
           <div className={styles.top_bar_links}>
             <Link href="/about/location">오시는 길</Link>
-            <Link href="/about/pastor">교회 소개</Link>
+            <Link href="/about">교회 소개</Link>
             <Link href="/login">로그인</Link>
           </div>
         </LayoutContainer>

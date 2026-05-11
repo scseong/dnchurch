@@ -1,12 +1,52 @@
 import { ImageLoaderProps } from 'next/image';
 
 const CLOUD_NAME = process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME;
+const ROOT_FOLDER = process.env.NEXT_PUBLIC_CLOUDINARY_ROOT_FOLDER ?? '';
 const BASE_URL = `https://res.cloudinary.com/${CLOUD_NAME}/image/upload`;
 
-export const getCloudinaryUrl = (publicId: string) => `${BASE_URL}/${publicId}`;
+// ROOT prefix missing from public_id is composed here; full URL passthrough belongs to URL builders.
+const normalizePublicId = (input: string): string => {
+  const trimmed = input.replace(/^\/+/, '');
+  if (!ROOT_FOLDER) return trimmed;
+  const prefix = `${ROOT_FOLDER}/`;
+  return trimmed.startsWith(prefix) ? trimmed : `${prefix}${trimmed}`;
+};
+
+const assertSegment = (segment: string, label: string) => {
+  if (!segment) throw new Error(`${label}: segment cannot be empty`);
+  if (segment.includes('/')) throw new Error(`${label}: segment "${segment}" cannot contain "/"`);
+};
+
+// Cloudinary 업로드 응답의 public_id에서 환경 prefix를 떼서 DB에 저장할 때 사용
+export const stripRootPrefix = (publicId: string): string => {
+  const cleaned = publicId.replace(/^\/+/, '');
+  if (!ROOT_FOLDER) return cleaned;
+  const prefix = `${ROOT_FOLDER}/`;
+  return cleaned.startsWith(prefix) ? cleaned.slice(prefix.length) : cleaned;
+};
+
+// 정적 자산(코드에서 직접 참조하는 사이트 이미지)의 public_id 합성: <CloudinaryImage src={siteAsset('home/sketch')} />
+export const siteAsset = (relativePath: string): string => {
+  const cleaned = relativePath.replace(/^\/+|\/+$/g, '');
+  if (!cleaned) throw new Error('siteAsset: relativePath cannot be empty');
+  if (cleaned.includes('//')) throw new Error('siteAsset: relativePath cannot contain "//"');
+  return ROOT_FOLDER ? `${ROOT_FOLDER}/site/${cleaned}` : `site/${cleaned}`;
+};
+
+// 동적 업로드(주보·설교 등 DB 첨부 자산)의 업로드 folder path 합성: uploadFolder('bulletins', '2026', '03', '28')
+export const uploadFolder = (domain: string, ...parts: string[]): string => {
+  assertSegment(domain, 'uploadFolder');
+  parts.forEach((part) => assertSegment(part, 'uploadFolder'));
+  const tail = [domain, ...parts].join('/');
+  return ROOT_FOLDER ? `${ROOT_FOLDER}/uploads/${tail}` : `uploads/${tail}`;
+};
+
+// Cloudinary 전송 URL 빌더 — <img>·OG 메타데이터·다운로드 등 <Image> 컴포넌트 외 사용처
+export const getCloudinaryUrl = (publicId: string) =>
+  /^https?:\/\//i.test(publicId) ? publicId : `${BASE_URL}/${normalizePublicId(publicId)}`;
 
 export const getCloudinaryDownloadUrl = (publicId: string) =>
-  `${BASE_URL}/fl_attachment/${publicId}`;
+  `${BASE_URL}/fl_attachment/${normalizePublicId(publicId)}`;
 
 export type CropMode = 'fill' | 'crop' | 'thumb' | 'scale' | 'fit' | 'limit' | 'pad' | 'auto';
 export type CropGravity = 'auto' | 'face' | 'faces' | 'center' | 'north' | 'south' | 'east' | 'west' | 'north_east' | 'north_west' | 'south_east' | 'south_west';
@@ -17,8 +57,10 @@ type CloudinaryLoaderOptions = {
   aspectRatio?: string;
 };
 
+// next/image의 loader — <CloudinaryImage>가 내부적으로 사용. src에 ROOT가 없으면 자동 합성됨
 export function createCloudinaryLoader({ cropMode, gravity, aspectRatio }: CloudinaryLoaderOptions = {}) {
   return function ({ src, width, quality }: ImageLoaderProps) {
+    if (/^https?:\/\//i.test(src)) return src;
     const params = ['f_auto'];
     if (cropMode) {
       params.push(`c_${cropMode}`);
@@ -28,7 +70,7 @@ export function createCloudinaryLoader({ cropMode, gravity, aspectRatio }: Cloud
       params.push('c_limit');
     }
     params.push(`w_${width}`, `q_${quality || 85}`);
-    return `${BASE_URL}/${params.join(',')}/${src}`;
+    return `${BASE_URL}/${params.join(',')}/${normalizePublicId(src)}`;
   };
 }
 

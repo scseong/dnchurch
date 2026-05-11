@@ -1,0 +1,60 @@
+.item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: $spacing-12;
+  width: 100%;
+  padding: $spacing-12 $spacing-16;
+  background-color: transparent;
+  border: none;
+  border-radius: $radius-s;
+  font-family: inherit;
+  font-size: $font-size-14;
+  font-weight: $font-weight-medium;
+  color: $txt-primary;
+  text-align: left;
+  text-decoration: none;
+  cursor: pointer;
+  transition: background-color 0.15s ease;
+
+  &:hover:not(.disabled) {
+    background-color: $bg-hover;
+  }
+
+  &:focus-visible {
+    outline: $spacing-2 solid $border-focus;
+    outline-offset: calc(-1 * #{$spacing-2});
+  }
+}
+
+.selected {
+  background-color: $primary-subtle;
+  color: $primary;
+  font-weight: $font-weight-semibold;
+}
+
+.disabled {
+  color: $txt-disabled;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+.body {
+  flex: 1;
+  min-width: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: $spacing-8;
+}
+
+.trailing {
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: $spacing-4;
+  color: $txt-tertiary;
+
+  .selected & {
+    color: $primary;
+  }
+}

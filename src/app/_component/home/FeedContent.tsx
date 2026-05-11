@@ -6,6 +6,8 @@ import clsx from 'clsx';
 import { PiCaretRight } from 'react-icons/pi';
 import { revealStyle, REVEAL_STEP, REVEAL_STEP_CONTENT, getRevealStyle } from '@/utils/reveal';
 import { isRecent, formattedDate } from '@/utils/date';
+import { NOTICE_CATEGORY_VARIANT } from '@/constants/notice';
+import { Label } from '@/components/ui';
 import type { NoticeType } from '@/types/notice';
 import styles from './FeedContent.module.scss';
 
@@ -84,11 +86,15 @@ export default function FeedContent({ notices }: Props) {
                 <div className={styles.item_body}>
                   <div className={styles.item_content}>
                     <span className={styles.item_title_row}>
-                      {isRecent(notice.created_at) && <span className={styles.badge_new}>N</span>}
+                      {isRecent(notice.created_at) && (
+                        <Label size="xs" variant="success">NEW</Label>
+                      )}
                       <span className={styles.item_title}>{notice.title}</span>
                     </span>
                     <span className={styles.item_meta}>
-                      <span className={styles.badge_category}>{notice.category}</span>
+                      <Label size="xs" variant={NOTICE_CATEGORY_VARIANT[notice.category]}>
+                        {notice.category}
+                      </Label>
                       <span className={styles.item_date}>
                         {formattedDate(notice.created_at, 'YYYY.MM.DD')}
                       </span>
@@ -118,7 +124,7 @@ export default function FeedContent({ notices }: Props) {
                 <div className={styles.item_body}>
                   <div className={styles.item_content}>
                     <span className={styles.item_title_row}>
-                      {item.isNew && <span className={styles.badge_new}>N</span>}
+                      {item.isNew && <Label size="xs" variant="success">NEW</Label>}
                       <span className={styles.item_title}>{item.title}</span>
                     </span>
                     <span className={styles.item_meta}>

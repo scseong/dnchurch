@@ -1,7 +1,7 @@
 $icon_box_size: 4.2rem;
 
 .quick_wrap {
-  background: $cream-deep;
+  background: $beige-300;
 }
 
 .quick_container {
@@ -38,7 +38,7 @@ $icon_box_size: 4.2rem;
   align-items: center;
   padding: $spacing-24;
   border-bottom: $spacing-1 solid $border-warm;
-  transition: background $transition-duration-normal $transition-easing-default;
+  transition: background-color $transition-duration-normal $transition-easing-default;
 
   @include respond-up($breakpoint-mobile) {
     padding: $spacing-20 $spacing-24;
@@ -55,7 +55,7 @@ $icon_box_size: 4.2rem;
   }
 
   &:hover {
-    background: $cream;
+    background-color: $bg-hover;
 
     .arrow {
       opacity: 1;
@@ -72,10 +72,10 @@ $icon_box_size: 4.2rem;
   flex-shrink: 0;
   width: $icon_box_size;
   height: $icon_box_size;
-  background: $navy;
+  background: $navy-950;
   border-radius: $radius-xs;
   font-size: calc($icon_box_size / 1.8);
-  color: $gold;
+  color: $gold-600;
 
   @include respond-up($breakpoint-tablet) {
     margin-right: $spacing-16;
@@ -105,14 +105,13 @@ $icon_box_size: 4.2rem;
 
 .desc {
   display: block;
-  font-size: $font-size-12;
-  color: $txt-tertiary;
+  @include text-caption-small;
 }
 
 .arrow {
   flex-shrink: 0;
   font-size: $font-size-14;
-  color: $gold;
+  color: $gold-600;
   opacity: 0;
   transition:
     opacity 0.2s ease,

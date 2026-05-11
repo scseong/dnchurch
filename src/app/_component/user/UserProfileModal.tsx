@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import UserProfile from './UserProfile';
 import { AiOutlineUser, AiOutlineLogout } from 'react-icons/ai';
+// eslint-disable-next-line no-restricted-imports -- 점진 마이그레이션 대상 (tech-debt-tracker.md)
 import { signOut } from '@/apis/auth';
 import styles from './UserProfileModal.module.scss';
 

@@ -1,0 +1,12 @@
+{
+  "mcpServers": {
+    "cloudinary-asset-mgmt": {
+      "type": "http",
+      "url": "https://asset-management.mcp.cloudinary.com/mcp"
+    },
+    "cloudinary-env-config": {
+      "type": "http",
+      "url": "https://environment-config.mcp.cloudinary.com/mcp"
+    }
+  }
+}

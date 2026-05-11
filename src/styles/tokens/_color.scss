@@ -6,7 +6,7 @@
 
 // ── Gray ──
 
-$black:    #000000;
+$black: #000000;
 $gray-900: #111827;
 $gray-700: #374151;
 $gray-500: #6b7280;
@@ -14,38 +14,39 @@ $gray-400: #9ca3af;
 $gray-300: #d1d5db;
 $gray-200: #e5e7eb;
 $gray-100: #f3f4f6;
-$gray-50:  #f9fafb;
-$white:    #faf9f6;
+$gray-50: #f9fafb;
+$white: #faf9f6;
 
-// ── Navy (Brand) ──
+// ── Navy (Brand) — 숫자 기반 통일 ──
 
-$navy:       #1c2b3a; // 다크 배경, 헤더/푸터
-$navy-mid:   #2c3e50; // 서브 배경, 보조 요소
-$navy-light: #3d5166; // hover 상태, 보조 UI
-
-// ── Navy-Blue (Primary Action) ──
-// 밝은 배경 위 WCAG AA 이상 대비
-
-$navy-blue-900: #1e3a5f;
-$navy-blue-800: #254770;
-$navy-blue-700: #2b4c7e;
-$navy-blue-100: #e1e8f0;
+$navy-900: #0a1218;
+$navy-950: #1c2b3a;
+$navy-800: #2c3e50;
+$navy-600: #3d5166;
 
 // ── Gold (Accent) ──
 
-$gold:       #c4924a; // CTA 강조, 브랜드 액센트
-$gold-light: #d9a96a; // hover 상태, 보조 강조
+$gold-600: #c4924a;
+$gold-400: #d9a96a;
+$gold-100: #f5ead6;
 
-// ── Cream (Warm Surface) ──
+// ── Beige (Neutral Surface) ──
+// 노란기 적은 중성 옅은 면. 5단계 (cream 토큰 삭제 후 통합).
 
-$cream:      #f5f0e6; // 섹션/카드 따뜻한 배경
-$cream-deep: #ede6d7; // 강조 배경, hover
+$beige-50: #fafaf8;
+$beige-100: #f5f4f2;
+$beige-150: #f2f0eb;
+$beige-200: #f0eee9;
+$beige-300: #e8e6e1;
 
-// ── Utility (Status) ──
+// ── Status ──
 
-$green-500:  #10b981;
-$red-500:    #ef4444;
+$green-500: #10b981;
+$green-100: #d1fae5;
+$red-500: #ef4444;
+$red-100: #fee2e2;
 $orange-600: #f68b28;
+$orange-100: #ffedd5;
 
 // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 // 2. SEMANTIC TOKENS
@@ -54,39 +55,72 @@ $orange-600: #f68b28;
 
 // ── Text ──
 
-$txt-primary:     $gray-900;       // 제목, 본문
-$txt-secondary:   $gray-700;       // 부연 설명, 서브타이틀
-$txt-tertiary:    $gray-500;       // 날짜, 메타, 캡션
-$txt-link:        $navy-blue-700;  // 링크
-$txt-link-active: $navy-blue-900;  // 링크 활성
-$txt-disabled:    $gray-400;       // 비활성
-$txt-inverse:     $white;          // 다크 배경/이미지 위
+$txt-primary: $gray-900; // 제목, 본문
+$txt-secondary: $gray-700; // 부연 설명, 서브타이틀
+$txt-tertiary: $gray-500; // 날짜, 메타, 캡션
+$txt-link: $navy-800; // 링크 — v3: navy 재매핑
+$txt-link-active: $navy-950; // 링크 활성 — v3: navy 재매핑
+$txt-disabled: $gray-400; // 비활성
+$txt-inverse: $white; // 다크 배경/이미지 위
+
+// 이미지·다크 배경 위 텍스트 (이전 _semantic.scss에서 통합)
+$txt-image-subtle: rgba(255, 255, 255, 0.7); // 이미지 위 보조 텍스트
+$txt-dark-muted: rgba(255, 255, 255, 0.6); // 다크 배경 보조 텍스트/링크
+$txt-dark-faint: rgba(255, 255, 255, 0.4); // 다크 배경 약한 텍스트 (카피라이트 등)
 
 // ── Background ──
+// v4: warm(decorative) vs cool(interactive) 역할 분리.
+// 정적 면(섹션·카드 bg) = warm. 인터랙션 피드백(hover/active) = cool.
 
-$bg-primary:   $gray-50;    // 페이지 전체
-$bg-secondary: $cream;      // 카드/섹션
-$bg-tertiary:  $cream-deep; // hover, 강조
-$bg-invert:    $black;      // 푸터 등 다크
-$bg-dark:      #0f1820;     // 다크 섹션 배경
-$bg-dark-card: #1a2535;     // 다크 섹션 내 카드
+$bg-primary: $beige-50; // 페이지 전체 기본 배경
+$bg-card: $white; // 카드 배경 — $border-card와 쌍
+$bg-secondary: $beige-150; // 섹션·카드 정적 면 (decorative neutral) ★
+$bg-beige-subtle: $beige-100; // 가장 옅은 beige 섹션 면 (secondary보다 옅음)
+$bg-hover: rgba($navy-800, 0.06); // 인터랙티브 hover 피드백 (cool, 면 종류 무관) — v4
+$bg-accent-subtle: rgba(196, 146, 74, 0.12); // CTA 섹션·환영 배너 (Gold 12% tint)
+$bg-dark: #0f1820; // 다크 섹션 (페이지당 최대 1회)
+$bg-dark-card: #1a2535; // 다크 섹션 내 카드
+$bg-dark-nav: $navy-950; // 헤더·푸터·사이드바 전용
 
 // ── Border ──
 
-$border-primary:   $gray-300;  // input, 구분선, 카드 테두리
-$border-secondary: $gray-500;  // input focus
-$border-inverse:   $white;     // 다크 배경 위
-$border-warm:      #64503226;  // cream 배경 위 구분선
+$border-primary: $gray-300; // 기본 구분선, input
+$border-subtle: rgba($gray-500, 0.22); // 얕은 구분선 — 중립 배경 위 가벼운 분리
+$border-strong: rgba($gray-500, 0.44); // 강한 구분선 — 강조 테두리, 선택 상태
+$border-focus: $navy-800; // focus 링 — v3: navy 재매핑
+$border-warm: rgba(100, 80, 50, 0.15); // cream·gold 배경 위 테두리
+$border-card: $beige-200; // 카드·섹션 외곽 테두리 (라이트 배경)
+$border-inverse: $white; // 다크 배경 위
+$border-dark-subtle: rgba(255, 255, 255, 0.2); // 다크 카드 테두리
+$border-dark-faint: rgba(255, 255, 255, 0.1); // 다크 구분선
 
 // ── Primary Action ──
 
-$primary:        $navy-blue-700; // 기본 (링크, CTA, 선택된 탭)
-$primary-hover:  $navy-blue-800; // 호버
-$primary-active: $navy-blue-900; // 클릭/활성
-$primary-subtle: $navy-blue-100; // 연한 배경
+$primary: $navy-800; // 기본 (링크, CTA, 선택된 탭)
+$primary-hover: $navy-600; // 호버
+$primary-active: $navy-950; // 클릭/활성
+$primary-subtle: rgba(
+  $navy-800,
+  0.08
+); // active/selected 항목의 cool 강조 면 — v4: warm beige → cool navy tint
+
+// ── Accent (Gold) ──
+
+$accent: $gold-600; // Gold CTA, eyebrow 텍스트
+$accent-hover: $gold-400; // Gold hover
+$accent-subtle: $gold-100; // Gold 연한 배경
 
 // ── Status ──
 
-$status-positive: $green-500;  // 성공
-$status-negative: $red-500;    // 에러
-$status-warning:  $orange-600; // 경고
+$status-positive: $green-500; // 성공
+$status-positive-bg: $green-100; // 성공 배경
+$status-negative: $red-500; // 에러
+$status-negative-bg: $red-100; // 에러 배경
+$status-warning: $orange-600; // 경고
+$status-warning-bg: $orange-100; // 경고 배경
+
+// ── Label Neutral ──
+// Label `neutral` variant 전용. 다른 시맨틱 색이 부적절한 분류·메타 표시에 사용.
+
+$label-neutral-fg: $txt-secondary;
+$label-neutral-bg: $gray-200;

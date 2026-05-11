@@ -7,6 +7,11 @@ export default function useTimer(onEnd?: () => void) {
   const expireAtRef = useRef<string | null>(null);
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
 
+  const stop = useCallback(() => {
+    if (intervalRef.current) clearInterval(intervalRef.current);
+    intervalRef.current = null;
+  }, []);
+
   const tick = useCallback(() => {
     if (!expireAtRef.current) return;
 
@@ -21,7 +26,7 @@ export default function useTimer(onEnd?: () => void) {
     }
 
     setRemain(diff);
-  }, [onEnd]);
+  }, [onEnd, stop]);
 
   const start = useCallback(
     (durationSec: number) => {
@@ -32,11 +37,6 @@ export default function useTimer(onEnd?: () => void) {
     },
     [tick]
   );
-
-  const stop = useCallback(() => {
-    if (intervalRef.current) clearInterval(intervalRef.current);
-    intervalRef.current = null;
-  }, []);
 
   useEffect(() => stop, [stop]);
 

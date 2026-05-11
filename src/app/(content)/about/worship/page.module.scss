@@ -1,31 +1,363 @@
-.container {
-  padding: $spacing-0 $spacing-20;
+// ══════════════════════════════════════════
+// WORSHIP — 예배안내 페이지 (re-design)
+// references/Worship.jsx 새 디자인 적용
+// 1. 우리가 드리는 예배 (라이트 영역)
+// 2. 카드 그리드 (3열 / 1024↓ 2열 + SCHOOL 풀폭)
+// 3. 처음 오신 분께 (라이트 영역, 하단)
+// ══════════════════════════════════════════
 
-  @include respond($breakpoint-tablet) {
-    padding: $spacing-0;
+.container {
+  padding-top: $spacing-32;
+  padding-bottom: $spacing-32;
+
+  @include respond-up($breakpoint-pc-sm) {
+    padding-top: $spacing-48;
+    padding-bottom: $spacing-64;
+  }
+}
+
+// ── 1. 우리가 드리는 예배 ──
+
+.statement {
+  margin-bottom: $spacing-24;
+  padding: $spacing-24 $spacing-20;
+  background: $bg-beige-subtle;
+  border-radius: $radius-m;
+
+  @include respond-up($breakpoint-pc-sm) {
+    margin-bottom: $spacing-32;
+    padding: $spacing-32 $spacing-48;
+    display: flex;
+    align-items: center;
+    gap: $spacing-48;
+  }
+}
+
+.statement_head {
+  margin-bottom: $spacing-16;
+
+  @include respond-up($breakpoint-pc-sm) {
+    flex-shrink: 0;
+    margin-bottom: 0;
+  }
+}
+
+.statement_title {
+  font-size: $font-size-18;
+  font-weight: $font-weight-bold;
+  color: $txt-primary;
+  letter-spacing: $letter-spacing-tight;
+  white-space: nowrap;
+
+  @include respond-up($breakpoint-pc-sm) {
+    font-size: $font-size-22;
+  }
+}
+
+.statement_underline {
+  display: block;
+  margin-top: $spacing-10;
+  width: $spacing-32; // 모바일 2.4rem / PC 3.2rem 자동
+  height: 0.2rem;
+  background: $accent;
+
+  @include respond-up($breakpoint-pc-sm) {
+    margin-top: $spacing-12;
+  }
+}
+
+.statement_body {
+  @include respond-up($breakpoint-pc-sm) {
+    flex: 1;
+    min-width: 0;
+  }
+}
+
+.statement_quote {
+  margin-bottom: $spacing-8;
+  font-size: $font-size-13;
+  font-weight: $font-weight-medium;
+  color: $txt-primary;
+  line-height: $line-height-relaxed;
+  word-break: keep-all;
+  font-style: normal;
+
+  @include respond-up($breakpoint-pc-sm) {
+    font-size: $font-size-16;
+    margin-bottom: $spacing-10;
+  }
+}
+
+.statement_ref {
+  margin-bottom: $spacing-12;
+  font-size: $font-size-11;
+  font-weight: $font-weight-semibold;
+  color: $accent;
+  letter-spacing: $letter-spacing-wide;
+
+  @include respond-up($breakpoint-pc-sm) {
+    font-size: $font-size-12;
+    margin-bottom: $spacing-16;
+  }
+}
+
+.statement_desc {
+  font-size: $font-size-12;
+  color: $txt-secondary;
+  line-height: $line-height-relaxed;
+  word-break: keep-all;
+
+  @include respond-up($breakpoint-pc-sm) {
+    font-size: $font-size-13;
+    line-height: $line-height-loose;
+  }
+}
+
+// ── 2. 카드 그리드 ──
+
+.cards_grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: $spacing-12;
+  margin-bottom: $spacing-24;
+
+  @include respond-up($breakpoint-tablet) {
+    grid-template-columns: 1fr 1fr;
   }
 
-  div:first-child {
+  @include respond-up($breakpoint-pc) {
+    grid-template-columns: repeat(3, 1fr);
+    gap: $spacing-20;
     margin-bottom: $spacing-32;
   }
 }
 
-.schedule {
-  h4 {
-    margin-bottom: $spacing-16;
-    padding-left: $spacing-16;
-    position: relative;
+.card {
+  display: flex;
+  flex-direction: column;
+  padding: $spacing-20;
+  background: $beige-50;
+  border: 0.1rem solid $border-card;
+  border-radius: $radius-m;
+  box-shadow: $shadow-sm;
+  transition: box-shadow $transition-duration-normal $transition-easing-default;
+
+  &:hover {
+    box-shadow: $shadow-md;
   }
 
-  h4::before {
-    content: '';
-    position: absolute;
-    top: 50%;
-    left: 0;
-    width: $spacing-8;
-    height: $spacing-8;
-    background-color: $primary;
-    border-radius: 50%;
-    transform: translateY(-50%);
+  @include respond-up($breakpoint-pc-sm) {
+    min-height: 28rem;
+    padding: $spacing-24 $spacing-24;
+  }
+
+  // 1024↓ 2열 + SCHOOL 풀폭
+  @include respond-up($breakpoint-tablet) {
+    &[data-type='school'] {
+      grid-column: 1 / -1;
+    }
+  }
+
+  @include respond-up($breakpoint-pc) {
+    &[data-type='school'] {
+      grid-column: auto;
+    }
+  }
+}
+
+.card_head {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: $spacing-12;
+  margin-bottom: $spacing-16;
+
+  @include respond-up($breakpoint-pc-sm) {
+    margin-bottom: $spacing-20;
+  }
+}
+
+.card_head_meta {
+  min-width: 0;
+}
+
+.card_eyebrow {
+  margin-bottom: $spacing-6;
+  font-size: $font-size-11;
+  font-weight: $font-weight-semibold;
+  color: $accent;
+  letter-spacing: $letter-spacing-wider;
+
+  @include respond-up($breakpoint-pc-sm) {
+    margin-bottom: $spacing-8;
+  }
+}
+
+.card_title {
+  font-size: $font-size-15;
+  font-weight: $font-weight-bold;
+  color: $txt-primary;
+  letter-spacing: $letter-spacing-tight;
+
+  @include respond-up($breakpoint-pc-sm) {
+    font-size: $font-size-18;
+  }
+}
+
+.card_cta {
+  display: inline-flex;
+  align-items: center;
+  gap: $spacing-4;
+  flex-shrink: 0;
+  font-size: $font-size-11;
+  font-weight: $font-weight-semibold;
+  color: $primary;
+  text-decoration: none;
+  white-space: nowrap;
+  @include hover-color-shift($primary-hover);
+
+  @include respond-up($breakpoint-pc-sm) {
+    font-size: $font-size-12;
+  }
+}
+
+.schedule_list {
+  list-style: none;
+}
+
+.schedule_row {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: $spacing-10;
+  padding: $spacing-10 0;
+
+  & + & {
+    border-top: 0.1rem solid $border-card;
+  }
+}
+
+.schedule_meta {
+  min-width: 0;
+}
+
+.schedule_name {
+  display: flex;
+  align-items: baseline;
+  gap: $spacing-6;
+  font-size: $font-size-13;
+  font-weight: $font-weight-semibold;
+  color: $txt-primary;
+  letter-spacing: $letter-spacing-tight;
+}
+
+.schedule_age {
+  font-size: $font-size-11;
+  font-weight: $font-weight-medium;
+  color: $txt-tertiary;
+}
+
+.schedule_place {
+  margin-top: 0.2rem;
+  font-size: $font-size-11;
+  color: $txt-tertiary;
+}
+
+.schedule_time {
+  flex-shrink: 0;
+  font-size: $font-size-12;
+  font-weight: $font-weight-bold;
+  color: $txt-primary;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: $letter-spacing-tight;
+  white-space: nowrap;
+
+  @include respond-up($breakpoint-pc-sm) {
+    font-size: $font-size-13;
+  }
+}
+
+// ── 3. 처음 오신 분께 ──
+
+.welcome {
+  padding: $spacing-20;
+  background: $bg-beige-subtle;
+  border-radius: $radius-m;
+
+  @include respond-up($breakpoint-pc-sm) {
+    padding: $spacing-24 $spacing-32;
+    display: flex;
+    align-items: center;
+    gap: $spacing-32;
+  }
+}
+
+.welcome_text {
+  margin-bottom: $spacing-12;
+
+  @include respond-up($breakpoint-pc-sm) {
+    flex: 1;
+    min-width: 0;
+    margin-bottom: 0;
+  }
+}
+
+.welcome_title {
+  margin-bottom: $spacing-6;
+  font-size: $font-size-15;
+  font-weight: $font-weight-bold;
+  color: $txt-primary;
+  letter-spacing: $letter-spacing-tight;
+
+  @include respond-up($breakpoint-pc-sm) {
+    font-size: $font-size-18;
+  }
+}
+
+.welcome_guide {
+  font-size: $font-size-12;
+  color: $txt-secondary;
+  line-height: $line-height-relaxed;
+  word-break: keep-all;
+
+  @include respond-up($breakpoint-pc-sm) {
+    font-size: $font-size-13;
+  }
+}
+
+.welcome_ctas {
+  display: flex;
+  gap: $spacing-6;
+  overflow-x: auto;
+  scrollbar-width: none;
+  list-style: none;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+
+  @include respond-up($breakpoint-pc-sm) {
+    flex-shrink: 0;
+    overflow: visible;
+    gap: $spacing-8;
+  }
+}
+
+.welcome_cta {
+  display: inline-flex;
+  flex-shrink: 0;
+  padding: $spacing-8 $spacing-12;
+  background: $white;
+  border: 0.1rem solid $border-card;
+  border-radius: $radius-circle;
+  font-size: $font-size-12;
+  font-weight: $font-weight-semibold;
+  color: $txt-primary;
+  text-decoration: none;
+  white-space: nowrap;
+  @include hover-bg-shift($beige-100);
+
+  @include respond-up($breakpoint-pc-sm) {
+    padding: $spacing-10 $spacing-16;
   }
 }

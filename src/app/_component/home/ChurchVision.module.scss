@@ -12,9 +12,7 @@
 
   .caption {
     display: inline-block;
-    font-size: $font-size-15;
-    font-weight: $font-weight-semibold;
-    color: $primary;
+    @include text-body-emphasis($color: $primary);
   }
 
   h2 {
@@ -64,7 +62,7 @@
 
     p {
       text-align: center;
-      line-height: $line-height-wide;
+      line-height: $line-height-loose;
     }
   }
 }

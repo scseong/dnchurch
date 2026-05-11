@@ -1,0 +1,51 @@
+.pill {
+  display: inline-flex;
+  align-items: center;
+  gap: $spacing-4;
+  padding: $spacing-8 $spacing-16;
+  font-size: $font-size-13;
+  font-weight: $font-weight-medium;
+  color: $txt-secondary;
+  background-color: $primary-subtle;
+  border: 1px solid transparent;
+  border-radius: $radius-circle;
+  white-space: nowrap;
+  transition:
+    background-color 0.15s ease,
+    color 0.15s ease;
+}
+
+button.pill {
+  cursor: pointer;
+
+  &:hover:not(.active) {
+    background-color: $bg-hover;
+  }
+}
+
+.active {
+  color: $txt-inverse;
+  background-color: $primary;
+  border-color: $primary;
+}
+
+.dismissible {
+  padding: $padding-control;
+  font-size: $font-size-12;
+  color: $primary;
+}
+
+.close {
+  display: inline-flex;
+  padding: 0;
+  font-size: $font-size-14;
+  color: inherit;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  opacity: 0.7;
+
+  &:hover {
+    opacity: 1;
+  }
+}

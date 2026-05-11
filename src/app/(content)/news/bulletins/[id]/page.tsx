@@ -79,7 +79,7 @@ export default async function BulletinDetail({ params }: { params: Promise<{ id:
       />
       <BoardBody images={imageIds} />
       <BoardFooter files={files} prevNext={prevNextBulletin} />
-      <BoardListLink link="/news/bulletin" />
+      <BoardListLink link="/news/bulletins" />
     </MainContainer>
   );
 }

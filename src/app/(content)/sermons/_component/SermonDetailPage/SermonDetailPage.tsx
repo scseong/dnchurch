@@ -6,7 +6,7 @@ import { IoDocumentTextOutline, IoDownloadOutline } from 'react-icons/io5';
 import { LayoutContainer } from '@/components/layout';
 import SermonVideoPlayer from '../SermonVideoPlayer/SermonVideoPlayer';
 import SermonVideoTools from '../SermonVideoTools/SermonVideoTools';
-import SermonTabs from '../SermonTabs/SermonTabs';
+import { Tabs } from '@/components/ui';
 import ScriptureBlock from '../ScriptureBlock/ScriptureBlock';
 import SermonNoteEditor from '../SermonNoteEditor/SermonNoteEditor';
 import SeriesEpisodeList from '../SeriesEpisodeList/SeriesEpisodeList';
@@ -16,10 +16,10 @@ import type { SermonWithRelations, SermonResource } from '@/types/sermon';
 import styles from './SermonDetailPage.module.scss';
 
 const TABS = [
-  { key: 'summary', label: '요약' },
-  { key: 'scripture', label: '본문' },
-  { key: 'resources', label: '자료' },
-  { key: 'notes', label: '노트' }
+  { id: 'summary', label: '요약' },
+  { id: 'scripture', label: '본문' },
+  { id: 'resources', label: '자료' },
+  { id: 'notes', label: '노트' }
 ];
 
 type Props = {
@@ -71,7 +71,7 @@ export default function SermonDetailPage({ sermon, seriesEpisodes }: Props) {
             duration={duration}
             serviceType={sermon.service_type}
           />
-          <SermonTabs activeTab={activeTab} onTabChange={setActiveTab} tabs={TABS} />
+          <Tabs variant="underline" items={TABS} activeId={activeTab} onChange={setActiveTab} />
           <TabContent activeTab={activeTab} sermon={sermon} resources={activeResources} />
           {hasSeriesEpisodes && (
             <SeriesEpisodeList

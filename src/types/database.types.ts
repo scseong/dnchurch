@@ -21,7 +21,6 @@ export type Database = {
           created_at: string
           id: number
           order_index: number
-          url: string
         }
         Insert: {
           bulletin_id: number
@@ -29,7 +28,6 @@ export type Database = {
           created_at?: string
           id?: never
           order_index?: number
-          url: string
         }
         Update: {
           bulletin_id?: number
@@ -37,7 +35,6 @@ export type Database = {
           created_at?: string
           id?: never
           order_index?: number
-          url?: string
         }
         Relationships: [
           {
@@ -384,6 +381,30 @@ export type Database = {
           },
         ]
       }
+      site_collections: {
+        Row: {
+          description: string | null
+          items: Json
+          key: string
+          updated_at: string
+          updated_by: string | null
+        }
+        Insert: {
+          description?: string | null
+          items: Json
+          key: string
+          updated_at?: string
+          updated_by?: string | null
+        }
+        Update: {
+          description?: string | null
+          items?: Json
+          key?: string
+          updated_at?: string
+          updated_by?: string | null
+        }
+        Relationships: []
+      }
       site_settings: {
         Row: {
           description: string | null
@@ -411,6 +432,7 @@ export type Database = {
           created_at: string
           education: string[]
           experience: string[]
+          greeting_paragraphs: Json
           id: number
           image_url: string | null
           is_active: boolean
@@ -424,6 +446,7 @@ export type Database = {
           created_at?: string
           education?: string[]
           experience?: string[]
+          greeting_paragraphs?: Json
           id?: number
           image_url?: string | null
           is_active?: boolean
@@ -437,6 +460,7 @@ export type Database = {
           created_at?: string
           education?: string[]
           experience?: string[]
+          greeting_paragraphs?: Json
           id?: number
           image_url?: string | null
           is_active?: boolean
@@ -449,35 +473,50 @@ export type Database = {
       }
       worship_schedules: {
         Row: {
+          age_group: string | null
           category: Database["public"]["Enums"]["worship_category"]
           created_at: string
+          description: string | null
+          duration: string | null
           id: number
           is_active: boolean
+          is_featured: boolean
           location: string
           name: string
           order_index: number
+          sub_category: string | null
           time: string
           updated_at: string
         }
         Insert: {
+          age_group?: string | null
           category: Database["public"]["Enums"]["worship_category"]
           created_at?: string
+          description?: string | null
+          duration?: string | null
           id?: number
           is_active?: boolean
+          is_featured?: boolean
           location: string
           name: string
           order_index?: number
+          sub_category?: string | null
           time: string
           updated_at?: string
         }
         Update: {
+          age_group?: string | null
           category?: Database["public"]["Enums"]["worship_category"]
           created_at?: string
+          description?: string | null
+          duration?: string | null
           id?: number
           is_active?: boolean
+          is_featured?: boolean
           location?: string
           name?: string
           order_index?: number
+          sub_category?: string | null
           time?: string
           updated_at?: string
         }
@@ -774,7 +813,10 @@ export const Constants = {
         "새벽예배",
         "특별예배",
       ],
-      worship_category: ["main", "church_school"],
+      worship_category: [
+        "main",
+        "church_school",
+      ],
     },
   },
 } as const

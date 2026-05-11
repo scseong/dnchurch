@@ -9,6 +9,7 @@ import {
   IoSpeedometerOutline,
   IoTvOutline
 } from 'react-icons/io5';
+import { ListItem } from '@/components/ui';
 import { useToastStore } from '@/store/toast.store';
 import styles from './SermonVideoTools.module.scss';
 
@@ -49,7 +50,7 @@ export default function SermonVideoTools({ sermonId, onSpeedChange }: Props) {
 
   useEffect(() => {
     const list = loadBookmarks();
-    setBookmarked(list.includes(sermonId));
+    queueMicrotask(() => setBookmarked(list.includes(sermonId)));
   }, [sermonId]);
 
   useEffect(() => {
@@ -109,17 +110,14 @@ export default function SermonVideoTools({ sermonId, onSpeedChange }: Props) {
           <ul className={styles.speed_popup} role="menu">
             {SPEED_OPTIONS.map((value) => (
               <li key={value}>
-                <button
-                  type="button"
+                <ListItem
                   role="menuitem"
-                  className={clsx(
-                    styles.speed_option,
-                    speed === value && styles.speed_option_active
-                  )}
+                  selected={speed === value}
                   onClick={() => handleSpeedSelect(value)}
+                  className={styles.speed_option}
                 >
                   {value}x
-                </button>
+                </ListItem>
               </li>
             ))}
           </ul>

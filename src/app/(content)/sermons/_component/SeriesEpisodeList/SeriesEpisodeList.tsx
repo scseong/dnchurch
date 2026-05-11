@@ -2,6 +2,7 @@
 
 import clsx from 'clsx';
 import { IoTimeOutline, IoPlayCircle } from 'react-icons/io5';
+import { Button, ListItem } from '@/components/ui';
 import { formatSermonDuration } from '@/utils/sermon';
 import type { SermonWithRelations } from '@/types/sermon';
 import styles from './SeriesEpisodeList.module.scss';
@@ -45,24 +46,27 @@ export default function SeriesEpisodeList({
 
           return (
             <li key={sermon.id}>
-              <button
-                type="button"
-                className={clsx(styles.row, isCurrent && styles.row_current)}
+              <ListItem
+                selected={isCurrent}
                 onClick={() => onSelect(sermon)}
-                aria-current={isCurrent || undefined}
+                className={styles.row}
+                trailing={
+                  duration ? (
+                    <span className={styles.duration}>
+                      <IoTimeOutline aria-hidden="true" />
+                      {duration}
+                    </span>
+                  ) : undefined
+                }
               >
-                <div className={styles.order_col}>
+                <span className={styles.order_col}>
                   <span className={styles.order_label}>제{order}편</span>
                   <span className={clsx(styles.order_badge, isCurrent && styles.badge_current)}>
-                    {isCurrent ? (
-                      <IoPlayCircle aria-hidden="true" />
-                    ) : (
-                      order
-                    )}
+                    {isCurrent ? <IoPlayCircle aria-hidden="true" /> : order}
                   </span>
-                </div>
+                </span>
 
-                <div className={styles.info}>
+                <span className={styles.info}>
                   <span className={styles.title}>{sermon.title}</span>
                   <span className={styles.meta}>
                     {shortDate}
@@ -80,24 +84,17 @@ export default function SeriesEpisodeList({
                     )}
                   </span>
                   {isCurrent && <span className={styles.now_label}>현재 재생 중</span>}
-                </div>
-
-                {duration && (
-                  <span className={styles.duration}>
-                    <IoTimeOutline aria-hidden="true" />
-                    {duration}
-                  </span>
-                )}
-              </button>
+                </span>
+              </ListItem>
             </li>
           );
         })}
       </ul>
 
       {hasMore && (
-        <button type="button" className={styles.view_all} onClick={onViewAll}>
+        <Button variant="ghost" size="sm" fullWidth className={styles.view_all} onClick={onViewAll}>
           시리즈 전체 {totalCount}편 보기 →
-        </button>
+        </Button>
       )}
     </div>
   );

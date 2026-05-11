@@ -3,16 +3,17 @@ import { GNB_ITEMS } from '@/config/navigation';
 export type HeroMeta = {
   title: string;
   subtitle: string;
+  eyebrow?: string;
   backgroundImage?: string;
 };
 
 /** 카테고리(prefix) 단위 기본 메타 — subtitle 소스 */
 const HERO_META: Record<string, HeroMeta> = {
-  '/about': { title: '교회 소개', subtitle: '대구동남교회를 소개합니다' },
-  '/next-gen': { title: '다음세대', subtitle: '믿음의 다음 세대를 세웁니다' },
-  '/sermons': { title: '설교', subtitle: '주일 말씀과 강해 설교를 만나보세요' },
-  '/community': { title: '교제', subtitle: '함께 기도하고 나누는 공동체' },
-  '/news': { title: '교회 소식', subtitle: '교회의 소식을 전해드립니다' },
+  '/about': { title: '교회 소개', subtitle: '대구동남교회를 소개합니다', eyebrow: 'ABOUT' },
+  '/next-gen': { title: '다음세대', subtitle: '믿음의 다음 세대를 세웁니다', eyebrow: 'NEXT GEN' },
+  '/sermons': { title: '설교', subtitle: '주일 말씀과 강해 설교를 만나보세요', eyebrow: 'SERMONS' },
+  '/community': { title: '교제', subtitle: '함께 기도하고 나누는 공동체', eyebrow: 'COMMUNITY' },
+  '/news': { title: '교회 소식', subtitle: '교회의 소식을 전해드립니다', eyebrow: 'NEWS' },
 };
 
 /**
@@ -36,8 +37,8 @@ export function resolveHeroMeta(pathname: string): HeroMeta | null {
       }
     }
 
-    // 자식이 없는 경우: 부모 href 정확히 매칭 또는 하위 경로
-    if (pathname === item.href || (!item.children && pathname.startsWith(item.href + '/'))) {
+    // 자식이 없는 경우: 부모 href 정확히 매칭만 (상세 페이지·Hub 제외)
+    if (!item.children && pathname === item.href) {
       title = item.label;
       categoryKey = item.href.split('/').slice(0, 2).join('/');
       break;
@@ -48,11 +49,13 @@ export function resolveHeroMeta(pathname: string): HeroMeta | null {
 
   // HERO_META에서 카테고리 prefix로 subtitle 조회
   let subtitle = '';
+  let eyebrow: string | undefined;
   for (const key of Object.keys(HERO_META)) {
     if (categoryKey.startsWith(key) && key.length > subtitle.length) {
       subtitle = HERO_META[key].subtitle;
+      eyebrow = HERO_META[key].eyebrow;
     }
   }
 
-  return { title, subtitle };
+  return { title, subtitle, eyebrow };
 }

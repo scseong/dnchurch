@@ -12,16 +12,16 @@ description: SCSS 파일 생성/수정, 스타일 작성, 디자인 토큰 사�
 | 파일 | 주요 토큰 |
 |---|---|
 | `tokens/_breakpoint.scss` | Primitive(`$breakpoint-420` ~ `$breakpoint-1920`), Semantic(`$breakpoint-mobile` ~ `$breakpoint-pc-xl`), `$responsive-font-vw-map` |
-| `tokens/_color.scss` | Gray/Blue/Brand/Utility primitive, 시맨틱(`$txt-*` `$bg-*` `$border-*` `$primary` `$status-*`) |
-| `tokens/_effect.scss` | `$shadow-*`, `$transition-*`, `@keyframes fadeUp` (radius primitive는 `globals.scss` CSS custom properties) |
-| `tokens/_layout.scss` | `$container-padding/min/max`, `$screensize-h-min`, `$header-height`, `$button-height-*` (container primitive는 `globals.scss` CSS custom properties) |
-| `tokens/_spacing.scss` | `$spacing-{px값}` (숫자=px): `$spacing-1` ~ `$spacing-96`, 4·8 배수 기반 |
+| `tokens/_color.scss` | Gray/Navy/Gold/Beige/Status primitive, 시맨틱(`$txt-*` `$bg-*` `$border-*` `$primary` `$accent` `$status-*`) |
+| `tokens/_effect.scss` | `$shadow-*`, `$transition-*`, `@keyframes fadeUp` |
+| `tokens/_layout.scss` | `$container-padding/min/max`, `$header-height`, `$button-height-*`, `$icon-button-size-*` |
+| `tokens/_spacing.scss` | `$spacing-{px값}` (숫자=px): `$spacing-0` ~ `$spacing-200`, 4·8 배수 기반 |
 | `tokens/_typography.scss` | `$font-family-*`, `$font-size-{11~42}` (숫자=px), `$font-weight-*`, `$line-height-*`, `$letter-spacing-*`, heading size map |
-| `tokens/_semantic.scss` | `$padding-*`, `$content-gap-{XL~XS}`, `$section-padding-{px값}`, `$radius-xl/l/m/s/xs/circle`, `$overlay-*`, `$txt-image-subtle` |
+| `tokens/_semantic.scss` | `$padding-*`, `$content-gap-{xl~xs}`, `$section-gap-*`, `$radius-xl/l/m/s/xs/xxs/circle`, `$overlay-*` |
 
 ## 자동 주입 동작 방식
 
-`additionalData` → `_variables.scss` → 토큰 7개 파일이 모든 `.module.scss`에 주입된다. 이 덕분에 `@keyframes fadeUp`(`_effect.scss` 정의)도 각 모듈에 로컬 스코프로 주입되어 `animation: fadeUp`을 별도 import 없이 사용할 수 있다. `_mixins.scss`는 `@use '_variables' as *`로 토큰을 내부 참조하므로, mixin 내에서 모든 토큰 변수를 사용할 수 있다.
+`additionalData` → `_variables.scss` → 토큰 7개 파일이 모든 `.module.scss`에 주입된다. `@keyframes fadeUp`(`_effect.scss` 정의)도 각 모듈에 로컬 스코프로 주입되어 별도 import 없이 사용할 수 있다.
 
 ## 사용 가능한 믹스인 (`_mixins.scss`)
 
@@ -32,69 +32,209 @@ description: SCSS 파일 생성/수정, 스타일 작성, 디자인 토큰 사�
 | `blind` | 접근성용 화면 가림 |
 | `prevent-img-drag` | 이미지 드래그 방지 |
 | `ellipsis-multi($lines)` | 여러 줄 말줄임 |
-| `text-hero` | 히어로 타이틀 (h1 반응형 + bold) |
-| `text-page-title` | 페이지 타이틀 (h2 반응형 + bold) |
-| `text-section-title` | 섹션 타이틀 (h3 반응형 + bold) |
-| `text-sub-section-title` | 서브 섹션 타이틀 (h4 반응형 + semibold) |
-| `text-card-title` | 카드/아이템 타이틀 (h5 반응형 + semibold) |
-| `text-body` | 본문 (default + regular + $txt-primary) |
-| `text-sub` | 보조 텍스트 (md + regular + $txt-secondary) |
-| `text-caption` | 캡션/메타 (sm + regular + $txt-tertiary) |
-| `text-label` | 라벨/카테고리 (sm + medium + $txt-secondary) |
+| `text-page-title($color, $weight)` | 페이지 최상위 제목 (h2 반응형 26→34px + bold) |
+| `text-card-title($color, $weight)` | 카드/아이템 제목 (h5 반응형 18→20px + semibold) |
+| `text-sub($color)` | 보조 텍스트 (14px + regular + `$txt-secondary`) |
+| `text-caption($color)` | 캡션/메타 (13px + regular + `$txt-tertiary`) |
+| `text-body-emphasis($color)` | 본문 강조 (15px + medium + `$txt-primary`) |
+| `text-sub-emphasis($color)` | 보조 본문 강조 (14px + medium + `$txt-secondary`) |
+| `text-label-emphasis($color)` | 라벨 강조 (13px + semibold + `$txt-secondary`) |
+| `text-caption-small($color)` | 작은 캡션 (12px + medium + `$txt-tertiary`) |
+| `text-caption-strong($color)` | 강조 캡션/뱃지 (11px + semibold + `$txt-tertiary`) |
+| `hover-bg-shift($hover-bg, $duration: 0.18s)` | 배경색 hover (`background-color`만) — 버튼·드롭다운 |
+| `hover-color-shift($hover-color, $duration: 0.18s)` | 텍스트 색 hover (`color`만) — 링크·텍스트 버튼 |
+| `hover-lift($shadow: $shadow-md, $lift: 2px, $duration: 0.22s)` | Lift 효과 hover (`transform` + `box-shadow`, 모바일 `:active` 분기 포함) — 카드·CTA |
 
 ## 컬러 토큰 체계
 
-### Primitive (순수 색상값)
-- **Gray**: `$gray-900` ~ `$gray-50`, `$black`, `$white`
-- **Brand**: `$navy`, `$gold`, `$cream`, `$cream-deep`
-- **Blue**: `$blue-900`, `$blue-800`, `$blue-700`, `$blue-100` (primary 액션 전용)
-- **Utility**: `$green-500`, `$red-500`, `$orange-600`
+### Warm vs Cool 역할 분리 (v4 — 가장 먼저 읽기)
 
-### Semantic (역할 기반)
-- **Text**: `$txt-primary` `$txt-secondary` `$txt-tertiary` `$txt-link` `$txt-disabled` `$txt-inverse`
-- **Background**: `$bg-primary` `$bg-secondary`(cream) `$bg-tertiary`(cream-deep) `$bg-invert` `$bg-dark` `$bg-dark-card`
-- **Border**: `$border-primary` `$border-secondary` `$border-inverse`
-- **Action**: `$primary` `$primary-active` `$primary-hover` `$primary-subtle`
-- **Status**: `$status-positive` `$status-negative` `$status-warning`
+색상은 **온도(warm/cool)** 와 **역할(decorative/interactive)** 두 축으로 나뉜다. 두 축이 어긋나면 navy ↔ beige가 무작위 인접해 시각이 부서진다.
+
+| 역할 | 온도 | 용도 | 토큰 |
+|---|---|---|---|
+| **Decorative surface** | warm | 페이지·섹션·카드 정적 면 | `$bg-secondary` (cream), `$bg-accent-subtle` (gold tint) |
+| **Interactive feedback** | cool | hover/active/selected | `$bg-hover` (navy 6% rgba), `$primary-subtle` (navy 8% rgba), `$primary` |
+| **Brand action** | cool | CTA·링크·focus | `$primary`, `$primary-hover`, `$primary-active` |
+| **Accent action** | warm | Featured/eyebrow/Gold CTA | `$accent`, `$accent-hover`, `$accent-subtle` |
+
+**규칙**: hover/active 안에서 warm primitive(`$beige-*` `$cream-*`)나 warm semantic(`$bg-secondary`)을 직접 면 색으로 쓰지 않는다. 인터랙션 신호는 cool tint로만 표현한다(예외: 정적 warm 카드 위에서 또 다른 warm 카드로 강조하는 디자인 명시 케이스).
+
+### Primitive (순수 색상값 — 직접 사용 금지, Semantic 토큰을 통해서만 참조)
+
+- **Gray**: `$gray-900` `$gray-700` `$gray-500` `$gray-400` `$gray-300` `$gray-200` `$gray-100` `$gray-50` `$black` `$white`
+- **Navy (Brand · Primary Action · Interactive cool)**: `$navy-950` `$navy-900` `$navy-800` `$navy-600`
+- **Gold (Accent)**: `$gold-600` `$gold-400` `$gold-100`
+- **Beige (Warm Decorative Surface)**: `$beige-50` `$beige-100` `$beige-150` `$beige-200` `$beige-300` — 정적 면 전용. (`$beige-50/100/150/200` = `$bg-primary`/`$bg-beige-subtle`/`$bg-secondary`/`$border-card`로 매핑 완료; `$beige-300`은 미정)
+- **Status**: `$green-500` `$green-100` `$red-500` `$red-100` `$orange-600` `$orange-100`
+
+### Semantic (역할 기반 — 컴포넌트에서 직접 사용)
+
+**Text**
+`$txt-primary` `$txt-secondary` `$txt-tertiary` `$txt-link` `$txt-link-active` `$txt-disabled` `$txt-inverse`
+`$txt-image-subtle` (이미지 위 보조) `$txt-dark-muted` (다크배경 보조) `$txt-dark-faint` (다크배경 약한)
+
+**Background**
+- 정적 warm: `$bg-primary`(beige-50, 페이지 배경) `$bg-card`(#fff, 카드·패널) `$bg-secondary`(beige-150, 섹션·카드 정적 면) `$bg-beige-subtle`(beige-100, 가장 옅은 섹션 면) `$bg-accent-subtle`(gold 12% tint, CTA·배너 면)
+- 인터랙티브 cool: `$bg-hover`(navy 6% rgba) — 면 종류 무관, hover/active 피드백 전용 ★
+- 다크: `$bg-dark` `$bg-dark-card` `$bg-dark-nav`(헤더·푸터)
+
+> v4: `$bg-tertiary` **삭제**. hover 피드백은 `$bg-hover`로, 더 깊은 warm 면이 필요하면 `$bg-secondary` 재사용.
+
+**Border**
+`$border-primary` `$border-subtle` `$border-strong` `$border-focus` `$border-warm`(cream·gold 배경 위)
+`$border-inverse` `$border-dark-subtle` `$border-dark-faint`
+
+**Primary Action (Navy · Cool)**
+`$primary`(navy-800) `$primary-hover`(navy-600 — _lighter_) `$primary-active`(navy-950 — _darker_) `$primary-subtle`(navy 8% rgba — active/selected 면)
+
+> **Hover 방향 의도**: 다크 navy primary는 hover에서 **밝아진다**(lift affordance). 클릭 시 active로 한 단계 어두워진다.
+>
+> **`$primary-subtle` v4**: warm beige가 아닌 **cool navy tint(rgba 8%)**. 칩의 `.active`, 선택 패널 등에서 `$primary` 텍스트/보더와 같은 온도로 짝을 이룬다. warm 면 위·cool 면 위 모두에서 자연스러운 강조를 만든다.
+
+**Accent (Gold)**
+`$accent` `$accent-hover` `$accent-subtle`
+
+**Status**
+`$status-positive` `$status-positive-bg` `$status-negative` `$status-negative-bg` `$status-warning` `$status-warning-bg`
 
 ```scss
-// ❌ 하드코딩
+// ❌ 금지 — 하드코딩
 color: #1f2937;
+background: #f5f0e6;
 
-// ✅ 시맨틱 토큰 우선
+// ❌ 금지 — primitive 직접 사용
+color: $gold-600;              // → $accent
+background: $navy-950;         // → $bg-dark-nav 또는 $primary-active
+border: 1px solid $beige-200;  // → $border-card
+
+// ✅ 올바른 사용
 color: $txt-primary;
 background: $bg-secondary;
-border-color: $border-primary;
-
-// ✅ 브랜드 색상
-color: $gold;
-background: $navy;
+border-color: $border-card;
+color: $accent;                // eyebrow · Gold CTA
+background-color: $bg-dark-nav; // 헤더 · 푸터 다크 nav
 ```
 
-## Semantic Token 매핑 규칙
+### Primitive → Semantic 치트시트
 
-Primitive 토큰 위에 역할 기반 시맨틱 토큰이 정의되어 있다. UI 요소를 스타일링할 때 **시맨틱 토큰을 우선 사용**한다.
+primitive를 쓰려는 순간 이 표를 먼저 확인한다.
+
+| 쓰려던 primitive | 대신 쓸 semantic | 대표 사용 상황 |
+|---|---|---|
+| `$gold-600` | `$accent` | eyebrow 텍스트, Gold CTA 아이콘·텍스트 |
+| `$gold-400` | `$accent-hover` | Gold 요소 hover 상태 |
+| `$gold-100` | `$accent-subtle` | Gold 연한 배경 |
+| `$navy-800` | `$primary` | CTA 배경, 링크, 선택 탭 |
+| `$navy-600` | `$primary-hover` | Primary hover 상태 |
+| `$navy-950` (active) | `$primary-active` | 클릭·활성 상태 |
+| `$navy-950` (배경) | `$bg-dark-nav` | 헤더·푸터·사이드바 다크 배경 |
+| `$gray-900` | `$txt-primary` | 제목·본문 |
+| `$gray-700` | `$txt-secondary` | 보조 텍스트·부제 |
+| `$gray-500` | `$txt-tertiary` | 캡션·메타·날짜 |
+| `$gray-400` | `$txt-disabled` | 비활성 텍스트 |
+| `$gray-300` | `$border-primary` | 기본 구분선·input 테두리 |
+| `$gray-200` | `$label-neutral-bg` | 중립 라벨·뱃지 배경 |
+| `$beige-50` | `$bg-primary` | 페이지 전체 배경 |
+| `$beige-100` | `$bg-beige-subtle` | 가장 옅은 섹션 면 |
+| `$beige-150` | `$bg-secondary` | 섹션·카드 정적 면 |
+| `$beige-200` | `$border-card` | 카드·섹션 외곽 테두리 |
+| `$white` | `$txt-inverse` / `$bg-card` | 다크 배경 위 텍스트 / 카드·패널 배경 |
+
+**예외 — semantic 미정 (사용처에 로컬 주석 필수)**
+- 다크 그라디언트: `linear-gradient($navy-900, $navy-950)` 등 Hero·배너 전용
+- rgba 투명도 조합: `rgba($gold-600, 0.18)` 등 기존 semantic으로 표현 불가한 케이스
+
+## Semantic Token 매핑 규칙
 
 | UI 요소 | spacing | radius | 기타 |
 |---|---|---|---|
 | input, button | `$padding-control` | `$radius-xs` | |
+| 큰 CTA 버튼 | `$padding-control-wide` | `$radius-xs` | |
 | card, 패널 | `$padding-card` | `$radius-s` | `$shadow-sm` |
+| 소형 카드, 리스트 아이템 | `$padding-card-compact` | `$radius-s` | `$content-gap-s` |
 | 모달, 바텀시트 | `$padding-card` | `$radius-m` | `$overlay-scrim` |
 | 태그, 뱃지 | `$padding-inline-xs` | `$radius-circle` | |
-| 섹션 컨테이너 | `$container-padding` / `$section-padding-*` | — | `$container-max` |
-| 리스트 아이템 | `$padding-card-compact` | — | `$content-gap-s` |
+| 섹션 컨테이너 | `$container-padding` / `$section-gap-*` | — | `$container-max` |
 | 이미지 오버레이 | — | — | `$overlay-scrim`, `$txt-image-subtle` |
+| `:focus-visible` outline | `$focus-ring-width` / `$focus-ring-offset` | — | `$focus-ring-color` |
 
-**Content Gap** — XL~XS 상대 크기: `$content-gap-xs`(8px) < `$content-gap-s`(12px) < `$content-gap-m`(16px) < `$content-gap-l`(24px) < `$content-gap-xl`(32px)
-**Section Gap** — 섹션 여백: `$section-padding-40` / `$section-padding-64` / `$section-padding-80`
+**Content Gap** (XL→XS): `$content-gap-xl`(32px) > `$content-gap-l`(24px) > `$content-gap-m`(16px) > `$content-gap-s`(12px) > `$content-gap-xs`(8px)
 
-다크 섹션(이미지/영상 위 콘텐츠): `$bg-dark`, `$bg-dark-card`
+**Section Gap**: `$section-gap-80` / `$section-gap-64` / `$section-gap-40`
 
-상세 매핑은 `src/styles/_usage-guide.scss` 참조.
+다크 섹션: `$bg-dark`, `$bg-dark-card` / 이미지·영상 위: `$overlay-image`, `$txt-image-subtle`
 
-토큰에 없는 값이 필요한 경우, 해당 파일 상단에 로컬 변수로 선언하고 사용한다.
+상세 매핑은 `docs/references/STYLES_USAGE_GUIDE.md` 참조.
+
+## Hover 시스템
+
+Hover 패턴은 **3원칙**을 예외 없이 따른다 — 다른 곳에서 `transition: all`/shorthand `background:`/hover 안 `border-color`를 쓰면 인라인 스타일 충돌·border 흔들림·다른 색면과의 부조화가 발생.
+
+| 원칙 | 금지 | 권장 |
+|---|---|---|
+| **#1** | `transition: all 0.18s` | 변하는 속성만 명시 (`transition: background-color 0.18s ease`) — 또는 `hover-*` mixin 사용 |
+| **#2** | `:hover { background: $primary-hover; }` shorthand | `:hover { background-color: $primary-hover; }` — 또는 `@include hover-bg-shift($primary-hover);` |
+| **#3** | `:hover { border-color: $primary; }` 또는 hover에서 `border:` 명시 | hover에서 border 관련 코드 자체를 작성하지 않음 (다크 outline 버튼은 Phase 3 별도 mixin) |
+
+### 패턴별 mixin 매핑
+
+| 컴포넌트 | hover 의도 | 사용 |
+|---|---|---|
+| Primary 버튼 (light/dark surface 모두) | bg navy-800 → navy-600 (lighter) | `@include hover-bg-shift($primary-hover);` + `&:active { background-color: $primary-active; }` |
+| Secondary 버튼 / 아이콘 버튼 / 드롭다운 항목 | 정적 면 → cool tint | `@include hover-bg-shift($bg-hover);` (border는 절대 건드리지 X) |
+| 칩 / 리스트 항목 (선택 가능) | hover → cool tint, active/selected → cool 강조 | hover: `@include hover-bg-shift($bg-hover);` · active: `background-color: $primary-subtle;` |
+| 텍스트 링크 | color $txt-link → $primary | `@include hover-color-shift($primary);` |
+| 다크 위 링크 | color → $accent | `@include hover-color-shift($accent);` |
+| 카드 (clickable) | translateY + box-shadow | `@include hover-lift;` (기본 `$shadow-md`) |
+| Featured/Dark CTA 카드 | translateY + 강조 shadow | `@include hover-lift($shadow: $shadow-lg);` |
+| Tab 비활성 | color → $txt-primary | `@include hover-color-shift($txt-primary);` |
+
+### 사용 예시
+
+```scss
+@use '@/styles/_variables.scss' as *;
+@use '@/styles/_mixins.scss' as *;
+
+.button_primary {
+  background-color: $primary;
+  color: $txt-inverse;
+  padding: $padding-control;
+  border-radius: $radius-xs;
+
+  @include text-label-emphasis($color: $txt-inverse);
+  @include hover-bg-shift($primary-hover);
+
+  &:active {
+    background-color: $primary-active;
+  }
+}
+
+.card {
+  background-color: $white;
+  border: 1px solid $border-primary;
+  border-radius: $radius-m;
+  padding: $padding-card;
+
+  @include hover-lift;
+  // base border는 허용. hover 안에서 border 관련 코드 작성 X
+}
+```
+
+## Transition
+
+transition shorthand 토큰은 제공하지 않는다(이전 `$transition-base/spring/enter`는 `all` 포함으로 Hover 3원칙 #1 위반이라 삭제). hover는 `hover-*` mixin 또는 변경 속성을 명시한 transition을 직접 작성한다.
+
+```scss
+transition: background-color 0.18s ease;  // 직접 명시
+@include hover-bg-shift($primary-hover);  // mixin (권장)
+```
+
+easing·duration이 필요하면 `$transition-easing-{default,spring,snappy}` / `$transition-duration-normal` 토큰을 합성한다.
 
 ## 폰트
 
-- **Pretendard** (CDN, variable font) — 본문 기본 폰트
-- **Nanum Myeongjo** (Google Fonts, CSS variable `--font-myeongjo`) — 특정 헤딩/강조
+- **Pretendard Variable** (CDN) — `$font-family-base`, 모든 헤딩·본문·UI 텍스트 기본
+- **Noto Serif KR** (Google Fonts, CSS variable `--font-notoserifKR`) — `$font-family-secondary`, 교회 로고타입·성경 인용구 전용
+
+토큰에 없는 값이 필요한 경우, 해당 파일 상단에 로컬 변수로 선언하고 사용한다.

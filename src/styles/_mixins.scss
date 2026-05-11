@@ -76,69 +76,24 @@
 //   $weight — font-weight. 각 역할의 기본 굵기
 //
 // 사용법:
-//   @include text-section-title;                              // 기본값
-//   @include text-section-title($color: $txt-image);      // 다크 배경
+//   @include text-page-title;                                 // 기본값
+//   @include text-page-title($color: $txt-image-subtle);      // 다크 배경
 //   @include text-card-title($weight: $font-weight-bold);     // 강조
-//   @include text-body($color: $txt-secondary);        // 색상 변경
+//   @include text-sub($color: $txt-secondary);                // 색상 변경
 // ══════════════════════════════════════════
-
-/// 히어로 타이틀 — 배너, 랜딩 최상단 (h1 반응형)
-@mixin text-hero($color: null, $weight: $font-weight-bold) {
-  font-size: $font-size-32;
-  font-weight: $weight;
-  line-height: map-get($heading-line-heights, 'h1');
-  letter-spacing: $letter-spacing-heading;
-  @if $color {
-    color: $color;
-  }
-
-  @include respond-up($breakpoint-tablet) {
-    font-size: $font-size-42;
-  }
-}
 
 /// 페이지 타이틀 — 각 페이지 최상위 제목 (h2 반응형)
 @mixin text-page-title($color: null, $weight: $font-weight-bold) {
   font-size: $font-size-26;
   font-weight: $weight;
   line-height: map-get($heading-line-heights, 'h2');
-  letter-spacing: $letter-spacing-heading;
+  letter-spacing: map-get($heading-letter-spacings, 'h2');
   @if $color {
     color: $color;
   }
 
   @include respond-up($breakpoint-tablet) {
     font-size: $font-size-34;
-  }
-}
-
-/// 섹션 타이틀 — 페이지 내 구역 제목 (h3 반응형)
-@mixin text-section-title($color: null, $weight: $font-weight-bold) {
-  font-size: $font-size-22;
-  font-weight: $weight;
-  line-height: map-get($heading-line-heights, 'h3');
-  letter-spacing: $letter-spacing-tight;
-  @if $color {
-    color: $color;
-  }
-
-  @include respond-up($breakpoint-tablet) {
-    font-size: $font-size-28;
-  }
-}
-
-/// 서브 섹션 타이틀 — 섹션 내 하위 제목 (h4 반응형)
-@mixin text-sub-section-title($color: null, $weight: $font-weight-semibold) {
-  font-size: $font-size-20;
-  font-weight: $weight;
-  line-height: map-get($heading-line-heights, 'h4');
-  letter-spacing: $letter-spacing-tight;
-  @if $color {
-    color: $color;
-  }
-
-  @include respond-up($breakpoint-tablet) {
-    font-size: $font-size-24;
   }
 }
 
@@ -154,14 +109,6 @@
   @include respond-up($breakpoint-tablet) {
     font-size: $font-size-20;
   }
-}
-
-/// 본문 — 일반 텍스트 (기본 크기, 반응형 변경 없음)
-@mixin text-body($color: $txt-primary) {
-  font-size: $font-size-15;
-  font-weight: $font-weight-regular;
-  line-height: $line-height-base;
-  color: $color;
 }
 
 /// 보조 텍스트 — 부연 설명, 서브 텍스트
@@ -180,10 +127,101 @@
   color: $color;
 }
 
-/// 라벨 — 폼 라벨, 카테고리 이름, 네비게이션
-@mixin text-label($color: $txt-secondary) {
-  font-size: $font-size-13;
+// ══════════════════════════════════════════
+// TEXT — 강조 변형 (-emphasis / -small / -strong)
+// 컨벤션:
+//   -emphasis : 같은 사이즈에서 weight 강조 (regular→medium / medium→semibold)
+//   -small    : 같은 컨텍스트에서 한 단계 작은 사이즈
+//   -strong   : 가장 강한 강조 (작고 굵음)
+// 본 그룹은 ADR 0003 — design-system-v3 typography hierarchy 참조
+// ══════════════════════════════════════════
+
+/// 본문 강조 — 본문 기본 사이즈에서 weight 강조 (15 medium, body-default lh)
+@mixin text-body-emphasis($color: $txt-primary) {
+  font-size: $font-size-15;
   font-weight: $font-weight-medium;
-  line-height: $line-height-base;
+  line-height: $line-height-body-default;
   color: $color;
+}
+
+/// 보조 본문 강조 — 보조 본문에서 weight 강조 (14 medium, body-default lh)
+@mixin text-sub-emphasis($color: $txt-secondary) {
+  font-size: $font-size-14;
+  font-weight: $font-weight-medium;
+  line-height: $line-height-body-default;
+  color: $color;
+}
+
+/// 라벨 강조 — 라벨에서 weight 강조 (13 semibold, body-ui lh)
+@mixin text-label-emphasis($color: $txt-secondary) {
+  font-size: $font-size-13;
+  font-weight: $font-weight-semibold;
+  line-height: $line-height-body-ui;
+  color: $color;
+}
+
+/// 작은 캡션 — 메타·미세 라벨 (12 medium, body-ui lh)
+@mixin text-caption-small($color: $txt-tertiary) {
+  font-size: $font-size-12;
+  font-weight: $font-weight-medium;
+  line-height: $line-height-body-ui;
+  color: $color;
+}
+
+/// 강조 캡션 — 뱃지·태그·미세 강조 (11 semibold, body-ui lh)
+@mixin text-caption-strong($color: $txt-tertiary) {
+  font-size: $font-size-11;
+  font-weight: $font-weight-semibold;
+  line-height: $line-height-body-ui;
+  color: $color;
+}
+
+// ══════════════════════════════════════════
+// HOVER PATTERNS — v3 디자인 시스템
+//
+// 3원칙 (예외 없이 적용):
+//   1. transition: all 금지 — 변하는 속성만 명시 (인라인 스타일과 충돌 방지)
+//   2. shorthand background: 금지 — :hover에서는 background-color: 만 사용
+//   3. hover 안에서 border* 일절 명시 X (다크 outline 버튼 예외는 Phase 3에서 별도 mixin)
+//
+// 다크 navy primary는 hover에서 밝아진다(`$primary-hover` = navy-600 < `$primary` = navy-800).
+// 색 의도 자세히는 .claude/skills/styles/SKILL.md "Primary Action (Navy)" 참조.
+// ══════════════════════════════════════════
+
+/// 배경색 변경 hover — 버튼·카드·드롭다운 항목
+@mixin hover-bg-shift($hover-bg, $duration: 0.18s) {
+  transition: background-color $duration $transition-easing-default;
+
+  &:hover {
+    background-color: $hover-bg;
+  }
+}
+
+/// 텍스트 색상 변경 hover — 링크·텍스트 버튼·네비 항목
+@mixin hover-color-shift($hover-color, $duration: 0.18s) {
+  transition: color $duration $transition-easing-default;
+
+  &:hover {
+    color: $hover-color;
+  }
+}
+
+/// Lift 효과 hover — 카드·다크 영역 CTA. transform(spring) + box-shadow(default).
+/// 모바일(:hover 미지원) 환경에서는 :active로 미세한 scale 피드백 제공.
+@mixin hover-lift($shadow: $shadow-md, $lift: 2px, $duration: 0.22s) {
+  transition:
+    transform $duration $transition-easing-spring,
+    box-shadow $duration $transition-easing-default;
+  cursor: pointer;
+
+  &:hover {
+    transform: translateY(calc(-1 * #{$lift}));
+    box-shadow: $shadow;
+  }
+
+  @media (hover: none) {
+    &:active {
+      transform: scale(0.985);
+    }
+  }
 }

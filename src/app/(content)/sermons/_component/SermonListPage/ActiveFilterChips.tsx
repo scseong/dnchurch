@@ -1,6 +1,6 @@
 'use client';
 
-import { IoClose } from 'react-icons/io5';
+import { Pill } from '@/components/ui';
 import useSermonFilter from '@/hooks/useSermonFilter';
 import type { SeriesWithSermonCount } from '@/types/sermon';
 import styles from './SermonListPage.module.scss';
@@ -23,51 +23,31 @@ export default function ActiveFilterChips({ allSeries }: Props) {
   return (
     <ul role="list" aria-label="적용된 필터" className={styles.active_filters}>
       {seriesLabel && (
-        <li className={styles.filter_chip}>
-          {seriesLabel}
-          <button
-            type="button"
-            onClick={() => setFilter({ series: null })}
-            aria-label="시리즈 필터 해제"
-          >
-            <IoClose />
-          </button>
+        <li>
+          <Pill closable onClose={() => setFilter({ series: null })}>
+            {seriesLabel}
+          </Pill>
         </li>
       )}
       {year && (
-        <li className={styles.filter_chip}>
-          {year}년
-          <button
-            type="button"
-            onClick={() => setFilter({ year: null })}
-            aria-label="연도 필터 해제"
-          >
-            <IoClose />
-          </button>
+        <li>
+          <Pill closable onClose={() => setFilter({ year: null })}>
+            {year}년
+          </Pill>
         </li>
       )}
       {preacher && (
-        <li className={styles.filter_chip}>
-          {preacher}
-          <button
-            type="button"
-            onClick={() => setFilter({ preacher: null })}
-            aria-label="설교자 필터 해제"
-          >
-            <IoClose />
-          </button>
+        <li>
+          <Pill closable onClose={() => setFilter({ preacher: null })}>
+            {preacher}
+          </Pill>
         </li>
       )}
       {q && (
-        <li className={styles.filter_chip}>
-          &quot;{q}&quot;
-          <button
-            type="button"
-            onClick={() => setFilter({ q: null })}
-            aria-label="검색 해제"
-          >
-            <IoClose />
-          </button>
+        <li>
+          <Pill closable onClose={() => setFilter({ q: null })}>
+            &quot;{q}&quot;
+          </Pill>
         </li>
       )}
       <li>

@@ -1,6 +1,7 @@
 'use client';
 
 import { FaRegTrashAlt } from 'react-icons/fa';
+import { getCloudinaryUrl } from '@/utils/cloudinary';
 import { formattedDate } from '@/utils/date';
 import { convertBytesToFileSize } from '@/utils/file';
 import type { ImageItem } from '@/types/bulletin';
@@ -18,7 +19,7 @@ export default function ImagePreview({ images, onDelete }: Props) {
     <div className={styles.container}>
       {images.map((image) => {
         const isExisting = image.type === 'existing';
-        const imageSrc = isExisting ? image.url : image.previewUrl;
+        const imageSrc = isExisting ? getCloudinaryUrl(image.cloudinaryId) : image.previewUrl;
 
         const fileName = isExisting
           ? image.cloudinaryId.split('/').pop() || '기존 이미지'

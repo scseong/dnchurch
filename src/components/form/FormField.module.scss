@@ -35,7 +35,7 @@
     transition: border 0.1s ease-in-out;
 
     &:focus {
-      border: 1px solid $border-secondary !important;
+      border: 1px solid $border-focus !important;
     }
   }
 }

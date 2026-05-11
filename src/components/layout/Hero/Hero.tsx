@@ -18,6 +18,7 @@ export default function Hero() {
       <div className={styles.hero_overlay} aria-hidden="true" />
       <LayoutContainer className={styles.hero_inner}>
         <Breadcrumb />
+        {meta.eyebrow && <span className={styles.hero_eyebrow}>{meta.eyebrow}</span>}
         <h1 className={styles.hero_title}>{meta.title}</h1>
         <p className={styles.hero_subtitle}>{meta.subtitle}</p>
       </LayoutContainer>

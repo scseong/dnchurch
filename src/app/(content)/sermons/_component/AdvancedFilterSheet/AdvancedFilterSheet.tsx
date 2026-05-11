@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import clsx from 'clsx';
-import BottomSheet from '@/components/common/BottomSheet/BottomSheet';
+import { BottomSheet, Button } from '@/components/ui';
 import type { Preacher } from '@/types/sermon';
 import styles from './AdvancedFilterSheet.module.scss';
 
@@ -28,7 +28,7 @@ export default function AdvancedFilterSheet({
   );
 
   useEffect(() => {
-    if (open) setSelected(activePreacher ?? ALL_KEY);
+    if (open) queueMicrotask(() => setSelected(activePreacher ?? ALL_KEY));
   }, [open, activePreacher]);
 
   const handleReset = () => setSelected(ALL_KEY);
@@ -39,7 +39,21 @@ export default function AdvancedFilterSheet({
   };
 
   return (
-    <BottomSheet open={open} onClose={onClose} title="상세 필터">
+    <BottomSheet
+      open={open}
+      onClose={onClose}
+      title="상세 필터"
+      footer={
+        <>
+          <Button variant="secondary" fullWidth onClick={handleReset}>
+            초기화
+          </Button>
+          <Button fullWidth onClick={handleApply}>
+            적용
+          </Button>
+        </>
+      }
+    >
       <section className={styles.section}>
         <h3 className={styles.section_title}>설교자</h3>
         <div className={styles.chips}>
@@ -62,15 +76,6 @@ export default function AdvancedFilterSheet({
           ))}
         </div>
       </section>
-
-      <div className={styles.footer}>
-        <button type="button" className={styles.btn_reset} onClick={handleReset}>
-          초기화
-        </button>
-        <button type="button" className={styles.btn_apply} onClick={handleApply}>
-          적용
-        </button>
-      </div>
     </BottomSheet>
   );
 }

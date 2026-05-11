@@ -50,9 +50,7 @@
   & > span {
     margin-bottom: $spacing-8;
     display: inline-block;
-    font-size: $font-size-15;
-    font-weight: $font-weight-semibold;
-    color: $primary;
+    @include text-body-emphasis($color: $primary);
   }
 
   h2 {
@@ -66,7 +64,7 @@
 
     p {
       letter-spacing: -0.05rem;
-      line-height: $line-height-wide;
+      line-height: $line-height-loose;
     }
   }
 
@@ -77,14 +75,15 @@
     padding-bottom: $spacing-2;
     color: $txt-link;
     font-weight: $font-weight-medium;
-    text-decoration: none;
-    border-bottom: $spacing-1 solid transparent;
+    text-decoration: underline;
+    text-decoration-color: transparent;
+    text-underline-offset: 0.3rem;
     transition:
-      border-color $transition-duration-normal $transition-easing-default,
+      text-decoration-color $transition-duration-normal $transition-easing-default,
       opacity $transition-duration-normal $transition-easing-default;
 
     &:hover {
-      border-color: $txt-link;
+      text-decoration-color: $txt-link;
       opacity: 0.8;
     }
   }

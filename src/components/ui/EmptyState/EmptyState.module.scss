@@ -1,0 +1,45 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+.size_default {
+  gap: $spacing-8;
+  padding: $section-gap-40 $spacing-20;
+}
+
+.size_compact {
+  gap: $spacing-4;
+  padding: $spacing-12 0;
+
+  .title {
+    font-size: $font-size-13;
+    font-weight: $font-weight-regular;
+    color: $txt-tertiary;
+  }
+}
+
+.icon {
+  display: flex;
+  font-size: 2.4rem;
+  color: $txt-tertiary;
+  margin-bottom: $spacing-4;
+}
+
+.title {
+  font-size: $font-size-16;
+  font-weight: $font-weight-medium;
+  color: $txt-secondary;
+}
+
+.description {
+  font-size: $font-size-14;
+  color: $txt-tertiary;
+}
+
+.action {
+  margin-top: $spacing-8;
+}

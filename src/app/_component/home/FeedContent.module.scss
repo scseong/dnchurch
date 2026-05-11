@@ -27,8 +27,8 @@
 
 .tab_active {
   font-weight: $font-weight-semibold;
-  color: $gold;
-  border-bottom-color: $gold;
+  color: $gold-600;
+  border-bottom-color: $gold-600;
 }
 
 .tab_inactive {
@@ -95,28 +95,30 @@
 }
 
 .color_bar_news {
-  background: $gold;
+  background: $gold-600;
 }
 
 .color_bar_sharing {
-  background: $gold;
+  background: $gold-600;
 }
 
 .more_link {
   padding-bottom: $spacing-2;
   display: block;
   width: fit-content;
-  border-bottom: $spacing-1 solid rgba($gold, 0.2);
+  text-decoration: underline;
+  text-decoration-color: rgba($gold-600, 0.2);
+  text-underline-offset: 0.3rem;
   font-size: $font-size-13;
   font-weight: $font-weight-medium;
-  color: rgba($gold, 0.8);
+  color: rgba($gold-600, 0.8);
   transition:
     color $transition-duration-normal $transition-easing-default,
-    border-color $transition-duration-normal $transition-easing-default;
+    text-decoration-color $transition-duration-normal $transition-easing-default;
 
   &:hover {
-    color: $gold;
-    border-color: $gold;
+    color: $gold-600;
+    text-decoration-color: $gold-600;
   }
 }
 
@@ -134,14 +136,14 @@
   padding: $padding-card-compact;
   text-decoration: none;
   cursor: pointer;
-  transition: background $transition-duration-normal $transition-easing-default;
+  transition: background-color $transition-duration-normal $transition-easing-default;
 
   &:not(:last-child) {
     border-bottom: $spacing-1 solid $gray-200;
   }
 
   &:hover {
-    background: $cream;
+    background-color: $bg-hover;
   }
 
   @include respond-up($breakpoint-tablet) {
@@ -205,33 +207,6 @@
   @include text-caption;
 }
 
-// ─── Badges ─────────────────────────────────────────
-.badge_category {
-  flex-shrink: 0;
-  padding: $spacing-4 $spacing-6;
-  font-size: $font-size-11;
-  font-weight: $font-weight-medium;
-  line-height: $line-height-reset;
-  border-radius: $radius-xxs;
-  white-space: nowrap;
-  color: $txt-secondary;
-  background: $cream;
-}
-
-.badge_new {
-  color: $white;
-  font-size: 0.8rem;
-  font-weight: $font-weight-bold;
-  background: $gold;
-  border-radius: $radius-xs;
-  flex-shrink: 0;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: $font-size-13;
-  height: $font-size-13;
-}
-
 // ─── More Button (Mobile Only) ──────────────────────
 .more_button {
   display: block;
@@ -247,11 +222,11 @@
   text-align: center;
   text-decoration: none;
   transition:
-    background $transition-duration-normal $transition-easing-default,
+    background-color $transition-duration-normal $transition-easing-default,
     color $transition-duration-normal $transition-easing-default;
 
   &:hover {
-    background: $cream;
+    background-color: $bg-hover;
     color: $txt-primary;
   }
 

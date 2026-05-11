@@ -3,7 +3,7 @@
 import { useState, useCallback } from 'react';
 import NoticeTable from '@/app/(content)/news/notices/_component/NoticeTable';
 import NoticeDrawer from '@/app/(content)/news/notices/_component/NoticeDrawer';
-import Pagination from '@/components/layout/Pagination';
+import { Pagination } from '@/components/ui';
 import { DEFAULT_PAGE_SIZE } from '@/constants/notice';
 import type { NoticeType } from '@/types/notice';
 

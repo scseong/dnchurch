@@ -1,7 +1,9 @@
 import type { Metadata } from 'next';
 import React from 'react';
 import MainContainer from '@/components/layout/container/MainContainer';
+// eslint-disable-next-line no-restricted-imports -- 점진 마이그레이션 대상 (tech-debt-tracker.md)
 import { getActiveStaff } from '@/apis/staff';
+import CloudinaryImage from '@/components/common/CloudinaryImage';
 import type { StaffType } from '@/types/common';
 import styles from './page.module.scss';
 
@@ -35,47 +37,62 @@ export default async function ServingPeople() {
   );
 }
 
-const StaffProfile = ({ staff }: { staff: StaffType }) => (
-  <div className={styles.profile}>
-    <div className={styles.title}>
-      <h4>
-        {staff.title} {staff.name}
-      </h4>
-    </div>
-    <div className={styles.detail}>
-      <div className={styles.image_wrap}>
-        <img src={staff.image_url ?? ''} alt="프로필 이미지" />
+const StaffProfile = ({ staff }: { staff: StaffType }) => {
+  const isLegacyPublicPath = staff.image_url?.startsWith('/');
+
+  return (
+    <div className={styles.profile}>
+      <div className={styles.title}>
+        <h4>
+          {staff.title} {staff.name}
+        </h4>
       </div>
-      <div className={styles.content}>
-        {staff.education.length > 0 && (
-          <div>
-            <h5>학력</h5>
-            <ul>
-              {staff.education.map((edu, idx) => (
-                <li key={idx}>{edu}</li>
-              ))}
-            </ul>
-          </div>
-        )}
-        {staff.experience.length > 0 && (
-          <div>
-            <h5>약력</h5>
-            <ul>
-              {staff.experience.map((exp, idx) => (
-                <li key={idx}>{exp}</li>
-              ))}
-            </ul>
-          </div>
-        )}
-        {staff.contact && (
-          <div>
-            <h5>연락처</h5>
-            <ul>
-              <li>{staff.contact}</li>
-            </ul>
-          </div>
-        )}
+      <div className={styles.detail}>
+        <div className={styles.image_wrap}>
+          {staff.image_url &&
+            (isLegacyPublicPath ? (
+              // eslint-disable-next-line @next/next/no-img-element -- 점진 마이그레이션: cloudinary 이관 전 legacy public/ 자산
+              <img src={staff.image_url} alt="프로필 이미지" width={200} height={267} />
+            ) : (
+              <CloudinaryImage
+                src={staff.image_url}
+                alt="프로필 이미지"
+                width={200}
+                height={267}
+              />
+            ))}
+        </div>
+        <div className={styles.content}>
+          {staff.education.length > 0 && (
+            <div>
+              <h5>학력</h5>
+              <ul>
+                {staff.education.map((edu, idx) => (
+                  <li key={idx}>{edu}</li>
+                ))}
+              </ul>
+            </div>
+          )}
+          {staff.experience.length > 0 && (
+            <div>
+              <h5>약력</h5>
+              <ul>
+                {staff.experience.map((exp, idx) => (
+                  <li key={idx}>{exp}</li>
+                ))}
+              </ul>
+            </div>
+          )}
+          {staff.contact && (
+            <div>
+              <h5>연락처</h5>
+              <ul>
+                <li>{staff.contact}</li>
+              </ul>
+            </div>
+          )}
+        </div>
       </div>
     </div>
-  </div>
-);
+  );
+};
