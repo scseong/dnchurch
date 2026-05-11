@@ -3,9 +3,23 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  text-align: center;
+}
+
+.size_default {
   gap: $spacing-8;
   padding: $section-gap-40 $spacing-20;
-  text-align: center;
+}
+
+.size_compact {
+  gap: $spacing-4;
+  padding: $spacing-12 0;
+
+  .title {
+    font-size: $font-size-13;
+    font-weight: $font-weight-regular;
+    color: $txt-tertiary;
+  }
 }
 
 .icon {

@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import LayoutContainer from '@/components/layout/container/LayoutContainer';
+import { EmptyState } from '@/components/ui';
 import { getWorshipPageData } from '@/services/about';
 import styles from './page.module.scss';
 
@@ -88,22 +89,26 @@ export default async function Worship() {
                 </Link>
               )}
             </header>
-            <ul className={styles.schedule_list}>
-              {group.items.map((item) => (
-                <li key={item.id} className={styles.schedule_row}>
-                  <div className={styles.schedule_meta}>
-                    <p className={styles.schedule_name}>
-                      <span>{item.name}</span>
-                      {item.age_group && (
-                        <span className={styles.schedule_age}>{item.age_group}</span>
-                      )}
-                    </p>
-                    <p className={styles.schedule_place}>{item.location}</p>
-                  </div>
-                  <p className={styles.schedule_time}>{item.time}</p>
-                </li>
-              ))}
-            </ul>
+            {group.items.length > 0 ? (
+              <ul className={styles.schedule_list}>
+                {group.items.map((item) => (
+                  <li key={item.id} className={styles.schedule_row}>
+                    <div className={styles.schedule_meta}>
+                      <p className={styles.schedule_name}>
+                        <span>{item.name}</span>
+                        {item.age_group && (
+                          <span className={styles.schedule_age}>{item.age_group}</span>
+                        )}
+                      </p>
+                      <p className={styles.schedule_place}>{item.location}</p>
+                    </div>
+                    <p className={styles.schedule_time}>{item.time}</p>
+                  </li>
+                ))}
+              </ul>
+            ) : (
+              <EmptyState title="예배 일정 준비 중" size="compact" />
+            )}
           </article>
         ))}
       </section>
