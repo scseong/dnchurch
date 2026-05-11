@@ -139,6 +139,67 @@ node scripts/harness-gate.mjs <task-id>
 node scripts/complete-task.mjs <task-id>
 ```
 
+## 커밋 메시지
+
+CLAUDE.md prefix 6개(`Feat·Fix·Style·Refactor·Docs·Chore`) + bullet 본문 + Co-Authored-By footer 규칙 위에, 다음 추가 규칙을 따른다.
+
+### Subject 규칙
+
+- **WHY/IMPACT 우선** — "X 채택/적용" 보다 "Y 문제 해소"를 선호. 메커니즘이 아니라 사용자/시스템 영향을 subject에 노출.
+- **추상명사 회피** — "정합/통일/정정" 단독 사용 금지. 구체 Before→After 또는 숫자/경로 명시.
+  - ❌ `Fix: 라우트 경로 정정`
+  - ✅ `Fix: /news/bulletin → /news/bulletins (8건) + /about/directions → /about/location`
+- **길이** — 권장 50자, 최대 80자 (한국어 char 기준).
+- **다중 concern 표시** — subject의 `+` 연결은 commit 분리 신호. 같은 파일이라 묶었으면 subject에 그 사실 명시 (`(2 concerns 동일 파일)`).
+
+### Body 4-line 가이드
+
+```
+<Prefix>: <subject>
+
+- 왜: motivation (트리거/배경)
+- 무엇: 핵심 변경 (파일 단위 또는 동작 단위)
+- 영향: 호출부·사용자 변화, breaking 여부
+- 제외: 의도적으로 안 한 것 (있을 때만)
+
+Co-Authored-By: <실제 모델명> <noreply@anthropic.com>
+```
+
+라벨(`왜/무엇/영향/제외`)을 그대로 적지 않아도 OK. 핵심은 **WHY와 IMPACT가 본문에 노출**되어야 함.
+
+### 출처 표기
+
+QA / Codex / Gemini / 자체 발견 등 변경 트리거를 일관되게 표시한다.
+
+- ✅ `Fix: <subject> (QA #6)` 또는 `(Codex P1 review)`
+- ❌ 출처 없음 — self-initiated인지 외부 피드백인지 모호
+
+### 좋은 예 / 나쁜 예
+
+❌ 나쁨 (subject가 추상, body가 WHAT만 반복):
+
+```
+Refactor: ui/ named export 통일
+
+- Modal/BottomSheet/Pagination을 default → named로 변경
+- ui/index.ts barrel 갱신
+```
+
+✅ 좋음 (WHY 우선, 트레이드오프·제외 명시):
+
+```
+Refactor: ui/ 12 컴포넌트 export 패턴 통일 (3 outlier 정리)
+
+- 왜: 9 named + 3 default 혼재 → 파일 열 때 인지 부하, grep/refactor 어려움
+- 무엇: Modal/BottomSheet/Pagination을 named export로 변경, barrel re-export 3줄 갱신
+- 영향: consumer 모두 barrel 경유라 import 형태 변화 0건 (grep 검증)
+- 제외: `'use client'` 정리는 별도 tech-debt 항목 (#7)
+```
+
+### 검증
+
+현재 hook 강제 없음. PR 리뷰에서 위 규칙 충족 여부 확인. 운영 패턴 누적 후 `commit-msg` hook 도입 여부 별도 결정.
+
 ## ADR 판단
 
 다음 변경은 exec-plan의 `## ADR 판단`에 필요 여부와 사유를 기록한다.
