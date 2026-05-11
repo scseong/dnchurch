@@ -41,7 +41,7 @@ export default async function Banner() {
             <UserIcon />
             처음 오셨나요?
           </Link>
-          <Link href="/news/bulletin" className={styles.btn_secondary}>
+          <Link href="/news/bulletins" className={styles.btn_secondary}>
             <PlayIcon />
             이번 주 말씀 보기
           </Link>
