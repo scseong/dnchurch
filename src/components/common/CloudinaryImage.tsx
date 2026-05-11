@@ -31,12 +31,11 @@ export default function CloudinaryImage({
       fill={fill}
       sizes={sizes}
       loader={createCloudinaryLoader({ cropMode, gravity, aspectRatio })}
-      style={{
-        width: fill ? undefined : '100%',
-        height: fill ? undefined : style?.height || 'auto',
-        display: 'block',
-        ...style
-      }}
+      style={
+        fill
+          ? { objectFit: 'cover', ...style }
+          : { width: '100%', height: style?.height || 'auto', display: 'block', ...style }
+      }
       {...rest}
     />
   );
