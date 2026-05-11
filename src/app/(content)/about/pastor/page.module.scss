@@ -24,7 +24,7 @@
 
   @include respond-up($breakpoint-tablet) {
     grid-template-columns: 1fr 30%;
-    grid-template-areas: 'profile content';
+    grid-template-areas: 'content profile';
     column-gap: $spacing-56;
     row-gap: 0;
     align-items: start;
@@ -61,6 +61,7 @@
   @include respond-up($breakpoint-tablet) {
     max-width: 32rem;
     margin-right: auto;
+    background: transparent;
   }
 
   @include respond-up($breakpoint-pc-sm) {

@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useRef } from 'react';
+import { useEffect, useId, useRef } from 'react';
 import useScrollLock from './useScrollLock';
 
 const FOCUSABLE_SELECTOR =
@@ -36,6 +36,7 @@ export function useDialog({
 }: UseDialogOptions) {
   const panelRef = useRef<HTMLDivElement | null>(null);
   const previousActiveRef = useRef<HTMLElement | null>(null);
+  const titleId = useId();
   // onClose identity 변경 시 effect 재실행으로 focus가 리셋되는 것을 방지 — 최신값을 ref로 보관.
   const onCloseRef = useRef(onClose);
   useEffect(() => {
@@ -102,6 +103,7 @@ export function useDialog({
   return {
     panelRef,
     trimmedTitle,
-    accessibleLabel
+    accessibleLabel,
+    titleId
   };
 }

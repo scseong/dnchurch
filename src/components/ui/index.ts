@@ -9,7 +9,7 @@
 export { Button } from './Button/Button';
 export type { ButtonVariant, ButtonSize, ButtonProps } from './Button/Button';
 
-export { default as BottomSheet } from './BottomSheet/BottomSheet';
+export { BottomSheet } from './BottomSheet/BottomSheet';
 
 export { EmptyState } from './EmptyState/EmptyState';
 
@@ -19,10 +19,10 @@ export type { LabelVariant, LabelShape, LabelSize, LabelProps } from './Label/La
 export { ListItem } from './ListItem/ListItem';
 export type { ListItemProps } from './ListItem/ListItem';
 
-export { default as Modal } from './Modal/Modal';
+export { Modal } from './Modal/Modal';
 export type { ModalSize } from './Modal/Modal';
 
-export { default as Pagination } from './Pagination/Pagination';
+export { Pagination } from './Pagination/Pagination';
 
 export { Pill } from './Pill/Pill';
 

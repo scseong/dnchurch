@@ -10,14 +10,14 @@ export default function BulletinYearFilter({ selectedYear, years }: Props) {
   return (
     <ul className={styles.yearList}>
       <li>
-        <Link href="/news/bulletin" scroll={false}>
+        <Link href="/news/bulletins" scroll={false}>
           전체
         </Link>
       </li>
       {years?.map((year) => (
         <li key={year}>
           <Link
-            href={`/news/bulletin?year=${year}`}
+            href={`/news/bulletins?year=${year}`}
             scroll={false}
             className={selectedYear === year ? styles.active : ''}
           >

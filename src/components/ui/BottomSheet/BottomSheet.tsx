@@ -33,7 +33,7 @@ type Props = PropsWithChildren<{
  * </BottomSheet>
  * ```
  */
-export default function BottomSheet({
+export function BottomSheet({
   open,
   onClose,
   title,
@@ -43,7 +43,7 @@ export default function BottomSheet({
   children
 }: Props) {
   const overlayRef = useRef<HTMLDivElement>(null);
-  const { panelRef, trimmedTitle, accessibleLabel } = useDialog({
+  const { panelRef, trimmedTitle, accessibleLabel, titleId } = useDialog({
     open,
     onClose,
     title,
@@ -72,13 +72,15 @@ export default function BottomSheet({
         className={clsx(styles.sheet, open && styles.open)}
         role="dialog"
         aria-modal="true"
-        aria-label={accessibleLabel}
+        {...(trimmedTitle
+          ? { 'aria-labelledby': titleId }
+          : { 'aria-label': accessibleLabel })}
         tabIndex={-1}
       >
         <div className={styles.handle} aria-hidden="true" />
         {showHeader && (
           <header className={styles.header}>
-            {trimmedTitle && <h2 className={styles.title}>{title}</h2>}
+            {trimmedTitle && <h2 id={titleId} className={styles.title}>{title}</h2>}
             {showClose && (
               <button
                 type="button"

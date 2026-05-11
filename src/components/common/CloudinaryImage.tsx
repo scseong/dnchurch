@@ -3,7 +3,7 @@
 import Image, { ImageProps } from 'next/image';
 import { createCloudinaryLoader, CropMode, CropGravity } from '@/utils/cloudinary';
 
-type Props = ImageProps & {
+type Props = Omit<ImageProps, 'loader'> & {
   cropMode?: CropMode;
   gravity?: CropGravity;
   aspectRatio?: string;

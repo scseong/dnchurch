@@ -4,7 +4,7 @@ import styles from './not-found.module.scss';
 
 export default function NotFound() {
   const handleGoBack = () => {
-    window.location.href = '/news/bulletin';
+    window.location.href = '/news/bulletins';
   };
 
   return (

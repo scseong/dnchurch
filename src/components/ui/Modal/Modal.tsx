@@ -53,7 +53,7 @@ type Props = PropsWithChildren<{
  * </Modal>
  * ```
  */
-export default function Modal({
+export function Modal({
   open,
   onClose,
   title,
@@ -65,7 +65,7 @@ export default function Modal({
   children
 }: Props) {
   const overlayRef = useRef<HTMLDivElement>(null);
-  const { panelRef, trimmedTitle, accessibleLabel } = useDialog({
+  const { panelRef, trimmedTitle, accessibleLabel, titleId } = useDialog({
     open,
     onClose,
     title,
@@ -96,12 +96,14 @@ export default function Modal({
         className={clsx(styles.panel, styles[`size_${size}`])}
         role={role}
         aria-modal="true"
-        aria-label={accessibleLabel}
+        {...(trimmedTitle
+          ? { 'aria-labelledby': titleId }
+          : { 'aria-label': accessibleLabel })}
         tabIndex={-1}
       >
         {showHeader && (
           <header className={styles.header}>
-            {trimmedTitle && <h2 className={styles.title}>{title}</h2>}
+            {trimmedTitle && <h2 id={titleId} className={styles.title}>{title}</h2>}
             {showClose && (
               <button
                 type="button"

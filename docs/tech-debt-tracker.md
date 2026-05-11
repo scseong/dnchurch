@@ -247,15 +247,6 @@
 - **영향 범위**: `src/actions/_bulletin-helpers.ts`, `src/apis/cloudinary.ts`
 - **발견일**: 2026-05-11 (PR #82 Codex 리뷰)
 
-### 🟡 `serverActions.bodySizeLimit` ↔ bulletin UI 정책 불일치
-
-- **무엇**: `next.config.ts:24`의 `bodySizeLimit: '5mb'` vs bulletin UI는 1장 5MB × 최대 5장 허용. 여러 장 동시 업로드 시 Server Action 진입 전 body limit으로 차단 가능 (Cloudinary upload는 base64 직렬화로 추가 bloat ≈ +33%)
-- **왜**: 단일 파일 업로드 가정으로 설정. multi-upload 추가 시 limit 재검토 누락
-- **마이그레이션 경로**: (a) `bodySizeLimit`을 `30mb`로 상향(5MB×5 + base64 + 메타데이터) 또는 (b) 클라이언트에서 순차 업로드로 전환(메모리 안전). (a)가 단순하지만 DoS 위험 약간 증가
-- **확인 필요**: 실제로 5장 동시 업로드 시 차단되는지 reproduce
-- **영향 범위**: `next.config.ts`, `src/actions/_bulletin-helpers.ts`, bulletin form
-- **발견일**: 2026-05-11 (PR #82 Codex 리뷰)
-
 ### 🟢 Cloudinary 이미지 품질 `q_85` 고정 → `q_auto` 전환 검토
 
 - **무엇**: `src/utils/cloudinary.ts:72`의 loader가 `q_85` 고정. Cloudinary 공식 권장은 `q_auto` (또는 `q_auto:good`) — 컨텐츠별 최적 품질로 자동 조정
@@ -321,4 +312,11 @@
 - **참고**: `feat/common-components-v4` 브랜치에 등록된 "Hover Border 위반 — 디자인 시스템 v4 미완 잔여 (10건)" 부채 중 home 5건 + SermonCard 1건 분량을 본 작업으로 청산. admin 5건은 후속 ADR 0004 영역으로 분리 보존.
 - **결과 기록**: `docs/exec-plans/completed/2026-05-07-design-system-v4-home-cleanup.md` (머지 후 이동 예정)
 
-<!-- last-audit: 2026-05-07 -->
+### ✅ `serverActions.bodySizeLimit` ↔ bulletin upload 정책 불일치 (2026-05-11)
+
+- **부채**: `bodySizeLimit: '5mb'` vs bulletin UI 5MB × 최대 5장(=25MB). multi-upload 시 Server Action 진입 전 차단 가능 (PR #82 Codex 리뷰에서 등록)
+- **해소**: about-page-qa fix에서 `next.config.ts:24` `bodySizeLimit`을 `5mb` → `30mb`로 상향. 25MB 정책 수용
+- **확인**: 변경 1줄. 빌드/lint PASS
+- **참고**: sermon 자료 단일 50MB 한도(`src/lib/sermon-resource.ts`)는 운영상 차단 사례 미확인 — 발생 시 별도 부채로 등록
+
+<!-- last-audit: 2026-05-11 -->

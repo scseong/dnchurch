@@ -59,7 +59,7 @@ const supabase = createStaticClient({ tags: ['staff'], cache: 'force-cache' });
 
 ```ts
 // 예시: 주보 수정 후
-revalidatePath('/news/bulletin');
+revalidatePath('/news/bulletins');
 revalidateTag('bulletin-detail');      // 전체 상세 무효화
 revalidateTag(`bulletin-detail-${id}`); // 특정 건만 무효화
 ```

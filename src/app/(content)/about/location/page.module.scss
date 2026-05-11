@@ -104,14 +104,14 @@
 .btn_secondary {
   flex: 1;
   padding: $spacing-10 $spacing-12;
-  background: $bg-primary;
+  background: $bg-card;
   border: 0.1rem solid $border-card;
   border-radius: $radius-s;
   color: $txt-primary;
   font-size: $font-size-12;
   font-weight: $font-weight-semibold;
   cursor: pointer;
-  @include hover-bg-shift($beige-100);
+  @include hover-bg-shift($bg-hover);
 
   &:disabled {
     cursor: not-allowed;

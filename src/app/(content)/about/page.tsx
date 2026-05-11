@@ -104,7 +104,7 @@ export default async function AboutHub() {
         {/* GALLERY */}
         <section className={styles.gallery_section}>
           <header className={styles.row_head}>
-            <span className={styles.row_label}>GALLERY</span>
+            <h2 className={styles.row_label}>GALLERY</h2>
             <span className={styles.row_line} aria-hidden="true" />
           </header>
           <div className={styles.gallery_grid}>
@@ -123,7 +123,7 @@ export default async function AboutHub() {
         {/* INDEX 4 cards */}
         <section className={styles.index_section}>
           <header className={styles.row_head}>
-            <span className={styles.row_label}>INDEX</span>
+            <h2 className={styles.row_label}>INDEX</h2>
             <span className={styles.row_line} aria-hidden="true" />
             <span className={styles.row_count}>04 PAGES</span>
           </header>
@@ -154,7 +154,7 @@ export default async function AboutHub() {
         <section className={styles.bottom_grid}>
           <div className={styles.bottom_card}>
             <header className={styles.bottom_head}>
-              <span className={styles.bottom_label}>HISTORY · 걸어온 길</span>
+              <h2 className={styles.bottom_label}>HISTORY · 걸어온 길</h2>
               <Link href="/about/vision" className={styles.bottom_link}>
                 자세히 →
               </Link>
@@ -172,7 +172,7 @@ export default async function AboutHub() {
 
           <div className={styles.bottom_card}>
             <header className={styles.bottom_head}>
-              <span className={styles.bottom_label}>LOCATION · 오시는 길</span>
+              <h2 className={styles.bottom_label}>LOCATION · 오시는 길</h2>
               <Link href="/about/location" className={styles.bottom_link}>
                 지도 →
               </Link>

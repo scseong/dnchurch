@@ -19,7 +19,7 @@ const ITEMS = [
     Icon: PiBookOpenLight
   },
   {
-    href: '/about/directions',
+    href: '/about/location',
     label: '오시는 길',
     desc: '교회 위치 및 교통편 안내',
     Icon: PiMapPinLight
