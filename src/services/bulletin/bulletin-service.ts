@@ -111,7 +111,6 @@ export const bulletinService = (supabase: SupabaseClient<Database>) => ({
         p_author_id: authorId,
         p_images: images.map((img) => ({
           cloudinary_id: img.cloudinaryId,
-          url: img.url,
           order_index: img.orderIndex
         }))
       })
@@ -134,7 +133,6 @@ export const bulletinService = (supabase: SupabaseClient<Database>) => ({
         p_sunday_date: sundayDate,
         p_images_to_add: imagesToAdd.map((img) => ({
           cloudinary_id: img.cloudinaryId,
-          url: img.url,
           order_index: img.orderIndex
         })),
         p_image_ids_to_delete: imageIdsToDelete

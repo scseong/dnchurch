@@ -2,11 +2,22 @@
 
 import { v2 as cloudinary } from 'cloudinary';
 
+const ROOT_FOLDER = process.env.NEXT_PUBLIC_CLOUDINARY_ROOT_FOLDER ?? '';
+
 cloudinary.config({
   cloud_name: process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME,
   api_key: process.env.CLOUDINARY_API_KEY,
   api_secret: process.env.CLOUDINARY_API_SECRET
 });
+
+// Cloudinary destroy는 fully-qualified public_id를 요구. DB에 저장된 ROOT-relative cloudinary_id를 받으면 ROOT 합성
+function toFullyQualifiedPublicId(publicId: string): string {
+  if (/^https?:\/\//i.test(publicId)) return publicId;
+  const trimmed = publicId.replace(/^\/+/, '');
+  if (!ROOT_FOLDER) return trimmed;
+  const prefix = `${ROOT_FOLDER}/`;
+  return trimmed.startsWith(prefix) ? trimmed : `${prefix}${trimmed}`;
+}
 
 export async function uploadImage({
   file,
@@ -24,7 +35,7 @@ export async function uploadImage({
 
     const result = await cloudinary.uploader.upload(dataUri, {
       folder,
-      public_id: filename
+      public_id: `${folder}/${filename}`
     });
 
     return result;
@@ -36,10 +47,13 @@ export async function uploadImage({
 
 export async function deleteImage(publicId: string) {
   try {
-    const result = await cloudinary.uploader.destroy(publicId);
+    const result = await cloudinary.uploader.destroy(toFullyQualifiedPublicId(publicId));
     return result;
   } catch (error: any) {
-    console.error('[Cloudinary Delete Error] ', error.response?.data || error.message);
+    console.error('[Cloudinary Delete Error] ', {
+      publicId,
+      error: error.response?.data || error.message
+    });
     throw error;
   }
 }

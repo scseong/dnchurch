@@ -223,6 +223,64 @@
   - rgba: `news/notices/_component/NoticeDrawer.module.scss:27`, `sermons/_component/{SortBottomSheet:4, GridCard:59,77,93, SermonCard:69,87,109}`
 - **발견일**: 2026-05-07 (Codex 디자인 시스템 audit)
 
+### 🟢 Cloudinary `uploadImage()` `folder` + `public_id` 중복 전달
+
+- **무엇**: `src/apis/cloudinary.ts:36-39`에서 `cloudinary.uploader.upload()`에 `folder`와 fully-qualified `public_id`를 동시 전달
+- **왜**: dnchurch dev/prod preset의 dynamic folder mode에서 경험적으로 검증된 조합. Cloudinary 공식은 dynamic folder mode에서 `asset_folder` + `public_id_prefix` 또는 `use_asset_folder_as_public_id_prefix`를 권장
+- **마이그레이션 경로**: 단순화 시도 전 smoke test 필수 — `folder` 제거 / `asset_folder` 전환 각각 시도 후 결과 `public_id` 형태와 폴더 위치 확인. 검증 통과 시 단순화
+- **영향 범위**: `src/apis/cloudinary.ts`
+- **발견일**: 2026-05-11 (PR #82 Codex 리뷰)
+
+### 🟡 bulletin 이미지 filename 충돌 위험
+
+- **무엇**: `src/actions/_bulletin-helpers.ts:20`에서 업로드 filename은 sanitize만 수행하고 uniqueness suffix 없음. 같은 날(`uploads/bulletins/YYYY/MM/DD`) 동일 이름 파일 재업로드 시 `public_id` 중복으로 overwrite 가능
+- **왜**: 단순 sanitize만으로 충분하다고 판단(날짜별 폴더 분리 가정). 실제로는 같은 날 같은 이름 파일 재업로드 시나리오가 가능
+- **마이그레이션 경로**: filename에 `${orderIndex}-${randomUUID().slice(0,8)}-${name}` 같은 prefix 추가. orderIndex만으로도 같은 폼 내 중복은 방지되지만, 다른 세션/같은 날 재업로드는 UUID로 보호
+- **영향 범위**: `src/actions/_bulletin-helpers.ts`
+- **발견일**: 2026-05-11 (PR #82 Codex 리뷰)
+
+### 🟡 bulletin 업로드 부분실패 orphan asset
+
+- **무엇**: `src/actions/_bulletin-helpers.ts:18` `Promise.all` 병렬 업로드 — 1장이라도 실패하면 throw로 끝나고, 이미 업로드 성공한 자산은 Cloudinary에 orphan으로 남음
+- **왜**: 초기 구현에서 happy-path만 고려. cleanup 정책 미정의
+- **마이그레이션 경로**: `Promise.allSettled` + fulfilled 결과의 `public_id`를 `deleteImage()`로 cleanup 후 rejection 재throw. sermon 업로드(`actions/sermon.action.ts`의 `removeStorageObjects`) 패턴 참고
+- **영향 범위**: `src/actions/_bulletin-helpers.ts`, `src/apis/cloudinary.ts`
+- **발견일**: 2026-05-11 (PR #82 Codex 리뷰)
+
+### 🟡 `serverActions.bodySizeLimit` ↔ bulletin UI 정책 불일치
+
+- **무엇**: `next.config.ts:24`의 `bodySizeLimit: '5mb'` vs bulletin UI는 1장 5MB × 최대 5장 허용. 여러 장 동시 업로드 시 Server Action 진입 전 body limit으로 차단 가능 (Cloudinary upload는 base64 직렬화로 추가 bloat ≈ +33%)
+- **왜**: 단일 파일 업로드 가정으로 설정. multi-upload 추가 시 limit 재검토 누락
+- **마이그레이션 경로**: (a) `bodySizeLimit`을 `30mb`로 상향(5MB×5 + base64 + 메타데이터) 또는 (b) 클라이언트에서 순차 업로드로 전환(메모리 안전). (a)가 단순하지만 DoS 위험 약간 증가
+- **확인 필요**: 실제로 5장 동시 업로드 시 차단되는지 reproduce
+- **영향 범위**: `next.config.ts`, `src/actions/_bulletin-helpers.ts`, bulletin form
+- **발견일**: 2026-05-11 (PR #82 Codex 리뷰)
+
+### 🟢 Cloudinary 이미지 품질 `q_85` 고정 → `q_auto` 전환 검토
+
+- **무엇**: `src/utils/cloudinary.ts:72`의 loader가 `q_85` 고정. Cloudinary 공식 권장은 `q_auto` (또는 `q_auto:good`) — 컨텐츠별 최적 품질로 자동 조정
+- **왜**: 명시적 품질 관리 의도. 자동화 결과 품질 변동성 우려로 보류
+- **마이그레이션 경로**: 일부 use-case(`hero`, `bulletin`)에서 A/B 비교 후 `q_auto:good` 전환. PSNR/SSIM 또는 시각 검토로 품질 회귀 없음 확인 → 전체 전환
+- **영향 범위**: `src/utils/cloudinary.ts`, 모든 `<CloudinaryImage>` 사용처
+- **참고**: https://cloudinary.com/documentation/image_optimization
+- **발견일**: 2026-05-11 (PR #82 Codex 리뷰)
+
+### 🟢 Cloudinary use-case별 preset 부재 (OG/카카오/다운로드)
+
+- **무엇**: `getCloudinaryUrl()`은 변환 없이 원본 URL 생성. OG 이미지·카카오 공유·다운로드 등 각 use-case에 적절한 사이즈/품질 변환이 일괄 적용되지 않음
+- **왜**: 초기에는 `<Image>` 컴포넌트만 사용하는 가정. OG/공유 등 외부 use-case 추가 시 case-by-case로 변환 추가
+- **마이그레이션 경로**: use-case별 명명된 preset 함수 도입 — 예: `getOgImageUrl(publicId)`, `getKakaoShareUrl(publicId)`, `getThumbnailUrl(publicId)`. 각각 `w`/`c`/`q`/`f` 조합 고정 → derived asset 종류 통제 → bandwidth/transformation 비용 절감
+- **영향 범위**: `src/utils/cloudinary.ts`, OG metadata 생성 사이트, 공유 버튼 컴포넌트
+- **발견일**: 2026-05-11 (PR #82 Codex 리뷰)
+
+### 🟢 `CloudinaryImage` 불필요한 `'use client'` boundary
+
+- **무엇**: `src/components/common/CloudinaryImage.tsx:1`이 `'use client'`이지만 React 훅을 사용하지 않음. 단순히 `<Image>`에 loader 함수를 넘기는 wrapper
+- **왜**: 초기 작성 시 안전하게 client 지정. `loader` prop이 함수라 RSC에서 직접 전달 시 직렬화 문제 우려
+- **마이그레이션 경로**: `'use client'` 제거 후 RSC 호환성 검증 — `loader={createCloudinaryLoader(...)}` 패턴이 RSC에서 동작하는지 확인. 안 되면 module-level pre-built loader 인스턴스(cropMode 조합별)로 우회. 통과 시 client JS 번들 감소
+- **영향 범위**: `src/components/common/CloudinaryImage.tsx`
+- **발견일**: 2026-05-11 (PR #82 Codex 리뷰)
+
 ---
 
 ## 해결된 항목

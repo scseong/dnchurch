@@ -25,7 +25,7 @@ export default function LatestBulletin({ title, images }: Props) {
         <KakaoShareBtn
           title={`${title} | 대구동남교회`}
           description="이번 주 교회 주보에서 예배 일정과 소식을 살펴보세요."
-          imageUrl={getCloudinaryUrl(imageIds[0])}
+          imageUrl={imageIds[0] ? getCloudinaryUrl(imageIds[0]) : undefined}
         />
       </div>
     </section>

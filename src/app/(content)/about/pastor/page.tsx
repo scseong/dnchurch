@@ -30,7 +30,7 @@ export default async function PastorPage() {
   return (
     <LayoutContainer className={styles.container}>
       <div className={styles.grid}>
-        {/* 좌측: 사진 + 이름 (+ PC 한정 career) */}
+        {/* 좌측 (PC) / 상단 (Mobile): 사진 + 이름 + career 카드 */}
         <aside className={styles.profile_block}>
           <div className={styles.photo}>
             {pastor?.imageUrl ? (
@@ -51,15 +51,18 @@ export default async function PastorPage() {
               <span className={styles.name}>{name}</span>
               <span className={styles.role}>{title}</span>
             </p>
-            <ul className={styles.career_list_pc}>
+          </div>
+          <section className={styles.career_card}>
+            <p className={styles.career_label}>CAREER</p>
+            <ul className={styles.career_list}>
               {career.map((line, index) => (
-                <li key={index} className={styles.career_item_pc}>
+                <li key={index} className={styles.career_item}>
                   <span className={styles.career_dot} aria-hidden="true" />
                   {line}
                 </li>
               ))}
             </ul>
-          </div>
+          </section>
         </aside>
 
         {/* 우측 (PC) / 본문 (Mobile): 인사말 + signature */}
@@ -84,19 +87,6 @@ export default async function PastorPage() {
             </p>
           </footer>
         </article>
-
-        {/* Mobile 한정: career 별도 카드 (references MGreeting) */}
-        <aside className={styles.career_card_mobile}>
-          <p className={styles.career_label}>CAREER</p>
-          <ul className={styles.career_list}>
-            {career.map((line, index) => (
-              <li key={index} className={styles.career_item}>
-                <span className={styles.career_dot} aria-hidden="true" />
-                {line}
-              </li>
-            ))}
-          </ul>
-        </aside>
       </div>
     </LayoutContainer>
   );
