@@ -37,6 +37,6 @@
 | [0005](0005-about-pages-content-model.md) | about pages content model | Superseded by [0006](0006-about-pages-domain-driven-content.md) | 2026-05-09 |
 | [0006](0006-about-pages-domain-driven-content.md) | about pages domain-driven content | Accepted | 2026-05-09 |
 | [0007](0007-cloudinary-asset-folder-convention.md) | cloudinary asset folder convention | Accepted | 2026-05-11 |
-| [0008](0008-code-quality-harness.md) | 코드 품질 강제: 에이전트 리뷰 + 사전 지침 채택 (Tier 1·2 도입 유보) | Proposed | 2026-05-13 |
+| [0008](0008-code-quality-harness.md) | 코드 품질 강제: 에이전트 리뷰 + 사전 지침 채택 (Tier 1·2 도입 유보) | Accepted | 2026-05-13 |
 
 <!-- last-audit: 2026-05-01 -->

@@ -76,6 +76,8 @@ PR마다 Codex 1차 검증 + Claude 2차 검증이 위 14축을 자연어로 점
   - 규칙 위반은 Codex 1차 검증·Claude 2차 검증에서 차단 대상.
 - Codex 호출 프로토콜: 영어 질의, 한국어 응답 (ADR 0001 운영 원칙)
 
+> ⚠️ **본 PR 범위 외**: 14축 체크리스트를 `## Codex 1차 검증`/`## Claude 2차 검증` 프롬프트 본문과 `harness-workflow/SKILL.md`의 `CODEX_FIRST_PASS`/`VERIFY` 단락에 실제 인용하는 작업은 후속 `agent-quality-guidance` PR. 본 PR이 신설한 `## 검증 결과 기록 규칙`은 **기록 형식**만 강제(추상 표현 차단)하고, 14축의 실제 점검 텍스트 삽입은 별도. 즉 본 ADR은 점검 대상 SSOT(14축 정의)와 형식 규칙(SSOT 위치)을 결정하고, 점검 호출부 텍스트 변경은 후속에서.
+
 ### 명시적으로 채택 안 함
 
 - **Tier 1 신규 도입**: `no-floating-promises`, `complexity`, `max-depth`, `max-lines-per-function` 같은 규칙은 본 ADR로 도입하지 않는다. 현재 운영 중인 ESLint·stylelint 규칙(레이어 방향·토큰·hex 등)은 그대로 유지.
