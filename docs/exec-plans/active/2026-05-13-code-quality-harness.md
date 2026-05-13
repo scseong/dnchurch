@@ -126,18 +126,18 @@ Codex 진단(현재 conversation에서 수행 — 현재 하네스는 형식·�
 
 ## Codex 1차 검증
 
-- **상태**: 미요청 (본 작업은 코드 변경 없음 — ADR 본문 비판으로 대체)
-- **요청 시점**:
-- **결론**: 미요청 / PASS / FIX_APPLIED / CHANGE_REQUEST / BLOCK
-- **수정 파일**:
-- **핵심 지적**:
-- **남은 리스크**:
+- **상태**: 적용 불가 (본 PR은 docs-only, 코드 diff 0). Codex Plan Review Round 1/2가 사실상 1차 검증 역할 — Round 1은 초안 3-tier에 대한 4 finding, Round 2는 방향 전환 후 새 ADR 본문에 대한 4 finding. 모두 `## Codex 계획 검증`에 verbatim 기록 + 풀어쓰기 적용.
+- **요청 시점**: 2026-05-13 (Round 1, Round 2 별도 실행 — 1차는 grep stall로 cancel, 2차 단축 prompt로 성공)
+- **결론**: PASS (코드 변경 없음, Plan Review 비판 8건은 ADR 본문/exec-plan으로 흡수 또는 후속 작업으로 분리)
+- **수정 파일**: 없음 (Codex 직접 수정 0)
+- **핵심 지적**: `## Codex 계획 검증` 섹션 참조 — Round 1 4 finding(Tier 경계 모호 / 품질 축 5개 누락 / Alternatives 약함 / 운영 control 누락)과 Round 2 4 finding(예방-only 커버리지 공백 / Threshold·deterministic 묶음 / 재평가 운영화 부족 / SSOT drift) 모두 거기 풀어쓰기로 기록.
+- **남은 리스크**: Codex Round 2 Finding 2 (`@typescript-eslint/no-floating-promises`·`no-misused-promises`·`tsc --noEmit` dry-run 후 near-zero Tier 1 subset 즉시 채택 가능성)는 본 PR 범위 밖 후속 exec-plan(`agent-quality-guidance` 또는 별도 slug)에서 처리. `start-task.mjs`의 TEMPLATE_ONLY 섹션 자동 제거 로직도 후속.
 
 ## Claude 2차 검증
 
-- **검토 내용**:
-- **실행한 검증**:
-- **최종 판단**:
+- **검토 내용**: 본 PR 5개 파일 변경 self-review. ① `docs/decisions/0008-code-quality-harness.md`(new, Status `Accepted`) — Decision 메커니즘 2에 결과 기록 규칙 명시, Alternatives A/B/C/D/E/F 6안 모두 기각 사유 포함. ② `docs/decisions/README.md` — `update-adr-index.mjs`로 8건 인덱스 자동 갱신(수동 편집 없음). ③ `.claude/skills/harness-workflow/SKILL.md` — `## 검증 결과 기록 규칙` SSOT 섹션 신설, `## 커밋 메시지` 직전에 배치(절차 단계 직후 자연스러운 연결). ④ `docs/exec-plans/_template.md` — 동일 규칙 reference + "TEMPLATE 안내 — 실제 plan에서는 제거" 3중 표시(제목·blockquote·HTML 주석 marker). ⑤ `docs/exec-plans/active/2026-05-13-code-quality-harness.md` — 본 PR 운영 plan. 외과적 변경 원칙 충족: 모든 변경이 ADR 0008 정책 + 메커니즘 2 운영화로 묶이며 인접 정리·포맷·이름 변경 없음.
+- **실행한 검증**: `node scripts/verify-task.mjs code-quality-harness` (ESLint ✓, stylelint ✓, build ✓, Knip ⚠ warning-only로 기존 부채 — `src/` 변경 0건이라 본 PR 책임 아님). `node scripts/update-adr-index.mjs`로 README 인덱스 갱신 확인(8건). `node scripts/harness-gate.mjs code-quality-harness` 1차 실행은 본 검증 섹션 미작성으로 fail → 본 Edit으로 보강 후 재실행 예정.
+- **최종 판단**: PASS. 사용자 결정 3단계(A: ADR 작성, B: Tier 3 단일 단순화, C: 검증 기록 추상 차단 본 PR에 강제)가 ADR/skill/template/exec-plan에 정확히 반영. 코드 변경 0, runtime 영향 없음. 머지 후 `node scripts/complete-task.mjs code-quality-harness`로 active → completed 이동.
 
 ## 리뷰 (완료 직전)
 
