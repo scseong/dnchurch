@@ -1,8 +1,11 @@
 # code-quality-harness — ADR 0008 작성
 
-- **상태**: 🟡 진행 중
+- **상태**: ✅ 완료
 - **시작일**: 2026-05-13
+- **완료일**: 2026-05-13
 - **브랜치**: chore/code-quality-harness
+- **PR**: [#85](https://github.com/scseong/dnchurch/pull/85)
+- **commits**: `22e41d4` · `f07fd85` · `87ac430`
 
 ## 목표
 
@@ -147,6 +150,18 @@ Codex 진단(현재 conversation에서 수행 — 현재 하네스는 형식·�
 
 ## 회고 (머지 후 작성, completed/로 이동 시)
 
-- 잘된 것:
-- 다음에 할 것:
-- 발견된 부채 (→ tech-debt-tracker.md 옮길 것):
+- **잘된 것**:
+  - 정책 결정(ADR 0008) + 메커니즘 2 운영화(`## 검증 결과 기록 규칙` SSOT)를 외과적 변경 원칙 유지하며 한 PR에 통합. 후속 작업 의존성 ↓.
+  - 방향 전환 신속성 — 초안 3-tier → Codex Round 1 4 finding → 사용자 결정으로 단일 tier 단순화까지 1 conversation 내 완료. 결정 흐름이 ADR Context + exec-plan 의사결정 로그에 양쪽 기록.
+  - PR 리뷰 봇 P2 빠른 반영 — Gemini + Codex의 README Status 불일치 지적은 `update-adr-index.mjs` 1회 재실행으로 30초 내 해소. Codex 14축 미인용 지적은 메커니즘 2 끝 ⚠️ 박스로 범위 명시 강화.
+  - 강제 메커니즘 즉시 발효 — skill SSOT를 본 PR에 신설했으므로 다음 Claude 호출부터 추상 기록 차단 자동 적용 (별도 도구·hook·CI 변경 없이).
+- **다음에 할 것**:
+  - `agent-quality-guidance` exec-plan — 14축 사전 지침을 `.claude/skills/{harness-workflow,supabase,styles,ui-components,file-structure}/SKILL.md` + `docs/exec-plans/_template.md` + `AGENTS.md`에 인용. 각 도메인별 발췌 (예: `supabase`에 security/RLS·server/client boundary·data validation). 본 PR 머지 후 즉시 시작 가능.
+  - Codex Round 2 Finding 2 dry-run — `npx eslint --rule '@typescript-eslint/no-floating-promises: error' .` + `no-misused-promises` + `tsc --noEmit` 위반 건수 확인 후 near-zero Tier 1 즉시 도입 가능성 결정. 비용 1분.
+  - `start-task.mjs`의 TEMPLATE_ONLY 섹션 자동 제거 로직 — 작성자가 수동 제거하지 않게 도구가 처리.
+  - 2026-11-13 경 Tier 1 도입 ROI 재평가 — 측정 지표 = 반복 지적률(분기 동일 axis 3회 이상) + 회귀 빈도(prod leak 1회 이상).
+- **발견된 부채 (→ tech-debt-tracker.md 옮길 것)**:
+  - **Codex CLI Round 1 stall** — PowerShell 환경에서 repo-wide `rg` 명령으로 27분 progress 없음 (updatedAt 6분 정지). 회피책으로 prompt에 "Do not deep-grep" 명시. 근본 원인(codex-companion runtime이 PowerShell의 long-running `rg` stuck) 분석 필요.
+  - **`bash.exe.stackdump`** — Windows Git Bash crash artifact가 working tree에 untracked로 누적. `.gitignore`에 패턴(`*.stackdump`) 추가 필요.
+  - **enforce-verification 흐름의 verify-task ↔ commit cycle 반복** — 본 PR에서 verify-task → commit → "diff mismatch" → verify-task 재실행 패턴 3회. enforce-verification가 commit-time staged diff와 verify 증적을 일치 인식 못 하는 구조. 도구 개선 후보 (예: pre-commit 시점에 staged.patch 자동 갱신).
+  - **TEMPLATE_ONLY 섹션이 새 exec-plan에 carrying** — `start-task.mjs`가 template 복사 시 본 섹션을 자동 제거하지 않음. 위 "다음에 할 것"의 후속 작업 항목과 동일.
