@@ -197,11 +197,12 @@ CLAUDE.md prefix 6개(`Feat·Fix·Style·Refactor·Docs·Chore`) + bullet 본문
   - ❌ `Chore: Hero 메타 2 키 + 라우트 3 스켈레톤` — "메타", "키", "스켈레톤" 모두 코드 미열람자가 추측해야 함
   - ✅ `Chore: sermons 자식 페이지 2종 Hero 등록 + 신규 라우트 3종 스켈레톤 추가` — 어떤 페이지/Hero/라우트인지 표면화
   - body에서는 첫 등장 시 풀어 설명: "`hero.config.ts`의 `HERO_META` 객체에 `/sermons/all`·`/sermons/series` 두 엔트리(title/subtitle/eyebrow) 추가"처럼
-- **다중 concern 표시** — subject에 `+`·`/`·`,`로 영역을 2개 이상 나열하면 즉시 다음 두 가지 중 택1을 명시한다.
+- **다중 concern 표시** — subject에 `+`로 영역을 2개 이상 나열하면 즉시 다음 두 가지 중 택1을 명시한다. (`/`·`,`는 URL 경로(`/sermons/all`)·자연어 열거에서 합법 등장하므로 분리 신호 대상이 아니다 — commit-msg-hook task Codex 1차 FLAG D 반영, hook R4 검사도 `+`만)
   - (a) **commit 분리** — 각 영역을 별도 commit으로. 기본 가정.
   - (b) **단일 의도 통일** — 모든 영역이 단일 상위 의도(예: "Phase 0 foundation prep") 하에 묶이는 경우, subject는 그 상위 의도 하나로 표현하고 본문 bullet에서 영역별로 풀어쓴다. 같은 파일·같은 모듈 변경 묶음은 `(N concerns 동일 파일)` 표기.
   - ❌ `Chore: sermons Phase 0 — 9-영역 감사 + Carousel 공용 + 3 라우트 + Hero 메타 2 키` — subject `+` 3회 → commit 분리 신호로 오해. 약어 다발.
   - ✅ `Chore: sermons 섹션 Phase 0 foundation — Phase 1 진입 전 사전 준비 완료` + 본문 4 영역 bullet — 단일 의도 통일
+  - ✅ `Fix: /news/bulletin → /news/bulletins (8건) + /about/directions → /about/location` — `/`는 URL 경로, `+`는 1회로 분리 신호 아님
 
 ### Body 4-line 가이드
 
