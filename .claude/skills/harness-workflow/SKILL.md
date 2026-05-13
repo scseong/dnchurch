@@ -139,6 +139,49 @@ node scripts/harness-gate.mjs <task-id>
 node scripts/complete-task.mjs <task-id>
 ```
 
+## 검증 결과 기록 규칙
+
+`## Codex 계획 검증`, `## Codex 1차 검증`, `## Claude 2차 검증`의 결과를 exec-plan에 기록할 때 다음 규칙을 적용한다 (ADR 0008 Decision 메커니즘 2 운영화). 본 규칙이 SSOT — `docs/exec-plans/_template.md`는 짧은 reference 섹션만 보유한다.
+
+### 추상 표현 금지
+
+기록은 PM·클라이언트가 별도 컨텍스트 없이 읽을 수 있어야 한다. 다음 패턴은 금지한다.
+
+- 추상명사로 끝맺기 — `보강 필요`, `명시 필요`, `통합 필요`, `정합`, `근거 약함`, `커버리지 공백`
+- 형용사 정성 표현 — `오탐 낮은`, `많은 부채`, `긴 함수`
+- 도구·파일·명령 누락 — `lint 강화`, `타입 안전성 향상`
+
+### 구체화 4원소
+
+모든 비판·제안은 다음 4원소 중 최소 2개를 갖춰야 한다.
+
+1. **실제 도구·규칙·파일·명령** — `eslint.config.mjs:37`, `@typescript-eslint/no-floating-promises`, `tsc --noEmit`
+2. **수치 또는 binary 기준** — `위반 23건`, `오탐률 5% 이하`, `3개월 내 3회 이상`
+3. **구체 동사 + 결과** — `Tier 정의에 "deterministic + 오탐률 5% 이하" 한 줄 추가`
+4. **예시 1개 이상** — 비판 1개당 실제 코드/규칙/파일 예시 1개
+
+### Codex 결과 인용
+
+Codex stdout은 verbatim 인용 + 그 아래 평이 한국어 풀이 1줄 추가. PM이 전문어 그대로면 못 읽힌다.
+
+### 나쁜 예 / 좋은 예
+
+❌ 나쁨 (추상명사·도구 누락·예시 0):
+
+```
+Finding 1 — 3-tier 경계 보강 필요. 운영 기준 명시 필요.
+```
+
+✅ 좋음 (실제 규칙·구체 동사+결과·예시):
+
+```
+Finding 1 — Tier 1 후보에 자동수정 불가 규칙(`complexity`, `max-lines-per-function`)이 들어가 Tier 1/2 구분이 흔들림. 후속 작업자가 새 규칙(예: `unused-import`) 도입 시 어느 Tier인지 매번 토론 필요. → Tier 1 정의에 "deterministic(같은 코드 항상 같은 결과) + 오탐률 5% 이하" 운영 기준 한 줄 추가.
+```
+
+### 강제 출처
+
+본 규칙은 ADR 0008 메커니즘 2(Detection) 운영화의 일부. memory `feedback_concrete_records`와 sync 유지. 규칙 위반은 Codex 1차 검증·Claude 2차 검증에서 차단 대상.
+
 ## 커밋 메시지
 
 CLAUDE.md prefix 6개(`Feat·Fix·Style·Refactor·Docs·Chore`) + bullet 본문 + Co-Authored-By footer 규칙 위에, 다음 추가 규칙을 따른다.
