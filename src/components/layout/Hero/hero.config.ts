@@ -12,6 +12,8 @@ const HERO_META: Record<string, HeroMeta> = {
   '/about': { title: '교회 소개', subtitle: '대구동남교회를 소개합니다', eyebrow: 'ABOUT' },
   '/next-gen': { title: '다음세대', subtitle: '믿음의 다음 세대를 세웁니다', eyebrow: 'NEXT GEN' },
   '/sermons': { title: '설교', subtitle: '주일 말씀과 강해 설교를 만나보세요', eyebrow: 'SERMONS' },
+  '/sermons/all': { title: '전체 설교', subtitle: '대구동남교회의 모든 설교를 검색·필터로 찾아보세요', eyebrow: 'ALL SERMONS' },
+  '/sermons/series': { title: '모든 시리즈', subtitle: '대구동남교회 강해 설교 시리즈 목록', eyebrow: 'SERMON SERIES' },
   '/community': { title: '교제', subtitle: '함께 기도하고 나누는 공동체', eyebrow: 'COMMUNITY' },
   '/news': { title: '교회 소식', subtitle: '교회의 소식을 전해드립니다', eyebrow: 'NEWS' },
 };
@@ -23,6 +25,9 @@ const HERO_META: Record<string, HeroMeta> = {
  * - GNB_ITEMS에 존재하는 페이지만 (상세 페이지 제외)
  */
 export function resolveHeroMeta(pathname: string): HeroMeta | null {
+  const direct = HERO_META[pathname];
+  if (direct) return direct;
+
   let title = '';
   let categoryKey = '';
 
