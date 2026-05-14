@@ -150,3 +150,17 @@ node scripts/verify-task.mjs sermons-series-carousel
 - `docs/references/sermons/Sermon-Implementation-Prompts.md` Phase 1-3 (line 195-219)
 - `docs/references/sermons/ChurchSermonAll.jsx` — `SeriesGridCard`(line 594-642), `ListPCSeriesPreview`(line 930-966)
 - Phase 1-2: `docs/exec-plans/completed/2026-05-14-sermons-recent-carousel.md`(머지 후 이동) — Carousel 사용 패턴 + D5 drag-ghost 차단 (본 plan D4 재사용)
+
+## 회고 (필수 5필드)
+
+- KPI / 시작-종료 (분): ~90 (plan CR 1라운드 + Codex 1차 CR 1건 + D7 경로 정정 후속 fix + verify 3회)
+- KPI / Codex 라운드: 3 (계획 1차 CHANGE_REQUEST `a0eeb1aa` → 2차 PASS `a9d3bc39` + 1차 CR→FIX_APPLIED `a6f62440`)
+- KPI / material 사후 발견: 2 (description null → meta_bar margin-top auto 누락 Codex 발견 / `/series` → `/sermons/series` 경로 사용자 검증 발견)
+- KPI / harness-gate placeholder fail: 0
+- KPI / 사용자 검토 부족 피드백: 0
+
+## 회고
+
+- 잘된 것: Codex CR 1차 3건(D5 filter / D6 scrim / D7 calc 검증)을 plan 수정으로 즉시 해소하여 2차 PASS. ADR 0010 verdict matrix가 material vs expression 분리에 효과적.
+- 다음에 할 것: 새 라우트 경로는 컴포넌트 link 작성 전 `ls src/app/(content)/<route>/` 또는 mockup vs 실제 디렉토리 1회 확인 — D7 사용자 발견 차단.
+- 발견된 부채: `sermon_series.cover_tone` 컬럼 부재 (D1) + `sermon_series` 안 preacher 직접 컬럼 부재 (D2) — Phase 5 시리즈 상세 페이지 작업 시 정식 컬럼 추가 또는 시리즈-설교자 집계 쿼리 결정.

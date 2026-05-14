@@ -1,3 +1,6 @@
+// 데스크톱 시리즈 사이드바 폭 — mockup `DetailPCBody` line 1282 (`1fr 360px`)
+$sidebar-width: 36rem;
+
 // ══════════════════════════════════════════
 // Layout
 // ══════════════════════════════════════════
@@ -11,6 +14,34 @@
   @include respond-up($breakpoint-tablet) {
     padding-top: $section-gap-40;
   }
+
+  @include respond-up($breakpoint-pc-sm) {
+    gap: $content-gap-l;
+  }
+}
+
+// 시리즈 사이드바 동반 시 PC 1024+에서 grid 1fr 360px (의사결정 로그 D5)
+.layout_with_sidebar {
+  @include respond-up($breakpoint-pc-sm) {
+    display: grid;
+    grid-template-columns: 1fr $sidebar-width;
+    align-items: start;
+    gap: $section-gap-40 $content-gap-xl;
+  }
+}
+
+// SermonOtherByPreacher row 2 full-width (sermons-detail-mobile D2). 단독 설교 flex layout에서는 inert.
+.other_full_width {
+  @include respond-up($breakpoint-pc-sm) {
+    grid-column: 1 / -1;
+  }
+}
+
+.main_column {
+  display: flex;
+  flex-direction: column;
+  gap: $content-gap-m;
+  min-width: 0;
 
   @include respond-up($breakpoint-pc-sm) {
     gap: $content-gap-l;
@@ -40,9 +71,19 @@
 }
 
 .series_tag {
+  align-self: flex-start;
   font-size: $font-size-13;
   font-weight: $font-weight-semibold;
   color: $primary;
+  text-decoration: none;
+
+  @include hover-color-shift($primary-hover);
+}
+
+.series_tag_plain {
+  font-size: $font-size-13;
+  font-weight: $font-weight-semibold;
+  color: $txt-tertiary;
 }
 
 .sermon_title {
@@ -61,9 +102,14 @@
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  gap: $spacing-8;
-  font-size: $font-size-13;
+  gap: $spacing-4;
+  font-size: $font-size-12;
   color: $txt-tertiary;
+
+  @include respond-up($breakpoint-tablet) {
+    gap: $spacing-8;
+    font-size: $font-size-13;
+  }
 }
 
 .dot {
@@ -85,28 +131,14 @@
 }
 
 // ══════════════════════════════════════════
-// Tabs & Content
+// Summary
 // ══════════════════════════════════════════
-
-.tab_content {
-  min-height: 12rem;
-}
-
-.tab_panel {
-  padding: $spacing-16 0;
-}
 
 .summary_text {
   font-size: $font-size-14;
   line-height: $line-height-loose;
   color: $txt-secondary;
-  white-space: pre-line;
-}
-
-.empty {
-  font-size: $font-size-14;
-  color: $txt-tertiary;
-  font-style: italic;
+  white-space: pre-wrap; // admin UI 입력값의 줄바꿈 보존 (의사결정 로그 D4)
 }
 
 // ══════════════════════════════════════════

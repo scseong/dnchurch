@@ -134,3 +134,17 @@ node scripts/verify-task.mjs sermons-recent-carousel
 - `docs/references/sermons/ChurchSermonAll.jsx` — `SermonCarouselCard`(line 728-789), `ListPCRecent`(line 894-928), `MListRecent`(line 2272-2304)
 - `src/components/ui/Carousel/Carousel.tsx` (Phase 0 산출) — `useCarousel`/`<CarouselArrows>`/`<Carousel>` 3 export
 - Phase 1-1 completed: `docs/exec-plans/completed/2026-05-14-sermons-featured.md` — `getSermons({pageSize:1})` 의사결정 로그(동일 이유로 본 plan도 `getSermons({pageSize:8})` 채택)
+
+## 회고 (필수 5필드)
+
+- KPI / 시작-종료 (분): ~75 (ADR 0010 적용 첫 task — plan 1라운드 + Codex 1차 1라운드 + verify + D5 후속 fix)
+- KPI / Codex 라운드: 2 (계획 PASS_WITH_DECISION_LOG `a53154d6` + 1차 PASS `aa657e5d`)
+- KPI / material 사후 발견: 1 (D5 PC `<Link>` ghost image drag 버벅임 — 사용자 수동 검증)
+- KPI / harness-gate placeholder fail: 0
+- KPI / 사용자 검토 부족 피드백: 0
+
+## 회고
+
+- 잘된 것: Phase 1-1 SermonFeatured 패턴 재사용으로 카드 컴포넌트 작성 비용 ↓. ADR 0010 compact plan + PASS_WITH_DECISION_LOG가 expression-only 지적 3건(D1-D3)을 plan 갱신 라운드 없이 흡수.
+- 다음에 할 것: 후속 캐러셀 task부터 PC `<Link>` 카드 wrap에는 처음부터 `draggable={false}` + SCSS drag-ghost 차단 패턴 default 적용 (D5 재발 차단).
+- 발견된 부채: `sermon-cache.ts list()` revalidate 1day vs `recent()` 1hour 차이 (D1) — 새 설교 등록 시 admin action에서 `sermon-list` tag revalidate 누락되면 메인이 최대 24h stale. 운영 모니터링 항목.

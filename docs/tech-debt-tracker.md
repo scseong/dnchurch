@@ -319,4 +319,13 @@
 - **확인**: 변경 1줄. 빌드/lint PASS
 - **참고**: sermon 자료 단일 50MB 한도(`src/lib/sermon-resource.ts`)는 운영상 차단 사례 미확인 — 발생 시 별도 부채로 등록
 
-<!-- last-audit: 2026-05-11 -->
+### 🟢 `<SeriesEpisodeList>` 컴포넌트 unused (sermons-detail-series-sidebar 머지 이후)
+
+- **상태**: 🟢 마이그레이션 가능
+- **무엇**: `src/app/(content)/sermons/_component/SeriesEpisodeList/SeriesEpisodeList.tsx` + `.module.scss` — 본 컴포넌트는 PR #90(`feat/sermons-detail`)에서 `SermonDetailPage`의 회차 목록 노출을 `<SermonSeriesSidebar>`로 이관하며 사용처가 사라짐
+- **왜**: 1차 의도(sermons-detail-series-sidebar D4 / Codex CR-c)는 Phase 2-4 모바일 회차 목록에서 재사용 후보로 보존이었으나, Phase 2-4 mobile reshuffle도 동일 PR에 흡수되어 `SermonSeriesSidebar`가 모바일 stack에서도 시리즈 회차 책임 → 본 컴포넌트 재사용처 0건 확정
+- **마이그레이션 경로**: 별도 task에서 (a) 디렉토리 + module SCSS 삭제 + Knip warn 정리, (b) 다른 use case(예: 어드민 사이드 패널 회차 목록) 발견 시 그 task에서 재사용
+- **영향 범위**: `src/app/(content)/sermons/_component/SeriesEpisodeList/` (2 파일, 약 100줄)
+- **발견일**: 2026-05-14 (PR #90 Codex 객관 리뷰 발견)
+
+<!-- last-audit: 2026-05-14 -->
