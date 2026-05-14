@@ -146,5 +146,16 @@ node scripts/verify-task.mjs commit-msg-hook
 
 ## 회고 (머지 후)
 
-- 잘된 것:
-- 다음에 할 것:
+- **잘된 것**:
+  - dependency 0의 단순한 Node.js ESM 스크립트(`scripts/check-commit-msg.mjs`, ~95줄)로 hook 도입 — commitlint 같은 외부 패키지 회피
+  - self-test 통과 — commit `9810863`(본 hook 도입 commit) 자체가 활성 hook을 통과해 동작 증명
+  - ADR 0009 Accepted + Alternatives 4건(GitHub Actions only / heuristic strict / SKILL only / commitlint) 문서화
+  - Codex 계획 검증 1 라운드 CHANGE_REQUEST(FLAG A/B/D/F 4건)와 1차 구현 검증 1 라운드 CHANGE_REQUEST(R3 trailer 범위 + bash.exe.stackdump 2건) 모두 반영해 PASS
+  - R3 trailer 검사를 마지막 paragraph로 좁힌 발견 — body 중간 인용 라인이 trailer로 오인되던 문제 해소
+- **다음에 할 것**:
+  - `scripts/check-commit-msg.test.mjs` 자동 테스트 추가 (`node:test` 기반, R1~R4 + skip + nonexistent-path 6 케이스) — 별도 task
+  - GitHub Actions로 develop·main 브랜치 보호 강화 — local hook + `--no-verify` 우회 가능한 약점 보완
+  - Phase 1 진입 시 commit 작성자 모두에게 hook 4 룰 자동 적용 — 외부 가독성·다중 concern 분리 룰 운영 패턴 누적
+- **발견된 부채** (→ `docs/tech-debt-tracker.md`):
+  - hook은 local only — CI 보호 부재. `--no-verify` 우회 가능. 별도 GitHub Actions task로 보완 필요
+  - `scripts/check-commit-msg.mjs` 자동 테스트 부재 — 회귀 시 수동 9 케이스 재실행 필요

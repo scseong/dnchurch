@@ -384,6 +384,17 @@ node scripts/verify-task.mjs sermons-phase0-foundation
 
 ## 회고 (머지 후 작성, completed/로 이동 시)
 
-- 잘된 것:
-- 다음에 할 것:
-- 발견된 부채 (→ tech-debt-tracker.md 옮길 것):
+- **잘된 것**:
+  - Codex 계획 검증 6 라운드를 단일 thread resume으로 누적 진행 — 1차 누적 13건 CHANGE_REQUEST가 6차 PASS까지 모순 0으로 수렴
+  - mockup `ChurchSermonAll.jsx:648-726`의 `useCarousel` 훅 + `CarouselArrows` 패턴을 TypeScript로 정확히 이식. props 4개(`children`/`ariaLabel`/`mobileFullBleed`/`carousel`)로 좁힘. 화살표 헤더 우측 배치(`Sermon-Design-Decisions.md §2-2`) 충족
+  - 감사 보고서 9 표를 exec-plan에 인라인 — 별도 `system-audit.md` 없이 plan 자체가 audit 산출물
+  - PR #68 결정 인용으로 `[id]` 유지 일관성. mockup `[slug]` URL 패턴 채택하지 않고 dnchurch 정책 우선
+  - OQ-3 `cover_tone` 부재를 단일 그라데이션(`$overlay-image` 재사용)으로 해결 — DB 마이그레이션 회피
+  - `resolveHeroMeta` direct-match 1단계 추가로 GNB_ITEMS 미변경 + 자식 라우트 Hero 표시 동시 충족
+- **다음에 할 것**:
+  - Phase 1 진입 전 결정 3건: OQ-1 archive 처리 / OQ-4 video provider 분기 / OQ-5 Cloudinary-YouTube 호환
+  - Carousel 4 named export(`Carousel`/`useCarousel`/`CarouselArrows`/`UseCarouselReturn`)는 Phase 1-2(최근 설교)·Phase 1-3(시리즈 미리보기) exec-plan에서 import 사용 — knip warning 자동 해소
+  - `SermonDetailPage.tsx:34-36`의 인라인 preacher 라벨을 `formatPreacherLabel`(`src/utils/sermon.ts:100`) helper로 교체 (Phase 2)
+- **발견된 부채** (→ `docs/tech-debt-tracker.md`):
+  - `docs/references/sermons/ChurchSermonAll.jsx`가 `.gitignore` `docs/references/**/*.jsx` 패턴 추가 후에도 git 추적 유지. 향후 정리 시 `git rm --cached` 검토
+  - `SermonDetailPage.tsx:34-36` 인라인 preacher 라벨 vs `formatPreacherLabel` helper 중복 — Phase 2 교체 시 일관성 회복
