@@ -369,6 +369,8 @@ node scripts/update-adr-index.mjs
 
 일회성 판단이면 `ADR 판단`에 `불필요`와 사유를 남긴다.
 
+compact 템플릿(ADR 0010)의 frontmatter 1줄 필드를 쓸 때는 **`**ADR needed**: no — <한 줄 사유>`** 형식으로 inline 사유를 같이 적는다. ADR_TRIGGER_PARTS 파일이 diff에 포함된 경우 bare `no` 만으로는 `harness-gate`가 차단한다 (예: `**ADR needed**: no — scripts/ 오타 수정만 포함`).
+
 ## 최소 사용자 프롬프트 예시
 
 ```text
