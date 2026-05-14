@@ -1,0 +1,172 @@
+// 캐러셀 카드 폭 — mockup `SermonCarouselCard` PC 240px / 모바일 210px
+$card-width-mobile: 21rem;
+$card-width-pc: 24rem;
+// 다크 미디어 영역의 유리감 배지 (play 버튼) — 토큰 미존재 (mockup `rgba(255,255,255,.14|.22)`)
+$badge-glass-bg: rgba(255, 255, 255, 0.14);
+$badge-glass-border: rgba(255, 255, 255, 0.22);
+// 영상 우하단 duration overlay — 토큰 미존재 (mockup `rgba(0,0,0,.7)`)
+$duration-overlay-bg: rgba(0, 0, 0, 0.7);
+
+.section {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-16;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: $spacing-12;
+}
+
+.section_title {
+  margin: 0;
+  font-size: $font-size-18;
+  font-weight: $font-weight-bold;
+  color: $txt-primary;
+  letter-spacing: $letter-spacing-body;
+}
+
+.header_actions {
+  display: inline-flex;
+  align-items: center;
+  gap: $spacing-12;
+}
+
+.more_link {
+  font-size: $font-size-13;
+  font-weight: $font-weight-semibold;
+  color: $primary;
+  text-decoration: none;
+
+  @include hover-color-shift($primary-hover);
+}
+
+.card {
+  flex: 0 0 $card-width-mobile;
+  display: flex;
+  flex-direction: column;
+  background-color: $bg-card;
+  border: 1px solid $border-card;
+  border-radius: $radius-s;
+  overflow: hidden;
+  text-decoration: none;
+  color: inherit;
+  // PC drag 시 anchor ghost image · 텍스트 selection 차단 (의사결정 로그 D5)
+  user-select: none;
+  -webkit-user-drag: none;
+
+  @include respond-up($breakpoint-tablet) {
+    flex-basis: $card-width-pc;
+  }
+}
+
+.thumb_box {
+  position: relative;
+  aspect-ratio: 16 / 9;
+  background: $overlay-image;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.thumb {
+  object-fit: cover;
+  -webkit-user-drag: none;
+  pointer-events: none;
+}
+
+.play_circle {
+  position: relative;
+  z-index: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: $spacing-32;
+  height: $spacing-32;
+  border-radius: $radius-circle;
+  background-color: $badge-glass-bg;
+  border: 1px solid $badge-glass-border;
+  color: $accent;
+
+  svg {
+    margin-left: $spacing-1;
+  }
+}
+
+.duration {
+  position: absolute;
+  bottom: $spacing-6;
+  right: $spacing-6;
+  padding: $spacing-2 $spacing-6;
+  border-radius: $radius-xxs;
+  background-color: $duration-overlay-bg;
+  color: $txt-inverse;
+  font-size: $font-size-11;
+  font-weight: $font-weight-semibold;
+  font-variant-numeric: tabular-nums;
+}
+
+.body {
+  display: flex;
+  flex-direction: column;
+  padding: $spacing-12 $spacing-12 $spacing-12;
+}
+
+.label {
+  margin-bottom: $spacing-6;
+  font-size: $font-size-11;
+  text-transform: none;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.label_series {
+  color: $accent;
+  font-weight: $font-weight-bold;
+}
+
+.label_type {
+  color: $txt-tertiary;
+  font-weight: $font-weight-semibold;
+}
+
+.title {
+  margin: 0 0 $spacing-2;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  min-height: 2.8em;
+  font-size: $font-size-13;
+  font-weight: $font-weight-semibold;
+  color: $txt-primary;
+  line-height: $line-height-snug;
+  letter-spacing: $letter-spacing-body;
+  word-break: keep-all;
+}
+
+.scripture {
+  margin: 0 0 $spacing-8;
+  font-size: $font-size-11;
+  font-weight: $font-weight-semibold;
+  color: $primary;
+}
+
+.meta_bar {
+  display: flex;
+  align-items: center;
+  gap: $spacing-4;
+  padding-top: $spacing-8;
+  border-top: 1px solid $border-subtle;
+  font-size: $font-size-11;
+  color: $txt-tertiary;
+  font-variant-numeric: tabular-nums;
+}
+
+.dot {
+  opacity: 0.4;
+}

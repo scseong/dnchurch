@@ -1,8 +1,11 @@
 import type { Metadata } from 'next';
 import { redirect } from 'next/navigation';
 import { LayoutContainer } from '@/components/layout';
-import { getFeaturedSermon } from '@/services/sermon';
+import { getFeaturedSermon, getSermons } from '@/services/sermon';
 import SermonFeatured from './_component/SermonFeatured/SermonFeatured';
+import SermonRecentCarousel from './_component/SermonRecentCarousel/SermonRecentCarousel';
+
+const RECENT_CAROUSEL_COUNT = 8;
 
 export const metadata: Metadata = {
   title: '설교',
@@ -27,11 +30,19 @@ export default async function SermonsPage({ searchParams }: SermonsPageProps) {
   const query = qs.toString();
   if (query) redirect(`/sermons/all?${query}`);
 
-  const featured = await getFeaturedSermon();
+  // Featured 1건이 캐러셀 첫 카드와 중복되지 않도록 pageSize +1 후 Featured ID 필터링 (의사결정 로그 D4).
+  const [featured, recent] = await Promise.all([
+    getFeaturedSermon(),
+    getSermons({ pageSize: RECENT_CAROUSEL_COUNT + 1 })
+  ]);
+  const recentList = recent.sermons
+    .filter((sermon) => sermon.id !== featured?.id)
+    .slice(0, RECENT_CAROUSEL_COUNT);
 
   return (
     <LayoutContainer>
       <SermonFeatured sermon={featured} />
+      <SermonRecentCarousel sermons={recentList} />
     </LayoutContainer>
   );
 }
