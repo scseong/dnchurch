@@ -17,6 +17,27 @@
   }
 }
 
+// 시리즈 사이드바 동반 시 PC 1024+에서 grid 1fr 360px (의사결정 로그 D5)
+.layout_with_sidebar {
+  @include respond-up($breakpoint-pc-sm) {
+    display: grid;
+    grid-template-columns: 1fr 36rem;
+    align-items: start;
+    gap: $section-gap-40 $content-gap-xl;
+  }
+}
+
+.main_column {
+  display: flex;
+  flex-direction: column;
+  gap: $content-gap-m;
+  min-width: 0;
+
+  @include respond-up($breakpoint-pc-sm) {
+    gap: $content-gap-l;
+  }
+}
+
 .video_section {
   display: flex;
   flex-direction: column;

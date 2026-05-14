@@ -1,0 +1,192 @@
+// 회차 목록 최대 height — mockup `SeriesSidebar` line 1173 (max-h 480 overflow auto)
+$episode-list-max-height: 48rem;
+
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-12;
+}
+
+// ══════════════════════════════════════════
+// Summary card (시리즈 메타)
+// ══════════════════════════════════════════
+
+.summary_card {
+  display: flex;
+  flex-direction: column;
+  background-color: $bg-card;
+  border: 1px solid $border-card;
+  border-radius: $radius-s;
+  padding: $padding-card;
+}
+
+.eyebrow {
+  margin-bottom: $spacing-8;
+  font-size: $font-size-11;
+  font-weight: $font-weight-semibold;
+  letter-spacing: $letter-spacing-wide;
+  color: $accent;
+}
+
+.series_title {
+  margin: 0 0 $spacing-8;
+  font-size: $font-size-15;
+  font-weight: $font-weight-bold;
+  color: $txt-primary;
+  letter-spacing: $letter-spacing-body;
+  word-break: keep-all;
+}
+
+.series_description {
+  margin: 0 0 $spacing-12;
+  font-size: $font-size-12;
+  color: $txt-secondary;
+  line-height: $line-height-body-reading;
+  word-break: keep-all;
+}
+
+.summary_meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: $spacing-4;
+  padding-top: $spacing-12;
+  border-top: 1px solid $border-subtle;
+  font-size: $font-size-11;
+  color: $txt-secondary;
+  font-variant-numeric: tabular-nums;
+}
+
+.dot {
+  opacity: 0.4;
+}
+
+.meta_ongoing {
+  color: $primary;
+  font-weight: $font-weight-bold;
+}
+
+.meta_completed {
+  color: $txt-secondary;
+}
+
+.count {
+  color: $txt-primary;
+  font-weight: $font-weight-bold;
+}
+
+// ══════════════════════════════════════════
+// Episode list card
+// ══════════════════════════════════════════
+
+.list_card {
+  display: flex;
+  flex-direction: column;
+  background-color: $bg-card;
+  border: 1px solid $border-card;
+  border-radius: $radius-s;
+  overflow: hidden;
+}
+
+.list_header {
+  padding: $spacing-12 $spacing-16;
+  border-bottom: 1px solid $border-subtle;
+  font-size: $font-size-12;
+  font-weight: $font-weight-semibold;
+  color: $txt-primary;
+}
+
+.episode_list {
+  display: flex;
+  flex-direction: column;
+  max-height: $episode-list-max-height;
+  overflow-y: auto;
+}
+
+.episode_row {
+  display: grid;
+  grid-template-columns: $spacing-32 1fr auto;
+  gap: $spacing-10;
+  align-items: center;
+  width: 100%;
+  padding: $spacing-12 $spacing-16;
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid $border-subtle;
+  text-align: left;
+  cursor: pointer;
+  color: inherit;
+
+  &:last-child {
+    border-bottom: none;
+  }
+
+  &:not(:disabled) {
+    @include hover-bg-shift($bg-hover);
+  }
+
+  &:disabled {
+    cursor: default;
+  }
+}
+
+.episode_row_current {
+  background-color: $primary-subtle;
+}
+
+.order_num {
+  font-size: $font-size-11;
+  font-weight: $font-weight-bold;
+  color: $txt-tertiary;
+  font-variant-numeric: tabular-nums;
+  text-align: center;
+
+  .episode_row_current & {
+    color: $accent;
+  }
+}
+
+.info {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-2;
+  min-width: 0;
+}
+
+.title {
+  font-size: $font-size-12;
+  font-weight: $font-weight-medium;
+  color: $txt-secondary;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+
+  .episode_row_current & {
+    color: $txt-primary;
+    font-weight: $font-weight-bold;
+  }
+}
+
+.meta {
+  display: flex;
+  align-items: center;
+  gap: $spacing-4;
+  font-size: $font-size-11;
+  color: $txt-tertiary;
+  font-variant-numeric: tabular-nums;
+}
+
+.meta_dot {
+  opacity: 0.4;
+}
+
+.play_indicator {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: $spacing-20;
+  height: $spacing-20;
+  border-radius: $radius-circle;
+  background-color: $primary;
+  color: $txt-inverse;
+}
