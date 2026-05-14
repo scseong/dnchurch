@@ -1,0 +1,154 @@
+// 모바일 카드 폭 — mockup `SeriesGridCard` 모바일 260px (`MListSeriesPreview` 영역)
+$card-width-mobile: 26rem;
+// 다크 커버 위 배지 유리감 — 토큰 미존재 (mockup `rgba(0,0,0,.32)` + backdrop-filter)
+$badge-glass-bg: rgba(0, 0, 0, 0.32);
+
+.section {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-16;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: $spacing-12;
+}
+
+.section_title {
+  margin: 0;
+  font-size: $font-size-18;
+  font-weight: $font-weight-bold;
+  color: $txt-primary;
+  letter-spacing: $letter-spacing-body;
+}
+
+.header_actions {
+  display: inline-flex;
+  align-items: center;
+  gap: $spacing-12;
+}
+
+.more_link {
+  font-size: $font-size-13;
+  font-weight: $font-weight-semibold;
+  color: $primary;
+  text-decoration: none;
+
+  @include hover-color-shift($primary-hover);
+}
+
+.card {
+  flex: 0 0 $card-width-mobile;
+  display: flex;
+  flex-direction: column;
+  background-color: $bg-card;
+  border: 1px solid $border-card;
+  border-radius: $radius-s;
+  overflow: hidden;
+  text-decoration: none;
+  color: inherit;
+  // PC drag 시 anchor ghost image · 텍스트 selection 차단 (Phase 1-2 D5 패턴 재적용)
+  user-select: none;
+  -webkit-user-drag: none;
+
+  @include respond-up($breakpoint-tablet) {
+    // mockup ListPCSeriesPreview line 959: calc((100% - 32px) / 3). Carousel 기본 gap 12px 기준 (의사결정 D3)
+    flex-basis: calc((100% - 2 * #{$content-gap-s}) / 3);
+  }
+}
+
+.cover {
+  position: relative;
+  aspect-ratio: 16 / 9;
+  background: $overlay-image;
+  overflow: hidden;
+  display: flex;
+  align-items: flex-end;
+  justify-content: flex-end;
+  padding: $spacing-12;
+}
+
+.cover_image {
+  object-fit: cover;
+  -webkit-user-drag: none;
+  pointer-events: none;
+}
+
+.cover_scrim {
+  position: absolute;
+  inset: 0;
+  background-color: $overlay-scrim;
+  pointer-events: none;
+}
+
+.badge {
+  position: relative;
+  z-index: 1;
+  padding: $spacing-2 $spacing-8;
+  border-radius: $radius-circle;
+  background-color: $badge-glass-bg;
+  color: $txt-inverse;
+  font-size: $font-size-11;
+  font-weight: $font-weight-semibold;
+  letter-spacing: $letter-spacing-wide;
+}
+
+.body {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  padding: $spacing-16;
+}
+
+.title {
+  margin: 0 0 $spacing-6;
+  font-size: $font-size-16;
+  font-weight: $font-weight-bold;
+  color: $txt-primary;
+  letter-spacing: $letter-spacing-body;
+  line-height: $line-height-snug;
+  word-break: keep-all;
+}
+
+.description {
+  margin: 0 0 $spacing-12;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  flex: 1;
+  font-size: $font-size-12;
+  color: $txt-secondary;
+  line-height: $line-height-body-reading;
+  word-break: keep-all;
+}
+
+.meta_bar {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: $spacing-4;
+  // description이 null일 때도 카드 height 통일 — auto가 flex spacer 역할 (Codex 1차 CR 반영)
+  margin-top: auto;
+  padding-top: $spacing-8;
+  border-top: 1px solid $border-subtle;
+  font-size: $font-size-11;
+  color: $txt-secondary;
+  font-variant-numeric: tabular-nums;
+}
+
+.dot {
+  opacity: 0.4;
+}
+
+.ongoing {
+  color: $primary;
+  font-weight: $font-weight-bold;
+}
+
+.count {
+  color: $txt-primary;
+  font-weight: $font-weight-bold;
+}

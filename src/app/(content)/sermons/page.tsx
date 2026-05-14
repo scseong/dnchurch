@@ -1,9 +1,10 @@
 import type { Metadata } from 'next';
 import { redirect } from 'next/navigation';
 import { LayoutContainer } from '@/components/layout';
-import { getFeaturedSermon, getSermons } from '@/services/sermon';
+import { getAllSeries, getFeaturedSermon, getSermons } from '@/services/sermon';
 import SermonFeatured from './_component/SermonFeatured/SermonFeatured';
 import SermonRecentCarousel from './_component/SermonRecentCarousel/SermonRecentCarousel';
+import SermonSeriesCarousel from './_component/SermonSeriesCarousel/SermonSeriesCarousel';
 
 const RECENT_CAROUSEL_COUNT = 8;
 
@@ -30,19 +31,23 @@ export default async function SermonsPage({ searchParams }: SermonsPageProps) {
   const query = qs.toString();
   if (query) redirect(`/sermons/all?${query}`);
 
-  // Featured 1건이 캐러셀 첫 카드와 중복되지 않도록 pageSize +1 후 Featured ID 필터링 (의사결정 로그 D4).
-  const [featured, recent] = await Promise.all([
+  // Featured 1건이 캐러셀 첫 카드와 중복되지 않도록 pageSize +1 후 Featured ID 필터링 (sermons-recent-carousel D4).
+  // 시리즈는 ended_at이 null인 진행 중만 메인 노출 (sermons-series-carousel D5).
+  const [featured, recent, allSeries] = await Promise.all([
     getFeaturedSermon(),
-    getSermons({ pageSize: RECENT_CAROUSEL_COUNT + 1 })
+    getSermons({ pageSize: RECENT_CAROUSEL_COUNT + 1 }),
+    getAllSeries()
   ]);
   const recentList = recent.sermons
     .filter((sermon) => sermon.id !== featured?.id)
     .slice(0, RECENT_CAROUSEL_COUNT);
+  const ongoingSeries = allSeries.filter((series) => series.ended_at === null);
 
   return (
     <LayoutContainer>
       <SermonFeatured sermon={featured} />
       <SermonRecentCarousel sermons={recentList} />
+      <SermonSeriesCarousel series={ongoingSeries} />
     </LayoutContainer>
   );
 }
