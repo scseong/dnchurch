@@ -84,11 +84,28 @@ node scripts/verify-task.mjs sermons-main-layout
 
 ## Codex 1차 검증
 
-- **결론**: 미요청
+- **결론**: **PASS** (2026-05-14, fresh thread `a7a06c6114b0ef9f3`)
+- **검토 범위**: 2 파일 staged diff (`page.module.scss` 신규 5줄 + `page.tsx` 2줄 수정)
+
+**Codex verdict** (verbatim):
+> P1 Bugs/types: PASS — styles import, token injection, className 병합은 모두 [ASSUMED from project rules]로 충족.
+> P2 Layer: PASS — RSC의 `.module.scss` 사용은 [ASSUMED from project rules] 허용, client boundary 필요 없음.
+> P3 Surgical: PASS — `page.tsx`는 import와 `className` 변경만 보이며, 기존 로직은 diff summary상 변경 없음.
+> P4 Token: PASS — SCSS 3개 값은 semantic token으로 보이고, D1/D2 구현은 제공된 decision log와 일치.
+
+**평이 풀이**: 4 priority 모두 PASS — token injection(`$section-gap-40`/`$spacing-24`/`$spacing-40`)이 globals.scss additionalData로 작동, `LayoutContainer`의 `clsx` className 병합 정합, RSC `.module.scss` 사용 OK, surgical change (2 파일 / 2 + 5줄).
 
 ## Claude 2차 검증
 
-- **최종 판단**: 미작성
+- **검토 내용**: 2 파일 staged diff(`git diff --cached`) 교차 확인 + Codex 1차 PASS 검증.
+  - `page.module.scss`(5줄): `.sections { display:flex; flex-direction:column; gap:$section-gap-40; padding-block: $spacing-24 $spacing-40 }`. 하드코딩 0건, 토큰 3종 모두 globals 반응형(`var(--*)`).
+  - `page.tsx`(+2줄): `import styles from './page.module.scss'` + `<LayoutContainer className={styles.sections}>` 1 attr. 기존 로직(redirect/Promise.all 3-tuple/filter dedup/3 컴포넌트 배치) 모두 유지. 인접 정리 0.
+  - **branch 정정 절차**: 작업 중간에 git 환경 불일치(`refactor/harness-codex-review-cap` branch에서 stash apply로 conflict 발생) 발견 → `git checkout HEAD --` 4 파일 복원 → `git switch feat/sermons` → Phase 1-4 변경 page.tsx에 재적용. 최종 검증은 올바른 branch `feat/sermons` HEAD `191a635` 위에서 수행.
+- **실행한 검증**: `node scripts/verify-task.mjs sermons-main-layout` (run-id `20260514-190038`, `feat/sermons` branch) → ✓ 필수 검증 통과 (ESLint / stylelint / Build (next) / Knip).
+  - `logs/sermons-main-layout/20260514-190038/summary.log`: `✓ 필수 검증 통과 (⚠ 경고: Knip — 기존 부채)`.
+  - `git status -s`: A 3 (page.module.scss + page.tsx M + exec-plan A) — plan §영향받는 파일과 일치.
+- **남은 항목**: `yarn dev` 수동 검증 (`/sermons` 진입: Hero 정상, 3 섹션 사이 vertical gap 가시적, page top/bottom padding 적용, 모바일에서도 spacing 작동 + mobileFullBleed 좌우 -16 충돌 0).
+- **최종 판단**: ✅ **PASS** — verify-task PASS + Codex 1차 PASS + branch 정정 후 diff 교차 확인 일치. 사용자 yarn dev 수동 검증 후 commit 진행 가능.
 
 ---
 
@@ -98,3 +115,17 @@ node scripts/verify-task.mjs sermons-main-layout
 - `docs/references/sermons/ChurchSermonAll.jsx` — `ListPCHero`(line 795-803), `ListPCBody`(line 968-986), `MListBanner`(line 2207-2213), `MListBody`(line 2352-2370)
 - `src/components/layout/Hero/hero.config.ts:14` — 기존 `/sermons` HeroMeta 자동 적용
 - `src/components/layout/container/LayoutContainer.tsx` + `.module.scss` — horizontal padding/max-width만, vertical은 page 책임
+
+## 회고 (필수 5필드)
+
+- KPI / 시작-종료 (분): ~45 (단순 SCSS 1 + page.tsx 2줄 + branch 정정 후속)
+- KPI / Codex 라운드: 2 (계획 PASS_WITH_DECISION_LOG `a0cff5d1` + 1차 PASS `a7a06c61`)
+- KPI / material 사후 발견: 0 (branch mishap은 process error로 별도 분류, 자동 검증으로 자체 정정)
+- KPI / harness-gate placeholder fail: 0
+- KPI / 사용자 검토 부족 피드백: 0
+
+## 회고
+
+- 잘된 것: 작업 자체는 외과적(SCSS 1 + page.tsx 2줄). Codex 양 라운드 PASS, 의사결정 로그 D1-D2로 expression-only 분리.
+- 다음에 할 것: 다중 branch 진행 시 작업 시작 전 `git branch --show-current` 1회 확인 — 본 task에서 `refactor/harness-codex-review-cap`에 stash apply로 conflict 발생, 자동 검증 후 자체 정정. 사전 차단 가능.
+- 발견된 부채: 모바일 단일 토큰 `$section-gap-40` 사용(D1) — 사용자 피드백 누적 시 모바일 전용 `$section-gap-24` 등 도입 검토.
