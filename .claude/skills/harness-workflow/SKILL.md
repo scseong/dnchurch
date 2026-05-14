@@ -45,6 +45,22 @@ description: 기능 추가, 버그 수정, 리팩터링, 설계/정책 변경, P
 - 레이어 방향 `apis → services → actions → app`을 확인한다.
 - 스타일 작업은 token/mixin 규칙을 확인한다.
 
+**구현 의존 claim 직접 검증 (ADR 0010)** — claim이 있으면 다음을 먼저 SSOT로 확인 (audit/doc은 보조). 확인 결과는 exec-plan `## 검증된 Assumptions` 또는 `## 의사결정 로그`에 1줄 기록.
+
+| claim 유형 | 검증 도구·명령 |
+|---|---|
+| DB 컬럼·테이블 존재 | `mcp__claude_ai_Supabase__list_tables` 또는 `execute_sql` (migrations와 drift 가능 — 원격 SSOT 우선). 예: phase 1-1에서 `is_featured` 부재 사전 발견 가능 |
+| 타입 정의 (Database generated types) | `rg "컬럼명|타입명" src/types/database.types.ts` |
+| 라우트·페이지 존재 | `Glob src/app/**/page.tsx` |
+| SCSS 토큰·mixin 존재 | `rg "\\$token-name" src/styles/tokens/` 또는 `src/styles/_mixins.scss` |
+| config flag·env 변수 | `rg "FLAG_NAME" next.config.ts eslint.config.mjs scripts/ src/lib/supabase/` (`.env.example` 없음 — actual env consumer로 grep) |
+| wrapper 컨벤션 (`<Image>` vs `<CloudinaryImage>` 등) | `Grep src/app -l "from 'next/image'"` 0건이면 wrapper 컨벤션. `src/components/common/CloudinaryImage.tsx`가 유일한 직접 import 지점 |
+
+**범위 규칙**:
+- 영향 파일 surface only — 전수 검사 금지 (LOC 늘면 plan-text 모순 표현 CR 폭주 원인)
+- 단순 변경(typo/rename/1줄) + 구현 의존 claim 없음 → EXPLORE 1–2분 종료 가능
+- 다단계 작업이거나 DB/타입/라우트/토큰 의존 claim 있음 → 위 표대로 직접 검증 필수
+
 ### 2. PLAN
 
 다단계 작업이면 실행한다.
@@ -67,13 +83,57 @@ Codex가 결론을 내기 전에 다음 5체크를 수행하도록 프롬프트�
 4. 성공 기준(Success Criteria)과 검증 명령이 구체적인가?
 5. 새 추상화·새 라이브러리·데이터 흐름 변경이 과한가? (없어야 정상)
 
-Codex 결론은 `PASS`, `CHANGE_REQUEST`, `BLOCK` 중 하나로 해석한다.
+#### CHANGE_REQUEST는 material implementation risk만 (ADR 0010)
 
-- `PASS`: 구현 진행
-- `CHANGE_REQUEST`: exec-plan 수정 후 구현 진행 (5체크 중 어느 하나라도 미충족이면 기본적으로 CHANGE_REQUEST)
-- `BLOCK`: exec-plan 재작성 후 Codex 재요청 필수. 재요청도 BLOCK이면 사용자에게 에스컬레이션 — 최종 판단은 사용자가 내린다.
+5체크 미충족이라도 **구현 판단을 바꾸지 않는 plan-text 표현 모순·label 정합·문장 품질**은 CR 대상 아님. 대신 exec-plan `## 의사결정 로그`에 1줄 기록하고 WORK로 진입한다.
 
-결과는 exec-plan의 `## Codex 계획 검증`에 기록한다.
+**must-CR (material — 구현/데이터/타입/레이어/사용자 영향)** — 다음 8 케이스는 반드시 CR.
+
+1. DB column·table 부재로 데이터 흐름 실패 (예: phase 1-1의 `is_featured` BLOCK)
+2. 타입 불일치로 type-check 실패 (예: `SermonListItem` vs `SermonWithRelations` 필드 누락)
+3. 레이어 위반 (app → apis 직접 호출, services bypass)
+4. 인증/캐시/배포 정책 변경 누락 (예: `createServerSideClient` vs `createStaticClient` 오용)
+5. `## Non-goals`에 명시한 항목을 plan이 변경하려 함 (예: `[id]`→`[slug]` 시도)
+6. user-visible acceptance criteria 위반 (SEO/UX 영향 metadata 포함, 예: title이 GNB 라벨과 불일치)
+7. 검증 명령 부재·부적절 (SC가 "동작하게" 같은 약한 기준)
+8. repo policy 위반 (token 하드코딩 / `<Image>` 직접 사용 / `--no-verify` / barrel 반사 등)
+
+**expression-only (PASS_WITH_DECISION_LOG 처리)** — 다음 5 케이스는 CR 아님. 의사결정 로그 1줄 + WORK 진입.
+
+1. 같은 정보를 N곳에 적어 미세 불일치 (예: "코드 변경 0" vs "1줄 변경" 표현 충돌)
+2. label 표기 차이 ("신규" vs "교체", "이관" vs "분리")
+3. 중복 설명·섹션 배치·비차단 명명 제안
+4. 문장 품질 (이중부정·길이·어순)
+5. SEO·라우팅 영향 없는 표기 오타 (의사결정 로그 내 typo)
+
+**애매하면 material로 승격** (안전 쪽).
+
+#### Codex 결론 토큰 (4종)
+
+- `PASS` — 5체크 모두 충족. WORK 진행.
+- `PASS_WITH_DECISION_LOG` — material risk 없음 + expression-only 지적 N건. exec-plan `## 의사결정 로그`에 각 1줄 추가 후 WORK 진행. **3차 자동 호출 금지** (재요청은 사용자 명시 승인 시만).
+- `CHANGE_REQUEST` — must-CR 1건 이상. exec-plan 수정 후 WORK.
+- `BLOCK` — 인증/캐시/배포/DB/데이터 손실/보안/컨텍스트 충돌. exec-plan 재작성 후 Codex 재요청 필수. 재요청도 BLOCK이면 사용자 에스컬레이션 — 최종 판단은 사용자.
+
+`BLOCK` 기준은 본 cap 무관 유지 — material risk + 운영 영향 결합 시 항상 차단.
+
+#### 호출 프롬프트 템플릿
+
+```
+Review the planning document at <path>. Apply the 5-check (Assumptions / Non-goals / scope linkage / Success Criteria + verification / new abstractions).
+
+Classify each finding as:
+- material — DB/type/layer/auth/cache/deploy/Non-goals violation/user-visible/policy (must-CR)
+- expression-only — plan-text inconsistency, label, ordering, typo (decision-log only, NOT CR)
+
+Concrete-records rule: every critique must include ≥2 of {real tool/rule/file/command, numeric or binary criterion, concrete verb+result, ≥1 example}. No abstract nouns like "보강 필요" / "정합" / "근거 약함".
+
+Conclude with exactly one token: PASS / PASS_WITH_DECISION_LOG / CHANGE_REQUEST / BLOCK. Add confidence: low/medium/high.
+
+Respond in Korean.
+```
+
+결과는 exec-plan의 `## Codex 계획 검증`에 기록한다 (verdict token + 풀이 1줄 + 핵심 지적).
 
 ### 4. WORK
 
