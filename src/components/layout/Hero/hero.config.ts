@@ -25,6 +25,9 @@ const HERO_META: Record<string, HeroMeta> = {
  * - GNB_ITEMS에 존재하는 페이지만 (상세 페이지 제외)
  */
 export function resolveHeroMeta(pathname: string): HeroMeta | null {
+  // direct match 우선 — HERO_META에 명시적으로 등록된 자식 라우트(예: /sermons/all)는 GNB_ITEMS children
+  // 매칭보다 우선한다. 향후 GNB_ITEMS에 같은 path의 children을 추가해도 HERO_META direct가 이긴다.
+  // child label 기반 동작이 필요해지면 이 분기를 loop 뒤로 옮기거나 HERO_META 엔트리를 제거해야 한다.
   const direct = HERO_META[pathname];
   if (direct) return direct;
 

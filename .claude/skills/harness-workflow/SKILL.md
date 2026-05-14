@@ -277,7 +277,17 @@ Chore: develop → main 릴리스 v0.5.0 (2026-05-11)   ← Type 형식이 commi
 
 ### 검증
 
-현재 hook 강제 없음. PR 리뷰에서 위 규칙(commit + PR 제목 모두) 충족 여부 확인. **2026-05-13 사용자 지시**: 외부 가독성·다중 concern 분리 룰은 "강제" 적용 요청 — 우선 본 SKILL/memory를 SSOT로 두고, `commit-msg` hook 도입은 별도 task로 진행(ADR 트리거 `.claude/hooks/` 해당. plan 단계로 분리).
+**Local `commit-msg` hook이 R1~R4 4개 deterministic 룰을 자동 강제** (2026-05-13~) — `scripts/check-commit-msg.mjs` + `.husky/commit-msg`. 위반 시 commit 차단(exit 1), `--no-verify` 명시 우회 허용. 관련 ADR: `docs/decisions/0009-commit-msg-hook-enforcement.md` (Accepted).
+
+강제되는 룰:
+- (R1) subject 정규식 `^(Feat|Fix|Style|Refactor|Docs|Chore): [^ ].+$`
+- (R2) subject 길이 80자 한도 (`.trimEnd()` 후)
+- (R3) `Co-Authored-By:` trailer가 메시지 마지막 paragraph에 위치 (case-insensitive)
+- (R4) subject `+` 2회 이상 차단 (다중 concern 분리 신호)
+
+PR 리뷰에서 수동 확인하는 영역 (hook 검증 X):
+- WHY/IMPACT 우선·추상명사 회피·외부 가독성 — heuristic 룰, 사람 리뷰 영역
+- PR 제목 — 별도 GitHub Actions task에서 도입 예정
 
 ## ADR 판단
 
