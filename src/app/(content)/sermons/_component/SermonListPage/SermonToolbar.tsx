@@ -1,6 +1,7 @@
 import SermonSearchForm from './SermonSearchForm';
 import ToolbarFilterButton from './ToolbarFilterButton';
 import SermonSeriesChips from './SermonSeriesChips';
+import SermonSearchFeedback from './SermonSearchFeedback';
 import SermonSeriesBanner from './SermonSeriesBanner';
 import ActiveFilterChips from './ActiveFilterChips';
 import type { SeriesWithSermonCount, Preacher } from '@/types/sermon';
@@ -11,13 +12,15 @@ type Props = {
   allPreachers: Preacher[];
   totalCount: number;
   standaloneCount: number;
+  resultCount: number;
 };
 
 export default function SermonToolbar({
   allSeries,
   allPreachers,
   totalCount,
-  standaloneCount
+  standaloneCount,
+  resultCount
 }: Props) {
   return (
     <header className={styles.toolbar_header}>
@@ -30,6 +33,7 @@ export default function SermonToolbar({
         totalCount={totalCount}
         standaloneCount={standaloneCount}
       />
+      <SermonSearchFeedback resultCount={resultCount} />
       <SermonSeriesBanner allSeries={allSeries} />
       <ActiveFilterChips allSeries={allSeries} />
     </header>

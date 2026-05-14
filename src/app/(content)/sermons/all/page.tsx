@@ -79,6 +79,7 @@ export default async function AllSermonsPage({ searchParams }: PageProps) {
             allPreachers={allPreachers}
             totalCount={totalCount}
             standaloneCount={standaloneCount}
+            resultCount={listResult.total}
           />
           {hasFilter ? (
             <SermonFilteredList sermons={listResult.sermons} />

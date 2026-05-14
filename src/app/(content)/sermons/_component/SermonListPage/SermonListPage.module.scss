@@ -325,6 +325,60 @@ $dot-size: 0.4rem;
   white-space: nowrap;
 }
 
+// ── Search Feedback Card (검색어 활성 시) ──
+
+.search_feedback {
+  display: flex;
+  align-items: center;
+  gap: $spacing-10;
+  padding: $spacing-12 $spacing-16;
+  margin-bottom: $content-gap-m;
+  background-color: $bg-card;
+  border: 1px solid $border-subtle;
+  border-radius: $radius-s;
+}
+
+.search_feedback_icon {
+  flex-shrink: 0;
+  font-size: $font-size-13;
+  color: $txt-tertiary;
+}
+
+.search_feedback_text {
+  flex: 1;
+  min-width: 0;
+  font-size: $font-size-12;
+  color: $txt-secondary;
+  font-variant-numeric: tabular-nums;
+  word-break: keep-all;
+}
+
+.search_feedback_query {
+  color: $txt-primary;
+  font-weight: $font-weight-bold;
+}
+
+.search_feedback_count {
+  color: $txt-primary;
+  font-weight: $font-weight-bold;
+}
+
+.search_feedback_clear {
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: $spacing-4;
+  padding: $spacing-2 $spacing-4;
+  font-size: $font-size-12;
+  font-weight: $font-weight-medium;
+  color: $txt-tertiary;
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+
+  @include hover-color-shift($txt-primary);
+}
+
 // ── Series Meta Card (시리즈 필터 활성 시) ──
 
 .series_meta {
