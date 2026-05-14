@@ -6,14 +6,20 @@ import process from "node:process";
 import { ADR_TRIGGER_PARTS } from "./_shared-config.mjs";
 
 const VERDICT_BY_SECTION = {
-  "Codex 계획 검증": /\*\*결론\*\*:\s*(PASS|PASS_WITH_DECISION_LOG|CHANGE_REQUEST|BLOCK)\b/,
-  "Codex 1차 검증": /\*\*결론\*\*:\s*(PASS|FIX_APPLIED|CHANGE_REQUEST|BLOCK)\b/,
-  "Claude 2차 검증": /\*\*최종 판단\*\*:\s*(PASS|FAIL)\b/,
+  "Codex 계획 검증": /\*\*결론\*\*:\s*(?:\*\*)?(PASS|PASS_WITH_DECISION_LOG|CHANGE_REQUEST|BLOCK)\b(?:\*\*)?/,
+  "Codex 1차 검증": /\*\*결론\*\*:\s*(?:\*\*)?(PASS|FIX_APPLIED|CHANGE_REQUEST|BLOCK)\b(?:\*\*)?/,
+  "Claude 2차 검증": /\*\*최종 판단\*\*:\s*(?:\*\*)?(PASS|FAIL)\b(?:\*\*)?/,
+};
+
+const ALLOWED_VERDICTS = {
+  "Codex 계획 검증": ["PASS", "PASS_WITH_DECISION_LOG", "CHANGE_REQUEST", "BLOCK"],
+  "Codex 1차 검증": ["PASS", "FIX_APPLIED", "CHANGE_REQUEST", "BLOCK"],
+  "Claude 2차 검증": ["PASS", "FAIL"],
 };
 
 const PLACEHOLDER_LINE = /^\s*(?:[-—–]|TBD|ＴＢＤ|미요청|미작성|N\/A|none)\s*$/i;
 const PLACEHOLDER_INLINE = /^\s*[-*]?\s*\*\*[^*]+\*\*:\s*["'`]?(?:TBD|ＴＢＤ|미요청|미작성|N\/A|none|-|—|–)["'`]?\s*$/i;
-const VERDICT_LABEL = /^\s*[-*]?\s*\*\*(?:결론|최종 판단)\*\*:\s*/;
+const VERDICT_LABEL = /^\s*[-*]?\s*\*\*(?:결론|최종 판단)\*\*:\s*(?:\*\*)?\w+(?:\*\*)?\s*/;
 const MIN_BODY_CHARS = 30;
 
 function fail(message) {
@@ -81,7 +87,7 @@ function assertSectionRich(body, label) {
     if (PLACEHOLDER_LINE.test(line)) continue;
 
     if (VERDICT_LABEL.test(line)) {
-      const after = line.replace(VERDICT_LABEL, "").replace(/^\w+\s*/, "").trim();
+      const after = line.replace(VERDICT_LABEL, "").trim();
       usefulChars += after.length;
       continue;
     }
@@ -108,10 +114,7 @@ function assertReviewSections(content, filename) {
 
     const verdictMatch = body.match(verdictRe);
     if (!verdictMatch) {
-      const allowed = verdictRe.source
-        .replace(/^.*?\(/, "")
-        .replace(/\)\\b$/, "")
-        .replace(/\|/g, " / ");
+      const allowed = ALLOWED_VERDICTS[heading].join(" / ");
       fail(
         `${filename}: ## ${heading} verdict token이 없습니다. 허용: ${allowed}. ` +
           `placeholder(미요청/미작성)은 차단됩니다 — Codex/Claude 검증을 실제로 수행하고 결론을 기록하세요.`,
@@ -154,12 +157,24 @@ function assertAdrDecision(content, filename) {
 
   if (adrRiskFiles.length === 0 || adrChanged) return;
 
-  const adrLine = /\*\*ADR needed\*\*:\s*(no|yes)\b/i.exec(content);
+  const adrLine = /^\s*-\s*\*\*ADR needed\*\*:\s*(no|yes)\b(?<rationale>.*)/im.exec(content);
   const legacyBody = sectionBody(content, "ADR 판단");
 
   if (!adrLine && !legacyBody) {
     fail(
       `${filename}: ADR 후보 변경이 있지만 frontmatter \`**ADR needed**: no | yes\` 또는 ## ADR 판단 섹션이 없습니다.`,
+    );
+  }
+
+  if (
+    adrLine?.[1].toLowerCase() === "no" &&
+    !adrLine.groups?.rationale.trim() &&
+    !legacyBody
+  ) {
+    fail(
+      `${filename}: ADR 후보 변경(${adrRiskFiles.slice(0, 3).join(", ")}${adrRiskFiles.length > 3 ? " ..." : ""})이 있는데 ` +
+        `\`**ADR needed**: no\`에 사유가 없습니다. ` +
+        `한 줄 inline 사유를 추가하세요 (예: \`**ADR needed**: no — scripts/ 오타 수정만 포함\`).`,
     );
   }
 
@@ -200,6 +215,7 @@ function parseArgs(argv) {
 }
 
 const { planFile, taskPattern } = parseArgs(process.argv.slice(2));
+const effectiveTask = taskPattern || process.env.TASK_ID || "";
 
 if (planFile) {
   if (!existsSync(planFile)) fail(`--plan-file 경로가 없습니다: ${planFile}`);
@@ -210,15 +226,13 @@ if (planFile) {
   process.exit(0);
 }
 
-if (!taskPattern) {
+if (!effectiveTask) {
   fail("Usage: node scripts/harness-gate.mjs <task-id-or-active-plan-pattern> | --plan-file <path>");
 }
 
-if (/[^a-zA-Z0-9_.-]/.test(taskPattern || process.env.TASK_ID || "")) {
-  fail(`task id는 영숫자·_·.·-만 허용합니다. 입력: ${taskPattern}`);
+if (/[^a-zA-Z0-9_.-]/.test(effectiveTask)) {
+  fail(`task id는 영숫자·_·.·-만 허용합니다. 입력: ${effectiveTask}`);
 }
-
-const effectiveTask = taskPattern || process.env.TASK_ID || "";
 
 const repoRoot = git(["rev-parse", "--show-toplevel"]);
 process.chdir(repoRoot);
