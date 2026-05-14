@@ -90,11 +90,33 @@ node scripts/verify-task.mjs sermons-detail-main
 
 ## Codex 1차 검증
 
-- **결론**: 미요청
+- **결론**: **PASS** (2026-05-14, fresh thread `a90ff12d3433231f2`)
+- **검토 범위**: 2 파일 staged diff (`SermonDetailPage.tsx` + `.module.scss`)
+
+**Codex verdict** (verbatim 발췌):
+> P1 `use client` 유지 OK: `useRouter` line 4, `router.push` callbacks line 32-39.
+> P1 `ScriptureBlock` 조건 OK: `sermon.scripture && sermon.scripture_text` line 57.
+> P1 `SermonMeta` 타입 OK: 호출 line 51-55, props type line 90-94 일치.
+> P2 `Link` OK / `SermonNoteEditor` OK: client parent.
+> P3 sub-components 미수정 / `[id]/page.tsx` 변경 0 / 노트·시리즈 보존.
+> P4 token OK: 하드코딩 0건.
+> D1 OK: `Tabs|TABS|activeTab|useState|tab_` 0건.
+> D2 OK: 주석 line 80, 노트 line 81.
+> D3 OK: `/sermons/series/${series.id}` line 103.
+> D4 OK: `white-space: pre-wrap` line 105.
+
+**평이 풀이**: 13개 점검(P1-P4 + D1-D4) 모두 PASS. Tabs/useState/TABS/tab_ 클래스 모두 제거 확인(`grep` 0건), `<Link>` 시리즈 라벨 + `pre-wrap` summary + 노트 임시 노출 주석 + ScriptureBlock null-safe 조건 모두 plan과 정합.
 
 ## Claude 2차 검증
 
-- **최종 판단**: 미작성
+- **검토 내용**: 2 파일 staged diff(`git diff --cached`) 교차 확인 + Codex 1차 PASS 13개 항목 검증.
+  - `SermonDetailPage.tsx`(약 150줄, 기존 205줄에서 축소): `useState`/`TABS`/`TabContent`/`Tabs` import + 사용 모두 제거 확인 (`grep`). `SermonMeta`는 sermon 객체 prop으로 통합(개별 8 props → 3 props로 단순화). `<Link href={\`/sermons/series/${series.id}\`}>` 감싸기 — `series` truthy 분기, plain text fallback "단독 설교". `ResourceList` sub-component 분리(현 메인 함수 75줄). `SermonNoteEditor` 페이지 최하단 임시 노출 + 주석으로 D2 의도 명시.
+  - `SermonDetailPage.module.scss`: `.tab_content`/`.tab_panel`/`.empty` 3 클래스 제거. `.summary_text { white-space: pre-line → pre-wrap }` (D4). `.series_tag`에 `align-self: flex-start` + `text-decoration: none` + `hover-color-shift($primary-hover)` 추가. `.series_tag_plain` 신규(단독 설교용 $txt-tertiary).
+- **실행한 검증**: `node scripts/verify-task.mjs sermons-detail-main` (run-id `20260514-192907`) → ✓ 필수 검증 통과 (ESLint / stylelint / Build (next) / Knip).
+  - `logs/sermons-detail-main/20260514-192907/summary.log`: `✓ 필수 검증 통과 (⚠ 경고: Knip — 기존 부채)`.
+  - `git status -s`: M 2 + A 1 — plan §영향받는 파일과 일치 (SermonDetailPage 2 파일 + exec-plan).
+- **남은 항목**: `yarn dev` 수동 검증 (`/sermons/[id]` 진입: 4 케이스 — 시리즈 있음+scripture+resources / 시리즈 없음+scripture / scripture_text 없음 / resources 없음. Tab UI 흔적 0, 시리즈 라벨 클릭 → `/sermons/series/${id}`, summary 줄바꿈 보존, 노트 영역 최하단 노출).
+- **최종 판단**: ✅ **PASS** — verify-task PASS + Codex 1차 PASS + diff 교차 확인 일치. 사용자 yarn dev 수동 검증 후 commit 진행 가능.
 
 ---
 
