@@ -48,5 +48,10 @@ next-env.d.ts
 .claude/settings.local.json
 
 # 디자인 핸드오프 자료 (커밋 대상 아님 — 로컬 참고용)
-docs/references/*.html
-docs/references/*.jsx
+# direct child + nested 모두 차단 (예: `docs/references/sermons/*.jsx` 같은 nested mockup)
+# 기존 commit된 nested mockup(ChurchSermonAll.jsx 등)은 git이 계속 추적 — 향후 신규 mockup은 차단
+docs/references/**/*.html
+docs/references/**/*.jsx
+
+# Windows bash crash dump
+*.stackdump

@@ -193,7 +193,16 @@ CLAUDE.md prefix 6개(`Feat·Fix·Style·Refactor·Docs·Chore`) + bullet 본문
   - ❌ `Fix: 라우트 경로 정정`
   - ✅ `Fix: /news/bulletin → /news/bulletins (8건) + /about/directions → /about/location`
 - **길이** — 권장 50자, 최대 80자 (한국어 char 기준).
-- **다중 concern 표시** — subject의 `+` 연결은 commit 분리 신호. 같은 파일이라 묶었으면 subject에 그 사실 명시 (`(2 concerns 동일 파일)`).
+- **외부 가독성 (코드 미열람자 1회 이해)** — subject와 body 모두 본 PR/저장소를 처음 보는 사람이 코드를 열지 않고도 "무엇이 어떻게 변했는지" 이해 가능해야 한다. 본 task 내부에서만 통하는 약어·축약(예: `메타 2 키`, `토큰 3종`, `9 영역`)은 본문에서 한 번 풀어쓰지 않으면 금지.
+  - ❌ `Chore: Hero 메타 2 키 + 라우트 3 스켈레톤` — "메타", "키", "스켈레톤" 모두 코드 미열람자가 추측해야 함
+  - ✅ `Chore: sermons 자식 페이지 2종 Hero 등록 + 신규 라우트 3종 스켈레톤 추가` — 어떤 페이지/Hero/라우트인지 표면화
+  - body에서는 첫 등장 시 풀어 설명: "`hero.config.ts`의 `HERO_META` 객체에 `/sermons/all`·`/sermons/series` 두 엔트리(title/subtitle/eyebrow) 추가"처럼
+- **다중 concern 표시** — subject에 `+`로 영역을 2개 이상 나열하면 즉시 다음 두 가지 중 택1을 명시한다. (`/`·`,`는 URL 경로(`/sermons/all`)·자연어 열거에서 합법 등장하므로 분리 신호 대상이 아니다 — commit-msg-hook task Codex 1차 FLAG D 반영, hook R4 검사도 `+`만)
+  - (a) **commit 분리** — 각 영역을 별도 commit으로. 기본 가정.
+  - (b) **단일 의도 통일** — 모든 영역이 단일 상위 의도(예: "Phase 0 foundation prep") 하에 묶이는 경우, subject는 그 상위 의도 하나로 표현하고 본문 bullet에서 영역별로 풀어쓴다. 같은 파일·같은 모듈 변경 묶음은 `(N concerns 동일 파일)` 표기.
+  - ❌ `Chore: sermons Phase 0 — 9-영역 감사 + Carousel 공용 + 3 라우트 + Hero 메타 2 키` — subject `+` 3회 → commit 분리 신호로 오해. 약어 다발.
+  - ✅ `Chore: sermons 섹션 Phase 0 foundation — Phase 1 진입 전 사전 준비 완료` + 본문 4 영역 bullet — 단일 의도 통일
+  - ✅ `Fix: /news/bulletin → /news/bulletins (8건) + /about/directions → /about/location` — `/`는 URL 경로, `+`는 1회로 분리 신호 아님
 
 ### Body 4-line 가이드
 
@@ -268,7 +277,17 @@ Chore: develop → main 릴리스 v0.5.0 (2026-05-11)   ← Type 형식이 commi
 
 ### 검증
 
-현재 hook 강제 없음. PR 리뷰에서 위 규칙(commit + PR 제목 모두) 충족 여부 확인. 운영 패턴 누적 후 `commit-msg` hook 또는 GitHub Actions 도입 여부 별도 결정.
+**Local `commit-msg` hook이 R1~R4 4개 deterministic 룰을 자동 강제** (2026-05-13~) — `scripts/check-commit-msg.mjs` + `.husky/commit-msg`. 위반 시 commit 차단(exit 1), `--no-verify` 명시 우회 허용. 관련 ADR: `docs/decisions/0009-commit-msg-hook-enforcement.md` (Accepted).
+
+강제되는 룰:
+- (R1) subject 정규식 `^(Feat|Fix|Style|Refactor|Docs|Chore): [^ ].+$`
+- (R2) subject 길이 80자 한도 (`.trimEnd()` 후)
+- (R3) `Co-Authored-By:` trailer가 메시지 마지막 paragraph에 위치 (case-insensitive)
+- (R4) subject `+` 2회 이상 차단 (다중 concern 분리 신호)
+
+PR 리뷰에서 수동 확인하는 영역 (hook 검증 X):
+- WHY/IMPACT 우선·추상명사 회피·외부 가독성 — heuristic 룰, 사람 리뷰 영역
+- PR 제목 — 별도 GitHub Actions task에서 도입 예정
 
 ## ADR 판단
 

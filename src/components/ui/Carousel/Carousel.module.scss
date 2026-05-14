@@ -1,0 +1,52 @@
+.track {
+  display: flex;
+  gap: $content-gap-s;
+  overflow-x: auto;
+  overflow-y: hidden;
+  scroll-snap-type: x proximity;
+  cursor: grab;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+.full_bleed {
+  margin-inline: calc(-1 * #{$container-padding});
+  padding-inline: $container-padding;
+
+  @include respond-up($breakpoint-tablet) {
+    margin-inline: 0;
+    padding-inline: 0;
+  }
+}
+
+.arrows {
+  display: inline-flex;
+  gap: $spacing-4;
+}
+
+.arrow_button {
+  width: $spacing-32;
+  height: $spacing-32;
+  border-radius: $radius-circle;
+  background-color: $bg-card;
+  border: 1px solid $border-card;
+  color: $txt-secondary;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  cursor: pointer;
+
+  &:not(:disabled) {
+    @include hover-bg-shift($bg-hover);
+  }
+
+  &:disabled {
+    opacity: 0.35;
+    cursor: not-allowed;
+  }
+}
