@@ -1,12 +1,11 @@
 'use client';
 
-import { useState } from 'react';
+import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { IoDocumentTextOutline, IoDownloadOutline } from 'react-icons/io5';
 import { LayoutContainer } from '@/components/layout';
 import SermonVideoPlayer from '../SermonVideoPlayer/SermonVideoPlayer';
 import SermonVideoTools from '../SermonVideoTools/SermonVideoTools';
-import { Tabs } from '@/components/ui';
 import ScriptureBlock from '../ScriptureBlock/ScriptureBlock';
 import SermonNoteEditor from '../SermonNoteEditor/SermonNoteEditor';
 import SeriesEpisodeList from '../SeriesEpisodeList/SeriesEpisodeList';
@@ -15,13 +14,6 @@ import { formatSermonDuration } from '@/utils/sermon';
 import type { SermonWithRelations, SermonResource } from '@/types/sermon';
 import styles from './SermonDetailPage.module.scss';
 
-const TABS = [
-  { id: 'summary', label: '요약' },
-  { id: 'scripture', label: '본문' },
-  { id: 'resources', label: '자료' },
-  { id: 'notes', label: '노트' }
-];
-
 type Props = {
   sermon: SermonWithRelations;
   seriesEpisodes: SermonWithRelations[];
@@ -29,12 +21,10 @@ type Props = {
 
 export default function SermonDetailPage({ sermon, seriesEpisodes }: Props) {
   const router = useRouter();
-  const [activeTab, setActiveTab] = useState('summary');
 
   const preacherLabel = sermon.preacher
     ? `${sermon.preacher.name}${sermon.preacher.title ? ` ${sermon.preacher.title}` : ''}`
     : '';
-  const seriesTitle = sermon.sermon_series?.title;
   const duration = formatSermonDuration(sermon.duration);
   const hasSeriesEpisodes = seriesEpisodes.length > 0;
   const activeResources = sermon.sermon_resources.filter((r) => !r.deleted_at);
@@ -53,38 +43,44 @@ export default function SermonDetailPage({ sermon, seriesEpisodes }: Props) {
     <LayoutContainer>
       <div className={styles.layout}>
         <div className={styles.video_section}>
-          <SermonVideoPlayer
-            videoId={sermon.video_id}
-            title={sermon.title}
-          />
+          <SermonVideoPlayer videoId={sermon.video_id} title={sermon.title} />
           <SermonVideoTools sermonId={String(sermon.id)} />
         </div>
 
         <div className={styles.info_section}>
           <SermonMeta
-            seriesTitle={seriesTitle}
-            seriesOrder={sermon.series_order}
-            title={sermon.title}
-            date={sermon.sermon_date}
-            preacher={preacherLabel}
-            scripture={sermon.scripture}
+            sermon={sermon}
+            preacherLabel={preacherLabel}
             duration={duration}
-            serviceType={sermon.service_type}
           />
-          <Tabs variant="underline" items={TABS} activeId={activeTab} onChange={setActiveTab} />
-          <TabContent activeTab={activeTab} sermon={sermon} resources={activeResources} />
+
+          {sermon.scripture && sermon.scripture_text && (
+            <ScriptureBlock
+              scriptureRef={sermon.scripture}
+              scriptureText={sermon.scripture_text}
+            />
+          )}
+
+          {sermon.summary && (
+            <p className={styles.summary_text}>{sermon.summary}</p>
+          )}
+
+          {activeResources.length > 0 && <ResourceList resources={activeResources} />}
+
           {hasSeriesEpisodes && (
             <SeriesEpisodeList
               currentSermonId={sermon.id}
               sermons={seriesEpisodes}
-              seriesTitle={seriesTitle ?? '시리즈'}
+              seriesTitle={sermon.sermon_series?.title ?? '시리즈'}
               onSelect={handleEpisodeSelect}
               onViewAll={handleViewAllSeries}
             />
           )}
+
+          {/* 노트는 mockup에 없으나 dnchurch 자체 기능. 임시 페이지 최하단 노출 (의사결정 로그 D2 — 별도 task로 위치 확정 예정) */}
+          <SermonNoteEditor sermonId={String(sermon.id)} />
         </div>
       </div>
-
     </LayoutContainer>
   );
 }
@@ -92,110 +88,71 @@ export default function SermonDetailPage({ sermon, seriesEpisodes }: Props) {
 /* ── Sub-components ── */
 
 type SermonMetaProps = {
-  seriesTitle: string | undefined;
-  seriesOrder: number | null;
-  title: string;
-  date: string;
-  preacher: string;
-  scripture: string | null;
+  sermon: SermonWithRelations;
+  preacherLabel: string;
   duration: string | null;
-  serviceType: string;
 };
 
-function SermonMeta({
-  seriesTitle,
-  seriesOrder,
-  title,
-  date,
-  preacher,
-  scripture,
-  duration,
-  serviceType
-}: SermonMetaProps) {
+function SermonMeta({ sermon, preacherLabel, duration }: SermonMetaProps) {
+  const series = sermon.sermon_series;
+  const seriesOrder = sermon.series_order;
+
   return (
     <div className={styles.meta_block}>
-      <span className={styles.series_tag}>
-        {seriesTitle ? `${seriesTitle} · 제${seriesOrder ?? '?'}편` : '단독 설교'}
-      </span>
-      <h1 className={styles.sermon_title}>{title}</h1>
+      {series ? (
+        <Link href={`/sermons/series/${series.id}`} className={styles.series_tag}>
+          {series.title} · 제{seriesOrder ?? '?'}편
+        </Link>
+      ) : (
+        <span className={styles.series_tag_plain}>단독 설교</span>
+      )}
+      <h1 className={styles.sermon_title}>{sermon.title}</h1>
+      {sermon.scripture && <span className={styles.scripture_tag}>{sermon.scripture}</span>}
       <div className={styles.meta_row}>
-        <span>{formattedDate(date, 'YYYY년 MM월 DD일')}</span>
+        <span>{formattedDate(sermon.sermon_date, 'YYYY년 MM월 DD일')}</span>
         <Dot />
-        <span>{preacher}</span>
+        <span>{sermon.service_type}</span>
+        {duration && (
+          <>
+            <Dot />
+            <span>{duration}</span>
+          </>
+        )}
         <Dot />
-        <span>{serviceType}</span>
+        <span>{preacherLabel}</span>
       </div>
-      {scripture && <span className={styles.scripture_tag}>{scripture}</span>}
     </div>
   );
 }
 
-type TabContentProps = {
-  activeTab: string;
-  sermon: SermonWithRelations;
+type ResourceListProps = {
   resources: SermonResource[];
 };
 
-function TabContent({ activeTab, sermon, resources }: TabContentProps) {
+function ResourceList({ resources }: ResourceListProps) {
   return (
-    <div className={styles.tab_content} role="tabpanel">
-      {activeTab === 'summary' && (
-        <div className={styles.tab_panel}>
-          {sermon.summary ? (
-            <p className={styles.summary_text}>{sermon.summary}</p>
-          ) : (
-            <p className={styles.empty}>등록된 요약이 없습니다</p>
-          )}
-        </div>
-      )}
-
-      {activeTab === 'scripture' && (
-        <div className={styles.tab_panel}>
-          {sermon.scripture ? (
-            <ScriptureBlock scriptureRef={sermon.scripture} scriptureText={sermon.scripture_text} />
-          ) : (
-            <p className={styles.empty}>등록된 본문이 없습니다</p>
-          )}
-        </div>
-      )}
-
-      {activeTab === 'resources' && (
-        <div className={styles.tab_panel}>
-          {resources.length > 0 ? (
-            <ul className={styles.resource_list}>
-              {resources.map((res) => (
-                <li key={res.id}>
-                  <a
-                    href={res.file_url}
-                    className={styles.resource_item}
-                    download
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    <IoDocumentTextOutline className={styles.resource_icon} aria-hidden="true" />
-                    <div className={styles.resource_info}>
-                      <span className={styles.resource_title}>{res.title}</span>
-                      {res.file_type && (
-                        <span className={styles.resource_type}>{res.file_type.toUpperCase()}</span>
-                      )}
-                    </div>
-                    <IoDownloadOutline className={styles.resource_download} aria-hidden="true" />
-                  </a>
-                </li>
-              ))}
-            </ul>
-          ) : (
-            <p className={styles.empty}>등록된 자료가 없습니다</p>
-          )}
-        </div>
-      )}
-
-      {activeTab === 'notes' && (
-        <div className={styles.tab_panel}>
-          <SermonNoteEditor sermonId={String(sermon.id)} />
-        </div>
-      )}
-    </div>
+    <ul className={styles.resource_list}>
+      {resources.map((res) => (
+        <li key={res.id}>
+          <a
+            href={res.file_url}
+            className={styles.resource_item}
+            download
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <IoDocumentTextOutline className={styles.resource_icon} aria-hidden="true" />
+            <div className={styles.resource_info}>
+              <span className={styles.resource_title}>{res.title}</span>
+              {res.file_type && (
+                <span className={styles.resource_type}>{res.file_type.toUpperCase()}</span>
+              )}
+            </div>
+            <IoDownloadOutline className={styles.resource_download} aria-hidden="true" />
+          </a>
+        </li>
+      ))}
+    </ul>
   );
 }
 

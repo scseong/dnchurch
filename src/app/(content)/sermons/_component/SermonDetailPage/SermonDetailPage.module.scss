@@ -40,9 +40,19 @@
 }
 
 .series_tag {
+  align-self: flex-start;
   font-size: $font-size-13;
   font-weight: $font-weight-semibold;
   color: $primary;
+  text-decoration: none;
+
+  @include hover-color-shift($primary-hover);
+}
+
+.series_tag_plain {
+  font-size: $font-size-13;
+  font-weight: $font-weight-semibold;
+  color: $txt-tertiary;
 }
 
 .sermon_title {
@@ -85,28 +95,14 @@
 }
 
 // ══════════════════════════════════════════
-// Tabs & Content
+// Summary
 // ══════════════════════════════════════════
-
-.tab_content {
-  min-height: 12rem;
-}
-
-.tab_panel {
-  padding: $spacing-16 0;
-}
 
 .summary_text {
   font-size: $font-size-14;
   line-height: $line-height-loose;
   color: $txt-secondary;
-  white-space: pre-line;
-}
-
-.empty {
-  font-size: $font-size-14;
-  color: $txt-tertiary;
-  font-style: italic;
+  white-space: pre-wrap; // admin UI 입력값의 줄바꿈 보존 (의사결정 로그 D4)
 }
 
 // ══════════════════════════════════════════
