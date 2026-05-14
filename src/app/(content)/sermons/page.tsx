@@ -5,6 +5,7 @@ import { getAllSeries, getFeaturedSermon, getSermons } from '@/services/sermon';
 import SermonFeatured from './_component/SermonFeatured/SermonFeatured';
 import SermonRecentCarousel from './_component/SermonRecentCarousel/SermonRecentCarousel';
 import SermonSeriesCarousel from './_component/SermonSeriesCarousel/SermonSeriesCarousel';
+import styles from './page.module.scss';
 
 const RECENT_CAROUSEL_COUNT = 8;
 
@@ -44,7 +45,7 @@ export default async function SermonsPage({ searchParams }: SermonsPageProps) {
   const ongoingSeries = allSeries.filter((series) => series.ended_at === null);
 
   return (
-    <LayoutContainer>
+    <LayoutContainer className={styles.sections}>
       <SermonFeatured sermon={featured} />
       <SermonRecentCarousel sermons={recentList} />
       <SermonSeriesCarousel series={ongoingSeries} />
