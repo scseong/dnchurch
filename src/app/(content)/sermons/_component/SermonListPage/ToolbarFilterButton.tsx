@@ -3,17 +3,19 @@
 import { useState } from 'react';
 import { IoFunnelOutline } from 'react-icons/io5';
 import AdvancedFilterSheet from '../AdvancedFilterSheet/AdvancedFilterSheet';
-import useSermonFilter from '@/hooks/useSermonFilter';
-import type { Preacher } from '@/types/sermon';
+import type {
+  PreacherWithSermonCount,
+  SeriesWithSermonCount
+} from '@/types/sermon';
 import styles from './SermonListPage.module.scss';
 
 type Props = {
-  allPreachers: Preacher[];
+  allSeries: SeriesWithSermonCount[];
+  allPreachers: PreacherWithSermonCount[];
 };
 
-export default function ToolbarFilterButton({ allPreachers }: Props) {
+export default function ToolbarFilterButton({ allSeries, allPreachers }: Props) {
   const [open, setOpen] = useState(false);
-  const { preacher, setFilter } = useSermonFilter();
 
   return (
     <>
@@ -29,9 +31,8 @@ export default function ToolbarFilterButton({ allPreachers }: Props) {
       <AdvancedFilterSheet
         open={open}
         onClose={() => setOpen(false)}
-        preachers={allPreachers}
-        activePreacher={preacher}
-        onApply={(id) => setFilter({ preacher: id })}
+        allSeries={allSeries}
+        allPreachers={allPreachers}
       />
     </>
   );

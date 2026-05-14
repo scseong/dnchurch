@@ -4,12 +4,15 @@ import SermonSeriesChips from './SermonSeriesChips';
 import SermonSearchFeedback from './SermonSearchFeedback';
 import SermonSeriesBanner from './SermonSeriesBanner';
 import ActiveFilterChips from './ActiveFilterChips';
-import type { SeriesWithSermonCount, Preacher } from '@/types/sermon';
+import type {
+  PreacherWithSermonCount,
+  SeriesWithSermonCount
+} from '@/types/sermon';
 import styles from './SermonListPage.module.scss';
 
 type Props = {
   allSeries: SeriesWithSermonCount[];
-  allPreachers: Preacher[];
+  allPreachers: PreacherWithSermonCount[];
   totalCount: number;
   standaloneCount: number;
   resultCount: number;
@@ -26,7 +29,7 @@ export default function SermonToolbar({
     <header className={styles.toolbar_header}>
       <div className={styles.toolbar}>
         <SermonSearchForm />
-        <ToolbarFilterButton allPreachers={allPreachers} />
+        <ToolbarFilterButton allSeries={allSeries} allPreachers={allPreachers} />
       </div>
       <SermonSeriesChips
         allSeries={allSeries}
