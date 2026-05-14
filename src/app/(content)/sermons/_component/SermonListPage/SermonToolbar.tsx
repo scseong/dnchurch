@@ -30,7 +30,7 @@ export default function SermonToolbar({
         totalCount={totalCount}
         standaloneCount={standaloneCount}
       />
-      <SermonSeriesBanner allSeries={allSeries} standaloneCount={standaloneCount} />
+      <SermonSeriesBanner allSeries={allSeries} />
       <ActiveFilterChips allSeries={allSeries} />
     </header>
   );
