@@ -1,0 +1,168 @@
+// PC 분기에서 Featured 좌측 미디어 영역 폭 — mockup `ListPCFeatured` 580px 고정
+$featured-image-col: 58rem;
+// 다크 미디어 영역의 유리감 배지 (play 버튼) — 토큰 미존재 (mockup `rgba(255,255,255,.14|.22)`)
+$badge-glass-bg: rgba(255, 255, 255, 0.14);
+$badge-glass-border: rgba(255, 255, 255, 0.22);
+// 영상 우하단 duration overlay — 토큰 미존재 (mockup `rgba(0,0,0,.55)`)
+$duration-overlay-bg: rgba(0, 0, 0, 0.55);
+
+.card {
+  display: flex;
+  flex-direction: column;
+  background-color: $bg-card;
+  border: 1px solid $border-card;
+  border-radius: $radius-m;
+  overflow: hidden;
+  text-decoration: none;
+  color: inherit;
+
+  @include hover-lift;
+
+  @include respond-up($breakpoint-tablet) {
+    display: grid;
+    grid-template-columns: $featured-image-col 1fr;
+  }
+}
+
+.media {
+  position: relative;
+  aspect-ratio: 16 / 9;
+  background: $overlay-image;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.thumb {
+  object-fit: cover;
+}
+
+.play_circle {
+  position: relative;
+  z-index: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: $spacing-64;
+  height: $spacing-64;
+  border-radius: $radius-circle;
+  background-color: $badge-glass-bg;
+  border: 1px solid $badge-glass-border;
+  color: $accent;
+
+  @include respond-up($breakpoint-tablet) {
+    width: $spacing-80;
+    height: $spacing-80;
+  }
+
+  svg {
+    margin-left: $spacing-2;
+  }
+}
+
+.duration {
+  position: absolute;
+  bottom: $spacing-10;
+  right: $spacing-10;
+  padding: $spacing-2 $spacing-8;
+  border-radius: $radius-xxs;
+  background-color: $duration-overlay-bg;
+  color: $txt-inverse;
+  font-size: $font-size-11;
+  font-weight: $font-weight-semibold;
+}
+
+.body {
+  display: flex;
+  flex-direction: column;
+  padding: $spacing-16 $spacing-20 $spacing-20;
+  min-width: 0;
+
+  @include respond-up($breakpoint-tablet) {
+    padding: $spacing-28 $spacing-32;
+    justify-content: center;
+  }
+}
+
+.meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: $spacing-6;
+  margin-bottom: $spacing-10;
+  font-size: $font-size-11;
+  color: $txt-tertiary;
+  font-variant-numeric: tabular-nums;
+
+  @include respond-up($breakpoint-tablet) {
+    gap: $spacing-8;
+    margin-bottom: $spacing-12;
+    font-size: $font-size-12;
+  }
+}
+
+.series {
+  color: $accent;
+  font-weight: $font-weight-bold;
+  letter-spacing: $letter-spacing-wide;
+}
+
+.date {
+  font-weight: $font-weight-semibold;
+}
+
+.dot {
+  opacity: 0.4;
+}
+
+.title {
+  margin: 0 0 $spacing-8;
+  font-size: $font-size-18;
+  font-weight: $font-weight-bold;
+  color: $txt-primary;
+  line-height: $line-height-snug;
+  letter-spacing: $letter-spacing-body;
+  word-break: keep-all;
+
+  @include respond-up($breakpoint-tablet) {
+    margin-bottom: $spacing-12;
+    font-size: $font-size-24;
+    line-height: $line-height-tight;
+  }
+}
+
+.scripture {
+  margin: 0 0 $spacing-8;
+  font-size: $font-size-12;
+  font-weight: $font-weight-bold;
+  color: $primary;
+
+  @include respond-up($breakpoint-tablet) {
+    margin-bottom: $spacing-16;
+    font-size: $font-size-13;
+  }
+}
+
+.summary {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  margin: 0 0 $spacing-12;
+  font-size: $font-size-13;
+  color: $txt-secondary;
+  line-height: $line-height-body-reading;
+  word-break: keep-all;
+
+  @include respond-up($breakpoint-tablet) {
+    margin-bottom: $spacing-16;
+  }
+}
+
+.preacher {
+  margin: 0;
+  font-size: $font-size-12;
+  font-weight: $font-weight-semibold;
+  color: $txt-secondary;
+}

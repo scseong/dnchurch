@@ -18,7 +18,7 @@ export default function SermonYearGrid({ yearCounts }: Props) {
         {yearCounts.map(({ year, count }) => (
           <li key={year}>
             <Link
-              href={`/sermons?year=${year}`}
+              href={`/sermons/all?year=${year}`}
               className={styles.year_card}
               aria-label={`${year}년 설교 ${count}편 보기`}
             >

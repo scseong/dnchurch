@@ -45,7 +45,7 @@ export default function SermonDetailPage({ sermon, seriesEpisodes }: Props) {
 
   const handleViewAllSeries = () => {
     if (sermon.sermon_series?.slug) {
-      router.push(`/sermons?series=${sermon.sermon_series.slug}`);
+      router.push(`/sermons/all?series=${sermon.sermon_series.slug}`);
     }
   };
 

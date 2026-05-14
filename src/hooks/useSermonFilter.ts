@@ -25,7 +25,7 @@ export default function useSermonFilter() {
         else next.set(key, value);
       }
       const qs = next.toString();
-      router.push(`/sermons${qs ? `?${qs}` : ''}`, { scroll: false });
+      router.push(`/sermons/all${qs ? `?${qs}` : ''}`, { scroll: false });
     },
     [router, sp]
   );
