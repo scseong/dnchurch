@@ -1,0 +1,6 @@
+.sections {
+  display: flex;
+  flex-direction: column;
+  gap: $section-gap-40;
+  padding-block: $spacing-24 $spacing-40;
+}
