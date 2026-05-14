@@ -222,7 +222,9 @@ if (planFile) {
   const content = readFileSync(planFile, "utf8");
   const filename = path.basename(planFile);
   assertReviewSections(content, filename);
-  console.log(`✓ 하네스 게이트 통과 (plan-file 모드): ${filename}`);
+  console.log(
+    `✓ verdict 섹션 검증 통과 (--plan-file: verification/ADR/body placeholder는 검사 안 함): ${filename}`,
+  );
   process.exit(0);
 }
 
