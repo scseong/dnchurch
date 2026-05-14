@@ -10,6 +10,7 @@ import SermonVideoTools from '../SermonVideoTools/SermonVideoTools';
 import ScriptureBlock from '../ScriptureBlock/ScriptureBlock';
 import SermonNoteEditor from '../SermonNoteEditor/SermonNoteEditor';
 import SermonSeriesSidebar from '../SermonSeriesSidebar/SermonSeriesSidebar';
+import SermonOtherByPreacher from '../SermonOtherByPreacher/SermonOtherByPreacher';
 import { formattedDate } from '@/utils/date';
 import { formatSermonDuration } from '@/utils/sermon';
 import type { SermonWithRelations, SermonResource } from '@/types/sermon';
@@ -18,9 +19,14 @@ import styles from './SermonDetailPage.module.scss';
 type Props = {
   sermon: SermonWithRelations;
   seriesEpisodes: SermonWithRelations[];
+  otherSermonsByPreacher: SermonWithRelations[];
 };
 
-export default function SermonDetailPage({ sermon, seriesEpisodes }: Props) {
+export default function SermonDetailPage({
+  sermon,
+  seriesEpisodes,
+  otherSermonsByPreacher
+}: Props) {
   const router = useRouter();
 
   const preacherLabel = sermon.preacher
@@ -63,6 +69,11 @@ export default function SermonDetailPage({ sermon, seriesEpisodes }: Props) {
             )}
 
             {activeResources.length > 0 && <ResourceList resources={activeResources} />}
+
+            <SermonOtherByPreacher
+              preacherLabel={preacherLabel}
+              sermons={otherSermonsByPreacher}
+            />
 
             {/* 노트는 mockup에 없으나 dnchurch 자체 기능. 임시 페이지 최하단 노출 (의사결정 로그 D2 — 별도 task로 위치 확정 예정) */}
             <SermonNoteEditor sermonId={String(sermon.id)} />
