@@ -155,3 +155,17 @@ node scripts/verify-task.mjs sermons-detail-series-sidebar
 - `docs/references/sermons/ChurchSermonAll.jsx` — `SeriesSidebar`(line 1120-1217), `DetailPCBody`(line 1278-1289)
 - Phase 2-1 완료: SermonDetailPage 150줄 순차 layout (본 task 위 layout grid 변경)
 - Phase 1-3 카드 경로 컨벤션: `/sermons/series/${id}` (의사결정 로그 D7)
+
+## 회고 (필수 5필드)
+
+- KPI / 시작-종료 (분): ~120 (CR 2건 plan + 1차 CR 1건 + D8 톤 정정 + 객관 리뷰 fix 4건)
+- KPI / Codex 라운드: 4 (계획 1차 CR `afceffda` → 2차 PARTIAL `a2f49b54` + 1차 CR→FIX_APPLIED `a0365aff` + PR 객관 리뷰 `ab6e22da`)
+- KPI / material 사후 발견: 2 (사용자 톤 정정 D8 — warm/cool 혼재 / Codex 객관 리뷰 button→Link 시맨틱 — a11y 위반)
+- KPI / harness-gate placeholder fail: 0
+- KPI / 사용자 검토 부족 피드백: 0
+
+## 회고
+
+- 잘된 것: 1차 CR 2건(grid breakpoint 768→1024 / Knip warn 처리)을 plan 수정으로 즉시 흡수. 객관 리뷰의 button→Link 정합도 PR 머지 전 반영.
+- 다음에 할 것: 클릭 시 navigation하는 row는 처음부터 `<Link>`로. `<button onClick={router.push}>` 패턴 검토 단계에서 차단. 사이드바·카드 톤은 styles SKILL warm vs cool 표 사전 확인.
+- 발견된 부채: opacity 0.4 토큰화 미정 — 본 task + Phase 1-3 모두 `.dot` 패턴에 inline 사용. 일관성 위해 `$opacity-muted` 등 토큰 신규 검토 별도 task.
