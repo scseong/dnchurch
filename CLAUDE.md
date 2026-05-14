@@ -6,9 +6,11 @@
 
 ## WHAT
 
-- **Stack**: Next.js (App Router), Supabase, SCSS Modules, Cloudinary, TypeScript
-- **Route Groups**: `(content)/` — HeroSection + Breadcrumb 포함 (about, news, fellowship, sermons, community, next-gen, notifications, search)
-- **Data Flow**: `apis/` (DB 쿼리) → `services/` (비즈니스 로직) → `actions/` (뮤테이션) → `app/` (페이지)
+- **Stack**: Next.js 16 (App Router), React 19, Supabase (`@supabase/ssr`), SCSS Modules, Cloudinary, TypeScript, Zustand, react-hook-form
+- **Route Groups**:
+  - `(content)/` — 일반 사용자 영역, HeroSection + Breadcrumb 포함 (about, news, fellowship, sermons, community, next-gen, notifications, search)
+  - `(admin)/` — 관리자 영역, admin 셸 적용. 두 그룹은 레이아웃·디자인 토큰·인증 모델이 다름 (`docs/ARCHITECTURE.md` 참고)
+- **Data Flow**: `apis/` (DB 쿼리) → `services/` (비즈니스 로직) → `actions/` (뮤테이션) → `app/` (페이지). 페이지는 `apis/` 직접 호출 금지 — 항상 `services/` 경유
 
 ## 행동 가드레일 (LLM 공통 실수 방지)
 
@@ -132,7 +134,7 @@ pre-commit 훅은 lint-staged로 변경 파일만 자동 검사 — error는 차
 | Codex 컨텍스트 로더 | `.codex/skills/context-loader/` | 컨텍스트 라우팅 변경 시 |
 | Claude Hook 자동 제안 | `.claude/hooks/` + `.claude/settings.json` | 협업 타이밍 변경 시 |
 | 워크플로우 자동화 스크립트 | `scripts/` | 스크립트 추가/변경 시 |
-| 작업별 how-to (자동 로딩) | `.claude/skills/{supabase,styles,file-structure,ui-components}/` | 트리거 시 자동 |
+| 작업별 how-to (자동 로딩) | `.claude/skills/{supabase,styles,file-structure,ui-components,harness-workflow,complete-task}/` | 트리거 시 자동 |
 
 스킬 트리거:
 
@@ -143,6 +145,7 @@ pre-commit 훅은 lint-staged로 변경 파일만 자동 검사 — error는 차
 | 새 파일 위치, 디렉토리 구조, barrel export     | `.claude/skills/file-structure/` |
 | Button·TextField·Modal·BottomSheet·Tabs 등 공용 UI 사용·확장·신규 추가 | `.claude/skills/ui-components/` |
 | 하네스 워크플로우, PLAN Mode, task-id, exec-plan, Codex 검증, harness-gate | `.claude/skills/harness-workflow/` |
+| 머지 후 exec-plan 이동·회고 작성·기술 부채 등록 | `.claude/skills/complete-task/` |
 
-<!-- last-audit: 2026-05-01 -->
+<!-- last-audit: 2026-05-14 -->
 
