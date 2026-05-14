@@ -307,8 +307,26 @@ node scripts/verify-task.mjs sermons-featured
 - [ ] 셀프 리뷰: 이 PR을 처음 보는 사람도 EXEC_PLAN만으로 변경 의도를 이해할 수 있는가?
 - [ ] **멀티 세션 리뷰** (권장): 같은 세션의 구현자는 무의식적 바이어스가 생긴다. 별도 Claude 세션 또는 `codex:rescue`로 객관적 검토를 요청해 시선을 분리한다.
 
-## 회고 (머지 후 작성, completed/로 이동 시)
+## 회고 (필수 5필드)
+
+- KPI / 시작-종료 (분): ~240 (2026-05-14 — Phase 0 머지 직후 시작, PR #87 머지 07:55 UTC; 사용자 피드백 "5분이면 될 작업을 1시간이 넘게 걸렸어"가 본 phase에서 발화 → ADR 0010 도입 트리거가 됨. **본 phase는 ADR 0010 적용 전이라 baseline 측정치**)
+- KPI / Codex 라운드: 7 (계획 검증 5라운드 + 구현 1차 검증 1라운드 + PR #87 리뷰 fix 검증 1라운드)
+- KPI / material 사후 발견: 3 (PR #87 review G-2 cloudinary public ID 깨짐 잠재 버그, C-1 `/sermons?series=…` 구 URL 회귀, C-2 홈 CTA archive 경로 — Codex 1차 검증에서 잡지 못하고 PR 자동 리뷰 단계에서 검출)
+- KPI / harness-gate placeholder fail: 0
+- KPI / 사용자 검토 부족 피드백: 0
+
+## 회고
 
 - 잘된 것:
+  - EXPLORE 단계에서 `is_featured` 컬럼 부재를 dev/prod DB + `database.types.ts:300-322`로 직접 검증해 Phase 0 audit 오류를 사전 차단 (BLOCK 발견).
+  - 1차 Codex 1차 검증에서 cloudinary helper `CLOUD_NAME` guard 부재를 Codex가 직접 수정 (FIX_APPLIED), SCSS 하드코딩 5건은 Claude가 로컬 변수로 반영.
+  - PR review 4건을 4 파일 1 commit으로 묶되 subject `+` 0회 / `,` 열거 / 80자 한도 준수 — commit-msg hook R2/R4 통과.
+
 - 다음에 할 것:
+  - Phase 1-2(Recent 설교 캐러셀)부터 ADR 0010 적용 — compact exec-plan 6 필수 + 3 검증, 계획 검증 1-2 라운드 목표.
+  - Codex 1차 검증 프롬프트에 "archive 이관 후 구 URL 회귀"·"홈/외부 진입점 link 정합성" 항목을 명시 추가 — 본 phase에서 PR review 단계까지 미발견된 C-1·C-2 클래스 차단.
+
 - 발견된 부채 (→ tech-debt-tracker.md 옮길 것):
+  - `sermons.is_featured` 컬럼 미존재 — 어드민 수동 마킹 UI 필요 시 별도 task (Phase 5 후보).
+  - Phase 0 audit §4 인용 오류 (`database.types.ts:483` ← 실제 부재) — Phase 0 회고 부채와 sync.
+  - `cloudinaryFetchUrl`의 public ID 입력은 현재 미사용이나 가드 추가로 미래 안전 — 사용처 추가 시 호출부 정책 재확인.
