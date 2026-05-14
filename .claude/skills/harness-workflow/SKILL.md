@@ -45,6 +45,22 @@ description: 기능 추가, 버그 수정, 리팩터링, 설계/정책 변경, P
 - 레이어 방향 `apis → services → actions → app`을 확인한다.
 - 스타일 작업은 token/mixin 규칙을 확인한다.
 
+**구현 의존 claim 직접 검증 (ADR 0010)** — claim이 있으면 다음을 먼저 SSOT로 확인 (audit/doc은 보조). 확인 결과는 exec-plan `## 검증된 Assumptions` 또는 `## 의사결정 로그`에 1줄 기록.
+
+| claim 유형 | 검증 도구·명령 |
+|---|---|
+| DB 컬럼·테이블 존재 | `mcp__claude_ai_Supabase__list_tables` 또는 `execute_sql` (migrations와 drift 가능 — 원격 SSOT 우선). 예: phase 1-1에서 `is_featured` 부재 사전 발견 가능 |
+| 타입 정의 (Database generated types) | `rg "컬럼명|타입명" src/types/database.types.ts` |
+| 라우트·페이지 존재 | `Glob src/app/**/page.tsx` |
+| SCSS 토큰·mixin 존재 | `rg "\\$token-name" src/styles/tokens/` 또는 `src/styles/_mixins.scss` |
+| config flag·env 변수 | `rg "FLAG_NAME" next.config.ts eslint.config.mjs scripts/ src/lib/supabase/` (`.env.example` 없음 — actual env consumer로 grep) |
+| wrapper 컨벤션 (`<Image>` vs `<CloudinaryImage>` 등) | `Grep src/app -l "from 'next/image'"` 0건이면 wrapper 컨벤션. `src/components/common/CloudinaryImage.tsx`가 유일한 직접 import 지점 |
+
+**범위 규칙**:
+- 영향 파일 surface only — 전수 검사 금지 (LOC 늘면 plan-text 모순 표현 CR 폭주 원인)
+- 단순 변경(typo/rename/1줄) + 구현 의존 claim 없음 → EXPLORE 1–2분 종료 가능
+- 다단계 작업이거나 DB/타입/라우트/토큰 의존 claim 있음 → 위 표대로 직접 검증 필수
+
 ### 2. PLAN
 
 다단계 작업이면 실행한다.
@@ -67,13 +83,57 @@ Codex가 결론을 내기 전에 다음 5체크를 수행하도록 프롬프트�
 4. 성공 기준(Success Criteria)과 검증 명령이 구체적인가?
 5. 새 추상화·새 라이브러리·데이터 흐름 변경이 과한가? (없어야 정상)
 
-Codex 결론은 `PASS`, `CHANGE_REQUEST`, `BLOCK` 중 하나로 해석한다.
+#### CHANGE_REQUEST는 material implementation risk만 (ADR 0010)
 
-- `PASS`: 구현 진행
-- `CHANGE_REQUEST`: exec-plan 수정 후 구현 진행 (5체크 중 어느 하나라도 미충족이면 기본적으로 CHANGE_REQUEST)
-- `BLOCK`: exec-plan 재작성 후 Codex 재요청 필수. 재요청도 BLOCK이면 사용자에게 에스컬레이션 — 최종 판단은 사용자가 내린다.
+5체크 미충족이라도 **구현 판단을 바꾸지 않는 plan-text 표현 모순·label 정합·문장 품질**은 CR 대상 아님. 대신 exec-plan `## 의사결정 로그`에 1줄 기록하고 WORK로 진입한다.
 
-결과는 exec-plan의 `## Codex 계획 검증`에 기록한다.
+**must-CR (material — 구현/데이터/타입/레이어/사용자 영향)** — 다음 8 케이스는 반드시 CR.
+
+1. DB column·table 부재로 데이터 흐름 실패 (예: phase 1-1의 `is_featured` BLOCK)
+2. 타입 불일치로 type-check 실패 (예: `SermonListItem` vs `SermonWithRelations` 필드 누락)
+3. 레이어 위반 (app → apis 직접 호출, services bypass)
+4. 인증/캐시/배포 정책 변경 누락 (예: `createServerSideClient` vs `createStaticClient` 오용)
+5. `## Non-goals`에 명시한 항목을 plan이 변경하려 함 (예: `[id]`→`[slug]` 시도)
+6. user-visible acceptance criteria 위반 (SEO/UX 영향 metadata 포함, 예: title이 GNB 라벨과 불일치)
+7. 검증 명령 부재·부적절 (SC가 "동작하게" 같은 약한 기준)
+8. repo policy 위반 (token 하드코딩 / `<Image>` 직접 사용 / `--no-verify` / barrel 반사 등)
+
+**expression-only (PASS_WITH_DECISION_LOG 처리)** — 다음 5 케이스는 CR 아님. 의사결정 로그 1줄 + WORK 진입.
+
+1. 같은 정보를 N곳에 적어 미세 불일치 (예: "코드 변경 0" vs "1줄 변경" 표현 충돌)
+2. label 표기 차이 ("신규" vs "교체", "이관" vs "분리")
+3. 중복 설명·섹션 배치·비차단 명명 제안
+4. 문장 품질 (이중부정·길이·어순)
+5. SEO·라우팅 영향 없는 표기 오타 (의사결정 로그 내 typo)
+
+**애매하면 material로 승격** (안전 쪽).
+
+#### Codex 결론 토큰 (4종)
+
+- `PASS` — 5체크 모두 충족. WORK 진행.
+- `PASS_WITH_DECISION_LOG` — material risk 없음 + expression-only 지적 N건. exec-plan `## 의사결정 로그`에 각 1줄 추가 후 WORK 진행. **3차 자동 호출 금지** (재요청은 사용자 명시 승인 시만).
+- `CHANGE_REQUEST` — must-CR 1건 이상. exec-plan 수정 후 WORK.
+- `BLOCK` — 인증/캐시/배포/DB/데이터 손실/보안/컨텍스트 충돌. exec-plan 재작성 후 Codex 재요청 필수. 재요청도 BLOCK이면 사용자 에스컬레이션 — 최종 판단은 사용자.
+
+`BLOCK` 기준은 본 cap 무관 유지 — material risk + 운영 영향 결합 시 항상 차단.
+
+#### 호출 프롬프트 템플릿
+
+```
+Review the planning document at <path>. Apply the 5-check (Assumptions / Non-goals / scope linkage / Success Criteria + verification / new abstractions).
+
+Classify each finding as:
+- material — DB/type/layer/auth/cache/deploy/Non-goals violation/user-visible/policy (must-CR)
+- expression-only — plan-text inconsistency, label, ordering, typo (decision-log only, NOT CR)
+
+Concrete-records rule: every critique must include ≥2 of {real tool/rule/file/command, numeric or binary criterion, concrete verb+result, ≥1 example}. No abstract nouns like "보강 필요" / "정합" / "근거 약함".
+
+Conclude with exactly one token: PASS / PASS_WITH_DECISION_LOG / CHANGE_REQUEST / BLOCK. Add confidence: low/medium/high.
+
+Respond in Korean.
+```
+
+결과는 exec-plan의 `## Codex 계획 검증`에 기록한다 (verdict token + 풀이 1줄 + 핵심 지적).
 
 ### 4. WORK
 
@@ -197,9 +257,11 @@ CLAUDE.md prefix 6개(`Feat·Fix·Style·Refactor·Docs·Chore`) + bullet 본문
   - ❌ `Chore: Hero 메타 2 키 + 라우트 3 스켈레톤` — "메타", "키", "스켈레톤" 모두 코드 미열람자가 추측해야 함
   - ✅ `Chore: sermons 자식 페이지 2종 Hero 등록 + 신규 라우트 3종 스켈레톤 추가` — 어떤 페이지/Hero/라우트인지 표면화
   - body에서는 첫 등장 시 풀어 설명: "`hero.config.ts`의 `HERO_META` 객체에 `/sermons/all`·`/sermons/series` 두 엔트리(title/subtitle/eyebrow) 추가"처럼
-- **다중 concern 표시** — subject에 `+`로 영역을 2개 이상 나열하면 즉시 다음 두 가지 중 택1을 명시한다. (`/`·`,`는 URL 경로(`/sermons/all`)·자연어 열거에서 합법 등장하므로 분리 신호 대상이 아니다 — commit-msg-hook task Codex 1차 FLAG D 반영, hook R4 검사도 `+`만)
+- **Subject `+` 0회를 기본값으로 작성** — `+` 등장 자체가 다중 concern 신호이자 commit 분리 검토 트리거다. hook R4은 `+` 2회부터 차단하지만, **작성 단계에서 0회를 목표**로 한다. `+`를 쓰고 싶어지면 (a)/(b) 중 택1:
   - (a) **commit 분리** — 각 영역을 별도 commit으로. 기본 가정.
   - (b) **단일 의도 통일** — 모든 영역이 단일 상위 의도(예: "Phase 0 foundation prep") 하에 묶이는 경우, subject는 그 상위 의도 하나로 표현하고 본문 bullet에서 영역별로 풀어쓴다. 같은 파일·같은 모듈 변경 묶음은 `(N concerns 동일 파일)` 표기.
+
+  (`/`·`,`는 URL 경로(`/sermons/all`)·자연어 열거에서 합법 등장하므로 분리 신호 대상이 아니다 — commit-msg-hook task Codex 1차 FLAG D 반영, hook R4 검사도 `+`만.)
   - ❌ `Chore: sermons Phase 0 — 9-영역 감사 + Carousel 공용 + 3 라우트 + Hero 메타 2 키` — subject `+` 3회 → commit 분리 신호로 오해. 약어 다발.
   - ✅ `Chore: sermons 섹션 Phase 0 foundation — Phase 1 진입 전 사전 준비 완료` + 본문 4 영역 bullet — 단일 의도 통일
   - ✅ `Fix: /news/bulletin → /news/bulletins (8건) + /about/directions → /about/location` — `/`는 URL 경로, `+`는 1회로 분리 신호 아님
@@ -306,6 +368,8 @@ node scripts/update-adr-index.mjs
 ```
 
 일회성 판단이면 `ADR 판단`에 `불필요`와 사유를 남긴다.
+
+compact 템플릿(ADR 0010)의 frontmatter 1줄 필드를 쓸 때는 **`**ADR needed**: no — <한 줄 사유>`** 형식으로 inline 사유를 같이 적는다. ADR_TRIGGER_PARTS 파일이 diff에 포함된 경우 bare `no` 만으로는 `harness-gate`가 차단한다 (예: `**ADR needed**: no — scripts/ 오타 수정만 포함`).
 
 ## 최소 사용자 프롬프트 예시
 

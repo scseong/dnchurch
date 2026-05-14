@@ -3,121 +3,64 @@
 - **상태**: 🟡 진행 중
 - **시작일**: YYYY-MM-DD
 - **브랜치**: feat/...
+- **Open questions**: none
+- **ADR needed**: no
 
 ## 목표
 
-(이 작업이 끝났을 때 무엇이 달라지는가? 1~3줄)
+(이 작업이 끝났을 때 무엇이 달라지는가? 1–3줄)
 
-## Assumptions
+## 검증된 Assumptions
 
-(이 계획이 성립하려면 무엇이 사실이어야 하는가? 명시하지 않으면 조용히 가정한 셈. 불확실하면 사용자에게 묻는다.)
-
--
-
-## Non-goals
-
-(이번 작업에서 **하지 않을 것**. 범위 크리프 방지. 인접 리팩터·"하는 김에" 정리는 여기에 명시적으로 제외.)
+(EXPLORE에서 rg/generated types/SQL/Read로 직접 확인한 사실만. 항목마다 확인 근거 1줄. 예: `is_published`만 존재 — `mcp__claude_ai_Supabase__list_tables(sermons)` 호출.)
 
 -
 
 ## Success Criteria
 
-(완료를 어떻게 검증할 것인가? "동작하게 만들어" 같은 약한 기준 금지. 각 항목은 yes/no로 판정 가능해야 한다.)
+(yes/no 판정 가능한 항목. "동작하게 만들어" 같은 약한 기준 금지.)
 
 -
-
-## Verification
-
-(어떤 명령·수동 확인으로 Success Criteria를 검증할 것인가? `verify-task.mjs` + 가장 좁은 신뢰 명령부터.)
-
--
-
-## 접근법
-
-(어떻게 풀 것인가? 핵심 결정 한두 줄. 대안과 기각 사유는 의사결정 로그 또는 ADR로)
 
 ## 영향받는 파일
 
-- `src/...`
 - `src/...`
 
 ## 단계별 체크리스트
 
 - [ ] 1. ...
-- [ ] 2. ...
-- [ ] 3. ...
 
-## 완료 기준 (DoD)
+## Verification
 
-- [ ] `node scripts/verify-task.mjs <task-id>` 통과 (lint + lint:styles + build + knip)
-- [ ] 사용자 승인 후 커밋
-- [ ] (필요 시) 마이그레이션 적용
-- [ ] (필요 시) ADR 또는 tech-debt-tracker 업데이트
+- `node scripts/verify-task.mjs <task-id>`
 
-## 참고 자료
+---
 
-(외부 자료를 발췌해 `docs/research/`에 저장한 경우 여기에 링크)
-
-- `docs/research/<date>-<slug>.md` — ...
-
-## 의사결정 로그
-
-(중간에 plan을 벗어나거나 새 결정이 생기면 여기에 추가. 날짜 + 한 줄 사유)
-
-- YYYY-MM-DD: ...
-
-## ADR 판단
-
-- **필요 여부**: 미검토
-- **결정 링크**:
-- **사유**:
-
-<!-- TEMPLATE_ONLY: 아래 "## 검증 결과 기록 규칙" 섹션 전체는 template 작성 가이드. 실제 exec-plan에서는 본 섹션 전체를 삭제한다. -->
-
-## 검증 결과 기록 규칙 (TEMPLATE 안내 — 실제 plan에서는 본 섹션 전체 삭제)
-
-> ⚠️ **본 섹션은 plan 작성 가이드일 뿐, 실제 exec-plan 본문에서는 본 섹션(`## 검증 결과 기록 규칙` 전체)을 삭제한다.** 규칙은 작성 시에만 적용하고 plan에 남기지 않는다.
-
-다음 `## Codex 계획 검증`, `## Codex 1차 검증`, `## Claude 2차 검증` 섹션을 채울 때 적용 (ADR 0008 Decision 메커니즘 2 운영화).
-
-- **추상 표현 금지** — `보강 필요`, `근거 약함`, `커버리지 공백` 같은 추상명사로 끝맺지 않는다.
-- **구체화 4원소** (최소 2개 갖춤) — 실제 도구·파일·명령 / 수치 또는 binary 기준 / 구체 동사+결과 / 예시 1개 이상.
-- **Codex stdout은 verbatim + 평이 풀이 1줄**.
-- 자세한 규칙·나쁜 예/좋은 예: `.claude/skills/harness-workflow/SKILL.md` "## 검증 결과 기록 규칙" (SSOT).
-
-<!-- /TEMPLATE_ONLY -->
+<!-- 검증 섹션 — Codex/Claude 호출 후 verdict 1줄 갱신. harness-gate가 verdict token + placeholder denylist + 최소 30자 본문 강제. -->
 
 ## Codex 계획 검증
 
-- **상태**: 미요청
-- **요청 시점**:
-- **결론**: 미요청 / PASS / CHANGE_REQUEST / BLOCK
-- **핵심 지적**:
-- **반영 내용**:
+- **결론**: 미요청
 
 ## Codex 1차 검증
 
-- **상태**: 미요청
-- **요청 시점**:
-- **결론**: 미요청 / PASS / FIX_APPLIED / CHANGE_REQUEST / BLOCK
-- **수정 파일**:
-- **핵심 지적**:
-- **남은 리스크**:
+- **결론**: 미요청
 
 ## Claude 2차 검증
 
-- **검토 내용**:
-- **실행한 검증**:
-- **최종 판단**:
+- **최종 판단**: 미작성
 
-## 리뷰 (완료 직전)
+---
 
-- [ ] 셀프 리뷰: 이 PR을 처음 보는 사람도 EXEC_PLAN만으로 변경 의도를 이해할 수 있는가?
-- [ ] **멀티 세션 리뷰** (권장): 같은 세션의 구현자는 무의식적 바이어스가 생긴다.
-      별도 Claude 세션 또는 `codex:rescue`로 객관적 검토를 요청해 시선을 분리한다.
+<!-- 이하 섹션은 해당 시에만 추가:
+## Non-goals          ← surgical scope 정의가 필요한 경우 (인접 정리 차단)
+## 감사               ← DB/타입/config 사전 점검 결과
+## 접근법             ← 결정이 1줄 이상 필요한 경우 (대안·기각 사유는 의사결정 로그·ADR)
+## 의사결정 로그       ← plan 변경 또는 expression CR 기록
+## ADR 판단            ← ADR_TRIGGER_PARTS 파일 변경 시 (mandatory 1줄 필드를 이 섹션으로 승격)
+## 참고 자료           ← docs/research/ 발췌 링크
+## 리뷰 (완료 직전)    ← 셀프/멀티 세션 리뷰 체크
+## 회고               ← 머지 후 completed/ 이동 시
+-->
 
-## 회고 (머지 후 작성, completed/로 이동 시)
-
-- 잘된 것:
-- 다음에 할 것:
-- 발견된 부채 (→ tech-debt-tracker.md 옮길 것):
+<!-- 검증 결과 기록 규칙 SSOT: `.claude/skills/harness-workflow/SKILL.md` "## 검증 결과 기록 규칙" 참조. 추상명사 금지, 구체화 4원소 최소 2개, Codex stdout verbatim + 풀이 1줄. -->

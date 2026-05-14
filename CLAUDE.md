@@ -45,6 +45,7 @@
 - `VERIFY_ENFORCE=1` 환경에서는 검증 기록이 없거나 diff가 바뀌면 커밋이 차단된다.
 - 머지/릴리스 전에는 `node scripts/harness-gate.mjs <slug>`로 검증 증적, Codex/Claude 검증 기록, ADR 판단을 강제 확인한다.
 - `--no-verify`로 우회 금지
+- **한 commit = 한 의도. 작성 시작 전 분리한다** — 여러 의도가 묶이면 `git add`를 분리해 별도 commit. subject에 `+`가 떠오르는 순간이 분리 누락 신호 (commit-msg hook R4는 사후 안전망).
 - **사용자 승인 후 커밋한다. 자동 커밋 금지.**
 - prefix는 6개만: Feat · Fix · Style · Refactor · Docs · Chore
 - 머지 후 `node scripts/complete-task.mjs <slug>`로 exec-plan을 `completed/`로 이동, 회고 작성

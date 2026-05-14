@@ -39,5 +39,6 @@
 | [0007](0007-cloudinary-asset-folder-convention.md) | cloudinary asset folder convention | Accepted | 2026-05-11 |
 | [0008](0008-code-quality-harness.md) | 코드 품질 강제: 에이전트 리뷰 + 사전 지침 채택 (Tier 1·2 도입 유보) | Accepted | 2026-05-13 |
 | [0009](0009-commit-msg-hook-enforcement.md) | commit msg hook enforcement | Accepted | 2026-05-13 |
+| [0010](0010-harness-codex-review-cap.md) | Harness CODEX_PLAN_REVIEW 범위 한정 + plan 압축 + EXPLORE 직접 검증 | Accepted | 2026-05-14 |
 
 <!-- last-audit: 2026-05-01 -->
