@@ -34,6 +34,8 @@ export type SermonCardItem = SermonListItem &
 
 export type SeriesWithSermonCount = SermonSeries & { sermon_count: number };
 
+export type PreacherWithSermonCount = Preacher & { sermon_count: number };
+
 export interface SermonListParams {
   page?: number;
   pageSize?: number;

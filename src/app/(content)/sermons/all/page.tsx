@@ -58,15 +58,19 @@ export default async function AllSermonsPage({ searchParams }: PageProps) {
 
   const standaloneCount = computeStandaloneCount(totalCount, allSeries);
   const activeSeries = series ?? null;
+  const activePreacher = preacher ?? null;
 
   return (
     <LayoutContainer>
       <div className={styles.body}>
         <SermonSidebar
           allSeries={allSeries}
+          allPreachers={allPreachers}
           totalCount={totalCount}
           standaloneCount={standaloneCount}
           activeSeries={activeSeries}
+          activePreacher={activePreacher}
+          hasActiveFilter={hasFilter}
           params={params}
         />
         <div className={styles.main}>

@@ -8,6 +8,7 @@ import type {
   SermonWithRelations,
   SermonListItem,
   SeriesWithSermonCount,
+  PreacherWithSermonCount,
   YearCount,
   AdminSermon,
   AdminSermonListParams,
@@ -160,17 +161,24 @@ export const sermonService = (supabase: SupabaseClient<Database>) => ({
     return (handled.data ?? []) as unknown as SermonWithRelations[];
   },
 
-  /** 활성 설교자 전체 조회 */
-  allPreachers: async () => {
+  /** 활성 설교자 전체 + 설교 편수 조회 (sermon_count는 allSeries와 동일 패턴 — published/deleted 필터 없음) */
+  allPreachers: async (): Promise<PreacherWithSermonCount[]> => {
     const res = await supabase
       .from('preachers')
-      .select('*')
+      .select('*, sermons(count)')
       .eq('is_active', true)
       .order('sort_order', { ascending: true })
       .order('name', { ascending: true });
 
     const handled = handleResponse(res);
-    return handled.data ?? [];
+    const rows = (handled.data ?? []) as unknown as Array<
+      PreacherWithSermonCount & { sermons: Array<{ count: number }> }
+    >;
+
+    return rows.map(({ sermons, ...rest }) => ({
+      ...rest,
+      sermon_count: sermons?.[0]?.count ?? 0
+    }));
   },
 
   /** 최근 설교를 경량 필드셋으로 조회 (홈 카드용) */
