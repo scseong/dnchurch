@@ -41,7 +41,8 @@ export const getRecentSermons = (limit = 4) => {
   return sermonService(supabase).recent(limit);
 };
 
-// 최신 published 설교 1건 (관계 join 포함). `is_featured` 컬럼 미존재로 인한 정책 — 어드민 수동 마킹 도입 시 단일 교체 지점.
+// 최신 published 설교 1건 (관계 join 포함). 정렬은 sermon-service.ts:68 `sermon_date desc` 기본값에 의존.
+// `is_featured` 컬럼 미존재로 인한 정책 — 어드민 수동 마킹 도입 시 단일 교체 지점.
 export const getFeaturedSermon = async () => {
   const { sermons } = await getSermons({ pageSize: 1 });
   return sermons[0] ?? null;

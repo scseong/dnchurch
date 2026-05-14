@@ -260,6 +260,24 @@ node scripts/verify-task.mjs sermons-featured
 - **수정 파일**: `src/utils/cloudinary.ts` (Codex 직접) + `src/app/(content)/sermons/_component/SermonFeatured/SermonFeatured.module.scss` (Claude 반영) + `src/app/(content)/sermons/_component/SermonFeatured/SermonFeatured.tsx` (Claude verify-task 발견 추가 반영)
 - **남은 리스크**: 없음 — verify-task.mjs PASS 후 해소
 
+### 2차 — PR #87 리뷰 fix (2026-05-14)
+
+**컨텍스트**: PR #87 open 후 자동 리뷰 4건 — Gemini 2(medium) + Codex 2(P2). 모두 material/operational, false alarm 1건 포함.
+
+**Codex verdict** (verbatim): `PASS`.
+
+**검토 범위**: working-tree diff 4 파일 (`services/sermon/index.ts`, `utils/cloudinary.ts`, `app/(content)/sermons/page.tsx`, `app/_component/home/RecentSermons.tsx`).
+
+**개별 verdict** (verbatim 발췌):
+> **G-1** — PASS. `src/services/sermon/index.ts:44` 주석만 변경됐고, `src/services/sermon/sermon-service.ts:68`의 `.order('sermon_date', { ascending: false })`가 `list()` 기본 쿼리에 무조건 적용됩니다.
+> **G-2** — PASS. `src/utils/cloudinary.ts:54`의 `if (remoteUrl === null) return null;`이 `src/utils/cloudinary.ts:55`의 `if (!/^https?:\/\//i.test(remoteUrl)) return remoteUrl;`보다 먼저 있습니다. `https://img.youtube.com/...` 같은 외부 URL은 정규식 통과 후 기존 fetch URL 생성 경로로 진행합니다.
+> **C-1** — PASS. `searchParams` 타입은 `Promise<Record<string, string | string[] | undefined>>` (Next.js 15 비동기 형식) … `/sermons/all?${query}` redirect 호출이 `getFeaturedSermon()` await보다 앞에 위치
+> **C-2** — PASS. `src/app/_component/home/RecentSermons.tsx:23` `href="/sermons/all"` 한 줄만 변경됐고, `git diff --numstat`도 이 파일을 `1 1`로 표시했습니다.
+
+**평이 풀이**: Gemini 2건은 (a) `getFeaturedSermon` 정렬 의존이 `list()` hardcoded `.order('sermon_date', {ascending: false})`라 false alarm — 주석으로 출처 명시. (b) `cloudinaryFetchUrl`이 public ID 입력 시 잘못된 fetch URL 생성 위험을 `if (!/^https?:\/\//i.test(...)) return remoteUrl;` 가드로 차단. Codex 2건은 archive 이관 후 (c) `/sermons?series=...` 구 URL이 Featured-only로 끊기는 회귀를 `redirect('/sermons/all?...')`로 보존, (d) 홈 `RecentSermons.tsx:23` CTA를 `/sermons/all`로 정정.
+
+**수정 파일**: 4 파일 (위 검토 범위). G-1 주석 1줄, G-2 가드 1줄, C-1 redirect 분기 신규(15줄), C-2 href 1줄.
+
 ## Claude 2차 검증
 
 - **검토 내용**: Codex 1차 FIX 1건(cloudinary.ts) + Claude 반영 5건(SermonFeatured.module.scss) + verify-task 추가 발견 1건(`<Image>` → `<CloudinaryImage>`) diff 교차 확인.
@@ -271,6 +289,18 @@ node scripts/verify-task.mjs sermons-featured
   - `git status --short`: M 10 + ?? 1 (SermonFeatured 디렉토리 신규). plan §영향받는 파일 list와 정확히 일치.
   - 사용자 수동 확인 완료 (2026-05-14): 3 URL 200 + 필터 4 clickpath + Featured `<Image>` URL `res.cloudinary.com` 시작 모두 정상.
 - **최종 판단**: ✅ **PASS** — Codex 1차 FIX 1건 + Claude 반영 5건 + verify-task 추가 발견 1건 모두 plan SC#1~7과 정합. 사용자 승인 받음. 커밋 진행 가능.
+
+### 2차 — PR #87 리뷰 fix (2026-05-14)
+
+- **검토 내용**: PR #87 자동 리뷰 4건(Gemini medium 2 + Codex P2 2)에 대한 fix diff 4 파일 교차 확인.
+  - G-1 (`services/sermon/index.ts:44`): `sermon-service.ts:68`의 `.order('sermon_date', {ascending: false})` 위치 직접 확인 — Gemini의 "정렬 보장 안 됨" 지적은 함수 이름만 보고 list() 본문 미확인한 false alarm. 주석 1줄로 출처 명시(`sermon-service.ts:68 'sermon_date desc' 기본값에 의존`)만 적용, 코드 변경 0줄.
+  - G-2 (`utils/cloudinary.ts:54-58`): null guard 다음, `res.cloudinary.com` passthrough 이전 위치에 `if (!/^https?:\/\//i.test(remoteUrl)) return remoteUrl;` 가드 삽입. 기존 YouTube 썸네일(`https://img.youtube.com/...`) 경로는 정규식 통과 후 fetch URL 변환 — 동작 회귀 0. public ID 입력 시 잘못된 fetch URL 생성하던 잠재 버그 차단.
+  - C-1 (`app/(content)/sermons/page.tsx`): `searchParams: Promise<Record<string, string | string[] | undefined>>` Next.js 15 비동기 시그니처. `URLSearchParams` + `qs.append` 반복으로 단일·배열 값 모두 보존. `redirect('/sermons/all?${query}')` 호출이 `getFeaturedSermon()` await보다 앞에 위치 — 구 URL 진입 시 DB 쿼리 없이 short-circuit.
+  - C-2 (`app/_component/home/RecentSermons.tsx:23`): `href="/sermons"` → `href="/sermons/all"` 1줄, `git diff --numstat`로 `1 1` 확인. 인접 정리 0.
+- **실행한 검증**: `node scripts/verify-task.mjs sermons-featured` 재실행 (run-id `20260514-164407`) → ✓ 필수 검증 통과 (ESLint / stylelint / Build (next) / Knip).
+  - `logs/sermons-featured/20260514-164407/summary.log`: `✓ 필수 검증 통과 (⚠ 경고: Knip — 기존 부채, 커밋 차단 안 됨)`.
+  - Codex 1차 PASS verbatim 인용 — §Codex 1차 검증 2차 섹션 참조.
+- **최종 판단**: ✅ **PASS** — PR #87 리뷰 4건 fix 모두 surgical change + plan SC 범위 내. 사용자 승인 받음. 커밋 진행 가능.
 
 ## 리뷰 (완료 직전)
 

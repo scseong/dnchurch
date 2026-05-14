@@ -20,7 +20,7 @@ export default async function RecentSermons() {
             <span className={styles.caption}>the Message</span>
             <h2>지난 설교 다시보기</h2>
           </div>
-          <Link href="/sermons" className={styles.header_link}>
+          <Link href="/sermons/all" className={styles.header_link}>
             설교 전체 보기 →
           </Link>
         </div>
