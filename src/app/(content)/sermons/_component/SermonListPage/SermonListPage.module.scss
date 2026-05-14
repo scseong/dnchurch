@@ -325,6 +325,52 @@ $dot-size: 0.4rem;
   white-space: nowrap;
 }
 
+// ── Result Header (필터 모드 결과 헤더 + 정렬) ──
+
+.result_header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: $spacing-12;
+  margin-bottom: $content-gap-m;
+  padding-bottom: $spacing-12;
+  border-bottom: 1px solid $border-subtle;
+}
+
+.result_count {
+  margin: 0;
+  font-size: $font-size-13;
+  color: $txt-secondary;
+
+  strong {
+    color: $txt-primary;
+    font-weight: $font-weight-bold;
+    font-variant-numeric: tabular-nums;
+  }
+}
+
+.sort_select {
+  padding: $spacing-8 $spacing-32 $spacing-8 $spacing-12;
+  font-size: $font-size-12;
+  font-weight: $font-weight-semibold;
+  font-family: inherit;
+  color: $txt-primary;
+  background-color: $bg-card;
+  border: 1px solid $border-primary;
+  border-radius: $radius-xs;
+  cursor: pointer;
+  appearance: none;
+  background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='10' viewBox='0 0 24 24' fill='none' stroke='%23737373' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right $spacing-10 center;
+}
+
+.sort_select_active {
+  color: $primary;
+  background-color: $primary-subtle;
+  border-color: $primary;
+}
+
 // ── Search Feedback Card (검색어 활성 시) ──
 
 .search_feedback {

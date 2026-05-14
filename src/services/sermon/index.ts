@@ -61,7 +61,7 @@ export const getSermonArchiveList = () =>
 export const getFilteredSermons = (
   params: Pick<
     SermonListParams,
-    'seriesId' | 'preacherId' | 'search' | 'year' | 'page'
+    'seriesId' | 'preacherId' | 'search' | 'year' | 'page' | 'sort'
   >
 ) => getSermons({ pageSize: FILTER_PAGE_SIZE, ...params });
 

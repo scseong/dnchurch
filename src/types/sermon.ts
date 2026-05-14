@@ -36,6 +36,8 @@ export type SeriesWithSermonCount = SermonSeries & { sermon_count: number };
 
 export type PreacherWithSermonCount = Preacher & { sermon_count: number };
 
+export type SermonSortKey = 'recent' | 'oldest';
+
 export interface SermonListParams {
   page?: number;
   pageSize?: number;
@@ -44,6 +46,7 @@ export interface SermonListParams {
   serviceType?: ServiceType;
   year?: number;
   search?: string;
+  sort?: SermonSortKey;
 }
 
 export type YearCount = {

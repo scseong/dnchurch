@@ -3,6 +3,7 @@
 import { useCallback } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { SERMON_FILTER_KEYS, type SermonFilterPatch } from '@/utils/sermon';
+import type { SermonSortKey } from '@/types/sermon';
 
 export default function useSermonFilter() {
   const router = useRouter();
@@ -14,10 +15,12 @@ export default function useSermonFilter() {
   const preacher = sp.get(preacherKey);
   const q = sp.get(qKey) ?? '';
   const year = sp.get(yearKey);
+  const rawSort = sp.get('sort');
+  const sort: SermonSortKey = rawSort === 'oldest' ? 'oldest' : 'recent';
   const isActive = !!(series || preacher || q || year);
 
-  const setFilter = useCallback(
-    (patch: SermonFilterPatch) => {
+  const updateParams = useCallback(
+    (patch: Record<string, string | null | undefined>) => {
       const next = new URLSearchParams(sp);
       for (const [key, value] of Object.entries(patch)) {
         if (value === undefined) continue;
@@ -30,5 +33,16 @@ export default function useSermonFilter() {
     [router, sp]
   );
 
-  return { series, preacher, q, year, isActive, setFilter };
+  const setFilter = useCallback(
+    (patch: SermonFilterPatch) => updateParams(patch),
+    [updateParams]
+  );
+
+  const setSort = useCallback(
+    (value: SermonSortKey) =>
+      updateParams({ sort: value === 'recent' ? null : value }),
+    [updateParams]
+  );
+
+  return { series, preacher, q, year, sort, isActive, setFilter, setSort };
 }

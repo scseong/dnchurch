@@ -6,6 +6,7 @@ import type {
   SermonArchiveView,
   SeriesWithSermonCount,
   SermonListParams,
+  SermonSortKey,
   YearCount
 } from '@/types/sermon';
 
@@ -112,23 +113,28 @@ export type SermonFilterPatch = {
   preacher?: string | null;
   q?: string | null;
   year?: string | null;
+  sort?: SermonSortKey | null;
 };
 
-export const SERMON_FILTER_KEYS = ['series', 'preacher', 'q', 'year'] as const satisfies readonly (keyof SermonFilterPatch)[];
+export const SERMON_FILTER_KEYS = ['series', 'preacher', 'q', 'year'] as const;
+// sort는 필터 reset에서 보존하기 위해 별도 추적 — buildSermonHref keys에는 포함, parseSermonParams에서 별도 검증
+export const SERMON_URL_KEYS = [...SERMON_FILTER_KEYS, 'sort'] as const;
 
 export function parseSermonParams(raw: SearchParams) {
   const [seriesKey, preacherKey, searchKey, yearKey] = SERMON_FILTER_KEYS;
+  const rawSort = getString(raw, 'sort');
 
   return {
     series: getString(raw, seriesKey),
     preacher: getString(raw, preacherKey),
     search: getString(raw, searchKey),
     year: getInt(raw, yearKey, { min: 1900, max: 2100 }),
+    sort: (rawSort === 'oldest' ? 'oldest' : 'recent') as SermonSortKey,
   };
 }
 
 export const buildSermonHref = (
   params: SearchParams,
   patch: SermonFilterPatch = {},
-): string => buildFilterHref('/sermons/all', params, SERMON_FILTER_KEYS, patch);
+): string => buildFilterHref('/sermons/all', params, SERMON_URL_KEYS, patch);
 

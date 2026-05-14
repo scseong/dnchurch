@@ -59,14 +59,15 @@ export const sermonService = (supabase: SupabaseClient<Database>) => ({
     preacherId,
     serviceType,
     year,
-    search
+    search,
+    sort = 'recent'
   }: SermonListParams = {}) => {
     let query = supabase
       .from('sermons')
       .select(SERMON_WITH_RELATIONS_SELECT, { count: 'exact' })
       .eq('is_published', true)
       .is('deleted_at', null)
-      .order('sermon_date', { ascending: false });
+      .order('sermon_date', { ascending: sort === 'oldest' });
 
     if (seriesId === '__none') {
       query = query.is('series_id', null);

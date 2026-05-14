@@ -4,6 +4,7 @@ import SermonSidebar from '../_component/SermonListPage/SermonSidebar';
 import SermonToolbar from '../_component/SermonListPage/SermonToolbar';
 import SermonArchive from '../_component/SermonListPage/SermonArchive';
 import SermonFilteredList from '../_component/SermonListPage/SermonFilteredList';
+import SermonResultHeader from '../_component/SermonListPage/SermonResultHeader';
 import {
   getAllPreachers,
   getAllSeries,
@@ -32,7 +33,7 @@ type PageProps = {
 
 export default async function AllSermonsPage({ searchParams }: PageProps) {
   const params = await searchParams;
-  const { series, preacher, search, year } = parseSermonParams(params);
+  const { series, preacher, search, year, sort } = parseSermonParams(params);
   const hasFilter = !!(series || preacher || search || year);
 
   const [allSeries, allPreachers] = await Promise.all([
@@ -51,7 +52,8 @@ export default async function AllSermonsPage({ searchParams }: PageProps) {
           seriesId: resolvedSeriesId,
           preacherId: resolvedPreacherId,
           search,
-          year
+          year,
+          sort
         })
       : getSermonArchiveList()
   ]);
@@ -82,7 +84,13 @@ export default async function AllSermonsPage({ searchParams }: PageProps) {
             resultCount={listResult.total}
           />
           {hasFilter ? (
-            <SermonFilteredList sermons={listResult.sermons} />
+            <>
+              <SermonResultHeader
+                resultCount={listResult.total}
+                hasQuery={!!search}
+              />
+              <SermonFilteredList sermons={listResult.sermons} />
+            </>
           ) : (
             <SermonArchive archive={buildSermonArchive(listResult.sermons, yearCounts)} />
           )}
