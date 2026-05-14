@@ -27,6 +27,13 @@
   }
 }
 
+// SermonOtherByPreacher row 2 full-width (sermons-detail-mobile D2). 단독 설교 flex layout에서는 inert.
+.other_full_width {
+  @include respond-up($breakpoint-pc-sm) {
+    grid-column: 1 / -1;
+  }
+}
+
 .main_column {
   display: flex;
   flex-direction: column;
@@ -92,9 +99,14 @@
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  gap: $spacing-8;
-  font-size: $font-size-13;
+  gap: $spacing-4;
+  font-size: $font-size-12;
   color: $txt-tertiary;
+
+  @include respond-up($breakpoint-tablet) {
+    gap: $spacing-8;
+    font-size: $font-size-13;
+  }
 }
 
 .dot {

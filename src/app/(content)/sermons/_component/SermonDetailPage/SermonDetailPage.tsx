@@ -70,12 +70,7 @@ export default function SermonDetailPage({
 
             {activeResources.length > 0 && <ResourceList resources={activeResources} />}
 
-            <SermonOtherByPreacher
-              preacherLabel={preacherLabel}
-              sermons={otherSermonsByPreacher}
-            />
-
-            {/* 노트는 mockup에 없으나 dnchurch 자체 기능. 임시 페이지 최하단 노출 (의사결정 로그 D2 — 별도 task로 위치 확정 예정) */}
+            {/* 노트는 mockup에 없으나 dnchurch 자체 기능. 임시 위치 — 별도 task로 위치 확정 예정 (sermons-detail-main D2) */}
             <SermonNoteEditor sermonId={String(sermon.id)} />
           </div>
         </div>
@@ -88,6 +83,13 @@ export default function SermonDetailPage({
             onSelect={handleEpisodeSelect}
           />
         )}
+
+        <div className={styles.other_full_width}>
+          <SermonOtherByPreacher
+            preacherLabel={preacherLabel}
+            sermons={otherSermonsByPreacher}
+          />
+        </div>
       </div>
     </LayoutContainer>
   );
