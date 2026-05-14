@@ -8,9 +8,16 @@ import styles from './SermonListPage.module.scss';
 type Props = {
   resultCount: number;
   hasQuery: boolean;
+  currentPage: number;
+  totalPages: number;
 };
 
-export default function SermonResultHeader({ resultCount, hasQuery }: Props) {
+export default function SermonResultHeader({
+  resultCount,
+  hasQuery,
+  currentPage,
+  totalPages
+}: Props) {
   const { sort, setSort } = useSermonFilter();
   const isActive = sort !== 'recent';
 
@@ -20,6 +27,11 @@ export default function SermonResultHeader({ resultCount, hasQuery }: Props) {
         <span>{hasQuery ? '결과 ' : '총 '}</span>
         <strong>{resultCount}</strong>
         <span>개 설교</span>
+        {totalPages > 1 && (
+          <span className={styles.result_page_info}>
+            · {currentPage} / {totalPages} 페이지
+          </span>
+        )}
       </p>
       <select
         className={clsx(styles.sort_select, isActive && styles.sort_select_active)}

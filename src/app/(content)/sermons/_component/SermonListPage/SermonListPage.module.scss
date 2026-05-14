@@ -349,6 +349,13 @@ $dot-size: 0.4rem;
   }
 }
 
+.result_page_info {
+  margin-left: $spacing-8;
+  font-size: $font-size-12;
+  color: $txt-tertiary;
+  font-variant-numeric: tabular-nums;
+}
+
 .sort_select {
   padding: $spacing-8 $spacing-32 $spacing-8 $spacing-12;
   font-size: $font-size-12;

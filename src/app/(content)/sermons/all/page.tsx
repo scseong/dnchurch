@@ -1,11 +1,14 @@
 import type { Metadata } from 'next';
+import { redirect } from 'next/navigation';
 import { LayoutContainer } from '@/components/layout';
+import { Pagination } from '@/components/ui';
 import SermonSidebar from '../_component/SermonListPage/SermonSidebar';
 import SermonToolbar from '../_component/SermonListPage/SermonToolbar';
 import SermonArchive from '../_component/SermonListPage/SermonArchive';
 import SermonFilteredList from '../_component/SermonListPage/SermonFilteredList';
 import SermonResultHeader from '../_component/SermonListPage/SermonResultHeader';
 import {
+  FILTER_PAGE_SIZE,
   getAllPreachers,
   getAllSeries,
   getFilteredSermons,
@@ -15,6 +18,7 @@ import {
 } from '@/services/sermon';
 import {
   buildSermonArchive,
+  buildSermonHref,
   computeStandaloneCount,
   parseSermonParams,
   resolvePreacherName,
@@ -33,7 +37,7 @@ type PageProps = {
 
 export default async function AllSermonsPage({ searchParams }: PageProps) {
   const params = await searchParams;
-  const { series, preacher, search, year, sort } = parseSermonParams(params);
+  const { series, preacher, search, year, sort, page } = parseSermonParams(params);
   const hasFilter = !!(series || preacher || search || year);
 
   const [allSeries, allPreachers] = await Promise.all([
@@ -53,7 +57,8 @@ export default async function AllSermonsPage({ searchParams }: PageProps) {
           preacherId: resolvedPreacherId,
           search,
           year,
-          sort
+          sort,
+          page
         })
       : getSermonArchiveList()
   ]);
@@ -61,6 +66,15 @@ export default async function AllSermonsPage({ searchParams }: PageProps) {
   const standaloneCount = computeStandaloneCount(totalCount, allSeries);
   const activeSeries = series ?? null;
   const activePreacher = preacher ?? null;
+  const filteredTotal = listResult.total;
+  const totalPages = hasFilter
+    ? Math.max(1, Math.ceil(filteredTotal / FILTER_PAGE_SIZE))
+    : 1;
+
+  // Out-of-range page → 마지막 페이지로 redirect (D4)
+  if (hasFilter && filteredTotal > 0 && page > totalPages) {
+    redirect(buildSermonHref(params, { page: String(totalPages) }));
+  }
 
   return (
     <LayoutContainer>
@@ -86,10 +100,17 @@ export default async function AllSermonsPage({ searchParams }: PageProps) {
           {hasFilter ? (
             <>
               <SermonResultHeader
-                resultCount={listResult.total}
+                resultCount={filteredTotal}
                 hasQuery={!!search}
+                currentPage={page}
+                totalPages={totalPages}
               />
               <SermonFilteredList sermons={listResult.sermons} />
+              <Pagination
+                totalCount={filteredTotal}
+                pageSize={FILTER_PAGE_SIZE}
+                currentPage={page}
+              />
             </>
           ) : (
             <SermonArchive archive={buildSermonArchive(listResult.sermons, yearCounts)} />

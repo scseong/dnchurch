@@ -114,6 +114,7 @@ export type SermonFilterPatch = {
   q?: string | null;
   year?: string | null;
   sort?: SermonSortKey | null;
+  page?: string | null;
 };
 
 export const SERMON_FILTER_KEYS = ['series', 'preacher', 'q', 'year'] as const;
@@ -130,11 +131,15 @@ export function parseSermonParams(raw: SearchParams) {
     search: getString(raw, searchKey),
     year: getInt(raw, yearKey, { min: 1900, max: 2100 }),
     sort: (rawSort === 'oldest' ? 'oldest' : 'recent') as SermonSortKey,
+    page: getInt(raw, 'page', { min: 1 }) ?? 1,
   };
 }
 
 export const buildSermonHref = (
   params: SearchParams,
   patch: SermonFilterPatch = {},
-): string => buildFilterHref('/sermons/all', params, SERMON_URL_KEYS, patch);
+): string => {
+  const keys = 'page' in patch ? [...SERMON_URL_KEYS, 'page'] : SERMON_URL_KEYS;
+  return buildFilterHref('/sermons/all', params, keys, patch);
+};
 

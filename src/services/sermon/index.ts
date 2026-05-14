@@ -9,7 +9,7 @@ import type { SermonListParams } from '@/types/sermon';
 // 아카이브 초기 로드는 최신 설교 N개(featured 1 + 그리드 나머지).
 // 지난 연도는 연도 필터(`?year=YYYY`)로 진입 시 서버 쿼리로 해당 연도만 로드.
 const ARCHIVE_RECENT_COUNT = 12;
-const FILTER_PAGE_SIZE = 24;
+export const FILTER_PAGE_SIZE = 24;
 
 export const getSermons = (params: SermonListParams = {}) => {
   const supabase = createStaticClient(sermonCache.list());
