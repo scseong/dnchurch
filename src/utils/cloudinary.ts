@@ -48,6 +48,16 @@ export const getCloudinaryUrl = (publicId: string) =>
 export const getCloudinaryDownloadUrl = (publicId: string) =>
   `${BASE_URL}/fl_attachment/${normalizePublicId(publicId)}`;
 
+// 외부 호스트(YouTube 썸네일 등)를 Cloudinary fetch URL로 감싸 next/image의 res.cloudinary.com remotePattern을 통과시키는 helper.
+// public ID(http(s):// 미접두) 입력은 fetch가 아니라 image/upload 변환 대상이므로 그대로 반환 — 호출부에서 <CloudinaryImage> loader가 처리.
+export const cloudinaryFetchUrl = (remoteUrl: string | null): string | null => {
+  if (remoteUrl === null) return null;
+  if (!/^https?:\/\//i.test(remoteUrl)) return remoteUrl;
+  if (/^https:\/\/res\.cloudinary\.com\//i.test(remoteUrl)) return remoteUrl;
+  if (!CLOUD_NAME) return null;
+  return `https://res.cloudinary.com/${CLOUD_NAME}/image/fetch/f_auto,q_auto/${encodeURIComponent(remoteUrl)}`;
+};
+
 export type CropMode = 'fill' | 'crop' | 'thumb' | 'scale' | 'fit' | 'limit' | 'pad' | 'auto';
 export type CropGravity = 'auto' | 'face' | 'faces' | 'center' | 'north' | 'south' | 'east' | 'west' | 'north_east' | 'north_west' | 'south_east' | 'south_west';
 

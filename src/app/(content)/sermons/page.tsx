@@ -1,88 +1,37 @@
 import type { Metadata } from 'next';
+import { redirect } from 'next/navigation';
 import { LayoutContainer } from '@/components/layout';
-import SermonSidebar from './_component/SermonListPage/SermonSidebar';
-import SermonToolbar from './_component/SermonListPage/SermonToolbar';
-import SermonArchive from './_component/SermonListPage/SermonArchive';
-import SermonFilteredList from './_component/SermonListPage/SermonFilteredList';
-import {
-  getAllPreachers,
-  getAllSeries,
-  getFilteredSermons,
-  getSermonArchiveList,
-  getSermonYearCounts,
-  getSermonsTotalCount
-} from '@/services/sermon';
-import {
-  buildSermonArchive,
-  computeStandaloneCount,
-  parseSermonParams,
-  resolvePreacherName,
-  resolveSeriesSlug
-} from '@/utils/sermon';
-import styles from './_component/SermonListPage/SermonListPage.module.scss';
+import { getFeaturedSermon } from '@/services/sermon';
+import SermonFeatured from './_component/SermonFeatured/SermonFeatured';
 
 export const metadata: Metadata = {
-  title: '말씀',
+  title: '설교',
   description: '대구동남교회 설교 영상과 말씀을 만나보세요.'
 };
 
-type PageProps = {
+type SermonsPageProps = {
   searchParams: Promise<Record<string, string | string[] | undefined>>;
 };
 
-export default async function SermonsPage({ searchParams }: PageProps) {
+// archive 뷰는 `/sermons/all`로 이관됨 (2026-05-14, exec-plan sermons-featured).
+// 기존 공유·인덱싱된 필터 URL(`/sermons?series=...&year=...&q=...`)이 Featured 카드만 보여주는 회귀를 막기 위해
+// 쿼리가 존재하면 `/sermons/all`로 query를 보존해 redirect한다.
+export default async function SermonsPage({ searchParams }: SermonsPageProps) {
   const params = await searchParams;
-  const { series, preacher, search, year } = parseSermonParams(params);
-  const hasFilter = !!(series || preacher || search || year);
+  const qs = new URLSearchParams();
+  for (const [key, value] of Object.entries(params)) {
+    if (value === undefined) continue;
+    if (Array.isArray(value)) value.forEach((v) => qs.append(key, v));
+    else qs.append(key, value);
+  }
+  const query = qs.toString();
+  if (query) redirect(`/sermons/all?${query}`);
 
-  const [allSeries, allPreachers] = await Promise.all([
-    getAllSeries(),
-    getAllPreachers(),
-  ]);
-
-  const resolvedSeriesId = resolveSeriesSlug(series, allSeries);
-  const resolvedPreacherId = resolvePreacherName(preacher, allPreachers);
-
-  const [totalCount, yearCounts, listResult] = await Promise.all([
-    getSermonsTotalCount(),
-    getSermonYearCounts(),
-    hasFilter
-      ? getFilteredSermons({
-          seriesId: resolvedSeriesId,
-          preacherId: resolvedPreacherId,
-          search,
-          year
-        })
-      : getSermonArchiveList()
-  ]);
-
-  const standaloneCount = computeStandaloneCount(totalCount, allSeries);
-  const activeSeries = series ?? null;
+  const featured = await getFeaturedSermon();
 
   return (
     <LayoutContainer>
-      <div className={styles.body}>
-        <SermonSidebar
-          allSeries={allSeries}
-          totalCount={totalCount}
-          standaloneCount={standaloneCount}
-          activeSeries={activeSeries}
-          params={params}
-        />
-        <div className={styles.main}>
-          <SermonToolbar
-            allSeries={allSeries}
-            allPreachers={allPreachers}
-            totalCount={totalCount}
-            standaloneCount={standaloneCount}
-          />
-          {hasFilter ? (
-            <SermonFilteredList sermons={listResult.sermons} />
-          ) : (
-            <SermonArchive archive={buildSermonArchive(listResult.sermons, yearCounts)} />
-          )}
-        </div>
-      </div>
+      <SermonFeatured sermon={featured} />
     </LayoutContainer>
   );
 }

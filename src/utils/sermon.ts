@@ -130,5 +130,5 @@ export function parseSermonParams(raw: SearchParams) {
 export const buildSermonHref = (
   params: SearchParams,
   patch: SermonFilterPatch = {},
-): string => buildFilterHref('/sermons', params, SERMON_FILTER_KEYS, patch);
+): string => buildFilterHref('/sermons/all', params, SERMON_FILTER_KEYS, patch);
 
