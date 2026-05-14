@@ -1,3 +1,6 @@
+// 데스크톱 시리즈 사이드바 폭 — mockup `DetailPCBody` line 1282 (`1fr 360px`)
+$sidebar-width: 36rem;
+
 // ══════════════════════════════════════════
 // Layout
 // ══════════════════════════════════════════
@@ -21,7 +24,7 @@
 .layout_with_sidebar {
   @include respond-up($breakpoint-pc-sm) {
     display: grid;
-    grid-template-columns: 1fr 36rem;
+    grid-template-columns: 1fr $sidebar-width;
     align-items: start;
     gap: $section-gap-40 $content-gap-xl;
   }

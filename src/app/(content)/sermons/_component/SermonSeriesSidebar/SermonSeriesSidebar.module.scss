@@ -108,30 +108,25 @@ $episode-list-max-height: 48rem;
   grid-template-columns: $spacing-32 1fr auto;
   gap: $spacing-10;
   align-items: center;
-  width: 100%;
   padding: $spacing-12 $spacing-16;
-  background: transparent;
-  border: none;
   border-bottom: 1px solid $border-subtle;
-  text-align: left;
-  cursor: pointer;
+  text-decoration: none;
   color: inherit;
+  // PC drag-ghost 차단 (Phase 1-2 D5 패턴)
+  -webkit-user-drag: none;
 
   &:last-child {
     border-bottom: none;
   }
+}
 
-  &:not(:disabled) {
-    @include hover-bg-shift($bg-hover);
-  }
-
-  &:disabled {
-    cursor: default;
-  }
+.episode_row:not(.episode_row_current) {
+  @include hover-bg-shift($bg-hover);
 }
 
 .episode_row_current {
   background-color: $primary-subtle;
+  cursor: default;
 }
 
 .order_num {

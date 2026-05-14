@@ -1,7 +1,6 @@
 'use client';
 
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
 import clsx from 'clsx';
 import { IoDocumentTextOutline, IoDownloadOutline } from 'react-icons/io5';
 import { LayoutContainer } from '@/components/layout';
@@ -12,7 +11,7 @@ import SermonNoteEditor from '../SermonNoteEditor/SermonNoteEditor';
 import SermonSeriesSidebar from '../SermonSeriesSidebar/SermonSeriesSidebar';
 import SermonOtherByPreacher from '../SermonOtherByPreacher/SermonOtherByPreacher';
 import { formattedDate } from '@/utils/date';
-import { formatSermonDuration } from '@/utils/sermon';
+import { formatPreacherLabel, formatSermonDuration } from '@/utils/sermon';
 import type { SermonWithRelations, SermonResource } from '@/types/sermon';
 import styles from './SermonDetailPage.module.scss';
 
@@ -27,19 +26,11 @@ export default function SermonDetailPage({
   seriesEpisodes,
   otherSermonsByPreacher
 }: Props) {
-  const router = useRouter();
-
-  const preacherLabel = sermon.preacher
-    ? `${sermon.preacher.name}${sermon.preacher.title ? ` ${sermon.preacher.title}` : ''}`
-    : '';
+  const preacherLabel = formatPreacherLabel(sermon.preacher);
   const duration = formatSermonDuration(sermon.duration);
   const series = sermon.sermon_series;
   const hasSeriesSidebar = Boolean(series) && seriesEpisodes.length > 0;
   const activeResources = sermon.sermon_resources.filter((r) => !r.deleted_at);
-
-  const handleEpisodeSelect = (ep: SermonWithRelations) => {
-    router.push(`/sermons/${ep.id}`);
-  };
 
   return (
     <LayoutContainer>
@@ -80,7 +71,6 @@ export default function SermonDetailPage({
             series={series}
             episodes={seriesEpisodes}
             currentSermonId={sermon.id}
-            onSelect={handleEpisodeSelect}
           />
         )}
 

@@ -6,7 +6,7 @@ import {
   getSermonsBySeries,
   incrementSermonViewCount
 } from '@/services/sermon';
-import { getSermonThumbnail } from '@/utils/sermon';
+import { formatPreacherLabel, getSermonThumbnail } from '@/utils/sermon';
 import type { SermonWithRelations } from '@/types/sermon';
 import SermonDetailPage from '../_component/SermonDetailPage/SermonDetailPage';
 
@@ -20,9 +20,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   if (!sermon) return {};
 
   const title = sermon.title;
-  const preacherLabel = sermon.preacher
-    ? `${sermon.preacher.name}${sermon.preacher.title ? ` ${sermon.preacher.title}` : ''}`
-    : '';
+  const preacherLabel = formatPreacherLabel(sermon.preacher);
   const description = sermon.summary ?? `${preacherLabel}의 설교`;
   const thumbnail = getSermonThumbnail(sermon);
 

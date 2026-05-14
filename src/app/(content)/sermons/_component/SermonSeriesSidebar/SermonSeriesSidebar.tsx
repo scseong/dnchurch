@@ -1,5 +1,4 @@
-'use client';
-
+import Link from 'next/link';
 import clsx from 'clsx';
 import { formattedDate } from '@/utils/date';
 import { formatSermonDuration } from '@/utils/sermon';
@@ -10,15 +9,9 @@ type Props = {
   series: SermonSeries;
   episodes: SermonWithRelations[];
   currentSermonId: number;
-  onSelect: (sermon: SermonWithRelations) => void;
 };
 
-export default function SermonSeriesSidebar({
-  series,
-  episodes,
-  currentSermonId,
-  onSelect
-}: Props) {
+export default function SermonSeriesSidebar({ series, episodes, currentSermonId }: Props) {
   if (episodes.length === 0) return null;
 
   const isCompleted = Boolean(series.ended_at);
@@ -45,49 +38,74 @@ export default function SermonSeriesSidebar({
         </div>
       </section>
 
-      <section className={styles.list_card}>
+      <nav className={styles.list_card} aria-label="시리즈 회차 목록">
         <header className={styles.list_header}>전체 회차 ({episodes.length}편)</header>
         <ul className={styles.episode_list}>
-          {episodes.map((ep, idx) => {
-            const isCurrent = ep.id === currentSermonId;
-            const order = ep.series_order ?? idx + 1;
-            const duration = formatSermonDuration(ep.duration);
-
-            return (
-              <li key={ep.id}>
-                <button
-                  type="button"
-                  className={clsx(styles.episode_row, isCurrent && styles.episode_row_current)}
-                  onClick={() => onSelect(ep)}
-                  disabled={isCurrent}
-                  aria-current={isCurrent ? 'true' : undefined}
-                >
-                  <span className={styles.order_num}>{String(order).padStart(2, '0')}</span>
-                  <span className={styles.info}>
-                    <span className={styles.title}>{ep.title}</span>
-                    <span className={styles.meta}>
-                      {formattedDate(ep.sermon_date, 'YYYY.MM.DD')}
-                      {duration && (
-                        <>
-                          <span className={styles.meta_dot} aria-hidden="true">·</span>
-                          {duration}
-                        </>
-                      )}
-                    </span>
-                  </span>
-                  {isCurrent && (
-                    <span className={styles.play_indicator} aria-hidden="true">
-                      <svg width="9" height="9" viewBox="0 0 24 24" fill="currentColor">
-                        <path d="M8 5v14l11-7z" />
-                      </svg>
-                    </span>
-                  )}
-                </button>
-              </li>
-            );
-          })}
+          {episodes.map((ep, idx) => (
+            <EpisodeRow
+              key={ep.id}
+              episode={ep}
+              order={ep.series_order ?? idx + 1}
+              isCurrent={ep.id === currentSermonId}
+            />
+          ))}
         </ul>
-      </section>
+      </nav>
     </aside>
+  );
+}
+
+type EpisodeRowProps = {
+  episode: SermonWithRelations;
+  order: number;
+  isCurrent: boolean;
+};
+
+function EpisodeRow({ episode, order, isCurrent }: EpisodeRowProps) {
+  const duration = formatSermonDuration(episode.duration);
+  const content = (
+    <>
+      <span className={styles.order_num}>{String(order).padStart(2, '0')}</span>
+      <span className={styles.info}>
+        <span className={styles.title}>{episode.title}</span>
+        <span className={styles.meta}>
+          {formattedDate(episode.sermon_date, 'YYYY.MM.DD')}
+          {duration && (
+            <>
+              <span className={styles.meta_dot} aria-hidden="true">·</span>
+              {duration}
+            </>
+          )}
+        </span>
+      </span>
+      {isCurrent && (
+        <span className={styles.play_indicator} aria-hidden="true">
+          <svg width="9" height="9" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M8 5v14l11-7z" />
+          </svg>
+        </span>
+      )}
+    </>
+  );
+
+  return (
+    <li>
+      {isCurrent ? (
+        <div
+          className={clsx(styles.episode_row, styles.episode_row_current)}
+          aria-current="page"
+        >
+          {content}
+        </div>
+      ) : (
+        <Link
+          href={`/sermons/${episode.id}`}
+          className={styles.episode_row}
+          draggable={false}
+        >
+          {content}
+        </Link>
+      )}
+    </li>
   );
 }
