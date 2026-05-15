@@ -2,12 +2,9 @@ import type {
   Sermon,
   Preacher,
   SermonSeries,
-  SermonWithRelations,
-  SermonArchiveView,
   SeriesWithSermonCount,
   SermonListParams,
-  SermonSortKey,
-  YearCount
+  SermonSortKey
 } from '@/types/sermon';
 
 export function hasVideo<T extends Pick<Sermon, 'video_id'>>(
@@ -55,14 +52,6 @@ export function getSeriesByYearEntries<T extends SermonSeries>(
     if (b === '미분류') return -1;
     return Number(b) - Number(a);
   });
-}
-
-export function buildSermonArchive(
-  sermons: SermonWithRelations[],
-  yearCounts: YearCount[],
-): SermonArchiveView {
-  const [featured = null] = sermons;
-  return { featured, yearCounts };
 }
 
 export function computeStandaloneCount(

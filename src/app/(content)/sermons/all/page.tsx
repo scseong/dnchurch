@@ -4,7 +4,6 @@ import { LayoutContainer } from '@/components/layout';
 import { EmptyState, Pagination } from '@/components/ui';
 import SermonSidebar from '../_component/SermonListPage/SermonSidebar';
 import SermonToolbar from '../_component/SermonListPage/SermonToolbar';
-import SermonArchive from '../_component/SermonListPage/SermonArchive';
 import SermonFilteredList from '../_component/SermonListPage/SermonFilteredList';
 import SermonResultHeader from '../_component/SermonListPage/SermonResultHeader';
 import {
@@ -12,12 +11,9 @@ import {
   getAllPreachers,
   getAllSeries,
   getFilteredSermons,
-  getSermonArchiveList,
-  getSermonYearCounts,
   getSermonsTotalCount
 } from '@/services/sermon';
 import {
-  buildSermonArchive,
   buildSermonHref,
   computeStandaloneCount,
   parseSermonParams,
@@ -48,28 +44,23 @@ export default async function AllSermonsPage({ searchParams }: PageProps) {
   const resolvedSeriesId = resolveSeriesSlug(series, allSeries);
   const resolvedPreacherId = resolvePreacherName(preacher, allPreachers);
 
-  const [totalCount, yearCounts, listResult] = await Promise.all([
+  const [totalCount, listResult] = await Promise.all([
     getSermonsTotalCount(),
-    getSermonYearCounts(),
-    hasFilter
-      ? getFilteredSermons({
-          seriesId: resolvedSeriesId,
-          preacherId: resolvedPreacherId,
-          search,
-          year,
-          sort,
-          page
-        })
-      : getSermonArchiveList()
+    getFilteredSermons({
+      seriesId: resolvedSeriesId,
+      preacherId: resolvedPreacherId,
+      search,
+      year,
+      sort,
+      page
+    })
   ]);
 
   const standaloneCount = computeStandaloneCount(totalCount, allSeries);
   const activeSeries = series ?? null;
   const activePreacher = preacher ?? null;
   const filteredTotal = listResult.total;
-  const totalPages = hasFilter
-    ? Math.max(1, Math.ceil(filteredTotal / FILTER_PAGE_SIZE))
-    : 1;
+  const totalPages = Math.max(1, Math.ceil(filteredTotal / FILTER_PAGE_SIZE));
 
   // 시리즈 미매칭 — slug가 있지만 'none'도 아니고 allSeries에도 없음
   const isUnknownSeries =
@@ -77,8 +68,8 @@ export default async function AllSermonsPage({ searchParams }: PageProps) {
     series !== 'none' &&
     !allSeries.some((item) => item.slug === series);
 
-  // Out-of-range page → 마지막 페이지로 redirect (D4)
-  if (hasFilter && filteredTotal > 0 && page > totalPages) {
+  // Out-of-range page → 마지막 페이지로 redirect
+  if (filteredTotal > 0 && page > totalPages) {
     redirect(buildSermonHref(params, { page: String(totalPages) }));
   }
 
@@ -99,7 +90,7 @@ export default async function AllSermonsPage({ searchParams }: PageProps) {
           <SermonToolbar
             allSeries={allSeries}
             allPreachers={allPreachers}
-            resultCount={listResult.total}
+            resultCount={filteredTotal}
           />
           {isUnknownSeries ? (
             <EmptyState
@@ -107,7 +98,7 @@ export default async function AllSermonsPage({ searchParams }: PageProps) {
               description="URL이 올바른지 확인하거나 사이드바에서 다른 시리즈를 선택해 주세요."
               announce
             />
-          ) : hasFilter ? (
+          ) : (
             <>
               <SermonResultHeader
                 resultCount={filteredTotal}
@@ -122,8 +113,6 @@ export default async function AllSermonsPage({ searchParams }: PageProps) {
                 currentPage={page}
               />
             </>
-          ) : (
-            <SermonArchive archive={buildSermonArchive(listResult.sermons, yearCounts)} />
           )}
         </div>
       </div>

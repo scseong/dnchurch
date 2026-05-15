@@ -6,9 +6,6 @@ import { createStaticClient } from '@/lib/supabase/static';
 import { createServerSideClient } from '@/lib/supabase/server';
 import type { SermonListParams } from '@/types/sermon';
 
-// archive 모드는 featured 1편 + 연도 그리드만 노출. recent 섹션은 /sermons 메인 페이지의
-// SermonRecentCarousel과 책임 분리(/sermons/all은 검색·필터 탐색 전용).
-const ARCHIVE_FEATURED_COUNT = 1;
 export const FILTER_PAGE_SIZE = 24;
 
 export const getSermons = (params: SermonListParams = {}) => {
@@ -53,10 +50,6 @@ export const incrementSermonViewCount = async (sermonId: number) => {
   return sermonService(supabase).incrementViewCount(sermonId);
 };
 
-/** archive 모드: featured 1편만 로드(`buildSermonArchive`가 첫 행을 featured로 사용) */
-export const getSermonArchiveList = () =>
-  getSermons({ pageSize: ARCHIVE_FEATURED_COUNT });
-
 /** 필터 모드용: 서버 쿼리로 매칭 페이지만 로드 */
 export const getFilteredSermons = (
   params: Pick<
@@ -69,12 +62,6 @@ export const getFilteredSermons = (
 export const getSermonsTotalCount = () => {
   const supabase = createStaticClient(sermonCache.list());
   return sermonService(supabase).totalCount();
-};
-
-/** 연도별 설교 편수 집계 (지난 설교 연도 그리드용) */
-export const getSermonYearCounts = () => {
-  const supabase = createStaticClient(sermonCache.list());
-  return sermonService(supabase).yearCounts();
 };
 
 /** [어드민] 수정용 설교 조회 — 캐시 없음, 초안 포함 */

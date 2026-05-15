@@ -54,11 +54,6 @@ export type YearCount = {
   count: number;
 };
 
-export type SermonArchiveView = {
-  featured: SermonWithRelations | null;
-  yearCounts: YearCount[];
-};
-
 // ─── Admin: 발행 상태 + 목록 응답 타입 ───────────────────────────────────────
 
 export type SermonStatus = 'published' | 'draft';
