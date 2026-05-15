@@ -28,11 +28,14 @@ export default function SermonSidebar({
   hasActiveFilter,
   params
 }: Props) {
+  // 필터 변경·초기화 시 정렬도 초기화 — useSermonFilter.setFilter와 동일한 D2 cascade.
+  // (buildSermonHref 전역 주입은 page.tsx out-of-range redirect의 sort까지 날리므로 call-site에서 명시)
   const resetHref = buildSermonHref(params, {
     series: null,
     preacher: null,
     q: null,
-    year: null
+    year: null,
+    sort: null
   });
 
   return (
@@ -60,7 +63,7 @@ export default function SermonSidebar({
             <ul role="list" className={styles.option_list}>
               <li>
                 <FilterItem
-                  href={buildSermonHref(params, { series: null })}
+                  href={buildSermonHref(params, { series: null, sort: null })}
                   active={!activeSeries}
                   label="전체"
                   count={totalCount}
@@ -68,7 +71,7 @@ export default function SermonSidebar({
               </li>
               <li>
                 <FilterItem
-                  href={buildSermonHref(params, { series: 'none' })}
+                  href={buildSermonHref(params, { series: 'none', sort: null })}
                   active={activeSeries === 'none'}
                   label="단독 설교"
                   count={standaloneCount}
@@ -77,7 +80,7 @@ export default function SermonSidebar({
               {allSeries.map((item) => (
                 <li key={item.id}>
                   <FilterItem
-                    href={buildSermonHref(params, { series: item.slug })}
+                    href={buildSermonHref(params, { series: item.slug, sort: null })}
                     active={activeSeries === item.slug}
                     label={item.title}
                     count={item.sermon_count}
@@ -99,7 +102,7 @@ export default function SermonSidebar({
             <ul role="list" className={styles.option_list}>
               <li>
                 <FilterItem
-                  href={buildSermonHref(params, { preacher: null })}
+                  href={buildSermonHref(params, { preacher: null, sort: null })}
                   active={!activePreacher}
                   label="전체"
                   count={totalCount}
@@ -108,7 +111,7 @@ export default function SermonSidebar({
               {allPreachers.map((preacher) => (
                 <li key={preacher.id}>
                   <FilterItem
-                    href={buildSermonHref(params, { preacher: preacher.name })}
+                    href={buildSermonHref(params, { preacher: preacher.name, sort: null })}
                     active={activePreacher === preacher.name}
                     label={formatPreacherLabel(preacher)}
                     count={preacher.sermon_count}
