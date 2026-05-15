@@ -18,6 +18,13 @@ export default function useSermonFilter() {
   const rawSort = sp.get('sort');
   const sort: SermonSortKey = rawSort === 'oldest' ? 'oldest' : 'recent';
   const isActive = !!(series || preacher || q || year);
+  // 적용된 필터 수 — 모바일 ToolbarFilterButton 배지 등 UI 카운터용. sort는 'recent' 기본값이 아닐 때만 카운트
+  const activeFilterCount =
+    (series ? 1 : 0) +
+    (preacher ? 1 : 0) +
+    (q.trim() ? 1 : 0) +
+    (year ? 1 : 0) +
+    (sort !== 'recent' ? 1 : 0);
 
   const updateParams = useCallback(
     (patch: Record<string, string | null | undefined>) => {
@@ -48,5 +55,15 @@ export default function useSermonFilter() {
     [updateParams]
   );
 
-  return { series, preacher, q, year, sort, isActive, setFilter, setSort };
+  return {
+    series,
+    preacher,
+    q,
+    year,
+    sort,
+    isActive,
+    activeFilterCount,
+    setFilter,
+    setSort
+  };
 }

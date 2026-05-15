@@ -2,7 +2,6 @@ import SermonSearchForm from './SermonSearchForm';
 import ToolbarFilterButton from './ToolbarFilterButton';
 import SermonSearchFeedback from './SermonSearchFeedback';
 import SermonSeriesBanner from './SermonSeriesBanner';
-import ActiveFilterChips from './ActiveFilterChips';
 import type {
   PreacherWithSermonCount,
   SeriesWithSermonCount
@@ -28,7 +27,6 @@ export default function SermonToolbar({
       </div>
       <SermonSearchFeedback resultCount={resultCount} />
       <SermonSeriesBanner allSeries={allSeries} />
-      <ActiveFilterChips allSeries={allSeries} />
     </header>
   );
 }
