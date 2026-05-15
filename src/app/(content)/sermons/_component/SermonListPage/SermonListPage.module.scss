@@ -99,7 +99,7 @@ $radio-dot-size: 0.4rem;
   display: flex;
   align-items: center;
   gap: $spacing-8;
-  padding: $spacing-8 $spacing-12;
+  padding: $spacing-6 $spacing-12;
   font-size: $font-size-13;
   color: $txt-secondary;
   border-radius: $radius-xs;
@@ -140,6 +140,7 @@ $radio-dot-size: 0.4rem;
 .option_label {
   min-width: 0;
   overflow: hidden;
+  font-size: $font-size-13;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
@@ -198,7 +199,7 @@ $radio-dot-size: 0.4rem;
 
 .search_input {
   width: 100%;
-  padding: $spacing-12 $spacing-40;
+  padding: $spacing-10 $spacing-40;
   font-size: $font-size-14;
   color: $txt-primary;
   border: 1px solid $border-primary;
@@ -359,7 +360,7 @@ $radio-dot-size: 0.4rem;
   gap: $content-gap-m;
   padding: $padding-card;
   margin-bottom: $content-gap-l;
-  background-color: $bg-secondary;
+  background-color: $bg-card;
   border: 1px solid $border-card;
   border-radius: $radius-s;
 }
