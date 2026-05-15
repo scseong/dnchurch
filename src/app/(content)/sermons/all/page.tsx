@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import { redirect } from 'next/navigation';
 import { LayoutContainer } from '@/components/layout';
-import { Pagination } from '@/components/ui';
+import { EmptyState, Pagination } from '@/components/ui';
 import SermonSidebar from '../_component/SermonListPage/SermonSidebar';
 import SermonToolbar from '../_component/SermonListPage/SermonToolbar';
 import SermonArchive from '../_component/SermonListPage/SermonArchive';
@@ -71,6 +71,12 @@ export default async function AllSermonsPage({ searchParams }: PageProps) {
     ? Math.max(1, Math.ceil(filteredTotal / FILTER_PAGE_SIZE))
     : 1;
 
+  // 시리즈 미매칭 — slug가 있지만 'none'도 아니고 allSeries에도 없음
+  const isUnknownSeries =
+    !!series &&
+    series !== 'none' &&
+    !allSeries.some((item) => item.slug === series);
+
   // Out-of-range page → 마지막 페이지로 redirect (D4)
   if (hasFilter && filteredTotal > 0 && page > totalPages) {
     redirect(buildSermonHref(params, { page: String(totalPages) }));
@@ -93,11 +99,15 @@ export default async function AllSermonsPage({ searchParams }: PageProps) {
           <SermonToolbar
             allSeries={allSeries}
             allPreachers={allPreachers}
-            totalCount={totalCount}
-            standaloneCount={standaloneCount}
             resultCount={listResult.total}
           />
-          {hasFilter ? (
+          {isUnknownSeries ? (
+            <EmptyState
+              title="해당 시리즈를 찾을 수 없습니다"
+              description="URL이 올바른지 확인하거나 사이드바에서 다른 시리즈를 선택해 주세요."
+              announce
+            />
+          ) : hasFilter ? (
             <>
               <SermonResultHeader
                 resultCount={filteredTotal}

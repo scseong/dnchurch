@@ -23,7 +23,7 @@ $dot-size: 0.4rem;
 
   @include respond-up($breakpoint-pc-sm) {
     display: block;
-    width: 24rem;
+    width: 28rem;
     flex-shrink: 0;
   }
 }
@@ -211,7 +211,6 @@ $dot-size: 0.4rem;
   }
 
   &:focus {
-    outline: none;
     background: $bg-primary;
     border-color: $primary;
   }
@@ -283,46 +282,6 @@ $dot-size: 0.4rem;
       white-space: nowrap;
     }
   }
-}
-
-// ── Series Chips (Mobile) ──
-
-.chips {
-  margin-bottom: $content-gap-l;
-
-  @include respond-up($breakpoint-pc-sm) {
-    display: none;
-  }
-}
-
-.chip_list {
-  display: flex;
-  gap: $spacing-8;
-  overflow-x: auto;
-  padding-bottom: $spacing-4;
-  list-style: none;
-  margin: 0;
-  padding-left: 0;
-
-  &::-webkit-scrollbar {
-    display: none;
-  }
-}
-
-.chip_more {
-  flex-shrink: 0;
-  display: inline-flex;
-  align-items: center;
-  gap: $spacing-4;
-  padding: $spacing-8 $spacing-16;
-  font-size: $font-size-13;
-  font-weight: $font-weight-medium;
-  color: $primary;
-  background: $primary-subtle;
-  border: 1px solid transparent;
-  border-radius: $radius-circle;
-  cursor: pointer;
-  white-space: nowrap;
 }
 
 // ── Result Header (필터 모드 결과 헤더 + 정렬) ──
@@ -643,4 +602,3 @@ $dot-size: 0.4rem;
 }
 
 // ── States ──
-
