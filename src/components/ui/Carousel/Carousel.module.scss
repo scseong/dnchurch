@@ -1,3 +1,53 @@
+.viewport {
+  position: relative;
+}
+
+// 캐러셀 양 끝 스크림 — 잘린 영역이 음영으로 사라지는 시각 신호(스크롤 affordance).
+// semantic 미정의 영역(엣지 위 black scrim) — rgba 투명도 조합이라 로컬 변수.
+// 점진적 다단 stop으로 자연스러운 ramp(엣지로 갈수록 진해짐).
+$edge-scrim-edge: rgba(0, 0, 0, 0.14);
+$edge-scrim-mid: rgba(0, 0, 0, 0.05);
+
+.fade_left,
+.fade_right {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: $spacing-48;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.18s ease;
+  display: none;
+
+  @include respond-up($breakpoint-tablet) {
+    display: block;
+  }
+}
+
+.fade_left {
+  left: 0;
+  background: linear-gradient(
+    to right,
+    $edge-scrim-edge 0%,
+    $edge-scrim-mid 45%,
+    transparent 100%
+  );
+}
+
+.fade_right {
+  right: 0;
+  background: linear-gradient(
+    to left,
+    $edge-scrim-edge 0%,
+    $edge-scrim-mid 45%,
+    transparent 100%
+  );
+}
+
+.fade_visible {
+  opacity: 1;
+}
+
 .track {
   display: flex;
   gap: $content-gap-s;
