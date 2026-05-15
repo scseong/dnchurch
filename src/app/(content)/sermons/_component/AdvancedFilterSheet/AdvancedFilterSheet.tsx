@@ -5,6 +5,7 @@ import clsx from 'clsx';
 import { IoCheckmark } from 'react-icons/io5';
 import { BottomSheet, Button } from '@/components/ui';
 import useSermonFilter from '@/hooks/useSermonFilter';
+import { formatPreacherLabel } from '@/utils/sermon';
 import type {
   PreacherWithSermonCount,
   SeriesWithSermonCount,
@@ -113,7 +114,7 @@ export default function AdvancedFilterSheet({
           {allPreachers.map((item) => (
             <li key={item.id}>
               <FilterOption
-                label={item.name}
+                label={formatPreacherLabel(item)}
                 selected={draft.preacher === item.name}
                 onClick={() => setDraft((d) => ({ ...d, preacher: item.name }))}
               />

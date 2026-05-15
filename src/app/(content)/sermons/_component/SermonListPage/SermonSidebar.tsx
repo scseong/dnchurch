@@ -2,7 +2,7 @@ import Link from 'next/link';
 import clsx from 'clsx';
 import { ListItem } from '@/components/ui';
 import SermonSearchForm from './SermonSearchForm';
-import { buildSermonHref } from '@/utils/sermon';
+import { buildSermonHref, formatPreacherLabel } from '@/utils/sermon';
 import type { SearchParams } from '@/utils/search-params';
 import type { PreacherWithSermonCount, SeriesWithSermonCount } from '@/types/sermon';
 import styles from './SermonListPage.module.scss';
@@ -110,7 +110,7 @@ export default function SermonSidebar({
                   <FilterItem
                     href={buildSermonHref(params, { preacher: preacher.name })}
                     active={activePreacher === preacher.name}
-                    label={preacher.name}
+                    label={formatPreacherLabel(preacher)}
                     count={preacher.sermon_count}
                   />
                 </li>

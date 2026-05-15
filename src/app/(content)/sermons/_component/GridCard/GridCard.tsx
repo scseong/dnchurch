@@ -56,7 +56,7 @@ export default function GridCard({ sermon, index = 0 }: Props) {
           <span className={styles.meta_dot} aria-hidden="true">
             ·
           </span>
-          <span>{formattedDate(sermon.sermon_date, 'YYYY.MM.DD')}</span>
+          <span>{formattedDate(sermon.sermon_date, 'YY.MM.DD')}</span>
         </div>
       </div>
     </Link>

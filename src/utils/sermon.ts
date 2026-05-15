@@ -64,11 +64,24 @@ export function resolvePreacherName(
   return found?.id;
 }
 
+/**
+ * `preacher.title` DB 원문(예: "담임목사", "부목사", "전임전도사")을 직분 토큰(목사/전도사/강도사 등)으로 정규화.
+ * 매핑 안 되는 값은 원문 그대로 (확장성 — 새 직분 도입 시 명시적 enum 추가 전까지 fallback).
+ */
+export function formatPreacherTitle(title: string | null | undefined): string {
+  if (!title) return '';
+  if (title.endsWith('전도사')) return '전도사';
+  if (title.endsWith('목사')) return '목사';
+  if (title.endsWith('강도사')) return '강도사';
+  return title;
+}
+
 export function formatPreacherLabel(
   preacher: Pick<Preacher, 'name' | 'title'> | null,
 ): string {
   if (!preacher) return '';
-  return preacher.title ? `${preacher.name} ${preacher.title}` : preacher.name;
+  const role = formatPreacherTitle(preacher.title);
+  return role ? `${preacher.name} ${role}` : preacher.name;
 }
 
 import { getString, getInt, buildFilterHref } from '@/utils/search-params';
