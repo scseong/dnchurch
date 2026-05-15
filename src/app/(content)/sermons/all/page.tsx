@@ -36,37 +36,65 @@ export default async function AllSermonsPage({ searchParams }: PageProps) {
   const { series, preacher, search, year, sort, page } = parseSermonParams(params);
   const hasFilter = !!(series || preacher || search || year);
 
-  const [allSeries, allPreachers] = await Promise.all([
+  const [allSeries, allPreachers, totalCount] = await Promise.all([
     getAllSeries(),
     getAllPreachers(),
-  ]);
-
-  const resolvedSeriesId = resolveSeriesSlug(series, allSeries);
-  const resolvedPreacherId = resolvePreacherName(preacher, allPreachers);
-
-  const [totalCount, listResult] = await Promise.all([
-    getSermonsTotalCount(),
-    getFilteredSermons({
-      seriesId: resolvedSeriesId,
-      preacherId: resolvedPreacherId,
-      search,
-      year,
-      sort,
-      page
-    })
+    getSermonsTotalCount()
   ]);
 
   const standaloneCount = computeStandaloneCount(totalCount, allSeries);
   const activeSeries = series ?? null;
   const activePreacher = preacher ?? null;
-  const filteredTotal = listResult.total;
-  const totalPages = Math.max(1, Math.ceil(filteredTotal / FILTER_PAGE_SIZE));
 
-  // 시리즈 미매칭 — slug가 있지만 'none'도 아니고 allSeries에도 없음
+  // 시리즈 미매칭 — slug가 있지만 'none'도 아니고 allSeries에도 없음.
+  // resolveSeriesSlug는 미매칭 slug를 원문 그대로 반환하므로, 조회 전에 차단하지 않으면
+  // raw slug가 UUID 컬럼(series_id)에 들어가 Supabase에서 throw된다.
   const isUnknownSeries =
     !!series &&
     series !== 'none' &&
     !allSeries.some((item) => item.slug === series);
+
+  if (isUnknownSeries) {
+    return (
+      <LayoutContainer>
+        <div className={styles.body}>
+          <SermonSidebar
+            allSeries={allSeries}
+            allPreachers={allPreachers}
+            totalCount={totalCount}
+            standaloneCount={standaloneCount}
+            activeSeries={activeSeries}
+            activePreacher={activePreacher}
+            hasActiveFilter={hasFilter}
+            params={params}
+          />
+          <div className={styles.main}>
+            <SermonToolbar allSeries={allSeries} allPreachers={allPreachers} />
+            <EmptyState
+              title="해당 시리즈를 찾을 수 없습니다"
+              description="URL이 올바른지 확인하거나 사이드바에서 다른 시리즈를 선택해 주세요."
+              announce
+            />
+          </div>
+        </div>
+      </LayoutContainer>
+    );
+  }
+
+  const resolvedSeriesId = resolveSeriesSlug(series, allSeries);
+  const resolvedPreacherId = resolvePreacherName(preacher, allPreachers);
+
+  const listResult = await getFilteredSermons({
+    seriesId: resolvedSeriesId,
+    preacherId: resolvedPreacherId,
+    search,
+    year,
+    sort,
+    page
+  });
+
+  const filteredTotal = listResult.total;
+  const totalPages = Math.max(1, Math.ceil(filteredTotal / FILTER_PAGE_SIZE));
 
   // Out-of-range page → 마지막 페이지로 redirect
   if (filteredTotal > 0 && page > totalPages) {
@@ -88,27 +116,17 @@ export default async function AllSermonsPage({ searchParams }: PageProps) {
         />
         <div className={styles.main}>
           <SermonToolbar allSeries={allSeries} allPreachers={allPreachers} />
-          {isUnknownSeries ? (
-            <EmptyState
-              title="해당 시리즈를 찾을 수 없습니다"
-              description="URL이 올바른지 확인하거나 사이드바에서 다른 시리즈를 선택해 주세요."
-              announce
-            />
-          ) : (
-            <>
-              <SermonResultHeader
-                resultCount={filteredTotal}
-                currentPage={page}
-                totalPages={totalPages}
-              />
-              <SermonFilteredList sermons={listResult.sermons} />
-              <Pagination
-                totalCount={filteredTotal}
-                pageSize={FILTER_PAGE_SIZE}
-                currentPage={page}
-              />
-            </>
-          )}
+          <SermonResultHeader
+            resultCount={filteredTotal}
+            currentPage={page}
+            totalPages={totalPages}
+          />
+          <SermonFilteredList sermons={listResult.sermons} />
+          <Pagination
+            totalCount={filteredTotal}
+            pageSize={FILTER_PAGE_SIZE}
+            currentPage={page}
+          />
         </div>
       </div>
     </LayoutContainer>
