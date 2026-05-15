@@ -117,12 +117,14 @@ export const sermonService = (supabase: SupabaseClient<Database>) => ({
     return (handled.data as unknown as SermonWithRelations | null) ?? null;
   },
 
-  /** 활성 시리즈 전체를 설교 개수와 함께 조회 */
+  /** 활성 시리즈 전체를 published + 미삭제 설교 개수와 함께 조회 */
   allSeries: async (): Promise<SeriesWithSermonCount[]> => {
     const res = await supabase
       .from('sermon_series')
-      .select('*, sermons(count)')
+      .select('*, sermons!inner(count)')
       .eq('is_active', true)
+      .eq('sermons.is_published', true)
+      .is('sermons.deleted_at', null)
       .order('started_at', { ascending: false })
       .order('sort_order', { ascending: true, nullsFirst: false });
 
@@ -162,12 +164,14 @@ export const sermonService = (supabase: SupabaseClient<Database>) => ({
     return (handled.data ?? []) as unknown as SermonWithRelations[];
   },
 
-  /** 활성 설교자 전체 + 설교 편수 조회 (sermon_count는 allSeries와 동일 패턴 — published/deleted 필터 없음) */
+  /** 활성 설교자 전체 + published + 미삭제 설교 편수 조회 (inner join — 노출 0편 설교자는 결과에서 제외) */
   allPreachers: async (): Promise<PreacherWithSermonCount[]> => {
     const res = await supabase
       .from('preachers')
-      .select('*, sermons(count)')
+      .select('*, sermons!inner(count)')
       .eq('is_active', true)
+      .eq('sermons.is_published', true)
+      .is('sermons.deleted_at', null)
       .order('sort_order', { ascending: true })
       .order('name', { ascending: true });
 

@@ -33,9 +33,12 @@ export default function useSermonFilter() {
     [router, sp]
   );
 
-  // 필터/정렬 변경 시 page 자동 리셋 — 잔류 page가 totalPages 초과해 빈 결과 노출되는 버그 차단
+  // page/sort는 기본값으로 자동 리셋하되, patch가 명시한 키는 그 값을 우선
+  // - page: 잔류 page가 totalPages 초과해 빈 결과 노출되는 버그 차단
+  // - sort: 필터 변경 시 정렬 의도가 새 결과 셋에 종속되므로 기본('recent')으로 회귀
   const setFilter = useCallback(
-    (patch: SermonFilterPatch) => updateParams({ ...patch, page: null }),
+    (patch: SermonFilterPatch) =>
+      updateParams({ page: null, sort: null, ...patch }),
     [updateParams]
   );
 
