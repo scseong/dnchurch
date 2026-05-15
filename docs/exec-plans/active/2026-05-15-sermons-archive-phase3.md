@@ -41,6 +41,7 @@
 ## ADR 판단
 
 - **불필요** — 12 sub-task 모두 ADR needed: no. services/sermon read-only helper·dead code 정리·타입 정리 범위. 영구 결정(아키텍처·캐시·라이브러리·레이어·인증) 변경 없음. `start-adr` 미실행.
+- **PR #91 자동리뷰 fix 5건 불필요** — page.tsx는 미존재 시리즈 조기 EmptyState 반환(throw 방지) 흐름 재배치, 나머지는 UI/href call-site·BottomSheet payload 조정. 레이어·캐시·타입 계약 불변. `sermon-service.ts`는 무변경(아래 #6 참조).
 
 ## Codex 계획 검증
 
@@ -54,8 +55,12 @@ sub-task 6개(sidebar/series-meta/search-feedback/result-header/pagination/mobil
 
 12개 1차 검증 결과: 8개 PASS(수정 0), 4개 직접수정/CR 반영 후 PASS — pagination 3건·sidebar 2건·result-header 1건(타입 안전성) 직접수정, series-meta 2건·mode-cleanup 2건 CR 반영, feedback-pass-2 scope밖 SCSS 2줄은 D7로 해소. 최종 잔여 CHANGE_REQUEST·BLOCK 0건. feedback-pass-3 1차에서 음수 리터럴 토큰 규칙·position relative·a11y·prop chain·dead 참조 모두 OK 확인.
 
+**PR #91 자동리뷰 fix 6건 Codex 1차** — 결론 CHANGE_REQUEST. fix 1~5(GridCard cloudinaryFetchUrl·page.tsx 미존재 시리즈 조기반환·SermonSidebar resetHref+필터링크 sort:null·AdvancedFilterSheet year:null) OK. fix 6(allSeries/allPreachers select 축소)만 ISSUE — `getAllSeries`는 `/sermons` 캐러셀 `SeriesCard.tsx:13`의 `cover_image_url` 등 공유 소비처(+admin 폼 3곳)가 있어 컬럼 축소가 UI 회귀. **조치: #6 전면 revert** (공유 함수 축소는 별도 전용 쿼리/전수 감사 필요한 perf tech-debt로 분리). 나머지 5건 적용 유지.
+
 ## Claude 2차 검증
 
 - **최종 판단**: PASS
 
 12 sub-task 전부 verify-task PASS(Knip 경고는 기존 barrel re-export false positive — 차단 안 됨, `docs/tech-debt-tracker.md` 대조 완료). Codex 직접수정분은 diff 교차 확인 후 의도·범위 일치 검증. 외과적 변경 위반은 D7(사용자 IDE 직접 편집) 외 0건. 커밋은 sub-task별 "한 commit = 한 의도"로 분리 완료(feat/sermons-archive 누적 ~21 commit).
+
+**PR #91 fix 2차** — Codex CHANGE_REQUEST의 #6 cover_image_url 회귀를 전수 grep으로 확인(`getAllSeries`/`getAllPreachers` 소비처 = `/sermons` 캐러셀 + admin 3 + `/sermons/all`). Claude 초기 소비처 감사가 admin·캐러셀을 누락 → #6 revert로 sermon-service.ts 무변경 복귀. fix 1~5는 verify PASS 재확인 예정. #6은 `docs/tech-debt-tracker.md` perf 항목으로 분리(별도 전용 쿼리 필요).
