@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import { IoPlay } from 'react-icons/io5';
+import CloudinaryImage from '@/components/common/CloudinaryImage';
 import { formattedDate } from '@/utils/date';
 import { formatPreacherLabel, formatSermonDuration, getSermonThumbnail } from '@/utils/sermon';
 import type { SermonCardItem } from '@/types/sermon';
@@ -27,7 +28,12 @@ export default function GridCard({ sermon, index = 0 }: Props) {
     >
       <div className={styles.thumb}>
         {thumbnail ? (
-          <img src={thumbnail} alt={sermon.title} loading="lazy" />
+          <CloudinaryImage
+            src={thumbnail}
+            alt={sermon.title}
+            fill
+            sizes="(min-width: 768px) 50vw, 100vw"
+          />
         ) : (
           <div className={styles.thumb_placeholder} aria-hidden="true" />
         )}
