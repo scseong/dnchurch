@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import { IoPlay } from 'react-icons/io5';
 import CloudinaryImage from '@/components/common/CloudinaryImage';
+import { cloudinaryFetchUrl } from '@/utils/cloudinary';
 import { formattedDate } from '@/utils/date';
 import { formatPreacherLabel, formatSermonDuration, getSermonThumbnail } from '@/utils/sermon';
 import type { SermonCardItem } from '@/types/sermon';
@@ -14,7 +15,7 @@ type Props = {
 };
 
 export default function GridCard({ sermon, index = 0 }: Props) {
-  const thumbnail = getSermonThumbnail(sermon);
+  const thumbnail = cloudinaryFetchUrl(getSermonThumbnail(sermon));
   const preacherLabel = formatPreacherLabel(sermon.preacher);
   const duration = formatSermonDuration(sermon.duration);
 
