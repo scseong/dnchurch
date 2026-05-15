@@ -45,6 +45,11 @@ export default function SermonResultHeader({
           </span>
         )}
       </p>
+      {isActive && (
+        <span className={styles.sort_label}>
+          {sort === 'oldest' ? '오래된순' : '최신순'}
+        </span>
+      )}
       <select
         className={clsx(styles.sort_select, isActive && styles.sort_select_active)}
         value={sort}

@@ -324,6 +324,24 @@ $radio-dot-size: 0.4rem;
   font-variant-numeric: tabular-nums;
 }
 
+// mobile 정렬 적용 표시 — sort_select는 PC 전용이라 모바일은 라벨로 활성 정렬 노출
+.sort_label {
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  padding: $spacing-4 $spacing-12;
+  font-size: $font-size-12;
+  font-weight: $font-weight-semibold;
+  color: $primary;
+  background-color: $primary-subtle;
+  border-radius: $radius-circle;
+  white-space: nowrap;
+
+  @include respond-up($breakpoint-pc-sm) {
+    display: none;
+  }
+}
+
 .sort_select {
   // mobile은 BottomSheet의 정렬 섹션이 단일 진입점 — sort_select 비표시
   display: none;
