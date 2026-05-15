@@ -4,6 +4,7 @@ import type { SermonWithRelations } from '@/types/sermon';
 import { cloudinaryFetchUrl } from '@/utils/cloudinary';
 import { getSermonThumbnail } from '@/utils/sermon';
 import { formattedDate } from '@/utils/date';
+import GridCard from '../GridCard/GridCard';
 import styles from './SermonOtherByPreacher.module.scss';
 
 type Props = {
@@ -17,6 +18,13 @@ export default function SermonOtherByPreacher({ preacherLabel, sermons }: Props)
   return (
     <section className={styles.section}>
       <h2 className={styles.title}>{preacherLabel}의 다른 설교</h2>
+      <ul role="list" className={styles.grid_mobile}>
+        {sermons.map((sermon, index) => (
+          <li key={sermon.id}>
+            <GridCard sermon={sermon} index={index} />
+          </li>
+        ))}
+      </ul>
       <div className={styles.grid}>
         {sermons.map((sermon) => (
           <OtherCard key={sermon.id} sermon={sermon} />
