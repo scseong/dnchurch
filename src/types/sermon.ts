@@ -34,6 +34,12 @@ export type SermonCardItem = SermonListItem &
 
 export type SeriesWithSermonCount = SermonSeries & { sermon_count: number };
 
+/** 시리즈 상세 페이지: 시리즈 단건 + 회차(설교) */
+export type SeriesDetail = {
+  series: SeriesWithSermonCount;
+  episodes: SermonWithRelations[];
+};
+
 export type PreacherWithSermonCount = Preacher & { sermon_count: number };
 
 export type SermonSortKey = 'recent' | 'oldest';

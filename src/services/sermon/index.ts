@@ -28,6 +28,12 @@ export const getSermonsBySeries = (seriesSlug: string) => {
   return sermonService(supabase).bySeriesSlug(seriesSlug);
 };
 
+/** 시리즈 상세(`/sermons/series/[id]`)용: id 기준 시리즈 단건 + 회차 (완료 포함) */
+export const getSeriesDetail = (id: string) => {
+  const supabase = createStaticClient(sermonCache.seriesDetail(id));
+  return sermonService(supabase).bySeriesId(id);
+};
+
 export const getAllPreachers = () => {
   const supabase = createStaticClient(sermonCache.preacherList());
   return sermonService(supabase).allPreachers();

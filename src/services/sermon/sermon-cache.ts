@@ -21,6 +21,10 @@ export const sermonCache = {
     tags: [ROOT, 'sermon-list', `sermon-series-${slug}`],
     revalidate: ONE_DAY_IN_SECONDS
   }),
+  seriesDetail: (id: string): NextCacheOptions => ({
+    tags: [ROOT, 'sermon-series-detail', `sermon-series-detail-${id}`],
+    revalidate: ONE_DAY_IN_SECONDS
+  }),
   preacherList: (): NextCacheOptions => ({
     tags: [ROOT, 'preacher-list'],
     revalidate: ONE_DAY_IN_SECONDS
