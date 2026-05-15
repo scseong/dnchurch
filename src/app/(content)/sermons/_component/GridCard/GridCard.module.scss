@@ -67,6 +67,12 @@ $play-overlay-border: rgba(255, 255, 255, 0.22);
   border-radius: $radius-circle;
   transform: translate(-50%, -50%);
   pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+.card:hover .play_btn {
+  opacity: 1;
 }
 
 .duration {
