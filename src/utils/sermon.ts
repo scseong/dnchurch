@@ -61,8 +61,8 @@ export function buildSermonArchive(
   sermons: SermonWithRelations[],
   yearCounts: YearCount[],
 ): SermonArchiveView {
-  const [featured = null, ...rest] = sermons;
-  return { featured, recentSermons: rest, yearCounts };
+  const [featured = null] = sermons;
+  return { featured, yearCounts };
 }
 
 export function computeStandaloneCount(

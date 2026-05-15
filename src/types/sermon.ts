@@ -56,7 +56,6 @@ export type YearCount = {
 
 export type SermonArchiveView = {
   featured: SermonWithRelations | null;
-  recentSermons: SermonWithRelations[];
   yearCounts: YearCount[];
 };
 

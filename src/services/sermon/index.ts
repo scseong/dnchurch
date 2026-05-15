@@ -6,9 +6,9 @@ import { createStaticClient } from '@/lib/supabase/static';
 import { createServerSideClient } from '@/lib/supabase/server';
 import type { SermonListParams } from '@/types/sermon';
 
-// 아카이브 초기 로드는 최신 설교 N개(featured 1 + 그리드 나머지).
-// 지난 연도는 연도 필터(`?year=YYYY`)로 진입 시 서버 쿼리로 해당 연도만 로드.
-const ARCHIVE_RECENT_COUNT = 12;
+// archive 모드는 featured 1편 + 연도 그리드만 노출. recent 섹션은 /sermons 메인 페이지의
+// SermonRecentCarousel과 책임 분리(/sermons/all은 검색·필터 탐색 전용).
+const ARCHIVE_FEATURED_COUNT = 1;
 export const FILTER_PAGE_SIZE = 24;
 
 export const getSermons = (params: SermonListParams = {}) => {
@@ -53,9 +53,9 @@ export const incrementSermonViewCount = async (sermonId: number) => {
   return sermonService(supabase).incrementViewCount(sermonId);
 };
 
-/** 아카이브 모드용: 최신 설교 N개 로드 (sermon_date desc) */
+/** archive 모드: featured 1편만 로드(`buildSermonArchive`가 첫 행을 featured로 사용) */
 export const getSermonArchiveList = () =>
-  getSermons({ pageSize: ARCHIVE_RECENT_COUNT });
+  getSermons({ pageSize: ARCHIVE_FEATURED_COUNT });
 
 /** 필터 모드용: 서버 쿼리로 매칭 페이지만 로드 */
 export const getFilteredSermons = (
