@@ -328,4 +328,13 @@
 - **영향 범위**: `src/app/(content)/sermons/_component/SeriesEpisodeList/` (2 파일, 약 100줄)
 - **발견일**: 2026-05-14 (PR #90 Codex 객관 리뷰 발견)
 
+### 🟢 `getAllSeries`/`getAllPreachers` `select('*')` payload 미최적화 (PR #91 Gemini 리뷰)
+
+- **상태**: 🟢 마이그레이션 가능
+- **무엇**: `src/services/sermon/sermon-service.ts:124,171` `allSeries`/`allPreachers`가 `select('*, sermons!inner(count)')`로 전체 컬럼 조회. 사이드바·필터 시트는 일부 필드만 사용
+- **왜 보류**: 단순 컬럼 축소는 회귀 — `getAllSeries`/`getAllPreachers`는 `/sermons` 캐러셀(`SeriesCard.tsx:13` `cover_image_url`)·admin 설교 폼 3곳(`admin/sermons{,/new,/[id]/edit}`)·`/sermons/all` 공유. PR #91 fix 시도 시 cover_image_url 누락으로 캐러셀 회귀 발견(Codex 1차 CHANGE_REQUEST) → 전면 revert
+- **마이그레이션 경로**: 별도 task에서 (a) 사이드바 전용 narrow 쿼리 함수 신설(공유 함수 불변), 또는 (b) 5개 소비처 전수 감사 후 union 컬럼셋으로 축소 + 타입 narrow
+- **영향 범위**: `src/services/sermon/sermon-service.ts` (2 쿼리), 소비처 5곳
+- **발견일**: 2026-05-15 (PR #91 Gemini 코드리뷰 제안 / Codex 1차에서 회귀 확인)
+
 <!-- last-audit: 2026-05-14 -->

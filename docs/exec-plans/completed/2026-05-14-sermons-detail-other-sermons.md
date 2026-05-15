@@ -108,3 +108,17 @@ node scripts/verify-task.mjs sermons-detail-other-sermons
 - `docs/references/sermons/Sermon-Implementation-Prompts.md` Phase 2-3 (line 307-323)
 - `docs/references/sermons/ChurchSermonAll.jsx` — StandaloneSidebar(line 1219-1276)에서 row 디자인 차용
 - Phase 1-2 D5 drag-ghost 패턴 / Phase 2-2 사이드바 톤 통일 D8 (완료 후 묶음 PR)
+
+## 회고 (필수 5필드)
+
+- KPI / 시작-종료 (분): ~45 (신규 컴포넌트 1 + [id]/page.tsx Promise.all 병렬 + SermonDetailPage prop 추가)
+- KPI / Codex 라운드: 1 (계획 PASS_WITH_DECISION_LOG `a774d067`. 1차 검증 생략 — small task)
+- KPI / material 사후 발견: 0 (PR review에서 본 컴포넌트 관련 지적 없음)
+- KPI / harness-gate placeholder fail: 0
+- KPI / 사용자 검토 부족 피드백: 0
+
+## 회고
+
+- 잘된 것: Phase 1-1 Featured 데이터 패턴 재사용 + Codex 권고로 Promise.all 병렬 fetch — 신규 service method 0 + TTFB 영향 0.
+- 다음에 할 것: pageSize+1 패턴(`pageSize:4` + filter + slice(0,3))은 Phase 1-2 dedup과 동일 — 재사용 가능한 헬퍼 검토(예: `withCurrentExcluded({fetch, currentId, count})`) 별도 task.
+- 발견된 부채: 없음 (본 task 단독).

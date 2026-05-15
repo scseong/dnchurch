@@ -14,13 +14,27 @@
   letter-spacing: $letter-spacing-body;
 }
 
-.grid {
-  display: grid;
-  grid-template-columns: 1fr;
+// 768px 이하 — /sermons/all 카드 섹션(GridCard) 재사용. 768px↑는 기존 3-col 유지.
+.grid_mobile {
+  display: flex;
+  flex-direction: column;
   gap: $content-gap-m;
+  list-style: none;
+  padding: 0;
+  margin: 0;
 
   @include respond-up($breakpoint-tablet) {
+    display: none;
+  }
+}
+
+.grid {
+  display: none;
+
+  @include respond-up($breakpoint-tablet) {
+    display: grid;
     grid-template-columns: repeat(3, 1fr);
+    gap: $content-gap-m;
   }
 }
 

@@ -1,5 +1,7 @@
 import Link from 'next/link';
 import { IoPlay } from 'react-icons/io5';
+import CloudinaryImage from '@/components/common/CloudinaryImage';
+import { cloudinaryFetchUrl } from '@/utils/cloudinary';
 import { formattedDate } from '@/utils/date';
 import { formatPreacherLabel, formatSermonDuration, getSermonThumbnail } from '@/utils/sermon';
 import type { SermonCardItem } from '@/types/sermon';
@@ -13,39 +15,50 @@ type Props = {
 };
 
 export default function GridCard({ sermon, index = 0 }: Props) {
-  const thumbnail = getSermonThumbnail(sermon);
+  const thumbnail = cloudinaryFetchUrl(getSermonThumbnail(sermon));
   const preacherLabel = formatPreacherLabel(sermon.preacher);
   const duration = formatSermonDuration(sermon.duration);
-  const seriesTitle = sermon.sermon_series?.title;
 
   return (
     <Link
       href={`/sermons/${sermon.id}`}
       className={styles.card}
       style={{ animationDelay: `${index * ANIMATION_STEP_MS}ms` }}
-      aria-label={`${sermon.title} - ${preacherLabel}`}
+      aria-label={`${sermon.title} - ${preacherLabel}${duration ? `, ${duration}` : ''}`}
     >
       <div className={styles.thumb}>
         {thumbnail ? (
-          <img src={thumbnail} alt={sermon.title} loading="lazy" />
+          <CloudinaryImage
+            src={thumbnail}
+            alt={sermon.title}
+            fill
+            sizes="(min-width: 1024px) 13rem, (min-width: 768px) 30vw, 40vw"
+          />
         ) : (
           <div className={styles.thumb_placeholder} aria-hidden="true" />
         )}
-        {seriesTitle && <span className={styles.series}>{seriesTitle}</span>}
         <span className={styles.play_btn} aria-hidden="true">
           <IoPlay />
         </span>
-        {duration && <span className={styles.duration}>{duration}</span>}
+        {duration && (
+          <span className={styles.duration} aria-hidden="true">
+            {duration}
+          </span>
+        )}
       </div>
 
       <div className={styles.info}>
         <h3 className={styles.title}>{sermon.title}</h3>
+        {sermon.scripture && (
+          <span className={styles.scripture}>{sermon.scripture}</span>
+        )}
         <div className={styles.meta}>
-          <span>{formattedDate(sermon.sermon_date, 'YYYY년 MM월 DD일')}</span>
-          <span className={styles.dot} aria-hidden="true" />
           <span>{preacherLabel}</span>
+          <span className={styles.meta_dot} aria-hidden="true">
+            ·
+          </span>
+          <span>{formattedDate(sermon.sermon_date, 'YY.MM.DD')}</span>
         </div>
-        {sermon.scripture && <span className={styles.scripture}>{sermon.scripture}</span>}
       </div>
     </Link>
   );

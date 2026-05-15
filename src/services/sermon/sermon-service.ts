@@ -8,6 +8,7 @@ import type {
   SermonWithRelations,
   SermonListItem,
   SeriesWithSermonCount,
+  PreacherWithSermonCount,
   YearCount,
   AdminSermon,
   AdminSermonListParams,
@@ -58,14 +59,15 @@ export const sermonService = (supabase: SupabaseClient<Database>) => ({
     preacherId,
     serviceType,
     year,
-    search
+    search,
+    sort = 'recent'
   }: SermonListParams = {}) => {
     let query = supabase
       .from('sermons')
       .select(SERMON_WITH_RELATIONS_SELECT, { count: 'exact' })
       .eq('is_published', true)
       .is('deleted_at', null)
-      .order('sermon_date', { ascending: false });
+      .order('sermon_date', { ascending: sort === 'oldest' });
 
     if (seriesId === '__none') {
       query = query.is('series_id', null);
@@ -115,12 +117,14 @@ export const sermonService = (supabase: SupabaseClient<Database>) => ({
     return (handled.data as unknown as SermonWithRelations | null) ?? null;
   },
 
-  /** 활성 시리즈 전체를 설교 개수와 함께 조회 */
+  /** 활성 시리즈 전체를 published + 미삭제 설교 개수와 함께 조회 */
   allSeries: async (): Promise<SeriesWithSermonCount[]> => {
     const res = await supabase
       .from('sermon_series')
-      .select('*, sermons(count)')
+      .select('*, sermons!inner(count)')
       .eq('is_active', true)
+      .eq('sermons.is_published', true)
+      .is('sermons.deleted_at', null)
       .order('started_at', { ascending: false })
       .order('sort_order', { ascending: true, nullsFirst: false });
 
@@ -160,17 +164,26 @@ export const sermonService = (supabase: SupabaseClient<Database>) => ({
     return (handled.data ?? []) as unknown as SermonWithRelations[];
   },
 
-  /** 활성 설교자 전체 조회 */
-  allPreachers: async () => {
+  /** 활성 설교자 전체 + published + 미삭제 설교 편수 조회 (inner join — 노출 0편 설교자는 결과에서 제외) */
+  allPreachers: async (): Promise<PreacherWithSermonCount[]> => {
     const res = await supabase
       .from('preachers')
-      .select('*')
+      .select('*, sermons!inner(count)')
       .eq('is_active', true)
+      .eq('sermons.is_published', true)
+      .is('sermons.deleted_at', null)
       .order('sort_order', { ascending: true })
       .order('name', { ascending: true });
 
     const handled = handleResponse(res);
-    return handled.data ?? [];
+    const rows = (handled.data ?? []) as unknown as Array<
+      PreacherWithSermonCount & { sermons: Array<{ count: number }> }
+    >;
+
+    return rows.map(({ sermons, ...rest }) => ({
+      ...rest,
+      sermon_count: sermons?.[0]?.count ?? 0
+    }));
   },
 
   /** 최근 설교를 경량 필드셋으로 조회 (홈 카드용) */

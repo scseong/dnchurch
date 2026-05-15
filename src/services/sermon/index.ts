@@ -6,10 +6,7 @@ import { createStaticClient } from '@/lib/supabase/static';
 import { createServerSideClient } from '@/lib/supabase/server';
 import type { SermonListParams } from '@/types/sermon';
 
-// 아카이브 초기 로드는 최신 설교 N개(featured 1 + 그리드 나머지).
-// 지난 연도는 연도 필터(`?year=YYYY`)로 진입 시 서버 쿼리로 해당 연도만 로드.
-const ARCHIVE_RECENT_COUNT = 12;
-const FILTER_PAGE_SIZE = 24;
+export const FILTER_PAGE_SIZE = 24;
 
 export const getSermons = (params: SermonListParams = {}) => {
   const supabase = createStaticClient(sermonCache.list());
@@ -53,15 +50,11 @@ export const incrementSermonViewCount = async (sermonId: number) => {
   return sermonService(supabase).incrementViewCount(sermonId);
 };
 
-/** 아카이브 모드용: 최신 설교 N개 로드 (sermon_date desc) */
-export const getSermonArchiveList = () =>
-  getSermons({ pageSize: ARCHIVE_RECENT_COUNT });
-
 /** 필터 모드용: 서버 쿼리로 매칭 페이지만 로드 */
 export const getFilteredSermons = (
   params: Pick<
     SermonListParams,
-    'seriesId' | 'preacherId' | 'search' | 'year' | 'page'
+    'seriesId' | 'preacherId' | 'search' | 'year' | 'page' | 'sort'
   >
 ) => getSermons({ pageSize: FILTER_PAGE_SIZE, ...params });
 
@@ -69,12 +62,6 @@ export const getFilteredSermons = (
 export const getSermonsTotalCount = () => {
   const supabase = createStaticClient(sermonCache.list());
   return sermonService(supabase).totalCount();
-};
-
-/** 연도별 설교 편수 집계 (지난 설교 연도 그리드용) */
-export const getSermonYearCounts = () => {
-  const supabase = createStaticClient(sermonCache.list());
-  return sermonService(supabase).yearCounts();
 };
 
 /** [어드민] 수정용 설교 조회 — 캐시 없음, 초안 포함 */

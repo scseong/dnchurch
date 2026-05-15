@@ -30,7 +30,7 @@ export default function SermonSearchForm() {
         <input
           type="text"
           className={styles.search_input}
-          placeholder="제목 또는 성경구절 검색"
+          placeholder="제목·성경구절"
           value={input}
           onChange={(event) => setInput(event.target.value)}
           aria-label="설교 검색"

@@ -112,3 +112,17 @@ node scripts/verify-task.mjs sermons-detail-mobile
 - `docs/references/sermons/Sermon-Implementation-Prompts.md` Phase 2-4 (line 327-351)
 - `docs/references/sermons/ChurchSermonAll.jsx` — `MDetailBody`(line 2360+에서 별도 정의)
 - Phase 2-1·2-2·2-3 완료 후 누적 layout 위에서 reshuffle 진행 (`docs/exec-plans/active/2026-05-14-sermons-detail-*.md`)
+
+## 회고 (필수 5필드)
+
+- KPI / 시작-종료 (분): ~30 (JSX 위치 swap + SCSS modifier 2개 + 메타 row 컴팩트)
+- KPI / Codex 라운드: 1 (계획 PASS_WITH_DECISION_LOG `ae0962ae`. 1차 검증 생략)
+- KPI / material 사후 발견: 0
+- KPI / harness-gate placeholder fail: 0
+- KPI / 사용자 검토 부족 피드백: 0
+
+## 회고
+
+- 잘된 것: ADR 0010 적용 4 task 연속 완료 — 본 task가 가장 작은 변경(2 파일). compact plan의 효과 확인.
+- 다음에 할 것: mockup 순서 정합 검토를 sub-task 분할 단계에서 미리 — Phase 2-2(사이드바 신규) 시점에 OtherByPreacher 위치까지 합쳤다면 reshuffle 별 task 분리 불필요.
+- 발견된 부채: SermonNoteEditor가 mockup 7-8 사이에 끼임 — Phase 2-1 D2 + 본 task D3 모두 미해결. 노트 위치 별도 task 우선순위 ↑.

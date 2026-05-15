@@ -123,21 +123,31 @@ type CarouselProps = {
 };
 
 export function Carousel({ children, ariaLabel, mobileFullBleed = false, carousel }: CarouselProps) {
-  const { ref, onMouseDown, onMouseMove, stopDrag, clickGuard } = carousel;
+  const { ref, canL, canR, onMouseDown, onMouseMove, stopDrag, clickGuard } = carousel;
 
   return (
-    <div
-      ref={ref}
-      className={clsx(styles.track, mobileFullBleed && styles.full_bleed)}
-      role="region"
-      aria-label={ariaLabel}
-      onMouseDown={onMouseDown}
-      onMouseMove={onMouseMove}
-      onMouseUp={stopDrag}
-      onMouseLeave={stopDrag}
-      onClickCapture={clickGuard}
-    >
-      {children}
+    <div className={styles.viewport}>
+      <div
+        ref={ref}
+        className={clsx(styles.track, mobileFullBleed && styles.full_bleed)}
+        role="region"
+        aria-label={ariaLabel}
+        onMouseDown={onMouseDown}
+        onMouseMove={onMouseMove}
+        onMouseUp={stopDrag}
+        onMouseLeave={stopDrag}
+        onClickCapture={clickGuard}
+      >
+        {children}
+      </div>
+      <div
+        className={clsx(styles.fade_left, canL && styles.fade_visible)}
+        aria-hidden="true"
+      />
+      <div
+        className={clsx(styles.fade_right, canR && styles.fade_visible)}
+        aria-hidden="true"
+      />
     </div>
   );
 }

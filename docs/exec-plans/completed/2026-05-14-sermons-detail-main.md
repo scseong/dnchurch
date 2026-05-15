@@ -133,3 +133,17 @@ node scripts/verify-task.mjs sermons-detail-main
 - `docs/references/sermons/ChurchSermonAll.jsx` — `SermonMeta`(line 992-1015), `DetailPCBody` (영역 line 별도 mockup)
 - 기존 자산: `SermonDetailPage.tsx`(205줄), `SermonVideoPlayer` / `SermonVideoTools` / `ScriptureBlock` / `SeriesEpisodeList` / `SermonNoteEditor`
 - Phase 1-3 시리즈 link 컨벤션: `/sermons/series/${id}` (의사결정 로그 D7)
+
+## 회고 (필수 5필드)
+
+- KPI / 시작-종료 (분): ~60 (Tabs 폐기 + 순차 layout + SermonMeta 통합 + summary white-space + 시리즈 라벨 Link)
+- KPI / Codex 라운드: 2 (계획 PASS_WITH_DECISION_LOG `ae4aa541` + 1차 PASS `a90ff12d`)
+- KPI / material 사후 발견: 1 (PR #90 Gemini medium — preacher 결합 inline 중복. formatPreacherLabel을 import만 추가하고 실제 사용은 inline 결합 — 직접 작성과 import 활용 분리 검토 안 함)
+- KPI / harness-gate placeholder fail: 0
+- KPI / 사용자 검토 부족 피드백: 0
+
+## 회고
+
+- 잘된 것: Tabs UI 폐기를 의사결정 로그 D1-D4로 명시. 큰 리팩터(205→150줄)임에도 외과적(2 파일) + 컴포넌트 5개 재사용으로 Codex 양 라운드 PASS.
+- 다음에 할 것: utils 함수가 있으면 import 즉시 활용. preacher 결합 같은 흔한 패턴은 inline 작성 전 `utils/{도메인}.ts` 빠르게 grep 습관.
+- 발견된 부채: SermonNoteEditor 위치 임시 — main_column 끝 단순 노출, Phase 2-2/2-3/2-4 누적 후에도 미해결. 별도 task에서 collapsible / 우측 사이드바 / 별도 페이지 중 결정 필요.

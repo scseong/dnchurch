@@ -23,8 +23,10 @@ export default function SermonFeatured({ sermon }: Props) {
       : null;
 
   return (
-    <Link href={`/sermons/${sermon.id}`} className={styles.card}>
-      <div className={styles.media}>
+    <section className={styles.section}>
+      <h2 className={styles.section_title}>이번 주 설교</h2>
+      <Link href={`/sermons/${sermon.id}`} className={styles.card}>
+        <div className={styles.media}>
         {thumb && (
           <CloudinaryImage
             src={thumb}
@@ -57,11 +59,12 @@ export default function SermonFeatured({ sermon }: Props) {
           <span className={styles.dot}>·</span>
           <span>{sermon.service_type}</span>
         </div>
-        <h2 className={styles.title}>{sermon.title}</h2>
+        <h3 className={styles.title}>{sermon.title}</h3>
         {sermon.scripture && <p className={styles.scripture}>{sermon.scripture}</p>}
         {summaryFirstParagraph && <p className={styles.summary}>{summaryFirstParagraph}</p>}
         <p className={styles.preacher}>{preacherLabel}</p>
-      </div>
-    </Link>
+        </div>
+      </Link>
+    </section>
   );
 }
