@@ -1,0 +1,269 @@
+// 시리즈 상세 — cover 헤로 + 회차 그리드. mockup SeriesDetailPCPage / SeriesEpisodeCard.
+
+// 썸네일 위 오버레이 — semantic 토큰 미정의 영역(이미지 위 dim). GridCard와 동일 패턴.
+$play-overlay-bg: rgba(255, 255, 255, 0.16);
+$play-overlay-border: rgba(255, 255, 255, 0.22);
+$duration-overlay-bg: rgba(0, 0, 0, 0.7);
+
+$ep-thumb-width: 13rem;
+
+.page {
+  display: flex;
+  flex-direction: column;
+  gap: $section-gap-40;
+  padding: $spacing-20 0 $section-gap-80;
+}
+
+// ── Hero ──
+
+.hero {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  gap: $spacing-8;
+  min-height: 22rem;
+  padding: $spacing-28 $spacing-20;
+  overflow: hidden;
+  background: $overlay-image;
+  border-radius: $radius-m;
+  color: $txt-inverse;
+
+  @include respond-up($breakpoint-pc-sm) {
+    min-height: 28rem;
+    padding: $spacing-40;
+  }
+}
+
+.hero_image {
+  object-fit: cover;
+  pointer-events: none;
+}
+
+.hero_scrim {
+  position: absolute;
+  inset: 0;
+  background-color: $overlay-scrim;
+  pointer-events: none;
+}
+
+.hero_content {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-8;
+  max-width: 72rem;
+}
+
+.hero_eyebrow {
+  font-size: $font-size-11;
+  font-weight: $font-weight-bold;
+  letter-spacing: $letter-spacing-wide;
+  color: $accent;
+  text-transform: uppercase;
+}
+
+.hero_title {
+  margin: 0;
+  font-size: $font-size-24;
+  font-weight: $font-weight-bold;
+  letter-spacing: $letter-spacing-body;
+  line-height: $line-height-tight;
+  word-break: keep-all;
+
+  @include respond-up($breakpoint-pc-sm) {
+    font-size: $font-size-34;
+  }
+}
+
+.hero_desc {
+  margin: 0;
+  font-size: $font-size-13;
+  line-height: $line-height-body-reading;
+  color: $txt-image-subtle;
+  word-break: keep-all;
+
+  @include respond-up($breakpoint-pc-sm) {
+    font-size: $font-size-15;
+  }
+}
+
+.hero_meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: $spacing-4;
+  margin-top: $spacing-4;
+  font-size: $font-size-12;
+  color: $txt-image-subtle;
+  font-variant-numeric: tabular-nums;
+}
+
+.hero_dot {
+  opacity: 0.5;
+}
+
+.hero_ongoing,
+.hero_completed {
+  color: $txt-inverse;
+  font-weight: $font-weight-bold;
+}
+
+.hero_count {
+  color: $txt-inverse;
+  font-weight: $font-weight-bold;
+}
+
+// ── Episodes ──
+
+.episodes_header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: $spacing-12;
+  margin-bottom: $content-gap-m;
+  padding-bottom: $spacing-12;
+  border-bottom: 1px solid $border-subtle;
+}
+
+.episodes_title {
+  margin: 0;
+  font-size: $font-size-16;
+  font-weight: $font-weight-bold;
+  color: $txt-primary;
+}
+
+.episodes_total {
+  font-size: $font-size-12;
+  color: $txt-tertiary;
+  font-variant-numeric: tabular-nums;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: $content-gap-s;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+
+  @include respond-up($breakpoint-pc-sm) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+.episode {
+  display: grid;
+  grid-template-columns: $spacing-32 $ep-thumb-width 1fr;
+  gap: $content-gap-s;
+  align-items: center;
+  padding: $spacing-12 $spacing-16;
+  background-color: $bg-card;
+  border: 1px solid $border-card;
+  border-radius: $radius-s;
+  text-decoration: none;
+  color: inherit;
+
+  @include hover-lift;
+}
+
+.ep_number {
+  font-size: $font-size-14;
+  font-weight: $font-weight-bold;
+  color: $txt-tertiary;
+  font-variant-numeric: tabular-nums;
+  text-align: center;
+}
+
+.ep_thumb {
+  position: relative;
+  aspect-ratio: 16 / 9;
+  overflow: hidden;
+  border-radius: $radius-xs;
+  background-color: $bg-secondary;
+}
+
+.ep_thumb_img {
+  object-fit: cover;
+}
+
+.ep_thumb_placeholder {
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg, $bg-secondary, $border-card);
+}
+
+.ep_play {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: $spacing-32;
+  height: $spacing-32;
+  font-size: $font-size-11;
+  color: $accent;
+  background-color: $play-overlay-bg;
+  backdrop-filter: blur(4px);
+  border: 1px solid $play-overlay-border;
+  border-radius: $radius-circle;
+  transform: translate(-50%, -50%);
+  opacity: 0;
+  transition: opacity 0.2s ease;
+  pointer-events: none;
+}
+
+.episode:hover .ep_play {
+  opacity: 1;
+}
+
+.ep_duration {
+  position: absolute;
+  right: $spacing-4;
+  bottom: $spacing-4;
+  padding: 0 $spacing-4;
+  font-size: $font-size-11;
+  font-weight: $font-weight-semibold;
+  color: $txt-inverse;
+  background-color: $duration-overlay-bg;
+  border-radius: $radius-xxs;
+  font-variant-numeric: tabular-nums;
+}
+
+.ep_info {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-4;
+  min-width: 0;
+}
+
+.ep_title {
+  margin: 0;
+  font-size: $font-size-14;
+  font-weight: $font-weight-semibold;
+  color: $txt-primary;
+  line-height: $line-height-snug;
+
+  @include ellipsis-multi(2);
+  word-break: keep-all;
+}
+
+.ep_meta {
+  display: flex;
+  align-items: center;
+  gap: $spacing-4;
+  font-size: $font-size-11;
+  color: $txt-tertiary;
+  font-variant-numeric: tabular-nums;
+}
+
+.ep_scripture {
+  color: $primary;
+  font-weight: $font-weight-semibold;
+}
+
+.ep_dot {
+  opacity: 0.4;
+}
