@@ -302,12 +302,18 @@ $radio-dot-size: 0.4rem;
   margin: 0;
   font-size: $font-size-13;
   color: $txt-secondary;
+  word-break: keep-all;
 
   strong {
     color: $txt-primary;
     font-weight: $font-weight-bold;
     font-variant-numeric: tabular-nums;
   }
+}
+
+.result_query {
+  color: $primary;
+  font-weight: $font-weight-bold;
 }
 
 .result_page_info {
@@ -343,60 +349,6 @@ $radio-dot-size: 0.4rem;
   color: $primary;
   background-color: $primary-subtle;
   border-color: $primary;
-}
-
-// ── Search Feedback Card (검색어 활성 시) ──
-
-.search_feedback {
-  display: flex;
-  align-items: center;
-  gap: $spacing-10;
-  padding: $spacing-12 $spacing-16;
-  margin-bottom: $content-gap-m;
-  background-color: $bg-card;
-  border: 1px solid $border-subtle;
-  border-radius: $radius-s;
-}
-
-.search_feedback_icon {
-  flex-shrink: 0;
-  font-size: $font-size-13;
-  color: $txt-tertiary;
-}
-
-.search_feedback_text {
-  flex: 1;
-  min-width: 0;
-  font-size: $font-size-12;
-  color: $txt-secondary;
-  font-variant-numeric: tabular-nums;
-  word-break: keep-all;
-}
-
-.search_feedback_query {
-  color: $txt-primary;
-  font-weight: $font-weight-bold;
-}
-
-.search_feedback_count {
-  color: $txt-primary;
-  font-weight: $font-weight-bold;
-}
-
-.search_feedback_clear {
-  flex-shrink: 0;
-  display: inline-flex;
-  align-items: center;
-  gap: $spacing-4;
-  padding: $spacing-2 $spacing-4;
-  font-size: $font-size-12;
-  font-weight: $font-weight-medium;
-  color: $txt-tertiary;
-  background-color: transparent;
-  border: none;
-  cursor: pointer;
-
-  @include hover-color-shift($txt-primary);
 }
 
 // ── Series Meta Card (시리즈 필터 활성 시) ──
@@ -491,19 +443,23 @@ $radio-dot-size: 0.4rem;
   @include hover-color-shift($primary-hover);
 }
 
-// ── Active Filters ──
+// ── Filter Badge (모바일 필터 적용 수 — notification 스타일) ──
 
 .filter_badge {
+  position: absolute;
+  top: -0.6rem;
+  right: -0.6rem;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  min-width: 1.6rem;
-  height: 1.6rem;
+  min-width: 1.8rem;
+  height: 1.8rem;
   padding: 0 $spacing-4;
   font-size: $font-size-11;
   font-weight: $font-weight-bold;
   color: $txt-inverse;
   background-color: $primary;
+  border: 2px solid $bg-card;
   border-radius: $radius-circle;
   font-variant-numeric: tabular-nums;
 }

@@ -87,11 +87,7 @@ export default async function AllSermonsPage({ searchParams }: PageProps) {
           params={params}
         />
         <div className={styles.main}>
-          <SermonToolbar
-            allSeries={allSeries}
-            allPreachers={allPreachers}
-            resultCount={filteredTotal}
-          />
+          <SermonToolbar allSeries={allSeries} allPreachers={allPreachers} />
           {isUnknownSeries ? (
             <EmptyState
               title="해당 시리즈를 찾을 수 없습니다"
@@ -102,7 +98,6 @@ export default async function AllSermonsPage({ searchParams }: PageProps) {
             <>
               <SermonResultHeader
                 resultCount={filteredTotal}
-                hasQuery={!!search}
                 currentPage={page}
                 totalPages={totalPages}
               />
