@@ -1,7 +1,6 @@
 import type {
   Sermon,
   Preacher,
-  SermonSeries,
   SeriesWithSermonCount,
   SermonListParams,
   SermonSortKey
@@ -30,28 +29,6 @@ export function formatSermonDuration(duration: string | null): string | null {
   const [, hh, mm, ss] = match;
   const hours = Number(hh);
   return hours > 0 ? `${hours}:${mm}:${ss}` : `${mm}:${ss}`;
-}
-
-export function groupSeriesByYear<T extends SermonSeries>(
-  series: T[],
-): Record<string, T[]> {
-  const grouped: Record<string, T[]> = {};
-  for (const item of series) {
-    const key = item.year === null ? '미분류' : String(item.year);
-    (grouped[key] ??= []).push(item);
-  }
-  return grouped;
-}
-
-export function getSeriesByYearEntries<T extends SermonSeries>(
-  series: T[],
-): Array<readonly [string, T[]]> {
-  const grouped = groupSeriesByYear(series);
-  return Object.entries(grouped).sort(([a], [b]) => {
-    if (a === '미분류') return 1;
-    if (b === '미분류') return -1;
-    return Number(b) - Number(a);
-  });
 }
 
 export function computeStandaloneCount(

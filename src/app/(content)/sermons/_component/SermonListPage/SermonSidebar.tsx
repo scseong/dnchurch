@@ -2,7 +2,7 @@ import Link from 'next/link';
 import clsx from 'clsx';
 import { ListItem } from '@/components/ui';
 import SermonSearchForm from './SermonSearchForm';
-import { buildSermonHref, getSeriesByYearEntries } from '@/utils/sermon';
+import { buildSermonHref } from '@/utils/sermon';
 import type { SearchParams } from '@/utils/search-params';
 import type { PreacherWithSermonCount, SeriesWithSermonCount } from '@/types/sermon';
 import styles from './SermonListPage.module.scss';
@@ -28,7 +28,6 @@ export default function SermonSidebar({
   hasActiveFilter,
   params
 }: Props) {
-  const seriesEntries = getSeriesByYearEntries(allSeries);
   const resetHref = buildSermonHref(params, {
     series: null,
     preacher: null,
@@ -75,14 +74,15 @@ export default function SermonSidebar({
                   count={standaloneCount}
                 />
               </li>
-              {seriesEntries.map(([yearKey, items]) => (
-                <SeriesYearGroup
-                  key={yearKey}
-                  yearKey={yearKey}
-                  items={items}
-                  activeSeries={activeSeries}
-                  params={params}
-                />
+              {allSeries.map((item) => (
+                <li key={item.id}>
+                  <FilterItem
+                    href={buildSermonHref(params, { series: item.slug })}
+                    active={activeSeries === item.slug}
+                    label={item.title}
+                    count={item.sermon_count}
+                  />
+                </li>
               ))}
             </ul>
           </nav>
@@ -142,41 +142,13 @@ function FilterItem({
       className={clsx(styles.option, active && styles.option_active)}
       trailing={<span className={styles.option_count}>{count}</span>}
     >
-      {active && <span className={styles.dot} aria-hidden="true" />}
-      {label}
+      <span
+        className={clsx(styles.radio, active && styles.radio_active)}
+        aria-hidden="true"
+      >
+        {active && <span className={styles.radio_dot} />}
+      </span>
+      <span className={styles.option_label}>{label}</span>
     </ListItem>
-  );
-}
-
-function SeriesYearGroup({
-  yearKey,
-  items,
-  activeSeries,
-  params
-}: {
-  yearKey: string;
-  items: SeriesWithSermonCount[];
-  activeSeries: string | null;
-  params: SearchParams;
-}) {
-  const yearHeadingId = `sermon-sidebar-year-${yearKey}`;
-  return (
-    <li className={styles.sidebar_group}>
-      <h4 id={yearHeadingId} className={styles.sidebar_year}>
-        {yearKey === '미분류' ? '미분류' : `${yearKey}년`}
-      </h4>
-      <ul role="list" aria-labelledby={yearHeadingId}>
-        {items.map((item) => (
-          <li key={item.id}>
-            <FilterItem
-              href={buildSermonHref(params, { series: item.slug })}
-              active={activeSeries === item.slug}
-              label={item.title}
-              count={item.sermon_count}
-            />
-          </li>
-        ))}
-      </ul>
-    </li>
   );
 }

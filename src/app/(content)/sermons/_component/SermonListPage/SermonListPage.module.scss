@@ -15,8 +15,9 @@
 
 // ── Sidebar (PC) ──
 
-// dot indicator (활성 RadioOption 좌측) — mockup `PCFilterSidebar` `ChurchSermonAll.jsx:1397-1481` 패턴
-$dot-size: 0.4rem;
+// radio indicator (모든 옵션 좌측) — mockup `RadioOption` `ChurchSermonAll.jsx:1364-1395` 패턴
+$radio-size: 1.3rem;
+$radio-dot-size: 0.4rem;
 
 .sidebar {
   display: none;
@@ -92,29 +93,6 @@ $dot-size: 0.4rem;
   list-style: none;
   padding: 0;
   margin: 0;
-
-  ul {
-    display: flex;
-    flex-direction: column;
-    gap: $spacing-2;
-    list-style: none;
-    padding: 0;
-    margin: 0;
-  }
-}
-
-.sidebar_group {
-  margin-top: $spacing-8;
-}
-
-.sidebar_year {
-  margin: 0 0 $spacing-4;
-  padding: 0 $spacing-8;
-  font-size: $font-size-11;
-  font-weight: $font-weight-semibold;
-  letter-spacing: $letter-spacing-wide;
-  color: $txt-tertiary;
-  text-transform: uppercase;
 }
 
 .option {
@@ -135,12 +113,35 @@ $dot-size: 0.4rem;
   font-weight: $font-weight-semibold;
 }
 
-.dot {
+.radio {
   flex-shrink: 0;
-  width: $dot-size;
-  height: $dot-size;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: $radio-size;
+  height: $radio-size;
+  border: 1.5px solid $border-card;
   border-radius: $radius-circle;
+  background-color: transparent;
+}
+
+.radio_active {
+  border-color: $primary;
   background-color: $primary;
+}
+
+.radio_dot {
+  width: $radio-dot-size;
+  height: $radio-dot-size;
+  border-radius: $radius-circle;
+  background-color: $txt-inverse;
+}
+
+.option_label {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .option_count {
