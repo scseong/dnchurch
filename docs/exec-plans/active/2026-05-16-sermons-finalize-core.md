@@ -79,7 +79,7 @@ Sermon 섹션 마감 핵심 3항목: (1) 5개 라우트 로딩/에러 UI(6-2), (
 
 ## Codex 1차 검증
 
-- **결론**: LGTM (1차안 23파일 staged 기준) — **단, play-hint 재설계(DL-7) 이후 최종 상태는 Codex 재검증 미수행**: 재요청이 codex-companion Bash 권한 거부로 실행 불가. 사용자가 "Claude 2차로 진행" 결정(재설계분이 순수 표현 SCSS·로직 무변경, 로직부는 본 LGTM에서 검증됨).
+- **결론**: PASS (Codex 1차안 LGTM, 23파일 staged 기준) — **단, play-hint 재설계(DL-7) 이후 최종 상태는 Codex 재검증 미수행**: 재요청이 codex-companion Bash 권한 거부로 실행 불가. 사용자가 "Claude 2차로 진행" 결정(재설계분이 순수 표현 SCSS·로직 무변경, 로직부는 본 LGTM=PASS에서 검증됨).
 
 > (LGTM 1차안) (a) DL-1 series/[id] generateMetadata PASS — UUID_RE 검사 후에만 getSeriesDetail, page는 guard/no-data서 notFound 유지. (b) error.tsx 1개가 5 route cascade·notFound 미삼킴, SermonsSkeleton 'use client' 없음. (c) play-hint mixin reveal 체인 보존, dead var 잔여 0. (d) VideoPlayer poster button+aria-label, click 후에만 autoplay=1. (e) Non-goal leak 0.
 
