@@ -24,7 +24,9 @@ export default function SeriesCard({ series }: Props) {
           />
         )}
         <div className={styles.cover_scrim} aria-hidden />
-        <span className={styles.badge}>ON-GOING</span>
+        <span className={styles.badge}>
+          {series.ended_at === null ? 'ON-GOING' : 'COMPLETED'}
+        </span>
       </div>
       <div className={styles.body}>
         <h3 className={styles.title}>{series.title}</h3>
@@ -32,7 +34,11 @@ export default function SeriesCard({ series }: Props) {
         <div className={styles.meta_bar}>
           <span>{formattedDate(series.started_at, 'YYYY.MM.DD')}</span>
           <span className={styles.dot} aria-hidden>~</span>
-          <span className={styles.ongoing}>진행 중</span>
+          {series.ended_at ? (
+            <span>{formattedDate(series.ended_at, 'YYYY.MM.DD')}</span>
+          ) : (
+            <span className={styles.ongoing}>진행 중</span>
+          )}
           <span className={styles.dot} aria-hidden>·</span>
           <span className={styles.count}>{series.sermon_count}편</span>
         </div>
