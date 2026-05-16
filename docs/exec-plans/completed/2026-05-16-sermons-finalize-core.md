@@ -107,6 +107,21 @@ Codex CHANGE_REQUEST + Gemini/Codex 인라인 6건 트리아지. verify `2026051
 - **OtherByPreacher 신규**: `IoPlay` import + `aria-hidden` span을 기존 Link 내부 thumb_box에 추가(중첩·a11y 무회귀). 모바일 list 변형에 적용, 데스크톱은 GridCard 재사용(이미 play 통일됨)이라 일관.
 - **Non-goal 무누수**: 7-1/7-4/8-2/8-3/8-4 미구현 유지. 변경은 표현(SCSS/markup)·로직/데이터/레이어 무변경.
 
+## 회고
+
+**잘된 것**
+- play-hint를 `_mixins.scss` 단일 소스로 중앙화한 덕에 사용자 2차 피드백(흰 아이콘+검정opacity·hover/모바일 동작 전환)을 믹스인 1곳 수정으로 5컴포넌트 일괄 반영. 분산 로컬 rgba였다면 5+곳 수정 필요했음.
+- Codex 계획검증 CR(UUID guard·canonical metadataBase) 구현 전 DL-1~3에 선반영 → 1차안 LGTM. PR #94 #1(설교 이동 autoplay)·#2/#3(메타 이미지 비-절대 URL)도 코드 컨벤션 추적으로 정확 진단·수정.
+- squash 머지 후 harness-gate "검증 기록 불일치 → 재verify" 패턴을 Phase 4/5/finalize 3회 반복 숙달, 매끄럽게 처리.
+
+**다음에 할 것**
+- play-hint 통일을 "시각만"으로 1차 종결했다가 사용자 피드백으로 동작·범위 2회 확장(DL-6→7→9). EXPLORE에서 **아이콘 렌더 방식(react-icons vs 하드코딩 inline svg)을 전수 확인하지 않아** SermonCarouselCard·Featured 사각지대를 사용자가 13→16 수동 패치로 잡아냄. 표현 통일 작업은 착수 전 "동일 역할 요소의 모든 렌더 변형" 인벤토리부터.
+- Codex 1차 LGTM 후 대규모 재설계 발생 → 재검증이 codex-companion Bash 권한 거부로 불가, Claude 2차 대행. 큰 재설계가 예상되면 1차 검증 타이밍을 재설계 합의 이후로 미루는 편이 효율적.
+
+**부채**
+- Non-goal 분리분 별도 task 필요: 7-1 검색 디바운스 / 7-4 캐러셀 키보드 a11y / 8-2 공유 / 8-3 접근성 점검 / 8-4 성능 점검.
+- PR #94 #4(`getSeriesDetail` metadata+page 2회 호출): `createStaticClient` fetch 메모이제이션으로 dedupe돼 실해 없음 → tech-debt 미등록(현 캐시 충분).
+
 ---
 
 <!-- 이하 섹션은 해당 시에만 추가:
