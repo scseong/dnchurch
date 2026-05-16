@@ -20,7 +20,11 @@ export default function SermonRecentCarousel({ sermons }: Props) {
       <header className={styles.header}>
         <h2 className={styles.section_title}>최근 설교</h2>
         <div className={styles.header_actions}>
-          <CarouselArrows canL={carousel.canL} canR={carousel.canR} onScroll={carousel.scroll} />
+          <CarouselArrows
+            canScrollLeft={carousel.canScrollLeft}
+            canScrollRight={carousel.canScrollRight}
+            onScroll={carousel.scrollByDirection}
+          />
           <Link href="/sermons/all" className={styles.more_link}>
             더 보기 →
           </Link>
