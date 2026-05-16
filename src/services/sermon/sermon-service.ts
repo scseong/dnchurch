@@ -8,6 +8,7 @@ import type {
   SermonWithRelations,
   SermonListItem,
   SeriesWithSermonCount,
+  SeriesDetail,
   PreacherWithSermonCount,
   YearCount,
   AdminSermon,
@@ -162,6 +163,41 @@ export const sermonService = (supabase: SupabaseClient<Database>) => ({
 
     const handled = handleResponse(res);
     return (handled.data ?? []) as unknown as SermonWithRelations[];
+  },
+
+  /**
+   * id로 시리즈 단건 + 회차(설교) 조회. `is_active`는 공개 노출 게이트라 유지
+   * — 완료 시리즈는 `ended_at`으로 판별되며 is_active=true로 그대로 노출.
+   * 숨김(is_active=false)·미존재 시 null. sermon_count는 노출 회차 수.
+   */
+  bySeriesId: async (id: string): Promise<SeriesDetail | null> => {
+    const seriesRes = await supabase
+      .from('sermon_series')
+      .select('*')
+      .eq('id', id)
+      .eq('is_active', true)
+      .maybeSingle();
+
+    const seriesHandled = handleResponse(seriesRes);
+    if (!seriesHandled.data) return null;
+
+    const res = await supabase
+      .from('sermons')
+      .select(SERMON_WITH_RELATIONS_SELECT)
+      .eq('series_id', id)
+      .eq('is_published', true)
+      .is('deleted_at', null)
+      .order('series_order', { ascending: true, nullsFirst: false })
+      .order('sermon_date', { ascending: true });
+
+    const handled = handleResponse(res);
+    const episodes = (handled.data ?? []) as unknown as SermonWithRelations[];
+    const seriesRow = seriesHandled.data as unknown as SeriesWithSermonCount;
+
+    return {
+      series: { ...seriesRow, sermon_count: episodes.length },
+      episodes
+    };
   },
 
   /** 활성 설교자 전체 + published + 미삭제 설교 편수 조회 (inner join — 노출 0편 설교자는 결과에서 제외) */
