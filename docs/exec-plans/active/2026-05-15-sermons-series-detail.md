@@ -111,6 +111,21 @@ material CR 0건, 전부 expression-only. 5체크 전부 PASS — Assumptions(co
 - DL-1~4 반영 확인: $overlay-image/$overlay-scrim, cache tag 문자열, UUID_RE 가드 위치, preacher 제외.
 - 외과적: bySeriesSlug/getSermonsBySeries 불변, 변경 전부 Phase 5 추적.
 
+## PR #92 자동리뷰 대응
+
+Gemini 3 + Codex 3 코멘트 트리아지. 코드 수정 3건(verify RUN_ID=`20260515-232128` PASS, HEAD 갱신 예정).
+
+- **[Codex #4 P1 — 적용]** `bySeriesId`가 `is_active` 필터를 통째 제거해 숨김(is_active=false) 시리즈가 UUID로 공개 노출. 코드 컨벤션상 `is_active`=공개 게이트(worship/staff/allSeries:126/bySeriesSlug:149/allPreachers:206 전부 `.eq('is_active',true)`), 완료 판정은 별축 `ended_at`(page.tsx:45·SermonSeriesBanner:23·SermonSeriesSidebar:17). → `bySeriesId` 시리즈 조회에 `.eq('is_active', true)` 복원. 완료 시리즈는 is_active=true+ended_at!=null이라 영향 없음, 숨김만 404. **계획의 "is_active 필터 없음" 결정 폐기** — 완료축을 is_active로 착각한 오류 정정.
+- **[Codex #5 P2 — 적용]** 헤로 ON-GOING/COMPLETED·메타 분기를 `series.is_active` → `series.ended_at === null`로. Banner/Sidebar/메인과 동일 축. 중복 `~` dot 외과적 통합, 분기 단순화로 dead가 된 `.hero_completed` SCSS 제거.
+- **[Codex #6 P2 — 적용]** `EpisodeGrid` 회차 번호 `index+1` → `sermon.series_order ?? index+1`. 비연속 series_order/중간 비공개 시 설교 상세 "제N편"과 번호 일치.
+- **[Gemini #3 — 미적용]** `started_at` null 가드 제안 → `database.types.ts:265 started_at: string` (NOT NULL, Insert 필수). 불가능 시나리오 방어 가드레일에 따라 미적용.
+- **[Gemini #1 — 미적용]** `Promise.all` 병렬화 제안 → 두 쿼리는 의도적 순차: 시리즈 미존재 시 `return null`로 episodes 쿼리 skip(notFound 경로 최적화). 병렬화 시 항상 둘 다 실행.
+- **[Gemini #2 — 미적용]** select narrowing → 공유 상수 `SERMON_WITH_RELATIONS_SELECT` 좁히기는 PR #91 #6과 동일 회귀 리스크. tech-debt 유지(별건 전용 쿼리 필요).
+
+> **Phase 4 파급**: `allSeriesIncludingInactive`(미PR `feat/sermons-all-series`)도 동일 전제(완료=is_active 착각) 오류. 완료는 ended_at 축이라 `allSeries`(is_active=true)가 이미 완료 포함 → Phase 4 PR 시 함수 존치 여부 재검토. 본 PR 범위 외.
+
+**ADR 판단(보강)**: 불필요 — `is_active` 필터 복원은 기존 공개 게이트 컨벤션 준수(신규 정책 아님), 일회성 버그 정정. `start-adr` 미실행.
+
 ---
 
 <!-- 이하 섹션은 해당 시에만 추가:
