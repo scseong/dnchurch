@@ -5,7 +5,11 @@ import clsx from 'clsx';
 import { IoCheckmark } from 'react-icons/io5';
 import { BottomSheet, Button } from '@/components/ui';
 import useSeriesFilter from '@/hooks/useSeriesFilter';
-import { getSeriesYearOptions, type SeriesStatusFilter } from '@/utils/sermon';
+import {
+  getSeriesYearOptions,
+  SERIES_STATUS_OPTIONS,
+  type SeriesStatusFilter
+} from '@/utils/sermon';
 import type { SeriesWithSermonCount } from '@/types/sermon';
 import styles from './SeriesListPage.module.scss';
 
@@ -77,13 +81,7 @@ export default function SeriesFilterBottomSheet({
       <section className={styles.sheet_section}>
         <h3 className={styles.sheet_title}>상태</h3>
         <ul role="list" className={styles.sheet_option_list}>
-          {(
-            [
-              { value: null, label: '전체' },
-              { value: 'active', label: '진행 중' },
-              { value: 'ended', label: '완료' }
-            ] as { value: SeriesStatusFilter | null; label: string }[]
-          ).map((option) => (
+          {SERIES_STATUS_OPTIONS.map((option) => (
             <li key={option.label}>
               <FilterOption
                 label={option.label}

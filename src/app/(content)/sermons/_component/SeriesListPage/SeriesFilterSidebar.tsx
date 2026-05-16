@@ -6,6 +6,7 @@ import {
   buildSeriesHref,
   filterSeries,
   getSeriesYearOptions,
+  SERIES_STATUS_OPTIONS,
   type SeriesStatusFilter
 } from '@/utils/sermon';
 import type { SearchParams } from '@/utils/search-params';
@@ -20,12 +21,6 @@ type Props = {
   hasActiveFilter: boolean;
   params: SearchParams;
 };
-
-const STATUS_OPTIONS: { value: SeriesStatusFilter | null; label: string }[] = [
-  { value: null, label: '전체' },
-  { value: 'active', label: '진행 중' },
-  { value: 'ended', label: '완료' }
-];
 
 export default function SeriesFilterSidebar({
   allSeries,
@@ -65,7 +60,7 @@ export default function SeriesFilterSidebar({
           </h3>
           <nav aria-label="상태 필터">
             <ul role="list" className={styles.option_list}>
-              {STATUS_OPTIONS.map((option) => (
+              {SERIES_STATUS_OPTIONS.map((option) => (
                 <li key={option.label}>
                   <FilterItem
                     href={buildSeriesHref(params, { status: option.value })}

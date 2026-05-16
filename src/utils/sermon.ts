@@ -135,13 +135,26 @@ export type SeriesFilterPatch = {
   q?: string | null;
 };
 
+// status 필터 옵션 (사이드바·BottomSheet 공용)
+export const SERIES_STATUS_OPTIONS: {
+  value: SeriesStatusFilter | null;
+  label: string;
+}[] = [
+  { value: null, label: '전체' },
+  { value: 'active', label: '진행 중' },
+  { value: 'ended', label: '완료' }
+];
+
+const SERIES_YEAR_MIN = 1900;
+const SERIES_YEAR_MAX = 2100;
+
 export function parseSeriesParams(raw: SearchParams) {
   const rawStatus = getString(raw, 'status');
   return {
     status: (rawStatus === 'active' || rawStatus === 'ended'
       ? rawStatus
       : undefined) as SeriesStatusFilter | undefined,
-    year: getInt(raw, 'year', { min: 1900, max: 2100 }),
+    year: getInt(raw, 'year', { min: SERIES_YEAR_MIN, max: SERIES_YEAR_MAX }),
     q: getString(raw, 'q'),
   };
 }
