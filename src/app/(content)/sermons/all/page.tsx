@@ -22,9 +22,20 @@ import {
 } from '@/utils/sermon';
 import styles from '../_component/SermonListPage/SermonListPage.module.scss';
 
+const PAGE_DESCRIPTION = '대구동남교회의 모든 설교를 검색·필터로 찾아보세요';
+const PAGE_CANONICAL = `${process.env.NEXT_PUBLIC_SITE_URL}/sermons/all`;
+
 export const metadata: Metadata = {
   title: '전체 설교',
-  description: '대구동남교회의 모든 설교를 검색·필터로 찾아보세요'
+  description: PAGE_DESCRIPTION,
+  alternates: { canonical: PAGE_CANONICAL },
+  openGraph: {
+    title: '전체 설교',
+    description: PAGE_DESCRIPTION,
+    url: PAGE_CANONICAL,
+    type: 'website'
+  },
+  twitter: { card: 'summary', title: '전체 설교', description: PAGE_DESCRIPTION }
 };
 
 type PageProps = {

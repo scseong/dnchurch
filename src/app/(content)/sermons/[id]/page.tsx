@@ -23,15 +23,24 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const preacherLabel = formatPreacherLabel(sermon.preacher);
   const description = sermon.summary ?? `${preacherLabel}의 설교`;
   const thumbnail = getSermonThumbnail(sermon);
+  const canonical = `${process.env.NEXT_PUBLIC_SITE_URL}/sermons/${id}`;
 
   return {
     title,
     description,
+    alternates: { canonical },
     openGraph: {
       title,
       description,
+      url: canonical,
       images: thumbnail ? [{ url: thumbnail }] : [],
       type: 'article'
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title,
+      description,
+      images: thumbnail ? [thumbnail] : []
     }
   };
 }
