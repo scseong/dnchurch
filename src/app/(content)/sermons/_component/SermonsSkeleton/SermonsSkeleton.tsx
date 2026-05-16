@@ -9,7 +9,7 @@ const LIST_ROWS = Array.from({ length: 6 });
 const SIDEBAR_OPTS = Array.from({ length: 4 });
 const EPISODES = Array.from({ length: 6 });
 
-function VCard() {
+function VerticalCardSkeleton() {
   return (
     <div className={styles.v_card}>
       <Skeleton className={styles.v_thumb} />
@@ -20,7 +20,7 @@ function VCard() {
   );
 }
 
-function HCard() {
+function HorizontalCardSkeleton() {
   return (
     <div className={styles.h_card}>
       <Skeleton className={styles.h_thumb} />
@@ -72,7 +72,7 @@ export default function SermonsSkeleton({ variant }: { variant: Variant }) {
                 <Skeleton variant="text" width="12rem" height="1.6rem" />
                 <div className={styles.carousel}>
                   {CAROUSEL.map((_, index) => (
-                    <VCard key={index} />
+                    <VerticalCardSkeleton key={index} />
                   ))}
                 </div>
               </section>
@@ -88,7 +88,7 @@ export default function SermonsSkeleton({ variant }: { variant: Variant }) {
               <Skeleton variant="text" width="40%" className={styles.result_bar} />
               <div className={styles.list}>
                 {LIST_ROWS.map((_, index) => (
-                  <HCard key={index} />
+                  <HorizontalCardSkeleton key={index} />
                 ))}
               </div>
             </div>
@@ -126,7 +126,7 @@ export default function SermonsSkeleton({ variant }: { variant: Variant }) {
             </div>
             <div className={styles.grid}>
               {EPISODES.map((_, index) => (
-                <HCard key={index} />
+                <HorizontalCardSkeleton key={index} />
               ))}
             </div>
           </>
