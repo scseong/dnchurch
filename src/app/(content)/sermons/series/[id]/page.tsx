@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { LayoutContainer } from '@/components/layout';
 import { getSeriesDetail } from '@/services/sermon';
-import { cloudinaryFetchUrl } from '@/utils/cloudinary';
+import { getCloudinaryUrl } from '@/utils/cloudinary';
 import SeriesDetailHero from '../../_component/SeriesDetailPage/SeriesDetailHero';
 import EpisodeGrid from '../../_component/SeriesDetailPage/EpisodeGrid';
 import styles from '../../_component/SeriesDetailPage/SeriesDetailPage.module.scss';
@@ -28,7 +28,9 @@ export async function generateMetadata({
   const { series } = data;
   const title = series.title;
   const description = series.description ?? '대구동남교회 강해 설교 시리즈';
-  const image = cloudinaryFetchUrl(series.cover_image_url);
+  const image = series.cover_image_url
+    ? getCloudinaryUrl(series.cover_image_url)
+    : null;
   const canonical = `${process.env.NEXT_PUBLIC_SITE_URL}/sermons/series/${id}`;
 
   return {
