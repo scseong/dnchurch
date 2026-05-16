@@ -2,10 +2,8 @@
 // 좌측 썸네일 13rem + 우측 정보 — 시선이 가로로 흘러 정보 즉시 파악.
 $thumb-width: 13rem;
 
-// 썸네일 위 오버레이 — semantic 토큰 미정의 영역(이미지 위 dim 배경). Phase 1-2 carousel과 동일 패턴.
+// 썸네일 우하단 duration — semantic 토큰 미정의(이미지 위 dim). play 힌트는 sermon-play-hint-sm 믹스인.
 $duration-overlay-bg: rgba(0, 0, 0, 0.7);
-$play-overlay-bg: rgba(255, 255, 255, 0.16);
-$play-overlay-border: rgba(255, 255, 255, 0.22);
 
 .card {
   display: grid;
@@ -51,24 +49,7 @@ $play-overlay-border: rgba(255, 255, 255, 0.22);
 }
 
 .play_btn {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: $spacing-32;
-  height: $spacing-32;
-  font-size: $font-size-11;
-  color: $accent;
-  background-color: $play-overlay-bg;
-  backdrop-filter: blur(4px);
-  border: 1px solid $play-overlay-border;
-  border-radius: $radius-circle;
-  transform: translate(-50%, -50%);
-  pointer-events: none;
-  opacity: 0;
-  transition: opacity 0.2s ease;
+  @include sermon-play-hint-sm;
 }
 
 .card:hover .play_btn {

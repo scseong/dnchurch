@@ -8,9 +8,21 @@ import SeriesResultHeader from '../_component/SeriesListPage/SeriesResultHeader'
 import SeriesGrid from '../_component/SeriesListPage/SeriesGrid';
 import styles from '../_component/SeriesListPage/SeriesListPage.module.scss';
 
+const PAGE_DESCRIPTION =
+  '대구동남교회 강해 설교 시리즈를 상태·연도·검색으로 찾아보세요';
+const PAGE_CANONICAL = `${process.env.NEXT_PUBLIC_SITE_URL}/sermons/series`;
+
 export const metadata: Metadata = {
   title: '모든 시리즈',
-  description: '대구동남교회 강해 설교 시리즈를 상태·연도·검색으로 찾아보세요'
+  description: PAGE_DESCRIPTION,
+  alternates: { canonical: PAGE_CANONICAL },
+  openGraph: {
+    title: '모든 시리즈',
+    description: PAGE_DESCRIPTION,
+    url: PAGE_CANONICAL,
+    type: 'website'
+  },
+  twitter: { card: 'summary', title: '모든 시리즈', description: PAGE_DESCRIPTION }
 };
 
 type PageProps = {

@@ -65,6 +65,14 @@
   pointer-events: none;
 }
 
+.play {
+  @include sermon-play-hint-sm;
+}
+
+.card:hover .play {
+  opacity: 1;
+}
+
 .body {
   display: flex;
   flex-direction: column;

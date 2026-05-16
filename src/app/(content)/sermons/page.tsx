@@ -9,9 +9,20 @@ import styles from './page.module.scss';
 
 const RECENT_CAROUSEL_COUNT = 8;
 
+const PAGE_DESCRIPTION = '대구동남교회 설교 영상과 말씀을 만나보세요.';
+const PAGE_CANONICAL = `${process.env.NEXT_PUBLIC_SITE_URL}/sermons`;
+
 export const metadata: Metadata = {
   title: '설교',
-  description: '대구동남교회 설교 영상과 말씀을 만나보세요.'
+  description: PAGE_DESCRIPTION,
+  alternates: { canonical: PAGE_CANONICAL },
+  openGraph: {
+    title: '설교',
+    description: PAGE_DESCRIPTION,
+    url: PAGE_CANONICAL,
+    type: 'website'
+  },
+  twitter: { card: 'summary', title: '설교', description: PAGE_DESCRIPTION }
 };
 
 type SermonsPageProps = {

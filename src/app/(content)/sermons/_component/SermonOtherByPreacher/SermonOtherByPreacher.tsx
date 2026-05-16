@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import { IoPlay } from 'react-icons/io5';
 import CloudinaryImage from '@/components/common/CloudinaryImage';
 import type { SermonWithRelations } from '@/types/sermon';
 import { cloudinaryFetchUrl } from '@/utils/cloudinary';
@@ -49,6 +50,9 @@ function OtherCard({ sermon }: { sermon: SermonWithRelations }) {
             className={styles.thumb}
           />
         )}
+        <span className={styles.play} aria-hidden>
+          <IoPlay />
+        </span>
       </div>
       <div className={styles.body}>
         <h3 className={styles.card_title}>{sermon.title}</h3>

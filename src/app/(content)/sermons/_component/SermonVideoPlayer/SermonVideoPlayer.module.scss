@@ -1,16 +1,8 @@
-.sticky_wrap {
-  position: sticky;
-  top: $app-header-height;
-  z-index: 10;
+.video_wrap {
   margin: 0 calc(-1 * $container-padding);
 
   @include respond-up($breakpoint-tablet) {
     margin: 0;
-  }
-
-  @include respond-up($header-breakpoint) {
-    position: relative;
-    top: 0;
   }
 }
 
@@ -29,6 +21,45 @@
     width: 100%;
     height: 100%;
     border: none;
+  }
+}
+
+.poster {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  padding: 0;
+  border: none;
+  background: $black;
+  cursor: pointer;
+}
+
+.poster_img {
+  object-fit: cover;
+}
+
+// 상세 영상 포스터 — 카드 hint 통일 제외(사용자 결정). 항상 표시되는 메인 재생 affordance.
+// rgba($black,..) = SKILL rgba 투명도 예외.
+.play {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: $spacing-64;
+  height: $spacing-64;
+  font-size: $font-size-28;
+  color: $txt-inverse;
+  background-color: rgba($black, 0.5);
+  border-radius: $radius-circle;
+
+  @include respond-up($breakpoint-tablet) {
+    width: $spacing-80;
+    height: $spacing-80;
+    font-size: $font-size-32;
   }
 }
 

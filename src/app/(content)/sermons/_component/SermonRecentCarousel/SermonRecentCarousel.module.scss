@@ -1,9 +1,7 @@
 // 캐러셀 카드 폭 — mockup `SermonCarouselCard` PC 240px / 모바일 210px
 $card-width-mobile: 21rem;
 $card-width-pc: 24rem;
-// 다크 미디어 영역의 유리감 배지 (play 버튼) — 토큰 미존재 (mockup `rgba(255,255,255,.14|.22)`)
-$badge-glass-bg: rgba(255, 255, 255, 0.14);
-$badge-glass-border: rgba(255, 255, 255, 0.22);
+// play 버튼은 sermon-play-hint-sm 믹스인 (단일 소스)
 // 영상 우하단 duration overlay — 토큰 미존재 (mockup `rgba(0,0,0,.7)`)
 $duration-overlay-bg: rgba(0, 0, 0, 0.7);
 
@@ -79,21 +77,15 @@ $duration-overlay-bg: rgba(0, 0, 0, 0.7);
 }
 
 .play_circle {
-  position: relative;
-  z-index: 1;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: $spacing-32;
-  height: $spacing-32;
-  border-radius: $radius-circle;
-  background-color: $badge-glass-bg;
-  border: 1px solid $badge-glass-border;
-  color: $accent;
+  @include sermon-play-hint-sm;
 
   svg {
     margin-left: $spacing-1;
   }
+}
+
+.card:hover .play_circle {
+  opacity: 1;
 }
 
 .duration {

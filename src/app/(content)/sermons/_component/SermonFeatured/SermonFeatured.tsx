@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import { IoPlay } from 'react-icons/io5';
 import CloudinaryImage from '@/components/common/CloudinaryImage';
 import type { SermonWithRelations } from '@/types/sermon';
 import { cloudinaryFetchUrl } from '@/utils/cloudinary';
@@ -38,9 +39,7 @@ export default function SermonFeatured({ sermon }: Props) {
           />
         )}
         <span className={styles.play_circle} aria-hidden>
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
-            <path d="M8 5v14l11-7z" />
-          </svg>
+          <IoPlay />
         </span>
         {duration && <span className={styles.duration}>{duration}</span>}
       </div>
