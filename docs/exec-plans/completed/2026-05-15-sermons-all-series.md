@@ -142,6 +142,20 @@ D2(개정)/DL-2의 `getAllSeriesIncludingInactive` 신설 결정이 **전제 오
 - **검증**: verify-task `20260516-135216` PASS(tsc/lint/lint:styles 0). Codex 1차 **PASS**(의미구조 SOUND·수정 완전·캐시 정합·정렬 수용). Claude 2차 교차: 소스 dangling 0(`grep src`), `sermon-series-list-all` revalidate 참조 0(actions/services), `ended_at: string | null`(undefined 없음 → badge `===null`/meta `?` 타입 정합).
 - **ADR 판단(보강)**: 불필요 — 잉여 함수 삭제·기존 `allSeries` 재사용·기존 `ended_at` 컨벤션 준수. 신규 정책 아님, `start-adr` 미실행. tech-debt-tracker 해당 항목 해소 처리 예정.
 
+## 회고
+
+**잘된 것**
+- Phase 5 PR #92 #4 진단에서 얻은 `is_active`(발행/공개)↔`ended_at`(완료) 의미축을 Phase 4 전체(service·filterSeries·SeriesCard)에 선제 적용 — 동형 결함을 PR 전에 일괄 정정. 사용자 의미축 확인(2026-05-16)으로 방향 확정 후 메모리화.
+- 미머지 단계 이점을 살려 전제 오류를 본체 3커밋에 흡수(reset --soft → 재구성, `-i` 미사용) — 잉여 함수 add+delete가 net-zero로 상쇄돼 service/index/cache가 이력에서 자연 소거, PR이 "처음부터 올바른 Phase 4"로 보임.
+- Codex 1차 PASS + Claude 2차 교차(dangling/revalidate/타입)로 삭제형 변경의 잔존 참조 리스크 차단.
+
+**다음에 할 것**
+- Phase 4 계획 단계에서 Codex CR-1("getAllSeries가 완료 제외")을 dev 완료 0건(DL-4) 상태로 검증 없이 채택한 게 근인. 데이터 의미축 가정은 실제 호출처 + 사용자 확인으로 교차검증 후 Assumption 등재해야 함.
+
+**부채**
+- dev DB 완료/숨김 시리즈 0건 → "완료" 필터·숨김 비노출·COMPLETED 뱃지·종료일 표시는 화면 미검증. 시드(완료 1·숨김 1) 후 표시 확인 필요(코드·타입은 검증됨).
+- `getAllSeries`/`getAllPreachers` select 최적화는 기존 tech-debt 유지(별건).
+
 ---
 
 <!-- 이하 섹션은 해당 시에만 추가:
