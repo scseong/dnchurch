@@ -166,14 +166,16 @@ export const sermonService = (supabase: SupabaseClient<Database>) => ({
   },
 
   /**
-   * id로 시리즈 단건 + 회차(설교) 조회. `bySeriesSlug`와 달리 `is_active` 필터 없음
-   * — 완료 시리즈도 상세 노출. 미존재 시 null. sermon_count는 노출 회차 수.
+   * id로 시리즈 단건 + 회차(설교) 조회. `is_active`는 공개 노출 게이트라 유지
+   * — 완료 시리즈는 `ended_at`으로 판별되며 is_active=true로 그대로 노출.
+   * 숨김(is_active=false)·미존재 시 null. sermon_count는 노출 회차 수.
    */
   bySeriesId: async (id: string): Promise<SeriesDetail | null> => {
     const seriesRes = await supabase
       .from('sermon_series')
       .select('*')
       .eq('id', id)
+      .eq('is_active', true)
       .maybeSingle();
 
     const seriesHandled = handleResponse(seriesRes);
