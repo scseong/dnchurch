@@ -10,8 +10,9 @@ import ScriptureBlock from '../ScriptureBlock/ScriptureBlock';
 import SermonNoteEditor from '../SermonNoteEditor/SermonNoteEditor';
 import SermonSeriesSidebar from '../SermonSeriesSidebar/SermonSeriesSidebar';
 import SermonOtherByPreacher from '../SermonOtherByPreacher/SermonOtherByPreacher';
+import SermonMetaActions from './SermonMetaActions';
 import { formattedDate } from '@/utils/date';
-import { cloudinaryFetchUrl } from '@/utils/cloudinary';
+import { cloudinaryFetchUrl, getCloudinaryUrl } from '@/utils/cloudinary';
 import {
   formatPreacherLabel,
   formatSermonDuration,
@@ -49,7 +50,7 @@ export default function SermonDetailPage({
               thumbnailUrl={cloudinaryFetchUrl(getSermonThumbnail(sermon))}
               title={sermon.title}
             />
-            <SermonVideoTools sermonId={String(sermon.id)} />
+            <SermonVideoTools />
           </div>
 
           <div className={styles.info_section}>
@@ -107,6 +108,8 @@ type SermonMetaProps = {
 function SermonMeta({ sermon, preacherLabel, duration }: SermonMetaProps) {
   const series = sermon.sermon_series;
   const seriesOrder = sermon.series_order;
+  const thumbnail = getSermonThumbnail(sermon);
+  const shareImageUrl = thumbnail ? getCloudinaryUrl(thumbnail) : undefined;
 
   return (
     <div className={styles.meta_block}>
@@ -119,18 +122,26 @@ function SermonMeta({ sermon, preacherLabel, duration }: SermonMetaProps) {
       )}
       <h1 className={styles.sermon_title}>{sermon.title}</h1>
       {sermon.scripture && <span className={styles.scripture_tag}>{sermon.scripture}</span>}
-      <div className={styles.meta_row}>
-        <span>{formattedDate(sermon.sermon_date, 'YYYY년 MM월 DD일')}</span>
-        <Dot />
-        <span>{sermon.service_type}</span>
-        {duration && (
-          <>
-            <Dot />
-            <span>{duration}</span>
-          </>
-        )}
-        <Dot />
-        <span>{preacherLabel}</span>
+      <div className={styles.meta_bar}>
+        <div className={styles.meta_row}>
+          <span>{formattedDate(sermon.sermon_date, 'YYYY년 MM월 DD일')}</span>
+          <Dot />
+          <span>{sermon.service_type}</span>
+          {duration && (
+            <>
+              <Dot />
+              <span>{duration}</span>
+            </>
+          )}
+          <Dot />
+          <span>{preacherLabel}</span>
+        </div>
+        <SermonMetaActions
+          sermonId={String(sermon.id)}
+          title={sermon.title}
+          description={sermon.summary ?? sermon.scripture ?? undefined}
+          shareImageUrl={shareImageUrl}
+        />
       </div>
     </div>
   );

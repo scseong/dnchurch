@@ -130,6 +130,99 @@ $sidebar-width: 36rem;
   border-radius: $radius-xs;
 }
 
+.meta_bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: $spacing-12;
+}
+
+.meta_actions {
+  display: flex;
+  gap: $spacing-6;
+}
+
+.share_wrap {
+  position: relative;
+}
+
+.pill {
+  display: inline-flex;
+  align-items: center;
+  gap: $spacing-4;
+  padding: $spacing-6 $spacing-12;
+  font-size: $font-size-12;
+  font-weight: $font-weight-semibold;
+  color: $txt-secondary;
+  background: $bg-primary;
+  border: 1px solid $border-primary;
+  border-radius: $radius-xs;
+  cursor: pointer;
+  transition:
+    color 0.15s ease,
+    background-color 0.15s ease;
+
+  svg {
+    font-size: $font-size-16;
+  }
+
+  &:hover {
+    color: $txt-primary;
+    background-color: $bg-hover;
+  }
+}
+
+.pill_active {
+  color: $primary;
+
+  &:hover {
+    color: $primary-hover;
+  }
+}
+
+.share_menu {
+  position: absolute;
+  top: calc(100% + #{$spacing-8});
+  right: 0;
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  min-width: 14rem;
+  padding: $spacing-4;
+  background: $bg-primary;
+  border: 1px solid $border-primary;
+  border-radius: $radius-s;
+  box-shadow: $shadow-md;
+}
+
+.share_item {
+  display: flex;
+  align-items: center;
+  gap: $spacing-8;
+  width: 100%;
+  padding: $spacing-8 $spacing-12;
+  font-size: $font-size-13;
+  color: $txt-secondary;
+  text-align: left;
+  background: transparent;
+  border: none;
+  border-radius: $radius-xs;
+  cursor: pointer;
+  transition:
+    color 0.15s ease,
+    background-color 0.15s ease;
+
+  svg {
+    font-size: $font-size-16;
+  }
+
+  &:hover {
+    color: $txt-primary;
+    background-color: $bg-hover;
+  }
+}
+
 // ══════════════════════════════════════════
 // Summary
 // ══════════════════════════════════════════
