@@ -26,7 +26,7 @@ export default function SeriesDetailHero({ series }: Props) {
       <div className={styles.hero_scrim} aria-hidden />
       <div className={styles.hero_content}>
         <span className={styles.hero_eyebrow}>
-          SERIES · {series.is_active ? 'ON-GOING' : 'COMPLETED'}
+          SERIES · {series.ended_at === null ? 'ON-GOING' : 'COMPLETED'}
         </span>
         <h1 className={styles.hero_title}>{series.title}</h1>
         {series.description && (
@@ -34,24 +34,13 @@ export default function SeriesDetailHero({ series }: Props) {
         )}
         <div className={styles.hero_meta}>
           <span>{formattedDate(series.started_at, 'YYYY.MM.DD')}</span>
-          {series.is_active ? (
-            <>
-              <span className={styles.hero_dot} aria-hidden>
-                ~
-              </span>
-              <span className={styles.hero_ongoing}>진행 중</span>
-            </>
+          <span className={styles.hero_dot} aria-hidden>
+            ~
+          </span>
+          {series.ended_at ? (
+            <span>{formattedDate(series.ended_at, 'YYYY.MM.DD')}</span>
           ) : (
-            <>
-              <span className={styles.hero_dot} aria-hidden>
-                ~
-              </span>
-              {series.ended_at ? (
-                <span>{formattedDate(series.ended_at, 'YYYY.MM.DD')}</span>
-              ) : (
-                <span className={styles.hero_completed}>종료</span>
-              )}
-            </>
+            <span className={styles.hero_ongoing}>진행 중</span>
           )}
           <span className={styles.hero_dot} aria-hidden>
             ·
