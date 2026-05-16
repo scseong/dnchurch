@@ -75,7 +75,16 @@ Sermon 섹션 마감 핵심 3항목: (1) 5개 라우트 로딩/에러 UI(6-2), (
 - **DL-6 (play-hint 통일 — 사용자 승인 스코프 추가)**: 썸네일 play가 4종 분기(GridCard·SeriesDetail = white .16 hover-reveal / RecentCarousel = white .14 always-on / Featured = glass big / VideoPlayer = black big)였음. 사용자가 "이번 PR 포함" 선택. **역할 2종** 믹스인 통일: `_mixins.scss`에 `sermon-play-hint-sm`·`-lg` 신규. (1차안: 시각만 캡슐화·동작 보존 → Codex 1차 LGTM)
 - **DL-7 (play-hint 재설계 — 사용자 피드백 2차)**: 사용자 요구 — "카드 섹션은 데스크톱 hover에만, 모바일 항상 표시 / 흰 아이콘 + 검정 opacity 배경 / thumbnail 있는 컴포넌트 모두". 믹스인을 위치+시각+동작 단일 소스로 재작성: `position:absolute` 중앙 + `color:$txt-inverse` + `background-color:rgba($black,0.5)`(glass border/blur 폐기, SKILL rgba 예외) + `opacity:0`+`transition`+`@media(hover:none){opacity:1}`. 각 컴포넌트는 `@include`만 + `부모:hover .play{opacity:1}` reveal. 적용: GridCard·SeriesDetail·RecentCarousel·Featured(+`.card:hover` 신규). **사용자 결정 분기**: ①VideoPlayer 상세 포스터는 통일 **제외**(메인 재생 affordance, 항상 표시) → 자체 always-visible 스타일 복원(흰·검정opacity 동일 톤, mixin 미사용) ②`SermonOtherByPreacher`는 play 없었으나 "thumbnail 모두" 지시로 **신규 추가**(IoPlay span + sm 믹스인 + `.card:hover`). 아이콘이 wrapper 대비 작다는 피드백 → sm `$font-size-11→14`, lg `24→28`(tablet `28→32`), VideoPlayer 동일.
 - **DL-8 (커밋 분리 갱신)**: (1) loading/error (2) SEO metadata (3) play-hint 통일·재설계(_mixins + 5 컴포넌트, OtherByPreacher 신규 span 포함) (4) video player(7-2 + sticky 제거 + 포스터 자체 스타일) (5) docs. 믹스인이 video보다 먼저 커밋돼야 빌드 정합(VideoPlayer는 mixin 미사용이라 무관하나 순서 유지).
-- **DL-9 (아이콘 통일 사각지대 — 사용자 발견)**: SermonCarouselCard·SermonFeatured만 하드코딩 `<svg width=13|24>`라 믹스인 `font-size`가 안 먹어 아이콘 크기가 따로 놀았음(사용자가 CarouselCard 13→16 수동 패치로 포착). 정합: 두 곳을 다른 3곳과 동일하게 `react-icons IoPlay`로 교체 → 5곳 전부 믹스인 font-size 단일 제어, 매직넘버 제거. 6번째 커밋(Fix). 사용자 수동 16은 IoPlay 교체로 대체, `.dot` 줄바꿈(에디터 artifact)은 원형 복원. PR 미생성(사용자 지시).
+- **DL-9 (아이콘 통일 사각지대 — 사용자 발견)**: SermonCarouselCard·SermonFeatured만 하드코딩 `<svg width=13|24>`라 믹스인 `font-size`가 안 먹어 아이콘 크기가 따로 놀았음(사용자가 CarouselCard 13→16 수동 패치로 포착). 정합: 두 곳을 다른 3곳과 동일하게 `react-icons IoPlay`로 교체 → 5곳 전부 믹스인 font-size 단일 제어, 매직넘버 제거. 6번째 커밋(Fix). 사용자 수동 16은 IoPlay 교체로 대체, `.dot` 줄바꿈(에디터 artifact)은 원형 복원. PR #94 생성(이후 사용자 지시).
+
+## PR #94 자동리뷰 대응
+
+Codex CHANGE_REQUEST + Gemini/Codex 인라인 6건 트리아지. verify `20260516-183435` PASS.
+
+- **[#1 P1 — 적용]** `SermonVideoPlayer` `playing`이 `videoId` 변경과 분리 → next/link 설교 이동 시 client component 재사용으로 새 설교 즉시 autoplay. `SermonDetailPage` 호출부 `key={String(sermon.id)}` 부여(설교 변경 시 리마운트→playing 초기화).
+- **[#2·#3 — 적용]** OG/twitter 이미지가 `cloudinaryFetchUrl`(public-id 그대로 반환, 주석 명시) → `<meta>`엔 loader 없어 비-절대 URL이면 카드 미리보기 깨짐. `series/[id]`·`sermons/[id]` 메타 이미지를 `getCloudinaryUrl`로 교체(public-id→절대 res.cloudinary.com, 이미 http면 그대로라 youtube 썸네일 idempotent). dev 데이터: cover_image_url 0건·thumbnail_url youtube 절대 URL이라 현 시점 활성 결함은 아니나 계약상 정정.
+- **[#5 — 적용]** skeleton `VCard`/`HCard` 약어 → `VerticalCardSkeleton`/`HorizontalCardSkeleton`.
+- **[#4 — 미적용]** `getSeriesDetail` metadata+page 2회 호출. `getSeriesDetail`은 `createStaticClient(sermonCache.seriesDetail(id))` 사용 — Next fetch 메모이제이션으로 동일 요청 dedupe됨. 공유 서비스 함수에 `React.cache` 래핑은 5개 소비처 회귀 리스크 대비 이득 미미. tech-debt 미등록(현 캐시로 충분), reply로 사유 설명.
 
 ## Codex 1차 검증
 
