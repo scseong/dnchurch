@@ -43,6 +43,7 @@ export default function SermonDetailPage({
         <div className={styles.main_column}>
           <div className={styles.video_section}>
             <SermonVideoPlayer
+              key={String(sermon.id)}
               videoId={sermon.video_id}
               videoProvider={sermon.video_provider}
               thumbnailUrl={cloudinaryFetchUrl(getSermonThumbnail(sermon))}
