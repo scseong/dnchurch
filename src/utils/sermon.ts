@@ -122,3 +122,59 @@ export const buildSermonHref = (
   return buildFilterHref('/sermons/all', params, keys, patch);
 };
 
+// ── 모든 시리즈 페이지(/sermons/series) 필터 ──
+// 설교자 축은 sermon_series에 preacher가 없어 제외 (후속 task). 정렬 고정이라 sort 없음.
+
+export const SERIES_FILTER_KEYS = ['status', 'year', 'q'] as const;
+
+export type SeriesStatusFilter = 'active' | 'ended';
+
+export type SeriesFilterPatch = {
+  status?: string | null;
+  year?: string | null;
+  q?: string | null;
+};
+
+export function parseSeriesParams(raw: SearchParams) {
+  const rawStatus = getString(raw, 'status');
+  return {
+    status: (rawStatus === 'active' || rawStatus === 'ended'
+      ? rawStatus
+      : undefined) as SeriesStatusFilter | undefined,
+    year: getInt(raw, 'year', { min: 1900, max: 2100 }),
+    q: getString(raw, 'q'),
+  };
+}
+
+export const buildSeriesHref = (
+  params: SearchParams,
+  patch: SeriesFilterPatch = {},
+): string => buildFilterHref('/sermons/series', params, SERIES_FILTER_KEYS, patch);
+
+export function filterSeries(
+  series: SeriesWithSermonCount[],
+  filters: { status?: SeriesStatusFilter; year?: number; q?: string },
+): SeriesWithSermonCount[] {
+  const query = filters.q?.trim().toLowerCase();
+  return series.filter((item) => {
+    if (filters.status === 'active' && item.ended_at !== null) return false;
+    if (filters.status === 'ended' && item.ended_at === null) return false;
+    if (filters.year !== undefined && item.year !== filters.year) return false;
+    if (query) {
+      const haystack = `${item.title} ${item.description ?? ''}`.toLowerCase();
+      if (!haystack.includes(query)) return false;
+    }
+    return true;
+  });
+}
+
+/** 결과셋에 존재하는 연도 옵션 (내림차순) */
+export function getSeriesYearOptions(
+  series: SeriesWithSermonCount[],
+): number[] {
+  const years = series
+    .map((item) => item.year)
+    .filter((year): year is number => year != null);
+  return [...new Set(years)].sort((a, b) => b - a);
+}
+
