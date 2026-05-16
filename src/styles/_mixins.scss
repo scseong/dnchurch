@@ -225,3 +225,58 @@
     }
   }
 }
+
+/// 썸네일 위 재생 힌트 — 흰 아이콘 + 검정 opacity 배경. 위치·표시 동작 포함 단일 소스.
+/// 카드: 데스크톱 hover 시 노출 / 모바일(hover 미지원) 항상 노출. 부모에 `:hover` reveal 추가.
+/// rgba($black,..) = SKILL rgba 투명도 예외. `-sm` 카드 / `-lg` Featured 큰 CTA.
+@mixin sermon-play-hint-sm {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: $spacing-32;
+  height: $spacing-32;
+  font-size: $font-size-14;
+  color: $txt-inverse;
+  background-color: rgba($black, 0.5);
+  border-radius: $radius-circle;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+
+  @media (hover: none) {
+    opacity: 1;
+  }
+}
+
+@mixin sermon-play-hint-lg {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: $spacing-64;
+  height: $spacing-64;
+  font-size: $font-size-28;
+  color: $txt-inverse;
+  background-color: rgba($black, 0.5);
+  border-radius: $radius-circle;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+
+  @media (hover: none) {
+    opacity: 1;
+  }
+
+  @include respond-up($breakpoint-tablet) {
+    width: $spacing-80;
+    height: $spacing-80;
+    font-size: $font-size-32;
+  }
+}

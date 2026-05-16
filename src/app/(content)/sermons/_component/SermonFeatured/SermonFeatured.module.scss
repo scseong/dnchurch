@@ -1,8 +1,6 @@
 // PC 분기에서 Featured 좌측 미디어 영역 폭 — mockup `ListPCFeatured` 580px 고정
 $featured-image-col: 58rem;
-// 다크 미디어 영역의 유리감 배지 (play 버튼) — 토큰 미존재 (mockup `rgba(255,255,255,.14|.22)`)
-$badge-glass-bg: rgba(255, 255, 255, 0.14);
-$badge-glass-border: rgba(255, 255, 255, 0.22);
+// play 버튼은 sermon-play-hint-lg 믹스인 (단일 소스)
 // 영상 우하단 duration overlay — 토큰 미존재 (mockup `rgba(0,0,0,.55)`)
 $duration-overlay-bg: rgba(0, 0, 0, 0.55);
 
@@ -55,26 +53,15 @@ $duration-overlay-bg: rgba(0, 0, 0, 0.55);
 }
 
 .play_circle {
-  position: relative;
-  z-index: 1;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: $spacing-64;
-  height: $spacing-64;
-  border-radius: $radius-circle;
-  background-color: $badge-glass-bg;
-  border: 1px solid $badge-glass-border;
-  color: $accent;
-
-  @include respond-up($breakpoint-tablet) {
-    width: $spacing-80;
-    height: $spacing-80;
-  }
+  @include sermon-play-hint-lg;
 
   svg {
     margin-left: $spacing-2;
   }
+}
+
+.card:hover .play_circle {
+  opacity: 1;
 }
 
 .duration {
