@@ -24,7 +24,10 @@ export default function EpisodeGrid({ episodes }: Props) {
         <ul role="list" className={styles.grid}>
           {episodes.map((sermon, index) => (
             <li key={sermon.id}>
-              <SeriesEpisodeCard sermon={sermon} order={index + 1} />
+              <SeriesEpisodeCard
+                sermon={sermon}
+                order={sermon.series_order ?? index + 1}
+              />
             </li>
           ))}
         </ul>
