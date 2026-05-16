@@ -11,7 +11,12 @@ import SermonNoteEditor from '../SermonNoteEditor/SermonNoteEditor';
 import SermonSeriesSidebar from '../SermonSeriesSidebar/SermonSeriesSidebar';
 import SermonOtherByPreacher from '../SermonOtherByPreacher/SermonOtherByPreacher';
 import { formattedDate } from '@/utils/date';
-import { formatPreacherLabel, formatSermonDuration } from '@/utils/sermon';
+import { cloudinaryFetchUrl } from '@/utils/cloudinary';
+import {
+  formatPreacherLabel,
+  formatSermonDuration,
+  getSermonThumbnail
+} from '@/utils/sermon';
 import type { SermonWithRelations, SermonResource } from '@/types/sermon';
 import styles from './SermonDetailPage.module.scss';
 
@@ -37,7 +42,12 @@ export default function SermonDetailPage({
       <div className={clsx(styles.layout, hasSeriesSidebar && styles.layout_with_sidebar)}>
         <div className={styles.main_column}>
           <div className={styles.video_section}>
-            <SermonVideoPlayer videoId={sermon.video_id} title={sermon.title} />
+            <SermonVideoPlayer
+              videoId={sermon.video_id}
+              videoProvider={sermon.video_provider}
+              thumbnailUrl={cloudinaryFetchUrl(getSermonThumbnail(sermon))}
+              title={sermon.title}
+            />
             <SermonVideoTools sermonId={String(sermon.id)} />
           </div>
 
