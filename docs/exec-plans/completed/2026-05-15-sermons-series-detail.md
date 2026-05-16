@@ -126,6 +126,19 @@ Gemini 3 + Codex 3 코멘트 트리아지. 코드 수정 3건(verify RUN_ID=`202
 
 **ADR 판단(보강)**: 불필요 — `is_active` 필터 복원은 기존 공개 게이트 컨벤션 준수(신규 정책 아님), 일회성 버그 정정. `start-adr` 미실행.
 
+## 회고
+
+**잘된 것**
+- squash 머지 후 다운스트림 문제(Phase 5가 squash 전 d74f1d6 분기 → develop 대비 1808줄 부풀림)를 `harness-gate` 검증 불일치 경고로 조기 포착. `git diff d74f1d6 origin/develop` 빈 출력 확인 후 `rebase --onto origin/develop d74f1d6`로 충돌 0·10파일 클린 분리.
+- 리뷰 P1(is_active 미필터)을 코드 컨벤션 추적(5개 공개 호출처 `.eq('is_active',true)` + ended_at 3개 호출처)으로 정확히 진단 — Codex 지적을 그대로 수용하지 않고 의미축을 코드로 확정.
+
+**다음에 할 것**
+- 계획 단계에서 "`bySeriesSlug`와 달리 `is_active` 필터 없음 — 완료 노출"을 검증된 Assumption으로 채택한 게 오류. 완료축(`ended_at`)과 공개축(`is_active`)을 혼동. 데이터 의미축은 계획 Assumptions에서 실제 호출처로 교차검증해야 했음.
+
+**부채**
+- Phase 4 `allSeriesIncludingInactive`(미PR `feat/sermons-all-series`)가 동일 전제 오류. `allSeries`(is_active=true)가 완료 시리즈를 이미 포함 → 함수 자체가 불필요할 수 있음. tech-debt 등록, Phase 4 PR 전 재검토.
+- `SERMON_WITH_RELATIONS_SELECT` 공유 상수 narrowing(Gemini #2) — PR #91 #6과 동일 사유로 보류, tech-debt-tracker 유지.
+
 ---
 
 <!-- 이하 섹션은 해당 시에만 추가:

@@ -337,4 +337,13 @@
 - **영향 범위**: `src/services/sermon/sermon-service.ts` (2 쿼리), 소비처 5곳
 - **발견일**: 2026-05-15 (PR #91 Gemini 코드리뷰 제안 / Codex 1차에서 회귀 확인)
 
+### 🟡 `allSeriesIncludingInactive` 전제 오류 — 완료축을 is_active로 착각 (Phase 4)
+
+- **상태**: 🟡 Phase 4 PR 전 재검토 필수
+- **무엇**: `feat/sermons-all-series`(미PR) Phase 4가 "완료 시리즈도 목록 노출" 목적으로 `is_active` 필터를 제거한 `allSeriesIncludingInactive`/`getAllSeriesIncludingInactive` 신설
+- **왜 오류**: dnchurch에서 `is_active`=공개 노출 게이트(`worship`/`staff`/`allSeries`/`bySeriesSlug`/`allPreachers` 일관), 완료 판정은 별축 `ended_at`(`page.tsx:45`·`SermonSeriesBanner:23`·`SermonSeriesSidebar:17`). 완료 시리즈는 `is_active=true`+`ended_at!=null`이라 **`allSeries`(is_active=true)가 이미 완료 포함** → `allSeriesIncludingInactive`는 불필요할뿐 아니라 숨김(is_active=false) 시리즈까지 목록 노출(PR #92 #4와 동형 결함). Phase 4 계획 Codex CR-1("getAllSeries가 완료 제외")이 데이터 검증 없이 채택된 게 근인(dev DB 완료 시리즈 0건이라 미검출)
+- **마이그레이션 경로**: Phase 4 PR 전 (a) `allSeriesIncludingInactive` 폐기하고 `allSeries` 재사용 가능 여부 확인(완료 시리즈 표시는 ended_at 분기로), (b) 불가 시 `is_active=true` 유지한 채 정렬만 조정
+- **영향 범위**: `src/services/sermon/sermon-service.ts`, `src/services/sermon/index.ts`, `feat/sermons-all-series` 브랜치 Phase 4 전반
+- **발견일**: 2026-05-15 (PR #92 #4 진단 중 동형 오류 발견)
+
 <!-- last-audit: 2026-05-14 -->
