@@ -75,6 +75,11 @@ preconnect는 연결만 데움 — 병목인 **플레이어 JS 다운로드·부
 - 회귀: provider 가드·placeholder·포스터/play 비주얼·`.poster` 절대 오버레이·`.main` 비율 무변경(Codex (d) 일부·(e) 일치). preconnect-only 잔재 없음(폐기).
 - 잔여 수용(문서화): (a) origin 미지정 (b) deferred sound 정책 (c) 비공식 프로토콜 — 표준 lite 패턴, 추후 공식 Player API 전환은 별도 결정.
 
+## 의사결정 로그
+
+- **DL-1 (계획-레벨 Codex 생략)**: 단일 컴포넌트·비구조·ADR_TRIGGER 미해당. 접근(즉시 iframe vs preconnect vs Player API)은 AskUserQuestion으로 사용자 확정, 구현分은 Codex 1차(FIX_APPLIED)로 검증. 계획 검증 verdict = PASS_WITH_DECISION_LOG.
+- **DL-2 (supersession — 중요)**: 본 슬러그 구현(eager iframe + `enablejsapi`/`postMessage` ready-큐)은 이후 `sermons-detail-mockup` D7에서 **모바일 재생 불가 근본원인으로 판명**, Codex 디버깅 검증을 거쳐 **src-swap autoplay(`?playsinline=1`, 클릭 시 `&autoplay=1`)로 전면 대체**됨. 따라서 위 Codex 1차/Claude 2차 기록은 *당시 코드 기준*이며 PR #95 최종 영상 코드의 검증 SSOT는 `2026-05-16-sermons-detail-mockup.md` D7. 본 슬러그에서 잔존하는 의도는 진입 즉시 iframe 마운트(첫재생 지연 완화)뿐.
+
 ---
 
 <!-- 이하 섹션은 해당 시에만 추가:
