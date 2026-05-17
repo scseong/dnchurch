@@ -52,7 +52,9 @@ preconnect는 연결만 데움 — 병목인 **플레이어 JS 다운로드·부
 
 ## Codex 계획 검증
 
-- **결론**: N/A — 단일 컴포넌트·비구조. 접근(즉시 iframe vs preconnect vs Player API)은 사용자와 대화로 확정(AskUserQuestion). 계획-레벨 Codex 생략, 구현分은 Codex 1차로 검증. ADR_TRIGGER 미해당.
+- **결론**: PASS_WITH_DECISION_LOG — 계획-레벨 Codex 생략 결정(단일 컴포넌트·비구조·ADR_TRIGGER 미해당, 접근은 AskUserQuestion으로 사용자 확정), 구현分은 Codex 1차로 검증.
+
+> **의사결정 로그(supersession)**: 이 슬러그의 구현(eager iframe + `enablejsapi`/`postMessage` 큐)은 이후 `sermons-detail-mockup` D7에서 **모바일 재생 불가 근본원인으로 판명되어 src-swap autoplay 방식으로 대체**됨(Codex 디버깅 검증). 즉 본 슬러그의 Codex 1차/Claude 2차 기록은 당시 코드 기준이며, PR #95 최종 영상 코드의 검증 SSOT는 `2026-05-16-sermons-detail-mockup.md` D7. 본 슬러그는 첫재생 지연 완화 의도(preboot)만 잔존.
 
 ## Codex 1차 검증
 
