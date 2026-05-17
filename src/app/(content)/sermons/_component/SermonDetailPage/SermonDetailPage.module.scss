@@ -4,6 +4,9 @@ $sidebar-width: 36rem;
 $tab-panel-min-height: 10rem;
 // 공유 시트 항목 최소 터치 영역 — 모바일 a11y 권장 타깃(≈48px) (토큰 없음·로컬)
 $share-item-min-height: 4.8rem;
+// 모바일 sticky 탭바 오프셋 = 모바일 헤더(.mobile_top) 높이. Header.module.scss의
+// 하위 sticky top:5.4rem 관례와 일치 — top:0이면 sticky 헤더(z-header) 뒤로 가려짐 (토큰 없음·로컬)
+$mobile-header-offset: 5.4rem;
 
 // ══════════════════════════════════════════
 // Layout
@@ -217,13 +220,22 @@ $share-item-min-height: 4.8rem;
 .sections {
   display: flex;
   flex-direction: column;
+
+  // 모바일: sticky 탭바의 containing block(=.sections)이 짧은 활성 패널
+  // 때문에 일찍 끝나 탭바가 곧 풀리는 문제 → 뷰포트 높이만큼 최소 확보.
+  // 실제 패널 콘텐츠가 더 길면 콘텐츠 높이가 우선.
+  min-height: calc(100svh - #{$mobile-header-offset});
+
+  @include respond-up($breakpoint-tablet) {
+    min-height: 0;
+  }
 }
 
 // 모바일: sticky 탭 바. PC(≥768)에서는 숨김 — 전 패널 스택 노출.
 // 모바일: 컨테이너 패딩을 음수 마진으로 상쇄해 화면 풀폭 탭 바(여백 0).
 .tab_bar {
   position: sticky;
-  top: 0;
+  top: $mobile-header-offset;
   z-index: 10;
   display: flex;
   margin: 0 calc(-1 * $container-padding) $content-gap-l;
