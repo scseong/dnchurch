@@ -8,12 +8,11 @@ import styles from './SermonListPage.module.scss';
 
 export default function SermonSearchForm() {
   const { q, setFilter } = useSermonFilter();
+  // 초기값만 URL q에서. q→input 미러링 effect는 제거 — 디바운스 navigation이
+  // 늦게 끝날 때 그 사이 입력을 되돌리던 버그(PR #95 #4)의 원인이었고,
+  // 입력은 사용자 소유다. (외부 q 변경은 라우트 전환 시 재마운트로 반영)
   const [input, setInput] = useState(q);
   const debounced = useDebounce(input, 300);
-
-  useEffect(() => {
-    setInput(q);
-  }, [q]);
 
   // 타이핑 멈춤 300ms 후 URL 반영.
   // - debounced가 현재 input과 같을 때만(디바운스 정착) push — Enter/clear 등 즉시 액션으로
