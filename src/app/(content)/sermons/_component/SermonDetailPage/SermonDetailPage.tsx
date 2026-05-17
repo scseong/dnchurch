@@ -2,22 +2,16 @@
 
 import Link from 'next/link';
 import clsx from 'clsx';
-import { IoDocumentTextOutline, IoDownloadOutline } from 'react-icons/io5';
 import { LayoutContainer } from '@/components/layout';
 import SermonVideoPlayer from '../SermonVideoPlayer/SermonVideoPlayer';
-import SermonVideoTools from '../SermonVideoTools/SermonVideoTools';
-import ScriptureBlock from '../ScriptureBlock/ScriptureBlock';
-import SermonNoteEditor from '../SermonNoteEditor/SermonNoteEditor';
 import SermonSeriesSidebar from '../SermonSeriesSidebar/SermonSeriesSidebar';
 import SermonOtherByPreacher from '../SermonOtherByPreacher/SermonOtherByPreacher';
+import SermonMetaActions from './SermonMetaActions';
+import SermonDetailSections from './SermonDetailSections';
 import { formattedDate } from '@/utils/date';
-import { cloudinaryFetchUrl } from '@/utils/cloudinary';
-import {
-  formatPreacherLabel,
-  formatSermonDuration,
-  getSermonThumbnail
-} from '@/utils/sermon';
-import type { SermonWithRelations, SermonResource } from '@/types/sermon';
+import { cloudinaryFetchUrl, getCloudinaryUrl } from '@/utils/cloudinary';
+import { formatPreacherLabel, getSermonThumbnail } from '@/utils/sermon';
+import type { SermonWithRelations } from '@/types/sermon';
 import styles from './SermonDetailPage.module.scss';
 
 type Props = {
@@ -32,10 +26,8 @@ export default function SermonDetailPage({
   otherSermonsByPreacher
 }: Props) {
   const preacherLabel = formatPreacherLabel(sermon.preacher);
-  const duration = formatSermonDuration(sermon.duration);
   const series = sermon.sermon_series;
   const hasSeriesSidebar = Boolean(series) && seriesEpisodes.length > 0;
-  const activeResources = sermon.sermon_resources.filter((r) => !r.deleted_at);
 
   return (
     <LayoutContainer>
@@ -49,31 +41,12 @@ export default function SermonDetailPage({
               thumbnailUrl={cloudinaryFetchUrl(getSermonThumbnail(sermon))}
               title={sermon.title}
             />
-            <SermonVideoTools sermonId={String(sermon.id)} />
           </div>
 
           <div className={styles.info_section}>
-            <SermonMeta
-              sermon={sermon}
-              preacherLabel={preacherLabel}
-              duration={duration}
-            />
+            <SermonMeta sermon={sermon} preacherLabel={preacherLabel} />
 
-            {sermon.scripture && sermon.scripture_text && (
-              <ScriptureBlock
-                scriptureRef={sermon.scripture}
-                scriptureText={sermon.scripture_text}
-              />
-            )}
-
-            {sermon.summary && (
-              <p className={styles.summary_text}>{sermon.summary}</p>
-            )}
-
-            {activeResources.length > 0 && <ResourceList resources={activeResources} />}
-
-            {/* 노트는 mockup에 없으나 dnchurch 자체 기능. 임시 위치 — 별도 task로 위치 확정 예정 (sermons-detail-main D2) */}
-            <SermonNoteEditor sermonId={String(sermon.id)} />
+            <SermonDetailSections sermon={sermon} />
           </div>
         </div>
 
@@ -101,12 +74,13 @@ export default function SermonDetailPage({
 type SermonMetaProps = {
   sermon: SermonWithRelations;
   preacherLabel: string;
-  duration: string | null;
 };
 
-function SermonMeta({ sermon, preacherLabel, duration }: SermonMetaProps) {
+function SermonMeta({ sermon, preacherLabel }: SermonMetaProps) {
   const series = sermon.sermon_series;
   const seriesOrder = sermon.series_order;
+  const thumbnail = getSermonThumbnail(sermon);
+  const shareImageUrl = thumbnail ? getCloudinaryUrl(thumbnail) : undefined;
 
   return (
     <div className={styles.meta_block}>
@@ -118,52 +92,26 @@ function SermonMeta({ sermon, preacherLabel, duration }: SermonMetaProps) {
         <span className={styles.series_tag_plain}>단독 설교</span>
       )}
       <h1 className={styles.sermon_title}>{sermon.title}</h1>
-      {sermon.scripture && <span className={styles.scripture_tag}>{sermon.scripture}</span>}
-      <div className={styles.meta_row}>
-        <span>{formattedDate(sermon.sermon_date, 'YYYY년 MM월 DD일')}</span>
-        <Dot />
-        <span>{sermon.service_type}</span>
-        {duration && (
-          <>
-            <Dot />
-            <span>{duration}</span>
-          </>
-        )}
-        <Dot />
-        <span>{preacherLabel}</span>
+      <div className={styles.meta_bar}>
+        <div className={styles.meta_row}>
+          {sermon.scripture && (
+            <>
+              <span className={styles.meta_scripture}>{sermon.scripture}</span>
+              <Dot />
+            </>
+          )}
+          <span>{preacherLabel}</span>
+          <Dot />
+          <span>{formattedDate(sermon.sermon_date, 'YYYY년 MM월 DD일')}</span>
+        </div>
+        <SermonMetaActions
+          sermonId={String(sermon.id)}
+          title={sermon.title}
+          description={sermon.summary ?? sermon.scripture ?? undefined}
+          shareImageUrl={shareImageUrl}
+        />
       </div>
     </div>
-  );
-}
-
-type ResourceListProps = {
-  resources: SermonResource[];
-};
-
-function ResourceList({ resources }: ResourceListProps) {
-  return (
-    <ul className={styles.resource_list}>
-      {resources.map((res) => (
-        <li key={res.id}>
-          <a
-            href={res.file_url}
-            className={styles.resource_item}
-            download
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <IoDocumentTextOutline className={styles.resource_icon} aria-hidden="true" />
-            <div className={styles.resource_info}>
-              <span className={styles.resource_title}>{res.title}</span>
-              {res.file_type && (
-                <span className={styles.resource_type}>{res.file_type.toUpperCase()}</span>
-              )}
-            </div>
-            <IoDownloadOutline className={styles.resource_download} aria-hidden="true" />
-          </a>
-        </li>
-      ))}
-    </ul>
   );
 }
 

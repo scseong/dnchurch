@@ -40,21 +40,30 @@ export default function SermonVideoPlayer({ videoId, videoProvider, thumbnailUrl
     );
   }
 
+  // iframe은 진입 즉시 마운트되어 플레이어가 미리 부팅됨(포스터가 가림).
+  // 클릭 시 src에 autoplay=1을 더해 — iframe navigation이 사용자 제스처 스택
+  // 안에서 일어나므로 모바일 자동재생 정책을 통과(단일 탭으로 재생).
+  const baseSrc = `https://www.youtube.com/embed/${videoId}?playsinline=1&rel=0`;
+  const iframeSrc = playing ? `${baseSrc}&autoplay=1` : baseSrc;
+
+  const handlePlay = () => setPlaying(true);
+
   return (
     <div className={styles.video_wrap}>
       <div className={styles.main}>
-        {playing ? (
-          <iframe
-            src={`https://www.youtube.com/embed/${videoId}?autoplay=1`}
-            title={title}
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-            allowFullScreen
-          />
-        ) : (
+        <iframe
+          src={iframeSrc}
+          title={title}
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+          allowFullScreen
+          tabIndex={playing ? undefined : -1}
+          aria-hidden={playing ? undefined : true}
+        />
+        {!playing && (
           <button
             type="button"
             className={styles.poster}
-            onClick={() => setPlaying(true)}
+            onClick={handlePlay}
             aria-label={`${title} 영상 재생`}
           >
             {thumbnailUrl && (

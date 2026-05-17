@@ -1,5 +1,12 @@
 // 데스크톱 시리즈 사이드바 폭 — mockup `DetailPCBody` line 1282 (`1fr 360px`)
 $sidebar-width: 36rem;
+// 모바일 탭 패널 최소 높이 — 콘텐츠 없는 탭에서 영역 붕괴·탭 전환 점프 방지 (토큰 없음·로컬)
+$tab-panel-min-height: 10rem;
+// 공유 시트 항목 최소 터치 영역 — 모바일 a11y 권장 타깃(≈48px) (토큰 없음·로컬)
+$share-item-min-height: 4.8rem;
+// 모바일 sticky 탭바 오프셋 = 모바일 헤더(.mobile_top) 높이. Header.module.scss의
+// 하위 sticky top:5.4rem 관례와 일치 — top:0이면 sticky 헤더(z-header) 뒤로 가려짐 (토큰 없음·로컬)
+$mobile-header-offset: 5.4rem;
 
 // ══════════════════════════════════════════
 // Layout
@@ -67,7 +74,7 @@ $sidebar-width: 36rem;
 .meta_block {
   display: flex;
   flex-direction: column;
-  gap: $content-gap-xs;
+  gap: $content-gap-s;
 }
 
 .series_tag {
@@ -119,15 +126,192 @@ $sidebar-width: 36rem;
   border-radius: $radius-circle;
 }
 
-.scripture_tag {
-  align-self: flex-start;
-  margin-top: $spacing-4;
-  padding: $padding-inline-sm;
+.meta_scripture {
+  color: $primary;
+  font-weight: $font-weight-bold;
+}
+
+.meta_bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: $spacing-12;
+}
+
+.meta_actions {
+  display: flex;
+  gap: $spacing-6;
+}
+
+.pill {
+  display: inline-flex;
+  align-items: center;
+  gap: $spacing-4;
+  padding: $spacing-6 $spacing-12;
   font-size: $font-size-12;
-  font-weight: $font-weight-medium;
+  font-weight: $font-weight-semibold;
   color: $txt-secondary;
-  background: $primary-subtle;
+  background: $bg-primary;
+  border: 1px solid $border-primary;
   border-radius: $radius-xs;
+  cursor: pointer;
+  transition:
+    color 0.15s ease,
+    background-color 0.15s ease;
+
+  svg {
+    font-size: $font-size-16;
+  }
+
+  &:hover {
+    color: $txt-primary;
+    background-color: $bg-hover;
+  }
+}
+
+.pill_active {
+  color: $primary;
+
+  &:hover {
+    color: $primary-hover;
+  }
+}
+
+// 공유는 BottomSheet(모바일) / 중앙 모달(PC) 내부 리스트로 렌더 — 드롭다운 폐기(디바이스 이탈 해결).
+.share_list {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-4;
+}
+
+.share_item {
+  display: flex;
+  align-items: center;
+  gap: $spacing-8;
+  width: 100%;
+  min-height: $share-item-min-height;
+  padding: $spacing-12 $spacing-16;
+  font-size: $font-size-13;
+  color: $txt-secondary;
+  text-align: left;
+  background: transparent;
+  border: none;
+  border-radius: $radius-xs;
+  cursor: pointer;
+  transition:
+    color 0.15s ease,
+    background-color 0.15s ease;
+
+  svg {
+    font-size: $font-size-16;
+  }
+
+  &:hover {
+    color: $txt-primary;
+    background-color: $bg-hover;
+  }
+}
+
+// ══════════════════════════════════════════
+// Sections (모바일 탭 / PC 스택 — D2·D4)
+// ══════════════════════════════════════════
+
+.sections {
+  display: flex;
+  flex-direction: column;
+
+  // 모바일: sticky 탭바의 containing block(=.sections)이 짧은 활성 패널
+  // 때문에 일찍 끝나 탭바가 곧 풀리는 문제 → 뷰포트 높이만큼 최소 확보.
+  // 실제 패널 콘텐츠가 더 길면 콘텐츠 높이가 우선.
+  min-height: calc(100svh - #{$mobile-header-offset});
+
+  @include respond-up($breakpoint-tablet) {
+    min-height: 0;
+  }
+}
+
+// 모바일: sticky 탭 바. PC(≥768)에서는 숨김 — 전 패널 스택 노출.
+// 모바일: 컨테이너 패딩을 음수 마진으로 상쇄해 화면 풀폭 탭 바(여백 0).
+.tab_bar {
+  position: sticky;
+  top: $mobile-header-offset;
+  z-index: 10;
+  display: flex;
+  margin: 0 calc(-1 * $container-padding) $content-gap-l;
+  background: $bg-card;
+  border-bottom: 1px solid $border-subtle;
+
+  @include respond-up($breakpoint-tablet) {
+    display: none;
+  }
+}
+
+.tab {
+  display: flex;
+  justify-content: center;
+  flex: 1;
+  padding: $spacing-20 0;
+  font-size: $font-size-13;
+  font-weight: $font-weight-medium;
+  color: $txt-tertiary;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  transition:
+    color 0.15s ease,
+    font-weight 0.15s ease;
+}
+
+// 활성 표시는 밑줄 없이 색·굵기만.
+.tab_active {
+  color: $txt-primary;
+  font-weight: $font-weight-bold;
+}
+
+// 모바일: 활성 패널만 표시. PC: 전 패널 표시 + 패널 간 구분선.
+.panel {
+  display: none;
+
+  @include respond-up($breakpoint-tablet) {
+    display: block;
+
+    & + & {
+      margin-top: $section-gap-40;
+      padding-top: $section-gap-40;
+      border-top: 1px solid $border-subtle;
+    }
+  }
+}
+
+.panel_active {
+  display: block;
+  min-height: $tab-panel-min-height;
+
+  @include respond-up($breakpoint-tablet) {
+    min-height: 0;
+  }
+}
+
+// 모바일: 탭 라벨이 섹션명을 대신하므로 패널 내 헤더 숨김. PC(탭 없음)에서만 노출.
+.section_header {
+  display: none;
+
+  @include respond-up($breakpoint-tablet) {
+    display: block;
+    margin-bottom: $content-gap-s;
+    font-size: $font-size-13;
+    font-weight: $font-weight-bold;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: $txt-primary;
+  }
+}
+
+.empty {
+  font-size: $font-size-14;
+  color: $txt-tertiary;
+  font-style: italic;
 }
 
 // ══════════════════════════════════════════
@@ -142,22 +326,24 @@ $sidebar-width: 36rem;
 }
 
 // ══════════════════════════════════════════
-// Resources
+// Resources (mockup 함께보기 카드)
 // ══════════════════════════════════════════
 
 .resource_list {
   display: flex;
   flex-direction: column;
-  gap: $spacing-4;
+  gap: $spacing-8;
 }
 
-.resource_item {
+.resource_card {
   display: flex;
   align-items: center;
   gap: $content-gap-s;
   padding: $spacing-12 $spacing-16;
-  background: $primary-subtle;
+  background: $bg-card;
+  border: 1px solid $border-card;
   border-radius: $radius-s;
+  text-decoration: none;
   transition: background-color 0.15s ease;
 
   &:hover {
@@ -165,10 +351,19 @@ $sidebar-width: 36rem;
   }
 }
 
-.resource_icon {
+.resource_badge {
   flex-shrink: 0;
-  font-size: $font-size-22;
-  color: $primary;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 3.6rem;
+  height: 3.6rem;
+  font-size: $font-size-11;
+  font-weight: $font-weight-bold;
+  letter-spacing: 0.05em;
+  color: $accent;
+  background: $bg-accent-subtle;
+  border-radius: $radius-xs;
 }
 
 .resource_info {
@@ -181,20 +376,20 @@ $sidebar-width: 36rem;
 
 .resource_title {
   font-size: $font-size-14;
-  font-weight: $font-weight-medium;
+  font-weight: $font-weight-semibold;
   color: $txt-primary;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
 
-.resource_type {
+.resource_size {
   font-size: $font-size-11;
   color: $txt-tertiary;
 }
 
 .resource_download {
   flex-shrink: 0;
-  font-size: $font-size-18;
+  font-size: $font-size-16;
   color: $txt-tertiary;
 }

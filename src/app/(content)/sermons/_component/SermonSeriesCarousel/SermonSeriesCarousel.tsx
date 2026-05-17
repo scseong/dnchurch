@@ -20,7 +20,11 @@ export default function SermonSeriesCarousel({ series }: Props) {
       <header className={styles.header}>
         <h2 className={styles.section_title}>진행 중인 시리즈</h2>
         <div className={styles.header_actions}>
-          <CarouselArrows canL={carousel.canL} canR={carousel.canR} onScroll={carousel.scroll} />
+          <CarouselArrows
+            canScrollLeft={carousel.canScrollLeft}
+            canScrollRight={carousel.canScrollRight}
+            onScroll={carousel.scrollByDirection}
+          />
           <Link href="/sermons/series" className={styles.more_link}>
             모든 시리즈 →
           </Link>
