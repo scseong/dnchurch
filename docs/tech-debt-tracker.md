@@ -131,6 +131,14 @@
 - **영향 범위**: `scripts/complete-task.mjs`
 - **발견일**: 2026-05-01
 
+### 🟢 exec-plan 형식 grep 가드 2종 (ADR 0011 D2 후속)
+
+- **무엇**: 의사결정 로그 D 번호 중복 금지 / 폐기 배너 있으면 대체 링크 필수 — 자동 검사 미구현
+- **왜**: ADR 0011에서 가독성 형식을 도입하되, 테스트 환경 없는 저장소에 lint 인프라 추가는 surgical 원칙과 충돌해 이번 범위 제외. 형식 정착 후 필요성 입증 시 도입
+- **마이그레이션 경로**: 형식 미준수 사례가 신규 문서에서 재발하면 `harness-gate.mjs`에 정규식 2종 추가(별도 markdown linter 없이)
+- **영향 범위**: `scripts/harness-gate.mjs`, `docs/exec-plans/`
+- **발견일**: 2026-05-17
+
 ### 🟡 admin 토큰 통합 (ADR 0005 placeholder)
 
 - **무엇**: `src/components/admin/layout/AdminLayout/index.module.scss:1-30`의 `:root` `--admin-*` 25종 변수가 메인 토큰 시스템과 분리된 채 admin 영역 전반에서 호출됨

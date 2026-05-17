@@ -238,9 +238,30 @@ Finding 1 — 3-tier 경계 보강 필요. 운영 기준 명시 필요.
 Finding 1 — Tier 1 후보에 자동수정 불가 규칙(`complexity`, `max-lines-per-function`)이 들어가 Tier 1/2 구분이 흔들림. 후속 작업자가 새 규칙(예: `unused-import`) 도입 시 어느 Tier인지 매번 토론 필요. → Tier 1 정의에 "deterministic(같은 코드 항상 같은 결과) + 오탐률 5% 이하" 운영 기준 한 줄 추가.
 ```
 
+### 의사결정 로그·검증 기록 형식
+
+가독성 강제 — 압축·기호 누적·약어가 쌓이면 작성자 본인도 맥락을 못 읽는다.
+
+- 의사결정 로그 항목 = `**Dn — 한 줄 제목**` + `문제:` / `해결:` / `결과:` bullet. 한 항목 = 한 결정.
+- **`해결:`의 핵심은 "왜 그 방법인가(이유)"** — 어떤 방법들이 있었고 무엇을 왜 택했는지. "무엇을 했다"로 끝내면 의사결정 맥락이 사라져 나중에 문서로 복구 불가.
+- `결과:`는 성과 — 무엇이 달라졌나/측정 가능한 변화.
+- 한 문장에 여러 사실을 `·`·`→`·`+`로 잇지 않는다. 둘 이상이면 bullet으로 쪼갠다. 약어·전문어 금지("미러"·"preboot iframe" → 풀어쓴다). 폐기 결정은 원항목 끝에 `⚠️ 정정(PR #xx): 폐기 → Dn 참조`.
+- 검증 결과는 공통 항목(lint/styles/build/knip)을 표 1행으로. 단락 재서술·`(a)~(g)` 재나열 금지, 새 위험·수동 미검증만 추가.
+
+❌ 나쁨: `D6: duration 제거 → prop·import 삭제·조건블록 제거, BottomSheet로 교체(드롭다운 이탈)`
+✅ 좋음 (왜·대안·성과가 드러남):
+```
+**D6 — 모바일 공유 메뉴를 BottomSheet로 교체**
+- 문제: 드롭다운이 모바일에서 화면 밖으로 잘려 항목을 못 눌렀다.
+- 해결: 위치를 직접 계산해 고치는 대신 공용 BottomSheet로 교체. 이유 — 위치 계산은 기기·뷰포트마다 깨지는 회귀가 반복됐고, BottomSheet는 모바일 시트/PC 모달 전환·focus trap이 이미 검증돼 재발 위험이 없음. 직접 만든 바깥클릭·ESC 핸들러는 중복이라 제거.
+- 결과: 모바일에서 메뉴가 항상 화면 안에 뜬다. 기기별 회귀 0.
+```
+
+전체 형식 예시는 `docs/exec-plans/_template.md` 하단 주석. memory `feedback_doc_decision_log_style` sync.
+
 ### 강제 출처
 
-본 규칙은 ADR 0008 메커니즘 2(Detection) 운영화의 일부. memory `feedback_concrete_records`와 sync 유지. 규칙 위반은 Codex 1차 검증·Claude 2차 검증에서 차단 대상.
+본 규칙은 ADR 0008 메커니즘 2(Detection) 운영화의 일부. memory `feedback_concrete_records`·`feedback_doc_decision_log_style`와 sync 유지. 규칙 위반은 Codex 1차 검증·Claude 2차 검증에서 차단 대상.
 
 ## 커밋 메시지
 

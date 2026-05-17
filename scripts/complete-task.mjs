@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 import { execFileSync } from "node:child_process";
-import { existsSync, mkdirSync, readdirSync, readFileSync, renameSync } from "node:fs";
+import { existsSync, mkdirSync, readdirSync, readFileSync, rmSync, writeFileSync } from "node:fs";
 import path from "node:path";
 import process from "node:process";
 import { ADR_TRIGGER_PARTS } from "./_shared-config.mjs";
@@ -20,6 +20,39 @@ function warnOrFail(message) {
 
 function git(args) {
   return execFileSync("git", args, { encoding: "utf8" }).trim();
+}
+
+function localDate() {
+  const now = new Date();
+  const local = new Date(now.getTime() - now.getTimezoneOffset() * 60000);
+  return local.toISOString().slice(0, 10);
+}
+
+// 완료 이동 시 헤더 상태 줄을 사실로 재기록한다.
+// 진행 중(🟡/진행 중)만 ✅ 완료로 바꾸고, 이미 종료된 상태(취소·폐기·대체 등)는 보존한다.
+// 상태 줄이 없거나 2개 이상이면 이동을 차단한다(수동 확인 필요).
+function rewriteStatusOrFail(markdown) {
+  // `[^\r\n]*`로 줄 내용만 잡고 `(\r?)`로 CRLF 종단을 캡처해 보존한다
+  // (그냥 `.*`면 `\r`를 먹어 치환 후 해당 줄만 LF가 되어 줄바꿈 노이즈 발생).
+  const statusRe = /^- \*\*상태\*\*:[^\r\n]*(\r?)$/gm;
+  const matches = markdown.match(statusRe) ?? [];
+
+  if (matches.length === 0) {
+    fail("Error: 헤더 '- **상태**:' 줄을 찾지 못했습니다. 템플릿 형식을 확인하세요.");
+  }
+  if (matches.length > 1) {
+    fail(`Error: '- **상태**:' 줄이 ${matches.length}개입니다. 수동 확인 후 1개만 남기세요.`);
+  }
+
+  const current = matches[0];
+  const inProgress = current.includes("🟡") || current.includes("진행 중");
+  if (!inProgress) {
+    console.log(`ℹ 상태 줄이 진행 중이 아니라 보존합니다: ${current.trim()}`);
+    return markdown;
+  }
+
+  const date = localDate();
+  return markdown.replace(statusRe, (_match, cr) => `- **상태**: ✅ 완료 (${date})${cr}`);
 }
 
 function gitLines(args) {
@@ -146,8 +179,14 @@ if (adrRiskFiles.length > 0 && !adrChanged) {
 
 if (existsSync(target)) fail(`Error: completed/ 에 동일 파일 존재: ${filename}`);
 
+// 이동 전에 상태 줄을 검사·재기록한다. 실패 조건이면 이동하지 않는다.
+const finalContent = rewriteStatusOrFail(content);
+
+// 원본을 먼저 지우면 write 실패 시 데이터가 사라진다.
+// completed 파일을 먼저 쓰고, 성공한 뒤에만 원본을 제거한다.
 mkdirSync(completedDir, { recursive: true });
-renameSync(source, target);
+writeFileSync(target, finalContent, "utf8");
+rmSync(source);
 
 const relPath = path.relative(repoRoot, target).replaceAll("\\", "/");
 console.log(`✓ 이동 완료: ${relPath}`);
