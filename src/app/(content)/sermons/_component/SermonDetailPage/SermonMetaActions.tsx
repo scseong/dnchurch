@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import clsx from 'clsx';
 import {
   IoHeart,
@@ -10,6 +10,7 @@ import {
   IoMailOutline,
   IoShareSocialOutline
 } from 'react-icons/io5';
+import { BottomSheet } from '@/components/ui';
 import useKakaoShare from '@/hooks/useKakaoShare';
 import { useToastStore } from '@/store/toast.store';
 import styles from './SermonDetailPage.module.scss';
@@ -54,27 +55,10 @@ export default function SermonMetaActions({
   const { share: shareToKakao } = useKakaoShare();
   const [shareOpen, setShareOpen] = useState(false);
   const [bookmarked, setBookmarked] = useState(false);
-  const shareWrapRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     setBookmarked(loadBookmarkedSermonIds().includes(sermonId));
   }, [sermonId]);
-
-  useEffect(() => {
-    if (!shareOpen) return;
-    const handlePointerDown = (event: MouseEvent) => {
-      if (!shareWrapRef.current?.contains(event.target as Node)) setShareOpen(false);
-    };
-    const handleKeyDown = (event: KeyboardEvent) => {
-      if (event.key === 'Escape') setShareOpen(false);
-    };
-    document.addEventListener('mousedown', handlePointerDown);
-    document.addEventListener('keydown', handleKeyDown);
-    return () => {
-      document.removeEventListener('mousedown', handlePointerDown);
-      document.removeEventListener('keydown', handleKeyDown);
-    };
-  }, [shareOpen]);
 
   const handleCopyLink = async () => {
     try {
@@ -118,58 +102,16 @@ export default function SermonMetaActions({
 
   return (
     <div className={styles.meta_actions}>
-      <div ref={shareWrapRef} className={styles.share_wrap}>
-        <button
-          type="button"
-          className={styles.pill}
-          onClick={() => setShareOpen((open) => !open)}
-          aria-expanded={shareOpen}
-          aria-controls="sermon-share-menu"
-        >
-          <IoShareSocialOutline aria-hidden="true" />
-          <span>공유</span>
-        </button>
-        {shareOpen && (
-          <div id="sermon-share-menu" className={styles.share_menu}>
-            <button
-              type="button"
-              className={styles.share_item}
-              onClick={handleCopyLink}
-              aria-label="링크 복사"
-            >
-              <IoLinkOutline aria-hidden="true" />
-              <span>링크 복사</span>
-            </button>
-            <button
-              type="button"
-              className={styles.share_item}
-              onClick={handleKakaoShare}
-              aria-label="카카오톡으로 공유"
-            >
-              <img src="/images/icon-kakaotalk.png" alt="" width={18} height={18} />
-              <span>카카오톡</span>
-            </button>
-            <button
-              type="button"
-              className={styles.share_item}
-              onClick={handleFacebookShare}
-              aria-label="페이스북으로 공유"
-            >
-              <IoLogoFacebook aria-hidden="true" />
-              <span>페이스북</span>
-            </button>
-            <button
-              type="button"
-              className={styles.share_item}
-              onClick={handleEmailShare}
-              aria-label="이메일로 공유"
-            >
-              <IoMailOutline aria-hidden="true" />
-              <span>이메일</span>
-            </button>
-          </div>
-        )}
-      </div>
+      <button
+        type="button"
+        className={styles.pill}
+        onClick={() => setShareOpen(true)}
+        aria-haspopup="dialog"
+        aria-expanded={shareOpen}
+      >
+        <IoShareSocialOutline aria-hidden="true" />
+        <span>공유</span>
+      </button>
       <button
         type="button"
         className={clsx(styles.pill, bookmarked && styles.pill_active)}
@@ -183,6 +125,50 @@ export default function SermonMetaActions({
         )}
         <span>저장</span>
       </button>
+      <BottomSheet
+        open={shareOpen}
+        onClose={() => setShareOpen(false)}
+        title="공유"
+      >
+        <div className={styles.share_list}>
+          <button
+            type="button"
+            className={styles.share_item}
+            onClick={handleCopyLink}
+            aria-label="링크 복사"
+          >
+            <IoLinkOutline aria-hidden="true" />
+            <span>링크 복사</span>
+          </button>
+          <button
+            type="button"
+            className={styles.share_item}
+            onClick={handleKakaoShare}
+            aria-label="카카오톡으로 공유"
+          >
+            <img src="/images/icon-kakaotalk.png" alt="" width={18} height={18} />
+            <span>카카오톡</span>
+          </button>
+          <button
+            type="button"
+            className={styles.share_item}
+            onClick={handleFacebookShare}
+            aria-label="페이스북으로 공유"
+          >
+            <IoLogoFacebook aria-hidden="true" />
+            <span>페이스북</span>
+          </button>
+          <button
+            type="button"
+            className={styles.share_item}
+            onClick={handleEmailShare}
+            aria-label="이메일로 공유"
+          >
+            <IoMailOutline aria-hidden="true" />
+            <span>이메일</span>
+          </button>
+        </div>
+      </BottomSheet>
     </div>
   );
 }
