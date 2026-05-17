@@ -2,6 +2,8 @@
 $sidebar-width: 36rem;
 // 모바일 탭 패널 최소 높이 — 콘텐츠 없는 탭에서 영역 붕괴·탭 전환 점프 방지 (토큰 없음·로컬)
 $tab-panel-min-height: 10rem;
+// 공유 시트 항목 최소 터치 영역 — 모바일 a11y 권장 타깃(≈48px) (토큰 없음·로컬)
+$share-item-min-height: 4.8rem;
 
 // ══════════════════════════════════════════
 // Layout
@@ -185,7 +187,8 @@ $tab-panel-min-height: 10rem;
   align-items: center;
   gap: $spacing-8;
   width: 100%;
-  padding: $spacing-8 $spacing-12;
+  min-height: $share-item-min-height;
+  padding: $spacing-12 $spacing-16;
   font-size: $font-size-13;
   color: $txt-secondary;
   text-align: left;
