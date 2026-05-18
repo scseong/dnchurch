@@ -41,17 +41,39 @@ sermons 섹션의 마지막 미구현인 접근성(8-3)·성능(8-4)을 점검�
 - verify-task PASS. knip 신규 0.
 - 측정 결과(axe/Lighthouse 전후)는 `## 검증 이력` 또는 `logs/sermons-a11y-perf/<run>/`에 표로 기록.
 
-## 영향받는 파일
+## 영향받는 파일 (접근성 점검 후 확정)
 
-- 감사 전 미확정(audit-then-scope). 후보: `src/app/(content)/sermons/_component/` 하위 16개. 체크리스트 1·3 완료 시 결함 목록 + 확정 파일 목록을 본 plan에 기록한다.
+수정 4건:
+- `SermonDetailPage/SermonDetailPage.tsx:94` — `<h1>` → `<h2>` (className 유지, 비주얼 무변경)
+- `SermonNoteEditor/SermonNoteEditor.tsx:56` — textarea에 `aria-label="설교 노트"` 추가
+- `SermonNoteEditor/SermonNoteEditor.module.scss:30` — `:focus-visible` 링(focus-ring 토큰) 추가
+- `SermonListPage/SermonListPage.module.scss:221` — `.search_clear` 탭타깃 `$spacing-48`(≥44px) + 중앙정렬
+
+성능 점검 결과 수정 0건(아래).
+
+## 접근성 점검 결과 (체크리스트 1)
+
+정적 감사(16 컴포넌트·5 라우트). 결함 8건 중 4건 수정, 4건 비결함.
+
+- **수정(고)**: NoteEditor textarea 라벨 부재(체크5), NoteEditor `outline:none` focus-visible 부재(체크6).
+- **수정(중)**: `/sermons/[id]` 중복 h1 + h3 스킵(체크3) — SermonDetailPage가 유일하게 자체 h1 방출. `news/bulletins/[id]` 등 타 (content) 상세는 Hero h1만 쓰는 게 컨벤션이라 h2로 정합. search_clear 탭타깃 ~32px(체크8).
+- **비결함**: 탭 `role="tab"` 부재(체크7) — detail-mockup D4에서 Codex 검증 후 ARIA tablist 의도적 회피(PC 전 패널 노출=disclosure 패턴). main/all/series h1 누락(체크3) — 오탐. `(content)/layout.tsx`의 공유 `Hero`가 h1(`Hero.tsx:22`) 제공. page 추가 시 중복 h1.
 
 ## 단계별 체크리스트
 
-- [ ] 1. 접근성 점검(레퍼런스 8항, 5라우트) → 결함 + 영향 파일 목록을 plan에 기록
-- [ ] 2. 접근성 결함 국소 수정(aria-label·heading·대비·focus·터치)
-- [ ] 3. 성능 점검(이미지·페이지네이션·Lighthouse 5라우트) → 결함 + 영향 파일 목록을 plan에 기록
-- [ ] 4. 성능 결함 국소 개선
-- [ ] 5. verify-task + Codex 1차 + Claude 2차
+- [x] 1. 접근성 점검(8항·5라우트) → 결함 8건 분류·기록
+- [x] 2. 접근성 결함 국소 수정 4건(라벨·focus-visible·중복h1·탭타깃)
+- [x] 3. 성능 정적 점검 → 결함 0건(아래 결과)
+- [x] 4. 성능 결함 국소 개선 — N/A(정적 결함 0)
+- [x] 5. verify-task PASS + Codex 1차(Claude 대행, fix#4 회귀 교정) + Claude 2차 PASS
+
+## 성능 점검 결과 (체크리스트 3)
+
+정적 점검. 수정 0건.
+
+- 이미지 priority/lazy: `SeriesDetailHero.tsx:23`·`SermonFeatured.tsx:38`만 `priority`. 나머지(GridCard·캐러셀·OtherByPreacher·EpisodeCard·VideoPlayer 포스터)는 Next Image 기본 lazy. SC와 정합 — 수정 불요.
+- 페이지네이션 URL 동기화: #91(Phase 7-1)에서 구현·머지됨.
+- Lighthouse 점수: 이 환경에 브라우저 없어 런타임 미측정. Vercel preview에서 확인 권장(저장소 런타임 검증 선례 패턴).
 
 ## Verification
 
@@ -86,15 +108,15 @@ sermons 섹션의 마지막 미구현인 접근성(8-3)·성능(8-4)을 점검�
 
 ## Codex 1차 검증
 
-- **결론**: 미요청
-- **현재 판단**: 미요청
-- **다음 행동**: 구현 diff 생성 후 갱신
+- **결론**: PASS (bounded 재실행, confidence medium)
+- **현재 판단**: 1차 Codex 과지연 취소 → Claude 대행이 fix#4 아이콘 좌측 이동 회귀 발견·`::before`로 교정. 이후 Codex bounded 재실행이 교정본 4건 전부 PASS(중복 h1 제거·focus-visible 토큰·::before 실히트영역·surgical).
+- **다음 행동**: Claude 2차 완료. 커밋은 사용자 지시로 보류.
 
 ## Claude 2차 검증
 
-- **최종 판단**: 미작성
-- **현재 판단**: 미작성
-- **다음 행동**: verify-task 후 갱신
+- **최종 판단**: PASS
+- **현재 판단**: verify-task PASS(20260518-161602). h1→h2 className 기반이라 무영향(scss/querySelector/JSON-LD 의존 0). focus-visible 토큰 정합. ::before 교정으로 아이콘 위치 불변·탭타깃 ≥48px.
+- **다음 행동**: 커밋 승인 대기.
 
 ## 검증 이력
 
@@ -104,6 +126,24 @@ sermons 섹션의 마지막 미구현인 접근성(8-3)·성능(8-4)을 점검�
 - 판정: CHANGE_REQUEST (confidence high)
 - 이유: SC 4개 도구·임계값 미명시, Non-goals ADR_TRIGGER·라이브러리 배제 누락, Assumptions 미확인 항목.
 - 조치: D1(SC 구체화·Non-goals 배제·Assumptions 실측), D2(브랜치 오염 PR 전략).
+
+</details>
+
+<details>
+<summary>2026-05-18 Codex 1차 검증 (과지연 취소 → Claude 대행)</summary>
+
+- 판정: FIX_APPLIED — Codex task 15분+ grep 루프 미수렴, 프로세스 종료. Claude가 4 a11y diff 직접 교차검증.
+- 이유: fix#4가 `min-width:$spacing-48`+center로 X 아이콘을 ~20px 좌측 이동(비주얼 회귀).
+- 조치: `::before` 48px 히트영역으로 교체 — 아이콘 위치 불변, 탭타깃 ≥48px. 재verify PASS.
+
+</details>
+
+<details>
+<summary>2026-05-18 Codex 1차 재검증 (bounded, --fresh)</summary>
+
+- 판정: PASS (confidence medium)
+- 이유: 사용자 요청으로 교정본 독립 교차검증. 범위를 4파일로 한정해 과지연 재발 방지.
+- 조치: 변경 없음 — h1→h2·focus-visible·::before·surgical 전부 확인. Claude 대행 결과 독립 재확인.
 
 </details>
 
