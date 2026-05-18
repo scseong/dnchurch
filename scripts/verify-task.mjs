@@ -119,6 +119,15 @@ function tailLines(text, n) {
 const failed = [];
 const warned = [];
 const startedAt = isoNow();
+const startedMs = Date.now();
+const STEPS = [
+  { label: "ESLint", args: ["lint"] },
+  { label: "stylelint", args: ["lint:styles"] },
+  { label: "Build (next)", args: ["build"] },
+  { label: "Knip (미사용 코드)", args: ["knip"], warningOnly: true },
+];
+const TOTAL_STEPS = STEPS.length;
+let stepNum = 0;
 
 function appendSummary(text = "") {
   writeFileSync(summaryLog, `${text}\n`, { encoding: "utf8", flag: "a" });
@@ -153,8 +162,13 @@ function runStep(label, args, warningOnly = false) {
   const stepLog = path.join(runDir, `${logName}.log`);
   const stepLogRel = `logs/${taskId}/${runId}/${logName}.log`;
 
+  stepNum += 1;
+  const stepStartMs = Date.now();
+
   logBoth("");
-  logBoth(`${color.bold}━━━ ${label} ━━━${color.reset}`);
+  logBoth(`${color.bold}━━━ [${stepNum}/${TOTAL_STEPS}] ${label} ━━━${color.reset}`);
+  // 진행 힌트는 터미널에만. summary.log에는 남기지 않는다(전이성 표시).
+  if (process.stdout.isTTY) process.stdout.write(`${color.yellow}  실행 중…${color.reset}\r`);
 
   const runner = packageRunner();
   const result = spawnSync(runner.command, [...runner.prefixArgs, ...args], {
@@ -163,32 +177,36 @@ function runStep(label, args, warningOnly = false) {
     env: process.env,
   });
 
+  // 진행 힌트 줄을 지운다(\r + 줄 전체 삭제). 안 지우면 짧은 후속 출력 뒤에 잔류 문자가 남는다.
+  if (process.stdout.isTTY) process.stdout.write("\r[2K");
+
+  // 단계 전체 출력은 per-step 로그에만 둔다. summary.log는 요약 전용(D1).
   const output = `${result.stdout ?? ""}${result.stderr ?? ""}`;
   writeFileSync(stepLog, output, "utf8");
-  if (output) {
-    writeFileSync(summaryLog, output, { encoding: "utf8", flag: "a" });
-  }
 
+  const elapsed = ((Date.now() - stepStartMs) / 1000).toFixed(1);
+
+  // 실패 단계만 tail을 터미널에 덤프한다. 경고(knip 등)는 1줄로만(D2).
   if (VERBOSE && output) {
     process.stdout.write(output);
-  } else if (!VERBOSE && output && result.status !== 0) {
+  } else if (!VERBOSE && output && !warningOnly && result.status !== 0) {
     const tail = tailLines(output, TAIL_LINES);
     process.stdout.write(`${color.yellow}--- 최근 ${TAIL_LINES}줄 (전체: ${stepLogRel}) ---${color.reset}\n`);
     process.stdout.write(tail.endsWith("\n") ? tail : `${tail}\n`);
   }
 
   if (result.status === 0) {
-    logBoth(`${color.green}✓ ${label} 통과${color.reset}`);
+    logBoth(`${color.green}✓ ${label} 통과${color.reset} (${elapsed}s)`);
     return;
   }
 
   if (warningOnly) {
-    logBoth(`${color.yellow}⚠ ${label} 경고${color.reset} (${stepLogRel})`);
+    logBoth(`${color.yellow}⚠ ${label} 경고${color.reset} (${elapsed}s) — ${stepLogRel} · 상세: VERIFY_VERBOSE=1`);
     warned.push(label);
     return;
   }
 
-  logBoth(`${color.red}✗ ${label} 실패${color.reset} (${stepLogRel})`);
+  logBoth(`${color.red}✗ ${label} 실패${color.reset} (${elapsed}s) — ${stepLogRel}`);
   failed.push(label);
 }
 
@@ -199,13 +217,13 @@ logBoth(`BRANCH=${branch}`);
 logBoth(`HEAD=${headSha}`);
 logBoth(`STARTED_AT=${startedAt}`);
 
-runStep("ESLint", ["lint"]);
-runStep("stylelint", ["lint:styles"]);
-runStep("Build (next)", ["build"]);
-runStep("Knip (미사용 코드)", ["knip"], true);
+for (const step of STEPS) runStep(step.label, step.args, step.warningOnly ?? false);
 
 logBoth("");
 logBoth(`${color.bold}━━━ 결과 요약 ━━━${color.reset}`);
+
+const totalElapsed = ((Date.now() - startedMs) / 1000).toFixed(1);
+logBoth(`소요: ${totalElapsed}s (${TOTAL_STEPS}단계)`);
 
 const logPath = `logs/${taskId}/${runId}/summary.log`;
 
