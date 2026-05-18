@@ -92,10 +92,14 @@ exec-plan 문서가 압축·기호 누적·약어로 읽기 어려워진 문제�
   - 문제: (a) 상태 줄 정규식 `.*$`가 `\r`를 먹어 CRLF 저장소에서 치환 후 그 줄만 LF → diff 노이즈. (b) `renameSync` 후 `writeFileSync` 순서라 write 실패 시 원본 소실 + target 손상.
   - 해결: (a) 정규식을 `[^\r\n]*(\r?)$`로 바꿔 CRLF 종단을 캡처·보존(콜백 치환에서 `${cr}` 복원). LF만 보존하는 대안은 저장소 CRLF 정책과 불일치라 기각. (b) `renameSync`를 `writeFileSync(target)`→`rmSync(source)` 순서로 교체. 이유: write가 실패해도 원본이 남아 데이터 무손실(rename-then-write는 실패 시 복구 불가). git은 내용 유사도로 여전히 rename 인식.
   - 결과: CRLF 저장소에서 줄바꿈 노이즈 0, write 실패 시에도 원본 보존. 엣지케이스 3종 재검증 통과.
+- **D5 — 한글 문장 규칙 추가 (사용자 지시, ADR 0011 연장)**
+  - 문제: 형식 규칙은 무엇을 어디에 쓸지만 잡고, 문장을 어떻게 쓰는지는 못 잡았다. 밀도·반복·번역투는 생성 단계의 한글 표현 습관에서 나온다.
+  - 해결: 문장 규칙을 범위별로 나눠 배치했다. 전역 규칙(자연스러운 한국어, 상투적 AI 표현 금지, 한 문장 한 가지)은 항상 로드되는 `CLAUDE.md` 핵심 규칙에 2줄로 넣었다. 상세 규칙과 before→after 예시는 `harness-workflow` SKILL "한글 문장 규칙"과 memory에 두었다. SKILL은 트리거 시에만 로드돼 전역을 못 덮으므로 CLAUDE.md가 필요했다.
+  - 결과: 일반 응답·커밋·문서 전부에 문장 규칙이 적용된다. CLAUDE.md는 짧게 유지하고 상세는 SKILL로 분담해 지도 비대화를 피했다.
 
 ## ADR 판단
 
-- **필요** — `scripts/complete-task.mjs` 동작 변경(상태 자동 재기록)은 harness 스크립트 정책 변경이고, 의사결정 로그 형식 강제는 ADR 0008 메커니즘 2(검증 기록 규칙) 운영 표준을 개정한다. 영구 정책이므로 `docs/decisions/0011-exec-plan-readability.md` 작성.
+- **필요** — `scripts/complete-task.mjs` 동작 변경(상태 자동 재기록)은 harness 스크립트 정책 변경이고, 의사결정 로그 형식 강제는 ADR 0008 메커니즘 2(검증 기록 규칙) 운영 표준을 개정한다. 영구 정책이므로 `docs/decisions/0011-exec-plan-readability.md` 작성. CLAUDE.md·SKILL의 한글 문장 규칙 추가(D5)는 ADR 0011 연장이라 새 ADR 불필요 — 본 섹션 기록으로 갈음.
 
 ---
 
