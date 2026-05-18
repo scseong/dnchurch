@@ -1,6 +1,6 @@
 # sermons-archive-phase3
 
-- **상태**: 🟡 진행 중
+- **상태**: ✅ 완료 (2026-05-18)
 - **시작일**: 2026-05-14
 - **브랜치**: feat/sermons-archive
 - **Open questions**: none
@@ -64,3 +64,9 @@ sub-task 6개(sidebar/series-meta/search-feedback/result-header/pagination/mobil
 12 sub-task 전부 verify-task PASS(Knip 경고는 기존 barrel re-export false positive — 차단 안 됨, `docs/tech-debt-tracker.md` 대조 완료). Codex 직접수정분은 diff 교차 확인 후 의도·범위 일치 검증. 외과적 변경 위반은 D7(사용자 IDE 직접 편집) 외 0건. 커밋은 sub-task별 "한 commit = 한 의도"로 분리 완료(feat/sermons-archive 누적 ~21 commit).
 
 **PR #91 fix 2차** — Codex CHANGE_REQUEST의 #6 cover_image_url 회귀를 전수 grep으로 확인(`getAllSeries`/`getAllPreachers` 소비처 = `/sermons` 캐러셀 + admin 3 + `/sermons/all`). Claude 초기 소비처 감사가 admin·캐러셀을 누락 → #6 revert로 sermon-service.ts 무변경 복귀. fix 1~5는 verify PASS 재확인 예정. #6은 `docs/tech-debt-tracker.md` perf 항목으로 분리(별도 전용 쿼리 필요).
+
+## 회고
+
+- **잘된 것**: 12 sub-task를 단일 phase plan으로 통합해 관리했다. 커밋은 의도별로 분리했다(누적 ~21). Codex 계획 검증으로 sub-task 6개의 CR 1~5건을 구현 전 반영해 1차에서 PASS를 받았다.
+- **다음에 할 것**: 공유 함수 소비처 감사를 처음부터 전수로 한다. Claude 초기 감사가 admin·캐러셀을 빠뜨려 PR #91 #6에서 `cover_image_url` 회귀가 났고, Codex가 잡아 revert했다. `getAllSeries` 같은 공유 쿼리는 컬럼 축소 전 grep 전수 확인이 필수다.
+- **부채**: `getAllSeries`/`getAllPreachers` select 축소(perf)는 전용 쿼리가 필요해 보류했다. `docs/tech-debt-tracker.md` perf 항목으로 등록했다.
