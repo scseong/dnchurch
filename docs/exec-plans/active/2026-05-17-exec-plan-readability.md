@@ -145,6 +145,13 @@ exec-plan 문서가 압축·기호 누적·약어로 읽기 어려워진 문제�
 - **knip 경고**: 신규 코드 심볼 0(helper는 동일 모듈 내부 사용). 목록은 기존 ~50건 부채(`feedback`/tech-debt 기등록), 비차단.
 - **형식 보완(사용자 WHY 지시)**: 템플릿·SKILL·메모리·ADR 4곳에 "`해결:`의 핵심=왜 그 방법인가" 반영. 본 plan의 D1~D4가 그 형식을 dogfood.
 
+## 후속 작업
+
+- PR 본문 가독성 표준 — exec-plan 가독성과 같은 정책을 PR 템플릿으로 확장
+  - 무엇: `.github/PULL_REQUEST_TEMPLATE/` 5종(feature·bugfix·maintenance·refactor·root)의 개요·하네스 검증·확인 포인트 골격 교체. 검증 표는 한 셀에 판정 하나·미래시제 금지, 개요는 목적과 범위 분리, 확인 포인트는 운영 리스크와 QA 후속 분리.
+  - 근거: 최근 PR #95/#94/#93 가독성 점검과 Claude·Codex 교차검증에서 도출. #95 검증 표가 판정 3개를 한 셀에 나열하고 "예정"을 결과로 적은 게 핵심 결함.
+  - 상태: 본 브랜치에서 같이 반영. ADR 0011 연장이라 새 ADR 불필요. 별도 lint 자동화는 과설계라 미도입.
+
 ---
 
 <!-- 검증 결과 기록 규칙 SSOT: `.claude/skills/harness-workflow/SKILL.md` "## 검증 결과 기록 규칙" 참조. 추상명사 금지, 구체화 4원소 최소 2개, Codex stdout verbatim + 풀이 1줄. -->
