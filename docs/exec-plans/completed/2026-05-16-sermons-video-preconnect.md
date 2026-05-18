@@ -1,6 +1,6 @@
 # sermons-video-preconnect
 
-- **상태**: 🟡 진행 중
+- **상태**: ✅ 완료 (2026-05-18)
 - **시작일**: 2026-05-16
 - **브랜치**: feat/sermons-video-preconnect
 - **Open questions**: none
@@ -92,5 +92,11 @@ preconnect는 연결만 데움 — 병목인 **플레이어 JS 다운로드·부
 ## 리뷰 (완료 직전)    ← 셀프/멀티 세션 리뷰 체크
 ## 회고               ← 머지 후 completed/ 이동 시
 -->
+
+## 회고
+
+- **잘된 것**: 첫재생 지연 완화를 위한 eager iframe + 접근(즉시로드 vs preconnect vs Player API)을 AskUserQuestion으로 사용자 확정.
+- **다음에 할 것**: 모바일 autoplay 정책(재생은 user-gesture 콜스택 내에서만)을 설계 단계에서 고려했어야 — postMessage ready-큐가 제스처 밖이라 모바일 재생 전무, detail-mockup D7에서야 Codex 디버깅으로 규명. 비공식 lite-youtube wire 의존의 한계.
+- **부채**: preboot 효과가 D7 src-swap(클릭 시 iframe navigation)으로 약화됨 — 첫재생 지연 최적화 재설계 시 공식 YT IFrame Player API(외부 스크립트 수용) 검토. `docs/tech-debt-tracker.md` 등록 권장.
 
 <!-- 검증 결과 기록 규칙 SSOT: `.claude/skills/harness-workflow/SKILL.md` "## 검증 결과 기록 규칙" 참조. 추상명사 금지, 구체화 4원소 최소 2개, Codex stdout verbatim + 풀이 1줄. -->

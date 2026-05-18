@@ -354,4 +354,29 @@
 - **영향 범위**: `src/services/sermon/sermon-service.ts`, `src/services/sermon/index.ts`, `feat/sermons-all-series` 브랜치 Phase 4 전반
 - **발견일**: 2026-05-15 (PR #92 #4 진단 중 동형 오류 발견)
 
+### 🟡 Kakao 공유 — 서빙 도메인 Kakao Developers 콘솔 미등록 (PR #95 D13)
+
+- **상태**: 🟡 외부 설정 필요 (코드 변경 아님)
+- **무엇**: 설교 상세 공유의 KakaoTalk 항목(`useKakaoShare`)이 데스크톱에서 `intent://...kakaolink` "no registered handler"로 실패. 데스크톱은 KakaoTalk 앱 부재로 본질적 한계지만, 실기기에서도 동작하려면 Kakao Developers 콘솔에 서빙 도메인 등록 필요
+- **조치**: Kakao Developers > 앱 > 플랫폼 > Web 사이트 도메인에 `http://localhost:3000`·`https://dnchurch.vercel.app`(및 운영 도메인) 등록 + 카카오 메시지/Link 활성, `NEXT_PUBLIC_KAKAO_API_KEY`가 해당 앱 JS 키인지 확인
+- **영향 범위**: `src/hooks/useKakaoShare.tsx`·`src/components/lib/KakaoScript.tsx`는 정상 — 콘솔 설정만
+- **발견일**: 2026-05-17 (PR #95 사용자 보고)
+
+### 🟡 설교 상세 영상 첫재생 지연 — preboot 약화 (PR #95 D7)
+
+- **상태**: 🟡 마이그레이션 가능 (수용된 트레이드오프)
+- **무엇**: 모바일 재생 불가 수정으로 `enablejsapi`/postMessage 큐 → 클릭 시 `src` autoplay swap 전환. iframe이 클릭 시 navigation돼 진입-시 preboot 효과(첫재생 지연 완화)가 대부분 무효화
+- **왜 수용**: postMessage ready-큐가 user-gesture 스택 밖이라 모바일 재생 자체가 안 됨(Codex 검증) — 정확성 > 지연 최적화
+- **마이그레이션 경로**: 첫재생 지연 재최적화 시 공식 YouTube IFrame Player API(외부 스크립트 수용) 도입 검토 — gesture 내 `playVideo` 호출로 preboot+모바일 재생 양립
+- **영향 범위**: `src/app/(content)/sermons/_component/SermonVideoPlayer/SermonVideoPlayer.tsx`
+- **발견일**: 2026-05-17 (PR #95, completed/2026-05-16-sermons-video-preconnect 회고)
+
+### 🟡 설교 섹션 모바일 실기기 QA 미완 (PR #95)
+
+- **상태**: 🟡 검증 필요 (자동검증 불가 항목)
+- **무엇**: 모바일 영상 단일탭 재생/정지, 탭바 sticky(헤더 오프셋·containing block), 공유 BottomSheet 터치, 스켈레톤 속도, Kakao(폰+KakaoTalk)는 tsc/lint/build로 검증 불가. Chrome 모바일 에뮬레이션도 autoplay 정책 미재현
+- **조치**: develop Vercel preview를 실기기에서 점검, 회귀 시 후속 폴리시
+- **영향 범위**: `/sermons/[id]` 모바일
+- **발견일**: 2026-05-17 (PR #95 머지, 실기기 검증 머지 후로 이월)
+
 <!-- last-audit: 2026-05-14 -->
