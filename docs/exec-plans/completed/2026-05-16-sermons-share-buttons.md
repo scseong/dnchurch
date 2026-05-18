@@ -1,6 +1,6 @@
 # sermons-share-buttons
 
-- **상태**: 🟡 진행 중
+- **상태**: ✅ 완료 (2026-05-18)
 - **시작일**: 2026-05-16
 - **브랜치**: feat/sermons-phase7-finish
 - **Open questions**: none
@@ -99,5 +99,11 @@
 ## 리뷰 (완료 직전)    ← 셀프/멀티 세션 리뷰 체크
 ## 회고               ← 머지 후 completed/ 이동 시
 -->
+
+## 회고
+
+- **잘된 것**: 공유·저장을 SermonMeta로 일원화, 중복 SermonVideoTools 공유 제거. Codex CR(disclosure a11y·localStorage 가드·import 정리) 반영. 이후 드롭다운→BottomSheet로 모바일 디바이스 이탈까지 해소.
+- **다음에 할 것**: 8-2가 detail-mockup과 같은 파일(SermonMeta/MetaActions)을 건드려 브랜치 경계가 얽힘 — 상세 페이지 연속 작업은 처음부터 한 작업 스코프로 잡는 게 깔끔(브랜치 스택·단일 통합 PR로 귀결).
+- **부채**: 없음(특이). Kakao 동작은 [[sermons-detail-mockup]] D13(콘솔 도메인 등록) 참조.
 
 <!-- 검증 결과 기록 규칙 SSOT: `.claude/skills/harness-workflow/SKILL.md` "## 검증 결과 기록 규칙" 참조. 추상명사 금지, 구체화 4원소 최소 2개, Codex stdout verbatim + 풀이 1줄. -->

@@ -1,6 +1,6 @@
 # sermons-detail-mockup
 
-- **상태**: 🟡 진행 중
+- **상태**: ✅ 완료 (2026-05-18)
 - **시작일**: 2026-05-16
 - **브랜치**: feat/sermons-detail-mockup
 - **Open questions**: none
@@ -136,5 +136,11 @@
 ## 리뷰 (완료 직전)    ← 셀프/멀티 세션 리뷰 체크
 ## 회고               ← 머지 후 completed/ 이동 시
 -->
+
+## 회고
+
+- **잘된 것**: mockup 충실 재작성(섹션·모바일 4탭/PC 스택·BottomSheet). 모바일 영상 재생 불가를 Codex 디버깅으로 근본원인(제스처 밖 postMessage) 규명·src-swap 해결. PR #95 자동리뷰 6건 전부 triage·reply, harness-gate 4/4.
+- **다음에 할 것**: 실기기 검증을 더 일찍 — Chrome 모바일 에뮬레이션은 autoplay 정책·sticky 헤더 겹침을 재현 못 함(D7·#5를 늦게 발견). React Compiler 신규 lint(set-state-in-effect/ref-in-render)를 설계 단계에 인지.
+- **부채**: 모바일 영상 재생/정지·BottomSheet·탭 sticky·Kakao(폰)·스켈레톤 속도 = 실기기 QA 미완(머지 후 develop preview에서 확인 필요). Kakao 공유는 Kakao Developers 콘솔 도메인 등록(localhost·dnchurch.vercel.app, 외부 설정) 필요 — `docs/tech-debt-tracker.md` 등록 권장.
 
 <!-- 검증 결과 기록 규칙 SSOT: `.claude/skills/harness-workflow/SKILL.md` "## 검증 결과 기록 규칙" 참조. 추상명사 금지, 구체화 4원소 최소 2개, Codex stdout verbatim + 풀이 1줄. -->

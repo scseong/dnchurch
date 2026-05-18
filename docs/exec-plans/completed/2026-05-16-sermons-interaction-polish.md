@@ -1,6 +1,6 @@
 # sermons-interaction-polish
 
-- **상태**: 🟡 진행 중
+- **상태**: ✅ 완료 (2026-05-18)
 - **시작일**: 2026-05-16
 - **브랜치**: feat/sermons-interaction-polish
 - **Open questions**: none
@@ -98,5 +98,11 @@ Phase 7 인터랙션 잔여 마감: (7-1) 설교/시리즈 검색 입력 300ms �
 ## 리뷰 (완료 직전)    ← 셀프/멀티 세션 리뷰 체크
 ## 회고               ← 머지 후 completed/ 이동 시
 -->
+
+## 회고
+
+- **잘된 것**: 검색 300ms 디바운스 + 캐러셀 방향키 + useCarousel 서술 네이밍. stale 재-push 가드.
+- **다음에 할 것**: q→input 미러 effect는 처음부터 anti-pattern("you might not need an effect")이었고 디바운스 navigation과 경쟁해 입력 되돌림 버그(PR #95 #4) 유발 — 파생 state는 effect 미러보다 소유권을 명확히. React Compiler lint가 가드형 effect/ref-in-render를 막아 결국 effect 제거가 정답.
+- **부채**: URL→input 외부 동기화 제거로 back/forward 시 검색창 텍스트 미복원(결과는 정상) — 의도적 수용, 필요 시 후속 검토.
 
 <!-- 검증 결과 기록 규칙 SSOT: `.claude/skills/harness-workflow/SKILL.md` "## 검증 결과 기록 규칙" 참조. 추상명사 금지, 구체화 4원소 최소 2개, Codex stdout verbatim + 풀이 1줄. -->
