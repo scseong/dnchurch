@@ -24,7 +24,7 @@ sermons 섹션의 마지막 미구현인 접근성(8-3)·성능(8-4)을 점검�
 - 새 기능 추가, 머지된 #91~#95 재작업.
 - sermons 밖 전역 접근성·성능.
 - ADR_TRIGGER 파일 변경: `next.config.*`·`package.json`·`src/services/`·`scripts/`. 새 a11y/perf 라이브러리(axe-core 등) 도입. 그런 결함이 나오면 별도 plan/ADR로 분리한다.
-- 부킹(이미 커밋된 exec-plan 5건 이관 + tech-debt) — 별개 의도. 같은 브랜치에 있으나 별 커밋. PR 시점에 분리 결정(의사결정 로그 D1).
+- 부킹(이미 커밋된 exec-plan 5건 이관 + tech-debt) — 별개 의도. 같은 브랜치에 있으나 별 커밋. PR 시점에 분리 결정(의사결정 로그 D2).
 
 ## Success Criteria
 
@@ -114,9 +114,9 @@ sermons 섹션의 마지막 미구현인 접근성(8-3)·성능(8-4)을 점검�
 
 ## Claude 2차 검증
 
-- **최종 판단**: PASS
-- **현재 판단**: verify-task PASS(20260518-161602). h1→h2 className 기반이라 무영향(scss/querySelector/JSON-LD 의존 0). focus-visible 토큰 정합. ::before 교정으로 아이콘 위치 불변·탭타깃 ≥48px.
-- **다음 행동**: 커밋 승인 대기.
+- **최종 판단**: PASS (PR #97 외부 리뷰로 h1 회귀 1건 교정)
+- **현재 판단**: focus-visible 토큰 정합, `::before` 교정으로 아이콘 위치 불변·탭타깃 ≥48px은 그대로 유효. 단 h1→h2는 **회귀였고 되돌렸다** — `resolveHeroMeta('/sermons/123')`은 `HERO_META` direct(`/sermons`,`/sermons/all`,`/sermons/series`) 미스 + `GNB_ITEMS` 정확매칭 미스로 `null` 반환(`hero.config.ts:31~56`) → `Hero.tsx:13 if (!meta) return null` → 상세 페이지에 Hero h1 없음. `SermonDetailPage`의 h1이 그 페이지 유일 h1이었다.
+- **다음 행동**: `SermonDetailPage.tsx:94` h2→h1 환원 완료. 재verify PASS(20260518-183603, Knip 기존 부채). 커밋 승인 대기.
 
 ## 검증 이력
 
@@ -144,6 +144,17 @@ sermons 섹션의 마지막 미구현인 접근성(8-3)·성능(8-4)을 점검�
 - 판정: PASS (confidence medium)
 - 이유: 사용자 요청으로 교정본 독립 교차검증. 범위를 4파일로 한정해 과지연 재발 방지.
 - 조치: 변경 없음 — h1→h2·focus-visible·::before·surgical 전부 확인. Claude 대행 결과 독립 재확인.
+- 한계: bounded 프롬프트에 "`(content)/layout.tsx`가 모든 sermons 라우트에 Hero h1 렌더" 전제를 줬다. 이 전제가 거짓이라 h1→h2 회귀를 못 잡았다.
+
+</details>
+
+<details>
+<summary>2026-05-18 PR #97 외부 리뷰 (Codex GitHub bot · Gemini)</summary>
+
+- 판정: 지적 2건 전부 유효 — 반영 완료.
+- Codex P2 (`SermonDetailPage.tsx:94`): `/sermons/[id]`는 Hero가 안 떠 자체 h1이 페이지 유일 h1. h2 변경은 h1 소실 회귀. → h1으로 환원.
+- Gemini medium (`2026-05-18-sermons-a11y-perf.md:27`): 부킹 분리 결정 참조가 `D1`인데 실제는 `D2`(94행). → `D2`로 정정.
+- 교훈: 내부 bounded 교차검증에 거짓 전제를 주입하면 PASS가 무의미. SSOT(`hero.config.ts`) 직접 확인이 audit/전제보다 우선(ADR 0010).
 
 </details>
 
