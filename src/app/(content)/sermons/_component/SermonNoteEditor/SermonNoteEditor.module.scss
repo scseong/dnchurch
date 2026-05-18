@@ -27,6 +27,11 @@
     background: $bg-primary;
     border-color: $primary;
   }
+
+  &:focus-visible {
+    outline: $focus-ring-width solid $focus-ring-color;
+    outline-offset: $focus-ring-offset;
+  }
 }
 
 .hint {

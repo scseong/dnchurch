@@ -91,7 +91,7 @@ function SermonMeta({ sermon, preacherLabel }: SermonMetaProps) {
       ) : (
         <span className={styles.series_tag_plain}>단독 설교</span>
       )}
-      <h1 className={styles.sermon_title}>{sermon.title}</h1>
+      <h2 className={styles.sermon_title}>{sermon.title}</h2>
       <div className={styles.meta_bar}>
         <div className={styles.meta_row}>
           {sermon.scripture && (

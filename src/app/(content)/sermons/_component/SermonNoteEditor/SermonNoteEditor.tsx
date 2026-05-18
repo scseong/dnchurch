@@ -57,6 +57,7 @@ export default function SermonNoteEditor({ sermonId }: Props) {
         className={styles.textarea}
         value={note}
         onChange={handleChange}
+        aria-label="설교 노트"
         placeholder="설교를 들으며 메모를 남겨보세요..."
         rows={8}
       />

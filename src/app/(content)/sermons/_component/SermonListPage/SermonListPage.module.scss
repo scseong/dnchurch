@@ -231,6 +231,17 @@ $radio-dot-size: 0.4rem;
   border: none;
   cursor: pointer;
 
+  // 아이콘 위치를 바꾸지 않고 탭 타깃만 ≥44px로 확장한다.
+  &::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: $spacing-48;
+    height: $spacing-48;
+    transform: translate(-50%, -50%);
+  }
+
   &:hover {
     color: $txt-primary;
   }
