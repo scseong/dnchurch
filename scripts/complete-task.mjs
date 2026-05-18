@@ -184,9 +184,19 @@ const finalContent = rewriteStatusOrFail(content);
 
 // 원본을 먼저 지우면 write 실패 시 데이터가 사라진다.
 // completed 파일을 먼저 쓰고, 성공한 뒤에만 원본을 제거한다.
+// 이동이 반쯤 끝나면 active·completed 양쪽에 남으므로 실패 시 두 경로를 출력한다.
 mkdirSync(completedDir, { recursive: true });
-writeFileSync(target, finalContent, "utf8");
-rmSync(source);
+try {
+  writeFileSync(target, finalContent, "utf8");
+  rmSync(source);
+} catch (error) {
+  fail(
+    `Error: 파일 이동 실패: ${error.message}\n` +
+      `  원본: ${source}\n` +
+      `  대상: ${target}\n` +
+      "  두 경로의 상태를 확인하고 수동으로 정리하세요.",
+  );
+}
 
 const relPath = path.relative(repoRoot, target).replaceAll("\\", "/");
 console.log(`✓ 이동 완료: ${relPath}`);
