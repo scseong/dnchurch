@@ -1,6 +1,6 @@
 # exec-plan-readability
 
-- **상태**: 🟡 진행 중
+- **상태**: ✅ 완료 (2026-05-20)
 - **시작일**: 2026-05-17
 - **브랜치**: feat/exec-plan-readability
 - **Open questions**: none
@@ -151,6 +151,12 @@ exec-plan 문서가 압축·기호 누적·약어로 읽기 어려워진 문제�
   - 무엇: `.github/PULL_REQUEST_TEMPLATE/` 5종(feature·bugfix·maintenance·refactor·root)의 개요·하네스 검증·확인 포인트 골격 교체. 검증 표는 한 셀에 판정 하나·미래시제 금지, 개요는 목적과 범위 분리, 확인 포인트는 운영 리스크와 QA 후속 분리.
   - 근거: 최근 PR #95/#94/#93 가독성 점검과 Claude·Codex 교차검증에서 도출. #95 검증 표가 판정 3개를 한 셀에 나열하고 "예정"을 결과로 적은 게 핵심 결함.
   - 상태: 본 브랜치에서 같이 반영. ADR 0011 연장이라 새 ADR 불필요. 별도 lint 자동화는 과설계라 미도입.
+
+## 회고
+
+- **잘된 것**: 형식을 사람 의지가 아니라 템플릿 모양 + complete-task 하드 재기록 + SKILL/CLAUDE.md/메모리/ADR 4곳 SSOT로 자가강제했다. 본 plan D1~D4가 그 형식을 dogfood해 규칙이 실제 작동한다는 증거가 됐다. Codex 1차 CR로 잡은 실버그 2건(CRLF lone-LF 노이즈·rename→write 순서로 원본 소실 위험)을 즉시 수정해 정책 도입과 동시에 회귀를 막았다.
+- **다음에 할 것**: D2 후속 grep 가드 2종(D번호 중복·폐기 배너 링크 강제)은 형식 정착 후 필요성 재평가로 미뤘다 — 실 정착 데이터 쌓이면 lint 표면 vs surgical 트레이드오프를 재판단한다. D5의 한글 문장 규칙(CLAUDE.md·SKILL)은 일반 응답·커밋 메시지에도 자동 적용되는지 후속 점검 필요.
+- **부채**: D2 grep 가드 2종은 `docs/tech-debt-tracker.md`에 등록 완료.
 
 ---
 

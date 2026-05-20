@@ -1,6 +1,6 @@
 # harness-output-readability
 
-- **상태**: 🟡 진행 중
+- **상태**: ✅ 완료 (2026-05-20)
 - **시작일**: 2026-05-17
 - **브랜치**: feat/harness-output-readability (WORK 진입 전 develop 기반 신규 — 현재 feat/exec-plan-readability)
 - **Open questions**: none
@@ -141,6 +141,12 @@
 - 조치: spawnSync 후 줄삭제(`\r\x1b[2K`). STEPS 배열에서 `TOTAL_STEPS` 도출.
 
 </details>
+
+## 회고
+
+- **잘된 것**: 실측 수치로 효과 검증 — `summary.log` 80KB → 719B(약 99% 감소), knip tail 0줄, 일반 통과 시 결과 요약이 스크롤 없이 보임. 단계 수를 `STEPS` 배열 길이에서 도출(`TOTAL_STEPS` 하드코딩 제거)해 단계 증감 시 표시 드리프트를 구조적으로 차단. `enforce-verification`이 `summary.log`를 읽지 않는다는 Assumption(`enforce-verification.mjs` Read 확인)을 plan에서 미리 잡아 ADR 불필요·게이트 회귀 0 보장.
+- **다음에 할 것**: `logs/` 최상위 40+ 일회성 디렉토리 정리(보관 N개 제한·prune 정책)는 별도 작업으로 분리 — 출력 가독성과 디스크 위생은 결정 기준이 다르다(삭제 정책·보관 기간). harness-gate·complete-task·start-task 출력 통일은 verify-task가 최대 노이즈 표면이라 우선순위 낮으나 필요시 같은 방향으로 정렬 가능.
+- **부채**: D3 `logs/` 자동 정리는 `docs/tech-debt-tracker.md`에 등록 완료.
 
 ---
 
