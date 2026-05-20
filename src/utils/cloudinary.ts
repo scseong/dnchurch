@@ -67,9 +67,17 @@ type CloudinaryLoaderOptions = {
   aspectRatio?: string;
 };
 
+// cloudinaryFetchUrl이 구운 `f_auto,q_auto/<encoded>` 프리픽스만 매칭 — 서명(/s--...--/)·커스텀 변환 체인은 passthrough.
+const CLOUDINARY_FETCH_RESIZE_RE =
+  /^(https:\/\/res\.cloudinary\.com\/[^/]+\/image\/fetch\/)f_auto,q_auto\/(.+)$/i;
+
 // next/image의 loader — <CloudinaryImage>가 내부적으로 사용. src에 ROOT가 없으면 자동 합성됨
 export function createCloudinaryLoader({ cropMode, gravity, aspectRatio }: CloudinaryLoaderOptions = {}) {
   return function ({ src, width, quality }: ImageLoaderProps) {
+    const fetchMatch = src.match(CLOUDINARY_FETCH_RESIZE_RE);
+    if (fetchMatch) {
+      return `${fetchMatch[1]}f_auto,q_auto,c_limit,w_${width}/${fetchMatch[2]}`;
+    }
     if (/^https?:\/\//i.test(src)) return src;
     const params = ['f_auto'];
     if (cropMode) {

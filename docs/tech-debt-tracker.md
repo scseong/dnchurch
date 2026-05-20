@@ -379,4 +379,22 @@
 - **영향 범위**: `/sermons/[id]` 모바일
 - **발견일**: 2026-05-17 (PR #95 머지, 실기기 검증 머지 후로 이월)
 
+### 🟡 @next/bundle-analyzer가 Turbopack 빌드와 비호환 (sermons-a11y-perf 8-4)
+
+- **상태**: 🟡 진행 중 (측정 도구 무력 — 런타임 동작은 정상)
+- **무엇**: `next.config.ts`에 `withBundleAnalyzer`(`ANALYZE=true`)가 배선돼 있으나 Next 16 기본 Turbopack 빌드에서 "The Next Bundle Analyzer is not compatible with Turbopack builds, no report will be generated"로 리포트 미생성. sermons 8-4 감사의 번들 byte-% 기준(단일 의존 ≥ route First Load JS 30%)·Code Splitting ≥10% 판정을 측정 불가
+- **왜**: 복구는 `next.config.ts` 수정(webpack 빌드 전환 또는 analyzer 대체) = ADR_TRIGGER_PARTS. 8-4 Non-goal·escape hatch로 이번 범위 제외
+- **마이그레이션 경로**: `next build --webpack` 일회 측정, 또는 `next build --experimental-analyze` 산출(`.next/diagnostics/analyze/<route>/analyze.data`) 파서 도입, 또는 analyzer를 Turbopack 호환 도구로 교체 — 별도 plan + ADR 판단
+- **영향 범위**: `next.config.ts`(측정만 — 런타임 번들 자체 정상, knip 신규 미사용 0)
+- **발견일**: 2026-05-18 (sermons-a11y-perf 8-4 감사)
+
+### 🟡 sermons Core Web Vitals 런타임 미측정 (sermons-a11y-perf 8-4)
+
+- **상태**: 🟡 진행 중 (자동검증 불가 항목)
+- **무엇**: LCP/INP/CLS는 헤드리스 빌드 환경에 브라우저 없어 미측정. 정적 감사로 이미지 리사이즈 결함(loader)은 수정했으나 실측 수치 없음
+- **왜**: 빌드 환경에 브라우저 부재. 런타임 메트릭은 배포 프리뷰에서만 측정 가능
+- **마이그레이션 경로**: Vercel preview URL에 Lighthouse mobile 1회 — 기준 LCP ≤2.5s·CLS ≤0.1·INP ≤200ms. 미달 항목만 후속 plan
+- **영향 범위**: `/sermons`·`/sermons/all`·`/sermons/[id]`·`/sermons/series`·`/sermons/series/[id]`
+- **발견일**: 2026-05-18 (sermons-a11y-perf 8-4 감사)
+
 <!-- last-audit: 2026-05-14 -->
