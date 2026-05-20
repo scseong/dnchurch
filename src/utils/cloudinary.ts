@@ -70,6 +70,14 @@ type CloudinaryLoaderOptions = {
 // next/image의 loader — <CloudinaryImage>가 내부적으로 사용. src에 ROOT가 없으면 자동 합성됨
 export function createCloudinaryLoader({ cropMode, gravity, aspectRatio }: CloudinaryLoaderOptions = {}) {
   return function ({ src, width, quality }: ImageLoaderProps) {
+    // Cloudinary fetch URL(YouTube 썸네일 등 외부 호스트 래핑)은 변환 세그먼트를 width 반응형으로 치환.
+    // cloudinaryFetchUrl이 구운 f_auto,q_auto는 유지하고 c_limit,w_<width>만 더한다 (q_ 중복 방지, 업스케일 차단).
+    const fetchMatch = src.match(
+      /^(https:\/\/res\.cloudinary\.com\/[^/]+\/image\/fetch\/)[^/]+\/(.+)$/i
+    );
+    if (fetchMatch) {
+      return `${fetchMatch[1]}f_auto,q_auto,c_limit,w_${width}/${fetchMatch[2]}`;
+    }
     if (/^https?:\/\//i.test(src)) return src;
     const params = ['f_auto'];
     if (cropMode) {
