@@ -230,7 +230,7 @@ type SermonResourceInput =
 - **우선순위**: 낮음
 - **관련 파일**: `src/app/(content)/sermons/_component/SeriesEpisodeList/`, `src/services/sermon/sermon-service.ts:108`, `:240`
 
-### N. 어드민 taxonomy가 공개용 게이트 함수를 재사용 [전체 구조 / 데이터 경계] [Codex 단독]
+### N. 어드민 시리즈·설교자 목록이 공개용 게이트 함수를 재사용 [전체 구조 / 데이터 경계] [Codex 단독]
 
 - **문제**: `getAllPreachers` / `getAllSeries`는 공개 노출을 위해 `is_active=true` + `sermons!inner(count)` + `is_published=true` + `deleted_at IS NULL` 조건을 모두 건다. 어드민 새 설교 등록(`new/page.tsx`)과 어드민 리스트 필터(`page.tsx`)가 이 함수들을 그대로 사용.
 - **영향**: 초안만 있는 설교자/시리즈, 발행된 설교가 0편인 새 설교자는 어드민 select에서 보이지 않는다. **새 설교자의 첫 설교 등록이 막힐 수 있다.** 어드민 워크플로 차원의 결함.
@@ -328,7 +328,7 @@ function buildResourcePath(sermonDate: string, originalName: string): string {
 
 | 우선순위 | 항목 | 출처 |
 | --- | --- | --- |
-| 높음 | N. 어드민 taxonomy 분리 | Codex 단독 |
+| 높음 | N. 어드민 시리즈·설교자 목록 분리 | Codex 단독 |
 | 높음 | O. view count + revalidate 충돌 + RPC overload | Codex 단독 + 3차 보강 |
 | 높음 | P. 발행 조건 SSOT | Codex 단독 |
 | 높음 | A. PreviewCard 설교자 UUID 표시 | Claude 1차 단독 |
@@ -361,8 +361,8 @@ function buildResourcePath(sermonDate: string, originalName: string): string {
 
 상위 우선순위 5건(A, E, N, O, P)을 한 PR로 묶기엔 무리. 의도별로 **4개 설교 PR + 1개 전역 task**로 분리. (메모리: 한 PR=한 의도의 입자를 응집 묶음으로)
 
-1. **어드민 taxonomy 분리 PR** — `sermons-admin-taxonomy`
-   - N (어드민 taxonomy 분리 — `getAdminPreachers`, `getAdminSeries` 신설)
+1. **어드민 시리즈·설교자 목록 분리 PR** — `sermons-admin-taxonomy` (식별자 유지)
+   - N (어드민 시리즈·설교자 목록 분리 — `getAdminPreachers`, `getAdminSeries` 신설)
    - 의도: 공개 ↔ 어드민 데이터 경계 정합화. 새 설교자/시리즈의 첫 등록 흐름 복원.
 
 2. **조회수 부수효과 분리 PR** — `sermons-view-count-side-effect`
