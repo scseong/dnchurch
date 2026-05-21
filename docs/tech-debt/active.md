@@ -312,7 +312,7 @@
 - **영향 범위**: `src/hooks/useKakaoShare.tsx`·`src/components/lib/KakaoScript.tsx`는 정상 — 콘솔 설정만
 - **발견일**: 2026-05-17 (PR #95 사용자 보고)
 
-### 🟡 설교 상세 영상 첫재생 지연 — preboot 효과 약화 (PR #95 D7)
+### 🟢 설교 상세 영상 첫재생 지연 — preboot 효과 약화 (PR #95 D7)
 
 - **상태**: 마이그레이션 가능 (받아들인 트레이드오프)
 - **무엇**: 모바일 재생 불가 수정으로 `enablejsapi`/postMessage 큐 → 클릭 시 `src` autoplay swap 방식으로 바뀜. iframe이 클릭 시 navigation되므로 진입-시 preboot 효과(첫재생 지연 완화)가 대부분 무효화됨

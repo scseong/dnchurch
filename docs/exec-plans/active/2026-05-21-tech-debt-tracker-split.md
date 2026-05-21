@@ -86,8 +86,8 @@
 ## ADR 판단
 
 - **ADR_TRIGGER_PARTS 변경 여부**: yes (4곳 — `CLAUDE.md`, `scripts/complete-task.mjs`, `.codex/skills/context-loader/`, `.claude/hooks/README.md`)
-- **변경 성격**: 문서 경로 분할에 따른 안내·메시지 갱신만. 동작 변경 0
-- **결정 (D1)**: 신규 ADR 작성 안 함 — ADR 0001 "docs/ 일원화" 범위 내 docs 구조 분할이며, index+split 패턴이 조직 표준으로 굳지 않았음. Codex 1차 검증 D1 권고 채택
+- **변경 성격**: 문서 경로 분할에 따른 안내·메시지 갱신 + D13 fix에서 `complete-task.mjs` 정규식 bold 호환 보강. 검증 동작은 더 관대해지는 방향이며 정책 변경 아님
+- **결정 (D1·D13)**: 신규 ADR 작성 안 함 — ADR 0001 "docs/ 일원화" 범위 내 docs 구조 분할이며, index+split 패턴이 조직 표준으로 굳지 않았음. D13 정규식 fix는 SKILL.md bold 가이드와의 호환성 보강(false negative 감소)으로 일회성 mechanical 변경
 - **재발 시 ADR 승격 기준**: 다른 docs(예: ARCHITECTURE.md, 향후 부채 외 인덱스)에 같은 패턴을 한 번 더 적용하게 되면 그때 `0012-docs-index-split` 같은 ADR로 정리
 
 ## 후속 작업
@@ -210,12 +210,10 @@
   - 문제: Codex 1차에서 누락 동결 참조 3건 발견 — `cloudinary-asset-structure.md:132`(자유 텍스트의 "tech-debt-tracker" 언급), `cleanup-phase1-5.md:43,50`(체크리스트 "tech-debt-tracker 갱신" 표기). 모두 진행 중 exec-plan 본문 텍스트
   - 해결: D4 동결 목록에 3건 추가. 진행 중 exec-plan 분류를 "본문 텍스트 손대지 않음"으로 명확화 — 체크리스트 항목·자유 텍스트 모두 동결
   - 결과: 동결 22곳 = eslint.config.mjs(2) + src/ line-disable(8) + .stylelintrc.json(4) + 루트 README(1) + constraints.md(1) + 진행 중 exec-plan 6건(cleanup-phase1-5:43,50,74 / cloudinary-asset-structure:110,132,199 / sermons-a11y-perf:107,219). 합 22곳
-
-## Codex 1차 검증
-
-- **결론**: 미요청
-- **현재 판단**: 미요청
-- **다음 행동**: 구현 diff 생성 후 갱신
+- **D13 — PR #100 리뷰 반영: 정규식 bold 라벨 + 헤더 아이콘 + plan 중복 섹션 (Gemini + Codex 합의 3건)**
+  - 문제: PR #100 머지 전 리뷰에서 Gemini bot 2건(G1: 정규식 bold 미인식, G2: active.md:315 아이콘 불일치)과 Codex 독립 리뷰 1건(GAP: plan에 stale `## Codex 1차 검증` 섹션 중복) 발견. G1·G2는 Codex가 VALID로 교차 검증, GAP는 Gemini가 놓친 단독 발견
+  - 해결: (1) `complete-task.mjs:110-112` 3개 regex 모두 `(\*\*)?...\1` 추가 — Node 엔진 직접 테스트로 bold·plain·new·old 4조합 모두 매칭, asymmetric·filled은 정상 미매칭 확인. PowerShell(.NET)에서는 `(X)?` 미매칭 시 `\1` 백레퍼런스 거동 다르나 실제 실행 환경은 Node이므로 무관. (2) `active.md:315` 헤더 🟡 → 🟢 (본문 "마이그레이션 가능"과 일관). HEAD pre-existing 결함이었으나 verbatim 원칙(D8)보다 내부 일관성 우선. (3) plan line 214의 중복 `## Codex 1차 검증` 템플릿 skeleton 삭제 — line 114의 실제 PASS_WITH_DECISION_LOG 섹션이 SSOT
+  - 결과: ADR 추가 없음 — 검증 정책 변경 아니라 SKILL.md bold 가이드와의 호환성 보강. 정규식이 더 관대해지는 방향(false negative 줄어듦). D8 verbatim 원칙은 "항목 본문 그대로 + 파일 수준 scaffolding"이라 헤더 아이콘 일관성 수정은 scaffolding 범주
 
 ## Claude 2차 검증
 
