@@ -1,6 +1,6 @@
 # sermons-admin-taxonomy
 
-- **상태**: 🟡 진행 중
+- **상태**: ✅ 완료 (2026-05-21)
 - **시작일**: 2026-05-20
 - **브랜치**: feat/sermons-admin-taxonomy
 - **Open questions**: 어드민 함수가 반환할 `sermon_count`의 의미를 published count로 유지할 것인가, 전체(draft 포함) count로 바꿀 것인가. 본 plan은 published count 유지로 진행(D2 참조), codex 계획 검증으로 확정 — Codex Q1 결과로 published count + LEFT join 채택.
@@ -329,3 +329,21 @@ logs: `logs/sermons-admin-taxonomy/{20260521-164450,20260521-172212}/`
 - **시리즈 관리 어드민 UI 신설** — 활성화 토글 + 비활성/종결 row 관리. 트리거 도입 후에도 수동 토글 필요 케이스(예: 시리즈 종료) 처리.
 - `sermon_count` 의미를 어드민에서 "전체(draft 포함) 회차"로 분기할지 — D2 후속. 사용자 피드백 받은 뒤 결정.
 - 같은 패턴(공개 게이트가 어드민에서 재사용)이 다른 도메인에 있는지 점검 — 스태프·공지·주보 등. 본 작업은 sermon 한정.
+
+## 회고
+
+### 잘된 점
+
+- 도메인 리뷰 Item N으로 결함을 정확히 짚어 외과적 수정(admin.ts 1파일 신규 + 어드민 3페이지 호출 교체)으로 PR 마감.
+- Codex 다회 검증(계획 1차 CR + 2차 PASS · diff 1차 PASS · D3 reversal 3차 CR + 자체 점검 PASS · gemini 봇 독립 평가 PASS_WITH_DECISION_LOG)을 자체 grep·diff로 교차 확인 — verdict 신뢰도 확보.
+- 4 commit 분리(Docs research · Fix 차단 결함 · Style 포맷팅 · Docs D4 deferral) — 의도별 응집 유지.
+- D3 reversal — dev 수동 검증에서 catch-22 발견 즉시 의사결정 로그에 정정 이력 + 재검증으로 plan 일관성 회복.
+
+### 다음에 할 것
+
+- exec-plan 본문에 D 결정 내용을 여러 섹션(Success Criteria · 체크리스트 · 트레이드오프)에 분산해 쓰면 정정 시 stale 문장이 생긴다. 다음 plan부터는 D 결정 사실을 한 곳(의사결정 로그)에서 referent로만 인용하고 다른 섹션은 한 줄 요약만 두자.
+- Codex 도구 hang에 두 번 시간 낭비 — codex:rescue 호출 시 prompt를 더 좁혀 duration 줄이거나, foreground timeout fallback 마련. 다음 작업에서 적용.
+
+### 부채 (후속 plan으로 등록됨)
+
+- `sermons-series-auto-activate` (DB trigger) · `sermons-view-count-side-effect` (ISR + RPC overload) · `sermons-publish-ssot` (validateSermonForm) · `sermons-admin-interaction` (행·`<th>` 키보드) · `queue-microtask-cleanup` (전역) · 도메인 리뷰 Item J·K (공개·어드민 동시 정리) — `docs/research/2026-05-20-sermons-domain-review.md` 우선순위 표 참조.
