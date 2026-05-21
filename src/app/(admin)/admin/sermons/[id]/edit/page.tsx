@@ -1,6 +1,7 @@
 import { notFound } from 'next/navigation';
 import SermonFormShell from '@/app/(admin)/admin/sermons/_components/SermonFormShell';
-import { getAllPreachers, getAllSeries, getSermonForEdit } from '@/services/sermon';
+import { getSermonForEdit } from '@/services/sermon';
+import { getAdminPreachers, getAdminSeries } from '@/services/sermon/admin';
 import { mapSermonToFormData } from '@/lib/sermon-form-mapper';
 
 interface Props {
@@ -11,8 +12,8 @@ export default async function SermonEditPage({ params }: Props) {
   const { id } = await params;
   const [sermon, preachers, series] = await Promise.all([
     getSermonForEdit(Number(id)),
-    getAllPreachers(),
-    getAllSeries()
+    getAdminPreachers(),
+    getAdminSeries()
   ]);
 
   if (!sermon) notFound();
