@@ -80,9 +80,7 @@ export const sermonService = (supabase: SupabaseClient<Database>) => ({
     if (serviceType) query = query.eq('service_type', serviceType);
 
     if (year) {
-      query = query
-        .gte('sermon_date', `${year}-01-01`)
-        .lte('sermon_date', `${year}-12-31`);
+      query = query.gte('sermon_date', `${year}-01-01`).lte('sermon_date', `${year}-12-31`);
     }
 
     if (search) {
@@ -250,9 +248,7 @@ export const sermonService = (supabase: SupabaseClient<Database>) => ({
       const y = new Date(sermon_date).getFullYear();
       map.set(y, (map.get(y) ?? 0) + 1);
     }
-    return Array.from(map, ([year, count]) => ({ year, count })).sort(
-      (a, b) => b.year - a.year
-    );
+    return Array.from(map, ([year, count]) => ({ year, count })).sort((a, b) => b.year - a.year);
   },
 
   /** 활성 설교 전체 수 (count-only, rows 없이 head로 조회) */
@@ -325,10 +321,7 @@ export const sermonService = (supabase: SupabaseClient<Database>) => ({
 
   /** [어드민] 발행 상태별 카운트 — is_published projection만 가져와 JS 집계 */
   adminStatusCounts: async (): Promise<Record<SermonStatusTab, number>> => {
-    const res = await supabase
-      .from('sermons')
-      .select('is_published')
-      .is('deleted_at', null);
+    const res = await supabase.from('sermons').select('is_published').is('deleted_at', null);
     const handled = handleResponse(res);
     const rows = (handled.data ?? []) as Array<{ is_published: boolean }>;
     let published = 0;
@@ -361,17 +354,13 @@ export const sermonService = (supabase: SupabaseClient<Database>) => ({
 
     if (params.selectedSeries.length > 0) {
       const includesNone = params.selectedSeries.includes(NONE_SERIES_SENTINEL);
-      const realIds = params.selectedSeries.filter(
-        (id) => id !== NONE_SERIES_SENTINEL
-      );
+      const realIds = params.selectedSeries.filter((id) => id !== NONE_SERIES_SENTINEL);
       if (includesNone && realIds.length === 0) {
         query = query.is('series_id', null);
       } else if (!includesNone && realIds.length > 0) {
         query = query.in('series_id', realIds);
       } else {
-        query = query.or(
-          `series_id.is.null,series_id.in.(${realIds.join(',')})`
-        );
+        query = query.or(`series_id.is.null,series_id.in.(${realIds.join(',')})`);
       }
     }
 
