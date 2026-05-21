@@ -169,6 +169,12 @@ D1·D2(의사결정 로그)에 채택 근거와 sermon_count 처리 결정을 �
   - 해결: 어드민 함수에서 `.eq('is_active', true)` 한 줄 제거. 어드민은 모든 시리즈·설교자 노출. 공개 함수는 불변 — 공개 sidebar는 게이트 그대로(`is_active=true` + published 1편 이상). 대안 (a) 시리즈 관리 어드민 UI 신설 + 활성화 토글 — 큰 UI 추가. 대안 (b) DB default를 `true`로 변경 — semantics(초안 게이트)와 충돌. 그래서 어드민 함수 한 줄 제거가 가장 외과적.
   - 결과: 첫 설교 등록 흐름 매끄러움. 어드민 dropdown에 초안·종결 시리즈가 같이 섞임 → 후속 task에서 (초안)/(종결) 배지로 시각적 구분 보강. 첫 설교 등록 시 자동 활성화(trigger)는 별도 plan `sermons-series-auto-activate`로 분리(이번 plan의 Non-goals "DB schema 변경, 마이그레이션").
 
+- **D4 — gemini-code-assist 봇이 지적한 4건(`select('*')`·`as unknown as`)을 본 PR에서 defer**
+  - 문제: PR #99 머지 직전 gemini-code-assist 봇이 4개 코멘트 — (a) `select('*, sermons(count)')` 성능 지적 2건(`admin.ts:40`·`:62`), (b) `as unknown as PreacherWithSermonCount`/`SeriesWithSermonCount` 타입 단언 정확성 지적 2건(`:47-49`·`:69-71`).
+  - 해결: 모두 defer. 사유 — (1) 본 plan의 Non-goals에 `select('*')` + JS 집계 정리(도메인 리뷰 Item J)가 명시적으로 제외되어 있음. (2) 동일 패턴이 공개 함수에도 있음(`sermon-service.ts:205`·`:213-215`·`:123`·`:131-133`) — 어드민만 고치면 공개·어드민 비대칭이 생겨 더 나빠짐. (3) 두 패턴 모두 도메인 리뷰 Item J(`select('*')`)·Item K(`as unknown as` 단언)로 후속 task 등록되어 있음 — 공개·어드민 동시 정리해야 일관성 유지.
+  - Codex 독립 검증: PR 머지 직전 codex 객관 검증 결과 `PASS_WITH_DECISION_LOG` — 4건 모두 defer 동의, 런타임 결함·머지 차단 리스크 없음 명시.
+  - 결과: 본 PR은 차단 결함 해소까지만. gemini 코멘트 4건에는 후속 PR 약속을 GitHub 답글로 기록(reviewer 트래킹용).
+
 ## ADR 판단
 
 - 변경 파일: `src/services/sermon/admin.ts`(추가만), `src/app/(admin)/admin/sermons/*.tsx`(호출 교체).
