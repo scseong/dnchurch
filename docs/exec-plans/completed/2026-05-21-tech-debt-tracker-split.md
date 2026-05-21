@@ -1,6 +1,6 @@
 # tech-debt-tracker-split
 
-- **상태**: 🟡 진행 중
+- **상태**: ✅ 완료 (2026-05-22)
 - **시작일**: 2026-05-21
 - **브랜치**: feat/sermons-publish-ssot (커밋 시 sermons 작업과 분리)
 - **Open questions**: none
@@ -248,6 +248,20 @@
   - 이유: <왜 이번에 안 하나>
   - 다음 기준: <언제 다시 하나>
   - 기록 위치: `docs/tech-debt-tracker.md` 또는 없음 -->
+
+## 회고
+
+- **잘된 것**: 좀비 broker 진단·정리로 Codex 합성 hang 근본 원인 해결, 검증 정확도 확보.
+  - 좀비 broker 10개(2026-05-09~05-21 누적)가 shared runtime endpoint `cxc-MWt4pI` dead pipe로 합성 IPC 차단. `Get-CimInstance Win32_Process`로 확인 후 종료. 깨끗한 런타임에서 9분·7분에 안정 완료(4회 hang → 5회차부터 정상)
+  - Codex 1차 3라운드(CR→CR→PASS_WITH_DECISION_LOG) + Claude 2차 PASS + Gemini bot 인라인 리뷰 + Codex 독립 리뷰 cross-check로 결함 3건 추가 발견(G1·G2·GAP) → D13으로 모두 반영. 단일 리뷰어보다 정확도 ↑
+  - D1~D13 결정 로그가 plan에 모두 박혀 있어 검증 history 추적성 유지. 좀비 broker 진단 과정도 plan에 기록
+  - 분할 후 인덱스 39줄로 정착 — EXPLORE 시 토큰 비용 12K → ~1K (개념상 92% 절감 가능)
+- **다음에 할 것**: 본 task 범위 밖이지만 가까운 시점에 다룰 일.
+  - 항목 본문 3줄 룰 압축 — 다음 분기 audit(2026 Q3) 또는 활성 항목 40건 초과 시점에 별도 task
+  - 분기별 90일 이상 미진행 🟢 항목 archive 정책 도입 — 2026 Q3 첫 실행. `docs/tech-debt/archive/<year>-Q<n>.md` 디렉토리 패턴 후보
+  - `docs/tech-debt/active.md` 다른 항목 헤더 아이콘 일관성 audit — 이번에 1건(설교 첫재생 지연) 발견했지만 다른 항목도 점검 가치 있음
+  - 다음 PR부터 commit-msg hook R4 룰(subject `+` 다중 concern 차단) 의식 — subject는 단일 의도로 통일하고 본문에 분해
+- **발견된 부채 (→ tech-debt/active.md 옮길 것)**: 없음 — 본 PR 자체가 tech-debt-tracker 운영 비용 개선 작업이며 신규 부채 발견 0건
 
 ---
 
