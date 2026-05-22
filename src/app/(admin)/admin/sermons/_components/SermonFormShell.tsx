@@ -73,13 +73,25 @@ export default function SermonFormShell({
 
   const publishLabel = formData.isPublished
     ? mode === 'new'
-      ? '발행'
-      : '발행 저장'
-    : '초안 저장';
+      ? '공개로 등록'
+      : '공개로 게시'
+    : mode === 'new'
+      ? '비공개로 등록'
+      : '비공개로 저장';
   const description =
     mode === 'new'
-      ? '영상, 본문, 자료를 입력하고 발행하세요'
+      ? '영상, 본문, 자료를 입력하고 공개하세요'
       : '영상, 본문, 자료를 수정하고 저장하세요';
+
+  const handleCancel = () => {
+    if (
+      isDirty &&
+      !window.confirm('저장하지 않은 변경 사항이 있습니다. 목록으로 돌아갈까요?')
+    ) {
+      return;
+    }
+    router.push('/admin/sermons');
+  };
 
   return (
     <>
@@ -88,9 +100,6 @@ export default function SermonFormShell({
         badge={mode === 'new' ? '새 설교 등록' : '수정'}
         title={mode === 'new' ? '새 설교 등록' : initialTitle}
         description={description}
-        actions={[
-          { label: publishLabel, variant: 'pri', onClick: handlePublish, disabled: isPending }
-        ]}
       />
       <SermonForm
         formData={formData}
@@ -98,6 +107,7 @@ export default function SermonFormShell({
         onAddResources={handleAddResources}
         onRemoveResource={handleRemoveResource}
         onPublish={handlePublish}
+        onCancel={handleCancel}
         isPending={isPending}
         publishLabel={publishLabel}
         preachers={preachers}

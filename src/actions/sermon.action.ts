@@ -7,10 +7,20 @@ import { createServerSideClient } from '@/lib/supabase/server';
 import { createAdminServerClient } from '@/lib/supabase/admin';
 import { sermonService, type SermonResourceRpcInput } from '@/services/sermon/sermon-service';
 import { mapFormToDbInsert, mapFormToDbUpdate } from '@/lib/sermon-form-mapper';
+import {
+  validateSermonForm,
+  SERMON_REQUIRED_LABELS,
+  type SermonRequiredField
+} from '@/lib/sermon-form';
 import { checkAdminPermission } from '@/actions/_auth-helpers';
 import { extractStoragePath, RESOURCE_BUCKET } from '@/lib/sermon-resource';
 import { formattedDate } from '@/utils/date';
 import type { SermonFormData, SermonResourceInput } from '@/types/sermon-form';
+
+function buildMissingMessage(missing: SermonRequiredField[]): string {
+  const labels = missing.map((key) => SERMON_REQUIRED_LABELS[key]).join(', ');
+  return `필수 항목(${labels})을 입력해주세요.`;
+}
 
 // ─── Storage 헬퍼 ────────────────────────────────────────────────────────────
 
@@ -115,13 +125,9 @@ export async function createSermonAction(
   if (!user) return { success: false, message: '로그인이 필요합니다.' };
   if (!isAdmin) return { success: false, message: '권한이 없습니다.' };
 
-  if (
-    !sermonFormData.title ||
-    !sermonFormData.sermonDate ||
-    !sermonFormData.preacherId ||
-    !sermonFormData.serviceType
-  ) {
-    return { success: false, message: '필수 항목(제목, 날짜, 설교자, 예배 종류)을 입력해주세요.' };
+  const { ok, missing } = validateSermonForm(sermonFormData);
+  if (!ok) {
+    return { success: false, message: buildMissingMessage(missing) };
   }
 
   let resourcePaths: string[] = [];
@@ -161,13 +167,9 @@ export async function updateSermonAction(
   if (!user) return { success: false, message: '로그인이 필요합니다.' };
   if (!isAdmin) return { success: false, message: '권한이 없습니다.' };
 
-  if (
-    !sermonFormData.title ||
-    !sermonFormData.sermonDate ||
-    !sermonFormData.preacherId ||
-    !sermonFormData.serviceType
-  ) {
-    return { success: false, message: '필수 항목(제목, 날짜, 설교자, 예배 종류)을 입력해주세요.' };
+  const { ok, missing } = validateSermonForm(sermonFormData);
+  if (!ok) {
+    return { success: false, message: buildMissingMessage(missing) };
   }
 
   // 신규 업로드 대상(file 있는 것)과 기존 보존 대상(url만 있는 것)을 분리

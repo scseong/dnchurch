@@ -24,6 +24,7 @@ interface SermonFormProps {
   onAddResources: (inputs: SermonResourceInput[]) => void;
   onRemoveResource: (id: string) => void;
   onPublish: () => void;
+  onCancel: () => void;
   isPending: boolean;
   publishLabel: string;
   preachers: Preacher[];
@@ -36,6 +37,7 @@ export default function SermonForm({
   onAddResources,
   onRemoveResource,
   onPublish,
+  onCancel,
   isPending,
   publishLabel,
   preachers,
@@ -76,32 +78,40 @@ export default function SermonForm({
             onRemove={onRemoveResource}
           />
           <PublishCard isPublished={formData.isPublished} onChange={onPatch} />
+          <div className={styles.action_bar}>
+            <button
+              type="button"
+              className={styles.action_bar_preview}
+              aria-label={previewOpen ? '미리보기 닫기' : '미리보기 열기'}
+              aria-expanded={previewOpen}
+              onClick={() => setPreviewOpen((open) => !open)}
+            >
+              <HiOutlineEye />
+            </button>
+            <div className={styles.action_bar_actions}>
+              <button
+                type="button"
+                className={styles.action_bar_cancel}
+                onClick={onCancel}
+              >
+                취소
+              </button>
+              <button
+                type="button"
+                className={styles.action_bar_submit}
+                disabled={isPending}
+                onClick={onPublish}
+              >
+                {publishLabel}
+              </button>
+            </div>
+          </div>
         </div>
         <aside className={styles.preview_col} aria-label="미리보기">
-          <PreviewCard formData={formData} series={series} />
+          <PreviewCard formData={formData} series={series} preachers={preachers} />
           <Checklist formData={formData} />
         </aside>
       </form>
-
-      <div className={styles.mobile_bar}>
-        <button
-          type="button"
-          className={styles.mobile_preview_button}
-          aria-label="미리보기 열기"
-          aria-expanded={previewOpen}
-          onClick={() => setPreviewOpen(true)}
-        >
-          <HiOutlineEye />
-        </button>
-        <button
-          type="button"
-          className={clsx(styles.mobile_button, styles.primary)}
-          disabled={isPending}
-          onClick={onPublish}
-        >
-          {publishLabel}
-        </button>
-      </div>
 
       <div
         className={clsx(styles.preview_overlay, previewOpen && styles.open)}
@@ -127,7 +137,7 @@ export default function SermonForm({
             </button>
           </header>
           <div className={styles.preview_sheet_body}>
-            <PreviewCard formData={formData} series={series} />
+            <PreviewCard formData={formData} series={series} preachers={preachers} />
             <Checklist formData={formData} />
           </div>
         </div>

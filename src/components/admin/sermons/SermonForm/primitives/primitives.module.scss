@@ -17,6 +17,7 @@
 
   &::placeholder {
     color: var(--admin-t3);
+    font-size: inherit;
   }
 
   &:focus-visible {
