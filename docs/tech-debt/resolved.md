@@ -1,0 +1,57 @@
+# Tech Debt — Resolved
+
+해결된 기술 부채 기록. 머지 후 [`active.md`](active.md)에서 옮겨 온다. 회고 검색·과거 회상용. 형식 규칙은 [`../tech-debt-tracker.md`](../tech-debt-tracker.md) 참조.
+
+---
+
+### ✅ `verify-task.mjs` 전체 검증이 사전 부채에 항상 막히던 문제 (2026-05-01)
+
+- `verify-task.mjs`는 ESLint/stylelint/build를 필수 통과 조건으로 유지하고, Knip은 현재 부채를 경고로 기록한다.
+- 결과는 `logs/<task-id>/<run-id>/`에 증적으로 남고, `enforce-verification.mjs`와 `harness-gate.mjs`가 현재 diff와 PASS 기록의 일치 여부를 확인한다.
+- 확인: `node scripts/verify-task.mjs harness-engineering-dogfood` 통과, `node scripts/harness-gate.mjs harness-engineering-dogfood` 통과.
+
+### ✅ ESLint errors 13건 청산 (2026-05-01)
+
+- 청산된 부채: `react-hooks/refs` 10 + `react-hooks/immutability` 1 + `prefer-const` 1 + `@typescript-eslint/no-require-imports` 1 = 13건
+- 처리:
+  - `react-hooks/refs` 10: ConfirmModal snapshot 패턴 (의도된 디자인) — 라인별 룰 disable + 의도 주석
+  - `react-hooks/immutability` 1: useTimer 함수 순서 재정렬 (`stop`을 `tick` 위로, deps 추가)
+  - `prefer-const` 1: middleware.ts `let` → `const` (자동 수정)
+  - `no-require-imports` 1: next.config.ts `require()` 라인 룰 disable (Next.js 공식 패턴)
+- 처리 EXEC_PLAN: `tech-debt-cleanup-phase1`
+
+### ✅ design-system-v3 Step 4 Codex 사후 1차 검증 (2026-05-07)
+
+- **사후 검증 대상**: design-system-v3 Step 4 커밋 3개 — `89f6850` (호출처 22개 alias 치환), `81e5c4c` (미사용 mixin·alias 정의 제거), `a635df8` (검증 기록 docs)
+- **검증 항목 3가지 모두 PASS**:
+  - (1) boundary 정확도 — `rg '\$[[:alnum:]_-]+[0-9]+%' src` 0건. prefix collision (`$navy/$navy-mid/$navy-light` 등) 모두 canonical token으로 정상 종결.
+  - (2) admin diff 범위 — admin 변경은 `$line-height-heading→snug` (1) + `$border-secondary→$border-strong` (2) 단일 토큰 치환만. `var(--admin-*)` 미변경 — 후속 ADR 0004 영역 미침범.
+  - (3) gradient 복구 — `Hero.module.scss:29`, `SermonListPage.module.scss:277(원 :330)` 모두 `$navy-950 0%` 정상 형태로 복구.
+- **결과 기록**: `docs/exec-plans/completed/2026-05-04-design-system-v3.md` "Codex 1차 검증 → Step 4 (사후)" 섹션
+
+### ✅ design-system-v4 home cleanup — `$bg-section` 토큰화 + Hover Border 6건 (2026-05-07)
+
+- **청산 부채 2건**:
+  - (1) `$bg-section: #fdfaf5` 로컬 hex (NewHere.module.scss:2) — `_color.scss`에 `$cream-100: #fdfaf5` primitive + `$bg-cream-subtle: $cream-100` semantic 1쌍 신규 추가, NewHere에서 토큰 참조로 교체.
+  - (2) Hover Border 위반 home 6건 — SKILL Hover 3원칙 #3 위반.
+    - A 그룹 link underline 5건 (FeedContent `.more_link`, RecentSermons `.header_link`, NewHere `.faq_link`/`.cta_link`, AboutOurChurch `.about_link`): `border-bottom + transition border-color`을 `text-decoration: underline + text-decoration-color + text-underline-offset` 패턴으로 일괄 교체.
+    - B 그룹 SermonCard 1건 (`.card:hover .play_btn`): `border-color: $gold-600` hover 라인 + transition list `border-color` 라인 제거. 정적 border는 유지.
+- **검증**: Codex 1차 PASS, Claude 2차 PASS, `verify-task.mjs` 필수 검증 통과 (`logs/design-system-v4-home-cleanup/20260507-232034/`).
+- **참고**: `feat/common-components-v4` 브랜치에 등록된 "Hover Border 위반 — 디자인 시스템 v4 미완 남은 부분 (10건)" 부채 중 home 5건 + SermonCard 1건 분량을 본 작업으로 정리. admin 5건은 후속 ADR 0004 영역으로 분리 보존.
+- **결과 기록**: `docs/exec-plans/completed/2026-05-07-design-system-v4-home-cleanup.md` (머지 후 이동 예정)
+
+### ✅ `serverActions.bodySizeLimit` ↔ bulletin upload 정책 불일치 (2026-05-11)
+
+- **부채**: `bodySizeLimit: '5mb'` vs bulletin UI 5MB × 최대 5장(=25MB). multi-upload 시 Server Action 진입 전 차단 가능 (PR #82 Codex 리뷰에서 등록)
+- **해소**: about-page-qa fix에서 `next.config.ts:24` `bodySizeLimit`을 `5mb` → `30mb`로 상향. 25MB 정책 수용
+- **확인**: 변경 1줄. 빌드/lint PASS
+- **참고**: sermon 자료 단일 50MB 한도(`src/lib/sermon-resource.ts`)는 운영상 차단 사례 미확인 — 발생 시 별도 부채로 등록
+
+### ✅ `allSeriesIncludingInactive` 전제 오류 — 완료축을 is_active로 착각 (Phase 4) (2026-05-16 해소)
+
+- **상태**: ✅ 해결됨 — `allSeriesIncludingInactive`/wrapper/`seriesListAll` 태그 삭제, `series/page.tsx`가 `getAllSeries()` 재사용, `filterSeries`·`SeriesCard` `ended_at` 축 전환. verify PASS·Codex 1차 PASS·Claude 2차 교차 클린. exec-plan "전제 오류 정정" 참조
+- **무엇**: `feat/sermons-all-series`(미PR) Phase 4가 "완료 시리즈도 목록 노출" 목적으로 `is_active` 필터를 제거한 `allSeriesIncludingInactive`/`getAllSeriesIncludingInactive` 신설
+- **왜 오류**: dnchurch에서 `is_active`=공개 노출 게이트(`worship`/`staff`/`allSeries`/`bySeriesSlug`/`allPreachers` 일관), 완료 판정은 별축 `ended_at`(`page.tsx:45`·`SermonSeriesBanner:23`·`SermonSeriesSidebar:17`). 완료 시리즈는 `is_active=true`+`ended_at!=null`이라 **`allSeries`(is_active=true)가 이미 완료 포함** → `allSeriesIncludingInactive`는 불필요할뿐 아니라 숨김(is_active=false) 시리즈까지 목록 노출(PR #92 #4와 동형 결함). Phase 4 계획 Codex CR-1("getAllSeries가 완료 제외")이 데이터 검증 없이 채택된 게 근인(dev DB 완료 시리즈 0건이라 미검출)
+- **마이그레이션 경로**: Phase 4 PR 전 (a) `allSeriesIncludingInactive` 폐기하고 `allSeries` 재사용 가능 여부 확인(완료 시리즈 표시는 ended_at 분기로), (b) 불가 시 `is_active=true` 유지한 채 정렬만 조정
+- **영향 범위**: `src/services/sermon/sermon-service.ts`, `src/services/sermon/index.ts`, `feat/sermons-all-series` 브랜치 Phase 4 전반
+- **발견일**: 2026-05-15 (PR #92 #4 진단 중 동형 오류 발견)

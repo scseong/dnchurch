@@ -7,7 +7,7 @@
 | 위치 | 무엇 | 라이프사이클 |
 | --- | --- | --- |
 | `ARCHITECTURE.md` | 시스템 아키텍처 (라우트·레이어·외부 의존) | 구조 변경 시 |
-| `tech-debt-tracker.md` | 알려진 기술 부채·마이그레이션 항목 | 발견/해결 즉시 |
+| `tech-debt-tracker.md` (인덱스) + `tech-debt/active.md`·`tech-debt/resolved.md` | 알려진 기술 부채·마이그레이션 항목 | 발견/해결 즉시 |
 | `exec-plans/active/` | 진행 중 작업의 EXEC_PLAN | 작업당 1개 |
 | `exec-plans/completed/` | 머지 완료된 작업 기록 (회고·검색용) | 머지 직후 이동 |
 | `decisions/` | ADR — "왜 이 선택을 했는가" 영구 기록 | 큰 결정 시 |
@@ -25,7 +25,7 @@ Codex CLI는 루트 `AGENTS.md`에서 시작한 뒤 `.codex/skills/context-loade
 - `CLAUDE.md`
 - `docs/README.md`
 - `docs/ARCHITECTURE.md`
-- `docs/tech-debt-tracker.md`
+- `docs/tech-debt/active.md` (인덱스: `docs/tech-debt-tracker.md`)
 
 작업 유형별 추가 문서는 `context-loader`의 라우팅 표가 결정한다. `docs/` 전체를 무차별 로딩하지 않는다.
 

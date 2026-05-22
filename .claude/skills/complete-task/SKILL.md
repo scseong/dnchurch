@@ -5,7 +5,7 @@ description: 사용자가 PR 머지 완료, complete-task, 회고 작성, exec-p
 
 # 작업 완료 처리
 
-PR이 머지된 후 `docs/exec-plans/active/<slug>.md`에 회고를 채우고 `completed/`로 이동하며, `docs/tech-debt-tracker.md` 업데이트와 별도 PR 제출을 어시스트한다.
+PR이 머지된 후 `docs/exec-plans/active/<slug>.md`에 회고를 채우고 `completed/`로 이동하며, `docs/tech-debt/active.md` 업데이트와 별도 PR 제출을 어시스트한다.
 
 ## 시작 판단
 
@@ -62,7 +62,7 @@ git pull
 
 - **잘된 것**: Codex/Claude 검증에서 PASS로 끝난 항목, 의사결정 로그의 좋은 판단.
 - **다음에 할 것**: Codex 검증의 "남은 리스크", 의사결정 로그의 미해결 항목, Non-goals 중 다음 작업으로 옮긴 것.
-- **발견된 부채 (→ tech-debt-tracker.md 옮길 것)**: verify-task 경고와 의사결정 로그의 부채 언급.
+- **발견된 부채 (→ tech-debt/active.md 옮길 것)**: verify-task 경고와 의사결정 로그의 부채 언급.
 
 초안은 사용자에게 먼저 보여주고 수정/승인을 받는다. 빈 회고로 두지 않는다.
 
@@ -70,7 +70,7 @@ git pull
 
 회고의 "부채" 항목과 verify-task 경고에서 신규 부채 후보를 추출한다.
 
-- 기존 `docs/tech-debt-tracker.md`와 대조해 중복은 제외한다.
+- 기존 `docs/tech-debt/active.md`와 대조해 중복은 제외한다.
 - 신규 항목은 사용자에게 등록 여부를 묻는다.
 - 승인 시 같은 commit에 포함되도록 같은 작업 트리에 변경을 적용한다.
 
@@ -97,7 +97,7 @@ git checkout -b chore/complete-<slug>
 ### 7. 사용자 승인 후 commit + push + PR
 
 ```bash
-git add docs/exec-plans/ docs/tech-debt-tracker.md
+git add docs/exec-plans/ docs/tech-debt/
 git commit -m "Docs: <slug> 회고 작성 및 completed 이동"
 git push -u origin chore/complete-<slug>
 gh pr create --base develop --assignee "@me" --label "📝 문서" \

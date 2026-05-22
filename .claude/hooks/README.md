@@ -51,7 +51,7 @@ Repository context:
 - Next.js App Router, Supabase, SCSS Modules, TypeScript
 - Required data flow: apis -> services -> actions -> app
 - System of record: docs/
-- Relevant docs: AGENTS.md, CLAUDE.md, docs/ARCHITECTURE.md, docs/tech-debt-tracker.md
+- Relevant docs: AGENTS.md, CLAUDE.md, docs/ARCHITECTURE.md, docs/tech-debt/active.md
 
 Review focus:
 1. Does the plan respect the architecture and layer boundaries?
