@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useTransition } from 'react';
+import { useEffect, useState, useTransition } from 'react';
 import { useRouter } from 'next/navigation';
 import { useUnsavedChanges } from '@/hooks/useUnsavedChanges';
 import PageHeader from '@/components/admin/layout/PageHeader';
@@ -8,6 +8,7 @@ import SermonForm from '@/components/admin/sermons/SermonForm';
 import { createSermonAction, updateSermonAction } from '@/actions/sermon.action';
 import { applyPatch } from '@/lib/sermon-form';
 import { useToastStore } from '@/store/toast.store';
+import { useAdminBreadcrumbStore } from '@/store/admin-breadcrumb.store';
 import type { Preacher, SeriesWithSermonCount } from '@/types/sermon';
 import {
   INITIAL_SERMON_FORM_DATA,
@@ -38,8 +39,15 @@ export default function SermonFormShell({
   const [isPending, startTransition] = useTransition();
   const [isDirty, setIsDirty] = useState(false);
   const toast = useToastStore();
+  const setDynamicCrumb = useAdminBreadcrumbStore((s) => s.setDynamicLabel);
 
   useUnsavedChanges(isDirty);
+
+  useEffect(() => {
+    if (mode !== 'edit') return;
+    setDynamicCrumb(initialTitle);
+    return () => setDynamicCrumb(null);
+  }, [mode, initialTitle, setDynamicCrumb]);
 
   const handlePatch = (patch: SermonFormPatch) => {
     setIsDirty(true);

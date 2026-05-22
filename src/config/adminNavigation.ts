@@ -56,10 +56,13 @@ export function isActiveAdminNav(pathname: string, href: string): boolean {
 
 /**
  * 어드민 경로 → AdminHeader 브레드크럼 라벨 배열.
- * 정적 라벨이 필요한 dynamic 경로(설교 수정)는 임시 플레이스홀더를 사용하며,
- * 실제 설교 제목 주입은 추후 페이지 단에서 컨텍스트/props로 대체한다.
+ * dynamic 경로(설교 수정)는 페이지가 `useAdminBreadcrumbStore.setDynamicLabel`로
+ * 실제 라벨을 주입한다. 미주입 시 임시 플레이스홀더로 fallback.
  */
-export function resolveAdminBreadcrumbs(pathname: string): string[] {
+export function resolveAdminBreadcrumbs(
+  pathname: string,
+  dynamicLabel?: string | null
+): string[] {
   const root = '관리자';
 
   if (pathname === '/admin') return [root, '대시보드'];
@@ -67,7 +70,7 @@ export function resolveAdminBreadcrumbs(pathname: string): string[] {
   if (pathname === '/admin/sermons') return [root, '설교 관리'];
   if (pathname === '/admin/sermons/new') return [root, '설교 관리', '새 설교 등록'];
   if (/^\/admin\/sermons\/[^/]+\/edit$/.test(pathname))
-    return [root, '설교 관리', '(설교 제목)'];
+    return [root, '설교 관리', dynamicLabel?.trim() || '(설교 제목)'];
 
   if (pathname === '/admin/sermons/series') return [root, '설교 관리', '시리즈 관리'];
   if (pathname === '/admin/sermons/speakers') return [root, '설교 관리', '설교자 관리'];
