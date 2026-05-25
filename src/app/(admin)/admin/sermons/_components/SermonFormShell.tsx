@@ -92,6 +92,7 @@ export default function SermonFormShell({
       : '영상, 본문, 자료를 수정하고 저장하세요';
 
   const handleCancel = () => {
+    if (isPending) return;
     if (
       isDirty &&
       !window.confirm('저장하지 않은 변경 사항이 있습니다. 목록으로 돌아갈까요?')

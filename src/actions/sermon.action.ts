@@ -8,7 +8,8 @@ import { createAdminServerClient } from '@/lib/supabase/admin';
 import { sermonService, type SermonResourceRpcInput } from '@/services/sermon/sermon-service';
 import { mapFormToDbInsert, mapFormToDbUpdate } from '@/lib/sermon-form-mapper';
 import {
-  validateSermonForm,
+  validateSermonSave,
+  validateSermonPublishReady,
   SERMON_REQUIRED_LABELS,
   type SermonRequiredField
 } from '@/lib/sermon-form';
@@ -17,9 +18,26 @@ import { extractStoragePath, RESOURCE_BUCKET } from '@/lib/sermon-resource';
 import { formattedDate } from '@/utils/date';
 import type { SermonFormData, SermonResourceInput } from '@/types/sermon-form';
 
-function buildMissingMessage(missing: SermonRequiredField[]): string {
+function buildMissingMessage(
+  missing: SermonRequiredField[],
+  mode: 'save' | 'publish'
+): string {
   const labels = missing.map((key) => SERMON_REQUIRED_LABELS[key]).join(', ');
-  return `필수 항목(${labels})을 입력해주세요.`;
+  return mode === 'publish'
+    ? `발행하려면 다음을 입력해주세요: ${labels}.`
+    : `저장하려면 다음을 입력해주세요: ${labels}.`;
+}
+
+// 저장 검증을 먼저 실행해 실패 시 "저장하려면" 메시지가 우선한다.
+// 통과하면 공개(isPublished=true)일 때만 발행 검증을 더한다. 막을 사유가 없으면 null.
+function validateSermonAction(formData: SermonFormData): string | null {
+  const saveCheck = validateSermonSave(formData);
+  if (!saveCheck.ok) return buildMissingMessage(saveCheck.missing, 'save');
+  if (formData.isPublished) {
+    const publishCheck = validateSermonPublishReady(formData);
+    if (!publishCheck.ok) return buildMissingMessage(publishCheck.missing, 'publish');
+  }
+  return null;
 }
 
 // ─── Storage 헬퍼 ────────────────────────────────────────────────────────────
@@ -125,9 +143,9 @@ export async function createSermonAction(
   if (!user) return { success: false, message: '로그인이 필요합니다.' };
   if (!isAdmin) return { success: false, message: '권한이 없습니다.' };
 
-  const { ok, missing } = validateSermonForm(sermonFormData);
-  if (!ok) {
-    return { success: false, message: buildMissingMessage(missing) };
+  const validationError = validateSermonAction(sermonFormData);
+  if (validationError) {
+    return { success: false, message: validationError };
   }
 
   let resourcePaths: string[] = [];
@@ -167,9 +185,9 @@ export async function updateSermonAction(
   if (!user) return { success: false, message: '로그인이 필요합니다.' };
   if (!isAdmin) return { success: false, message: '권한이 없습니다.' };
 
-  const { ok, missing } = validateSermonForm(sermonFormData);
-  if (!ok) {
-    return { success: false, message: buildMissingMessage(missing) };
+  const validationError = validateSermonAction(sermonFormData);
+  if (validationError) {
+    return { success: false, message: validationError };
   }
 
   // 신규 업로드 대상(file 있는 것)과 기존 보존 대상(url만 있는 것)을 분리

@@ -3,7 +3,7 @@ import { HiCheck } from 'react-icons/hi';
 import {
   SERMON_REQUIRED_LABELS,
   SERMON_REQUIRED_ORDER,
-  validateSermonForm
+  validateSermonPublishReady
 } from '@/lib/sermon-form';
 import type { SermonFormData } from '@/types/sermon-form';
 import parent from '../index.module.scss';
@@ -30,7 +30,7 @@ interface ChecklistProps {
 }
 
 export default function Checklist({ formData }: ChecklistProps) {
-  const { missing } = validateSermonForm(formData);
+  const { missing } = validateSermonPublishReady(formData);
   const requiredItems: ChecklistEntry[] = SERMON_REQUIRED_ORDER.map((key) => ({
     label: SERMON_REQUIRED_LABELS[key],
     required: true,

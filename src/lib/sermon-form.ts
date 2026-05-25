@@ -43,15 +43,41 @@ export const SERMON_REQUIRED_ORDER: readonly SermonRequiredField[] = [
   'videoId'
 ] as const;
 
-export function validateSermonForm(
+// 저장 가능 조건 — 비공개 초안 포함 모든 저장에 필요한 최소 4필드(DB NOT NULL 컬럼). 이 파일 안에서만 사용.
+const SERMON_SAVE_REQUIRED: readonly SermonRequiredField[] = [
+  'title',
+  'sermonDate',
+  'preacherId',
+  'serviceType'
+] as const;
+
+function collectMissing(
+  formData: SermonFormData,
+  fields: readonly SermonRequiredField[]
+): SermonRequiredField[] {
+  const isEmpty: Record<SermonRequiredField, boolean> = {
+    title: formData.title.trim() === '',
+    sermonDate: formData.sermonDate === '',
+    preacherId: formData.preacherId === '',
+    serviceType: formData.serviceType === '',
+    scripture: formData.scripture.trim() === '',
+    videoId: formData.videoId === ''
+  };
+  return fields.filter((field) => isEmpty[field]);
+}
+
+// 저장 가능 조건 — 4필드만 확인. 영상·성경 구절 없이 비공개 초안 저장 허용.
+export function validateSermonSave(
   formData: SermonFormData
 ): { ok: boolean; missing: SermonRequiredField[] } {
-  const missing: SermonRequiredField[] = [];
-  if (formData.title.trim() === '') missing.push('title');
-  if (formData.sermonDate === '') missing.push('sermonDate');
-  if (formData.preacherId === '') missing.push('preacherId');
-  if (formData.serviceType === '') missing.push('serviceType');
-  if (formData.scripture.trim() === '') missing.push('scripture');
-  if (formData.videoId === '') missing.push('videoId');
+  const missing = collectMissing(formData, SERMON_SAVE_REQUIRED);
+  return { ok: missing.length === 0, missing };
+}
+
+// 발행 가능 조건 — 공개(isPublished=true) 시 성경 구절·영상 연결까지 더한 6필드.
+export function validateSermonPublishReady(
+  formData: SermonFormData
+): { ok: boolean; missing: SermonRequiredField[] } {
+  const missing = collectMissing(formData, SERMON_REQUIRED_ORDER);
   return { ok: missing.length === 0, missing };
 }

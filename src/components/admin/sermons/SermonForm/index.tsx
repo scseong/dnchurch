@@ -92,6 +92,7 @@ export default function SermonForm({
               <button
                 type="button"
                 className={styles.action_bar_cancel}
+                disabled={isPending}
                 onClick={onCancel}
               >
                 취소
