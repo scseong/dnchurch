@@ -168,7 +168,7 @@ export async function createSermonAction(
     if (!result.data) throw new Error('create_sermon RPC returned no data');
 
     updateTag('sermon');
-    redirect(`/admin/sermons/${result.data.id}/edit`);
+    redirect('/admin/sermons');
   } catch (error) {
     if (isRedirectError(error)) throw error;
     await removeStorageObjects(resourcePaths);

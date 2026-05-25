@@ -4,7 +4,7 @@
 - **시작일**: 2026-05-24
 - **브랜치**: feat/sermons-publish-ssot
 - **Open questions**: none
-- **ADR needed**: no — src/actions/ 포함이나 기존 검증을 저장(4필드)·발행(6필드) 2단계로 분리, 외부 contract·스키마 변화 없음
+- **ADR needed**: no — src/actions/ 포함이나 검증 2단계 분리 + 등록 성공 redirect를 목록으로 바꾼 화면 이동(D4)뿐, 외부 contract·스키마 변화 없음
 
 ## 목표
 
@@ -68,10 +68,14 @@ PR #101 봇 리뷰 3건을 고친다 — 비공개 저장이 6필드에 막히�
   - 문제: Codex가 create 성공 시 잘못된 `beforeunload` 경고 가능성 제기.
   - 해결: `useUnsavedChanges`는 `beforeunload`만 등록(:12). Next soft nav(redirect·router.push)는 `beforeunload`를 띄우지 않음 → 실제 증상 없음. 최소 변경 원칙으로 코드 추가 안 함.
   - 결과: 불필요한 변경 회피, 기존 동작 유지.
+- **D4 — 등록 성공 후 edit 페이지가 아니라 목록으로 이동 (사용자 요청, dev 확인 중 발견)**
+  - 문제: 등록 성공 시 새 설교의 edit 페이지로 보냈음. 이미 만든 설교를 곧장 다시 편집할 이유가 없어 어색.
+  - 해결: `createSermonAction`의 redirect 대상을 `/admin/sermons/${id}/edit`에서 `/admin/sermons`(목록)로 바꿈. 수정(update)은 그대로 — 저장 후 같은 편집 화면 유지.
+  - 결과: 등록하면 목록에서 새 설교를 바로 확인. 등록과 수정의 끝 동작이 의도대로 갈림.
 
 ## ADR 판단
 
-불필요 — `src/actions/sermon.action.ts`가 diff에 들어가지만, 기존 검증을 저장(4필드)·발행(6필드) 두 단계로 나눈 것. 새 외부 contract·데이터 흐름·의존성·인증/캐시 정책·DB 스키마 변화 없음.
+불필요 — `src/actions/sermon.action.ts`가 diff에 들어가지만, (1) 기존 검증을 저장(4필드)·발행(6필드) 두 단계로 나눈 것과 (2) 등록 성공 redirect 대상을 edit에서 목록으로 바꾼 화면 이동(D4)뿐. 새 외부 contract·데이터 흐름·의존성·인증/캐시 정책·DB 스키마 변화 없음.
 
 ## Verification
 
