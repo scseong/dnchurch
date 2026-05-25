@@ -139,15 +139,6 @@
 - **영향 범위**: `scripts/harness-gate.mjs`, `docs/exec-plans/`
 - **발견일**: 2026-05-17
 
-### 🟡 admin 토큰 통합 (ADR 0005 placeholder)
-
-- **무엇**: `src/components/admin/layout/AdminLayout/index.module.scss:1-30`의 `:root` `--admin-*` 25종 변수가 메인 토큰 시스템과 분리된 채 admin 영역 전반에서 호출됨
-- **왜**: design-system-v3 본 task에서 통합 시도했으나 회귀 위험·범위 과대로 분리됨 (Codex 계획 검증 Q1, ADR 0003 References). 0004는 UI Component Foundation에 사용되어 본 ADR 번호는 0005로 재할당
-- **마이그레이션 경로**: 후속 ADR `0005-admin-token-unification` 작성 → 25종 변수 → 메인 토큰 매핑표 → admin 영역 SCSS 모듈 일괄 치환 → `:root` 정의 제거. 사이드바 다크 톤은 별도 시맨틱 토큰(`$bg-dark-nav` 계열) 분리 필요
-- **영향 범위**: `src/components/admin/**/*.module.scss` 전체, `src/app/admin/**` 일부
-- **확인**: `rg -n 'var\(--admin-'  -g '*.scss' src/`
-- **발견일**: 2026-05-04 (design-system-v3 task, Codex Q1)
-
 ### 🟢 design-system-v3 follow-up: 다크모드 토큰 분리
 
 - **무엇**: 라이트 토큰만 정의된 현재 `_color.scss` 시맨틱 레이어
@@ -283,6 +274,13 @@
 ---
 
 ## 해결된 항목
+
+### ✅ admin 토큰 통합 (ADR 0012) (2026-05-25 해소)
+
+- **부채**: `AdminLayout/index.module.scss`의 `.shell` scope에 `--admin-*` 26종 + 레이아웃 3종(`--header-h`·`--sidebar-w`·`--sidebar-w-collapsed`) CSS 커스텀 프로퍼티가 메인 토큰과 분리된 채 admin 13 파일에서 340회 호출됨
+- **해소**: ADR 0012(흡수)로 신규 SCSS 토큰 20개(`_color.scss` 17 + `_layout.scss` 3) 추가, 직접 매핑 9개는 기존 토큰 재사용. admin 13 파일 340 사용처를 `$bg-admin`·`$primary-soft`·`$status-*-soft`·`$bg-dark-nav-*`·`$admin-header-height` 등으로 치환하고 `.shell` 정의 블록 제거. admin cool 톤은 보존(색 통일 아님)
+- **확인**: `rg 'var\(--admin-|var\(--sidebar-w|var\(--header-h' src` → 0 hit. 빌드 PASS
+- **참고**: `docs/decisions/0012-admin-token-unification.md`, `docs/exec-plans/completed/2026-05-22-admin-token-unification.md`
 
 ### ✅ `verify-task.mjs` 전체 검증이 사전 부채에 항상 막히던 문제 (2026-05-01)
 
