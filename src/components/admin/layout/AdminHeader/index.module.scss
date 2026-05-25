@@ -5,10 +5,10 @@
   display: flex;
   align-items: center;
   gap: 12px;
-  height: var(--header-h);
+  height: $admin-header-height;
   padding: 0 24px;
-  background: var(--admin-bg-card);
-  border-bottom: 1px solid var(--admin-bd);
+  background: $bg-card;
+  border-bottom: 1px solid $border-admin;
 }
 
 .menu_btn {
@@ -20,13 +20,13 @@
   border: 0;
   border-radius: 6px;
   background: transparent;
-  color: var(--admin-t2);
+  color: $txt-secondary;
   font-size: 20px;
   cursor: pointer;
   transition: background 0.15s;
 
   &:hover {
-    background: var(--admin-bg-hover);
+    background: $bg-admin-hover;
   }
 
   @media (max-width: 1024px) {
@@ -58,21 +58,21 @@
 }
 
 .separator {
-  color: var(--admin-t3);
+  color: $txt-admin-tertiary;
   font-size: 12px;
 }
 
 .crumb {
-  color: var(--admin-t3);
+  color: $txt-admin-tertiary;
   cursor: pointer;
   transition: color 0.15s;
 
   &:hover {
-    color: var(--admin-t1);
+    color: $txt-primary;
   }
 
   &.current {
-    color: var(--admin-t1);
+    color: $txt-primary;
     font-weight: 600;
     cursor: default;
   }
@@ -84,10 +84,10 @@
   gap: 8px;
   width: 300px;
   padding: 7px 12px;
-  border: 1px solid var(--admin-bd);
+  border: 1px solid $border-admin;
   border-radius: 6px;
-  background: var(--admin-bg);
-  color: var(--admin-t3);
+  background: $bg-admin;
+  color: $txt-admin-tertiary;
   font-size: 13px;
   cursor: pointer;
   transition:
@@ -96,8 +96,8 @@
 
   &:hover,
   &:focus-visible {
-    border-color: var(--admin-t3);
-    color: var(--admin-t2);
+    border-color: $txt-admin-tertiary;
+    color: $txt-secondary;
     outline: none;
   }
 
@@ -117,10 +117,10 @@
 
 .kbd {
   padding: 2px 6px;
-  border: 1px solid var(--admin-bd);
+  border: 1px solid $border-admin;
   border-radius: 4px;
-  background: var(--admin-bg-card);
-  color: var(--admin-t3);
+  background: $bg-card;
+  color: $txt-admin-tertiary;
   font-family: inherit;
   font-size: 10px;
   font-weight: 500;
@@ -137,13 +137,13 @@
   border: 0;
   border-radius: 6px;
   background: transparent;
-  color: var(--admin-t2);
+  color: $txt-secondary;
   font-size: 20px;
   cursor: pointer;
   transition: background 0.15s;
 
   &:hover {
-    background: var(--admin-bg-hover);
+    background: $bg-admin-hover;
   }
 }
 
@@ -153,7 +153,7 @@
   right: 7px;
   width: 8px;
   height: 8px;
-  border: 2px solid var(--admin-bg-card);
+  border: 2px solid $bg-card;
   border-radius: 50%;
   background: #ef4444;
   box-sizing: content-box;
