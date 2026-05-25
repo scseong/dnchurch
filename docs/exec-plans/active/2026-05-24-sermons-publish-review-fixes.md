@@ -68,10 +68,10 @@ PR #101 봇 리뷰 3건을 고친다 — 비공개 저장이 6필드에 막히�
   - 문제: Codex가 create 성공 시 잘못된 `beforeunload` 경고 가능성 제기.
   - 해결: `useUnsavedChanges`는 `beforeunload`만 등록(:12). Next soft nav(redirect·router.push)는 `beforeunload`를 띄우지 않음 → 실제 증상 없음. 최소 변경 원칙으로 코드 추가 안 함.
   - 결과: 불필요한 변경 회피, 기존 동작 유지.
-- **D4 — 등록 성공 후 edit 페이지가 아니라 목록으로 이동 (사용자 요청, dev 확인 중 발견)**
-  - 문제: 등록 성공 시 새 설교의 edit 페이지로 보냈음. 이미 만든 설교를 곧장 다시 편집할 이유가 없어 어색.
-  - 해결: `createSermonAction`의 redirect 대상을 `/admin/sermons/${id}/edit`에서 `/admin/sermons`(목록)로 바꿈. 수정(update)은 그대로 — 저장 후 같은 편집 화면 유지.
-  - 결과: 등록하면 목록에서 새 설교를 바로 확인. 등록과 수정의 끝 동작이 의도대로 갈림.
+- **D4 — 등록·수정 성공 후 모두 목록으로 이동 (사용자 요청, dev 확인 중 발견)**
+  - 문제: 등록은 새 설교 edit 화면으로, 수정은 같은 edit 화면으로 보냈음. 작업을 마쳤는데 편집 화면에 머무를 이유가 없어 어색.
+  - 해결: 등록은 `createSermonAction`의 server redirect를, 수정은 `SermonFormShell`의 `router.push`를 모두 `/admin/sermons`(목록)로 바꿈.
+  - 결과: 등록·수정 둘 다 끝나면 목록에서 결과를 바로 확인. (처음엔 수정만 편집 화면 유지로 뒀으나 사용자 요청으로 목록 통일.)
 
 ## ADR 판단
 

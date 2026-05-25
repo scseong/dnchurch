@@ -71,7 +71,7 @@ export default function SermonFormShell({
         const result = await updateSermonAction(sermonId, formData);
         if (result.success) {
           setIsDirty(false);
-          router.push(`/admin/sermons/${sermonId}/edit`);
+          router.push('/admin/sermons');
         } else {
           toast.error(result.message);
         }
