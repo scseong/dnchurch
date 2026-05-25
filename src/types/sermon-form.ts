@@ -43,7 +43,7 @@ export const INITIAL_SERMON_FORM_DATA: SermonFormData = {
   scriptureText: '',
   summary: '',
   resources: [],
-  isPublished: false
+  isPublished: true
 };
 
 // 파생 필드(videoId, thumbnailUrl)는 applyPatch에서만 계산되어야 하므로 외부 패치 대상에서 제외.

@@ -1,6 +1,11 @@
 import clsx from 'clsx';
+import { SERMON_REQUIRED_LABELS, SERMON_REQUIRED_ORDER } from '@/lib/sermon-form';
 import type { PublishCardProps } from '@/types/sermon-form';
 import styles from '../index.module.scss';
+
+const REQUIRED_LABELS_SENTENCE = SERMON_REQUIRED_ORDER.map(
+  (key) => SERMON_REQUIRED_LABELS[key]
+).join(', ');
 
 export default function PublishCard({ isPublished, onChange }: PublishCardProps) {
   return (
@@ -24,8 +29,8 @@ export default function PublishCard({ isPublished, onChange }: PublishCardProps)
                 checked={!isPublished}
                 onChange={() => onChange({ isPublished: false })}
               />
-              <span className={styles.main}>초안</span>
-              <span className={styles.sub}>비공개</span>
+              <span className={styles.main}>비공개</span>
+              <span className={styles.sub}>임시 저장</span>
             </label>
             <label className={clsx(styles.toggle, isPublished && styles.on)}>
               <input
@@ -35,13 +40,13 @@ export default function PublishCard({ isPublished, onChange }: PublishCardProps)
                 checked={isPublished}
                 onChange={() => onChange({ isPublished: true })}
               />
-              <span className={styles.main}>발행</span>
-              <span className={styles.sub}>공개</span>
+              <span className={styles.main}>공개</span>
+              <span className={styles.sub}>사이트에 게시</span>
             </label>
           </div>
         </fieldset>
         <div className={styles.warn_box}>
-          발행하려면 제목, 날짜, 설교자, 영상 연결이 필요합니다
+          발행하려면 {REQUIRED_LABELS_SENTENCE}이 필요합니다
         </div>
       </div>
     </section>

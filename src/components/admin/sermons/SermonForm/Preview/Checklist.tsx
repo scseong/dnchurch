@@ -1,5 +1,10 @@
 import clsx from 'clsx';
 import { HiCheck } from 'react-icons/hi';
+import {
+  SERMON_REQUIRED_LABELS,
+  SERMON_REQUIRED_ORDER,
+  validateSermonPublishReady
+} from '@/lib/sermon-form';
 import type { SermonFormData } from '@/types/sermon-form';
 import parent from '../index.module.scss';
 import styles from './preview.module.scss';
@@ -18,7 +23,6 @@ const STATUS_CLASS: Record<Status, string> = {
   ok: styles.checklist_ok
 };
 
-const requiredStatus = (filled: boolean): Status => (filled ? 'ok' : 'err');
 const optionalStatus = (filled: boolean): Status => (filled ? 'ok' : 'empty');
 
 interface ChecklistProps {
@@ -26,16 +30,17 @@ interface ChecklistProps {
 }
 
 export default function Checklist({ formData }: ChecklistProps) {
-  const items: ChecklistEntry[] = [
-    { label: '설교 제목', required: true, status: requiredStatus(formData.title.trim() !== '') },
-    { label: '설교 날짜', required: true, status: requiredStatus(formData.sermonDate !== '') },
-    { label: '설교자 선택', required: true, status: requiredStatus(formData.preacherId !== '') },
-    { label: '예배 종류', required: true, status: requiredStatus(formData.serviceType !== '') },
-    { label: '영상 연결 (YouTube/Vimeo)', status: optionalStatus(Boolean(formData.videoId)) },
-    { label: '성경 구절', required: true, status: requiredStatus(formData.scripture.trim() !== '') },
+  const { missing } = validateSermonPublishReady(formData);
+  const requiredItems: ChecklistEntry[] = SERMON_REQUIRED_ORDER.map((key) => ({
+    label: SERMON_REQUIRED_LABELS[key],
+    required: true,
+    status: missing.includes(key) ? 'err' : 'ok'
+  }));
+  const optionalItems: ChecklistEntry[] = [
     { label: '설교 요약', status: optionalStatus(formData.summary.trim() !== '') },
-    { label: '썸네일 업로드', status: optionalStatus(Boolean(formData.thumbnailUrl)) }
+    { label: '첨부 자료', status: optionalStatus(formData.resources.length > 0) }
   ];
+  const items: ChecklistEntry[] = [...requiredItems, ...optionalItems];
   const completed = items.filter((item) => item.status === 'ok').length;
 
   return (
