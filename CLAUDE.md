@@ -38,7 +38,7 @@
 - **CODEX_PLAN_REVIEW** 트리거: 다단계 / 구조 변경 / `scripts/_shared-config.mjs`의 `ADR_TRIGGER_PARTS` 해당 파일. 결론 `PASS` / `CHANGE_REQUEST` / `BLOCK`. 재요청도 BLOCK이면 사용자 에스컬레이션
 - **WORK**: 한 번에 한 관심사. 계획 벗어나면 plan부터 갱신
 - **CODEX_FIRST_PASS**: 구현 diff 생성 시 Codex에 1차 검증 요청. 결과는 exec-plan `## Codex 1차 검증`에 기록
-- **VERIFY**: `node scripts/verify-task.mjs <slug>` → `logs/<task-id>/<run-id>/` (커밋 X). 실패 시 `docs/tech-debt-tracker.md` 대조. Codex가 1차 수정했으면 diff 교차 확인 후 `## Claude 2차 검증`에 기록
+- **VERIFY**: `node scripts/verify-task.mjs <slug>` → `logs/<task-id>/<run-id>/` (커밋 X). 실패 시 `docs/tech-debt/active.md` 대조. Codex가 1차 수정했으면 diff 교차 확인 후 `## Claude 2차 검증`에 기록
 
 ### COMMIT — 승인 후 커밋
 - 커밋 전 pre-commit 훅이 변경 파일 lint와 최신 검증 기록을 확인한다.
@@ -127,7 +127,7 @@ pre-commit 훅은 lint-staged로 변경 파일만 자동 검사 — error는 차
 | 진행 중 작업 (EXEC_PLAN) | `docs/exec-plans/active/` | 작업 시작 시 |
 | 완료된 작업 (회고·검색) | `docs/exec-plans/completed/` | 머지 후 이동 |
 | 영구 결정 (ADR) | `docs/decisions/` | 구조·라이브러리·패턴 변경 시 |
-| 기술 부채·마이그레이션 | `docs/tech-debt-tracker.md` | 발견 즉시 |
+| 기술 부채·마이그레이션 (활성·해결) | `docs/tech-debt/active.md`, `docs/tech-debt/resolved.md` (인덱스: `docs/tech-debt-tracker.md`) | 발견 즉시 |
 | 자동 생성 (DB 스키마 등) — **수정 금지** | `docs/generated/` | 스크립트 실행 시만 |
 | 외부 라이브러리 참조 (llms.txt) | `docs/references/` | 라이브러리 업데이트 시 |
 | 작업별 외부 자료 발췌 (일회성) | `docs/research/` | EXEC_PLAN 진행 중 |

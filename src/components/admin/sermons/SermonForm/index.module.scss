@@ -1,9 +1,17 @@
+// 모바일 하단 고정 액션 바의 대략 높이(버튼 42px + 위아래 패딩·테두리). 미리보기 오버레이가 이만큼 비워 바를 가리지 않는다.
+$action-bar-height: 64px;
+
 .wrap {
   display: flex;
   flex-direction: column;
   gap: 24px;
   max-width: 1400px;
   margin: 16px auto 0;
+  padding-bottom: 80px;
+
+  @media (min-width: 1024px) {
+    padding-bottom: 0;
+  }
 
   @media (min-width: 1280px) {
     display: grid;
@@ -470,27 +478,30 @@
   font-weight: 500;
 }
 
-// ── 모바일 하단 액션 바 ──
-// PC에서는 PageHeader 액션(임시저장/발행)을 우측에 두고, 모바일(<640px)에서 outline은 숨긴다.
-// 본 바는 숨겨진 임시저장을 복원하고 미리보기 시트 토글 버튼을 제공한다.
-.mobile_bar {
+// ── 하단 액션 바 ──
+// 모바일: 화면 하단에 fixed 고정. PC: form_col 흐름 안에서 PublishCard 다음 위치.
+.action_bar {
   position: fixed;
   bottom: 0;
   left: 0;
   right: 0;
   z-index: 30;
   display: flex;
-  gap: 6px;
+  align-items: center;
+  gap: 8px;
   padding: 10px 16px;
   background: $bg-card;
   border-top: 1px solid $border-admin;
 
   @media (min-width: 1024px) {
-    display: none;
+    position: static;
+    padding: 12px 0;
+    background: none;
+    border-top: 0;
   }
 }
 
-.mobile_preview_button {
+.action_bar_preview {
   flex-shrink: 0;
   display: inline-flex;
   align-items: center;
@@ -511,44 +522,71 @@
     border-color: $txt-admin-tertiary;
     color: $txt-primary;
   }
+
+  @media (min-width: 1024px) {
+    display: none;
+  }
 }
 
-.mobile_button {
-  flex: 1;
+.action_bar_actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-left: auto;
+}
+
+.action_bar_cancel {
   display: inline-flex;
   align-items: center;
   justify-content: center;
   height: 42px;
-  padding: 0 14px;
+  padding: 0 16px;
+  border: 1px solid $border-admin;
   border-radius: 6px;
+  background: $bg-card;
+  color: $txt-secondary;
   font-family: inherit;
   font-size: 13px;
   font-weight: 600;
   cursor: pointer;
   transition:
-    background 0.15s,
     border-color 0.15s,
     color 0.15s;
 
-  &.outline {
-    border: 1px solid $border-admin;
-    background: $bg-card;
-    color: $txt-secondary;
-
-    &:hover {
-      border-color: $txt-admin-tertiary;
-      color: $txt-primary;
-    }
+  &:hover {
+    border-color: $txt-admin-tertiary;
+    color: $txt-primary;
   }
 
-  &.primary {
-    border: 0;
-    background: $primary;
-    color: #fff;
+  &:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+}
 
-    &:hover {
-      background: color-mix(in srgb, $primary, #fff 8%);
-    }
+.action_bar_submit {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 42px;
+  padding: 0 20px;
+  border: 0;
+  border-radius: 6px;
+  background: $primary;
+  color: #fff;
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s;
+
+  &:hover {
+    background: color-mix(in srgb, $primary, #fff 8%);
+  }
+
+  &:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
   }
 }
 
@@ -556,7 +594,8 @@
 // PC(1024px+)에서는 우측 PreviewCard가 역할을 하므로 시트 자체가 불필요.
 .preview_overlay {
   position: fixed;
-  inset: 0;
+  // 하단을 액션 바 높이만큼 비워 모바일 고정 바가 dim 위로 노출되도록.
+  inset: 0 0 $action-bar-height 0;
   z-index: 300;
   display: none;
   align-items: flex-end;

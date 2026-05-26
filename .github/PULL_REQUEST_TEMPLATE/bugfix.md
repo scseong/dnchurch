@@ -18,7 +18,7 @@
 - **Task ID**: `<slug>` / N/A
 - **Exec Plan**: `docs/exec-plans/active/<YYYY-MM-DD>-<slug>.md` / N/A
 - **관련 ADR**: `docs/decisions/<ADR-file.md>` / 해당 없음
-- **관련 tech debt**: `docs/tech-debt-tracker.md#<섹션>` / 해당 없음
+- **관련 tech debt**: `docs/tech-debt/active.md#<섹션>` / 해당 없음
 - **작업 범위**: <!-- 수정 범위 -->
 - **제외한 범위**: <!-- 의도적으로 뺀 것 -->
 

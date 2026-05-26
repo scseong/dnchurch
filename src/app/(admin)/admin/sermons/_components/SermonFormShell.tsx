@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useTransition } from 'react';
+import { useEffect, useState, useTransition } from 'react';
 import { useRouter } from 'next/navigation';
 import { useUnsavedChanges } from '@/hooks/useUnsavedChanges';
 import PageHeader from '@/components/admin/layout/PageHeader';
@@ -8,6 +8,7 @@ import SermonForm from '@/components/admin/sermons/SermonForm';
 import { createSermonAction, updateSermonAction } from '@/actions/sermon.action';
 import { applyPatch } from '@/lib/sermon-form';
 import { useToastStore } from '@/store/toast.store';
+import { useAdminBreadcrumbStore } from '@/store/admin-breadcrumb.store';
 import type { Preacher, SeriesWithSermonCount } from '@/types/sermon';
 import {
   INITIAL_SERMON_FORM_DATA,
@@ -38,8 +39,15 @@ export default function SermonFormShell({
   const [isPending, startTransition] = useTransition();
   const [isDirty, setIsDirty] = useState(false);
   const toast = useToastStore();
+  const setDynamicCrumb = useAdminBreadcrumbStore((s) => s.setDynamicLabel);
 
   useUnsavedChanges(isDirty);
+
+  useEffect(() => {
+    if (mode !== 'edit') return;
+    setDynamicCrumb(initialTitle);
+    return () => setDynamicCrumb(null);
+  }, [mode, initialTitle, setDynamicCrumb]);
 
   const handlePatch = (patch: SermonFormPatch) => {
     setIsDirty(true);
@@ -63,7 +71,7 @@ export default function SermonFormShell({
         const result = await updateSermonAction(sermonId, formData);
         if (result.success) {
           setIsDirty(false);
-          router.push(`/admin/sermons/${sermonId}/edit`);
+          router.push('/admin/sermons');
         } else {
           toast.error(result.message);
         }
@@ -73,13 +81,26 @@ export default function SermonFormShell({
 
   const publishLabel = formData.isPublished
     ? mode === 'new'
-      ? '발행'
-      : '발행 저장'
-    : '초안 저장';
+      ? '공개로 등록'
+      : '공개로 게시'
+    : mode === 'new'
+      ? '비공개로 등록'
+      : '비공개로 저장';
   const description =
     mode === 'new'
-      ? '영상, 본문, 자료를 입력하고 발행하세요'
+      ? '영상, 본문, 자료를 입력하고 공개하세요'
       : '영상, 본문, 자료를 수정하고 저장하세요';
+
+  const handleCancel = () => {
+    if (isPending) return;
+    if (
+      isDirty &&
+      !window.confirm('저장하지 않은 변경 사항이 있습니다. 목록으로 돌아갈까요?')
+    ) {
+      return;
+    }
+    router.push('/admin/sermons');
+  };
 
   return (
     <>
@@ -88,9 +109,6 @@ export default function SermonFormShell({
         badge={mode === 'new' ? '새 설교 등록' : '수정'}
         title={mode === 'new' ? '새 설교 등록' : initialTitle}
         description={description}
-        actions={[
-          { label: publishLabel, variant: 'pri', onClick: handlePublish, disabled: isPending }
-        ]}
       />
       <SermonForm
         formData={formData}
@@ -98,6 +116,7 @@ export default function SermonFormShell({
         onAddResources={handleAddResources}
         onRemoveResource={handleRemoveResource}
         onPublish={handlePublish}
+        onCancel={handleCancel}
         isPending={isPending}
         publishLabel={publishLabel}
         preachers={preachers}

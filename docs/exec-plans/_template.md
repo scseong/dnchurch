@@ -78,7 +78,7 @@
 - <후속 항목>
   - 이유: <왜 이번에 안 하나>
   - 다음 기준: <언제 다시 하나>
-  - 기록 위치: `docs/tech-debt-tracker.md` 또는 없음 -->
+  - 기록 위치: `docs/tech-debt/active.md` 또는 없음 -->
 
 ---
 

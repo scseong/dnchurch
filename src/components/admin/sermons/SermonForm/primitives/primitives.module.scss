@@ -17,6 +17,7 @@
 
   &::placeholder {
     color: $txt-admin-tertiary;
+    font-size: inherit;
   }
 
   &:focus-visible {

@@ -107,9 +107,9 @@ if (/^- YYYY-MM-DD: \.\.\.$/m.test(content)) {
 }
 
 if (
-  /^- 잘된 것:\s*$/m.test(content) ||
-  /^- 다음에 할 것:\s*$/m.test(content) ||
-  /^- 발견된 부채 \(→ tech-debt-tracker\.md 옮길 것\):\s*$/m.test(content)
+  /^- (\*\*)?잘된 것\1:\s*$/m.test(content) ||
+  /^- (\*\*)?다음에 할 것\1:\s*$/m.test(content) ||
+  /^- (\*\*)?발견된 부채 \(→ tech-debt(?:-tracker\.md|\/active\.md) 옮길 것\)\1:\s*$/m.test(content)
 ) {
   console.warn(`⚠ 회고 섹션이 비어 있습니다: ${filename}`);
   console.warn("  이동 후 바로 completed/ 파일에 회고를 작성하세요.");
@@ -203,5 +203,5 @@ console.log(`✓ 이동 완료: ${relPath}`);
 console.log("");
 console.log("다음 단계:");
 console.log('  1. 파일 열어서 "회고" 섹션 작성 (잘된 것 / 다음에 할 것 / 부채)');
-console.log("  2. 발견된 부채는 docs/tech-debt-tracker.md에 등록");
+console.log("  2. 발견된 부채는 docs/tech-debt/active.md에 등록");
 console.log("  3. git add docs/exec-plans/ && 커밋");
