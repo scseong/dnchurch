@@ -1,6 +1,6 @@
 # admin-token-unification
 
-- **상태**: 🟡 진행 중
+- **상태**: ✅ 완료 (2026-05-26)
 - **시작일**: 2026-05-22
 - **브랜치**: feat/admin-token-unification (2026-05-25 `develop`에서 분기. admin SCSS는 sermons 콘텐츠 파일과 겹치지 않아 `feat/sermons-publish-ssot` 머지를 기다리지 않음)
 - **Open questions**: 없음. Q1(색 통일 vs admin 톤 흡수)은 ADR 0012가 **흡수(Adopt-and-rename)**로 확정. status 토큰은 `-soft` 접미사 신규 semantic으로 값 보존 흡수.
@@ -197,6 +197,15 @@
 ## 검증 이력
 
 <!-- 이전 판정·재검증만 여기에. 현재 판정은 위 검증 섹션에 둔다. -->
+
+## 회고
+
+- **잘된 것**: 340곳을 결정적 치환 스크립트 1회로 처리해 수동 오타·누락 0. 닫는 괄호까지 일치시켜 `var(--admin-bg)`가 `var(--admin-bg-card)`를 오염시키지 않게 함.
+  - 값 보존을 끝까지 지켜 시각 회귀 0. Codex 1차가 지적한 `$txt-admin-tertiary`의 면·보더 사용도 원본 #8a94a3 보존이라, 시각이 바뀌는 교체 제안은 거절(D4).
+  - develop 충돌도 같은 스크립트 재사용(`--theirs` 후 재실행)으로 #101 내용 보존하며 토큰화. 제거 114줄 = 추가 114줄 1:1 무손실 확인.
+- **다음에 할 것**: 분기 전 develop의 진행 PR(#100·#101)을 먼저 확인했어야 충돌을 미리 대비할 수 있었다. 다음엔 분기 시점에 곧 머지될 PR을 점검한다.
+  - 대규모 기계 치환 스크립트는 처음부터 파일 인자를 받게 설계해 재사용한다(이번엔 충돌 해소 때 다시 만듦).
+- **발견된 부채 (→ tech-debt/active.md 옮길 것)**: `$txt-admin-tertiary`(#8a94a3) 역할 중첩 — 텍스트 외에 draft 점 배경 2곳·hover 보더 5곳(D4). hover 보더 5곳은 기존 "Hover Border 위반 admin 5건" 항목에서 함께 정리한다. 신규 등록은 불필요.
 
 ## 후속 작업
 
