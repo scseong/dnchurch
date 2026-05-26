@@ -101,7 +101,7 @@
   gap: 6px;
   padding: 10px 12px;
   background: $primary-soft-subtle;
-  border: 1px solid color-mix(in srgb, $primary-soft, transparent 80%);
+  border: 1px solid rgba($primary-soft, 0.2);
   border-radius: 6px;
 }
 

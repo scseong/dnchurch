@@ -338,7 +338,7 @@
   }
 
   &.danger:hover {
-    background: color-mix(in srgb, $status-negative-soft, transparent 94%);
+    background: rgba($status-negative-soft, 0.06);
     border-color: $status-negative-soft;
     color: $status-negative-soft;
   }

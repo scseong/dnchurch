@@ -114,7 +114,7 @@
     color: #fff;
 
     &:hover {
-      background: color-mix(in srgb, $primary, #fff 8%);
+      background: mix(#fff, $primary, 8%);
     }
   }
 }

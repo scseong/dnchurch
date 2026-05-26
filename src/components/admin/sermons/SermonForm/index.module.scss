@@ -581,7 +581,7 @@ $action-bar-height: 64px;
   transition: background 0.15s;
 
   &:hover {
-    background: color-mix(in srgb, $primary, #fff 8%);
+    background: mix(#fff, $primary, 8%);
   }
 
   &:disabled {
