@@ -136,15 +136,6 @@
 - **영향 범위**: `scripts/harness-gate.mjs`, `docs/exec-plans/`
 - **발견일**: 2026-05-17
 
-### 🟡 admin 토큰 통합 (ADR 0005 placeholder)
-
-- **무엇**: `src/components/admin/layout/AdminLayout/index.module.scss:1-30`의 `:root` `--admin-*` 25종 변수가 메인 토큰 시스템과 분리된 채 admin 영역 전반에서 호출됨
-- **왜**: design-system-v3 본 task에서 통합 시도했으나 회귀 위험·범위 과대로 분리됨 (Codex 계획 검증 Q1, ADR 0003 References). 0004는 UI Component Foundation에 사용되어 본 ADR 번호는 0005로 재할당
-- **마이그레이션 경로**: 후속 ADR `0005-admin-token-unification` 작성 → 25종 변수 → 메인 토큰 매핑표 → admin 영역 SCSS 모듈 일괄 치환 → `:root` 정의 제거. 사이드바 다크 톤은 별도 시맨틱 토큰(`$bg-dark-nav` 계열) 분리 필요
-- **영향 범위**: `src/components/admin/**/*.module.scss` 전체, `src/app/admin/**` 일부
-- **확인**: `rg -n 'var\(--admin-'  -g '*.scss' src/`
-- **발견일**: 2026-05-04 (design-system-v3 task, Codex Q1)
-
 ### 🟢 design-system-v3 follow-up: 다크모드 토큰 분리
 
 - **무엇**: 라이트 토큰만 정의된 현재 `_color.scss` 시맨틱 레이어

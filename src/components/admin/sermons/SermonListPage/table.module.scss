@@ -1,8 +1,8 @@
 .table_wrap {
   display: none;
   position: relative;
-  background: var(--admin-bg-card);
-  border: 1px solid var(--admin-bd);
+  background: $bg-card;
+  border: 1px solid $border-admin;
   border-radius: 10px;
   overflow: hidden;
 
@@ -22,14 +22,14 @@
   border-collapse: collapse;
 
   thead {
-    background: var(--admin-bg-w);
-    border-bottom: 1px solid var(--admin-bd);
+    background: $bg-admin-subtle;
+    border-bottom: 1px solid $border-admin;
   }
 
   th {
     padding: 10px 14px;
     border: 0;
-    color: var(--admin-t3);
+    color: $txt-admin-tertiary;
     font-size: 11px;
     font-weight: 600;
     letter-spacing: 0.02em;
@@ -42,10 +42,10 @@
 
 .sortable {
   cursor: pointer;
-  transition: color 0.15s var(--admin-ease);
+  transition: color 0.15s $transition-easing-default;
 
   &:hover {
-    color: var(--admin-t1);
+    color: $txt-primary;
   }
 }
 
@@ -65,7 +65,7 @@
 
 .sort_icon_chevron_active {
   opacity: 1;
-  color: var(--admin-t1);
+  color: $txt-primary;
 }
 
 .col_thumb {
@@ -103,11 +103,11 @@
 
 .table tbody tr {
   cursor: pointer;
-  border-bottom: 1px solid var(--admin-bd);
-  transition: background 0.15s var(--admin-ease);
+  border-bottom: 1px solid $border-admin;
+  transition: background 0.15s $transition-easing-default;
 
   &:hover {
-    background: var(--admin-bg-w);
+    background: $bg-admin-subtle;
   }
 
   &:last-child {
@@ -117,7 +117,7 @@
 
 .table td {
   padding: 12px 14px;
-  color: var(--admin-t2);
+  color: $txt-secondary;
   font-size: 13px;
   vertical-align: middle;
 }
@@ -129,10 +129,10 @@
   justify-content: center;
   width: 52px;
   height: 32px;
-  background: var(--admin-bg-w);
+  background: $bg-admin-subtle;
   border-radius: 4px;
   overflow: hidden;
-  color: var(--admin-t3);
+  color: $txt-admin-tertiary;
   font-size: 16px;
 }
 
@@ -159,7 +159,7 @@
   -webkit-line-clamp: 1;
   overflow: hidden;
   max-width: 340px;
-  color: var(--admin-t1);
+  color: $txt-primary;
   font-size: 13px;
   font-weight: 600;
 }
@@ -170,7 +170,7 @@
   -webkit-line-clamp: 1;
   overflow: hidden;
   margin: 2px 0 0;
-  color: var(--admin-t3);
+  color: $txt-admin-tertiary;
   font-size: 11px;
 
   &.none {
@@ -189,18 +189,18 @@
   font-weight: 600;
 
   &.published {
-    background: var(--admin-ok-bg);
-    color: var(--admin-ok);
+    background: $status-positive-soft-bg;
+    color: $status-positive-soft;
   }
 
   &.draft {
-    background: var(--admin-bg-w);
-    color: var(--admin-t3);
+    background: $bg-admin-subtle;
+    color: $txt-admin-tertiary;
   }
 
   &.scheduled {
-    background: var(--admin-accent-bg);
-    color: var(--admin-accent);
+    background: $primary-soft-subtle;
+    color: $primary-soft;
   }
 }
 
@@ -222,13 +222,13 @@
 }
 
 .series_pill {
-  background: var(--admin-accent-bg);
-  color: var(--admin-accent);
+  background: $primary-soft-subtle;
+  color: $primary-soft;
 }
 
 .single_pill {
-  background: var(--admin-bg-w);
-  color: var(--admin-t3);
+  background: $bg-admin-subtle;
+  color: $txt-admin-tertiary;
 }
 
 .empty {
@@ -242,22 +242,22 @@
   justify-content: center;
   width: 52px;
   height: 52px;
-  background: var(--admin-bg-w);
+  background: $bg-admin-subtle;
   border-radius: 50%;
-  color: var(--admin-t3);
+  color: $txt-admin-tertiary;
   font-size: 22px;
 }
 
 .empty_title {
   margin: 12px 0 4px;
-  color: var(--admin-t2);
+  color: $txt-secondary;
   font-size: 14px;
   font-weight: 600;
 }
 
 .empty_desc {
   margin: 0;
-  color: var(--admin-t3);
+  color: $txt-admin-tertiary;
   font-size: 12px;
 }
 
@@ -268,31 +268,31 @@
   margin-top: 16px;
   height: 36px;
   padding: 0 16px;
-  border: 1px solid var(--admin-bd);
+  border: 1px solid $border-admin;
   border-radius: 6px;
-  background: var(--admin-bg-card);
-  color: var(--admin-t1);
+  background: $bg-card;
+  color: $txt-primary;
   font-size: 13px;
   font-weight: 600;
   cursor: pointer;
   transition:
-    border-color 0.15s var(--admin-ease),
-    background 0.15s var(--admin-ease),
-    color 0.15s var(--admin-ease);
+    border-color 0.15s $transition-easing-default,
+    background 0.15s $transition-easing-default,
+    color 0.15s $transition-easing-default;
 
   &:hover {
-    border-color: var(--admin-bd-s);
-    background: var(--admin-bg-w);
+    border-color: $border-primary;
+    background: $bg-admin-subtle;
   }
 
   &.primary {
-    border-color: var(--admin-accent);
-    background: var(--admin-accent);
+    border-color: $primary-soft;
+    background: $primary-soft;
     color: #fff;
 
     &:hover {
       filter: brightness(0.95);
-      background: var(--admin-accent);
+      background: $primary-soft;
     }
   }
 }
@@ -302,7 +302,7 @@
   justify-content: flex-end;
   gap: 4px;
   opacity: 0.35;
-  transition: opacity 0.15s var(--admin-ease);
+  transition: opacity 0.15s $transition-easing-default;
 }
 
 .table tbody tr:hover .row_actions,
@@ -320,27 +320,27 @@
   justify-content: center;
   width: 28px;
   height: 28px;
-  background: var(--admin-bg-card);
-  border: 1px solid var(--admin-bd);
+  background: $bg-card;
+  border: 1px solid $border-admin;
   border-radius: 5px;
-  color: var(--admin-t2);
+  color: $txt-secondary;
   font-size: 14px;
   cursor: pointer;
   transition:
-    background 0.15s var(--admin-ease),
-    border-color 0.15s var(--admin-ease),
-    color 0.15s var(--admin-ease);
+    background 0.15s $transition-easing-default,
+    border-color 0.15s $transition-easing-default,
+    color 0.15s $transition-easing-default;
 
   &:hover {
-    background: var(--admin-bg-w);
-    border-color: var(--admin-bd-s);
-    color: var(--admin-t1);
+    background: $bg-admin-subtle;
+    border-color: $border-primary;
+    color: $txt-primary;
   }
 
   &.danger:hover {
-    background: color-mix(in srgb, var(--admin-err), transparent 94%);
-    border-color: var(--admin-err);
-    color: var(--admin-err);
+    background: rgba($status-negative-soft, 0.06);
+    border-color: $status-negative-soft;
+    color: $status-negative-soft;
   }
 }
 
@@ -351,8 +351,8 @@
   justify-content: space-between;
   gap: 12px;
   padding: 14px 16px;
-  border-top: 1px solid var(--admin-bd);
-  color: var(--admin-t3);
+  border-top: 1px solid $border-admin;
+  color: $txt-admin-tertiary;
   font-size: 12px;
 }
 
@@ -372,21 +372,21 @@
   min-width: 30px;
   height: 30px;
   padding: 0 8px;
-  background: var(--admin-bg-card);
-  border: 1px solid var(--admin-bd);
+  background: $bg-card;
+  border: 1px solid $border-admin;
   border-radius: 5px;
-  color: var(--admin-t2);
+  color: $txt-secondary;
   font-size: 12px;
   cursor: pointer;
   transition:
-    background 0.15s var(--admin-ease),
-    border-color 0.15s var(--admin-ease),
-    color 0.15s var(--admin-ease);
+    background 0.15s $transition-easing-default,
+    border-color 0.15s $transition-easing-default,
+    color 0.15s $transition-easing-default;
 
   &:hover:not(:disabled) {
-    background: var(--admin-bg-w);
-    border-color: var(--admin-bd-s);
-    color: var(--admin-t1);
+    background: $bg-admin-subtle;
+    border-color: $border-primary;
+    color: $txt-primary;
   }
 
   &:disabled {
@@ -395,8 +395,8 @@
   }
 
   &.on {
-    background: var(--admin-pri);
-    border-color: var(--admin-pri);
+    background: $primary;
+    border-color: $primary;
     color: #fff;
     font-weight: 600;
   }
@@ -409,16 +409,16 @@
 
   select {
     padding: 5px 8px;
-    background: var(--admin-bg-card);
-    border: 1px solid var(--admin-bd);
+    background: $bg-card;
+    border: 1px solid $border-admin;
     border-radius: 5px;
-    color: var(--admin-t2);
+    color: $txt-secondary;
     font-size: 12px;
     cursor: pointer;
 
     &:focus {
       outline: none;
-      border-color: var(--admin-accent);
+      border-color: $primary-soft;
     }
   }
 }
@@ -446,9 +446,9 @@
   position: absolute;
   inset: 0;
   z-index: 5;
-  background: var(--admin-bg-card);
+  background: $bg-card;
   border-radius: inherit;
-  animation: loading_pulse 1.2s var(--admin-ease) infinite;
+  animation: loading_pulse 1.2s $transition-easing-default infinite;
 }
 
 @keyframes loading_pulse {
@@ -463,14 +463,14 @@
 
 .mobile_card {
   padding: 12px 14px;
-  background: var(--admin-bg-card);
-  border: 1px solid var(--admin-bd);
+  background: $bg-card;
+  border: 1px solid $border-admin;
   border-radius: 8px;
   cursor: pointer;
-  transition: border-color 0.15s var(--admin-ease);
+  transition: border-color 0.15s $transition-easing-default;
 
   &:hover {
-    border-color: var(--admin-bd-s);
+    border-color: $border-primary;
   }
 }
 
@@ -498,14 +498,14 @@
   -webkit-line-clamp: 1;
   overflow: hidden;
   margin: 0;
-  color: var(--admin-t1);
+  color: $txt-primary;
   font-size: 13px;
   font-weight: 600;
 }
 
 .mobile_card_meta {
   margin: 2px 0 0;
-  color: var(--admin-t3);
+  color: $txt-admin-tertiary;
   font-size: 11px;
 }
 
@@ -522,11 +522,11 @@
   justify-content: space-between;
   padding-top: 8px;
   margin-top: 8px;
-  border-top: 1px solid var(--admin-bd);
+  border-top: 1px solid $border-admin;
 }
 
 .mobile_card_stats {
-  color: var(--admin-t3);
+  color: $txt-admin-tertiary;
   font-size: 11px;
 }
 
@@ -541,7 +541,7 @@
   justify-content: space-between;
   gap: 8px;
   padding: 0 4px;
-  color: var(--admin-t3);
+  color: $txt-admin-tertiary;
   font-size: 12px;
 
   @media (min-width: 768px) {

@@ -44,8 +44,8 @@
 
 .table_card {
   display: none;
-  background: var(--admin-bg-card);
-  border: 1px solid var(--admin-bd);
+  background: $bg-card;
+  border: 1px solid $border-admin;
   border-radius: 10px;
   overflow: hidden;
 
@@ -59,8 +59,8 @@
   align-items: center;
   gap: 16px;
   padding: 12px 14px;
-  background: var(--admin-bg-w);
-  border-bottom: 1px solid var(--admin-bd);
+  background: $bg-admin-subtle;
+  border-bottom: 1px solid $border-admin;
 }
 
 .head_cell {
@@ -81,7 +81,7 @@
   align-items: center;
   gap: 16px;
   padding: 16px 14px;
-  border-bottom: 1px solid var(--admin-bd);
+  border-bottom: 1px solid $border-admin;
 
   &:last-child {
     border-bottom: 0;
@@ -163,8 +163,8 @@
   flex-direction: column;
   gap: 12px;
   padding: 12px 14px;
-  background: var(--admin-bg-card);
-  border: 1px solid var(--admin-bd);
+  background: $bg-card;
+  border: 1px solid $border-admin;
   border-radius: 8px;
 }
 
@@ -211,7 +211,7 @@
 %shimmer_bg {
   position: relative;
   overflow: hidden;
-  background: var(--admin-bg-w);
+  background: $bg-admin-subtle;
 }
 
 %shimmer_anim::after {
@@ -224,7 +224,7 @@
     rgba(255, 255, 255, 0.55) 50%,
     transparent 100%
   );
-  animation: shimmer 1.4s var(--admin-ease) infinite;
+  animation: shimmer 1.4s $transition-easing-default infinite;
 }
 
 @keyframes shimmer {

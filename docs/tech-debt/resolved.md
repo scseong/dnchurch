@@ -4,6 +4,13 @@
 
 ---
 
+### ✅ admin 토큰 통합 (ADR 0012) (2026-05-26 해소, PR #102)
+
+- **부채**: `AdminLayout/index.module.scss`의 `.shell` scope에 `--admin-*` 26종 + 레이아웃 3종(`--header-h`·`--sidebar-w`·`--sidebar-w-collapsed`) CSS 커스텀 프로퍼티가 메인 토큰과 분리된 채 admin 13 파일에서 340회 호출됨
+- **해소**: ADR 0012(흡수)로 신규 SCSS 토큰 20개(`_color.scss` 17 + `_layout.scss` 3) 추가, 직접 매핑 9개는 기존 토큰 재사용. admin 13 파일 340 사용처를 `$bg-admin`·`$primary-soft`·`$status-*-soft`·`$bg-dark-nav-*` 등으로 치환하고 `.shell` 정의 블록 제거. admin cool 톤은 보존(색 통일 아님)
+- **확인**: `rg 'var\(--admin-|var\(--sidebar-w|var\(--header-h' src` → 0 hit. 빌드 PASS
+- **참고**: `docs/decisions/0012-admin-token-unification.md`, exec-plan `2026-05-22-admin-token-unification`
+
 ### ✅ `verify-task.mjs` 전체 검증이 사전 부채에 항상 막히던 문제 (2026-05-01)
 
 - `verify-task.mjs`는 ESLint/stylelint/build를 필수 통과 조건으로 유지하고, Knip은 현재 부채를 경고로 기록한다.

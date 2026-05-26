@@ -145,6 +145,23 @@ primitive를 쓰려는 순간 이 표를 먼저 확인한다.
 - 다크 그라디언트: `linear-gradient($navy-900, $navy-950)` 등 Hero·배너 전용
 - rgba 투명도 조합: `rgba($gold-600, 0.18)` 등 기존 semantic으로 표현 불가한 케이스
 
+### Admin 표면 토큰 (ADR 0012)
+
+admin은 정보 밀도가 높은 cool 표면이라 콘텐츠 warm 톤과 다른 토큰을 쓴다. ADR 0012가 메인 시스템에 흡수했다. **`-admin` 접미사 토큰은 콘텐츠 영역에서 쓰지 않는다.**
+
+| 토큰 | 용도 |
+|---|---|
+| `$bg-admin` / `$bg-admin-subtle` / `$bg-admin-hover` | admin 페이지 면 / 보조 면 / 단색 hover |
+| `$border-admin` | admin 카드·divider |
+| `$txt-admin-tertiary` | admin meta·캡션 |
+| `$primary-soft` / `$primary-soft-subtle` | navy 밝은 변종(link·badge·active) / 8% subtle 면 |
+| `$status-{warning,positive,negative}-soft` (+ `-soft-bg`) | 채도 낮은 status — admin 테이블·폼 |
+| `$txt-on-dark-nav-muted` / `$txt-on-dark-nav-faint` | 다크 nav 위 보조·약한 텍스트 |
+| `$bg-dark-nav-hover` / `$bg-dark-nav-active` | 다크 nav hover·active 면 |
+| `$border-dark-nav` | 다크 nav divider |
+
+`-soft`·`-on-dark-nav`·`-dark-nav`는 admin 전용이 아니다 — 콘텐츠 영역에 다크 nav나 채도 낮은 status가 들어오면 재사용한다. `-admin` 접미사만 admin 표면 전용이다.
+
 ## Semantic Token 매핑 규칙
 
 | UI 요소 | spacing | radius | 기타 |

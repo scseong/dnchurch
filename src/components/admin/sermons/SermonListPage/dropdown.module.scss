@@ -11,33 +11,33 @@
   align-items: center;
   gap: 5px;
   padding: 8px 12px;
-  background: var(--admin-bg-card);
-  border: 1px solid var(--admin-bd);
+  background: $bg-card;
+  border: 1px solid $border-admin;
   border-radius: 6px;
-  color: var(--admin-t2);
+  color: $txt-secondary;
   font-size: 12.5px;
   font-weight: 500;
   cursor: pointer;
   transition:
-    border-color 0.15s var(--admin-ease),
-    background 0.15s var(--admin-ease),
-    color 0.15s var(--admin-ease);
+    border-color 0.15s $transition-easing-default,
+    background 0.15s $transition-easing-default,
+    color 0.15s $transition-easing-default;
 
   &:hover {
-    border-color: var(--admin-bd-s);
-    color: var(--admin-t1);
+    border-color: $border-primary;
+    color: $txt-primary;
   }
 }
 
 .filter_active {
-  border-color: var(--admin-accent);
-  background: var(--admin-accent-bg);
-  color: var(--admin-accent);
+  border-color: $primary-soft;
+  background: $primary-soft-subtle;
+  color: $primary-soft;
   font-weight: 600;
 
   &:hover {
-    border-color: var(--admin-accent);
-    color: var(--admin-accent);
+    border-color: $primary-soft;
+    color: $primary-soft;
   }
 }
 
@@ -46,7 +46,7 @@
   align-items: center;
   justify-content: center;
   padding: 1px 6px;
-  background: var(--admin-accent);
+  background: $primary-soft;
   border-radius: 100px;
   color: #fff;
   font-size: 10px;

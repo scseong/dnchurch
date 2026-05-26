@@ -1,9 +1,9 @@
 .sidebar {
   display: flex;
   flex-direction: column;
-  width: var(--sidebar-w);
-  background: var(--admin-sidebar-bg);
-  color: var(--admin-sidebar-t1);
+  width: $admin-sidebar-width;
+  background: $bg-dark-nav;
+  color: $txt-inverse;
 
   @media (min-width: 1024px) {
     position: sticky;
@@ -11,10 +11,10 @@
     align-self: stretch;
     height: 100vh;
     flex-shrink: 0;
-    transition: width 0.18s var(--admin-ease);
+    transition: width 0.18s $transition-easing-default;
 
     &.collapsed {
-      width: var(--sidebar-w-collapsed);
+      width: $admin-sidebar-width-collapsed;
 
       .title,
       .label,
@@ -43,7 +43,7 @@
     inset: 0 auto 0 0;
     z-index: 50;
     transform: translateX(-100%);
-    transition: transform 0.18s var(--admin-ease);
+    transition: transform 0.18s $transition-easing-default;
 
     &.mobile_open {
       transform: translateX(0);
@@ -59,9 +59,9 @@
   display: flex;
   align-items: center;
   gap: 10px;
-  height: var(--header-h);
+  height: $admin-header-height;
   padding: 0 16px;
-  border-bottom: 1px solid var(--admin-sidebar-border);
+  border-bottom: 1px solid $border-dark-nav;
 }
 
 .logo {
@@ -72,7 +72,7 @@
   width: 32px;
   height: 32px;
   border-radius: 8px;
-  background: var(--admin-accent);
+  background: $primary-soft;
   color: #fff;
   font-size: 18px;
 }
@@ -83,7 +83,7 @@
   font-family: var(--font-notoserifKR), 'Noto Serif KR', serif;
   font-size: 15px;
   font-weight: 700;
-  color: var(--admin-sidebar-t1);
+  color: $txt-inverse;
 }
 
 .nav {
@@ -108,7 +108,7 @@
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.06em;
-  color: var(--admin-sidebar-t3);
+  color: $txt-on-dark-nav-faint;
 }
 
 .items {
@@ -129,7 +129,7 @@
   border: 0;
   border-radius: 6px;
   background: transparent;
-  color: var(--admin-sidebar-t2);
+  color: $txt-on-dark-nav-muted;
   font-size: 13px;
   font-weight: 500;
   text-decoration: none;
@@ -139,13 +139,13 @@
     color 0.15s;
 
   &:hover {
-    background: var(--admin-sidebar-hover);
-    color: var(--admin-sidebar-t1);
+    background: $bg-dark-nav-hover;
+    color: $txt-inverse;
   }
 
   &.on {
-    background: var(--admin-sidebar-active);
-    color: var(--admin-sidebar-t1);
+    background: $bg-dark-nav-active;
+    color: $txt-inverse;
     font-weight: 600;
   }
 }
@@ -168,20 +168,20 @@
   padding: 2px 7px;
   border-radius: 100px;
   background: rgba(255, 255, 255, 0.08);
-  color: var(--admin-sidebar-t2);
+  color: $txt-on-dark-nav-muted;
   font-size: 10px;
   font-weight: 600;
 
   .item.on & {
     background: rgba(255, 255, 255, 0.14);
-    color: var(--admin-sidebar-t1);
+    color: $txt-inverse;
   }
 }
 
 .footer {
   display: flex;
   flex-direction: column;
-  border-top: 1px solid var(--admin-sidebar-border);
+  border-top: 1px solid $border-dark-nav;
 }
 
 .user {
@@ -199,8 +199,8 @@
   width: 32px;
   height: 32px;
   border-radius: 50%;
-  background: var(--admin-sidebar-active);
-  color: var(--admin-sidebar-t1);
+  background: $bg-dark-nav-active;
+  color: $txt-inverse;
   font-size: 12px;
   font-weight: 600;
 }
@@ -215,13 +215,13 @@
   line-height: 1.2;
   font-size: 12px;
   font-weight: 600;
-  color: var(--admin-sidebar-t1);
+  color: $txt-inverse;
 }
 
 .email {
   line-height: 1.2;
   font-size: 10px;
-  color: var(--admin-sidebar-t3);
+  color: $txt-on-dark-nav-faint;
 }
 
 .toggle {
@@ -231,16 +231,16 @@
   gap: 8px;
   padding: 10px 14px;
   border: 0;
-  border-top: 1px solid var(--admin-sidebar-border);
+  border-top: 1px solid $border-dark-nav;
   background: transparent;
-  color: var(--admin-sidebar-t2);
+  color: $txt-on-dark-nav-muted;
   font-size: 12px;
   font-weight: 500;
   cursor: pointer;
 
   &:hover {
-    background: var(--admin-sidebar-hover);
-    color: var(--admin-sidebar-t1);
+    background: $bg-dark-nav-hover;
+    color: $txt-inverse;
   }
 }
 

@@ -41,5 +41,6 @@
 | [0009](0009-commit-msg-hook-enforcement.md) | commit msg hook enforcement | Accepted | 2026-05-13 |
 | [0010](0010-harness-codex-review-cap.md) | Harness CODEX_PLAN_REVIEW 범위 한정 + plan 압축 + EXPLORE 직접 검증 | Accepted | 2026-05-14 |
 | [0011](0011-exec-plan-readability.md) | exec-plan 가독성 표준 | Accepted | 2026-05-17 |
+| [0012](0012-admin-token-unification.md) | admin token unification | Accepted | 2026-05-22 |
 
 <!-- last-audit: 2026-05-01 -->
