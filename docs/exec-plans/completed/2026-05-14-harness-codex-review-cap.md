@@ -1,6 +1,6 @@
 # harness-codex-review-cap
 
-- **상태**: 🟡 진행 중 (분석·합의 완료, 구현 대기)
+- **상태**: ✅ 완료 (2026-05-26)
 - **시작일**: 2026-05-14
 - **브랜치**: 미정 (`feat/harness-codex-review-cap` 또는 `chore/harness-...` 권장 — 확인 필요)
 - **선행**: PR #86(Phase 0) 머지 완료, PR #?(sermons-featured, 커밋 `38377a3` `feat/sermons-featured` 브랜치, 푸시는 됐으나 사용자 결정으로 PR 미생성)
@@ -416,3 +416,9 @@ gh pr create --base develop --assignee "@me" --label <label> --title "[Refactor]
 - 본 문서로 `node scripts/harness-gate.mjs harness-codex-review-cap` 실행 시 검증 섹션 부재로 fail 예상 — D2에 따라 본 작업은 harness-gate 우회 (사용자 명시 승인 필요).
 - 완료 후 `node scripts/complete-task.mjs harness-codex-review-cap`로 `completed/`로 이동. 회고 작성 시 KPI 측정 결과 첨부.
 - E7 결정: 본 문서 위치 `docs/exec-plans/active/` **유지**. 후속 보강으로 hook이 메타 작업 인식하도록 frontmatter `kind: meta` 또는 §"메타 작업 플래그" 추가 검토.
+
+## 회고 (머지 후 작성)
+
+- 잘된 것: 단순 feature가 2시간 걸린 CODEX_PLAN_REVIEW 5라운드 폭주의 근본원인을 진단해 6 fixes + 9 가드로 시스템화했다. CHANGE_REQUEST를 material risk로 좁히고 표현 문제는 의사결정 로그 1줄로 보내는 기준을 SKILL·ADR 0010에 박았다. `_template` 압축, `harness-gate` placeholder denylist + verdict token, hook section-hash debounce, fixture 3개를 함께 넣었다.
+- 다음에 할 것: 3 sub-phase 후 KPI(평균 phase 시간·Codex 라운드 수·CR 표현 비율) 측정으로 ADR 0010 Rollback Triggers를 점검한다. hook이 메타 작업을 인식하도록 frontmatter `kind: meta` 보강.
+- 발견된 부채: KPI 측정 자동화(`scripts/measure-phase.mjs`) 도입 여부 미정. (본 문서는 메타 핸드오프라 Codex/Claude 검증 섹션이 없다 — D2의 의도적 우회. complete-task 이동 시 해당 경고는 정상.)

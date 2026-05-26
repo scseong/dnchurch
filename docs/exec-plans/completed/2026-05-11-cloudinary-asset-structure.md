@@ -1,6 +1,6 @@
 # cloudinary-asset-structure
 
-- **상태**: 🟡 진행 중
+- **상태**: ✅ 완료 (2026-05-26)
 - **시작일**: 2026-05-11
 - **브랜치**: refactor/cloudinary-asset-structure
 
@@ -145,7 +145,7 @@ Cloudinary 폴더 구조를 `site/` (정적) + `uploads/{도메인}/` (동적)�
 
 ## Codex 계획 검증
 
-- **상태**: 완료
+- **검증 상태**: 완료
 - **요청 시점**: 2026-05-11 (이 세션 내)
 - **결론**: **PASS**
 - **핵심 지적**:
@@ -160,7 +160,7 @@ Cloudinary 폴더 구조를 `site/` (정적) + `uploads/{도메인}/` (동적)�
 
 ## Codex 1차 검증
 
-- **상태**: 완료 (CHANGE_REQUEST 2건 → FIX_APPLIED)
+- **검증 상태**: 완료 (CHANGE_REQUEST 2건 → FIX_APPLIED)
 - **요청 시점**: 2026-05-11 step 1~3 + ADR 작성 직후
 - **결론**: **FIX_APPLIED** (Codex 결론은 CHANGE_REQUEST, 모두 수정 적용 후 self-resolved)
 - **수정 파일**:
@@ -194,6 +194,6 @@ Cloudinary 폴더 구조를 `site/` (정적) + `uploads/{도메인}/` (동적)�
 
 ## 회고 (머지 후 작성, completed/로 이동 시)
 
-- 잘된 것:
-- 다음에 할 것:
-- 발견된 부채 (→ tech-debt-tracker.md 옮길 것):
+- 잘된 것: `site/`(정적)+`uploads/{도메인}/`(동적) 폴더 분리와 환경 prefix 코드 합성을 ADR 0007 단일 계약으로 묶었다. Codex 1차 CHANGE_REQUEST 2건(`normalizePublicId`의 full URL pass-through guard, versioned migration에서 `TRUNCATE` 분리)을 반영했다. dev Cloudinary 자산 8개·폴더 5개를 정리했고, smoke test에서 회귀 2건(빈 `images`의 `getCloudinaryUrl(undefined)`, `deleteImage`의 public_id 미합성)을 잡아 고쳤다.
+- 다음에 할 것: 정적 자산 재배치(`site/welcome`→`site/about/welcome`)와 hero co-location은 코드 헬퍼 도입 후 점진 마이그레이션으로 미뤘다. prod Cloudinary·DB 적용은 별도 후속.
+- 발견된 부채 (→ tech-debt-tracker.md 옮길 것): Console 업로드 시 public_id 자동 정정(upload preset/webhook), `dnchurch-dev/assets` 빈 폴더 정리 — tech-debt-tracker에 7건 등록 완료.
