@@ -77,7 +77,13 @@ model: opus
 |---|---|---|
 | `codex-reviewer` | `Skill codex:rescue` 호출 | 계획 검증·1차 검증·디버깅·트레이드오프 분석 |
 | `explorer` | `Agent` 도구 + `subagent_type: Explore` | 광역 코드 탐색·대용량 결과 수집 |
+| `doc-editor` | `Agent` 도구 + `subagent_type: doc-editor` | exec-plan·ADR·검증 기록·tech-debt·Codex 인용 표현 점검 (직접 수정 X, 제안만) |
+| `commit-pr-author` | `Agent` 도구 + `subagent_type: commit-pr-author` | commit 메시지·PR 본문·메타데이터 초안 (직접 실행 X, 사용자 승인 후) |
 | 사용자 | 자연어 한국어 + `AskUserQuestion` (모호 시) | 의사결정·승인·피드백 |
+
+### PR 생성 호출 순서
+
+PR 생성 시 본 에이전트가 통제하는 호출 순서 — `doc-editor → exec-plan 정리 → commit-pr-author`. 이유: 원본 exec-plan(검증 기록·Codex 인용)은 `doc-editor` 점검 대상이고 PR 본문은 그 파생본이라 `commit-pr-author` 소유 (writer-agents D1).
 
 ## 참조
 
