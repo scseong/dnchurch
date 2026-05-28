@@ -419,6 +419,6 @@ gh pr create --base develop --assignee "@me" --label <label> --title "[Refactor]
 
 ## 회고 (머지 후 작성)
 
-- 잘된 것: 단순 feature가 2시간 걸린 CODEX_PLAN_REVIEW 5라운드 폭주의 근본원인을 진단해 6 fixes + 9 가드로 시스템화했다. CHANGE_REQUEST를 material risk로 좁히고 표현 문제는 의사결정 로그 1줄로 보내는 기준을 SKILL·ADR 0010에 박았다. `_template` 압축, `harness-gate` placeholder denylist + verdict token, hook section-hash debounce, fixture 3개를 함께 넣었다.
+- 잘된 것: 단순 feature가 2시간 걸린 CODEX_PLAN_REVIEW 5라운드 폭주의 근본원인을 진단해 6 fixes + 9 가드 한 묶음으로 워크플로우에 새겼다. CHANGE_REQUEST를 material risk로 좁히고 표현 문제는 의사결정 로그 1줄로 보내는 기준을 SKILL·ADR 0010에 박았다. `_template` 압축, `harness-gate` placeholder denylist + verdict token, hook section-hash debounce, fixture 3개를 함께 넣었다.
 - 다음에 할 것: 3 sub-phase 후 KPI(평균 phase 시간·Codex 라운드 수·CR 표현 비율) 측정으로 ADR 0010 Rollback Triggers를 점검한다. hook이 메타 작업을 인식하도록 frontmatter `kind: meta` 보강.
-- 발견된 부채: KPI 측정 자동화(`scripts/measure-phase.mjs`) 도입 여부 미정. (본 문서는 메타 핸드오프라 Codex/Claude 검증 섹션이 없다 — D2의 의도적 우회. complete-task 이동 시 해당 경고는 정상.)
+- 발견된 부채: KPI 측정 자동화(`scripts/measure-phase.mjs`) 도입 여부 미정. (이 문서는 메타 핸드오프라 Codex/Claude 검증 섹션이 없다 — D2의 의도적 우회. complete-task 이동 시 해당 경고는 정상.)

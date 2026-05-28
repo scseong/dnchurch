@@ -229,6 +229,6 @@
 
 ## 회고 (머지 후 작성)
 
-- 잘된 것: 발행 필수 6필드를 `validateSermonForm` 한 곳에서 정의해 Server Action·Checklist·PublishCard가 같은 결과를 공유하게 했다. 설교자 UUID를 이름 표기로 고치고, 공개/비공개 라벨을 직관화했으며, `action_bar`를 PC 일반 흐름·모바일 fixed로 반응형 통합하고 edit breadcrumb에 실제 설교 제목을 주입했다. Codex 1차 CHANGE_REQUEST(취소 시 dirty 데이터 손실)를 D11로 막았다. 리뷰 대응 후속(`sermons-publish-review-fixes`)까지 completed/에 반영됐다.
-- 다음에 할 것(후속 plan 분리): 모바일 미리보기 BottomSheet 교체는 portal admin 토큰 정책(`.shell`→`:root` 승격 등) 결정이 선행이다. 어드민 행·`<th>` 키보드 접근성, view count RPC overload는 각각 별도 plan.
+- 잘된 것: 발행 필수 6필드를 `validateSermonForm` 한 곳에서 정의해 Server Action·Checklist·PublishCard가 같은 결과를 공유하게 했다. 설교자 UUID를 이름 표기로 고치고, 공개/비공개 라벨로 더 알아보기 쉽게 바꿨으며, `action_bar`를 PC 일반 흐름·모바일 fixed로 반응형 통합하고 edit breadcrumb에 실제 설교 제목을 주입했다. Codex 1차 CHANGE_REQUEST(취소 시 dirty 데이터 손실)를 D11로 막았다. 리뷰 대응 후속(`sermons-publish-review-fixes`)까지 completed/에 반영됐다.
+- 다음에 할 것(후속 plan 분리): 모바일 미리보기 BottomSheet 교체는 portal admin 토큰 정책(`.shell`→`:root` 승격 등) 결정이 선행이다. 어드민 행·`<th>` 키보드 접근성, view count RPC overload는 각각 따로 plan.
 - 발견된 부채: 취소 confirm을 native `window.confirm`로 임시 처리(admin 토큰 정책 해결 후 커스텀 교체), `video_provider` CHECK `('youtube','vimeo')`는 UI만 youtube로 좁히고 DB 마이그는 미동반.
