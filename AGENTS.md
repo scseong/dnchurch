@@ -14,6 +14,7 @@ Codex CLI용 부트스트랩 지도. 상세 규칙은 SSOT를 가리키고 본 �
 
 - 프로젝트 요약 / 필수 규칙 / 행동 가드레일 / 검증 명령 / 기록 위치: `CLAUDE.md`
 - Codex 작업별 라우팅 / 항상 로딩 세트 / 1차 검증 절차 / 5체크 / 핸드오프 형식: `.codex/skills/context-loader/SKILL.md`
+- 문서·메시지 작성 (commit·PR·exec-plan·ADR·tech-debt·검증 기록·Codex 인용)의 표현 규칙·템플릿·위반 카탈로그: `.claude/skills/writing-style/SKILL.md` — Codex가 한국어 산출물 작성 시 단일 SSOT (R1~R4 hook 검증 정책은 `.claude/skills/harness-workflow/SKILL.md` `## 커밋 메시지`)
 
 ## Codex 협업 원칙 (진입점-only)
 

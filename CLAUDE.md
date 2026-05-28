@@ -60,6 +60,8 @@
 | **claude-code** (이 에이전트) | `.claude/agents/claude-code.md` | 오케스트레이터, 초기 계획, 메인 구현, Codex 결과 통합, 2차 검증, 기록·커밋 책임 |
 | **codex-reviewer** (`codex:rescue` 스킬) | `.claude/agents/codex-reviewer.md` | 계획 검증, 깊은 추론, 설계 판단, 트레이드오프 분석, 막힌 디버깅, 구현 후 1차 검증, 제한적 수정 |
 | **explorer** (`Agent subagent_type: Explore`) | `.claude/agents/explorer.md` | 광역 코드 탐색 위임 래퍼 (3회 이상 검색 예상 / 대용량 결과 / 메인 컨텍스트 보호) |
+| **doc-editor** (`Agent subagent_type: doc-editor`) | `.claude/agents/doc-editor.md` | exec-plan·ADR·검증 기록·tech-debt·Codex 인용 표현 점검 (직접 수정 X, file:line + 수정 초안 제안만) |
+| **commit-pr-author** (`Agent subagent_type: commit-pr-author`) | `.claude/agents/commit-pr-author.md` | commit 메시지·PR 본문·메타데이터(label·assignee·template) 초안 (직접 실행 X, 사용자 승인 후 명령 실행) |
 
 **Codex 위임 트리거** (다음 시점에 `codex:rescue` 호출 검토):
 - 계획 작성 직후 — 구현 전 plan 품질 검증
@@ -76,6 +78,8 @@
 | --- | --- | --- | --- |
 | 2026-05-01 | 초기 구성 (ADR 0001 채택) | docs/decisions/0001, .claude/hooks/, scripts/ | Codex 오케스트레이션 전략 도입 |
 | 2026-05-28 | 에이전트 정의 파일 분리 | .claude/agents/ (claude-code, codex-reviewer, explorer) | `harness:harness` 메타 스킬 적용 — ADR 0001을 재사용 가능한 정의로 분리 |
+| 2026-05-28 | 공통 writer 에이전트 2종 + doc-style hook 추가 | .claude/agents/ (doc-editor, commit-pr-author), .claude/hooks/check-doc-style.mjs | 1인 작업 자기 리뷰 사각지대 보완 — memory feedback 11건(커밋·PR 7 + 문서 4) 누적 패턴 사전 차단 |
+| 2026-05-28 | writing-style SKILL 신설 (작성용 단일 SSOT) | .claude/skills/writing-style/, harness-workflow SKILL reference 1줄 | 작성 시점 표현 가이드 부재 해소 — 사후 점검만으로는 같은 위반 반복(본 task dogfood에서 plan 자체에 5건 위반 발견). description 트리거로 작성 시점 자동 로딩 |
 
 ## HOW (검증 루프)
 
@@ -143,7 +147,8 @@ pre-commit 훅은 lint-staged로 변경 파일만 자동 검사 — error는 차
 | Codex 컨텍스트 로더 | `.codex/skills/context-loader/` | 컨텍스트 라우팅 변경 시 |
 | Claude Hook 자동 제안 | `.claude/hooks/` + `.claude/settings.json` | 협업 타이밍 변경 시 |
 | 워크플로우 자동화 스크립트 | `scripts/` | 스크립트 추가/변경 시 |
-| 작업별 how-to (자동 로딩) | `.claude/skills/{supabase,styles,file-structure,ui-components}/` | 트리거 시 자동 |
+| 작업별 how-to (자동 로딩) | `.claude/skills/{supabase,styles,file-structure,ui-components,writing-style}/` | 트리거 시 자동 |
+| **작성용 SSOT** (한국어 표현·커밋·PR·exec-plan·ADR·tech-debt 템플릿) | `.claude/skills/writing-style/SKILL.md` | 모든 문서·메시지 작성 시 자동 로딩 |
 
 스킬 트리거:
 
@@ -154,6 +159,7 @@ pre-commit 훅은 lint-staged로 변경 파일만 자동 검사 — error는 차
 | 새 파일 위치, 디렉토리 구조, barrel export     | `.claude/skills/file-structure/` |
 | Button·TextField·Modal·BottomSheet·Tabs 등 공용 UI 사용·확장·신규 추가 | `.claude/skills/ui-components/` |
 | 하네스 워크플로우, PLAN Mode, task-id, exec-plan, Codex 검증, harness-gate | `.claude/skills/harness-workflow/` |
+| 문서·메시지 작성 (exec-plan, ADR, tech-debt, 검증 기록, commit, PR, Codex 인용) | `.claude/skills/writing-style/` |
 
 <!-- last-audit: 2026-05-01 -->
 
