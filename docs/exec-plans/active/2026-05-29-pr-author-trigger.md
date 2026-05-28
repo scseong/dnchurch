@@ -54,6 +54,11 @@ PR 본문 작성 시점에 commit-pr-author·writing-style 트리거가 약한 �
 
 ## 의사결정 로그
 
+- **D2 — hook 정규식을 첫 줄로 한정 (자기 자신 dogfood로 오탐 발견)**
+  - 문제: 본 task의 첫 commit 직후 hook이 발화. commit 메시지 본문(heredoc)에 `gh pr create` 문자열이 포함되어 있어 정규식이 매칭됨. 실제 명령은 `git commit`인데도 hook이 잘못 잡음 (오탐).
+  - 해결: `command.split("\n")[0]`로 첫 줄만 검사. heredoc 본문은 newline 이후라 첫 줄만 보면 실제 명령 의도 확인 가능. 이유 — Bash 명령은 항상 첫 줄에 위치, heredoc 본문은 명령이 아니라 데이터. 대안 "정규식 강화(`^\s*gh\s+...`)"는 명령 prefix(`env VAR=x gh ...` 등)와 충돌 가능. 첫 줄만 검사가 가장 단순·안전.
+  - 결과: hook 1줄 추가 (firstLine 추출). 자기 자신 dogfood로 즉시 결함 발견·수정.
+
 - **D1 — A+B+D 3 계층 조합 채택, C(description 강화) 보류**
   - 문제: PR 본문 작성 시점에 writing-style·commit-pr-author 자동 트리거 보장 약함. hook은 PostToolUse:Write|Edit|MultiEdit만 있어 `gh pr create` 시점은 사각지대.
   - 해결: A(PreToolUse:Bash hook 결정적 reminder) + B(claude-code 정의 호출 의무) + D(harness-workflow SKILL 단계 명시) 3 계층. 이유 — A 단독은 claude-code가 reminder 무시 시 명시 조항 없어 약함. B·D만은 권고에 그쳐 LLM 판단에 의존. 3 계층 결합이 결정적 알림 + 워크플로우 강제 + 표준 단계로 만들어 누락을 차단. 대안 C(description 키워드 확장)는 자동 트리거 LLM 판단 영역이라 보장 약함 — A·B·D 효과 측정 후 결정.

@@ -51,7 +51,10 @@ const payload = await readInput();
 const input = payload.tool_input ?? payload.toolInput ?? {};
 const command = String(input.command ?? "");
 
-if (!PR_CREATE_RE.test(command)) process.exit(0);
+// 첫 줄만 검사. heredoc 본문(commit 메시지·PR 본문 등)에 "gh pr create" 문자열이 포함된 false positive 차단.
+// 명령은 항상 첫 줄에 위치하고, heredoc 본문은 \n 이후라 첫 줄만 보면 실제 명령 의도 확인 가능.
+const firstLine = command.split("\n")[0];
+if (!PR_CREATE_RE.test(firstLine)) process.exit(0);
 
 const sessionId = String(payload.session_id ?? payload.sessionId ?? "default");
 const state = readState();
