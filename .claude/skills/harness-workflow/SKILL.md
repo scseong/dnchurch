@@ -201,207 +201,15 @@ node scripts/complete-task.mjs <task-id>
 
 ## 검증 결과 기록 규칙
 
-`## Codex 계획 검증`, `## Codex 1차 검증`, `## Claude 2차 검증`의 결과를 exec-plan에 기록할 때 다음 규칙을 적용한다 (ADR 0008 Decision 메커니즘 2 운영화). 본 규칙이 SSOT — `docs/exec-plans/_template.md`는 짧은 reference 섹션만 보유한다.
+`## Codex 계획 검증`, `## Codex 1차 검증`, `## Claude 2차 검증`의 결과를 exec-plan에 기록할 때 작성용 SSOT는 `.claude/skills/writing-style/SKILL.md`다. 본 SKILL은 검증 워크플로우 메타 정보만 담고, 표현 규칙(추상 표현 금지·구체화 4원소·Codex 결과 인용·나쁜/좋은 예·의사결정 로그 형식·한글 문장 규칙·검증 섹션 구조·검증 결과 표)은 모두 그쪽에 통합되어 있다.
 
-### 추상 표현 금지
-
-기록은 PM·클라이언트가 별도 컨텍스트 없이 읽을 수 있어야 한다. 다음 패턴은 금지한다.
-
-- 추상명사로 끝맺기 — `보강 필요`, `명시 필요`, `통합 필요`, `정합`, `근거 약함`, `커버리지 공백`
-- 형용사 정성 표현 — `오탐 낮은`, `많은 부채`, `긴 함수`
-- 도구·파일·명령 누락 — `lint 강화`, `타입 안전성 향상`
-
-### 구체화 4원소
-
-모든 비판·제안은 다음 4원소 중 최소 2개를 갖춰야 한다.
-
-1. **실제 도구·규칙·파일·명령** — `eslint.config.mjs:37`, `@typescript-eslint/no-floating-promises`, `tsc --noEmit`
-2. **수치 또는 binary 기준** — `위반 23건`, `오탐률 5% 이하`, `3개월 내 3회 이상`
-3. **구체 동사 + 결과** — `Tier 정의에 "deterministic + 오탐률 5% 이하" 한 줄 추가`
-4. **예시 1개 이상** — 비판 1개당 실제 코드/규칙/파일 예시 1개
-
-### Codex 결과 인용
-
-Codex stdout은 verbatim 인용 + 그 아래 평이 한국어 풀이 1줄 추가. PM이 전문어 그대로면 못 읽힌다.
-
-### 나쁜 예 / 좋은 예
-
-❌ 나쁨 (추상명사·도구 누락·예시 0):
-
-```
-Finding 1 — 3-tier 경계 보강 필요. 운영 기준 명시 필요.
-```
-
-✅ 좋음 (실제 규칙·구체 동사+결과·예시):
-
-```
-Finding 1 — Tier 1 후보에 자동수정 불가 규칙(`complexity`, `max-lines-per-function`)이 들어가 Tier 1/2 구분이 흔들림. 후속 작업자가 새 규칙(예: `unused-import`) 도입 시 어느 Tier인지 매번 토론 필요. → Tier 1 정의에 "deterministic(같은 코드 항상 같은 결과) + 오탐률 5% 이하" 운영 기준 한 줄 추가.
-```
-
-### 의사결정 로그·검증 기록 형식
-
-가독성 강제 — 압축·기호 누적·약어가 쌓이면 작성자 본인도 맥락을 못 읽는다.
-
-- 의사결정 로그 항목 = `**Dn — 한 줄 제목**` + `문제:` / `해결:` / `결과:` bullet. 한 항목 = 한 결정.
-- **`해결:`의 핵심은 "왜 그 방법인가(이유)"** — 어떤 방법들이 있었고 무엇을 왜 택했는지. "무엇을 했다"로 끝내면 의사결정 맥락이 사라져 나중에 문서로 복구 불가.
-- `결과:`는 성과 — 무엇이 달라졌나/측정 가능한 변화.
-- 한 문장에 여러 사실을 `·`·`→`·`+`로 잇지 않는다. 둘 이상이면 bullet으로 쪼갠다. 약어·전문어 금지("미러"·"preboot iframe" → 풀어쓴다). 폐기 결정은 원항목 끝에 `⚠️ 정정(PR #xx): 폐기 → Dn 참조`.
-- 검증 결과는 공통 항목(lint/styles/build/knip)을 표 1행으로. 단락 재서술·`(a)~(g)` 재나열 금지, 새 위험·수동 미검증만 추가.
-
-**한글 문장 규칙 (구조가 아니라 문장 자체 — 생성 시 적용):**
-
-- 자연스러운 한국어로 쓴다. 번역투와 외래어 직역을 빼고, 원어민이 실무에서 쓰는 문장으로.
-- 상투적 AI 표현 금지: "~라고 할 수 있습니다", "~에 대해 알아보았습니다", "~하는 것이 중요합니다", "결론적으로", "살펴보겠습니다" 등은 절대 안 쓴다.
-- 한 문장에 한 가지만. 양보·이유·예외를 한 문장에 겹치지 않는다.
-- 명사로 압축하지 않고 서술어로 끝낸다("신호 명확성" → "신호가 분명해진다").
-- 같은 근거는 한 번만. 반복 대신 참조한다. 괄호 보충은 문장 밖 `근거:` 줄로 뺀다.
-
-❌ 나쁨 (명사 압축·`·`적층·괄호 보충): `검증 정책·게이트 동작·manifest 스키마 불변. (Assumptions에서 enforce-verification이 summary.log 미파싱 확인)`
-✅ 좋음 (서술어 종결·한 문장 한 가지·근거 분리):
-```
-검증 정책과 게이트 동작은 그대로다. manifest 스키마도 바꾸지 않는다.
-근거: enforce-verification은 summary.log를 읽지 않는다 (Assumptions 참조).
-```
-
-❌ 나쁨: `D6: duration 제거 → prop·import 삭제·조건블록 제거, BottomSheet로 교체(드롭다운 이탈)`
-✅ 좋음 (왜·대안·성과가 드러남):
-```
-**D6 — 모바일 공유 메뉴를 BottomSheet로 교체**
-- 문제: 드롭다운이 모바일에서 화면 밖으로 잘려 항목을 못 눌렀다.
-- 해결: 위치를 직접 계산해 고치는 대신 공용 BottomSheet로 교체. 이유 — 위치 계산은 기기·뷰포트마다 깨지는 회귀가 반복됐고, BottomSheet는 모바일 시트/PC 모달 전환·focus trap이 이미 검증돼 재발 위험이 없음. 직접 만든 바깥클릭·ESC 핸들러는 중복이라 제거.
-- 결과: 모바일에서 메뉴가 항상 화면 안에 뜬다. 기기별 회귀 0.
-```
-
-전체 형식 예시는 `docs/exec-plans/_template.md` 하단 주석. memory `feedback_doc_decision_log_style` sync.
-
-### 검증 섹션 구조
-
-`## Codex 계획 검증`·`## Codex 1차 검증`·`## Claude 2차 검증`은 현재 판정만 담는다.
-
-- 3줄 고정: `- **결론**:`(2차는 `- **최종 판단**:`) / `- **현재 판단**:` / `- **다음 행동**:`.
-- 이전 판정·재검증 원문·CR 해소 내역은 이 섹션에 쓰지 않는다.
-- 이전 판정은 `## 검증 이력`에만 둔다. 거기서는 `**결론**:`·`**최종 판단**:`을 쓰지 않는다. `판정:`을 쓴다. `<details>` 본문은 판정/이유/조치 3줄 이하.
-- 재검증은 결론 3줄을 덮어쓰고, `## 검증 이력`에 `<details>` 1개를 append한다. 인라인 누적 금지.
-- 후속 작업은 `## 후속 작업` 한 곳에만. Non-goals·체크리스트에는 중복 기술하지 않는다.
-- `## 의사결정 로그`는 결정과 이유만. verdict 토큰을 재서술하지 않는다.
+본 규칙은 ADR 0008 메커니즘 2(Detection) 운영화의 일부다. memory `feedback_concrete_records`·`feedback_doc_decision_log_style`와 sync 유지. 규칙 위반은 Codex 1차 검증·Claude 2차 검증에서 차단 대상.
 
 `## 검증 이력`은 별도 top-level 섹션이라 `sectionBody()`가 다음 `##`에서 끊긴다. 게이트 코드 변경 없이 동작한다.
 
-### 강제 출처
-
-본 규칙은 ADR 0008 메커니즘 2(Detection) 운영화의 일부. memory `feedback_concrete_records`·`feedback_doc_decision_log_style`와 sync 유지. 규칙 위반은 Codex 1차 검증·Claude 2차 검증에서 차단 대상.
-
 ## 커밋 메시지
 
-CLAUDE.md prefix 6개(`Feat·Fix·Style·Refactor·Docs·Chore`) + bullet 본문 + Co-Authored-By footer 규칙 위에, 다음 추가 규칙을 따른다.
-
-### Subject 규칙
-
-- **WHY/IMPACT 우선** — "X 채택/적용" 보다 "Y 문제 해소"를 선호. 메커니즘이 아니라 사용자/시스템 영향을 subject에 노출.
-- **추상명사 회피** — "정합/통일/정정" 단독 사용 금지. 구체 Before→After 또는 숫자/경로 명시.
-  - ❌ `Fix: 라우트 경로 정정`
-  - ✅ `Fix: /news/bulletin → /news/bulletins (8건) + /about/directions → /about/location`
-- **길이** — 권장 50자, 최대 80자 (한국어 char 기준).
-- **외부 가독성 (코드 미열람자 1회 이해)** — subject와 body 모두 본 PR/저장소를 처음 보는 사람이 코드를 열지 않고도 "무엇이 어떻게 변했는지" 이해 가능해야 한다. 본 task 내부에서만 통하는 약어·축약(예: `메타 2 키`, `토큰 3종`, `9 영역`)은 본문에서 한 번 풀어쓰지 않으면 금지.
-  - ❌ `Chore: Hero 메타 2 키 + 라우트 3 스켈레톤` — "메타", "키", "스켈레톤" 모두 코드 미열람자가 추측해야 함
-  - ✅ `Chore: sermons 자식 페이지 2종 Hero 등록 + 신규 라우트 3종 스켈레톤 추가` — 어떤 페이지/Hero/라우트인지 표면화
-  - body에서는 첫 등장 시 풀어 설명: "`hero.config.ts`의 `HERO_META` 객체에 `/sermons/all`·`/sermons/series` 두 엔트리(title/subtitle/eyebrow) 추가"처럼
-- **Subject `+` 0회를 기본값으로 작성** — `+` 등장 자체가 다중 concern 신호이자 commit 분리 검토 트리거다. hook R4은 `+` 2회부터 차단하지만, **작성 단계에서 0회를 목표**로 한다. `+`를 쓰고 싶어지면 (a)/(b) 중 택1:
-  - (a) **commit 분리** — 각 영역을 별도 commit으로. 기본 가정.
-  - (b) **단일 의도 통일** — 모든 영역이 단일 상위 의도(예: "Phase 0 foundation prep") 하에 묶이는 경우, subject는 그 상위 의도 하나로 표현하고 본문 bullet에서 영역별로 풀어쓴다. 같은 파일·같은 모듈 변경 묶음은 `(N concerns 동일 파일)` 표기.
-
-  (`/`·`,`는 URL 경로(`/sermons/all`)·자연어 열거에서 합법 등장하므로 분리 신호 대상이 아니다 — commit-msg-hook task Codex 1차 FLAG D 반영, hook R4 검사도 `+`만.)
-  - ❌ `Chore: sermons Phase 0 — 9-영역 감사 + Carousel 공용 + 3 라우트 + Hero 메타 2 키` — subject `+` 3회 → commit 분리 신호로 오해. 약어 다발.
-  - ✅ `Chore: sermons 섹션 Phase 0 foundation — Phase 1 진입 전 사전 준비 완료` + 본문 4 영역 bullet — 단일 의도 통일
-  - ✅ `Fix: /news/bulletin → /news/bulletins (8건) + /about/directions → /about/location` — `/`는 URL 경로, `+`는 1회로 분리 신호 아님
-
-### Body 4-line 가이드
-
-```
-<Prefix>: <subject>
-
-- 왜: motivation (트리거/배경)
-- 무엇: 핵심 변경 (파일 단위 또는 동작 단위)
-- 영향: 호출부·사용자 변화, breaking 여부
-- 제외: 의도적으로 안 한 것 (있을 때만)
-
-Co-Authored-By: <실제 모델명> <noreply@anthropic.com>
-```
-
-라벨(`왜/무엇/영향/제외`)을 그대로 적지 않아도 OK. 핵심은 **WHY와 IMPACT가 본문에 노출**되어야 함.
-
-### 출처 표기
-
-QA / Codex / Gemini / 자체 발견 등 변경 트리거를 일관되게 표시한다.
-
-- ✅ `Fix: <subject> (QA #6)` 또는 `(Codex P1 review)`
-- ❌ 출처 없음 — self-initiated인지 외부 피드백인지 모호
-
-### 좋은 예 / 나쁜 예
-
-❌ 나쁨 (subject가 추상, body가 WHAT만 반복):
-
-```
-Refactor: ui/ named export 통일
-
-- Modal/BottomSheet/Pagination을 default → named로 변경
-- ui/index.ts barrel 갱신
-```
-
-✅ 좋음 (WHY 우선, 트레이드오프·제외 명시):
-
-```
-Refactor: ui/ 12 컴포넌트 export 패턴 통일 (3 outlier 정리)
-
-- 왜: 9 named + 3 default 혼재 → 파일 열 때 인지 부하, grep/refactor 어려움
-- 무엇: Modal/BottomSheet/Pagination을 named export로 변경, barrel re-export 3줄 갱신
-- 영향: consumer 모두 barrel 경유라 import 형태 변화 0건 (grep 검증)
-- 제외: `'use client'` 정리는 별도 tech-debt 항목 (#7)
-```
-
-### PR 제목
-
-위 commit subject의 WHY/IMPACT 원칙을 PR 제목에도 동일 적용. **단 형식은 commit과 다름**:
-
-- **형식**: `[Type] Title` — bracket(`[]`) + 공백 1개. `.github/PULL_REQUEST_TEMPLATE/*.md`에 명시된 컨벤션.
-  - Type 6개는 commit prefix와 동일 (`Feat·Fix·Style·Refactor·Docs·Chore`).
-  - commit은 `Fix: ...` (콜론), PR은 `[Fix] ...` (브래킷) — **혼동 금지**.
-- **유추 가능성 우선** — 제목만 보고 PR 내용을 짐작할 수 있어야 함. 추상 라벨("v3/v4", "통일", "정합", "리팩터")만으로는 부족.
-- **구체 동사 + 결과 명시** — "재설계", "도입", "DB 편집화", "차단", "해소" 같이 무엇을 어떻게 했는지 드러나는 동사 사용.
-- **길이** — 권장 70자, GitHub UI 가시성 한도 80자 정도.
-- **다중 영역 묶음 OK** — PR은 commit과 달리 본문이 별도 채워지므로 `+` 또는 `·`로 여러 영역을 잇는 게 자연스러움.
-
-❌ 나쁨 (잘못된 형식 + 유추 불가):
-
-```
-Chore: develop → main 릴리스 v0.5.0 (2026-05-11)   ← Type 형식이 commit 스타일(콜론)
-[Refactor] 디자인 시스템 v3/v4 통합                 ← 형식 OK지만 무슨 변경인지 유추 불가
-```
-
-✅ 좋음 ([Type] 형식 + 영역 + 동사 + 결과):
-
-```
-[Chore] v0.5.0 — 교회 소개 6 페이지 재설계(DB 편집화) + 디자인 토큰·공용 컴포넌트 통합
-[Refactor] ui/ 12 컴포넌트 export 패턴 통일 (3 outlier 정리)
-[Fix] release v0.5.0 QA 9건 — about/news 경로 + a11y + 공용 UI 정합
-```
-
-### 산출 문서 가독성 체크리스트 (PR 본문·exec-plan·검증 기록·문서 전부)
-
-Subject 규칙 "추상명사 회피"(301)·"외부 가독성"(305)을 사람이 읽는 모든 산출 문서로 확장 — PR 본문만이 아니라 exec-plan·의사결정 로그·검증 기록·tech-debt가 다 대상. 특히 Codex 결과·봇 리뷰를 요약할 때 원문의 영어·약어를 그대로 옮기지 않는다(요약도 번역한다). commit/문서 올리기 직전 6항목 점검:
-
-| # | 신호 | 고치는 법 |
-| --- | --- | --- |
-| ① 한자어 + 化·하다 명사 | 동사로 풂 — "정합화한다" → "한 곳에 정의해 네 곳을 맞춤" |
-| ② 무생물 주어 + 사람 동사 | 사람·대상을 주어로 — "안내가 …말했다" → "안내 문구에 …적힘" |
-| ③ 한 문장에 비교 2개+ | 불릿으로 쪼갬 |
-| ④ 약어·내부 기호(SSOT·D6) | 첫 등장 한 번 풀기 (305와 같음) |
-| ⑤ 추상명사로 끝맺기 | 동사+결과·숫자로 (301과 같음) |
-| ⑥ 추상명사 갈음(흐름·약속·측면) | 가리키는 구체 대상 2개 못 대면 나열 — "외부 약속 변화 없음" → "함수 입출력 형태·DB 구조 변화 없음" |
-
-⑥ 영어 용어(contract·flow) 한 단어 직역이 추상명사를 새로 만든다 — 실제 대상을 풀어 쓴다. **개조식 항목은 명사형 종결**(~추가·~정의), 산문은 서술어 — CLAUDE.md "서술어로 끝낸다"와 맥락이 다름. 단 명사형이 추상명사면 안 됨(⑤).
-
-한 줄 규칙: 코드 안 본 동료가 이 문장만 읽고 "무엇이 어떻게 바뀌는지" 말할 수 있나? 못 하면 고침. 상세·예시: memory `feedback_plain_korean`.
+commit subject·body 작성 규칙·PR 제목·산출 문서 가독성 체크리스트는 작성용 단일 SSOT인 `.claude/skills/writing-style/SKILL.md`를 참조한다. 본 SKILL은 검증 정책(R1~R4 hook 강제)만 워크플로우 메타로 보존.
 
 ### 검증
 
@@ -414,7 +222,7 @@ Subject 규칙 "추상명사 회피"(301)·"외부 가독성"(305)을 사람이 
 - (R4) subject `+` 2회 이상 차단 (다중 concern 분리 신호)
 
 PR 리뷰에서 수동 확인하는 영역 (hook 검증 X):
-- WHY/IMPACT 우선·추상명사 회피·외부 가독성 — heuristic 룰, 사람 리뷰 영역
+- WHY/IMPACT 우선·추상명사 회피·외부 가독성 — heuristic 룰, 사람 리뷰 영역 (writing-style SKILL이 SSOT)
 - PR 제목 — 별도 GitHub Actions task에서 도입 예정
 
 ## ADR 판단
