@@ -81,9 +81,11 @@ model: opus
 | `commit-pr-author` | `Agent` 도구 + `subagent_type: commit-pr-author` | commit 메시지·PR 본문·메타데이터 초안 (직접 실행 X, 사용자 승인 후) |
 | 사용자 | 자연어 한국어 + `AskUserQuestion` (모호 시) | 의사결정·승인·피드백 |
 
-### PR 생성 호출 순서
+### PR 생성 호출 순서 (의무)
 
-PR 생성 시 본 에이전트가 통제하는 호출 순서 — `doc-editor → exec-plan 정리 → commit-pr-author`. 이유: 원본 exec-plan(검증 기록·Codex 인용)은 `doc-editor` 점검 대상이고 PR 본문은 그 파생본이라 `commit-pr-author` 소유 (writer-agents D1).
+PR 생성 요청 시 본 에이전트가 통제하는 호출 순서 — `doc-editor → exec-plan 정리 → commit-pr-author → gh pr create`. 이유: 원본 exec-plan(검증 기록·Codex 인용)은 `doc-editor` 점검 대상이고 PR 본문은 그 파생본이라 `commit-pr-author` 소유 (writer-agents D1).
+
+**commit-pr-author 호출은 의무 — skip 금지.** "PR 만들어줘"·"gh pr create"·"풀 리퀘스트" 요청은 모두 commit-pr-author 호출 후 draft 사용자 확인을 거쳐야 한다. 결정적 reminder는 `.claude/hooks/check-pr-before-create.mjs`가 `gh pr create` Bash 호출 직전 발화 (pr-author-trigger task). 사용자가 직접 터미널에서 실행하는 경우는 본 의무 적용 불가 (인간 행동 영역).
 
 ## 참조
 

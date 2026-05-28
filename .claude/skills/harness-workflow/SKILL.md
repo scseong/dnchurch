@@ -193,6 +193,8 @@ node scripts/harness-gate.mjs <task-id>
 
 사용자 승인 없이 자동 커밋하지 않는다.
 
+**PR 생성 시 호출 순서 (의무)**: `doc-editor → exec-plan 정리 → commit-pr-author → gh pr create`. commit-pr-author가 PR 본문·label·assignee·template draft를 채팅에 제시하고 사용자 승인 후 `gh pr create` 실행. `.claude/hooks/check-pr-before-create.mjs`가 PreToolUse:Bash matcher로 `gh pr create` 호출 직전 결정적 reminder. 상세: `.claude/agents/claude-code.md` `### PR 생성 호출 순서 (의무)`.
+
 머지 후에는 실행한다.
 
 ```bash

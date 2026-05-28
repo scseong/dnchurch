@@ -64,6 +64,18 @@
           }
         ]
       }
+    ],
+    "PreToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"$CLAUDE_PROJECT_DIR/.claude/hooks/check-pr-before-create.mjs\"",
+            "timeout": 5
+          }
+        ]
+      }
     ]
   },
   "enabledPlugins": {

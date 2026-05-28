@@ -80,6 +80,7 @@
 | 2026-05-28 | 에이전트 정의 파일 분리 | .claude/agents/ (claude-code, codex-reviewer, explorer) | `harness:harness` 메타 스킬 적용 — ADR 0001을 재사용 가능한 정의로 분리 |
 | 2026-05-28 | 공통 writer 에이전트 2종 + doc-style hook 추가 | .claude/agents/ (doc-editor, commit-pr-author), .claude/hooks/check-doc-style.mjs | 1인 작업 자기 리뷰 사각지대 보완 — memory feedback 11건(커밋·PR 7 + 문서 4) 누적 패턴 사전 차단 |
 | 2026-05-28 | writing-style SKILL 신설 (작성용 단일 SSOT) | .claude/skills/writing-style/, harness-workflow SKILL reference 1줄 | 작성 시점 표현 가이드 부재 해소 — 사후 점검만으로는 같은 위반 반복(본 task dogfood에서 plan 자체에 5건 위반 발견). description 트리거로 작성 시점 자동 로딩 |
+| 2026-05-29 | PR 생성 시점 commit-pr-author 호출 의무화 + PreToolUse hook 신설 | .claude/hooks/check-pr-before-create.mjs, .claude/settings.json PreToolUse 블록, claude-code.md, harness-workflow SKILL | gh pr create 시점은 PostToolUse hook 사각지대 — 결정적 reminder + 워크플로우 의무 + COMMIT 단계 명시 3 계층 방어 |
 
 ## HOW (검증 루프)
 
