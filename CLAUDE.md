@@ -53,12 +53,13 @@
 
 ## 에이전트 역할 분담
 
-전략은 [ADR 0001](docs/decisions/0001-codex-orchestration-strategy.md) — 이 파일은 요약.
+전략·역할 분담·위임 트리거 SSOT는 [ADR 0001](docs/decisions/0001-codex-orchestration-strategy.md). 이 파일은 요약, `.claude/agents/`는 실행용 정의(에이전트별 입출력 프로토콜·에러 핸들링·협업 매트릭스)로 ADR을 운영화한 파일이다 — 충돌 시 ADR 0001을 우선한다.
 
-| 에이전트 | 책임 |
-| --- | --- |
-| **Claude Code** (이 에이전트) | 오케스트레이터, 초기 계획, 메인 구현, Codex 결과 통합, 2차 검증, 기록·커밋 책임 |
-| **Codex** (`codex:rescue` 스킬) | 계획 검증, 깊은 추론, 설계 판단, 트레이드오프 분석, 막힌 디버깅, 구현 후 1차 검증, 제한적 수정 |
+| 에이전트 | 정의 파일 | 책임 |
+| --- | --- | --- |
+| **claude-code** (이 에이전트) | `.claude/agents/claude-code.md` | 오케스트레이터, 초기 계획, 메인 구현, Codex 결과 통합, 2차 검증, 기록·커밋 책임 |
+| **codex-reviewer** (`codex:rescue` 스킬) | `.claude/agents/codex-reviewer.md` | 계획 검증, 깊은 추론, 설계 판단, 트레이드오프 분석, 막힌 디버깅, 구현 후 1차 검증, 제한적 수정 |
+| **explorer** (`Agent subagent_type: Explore`) | `.claude/agents/explorer.md` | 광역 코드 탐색 위임 래퍼 (3회 이상 검색 예상 / 대용량 결과 / 메인 컨텍스트 보호) |
 
 **Codex 위임 트리거** (다음 시점에 `codex:rescue` 호출 검토):
 - 계획 작성 직후 — 구현 전 plan 품질 검증
@@ -68,6 +69,13 @@
 - 구현 후 1차 검증 — 큰 diff, 고위험 파일, 레이어 변경, 검증 실패
 
 **위임 안 함**: 단순 수정(typo·rename·한 줄), 표준 작업(commit·lint·build), 답이 명확한 코드.
+
+### 하네스 변경 이력
+
+| 날짜 | 변경 내용 | 대상 | 사유 |
+| --- | --- | --- | --- |
+| 2026-05-01 | 초기 구성 (ADR 0001 채택) | docs/decisions/0001, .claude/hooks/, scripts/ | Codex 오케스트레이션 전략 도입 |
+| 2026-05-28 | 에이전트 정의 파일 분리 | .claude/agents/ (claude-code, codex-reviewer, explorer) | `harness:harness` 메타 스킬 적용 — ADR 0001을 재사용 가능한 정의로 분리 |
 
 ## HOW (검증 루프)
 
