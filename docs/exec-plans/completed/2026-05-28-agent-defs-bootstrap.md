@@ -1,6 +1,6 @@
 # agent-defs-bootstrap
 
-- **상태**: 🟡 진행 중
+- **상태**: ✅ 완료 (2026-05-30)
 - **시작일**: 2026-05-28
 - **브랜치**: refactor/harness-engineering
 - **Open questions**: none
@@ -153,3 +153,21 @@ Confidence: high
 | --- | --- | --- | --- | --- | --- | --- |
 | 1차 | 20260528-212629 | ✅ | ✅ | ✅ | 0 | — |
 | 2차 (CR 반영 후) | 20260528-213634 | ✅ | ✅ | ✅ | 0 | — |
+
+## 회고
+
+### 잘 된 것
+- ADR 0001(2026-05-01 Accepted)을 정의 파일 3개로 분리 — 메타 스킬 권장 형식 충족. 사용자 결정(Phase 0 감사 → "기존 확장" 모드)에 정확히 부합.
+- 본 task의 의사결정 D1(Codex 계획+1차 통합 호출)이 정확히 작동 — 검증 비용 절감, 단일 Codex 라운드로 모든 발견 수집.
+- 검증 흐름이 후속 task(writer-agents·pr-author-trigger)의 패턴 정착에 직접 활용됨.
+
+### 예상 못한 발견
+- Codex CR 4건 중 expression-only 2건(exec-plan 표현 모순) 사전 점검 안 됨 — 이게 writer-agents에서 doc-editor·writing-style SKILL 신설의 직접 동기.
+- 외과적 변경 원칙 충돌: 사용자 `/plugin install`이 추가한 `.claude/settings.json` 변경(`enabledPlugins.harness@harness-marketplace`)이 task 외 변경처럼 보였으나 D2로 "메타 스킬 적용 전제라 합류" 결정. 이런 외부 발생 변경은 task 범위 판단을 매번 자체 결정해야 함.
+
+### 후속 관찰 시점·항목
+- 새 세션에서 claude-code·codex-reviewer·explorer 정의가 실제 reload되어 작동하는지 확인 (#2 — writer-agents·pr-author-trigger와 동일).
+- 본 task가 신설한 ADR 0001 운영화 패턴이 후속 task에서도 그대로 적용되는지(같은 패턴 반복 = 정착).
+
+### 본 task의 본질
+ADR 0001(2026-05-01 결정)이 5개월 만에 정의 파일로 운영화. 메타 스킬 설치가 트리거 — 외부 도구가 본 저장소 정책의 실행 격차를 가시화한 사례. 본 task 자체는 신규 결정 0건, 기존 결정의 형식 정합 보강.

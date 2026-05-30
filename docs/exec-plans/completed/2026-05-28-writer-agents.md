@@ -1,6 +1,6 @@
 # writer-agents
 
-- **상태**: 🟡 진행 중
+- **상태**: ✅ 완료 (2026-05-30)
 - **시작일**: 2026-05-28
 - **브랜치**: refactor/harness-engineering
 - **Open questions**: none
@@ -195,3 +195,24 @@ confidence: medium
 | 2차 (D5 추가 후) | 20260528-231743 | ✅ | ✅ | ✅ | 0 | — |
 | 3차 (CR-2 본문 흡수 후) | 20260528-233040 | ✅ | ✅ | ✅ | 0 | — |
 | 4차 (CLAUDE.md·AGENTS.md 링크 추가 후) | 20260528-234648 | ✅ | ✅ | ✅ | 0 | — |
+
+## 회고
+
+### 잘 된 것
+- 사용자 본질 지적("사후 점검만으론 같은 위반 반복")이 D5(writing-style SKILL 신설) 결정으로 이어짐 — 본 task가 만든 가장 가치 있는 자산.
+- dogfood 5건 위반 발견(본인이 작성한 plan에서) — writing-style SKILL의 실효성을 본 task 안에서 즉시 입증.
+- harness-workflow SKILL 본문 87+125줄을 writing-style로 흡수 — SSOT 단일화. 두 곳이 어긋날 위험 0.
+- Codex 4 라운드(design + 1·2·3·4차) 거치며 점진적 결함 발견·해소.
+
+### 예상 못한 발견
+- D5 추가 변경이 Codex 2차 검증에서 CR-1·CR-2 새 발견. SSOT 통합 결정만으로는 부족 — 옵션 A(본문 흡수)·옵션 B(stub만) 트레이드오프가 검증 결과 명확해짐.
+- Codex CR-2 "drift 위험"이 옵션 B로 처리하면 즉시 발생할 수 있어 옵션 A 선택 강제. 신규 결정 → 즉시 검증 사이클 가치 입증.
+- doc-editor가 SSOT 자체(CLAUDE.md·SKILL) 점검 거부하는 "메타-순환 회피" 설계가 명시 안 됐다가 PR #104 Codex 리뷰에서 N3(적용 범위 모순)로 발견 — 본 task 머지 전에 정정.
+
+### 후속 관찰 시점·항목
+- 신규 에이전트(doc-editor·commit-pr-author) reload 후 실제 `Agent(subagent_type: ...)` 호출 작동 검증 — 다음 세션 첫 작업.
+- writing-style SKILL의 description 자동 트리거가 작성 시점에 실제 작동하는지 — exec-plan·ADR 작성 시 자동 로딩 빈도 관찰.
+- 운영 신호 측정(#1 후속) 도입 후 doc-editor 호출 빈도·표현 위반 추이 데이터 기반 재고 (3개월 후).
+
+### 본 task의 본질
+"사후 점검자는 보조 수단, 작성 시점 강제가 1차 방어"라는 사용자 본질 지적이 SSOT 구조 자체를 바꿈. 시작은 공통 writer 2 에이전트 신설이었으나 D5 추가로 SKILL 신설·기존 SKILL 본문 흡수까지 확장. 본 task의 진짜 산출물은 에이전트가 아니라 writing-style SSOT.

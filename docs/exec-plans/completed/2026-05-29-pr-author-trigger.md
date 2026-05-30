@@ -1,6 +1,6 @@
 # pr-author-trigger
 
-- **상태**: 🟡 진행 중
+- **상태**: ✅ 완료 (2026-05-30)
 - **시작일**: 2026-05-29
 - **브랜치**: refactor/harness-engineering
 - **Open questions**: none
@@ -96,3 +96,21 @@ PR 본문 작성 시점에 commit-pr-author·writing-style 트리거가 약한 �
 | 시점 | run-id | lint | styles | build | knip신규 | 수동 확인 필요 |
 | --- | --- | --- | --- | --- | --- | --- |
 | 1차 | 20260529-001126 | ✅ | ✅ | ✅ | 0 | — |
+
+## 회고
+
+### 잘 된 것
+- PR 생성 시점 사각지대(`gh pr create`는 PostToolUse hook 못 잡음) 사용자가 정확히 짚음 → A+B+D 3 계층 방어 도입.
+- 자기 dogfood로 hook 결함 즉시 발견·hot fix(`a3e1984`) — hook 첫 발화에서 commit 메시지 본문에 트리거 문자열 우연 포함 → 첫 줄만 검사로 1줄 수정. 자기 자신을 검증한 실제 사례.
+- 본 PR 생성 자체(PR #104) 시점에 check-pr-before-create hook이 정확히 발화 — Test plan #3 자동 통과.
+
+### 예상 못한 발견
+- 본 task가 만든 hook이 실제로 `gh pr create`를 **차단하지 못한다는 사실**이 PR #104 Codex 리뷰(C1)에서 발견. `permissionDecision` 누락 — `additionalContext`만으로는 Bash 실행 그대로. PR의 핵심 정책("PR 생성 전 commit-pr-author 호출 의무")이 작동 안 했음.
+- 본 task 머지 전에 C1 수정(`permissionDecision: "ask"` 추가)으로 핵심 정책 실효 확보 — 만약 PR 리뷰 안 받았으면 머지 후에도 reminder만 띄우는 무력한 hook으로 남았을 것.
+
+### 후속 관찰 시점·항목
+- `permissionDecision: "ask"` 적용 후 사용자가 매번 확인 받는 흐름이 노이즈인지 균형인지 관찰. 노이즈면 deny로 강화 또는 매처 정밀화.
+- PreToolUse:Bash hook의 누적 비용(#13 후속) — 매 Bash 호출마다 5초 timeout 실행. 본 저장소 Bash 호출 빈도 데이터 수집 필요.
+
+### 본 task의 본질
+"hook이 reminder만 출력하고 실행 차단 못 함"이라는 메커니즘적 결함이 본 task 머지 전 PR 리뷰로 발견됨. 본 task와 PR #104 후속 hot fix 합계가 진짜 산출물 — hook 신설만으로는 정책 강제 부족하고 `permissionDecision`까지 명시해야 실효 확보. 다른 PreToolUse hook 신설 시 같은 함정 반복 위험 — 본 task 패턴이 향후 hook 작성의 표준이 됨.
