@@ -8,7 +8,15 @@ import os from "node:os";
 import path from "node:path";
 import { stdin, stdout } from "node:process";
 
-const PR_CREATE_RE = /\bgh\s+pr\s+create\b/i;
+// 명령 시작이 `gh pr create`인 경우만 매칭. anchor `^` + 선택 prefix(env·assignment) 허용.
+// 한계: regex 기반이라 다음 케이스는 못 잡음 (false negative) — 본인 dogfood 사이클 + Codex 검증으로 인지:
+//   - `cd /path && gh pr create ...` (compound)
+//   - `$(gh pr create ...)` (subshell)
+//   - `echo done; gh pr create` (역순 compound)
+//   - `FOO=$(gh pr create ...)` (assignment + subshell)
+// 완전 해결은 shell command lexer 필요 — 본 hook 범위 밖. 위 케이스는 사용자가 자발적 commit-pr-author 호출 권장.
+// 단순 false positive(commit 메시지 본문에 트리거 문자열 우연 포함)는 본 anchor + firstLine 검사로 차단.
+const PR_CREATE_RE = /^\s*(?:env\s+)?(?:\w+=[^\s]+\s+)*gh\s+pr\s+create\b/i;
 const CWD_KEY = createHash("sha1").update(process.cwd()).digest("hex").slice(0, 8);
 const STATE_FILE = path.join(os.tmpdir(), `dnchurch-check-pr-before-create.${CWD_KEY}.state.json`);
 const DEBOUNCE_MS = 5 * 60 * 1000; // 5분 내 같은 세션 재발화 안 함
