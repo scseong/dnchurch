@@ -14,6 +14,7 @@ const CRITICAL_PARTS = [
   "src/apis/",
   "src/services/",
   "docs/decisions/",
+  ".claude/agents/",
 ];
 
 const STATE_FILE = path.join(os.tmpdir(), "dnchurch-post-impl-review.state");
