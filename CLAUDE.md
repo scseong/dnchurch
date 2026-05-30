@@ -59,7 +59,7 @@
 | --- | --- | --- |
 | **claude-code** (이 에이전트) | `.claude/agents/claude-code.md` | 오케스트레이터, 초기 계획, 메인 구현, Codex 결과 통합, 2차 검증, 기록·커밋 책임 |
 | **codex-reviewer** (`codex:rescue` 스킬) | `.claude/agents/codex-reviewer.md` | 계획 검증, 깊은 추론, 설계 판단, 트레이드오프 분석, 막힌 디버깅, 구현 후 1차 검증, 제한적 수정 |
-| **explorer** (`Agent subagent_type: Explore`) | `.claude/agents/explorer.md` | 광역 코드 탐색 위임 래퍼 (3회 이상 검색 예상 / 대용량 결과 / 메인 컨텍스트 보호) |
+| **explorer** (`Agent subagent_type: explorer`) | `.claude/agents/explorer.md` | 광역 코드 탐색 위임 래퍼 (3회 이상 검색 예상 / 대용량 결과 / 메인 컨텍스트 보호) |
 | **doc-editor** (`Agent subagent_type: doc-editor`) | `.claude/agents/doc-editor.md` | exec-plan·ADR·검증 기록·tech-debt·Codex 인용 표현 점검 (직접 수정 X, file:line + 수정 초안 제안만) |
 | **commit-pr-author** (`Agent subagent_type: commit-pr-author`) | `.claude/agents/commit-pr-author.md` | commit 메시지·PR 본문·메타데이터(label·assignee·template) 초안 (직접 실행 X, 사용자 승인 후 명령 실행) |
 

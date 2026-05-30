@@ -13,7 +13,7 @@ const PATH_RE = /(docs[\\/]+exec-plans[\\/]+(?:active|completed)[\\/]+.+\.md|doc
 const PLAN_PATH_RE = /docs[\\/]+exec-plans[\\/]+(?:active|completed)[\\/]+.+\.md$/i;
 const CWD_KEY = createHash("sha1").update(process.cwd()).digest("hex").slice(0, 8);
 const STATE_FILE = path.join(os.tmpdir(), `dnchurch-check-doc-style.${CWD_KEY}.state.json`);
-const PLAN_HASH_SECTIONS = ["Codex 계획 검증", "Codex 1차 검증", "Claude 2차 검증", "의사결정 로그", "검증 이력"];
+const PLAN_HASH_SECTIONS = ["Codex 계획 검증", "Codex 1차 검증", "Claude 2차 검증", "의사결정 로그", "검증 이력", "회고"];
 const SECTION_DELIM = "||";
 
 async function readInput() {

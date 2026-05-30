@@ -83,9 +83,10 @@ PR 본문 작성 시점에 commit-pr-author·writing-style 트리거가 약한 �
 
 ## Codex 1차 검증
 
-- **결론**: PASS_WITH_DECISION_LOG — D1으로 계획+1차 통합 호출 결정 (단순 hook 1개 + 정의·SKILL 1줄씩 변경이라 별도 1차 검증 ROI 낮음)
+- **결론**: PASS — D1으로 계획+1차 통합 호출 결정 (단순 hook 1개 + 정의·SKILL 1줄씩 변경이라 별도 1차 검증 ROI 낮음)
 - **현재 판단**: 본 task의 변경 위험 작음 — 자기 dogfood로 hook 오탐 즉시 발견·hot fix(`a3e1984`)로 입증
 - **다음 행동**: 사용자 승인 → 커밋
+- **⚠️ 정정 (PR #104 후속)**: 기존 verdict `PASS_WITH_DECISION_LOG` → `PASS` — `scripts/harness-gate.mjs`의 1차 검증 허용 토큰(`PASS / FIX_APPLIED / CHANGE_REQUEST / BLOCK`)과 정합. 1차 검증에 `PASS_WITH_DECISION_LOG`를 도입하는 정책 통일(옵션 B)은 별도 task로 분리.
 
 ## Claude 2차 검증
 

@@ -2,6 +2,7 @@
 name: doc-editor
 description: repo 내부 문서(exec-plan·ADR·검증 기록·tech-debt·Codex 결과 인용)의 표현 규칙 점검 전문 에이전트. claude-code 오케스트레이터가 작성/수정 직후 호출하면 추상명사·번역투·압축 표현·의사결정 로그 형식 위반을 file:line + 수정 초안으로 보고한다. 직접 수정 금지 — 제안만, 사용자가 적용. PR 본문·src/ 코드 주석·일반 채팅은 적용 범위 밖.
 model: opus
+tools: Read, Grep, Glob
 ---
 
 # doc-editor — repo 내부 문서 표현 점검자

@@ -2,6 +2,7 @@
 name: explorer
 description: 빌트인 Explore 서브 에이전트 래퍼. claude-code 오케스트레이터가 코드베이스 광역 탐색(3회 이상 검색 예상), 대용량 검색 결과 수집, 메인 컨텍스트 보호가 필요할 때 위임한다. 단일 파일 위치 확인 같은 좁은 작업은 호출 금지 — Glob/Grep을 직접 쓴다.
 model: opus
+tools: Read, Grep, Glob, Bash
 ---
 
 # explorer — 광역 탐색 위임 래퍼
@@ -55,7 +56,7 @@ model: opus
 
 | 상대 | 통신 방식 | 사용처 |
 |---|---|---|
-| `claude-code` | `Agent(subagent_type: Explore)` 호출 수신, 결과 반환 | 광역 탐색 요청 — 사용자와 직접 대화 안 함 |
+| `claude-code` | `Agent(subagent_type: explorer)` 호출 수신, 결과 반환 | 광역 탐색 요청 — 사용자와 직접 대화 안 함 |
 | `codex-reviewer` | 호출 안 함 | Codex는 자체 탐색 도구 보유 |
 
 ## 참조

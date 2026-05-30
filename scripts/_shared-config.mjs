@@ -26,4 +26,5 @@ export const ADR_TRIGGER_PARTS = [
   "scripts/",
   ".github/workflows/",
   ".github/PULL_REQUEST_TEMPLATE/",
+  ".github/PULL_REQUEST_TEMPLATE.md",
 ];
