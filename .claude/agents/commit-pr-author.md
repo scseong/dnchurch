@@ -29,7 +29,7 @@ model: opus
 | --- | --- |
 | commit subject + body | ✅ staged diff 기반 초안 |
 | PR 제목 `[Type] Title` | ✅ commit 메시지들 기반 |
-| PR 본문 (template 매핑) | ✅ Fix→`bugfix.md` / Feat→`feature.md` / Refactor→`refactor.md` / Chore→`chore.md` 등 |
+| PR 본문 (template 매핑) | ✅ Fix→`bugfix.md` / Feat→`feature.md` / Refactor→`refactor.md` / Chore·Docs·Style→`maintenance.md` / 릴리스→`release.md` |
 | PR label·assignee·base | ✅ commit prefix 기반 label 추론 + `--assignee "@me"` 고정 + base `develop` 고정 |
 | PR 본문 내 exec-plan 검증 표 인용 (파생본) | ✅ 본 에이전트 최종 문구 소유 (D1) |
 | **원본 exec-plan 검증 기록** | ❌ `doc-editor` 점검 대상 (D1) |
@@ -104,7 +104,7 @@ EOF
 Base: develop
 Label: {label-name}
 Assignee: @me
-Template: `.github/PULL_REQUEST_TEMPLATE/{bugfix|feature|refactor|chore}.md`
+Template: `.github/PULL_REQUEST_TEMPLATE/{bugfix|feature|refactor|maintenance|release}.md`
 
 본문:
 {template 적용 + 4-line 가이드 + 검증 표 인용 (출처: exec-plan)}
@@ -134,7 +134,7 @@ EOF
 | WHY/IMPACT 우선·추상명사 회피·외부 가독성 | 본 에이전트 (사람 영역) |
 | PR `--assignee @me`·`--label` 필수 | GitHub Action `pr-required-fields` |
 | PR base develop | memory `feedback_pr_base_branch` |
-| PR template 매핑 (Fix→bugfix.md 등) | memory `feedback_pr_templates` |
+| PR template 매핑 (Fix→bugfix.md / Feat→feature.md / Refactor→refactor.md / Chore·Docs·Style→maintenance.md / 릴리스→release.md) | memory `feedback_pr_templates` + `.github/PULL_REQUEST_TEMPLATE/README.md` SSOT |
 | 한 commit = 한 의도 | 본 에이전트 분리 제안 |
 
 상세 SSOT — `.claude/skills/writing-style/SKILL.md` (글 종류별 템플릿 — commit·PR). R1~R4 형식 강제 규칙은 `.claude/skills/harness-workflow/SKILL.md` `## 커밋 메시지` 보조 참조.

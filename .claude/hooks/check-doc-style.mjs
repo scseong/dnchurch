@@ -7,8 +7,10 @@ import os from "node:os";
 import path from "node:path";
 import { stdin, stdout } from "node:process";
 
-const PATH_RE = /(docs[\\/]+exec-plans[\\/]+active[\\/]+.+\.md|docs[\\/]+decisions[\\/]+\d+.+\.md|docs[\\/]+tech-debt[\\/]+active\.md)$/i;
-const PLAN_PATH_RE = /docs[\\/]+exec-plans[\\/]+active[\\/]+.+\.md$/i;
+// N2: completed/ 회고도 writing-style 적용 대상이라 감지 — `(active|completed)`로 확장.
+// G1: ADR regex를 `\d+.+\.md` → `\d+.*\.md`로 완화 — slug 없는 0001.md 같은 형식 대비 (defensive).
+const PATH_RE = /(docs[\\/]+exec-plans[\\/]+(?:active|completed)[\\/]+.+\.md|docs[\\/]+decisions[\\/]+\d+.*\.md|docs[\\/]+tech-debt[\\/]+(?:active|resolved)\.md)$/i;
+const PLAN_PATH_RE = /docs[\\/]+exec-plans[\\/]+(?:active|completed)[\\/]+.+\.md$/i;
 const CWD_KEY = createHash("sha1").update(process.cwd()).digest("hex").slice(0, 8);
 const STATE_FILE = path.join(os.tmpdir(), `dnchurch-check-doc-style.${CWD_KEY}.state.json`);
 const PLAN_HASH_SECTIONS = ["Codex 계획 검증", "Codex 1차 검증", "Claude 2차 검증", "의사결정 로그", "검증 이력"];

@@ -165,10 +165,10 @@ Subject 규칙:
 - **WHY/IMPACT 우선** — "X 채택/적용" 보다 "Y 문제 해소"를 선호. 메커니즘이 아니라 사용자/시스템 영향을 subject에 노출.
 - **추상명사 회피** — "정합·통일·정정" 단독 금지. 구체 Before→After 또는 숫자/경로 명시.
   - ❌ `Fix: 라우트 경로 정정`
-  - ✅ `Fix: /news/bulletin → /news/bulletins (8건) + /about/directions → /about/location`
+  - ✅ `Fix: /news/bulletin → /news/bulletins (8건), /about/directions → /about/location` (자연어 열거 `,` 사용 — `+` 0회 원칙 준수)
 - **외부 가독성 (코드 미열람자 1회 이해)** — 본 PR/저장소 처음 보는 사람이 코드 안 열고도 "무엇이 어떻게 변했는지" 이해 가능해야 한다. 본 task 내부 약어·축약(`메타 2 키`·`토큰 3종`·`9 영역`)은 본문에서 한 번 풀어쓰지 않으면 금지.
   - ❌ `Chore: Hero 메타 2 키 + 라우트 3 스켈레톤`
-  - ✅ `Chore: sermons 자식 페이지 2종 Hero 등록 + 신규 라우트 3종 스켈레톤 추가`
+  - ✅ `Chore: sermons 자식 페이지 2종 Hero 등록·신규 라우트 3종 스켈레톤 추가` (`·` 한국어 열거 — `+` 0회 원칙 준수)
   - body 첫 등장 시 풀어 설명: "`hero.config.ts`의 `HERO_META` 객체에 `/sermons/all`·`/sermons/series` 두 엔트리(title/subtitle/eyebrow) 추가"
 - **Subject `+` 0회를 기본** — `+` 등장 자체가 다중 의도 신호 + commit 분리 트리거. `+` 떠오르면 (a)/(b) 중 택1:
   - (a) **commit 분리** — 각 영역 별도 commit (기본 가정)
@@ -197,7 +197,7 @@ PR 제목 규칙:
   ```
 
 PR 메타데이터:
-- 본문 template 매핑 (`.github/PULL_REQUEST_TEMPLATE/` 매칭) — Fix→bugfix.md / Feat→feature.md / Refactor→refactor.md / Chore→chore.md
+- 본문 template 매핑 (`.github/PULL_REQUEST_TEMPLATE/README.md` SSOT) — Fix→bugfix.md / Feat→feature.md / Refactor→refactor.md / Chore·Docs·Style→maintenance.md / 릴리스→release.md
 - `--assignee "@me"`·`--label` 필수 — GitHub Action `pr-required-fields`가 차단
 - base는 `develop`
 
@@ -346,7 +346,7 @@ Refactor: ui/ 12 컴포넌트 export 패턴 통일 (3 outlier 정리)
 | 커밋 메시지 (commit subject + body) | ✅ |
 | PR 제목·본문 | ✅ |
 | Codex/외부 도구 결과 인용 (어디든) | ✅ — verbatim 보존 + 풀이 1줄 |
-| `CLAUDE.md`·`harness-workflow` SKILL 본문 | ✅ — 단 SKILL 본문 직접 수정 시만 (rare) |
+| `CLAUDE.md`·`harness-workflow` SKILL 본문 | ✅ 규칙 적용 의무 — 단 SKILL 본문 직접 수정 시만 (rare). **doc-editor 점검 대상은 아님** (SSOT 자체 점검은 메타-순환이라 doc-editor가 거부 — `.claude/agents/doc-editor.md` 에러 핸들링 참조). 작성자(claude-code)가 직접 규칙 적용 |
 | **사용자와의 채팅 응답** | ❌ — claude-code의 기본 한국어 규칙 적용 |
 | **src/ 코드 주석** | ❌ — 코드 주석 규칙은 별도 |
 | **자동 생성 문서** (`docs/generated/`) | ❌ — 수정 금지 영역 |

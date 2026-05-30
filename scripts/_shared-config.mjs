@@ -24,4 +24,6 @@ export const ADR_TRIGGER_PARTS = [
   ".claude/agents/",
   ".codex/",
   "scripts/",
+  ".github/workflows/",
+  ".github/PULL_REQUEST_TEMPLATE/",
 ];

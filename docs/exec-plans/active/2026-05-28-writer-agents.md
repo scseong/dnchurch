@@ -132,13 +132,13 @@
 
 ## Codex 계획 검증
 
-- **결론**: 사전 design review 완료 (CHANGE_REQUEST 3 material + 5 expression-only) → D1·D2·D3로 해소
+- **결론**: PASS_WITH_DECISION_LOG — 사전 design review CHANGE_REQUEST 3 material + 5 expression-only → D1·D2·D3로 해소 완료
 - **현재 판단**: 8 영역 design checklist 적용 — Option A 선택·자동화 수준·SSOT 패턴·구현 순서·데이터 매핑 5 영역 OK. 책임 경계·hook 충돌·matcher MultiEdit 3 영역 의사결정 로그로 해소.
 - **다음 행동**: 구현 diff 생성 후 Codex 1차 검증(D4 통합) 호출
 
 ## Codex 1차 검증
 
-- **결론**: 4 라운드 통과 — 1차 F4(D4), 2차 CR-1·CR-2(흡수+템플릿), 3차 CHECK 3(CLAUDE.md/AGENTS.md 링크), 4차 PASS
+- **결론**: PASS — 4 라운드 통과 (1차 F4 → D4, 2차 CR-1·CR-2 흡수+템플릿, 3차 CHECK 3 CLAUDE.md/AGENTS.md 링크, 4차 최종 통과)
 - **현재 판단**: 모든 material finding 해소. SSOT를 한 곳으로 모음 — writing-style이 작성·점검 master, harness-workflow는 워크플로우 메타(R1~R4 hook 정책·sectionBody 동작)만 보존. 두 곳이 어긋날 위험 없음 (Codex 4차 확인).
 - **다음 행동**: dogfood self-check + 사용자 승인 → 커밋
 

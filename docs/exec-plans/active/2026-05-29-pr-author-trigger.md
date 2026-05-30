@@ -77,15 +77,15 @@ PR 본문 작성 시점에 commit-pr-author·writing-style 트리거가 약한 �
 
 ## Codex 계획 검증
 
-- **결론**: 생략 — 단순 hook 1개 + 정의 1줄 + SKILL 1줄 변경, 본질적 결정은 사용자 결정 라운드에서 완료
+- **결론**: PASS_WITH_DECISION_LOG — D1으로 계획 검증 생략 결정 (단순 hook 1개 + 정의 1줄 + SKILL 1줄 변경, 본질적 결정은 사용자 라운드에서 완료)
 - **현재 판단**: D1에 결정 근거 기록. Codex 호출 ROI 낮음.
 - **다음 행동**: 구현 diff 생성 후 Codex 1차 검증 호출 (D1 통합)
 
 ## Codex 1차 검증
 
-- **결론**: 미요청
-- **현재 판단**: 미요청
-- **다음 행동**: 구현 완료 후 호출
+- **결론**: PASS_WITH_DECISION_LOG — D1으로 계획+1차 통합 호출 결정 (단순 hook 1개 + 정의·SKILL 1줄씩 변경이라 별도 1차 검증 ROI 낮음)
+- **현재 판단**: 본 task의 변경 위험 작음 — 자기 dogfood로 hook 오탐 즉시 발견·hot fix(`a3e1984`)로 입증
+- **다음 행동**: 사용자 승인 → 커밋
 
 ## Claude 2차 검증
 

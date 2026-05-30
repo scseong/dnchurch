@@ -24,6 +24,8 @@ async function readInput() {
 }
 
 function emitContext(message) {
+  // PreToolUse:Bash 차단을 위해 permissionDecision: "ask"로 설정 — 사용자에게 명시 확인 요청.
+  // additionalContext만으로는 reminder만 출력되고 Bash 실행 그대로 진행되어 의무 강제 X (Codex P2 리뷰 반영).
   stdout.write(JSON.stringify({
     continue: true,
     suppressOutput: true,
@@ -31,6 +33,8 @@ function emitContext(message) {
     hookSpecificOutput: {
       hookEventName: "PreToolUse",
       additionalContext: message,
+      permissionDecision: "ask",
+      permissionDecisionReason: message,
     },
   }));
 }
