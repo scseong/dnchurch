@@ -16,7 +16,8 @@ import { stdin, stdout } from "node:process";
 //   - `FOO=$(gh pr create ...)` (assignment + subshell)
 // 완전 해결은 shell command lexer 필요 — 본 hook 범위 밖. 위 케이스는 사용자가 자발적 commit-pr-author 호출 권장.
 // 단순 false positive(commit 메시지 본문에 트리거 문자열 우연 포함)는 본 anchor + firstLine 검사로 차단.
-const PR_CREATE_RE = /^\s*(?:env\s+)?(?:\w+=[^\s]+\s+)*gh\s+pr\s+create\b/i;
+// G5: 따옴표로 보호된 공백 포함 env 값(FOO="value with space") 매칭 — 기존 [^\s]+는 공백에서 끊김.
+const PR_CREATE_RE = /^\s*(?:env\s+)?(?:\w+=(?:"[^"]*"|'[^']*'|[^\s]+)\s+)*gh\s+pr\s+create\b/i;
 const CWD_KEY = createHash("sha1").update(process.cwd()).digest("hex").slice(0, 8);
 const STATE_FILE = path.join(os.tmpdir(), `dnchurch-check-pr-before-create.${CWD_KEY}.state.json`);
 const DEBOUNCE_MS = 5 * 60 * 1000; // 5분 내 같은 세션 재발화 안 함
@@ -65,7 +66,8 @@ const command = String(input.command ?? "");
 
 // 첫 줄만 검사. heredoc 본문(commit 메시지·PR 본문 등)에 "gh pr create" 문자열이 포함된 false positive 차단.
 // 명령은 항상 첫 줄에 위치하고, heredoc 본문은 \n 이후라 첫 줄만 보면 실제 명령 의도 확인 가능.
-const firstLine = command.split("\n")[0];
+// G7: Windows CRLF에서 첫 줄 끝 \r 잔존 방지 (현재 regex 영향은 낮으나 잠재 오동작 차단).
+const firstLine = command.split(/\r?\n/)[0];
 if (!PR_CREATE_RE.test(firstLine)) process.exit(0);
 
 const sessionId = String(payload.session_id ?? payload.sessionId ?? "default");

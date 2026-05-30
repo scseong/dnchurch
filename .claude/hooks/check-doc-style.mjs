@@ -79,7 +79,8 @@ const normalizedPath = candidatePath.replaceAll("\\", "/");
 if (!PATH_RE.test(normalizedPath)) process.exit(0);
 if (!existsSync(candidatePath)) process.exit(0);
 
-const content = readFileSync(candidatePath, "utf8");
+// G6: Windows CRLF 정규화 — 동일 내용이 OS 줄바꿈 차이로 hash 다르게 계산되어 불필요 재발화하는 결함 차단.
+const content = readFileSync(candidatePath, "utf8").replace(/\r\n/g, "\n");
 const isPlan = PLAN_PATH_RE.test(normalizedPath);
 const currentHash = hashFor(content, isPlan);
 const state = readState();
