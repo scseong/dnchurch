@@ -66,7 +66,7 @@
 - [ ] **Phase 3 — G7: 잔재 정리 (P3 · 작은 마감)**
   - [ ] `client.ts`의 `export const supabase` 제거, 2 호출처를 `getSupabaseBrowserClient()`로 교체
   - [ ] CLAUDE.md gotcha 1줄 갱신 — `supabase named export deprecated` 항목 삭제
-  - [ ] `useDrawerHistory` pathname effect에 `if (pushed.current) history.back()` 추가 — 이 G7이 훅 수정을 맡음. sitemap D4는 BottomNav '전체'를 `openDrawer`에 **연결**해 이 훅을 쓰기만 함(수정 없음).
+  - [ ] `useDrawerHistory` pathname effect에 guarded cleanup 패턴 도입 — `if (pushed.current && history.state?.__drawer === true) { history.replaceState({ ...history.state, __drawer: undefined }, '', window.location.href); pushed.current = false; }`로 Drawer-pushed history entry의 `__drawer` 키만 제거 + 기존 history.state 다른 키(Next.js router 내부 state) 보존. **`history.back()` 금지** — route commit 직후 effect가 실행되면 방금 이동한 history entry를 되돌려 사용자가 이전 페이지로 튕김 (Drawer 안 Link 사용 시). **`replaceState` guard 필수** — Drawer가 push하지 않은 entry(Next.js router push)는 절대 건드리지 않음. 이 G7이 훅 수정을 맡음. sitemap D4는 BottomNav '전체'를 `openDrawer`에 **연결**해 이 훅을 쓰기만 함(수정 없음).
   - [ ] PR prefix: `Refactor`
 
 - [ ] **Phase 4 — G3: Cloudinary 품질·preset (P1)**
@@ -218,4 +218,22 @@
 <!--
 이전 판정·재검증만 여기에 둔다. 검증 섹션 본문에는 현재 판정만 남긴다.
 규칙: `**결론**:`·`**최종 판단**:` 금지. `판정:`을 쓴다. <details> 본문은 3줄 이하.
+
+<details>
+<summary>YYYY-MM-DD Codex 계획 검증 1차</summary>
+
+- 판정: CHANGE_REQUEST
+- 이유: <핵심 이유 1개>
+- 조치: <D번호 또는 수정 위치>
+
+</details>
+-->
+
+---
+
+<!--
+검증 결과 기록 규칙 SSOT: `.claude/skills/harness-workflow/SKILL.md` "## 검증 결과 기록 규칙".
+- 추상명사 금지. 구체화 4원소 중 2개 이상.
+- Codex stdout은 verbatim. 그 아래 평이한 풀이 1줄.
+- 의사결정 로그·검증 기록은 위 형식 고정. 압축·기호잇기·약어·한 항목 다결정 금지.
 -->

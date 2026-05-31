@@ -56,21 +56,26 @@
 - `src/app/(content)/fellowship/` — 디렉토리 삭제(D1). 삭제 후 `rg "/fellowship" src` 남은 참조 0건 확인.
 - `src/config/navigation.ts` — `GNB_ITEMS` '교회 소개' children에 `{ 섬기는 사람들, /about/serving-people }` 추가(D2). '전체'(`/menu`) 항목은 Drawer 토글로 동작 변경(D4).
 - `src/components/layout/BottomNav/BottomNav.tsx` — '전체' 클릭을 Drawer 토글로(D4). `/menu` page 신설 안 함.
+- `src/components/layout/MobileNavigation/` — children 있는 항목의 부모 카테고리 Link 노출 (현재 펼침 button만이라 Drawer에서 부모 카테고리 페이지로 직접 이동 불가). 부모를 별도 child로 추가하거나 button/link 구조 split.
 - `src/hooks/useDrawerHistory.ts` — **수정 없음(쓰기만 함)**. 훅의 `popstate` 핸들러(`:36-46`)가 이미 뒤로가기 시 Drawer 닫힘을 처리하므로 D4는 BottomNav '전체'를 `openDrawer`에 **연결**하는 것으로 충분. 라우트 이동 시 history 정리는 tech-debt-pre-release G7(Phase 3)이 맡음.
+- `src/config/navigation.ts` `SPECIAL_PAGES` — `/search`·`/notifications` 라벨 정의 (P8). 현재 MobileHeader만 참조하므로 Hero·Breadcrumb도 참조 추가 필요.
+- `src/components/layout/Hero/`·`src/components/layout/Breadcrumb/` — `SPECIAL_PAGES` 라벨 참조 추가. `/search`·`/notifications` 진입 시 Hero·Breadcrumb가 라벨 표시 (P8 SC 충족).
 
 ## 단계별 체크리스트
 
 - [x] 1. Q1~Q4 사용자 결정 완료(2026-05-26) — D1~D4 기록.
 - [ ] 2. `GNB_ITEMS` 부모 href 정정 — 다음세대/교제/교회 소식 → 카테고리 경로. 첫 자식 자동 이동이 필요하면 카테고리 `page.tsx`에서 `redirect()` 처리.
-- [ ] 3. `GNB_ITEMS` '설교' 항목에 children 추가 — `{전체 설교, /sermons/all}`, `{시리즈, /sermons/series}`.
+- [ ] 3. `GNB_ITEMS` '설교' 항목에 children 추가 — `{전체 설교, /sermons/all}`, `{모든 시리즈, /sermons/series}` (Hero·Breadcrumb 라벨과 일치).
+- [ ] 3b. MobileNavigation 부모 카테고리 노출 — children 있는 항목의 부모 href가 Drawer에서도 직접 클릭 가능하도록 구조 조정. 부모를 별도 child로 추가하거나 button/link split (현재는 펼침 button만이라 부모 카테고리 페이지 이동 불가).
 - [ ] 4. `HERO_META`의 `/sermons/all`·`/sermons/series` direct entry 제거. `resolveHeroMeta` direct-match 분기는 코드 유지하되 의존 항목 0건임을 주석으로 명시.
 - [ ] 5. `BOTTOM_NAV_ITEMS` "소식" → "교회 소식". '전체'(`/menu`)는 클릭 시 Drawer 토글(D4) — `page.tsx` 신설 안 함.
 - [ ] 6. `ADMIN_NAV_SECTIONS` 가짜 badge 제거. 4개 빈 항목에 `comingSoon: true`.
 - [ ] 7. `AdminNavItem` 타입에 `comingSoon?: boolean` 추가. `AdminSidebar`에서 `comingSoon` 항목은 클릭 비활성(`aria-disabled` + `tabIndex={-1}` + Link → div 또는 `onClick preventDefault`) + 시각적 회색 처리 + "준비 중" pill.
 - [ ] 8. `resolveAdminBreadcrumbs` 죽은 분기 정리 — sidebar 정책에 맞춰 제거하거나 "준비 중" 라벨 통일.
+- [ ] 8b. P8 — `SPECIAL_PAGES` (`/search`·`/notifications`) Hero·Breadcrumb 라벨 표시. `navigation.ts` `SPECIAL_PAGES` 라벨 정의를 Hero·Breadcrumb 컴포넌트가 참조하도록 구조 조정 (현재 MobileHeader만 참조 → fallback "대구동남교회"가 Hero/Breadcrumb에 그대로 노출).
 - [ ] 9a. D1 — `/fellowship` 디렉토리 삭제 + `rg "/fellowship" src` 0건 확인.
 - [ ] 9b. D2 — `GNB_ITEMS` '교회 소개' children에 `섬기는 사람들`(`/about/serving-people`) 추가.
-- [ ] 9c. D4 — BottomNav '전체' 클릭 → `openDrawer`에 **연결**. 뒤로가기 시 Drawer 닫힘은 훅의 기존 `popstate` 핸들러가 이미 처리(`:36-46`) — D4는 훅 수정 없음. 라우트 이동 시 history 정리는 G7이 맡음.
+- [ ] 9c. D4 — BottomNav '전체' 클릭 → `drawerOpen ? closeDrawer : openDrawer` 토글 패턴 (open + close 양방향 — '전체' 두 번째 탭으로도 닫힘). 뒤로가기 시 Drawer 닫힘은 훅의 기존 `popstate` 핸들러가 이미 처리(`:36-46`) — D4는 훅 수정 없음. 라우트 이동 시 history 정리는 G7이 맡음.
 - [ ] 10. 사용자 dev 수동 검증 — 매트릭스 §3 P1·P2·P4·P6·P8 행.
 - [ ] 11. `yarn lint && yarn lint:styles && yarn build && yarn knip` PASS.
 - [ ] 12. `node scripts/verify-task.mjs sitemap-consistency-fix`.

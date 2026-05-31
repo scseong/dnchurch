@@ -12,7 +12,6 @@
 
 ## 검증된 Assumptions
 
-- `src/apis/announcement.ts:11-21` — 공개 공지 목록을 `createServerSideClient()`(no-store) + `count: 'exact'` + 페이지네이션 없이 호출. Read 확인 (2026-05-22).
 - `src/services/sermon/sermon-service.ts:28-33,66-92` — `list`가 `SERMON_WITH_RELATIONS_SELECT`(`*, preacher(*), sermon_series(*), sermon_resources(*)`)로 sermon_resources 풀 컬럼까지 매번 페치. 같은 파일 `:35-39`에 `SERMON_LIST_ITEM_SELECT` 경량 셀렉트가 정의돼 있는데 list에서 미사용. Read 확인.
 - `src/services/sermon/index.ts:49-52 getFeaturedSermon` — `getSermons({pageSize: 1})` 경유로 호출되어 `count: 'exact'`와 풀 관계 join이 1건만 보여주려고 발동. Read 확인.
 - `src/actions/sermon.action.ts:152,205,229` — 생성·수정·삭제 액션 3곳 모두 `updateTag('sermon')`로 도메인 전체 캐시(`sermon-list`·`sermon-recent`·`sermon-series-list`·`preacher-list`·전체 `sermon-detail`) 일괄 무효화. Grep 확인.
@@ -30,7 +29,6 @@
 
 ## Success Criteria
 
-- `/news/announcements` 페이지를 같은 1분 안에 두 번 새로고침해도, Supabase Dashboard `logs/postgrest`에 두 번째 풀 SELECT가 기록되지 않는다 (ISR 캐시 hit).
 - sermons 카드 목록 응답 JSON에 `sermon_resources` 키가 빠진다 (Network 탭 raw 응답 비교).
 - 어드민에서 sermon 1건을 수정한 직후, 같은 시리즈 안 다른 sermon 상세 페이지를 새로고침했을 때 PostgREST 로그가 새로 찍히지 않는다 (`sermon-detail-${id}` 키는 좁아져서 살아남음).
 - 같은 방식으로 bulletin 1건 수정 후 다른 bulletin 상세 캐시가 살아남는다.
@@ -39,7 +37,6 @@
 
 ## 영향받는 파일
 
-- `src/apis/announcement.ts` — 캐시 클라이언트 교체, 페이지네이션 인자 추가, count head 분리.
 - `src/services/sermon/sermon-service.ts` — `list` 셀렉트 분기, `count: 'exact'` 옵션 검토.
 - `src/services/sermon/sermon-cache.ts` — `cache: 'force-cache'` 중복 정리, 필요 시 태그 키 보강.
 - `src/services/sermon/index.ts` — `getFeaturedSermon`을 `recent(1)` 같은 경량 함수로 교체.
@@ -50,18 +47,17 @@
 - `src/actions/update-bulletin.action.ts` — `updateTag('bulletin-detail')` → `updateTag('bulletin-detail-${id}')` + 인접 키.
 - `src/actions/create-bulletin.action.ts` — 신규 생성 시 무효화 키 점검 (지금도 좁은 편이지만 일관성 확인).
 - `src/types/sermon.ts` — `SermonListItem`·`SermonWithRelations` 분기 시 호출처 타입 정합.
-- 호출처: `src/app/(content)/sermons/page.tsx`, `src/app/(content)/sermons/all/page.tsx`, `src/app/(content)/sermons/[id]/page.tsx`, `src/components/sermons/SermonCard*`, `src/app/(content)/news/announcements`(있다면) — 경량 타입 분기와 페이지네이션 인자.
+- 호출처: `src/app/(content)/sermons/page.tsx`, `src/app/(content)/sermons/all/page.tsx`, `src/app/(content)/sermons/[id]/page.tsx`, `src/components/sermons/SermonCard*` — 경량 타입 분기와 페이지네이션 인자.
 
 ## 단계별 체크리스트
 
-- [ ] 1. `announcement.ts`를 `createStaticClient`로 교체하고 `noticeCache.list()` 패턴을 본떠 `announcementCache.list()` 추가. `range`·`page`·`pageSize` 인자 도입, `count`는 `head: true` 호출로 따로 분리. 호출 page에서 인자 전달.
 - [ ] 2. `sermon-service.ts list`가 경량 셀렉트(`SERMON_LIST_ITEM_SELECT` 확장형: 카드 UI가 실제 쓰는 컬럼만)로 응답하도록 분기. 카드 UI(`SermonCard`·`SermonFilteredList` 등)가 참조하는 필드 grep해서 빠짐 없는지 확인. 상세·어드민은 풀 셀렉트 유지.
 - [ ] 3. `getFeaturedSermon`을 `sermonService.recent(1)` 또는 신규 경량 함수로 교체. 캐시 태그는 `sermon-recent` 재사용. `count: 'exact'` 제거.
 - [ ] 4. `actions/sermon.action.ts`의 `updateTag('sermon')` 3곳을 다음으로 교체.
   - 생성: `updateTag('sermon-list')` + `updateTag('sermon-recent')` + `updateTag('sermon-series-list')` + `updateTag('preacher-list')`.
-  - 수정: 위 묶음 + `updateTag('sermon-detail-${id}')` + (시리즈 변경 시) `updateTag('sermon-series-detail-${seriesId}')`.
-  - 삭제: 수정과 동일 묶음.
-- [ ] 5. `update-bulletin.action.ts:83-84`에서 `updateTag('bulletin-detail')` → `updateTag('bulletin-detail-${bulletinId}')`로 좁힘. `bulletin-detail-nav`는 인접 ID 2개를 따로 키로 좁힐 수 있는지 검토 (현재는 RPC `get_adjacent_bulletins` 캐시 키가 targetId 기준). 좁히기 어려우면 현 상태 유지하고 의사결정 로그에 기록.
+  - 수정: 위 묶음 + `updateTag('sermon-detail-${id}')` + (시리즈 변경·이동 시) **변경 전 `series_id`를 update RPC 호출 전에 조회 또는 RPC 반환값에 포함** + `updateTag('sermon-series-detail-${oldSeriesId}')` + `updateTag('sermon-series-detail-${newSeriesId}')` (새 series만 무효화하면 이전 series 상세 캐시가 stale로 남음).
+  - 삭제: 위 묶음 + **삭제 전 `series_id` 조회 필수** (RPC 반환값 또는 delete 전 SELECT) + `updateTag('sermon-series-detail-${seriesId}')`.
+- [ ] 5. `update-bulletin.action.ts:83-84`에서 `updateTag('bulletin-detail')` → `updateTag('bulletin-detail-${bulletinId}')`로 좁힘. 인접 nav는 실제 캐시 태그가 `bulletin-nav` + `bulletin-nav-${targetId}`(`bulletin-cache.ts:18`)이므로 `updateTag('bulletin-nav-${prevId}')` + `updateTag('bulletin-nav-${nextId}')`로 좁힐 수 있는지 검토 (`get_adjacent_bulletins` 호출 결과로 prev/next id 확보). 좁히기 어려우면 `updateTag('bulletin-nav')`로 fallback + 의사결정 로그에 기록.
 - [ ] 6. `count: 'exact'`가 페이지 응답에 실제로 필요한 곳(목록 페이지네이션 total)과 불필요한 곳(featured 1건, recent 캐러셀)을 분리. 후자에서 옵션 제거.
 - [ ] 7. `static.ts`의 `createStaticClient` 호출 옵션에서 `cache: 'force-cache'`와 `revalidate`가 충돌하는 케이스(`sermon-cache.ts:9`·`bulletin-cache.ts:5-13`)를 점검. revalidate가 있으면 `cache` 키 제거, revalidate 없으면 `cache: 'force-cache'` 유지.
 - [ ] 8. 타입·호출처 회귀: `tsc --noEmit` 또는 `yarn build`, 카드 UI 한 번 렌더 확인 (`yarn dev` + 브라우저).
@@ -104,6 +100,10 @@
 
 ## 후속 작업
 
+- **announcement.ts dead code 삭제** — `/news/announcements` 라우트 부재 확인(rg `(content)/news/announcements` → 0건). `src/apis/announcement.ts` + 호출처 grep 0건 확인 후 cleanup task로 분리.
+  - 이유: 본 plan(캐시 최적화 5곳)과 별개 — 죽은 코드 삭제 의도. 캐시 패턴 적용 대상에서 제외 (Cdx-5 후속).
+  - 다음 기준: 본 plan 머지 직후 작은 PR로 분리 (1 파일 삭제 + grep 검증).
+  - 기록 위치: `docs/tech-debt-tracker.md`
 - B 대안: 풀 페치 집계를 SQL로 이관 (notice category counts, sermon year counts, sermon admin status counts, bulletin year list).
   - 이유: RPC 또는 뷰 도입은 마이그레이션·타입 재생성이 필요해 이 plan 범위 밖. ADR 트리거에 해당해 따로 절차가 필요.
   - 다음 기준: row 수 sermons ≥ 500 또는 notices ≥ 200 도달, 또는 어드민 페이지 응답 지연 체감 시.
