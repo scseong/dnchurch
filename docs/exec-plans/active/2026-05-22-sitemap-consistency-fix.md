@@ -140,6 +140,10 @@
   - 문제: `resolveAdminBreadcrumbs`의 series/speakers/members/settings 분기가 sidebar comingSoon 정책과 어긋난다.
   - 해결: 4개 라우트 모두 `page.tsx` 부재(find로 확인)라 도달 시 404 — 분기를 제거한다. 라우트 신설 시 sidebar comingSoon 해제와 함께 복원하라는 주석을 남긴다.
   - 결과: 사이드바(비활성)와 breadcrumb 정책 일치. 죽은 분기 4개 제거.
+- **D11 — Codex 유지보수 리뷰의 즉시 수정 2건 선반영 (별도 커밋)**
+  - 문제: Codex 성능·유지보수 리뷰가 ① resolver별 매칭 규칙 불일치와 형제 prefix 오탐(`/newsroom`이 `/news`에 걸림), ② `resolveHeroMeta`의 subtitle 비교 로직(`key.length > subtitle.length`) 오류를 지금 고칠 대상으로 지목했다. 둘 다 작고 동작이 그대로라 옵션 B까지 미룰 이유가 약하다.
+  - 해결: `navigation.ts`에 `isRouteMatch` 함수를 추가해 5개 resolver에 일괄 적용하고, `resolveHeroMeta`의 망가진 루프를 `HERO_META[categoryKey]` 직접 조회로 바꿨다. 데이터 정정 커밋과 의도가 달라 별도 커밋으로 나눴다.
+  - 결과: 현재 라우트 동작은 그대로다. tech-debt 2건을 resolved로 옮겼다. 성능은 양쪽 모두 병목이 아니라 최적화하지 않기로 합의했다.
 
 ## 참고 자료
 
@@ -213,7 +217,7 @@ knip이 잡은 항목(`resolveNavLabel`·`ADMIN_ROOT` 미사용 export 등)은 �
 
 - **옵션 B 단일 매니페스트(`SITE_MAP`)** — `sitemap-manifest-migration` plan으로 분리.
   - 이유: 채널 간 SSOT 통합은 모든 nav 컴포넌트 시그니처를 동시에 손대므로 회귀 위험이 크다. 매트릭스 회귀 도구로 검증 자동화가 선행돼야 한다.
-  - 통합 시 함께 해소: segment-boundary 매칭 단일화(tech-debt `nav pathname 매칭이 segment boundary 무시`), `resolveHeroMeta` subtitle comparator(tech-debt `resolveHeroMeta subtitle comparator…`), resolver별 trailing-slash 정책 차이·분기 중복.
+  - 경계 인식 매칭(`isRouteMatch`)과 `resolveHeroMeta` subtitle 비교 로직은 Codex 유지보수 리뷰의 즉시 수정으로 먼저 반영했다(resolved.md 2건). 옵션 B는 SSOT 3분할·`SPECIAL_PAGES` 혼합 책임·admin breadcrumb `string[]` 통합을 맡는다.
   - 다음 기준: 이 plan 머지 + 매트릭스 도구 plan 머지 후.
   - 기록 위치: `docs/research/2026-05-22-navigation-sitemap-audit.md` §4 옵션 B.
 - **매트릭스 회귀 테스트 도구** — `sitemap-matrix-regression` plan으로 분리.

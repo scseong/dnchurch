@@ -77,13 +77,18 @@ export const BOTTOM_NAV_ITEMS: BottomNavItem[] = [
 
 // ── Active 판별 ──
 
+/** 경계 인식 경로 매칭 — href 자신 또는 그 하위 세그먼트만 true. bare startsWith의 형제 prefix 오탐(`/newsroom`이 `/news`에 걸림)을 막는다. */
+function isRouteMatch(pathname: string, href: string): boolean {
+  return pathname === href || pathname.startsWith(href + '/');
+}
+
 /** GNB 메뉴 활성 판별: children이 있으면 children href로도 매칭 */
 export function isActiveGnb(pathname: string, item: NavItem): boolean {
   if (item.href === '/') return pathname === '/';
 
-  if (pathname.startsWith(item.href)) return true;
+  if (isRouteMatch(pathname, item.href)) return true;
 
-  return item.children?.some((child) => pathname.startsWith(child.href)) ?? false;
+  return item.children?.some((child) => isRouteMatch(pathname, child.href)) ?? false;
 }
 
 /** BottomNav 활성 판별: 카테고리(첫 번째 세그먼트) 단위 매칭 */
@@ -92,7 +97,7 @@ export function isActiveBottomNav(pathname: string, href: string): boolean {
   if (href === '/menu') return false;
 
   const category = '/' + href.split('/').filter(Boolean)[0];
-  return pathname.startsWith(category);
+  return isRouteMatch(pathname, category);
 }
 
 // ── Label 해석 (Hero · MobileHeader) ──
@@ -153,7 +158,7 @@ export function resolveMobileHeader(pathname: string): { title: string; showBack
 
     if (pathname === item.href) return { title: item.label, showBack: false };
 
-    const matched = item.children.find((c) => pathname.startsWith(c.href));
+    const matched = item.children.find((c) => isRouteMatch(pathname, c.href));
     if (matched) {
       return { title: item.label, showBack: pathname !== matched.href };
     }
@@ -171,7 +176,7 @@ export function resolveMobileHeader(pathname: string): { title: string; showBack
 export function resolveSiblingTabs(pathname: string): NavItem[] | null {
   for (const item of GNB_ITEMS) {
     if (!item.children?.length) continue;
-    if (item.children.some((c) => pathname.startsWith(c.href))) {
+    if (item.children.some((c) => isRouteMatch(pathname, c.href))) {
       return item.children;
     }
   }
@@ -192,7 +197,7 @@ export function resolveBreadcrumbSegments(
     segments.push({ label: item.label, href: item.href });
 
     if (item.children) {
-      const matched = item.children.find((c) => pathname.startsWith(c.href));
+      const matched = item.children.find((c) => isRouteMatch(pathname, c.href));
       if (matched) {
         segments.push({ label: matched.label, href: matched.href });
       }

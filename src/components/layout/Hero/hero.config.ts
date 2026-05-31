@@ -66,15 +66,11 @@ export function resolveHeroMeta(pathname: string): HeroMeta | null {
 
   if (!title) return null;
 
-  // HERO_META에서 카테고리 prefix로 subtitle 조회
-  let subtitle = '';
-  let eyebrow: string | undefined;
-  for (const key of Object.keys(HERO_META)) {
-    if (categoryKey.startsWith(key) && key.length > subtitle.length) {
-      subtitle = HERO_META[key].subtitle;
-      eyebrow = HERO_META[key].eyebrow;
-    }
-  }
+  // subtitle·eyebrow는 카테고리 메타에서 조회. categoryKey는 항상 2-세그먼트 루트(GNB 부모 href)이고
+  // HERO_META 키도 전부 2-세그먼트 루트라 직접 조회로 충분하다.
+  const categoryMeta = HERO_META[categoryKey];
+  const subtitle = categoryMeta?.subtitle ?? '';
+  const eyebrow = categoryMeta?.eyebrow;
 
   return { title, subtitle, eyebrow };
 }
