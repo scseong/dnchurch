@@ -1,6 +1,6 @@
 # sermons-publish-ssot
 
-- **상태**: 🟡 진행 중
+- **상태**: ✅ 완료 (2026-05-26)
 - **시작일**: 2026-05-21
 - **브랜치**: feat/sermons-publish-ssot
 - **Open questions**: none
@@ -226,3 +226,9 @@
 - 변경 파일에 `src/actions/sermon.action.ts` 포함(ADR_TRIGGER_PARTS 해당).
 - 변경 내용은 validation 로직 SSOT 추출. 새 의존성·새 외부 contract·아키텍처 축 변화 없음. scripture 필수화는 도메인 규칙 강화로 도메인 리뷰 P + D1에 기록.
 - 판단: ADR 미발급. Codex 계획 검증에서 재확인.
+
+## 회고 (머지 후 작성)
+
+- 잘된 것: 발행 필수 6필드를 `validateSermonSave`/`validateSermonPublishReady`(`src/lib/sermon-form.ts:70/78`) + Server Action 측 `validateSermonAction` 한 곳에서 정의해 Server Action·Checklist·PublishCard가 같은 결과를 공유하게 했다. (계획 시 단일 `validateSermonForm`이었으나 구현에서 save/publish 단계별로 분리됨) 설교자 UUID를 이름 표기로 고치고, 공개/비공개 라벨로 더 알아보기 쉽게 바꿨으며, `action_bar`를 PC 일반 흐름·모바일 fixed로 반응형 통합하고 edit breadcrumb에 실제 설교 제목을 주입했다. Codex 1차 CHANGE_REQUEST(취소 시 dirty 데이터 손실)를 D11로 막았다. 리뷰 대응 후속(`sermons-publish-review-fixes`)까지 completed/에 반영됐다.
+- 다음에 할 것(후속 plan 분리): 모바일 미리보기 BottomSheet 교체는 portal admin 토큰 정책(`.shell`→`:root` 승격 등) 결정이 선행이다. 어드민 행·`<th>` 키보드 접근성, view count RPC overload는 각각 따로 plan.
+- 발견된 부채: 취소 confirm을 native `window.confirm`로 임시 처리(admin 토큰 정책 해결 후 커스텀 교체), `video_provider` CHECK `('youtube','vimeo')`는 UI만 youtube로 좁히고 DB 마이그는 미동반.

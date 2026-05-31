@@ -1,6 +1,6 @@
 # sermons-a11y-perf
 
-- **상태**: 🟡 진행 중 (8-3 접근성 #97 머지 완료 → 8-4 성능 실행 단계)
+- **상태**: ✅ 완료 (2026-05-26)
 - **시작일**: 2026-05-18
 - **브랜치**: feat/sermons-perf
 - **Open questions**: none
@@ -217,6 +217,12 @@ priority/lazy·페이지네이션 정상, "정적 결함 0"으로 종결했었�
   - 이유: <왜 이번에 안 하나>
   - 다음 기준: <언제 다시 하나>
   - 기록 위치: `docs/tech-debt-tracker.md` 또는 없음 -->
+
+## 회고 (머지 후 작성)
+
+- 잘된 것: 7영역 성능 감사를 이진 기준으로 닫아 실재 결함 1건만 남겼다. 이미지 fetch 리사이즈 우회(`cloudinary.ts:73` http passthrough)를 loader 분기 치환으로 고쳐 모바일 카드 썸네일을 58KB→8.6KB(−85%)로 줄였다. 정상 영역 5개는 근거와 함께 정상으로 남겨 가짜 작업을 만들지 않았다. a11y 4건(#97)을 수정했고 PR 외부 리뷰(Codex bot·Gemini) 2건을 반영했다.
+- 다음에 할 것: CWV(LCP/INP/CLS)는 Vercel preview Lighthouse로 실측한다. blur placeholder(LQIP URL)는 별건 후속.
+- 발견된 부채: `@next/bundle-analyzer`가 Turbopack 빌드와 비호환이라 번들 byte 측정 불가 — tech-debt 2건(번들·CWV) 등록 완료.
 
 ---
 
