@@ -55,8 +55,8 @@
 - [ ] 3. `getFeaturedSermon`을 `sermonService.recent(1)` 또는 신규 경량 함수로 교체. 캐시 태그는 `sermon-recent` 재사용. `count: 'exact'` 제거.
 - [ ] 4. `actions/sermon.action.ts`의 `updateTag('sermon')` 3곳을 다음으로 교체.
   - 생성: `updateTag('sermon-list')` + `updateTag('sermon-recent')` + `updateTag('sermon-series-list')` + `updateTag('preacher-list')`.
-  - 수정: 위 묶음 + `updateTag('sermon-detail-${id}')` + (시리즈 변경·이동 시) **변경 전 `series_id`를 update RPC 호출 전에 조회 또는 RPC 반환값에 포함** + `updateTag('sermon-series-detail-${oldSeriesId}')` + `updateTag('sermon-series-detail-${newSeriesId}')` (새 series만 무효화하면 이전 series 상세 캐시가 stale로 남음).
-  - 삭제: 위 묶음 + **삭제 전 `series_id` 조회 필수** (RPC 반환값 또는 delete 전 SELECT) + `updateTag('sermon-series-detail-${seriesId}')`.
+  - 수정: 위 묶음 + `updateTag('sermon-detail-${id}')` + (시리즈 변경·이동 시) **변경 전 `series_id`를 update RPC 호출 전에 조회 또는 RPC 반환값에 포함** + `if (oldSeriesId) updateTag('sermon-series-detail-${oldSeriesId}')` + `if (newSeriesId) updateTag('sermon-series-detail-${newSeriesId}')` (**null guard 필수** — 설교가 시리즈 미선택·시리즈 제거 케이스에서 `oldSeriesId`/`newSeriesId` null 가능. guard 없으면 `sermon-series-detail-null` 잘못된 태그 발생. 새 series만 무효화하면 이전 series 상세 캐시가 stale로 남음).
+  - 삭제: 위 묶음 + **삭제 전 `series_id` 조회 필수** (RPC 반환값 또는 delete 전 SELECT) + `if (seriesId) updateTag('sermon-series-detail-${seriesId}')` (null guard).
 - [ ] 5. `update-bulletin.action.ts:83-84`에서 `updateTag('bulletin-detail')` → `updateTag('bulletin-detail-${bulletinId}')`로 좁힘. 인접 nav는 실제 캐시 태그가 `bulletin-nav` + `bulletin-nav-${targetId}`(`bulletin-cache.ts:18`)이므로 `updateTag('bulletin-nav-${prevId}')` + `updateTag('bulletin-nav-${nextId}')`로 좁힐 수 있는지 검토 (`get_adjacent_bulletins` 호출 결과로 prev/next id 확보). 좁히기 어려우면 `updateTag('bulletin-nav')`로 fallback + 의사결정 로그에 기록.
 - [ ] 6. `count: 'exact'`가 페이지 응답에 실제로 필요한 곳(목록 페이지네이션 total)과 불필요한 곳(featured 1건, recent 캐러셀)을 분리. 후자에서 옵션 제거.
 - [ ] 7. `static.ts`의 `createStaticClient` 호출 옵션에서 `cache: 'force-cache'`와 `revalidate`가 충돌하는 케이스(`sermon-cache.ts:9`·`bulletin-cache.ts:5-13`)를 점검. revalidate가 있으면 `cache` 키 제거, revalidate 없으면 `cache: 'force-cache'` 유지.
@@ -66,7 +66,7 @@
 ## Verification
 
 - `node scripts/verify-task.mjs supabase-cost-pass-1`
-- 수동: `yarn dev` 후 브라우저에서 `/news/announcements`·`/sermons`·`/sermons/all`·`/news/bulletins/{id}` 진입해 Network 탭 응답 크기 비교.
+- 수동: `yarn dev` 후 브라우저에서 `/news/notices`·`/sermons`·`/sermons/all`·`/news/bulletins/{id}` 진입해 Network 탭 응답 크기 비교 (announcement 라우트는 dead code로 후속 task에서 삭제 예정).
 - 수동: Supabase Dashboard `Logs → API`에서 같은 페이지 두 번째 진입 시 PostgREST 호출 부재 확인 (ISR hit).
 
 ---

@@ -59,8 +59,8 @@
   - [ ] PR prefix: `Fix`
 
 - [ ] **Phase 2 — G2: Supabase silent fallback 로깅 (P0)**
-  - [ ] `getSiteCollection` — `if (error) console.error('[site-collections] ${key}', error)`
-  - [ ] `getSiteSettings`·`getActiveStaff` — 동일 패턴
+  - [ ] `getSiteCollection` — **백틱 템플릿 리터럴 필수**: `if (error) console.error(\`[site-collections] ${key}\`, error)` (싱글쿼트 사용 시 `${key}` 치환 안 되고 문자열 그대로 출력)
+  - [ ] `getSiteSettings`·`getActiveStaff` — 동일 패턴 (백틱 + `${변수}` 치환)
   - [ ] PR prefix: `Fix`
 
 - [ ] **Phase 3 — G7: 잔재 정리 (P3 · 작은 마감)**
@@ -165,6 +165,7 @@
 - **D9 — G5 typography: 11/12 상향 일괄**
   - 문제: 0.8/0.9rem 10건 — primitive `$font-size-11`이 최저. 8/9px 사용 의도 미확인.
   - 해결: `$font-size-8`/`$font-size-9` 신규 primitive(WCAG 권장 외 — 12px 이하 본문 비권장)·case-by-case(시간 비용) 대신 font-size 용도는 11/12 보수적 상향. padding/transform 용도 0.8rem은 spacing 토큰 분리.
+  - **컨텍스트 (1rem ≈ 10px)**: 본 프로젝트는 fluid typography(`html { font-size: 2.777778vw }`, `src/styles/globals.scss:112`) 적용 — 360px viewport 기준 `1rem ≈ 10px`. 따라서 `0.9rem = 9px → $font-size-11 = 1.1rem = 11px`은 **모든 viewport에서 상향**(viewport 커지면 둘 다 같은 비율로 ↑). 일반 `1rem = 16px` 가정 시 false positive(축소·WCAG 위반) 발생 — 본 plan 검토 시 fluid typography 컨텍스트 우선.
   - 결과: 접근성 손실 없음, primitive 추가 없이 해소.
 
 - **D10 — G6 `app/→apis` 단계 분리(3건 이 plan, 5건 후속)**
