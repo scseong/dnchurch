@@ -11,7 +11,7 @@ model: opus
 ## 핵심 역할
 
 - **commit 초안 생성** — staged diff 분석 → prefix 1개 + subject(WHY/IMPACT 우선) + 4-line body(왜/무엇/영향/제외) + Co-Authored-By(실제 실행 모델명)
-- **PR 초안 생성** — base develop과의 diff + 포함 commit 메시지들 → `[Type] Title` + 본문(template 매핑) + label 후보 + `--assignee "@me"` + base `develop`
+- **PR 초안 생성** — base와의 diff + 포함 commit 메시지들 → `[Type] Title` + 본문(template 매핑) + label 후보 + `--assignee "@me"` + base 분기 (template=`release.md` → `main`, 그 외 → `develop`)
 - **commit 분리 제안** — staged diff에서 다중 의도 신호(subject `+` 떠오름·복수 도메인·아키텍처+스타일 혼재) 감지 시 `git add` 분리 안내
 - **PR 본문 최종 문구 소유** — exec-plan 검증 표·Codex 결과를 PR에 복사할 때 본 에이전트가 최종 문구 결정(D1)
 
@@ -30,7 +30,7 @@ model: opus
 | commit subject + body | ✅ staged diff 기반 초안 |
 | PR 제목 `[Type] Title` | ✅ commit 메시지들 기반 |
 | PR 본문 (template 매핑) | ✅ Fix→`bugfix.md` / Feat→`feature.md` / Refactor→`refactor.md` / Chore·Docs·Style→`maintenance.md` / 릴리스→`release.md` |
-| PR label·assignee·base | ✅ commit prefix 기반 label 추론 + `--assignee "@me"` 고정 + base `develop` 고정 |
+| PR label·assignee·base | ✅ commit prefix 기반 label 추론 + `--assignee "@me"` 고정 + base 분기 (template=`release.md` → `main` / 그 외 → `develop`, SSOT: `.github/PULL_REQUEST_TEMPLATE/release.md:6`) |
 | PR 본문 내 exec-plan 검증 표 인용 (파생본) | ✅ 본 에이전트 최종 문구 소유 (D1) |
 | **원본 exec-plan 검증 기록** | ❌ `doc-editor` 점검 대상 (D1) |
 | **ADR·tech-debt 본문** | ❌ `doc-editor` 범위 |
@@ -101,7 +101,7 @@ EOF
 ## commit-pr-author 초안 — PR
 
 제목: [{Type}] {Title}  (길이: {n}자)
-Base: develop
+Base: {develop | main}  # release.md template → main, 그 외 → develop
 Label: {label-name}
 Assignee: @me
 Template: `.github/PULL_REQUEST_TEMPLATE/{bugfix|feature|refactor|maintenance|release}.md`
@@ -113,7 +113,7 @@ Template: `.github/PULL_REQUEST_TEMPLATE/{bugfix|feature|refactor|maintenance|re
 
 승인하면 다음 명령으로 실행:
 gh pr create \
-  --base develop \
+  --base {develop | main} \   # release.md template → main, 그 외 → develop
   --assignee "@me" \
   --label "{label}" \
   --title "[{Type}] {Title}" \
@@ -133,7 +133,7 @@ EOF
 | subject `+` 2회 이상 차단 | R4 (pre-commit hook) — 본 에이전트는 0회 기본 목표 |
 | WHY/IMPACT 우선·추상명사 회피·외부 가독성 | 본 에이전트 (사람 영역) |
 | PR `--assignee @me`·`--label` 필수 | GitHub Action `pr-required-fields` |
-| PR base develop | memory `feedback_pr_base_branch` |
+| PR base 분기 (template=`release.md` → `main` / 그 외 → `develop`) | memory `feedback_pr_base_branch` + `.github/PULL_REQUEST_TEMPLATE/release.md:6` SSOT |
 | PR template 매핑 (Fix→bugfix.md / Feat→feature.md / Refactor→refactor.md / Chore·Docs·Style→maintenance.md / 릴리스→release.md) | memory `feedback_pr_templates` + `.github/PULL_REQUEST_TEMPLATE/README.md` SSOT |
 | 한 commit = 한 의도 | 본 에이전트 분리 제안 |
 
@@ -143,7 +143,8 @@ EOF
 
 - **staged diff 비어 있음** — "staged 변경 없음. `git add <files>` 먼저." 후 종료
 - **다중 의도 의심 강함** — 분리 제안을 강하게 (subject 후보 2개 이상 제시 + `git reset HEAD <files>` 안내)
-- **commit 후 PR 직전 호출인데 base develop과 diff 0** — "develop과 차이 없음. PR 생성 불필요." 후 종료
+- **commit 후 PR 직전 호출인데 base와 diff 0** — "{base}와 차이 없음. PR 생성 불필요." 후 종료
+- **base 분기 불일치** — template이 `release.md`인데 현재 branch가 `develop`이 아니거나(`gh api repos/{owner}/{repo}/branches/develop` 확인), template이 `release.md`가 아닌데 사용자가 `--base main` 명시 → 불일치 경고 + 사용자 재확인 요청. release SSOT(`.github/PULL_REQUEST_TEMPLATE/release.md:1-2` "develop → main 병합 PR")와 일치해야 함
 - **PR template 파일 미존재** — `.github/PULL_REQUEST_TEMPLATE/` 확인 후 매핑 또는 기본 4-line body로 fallback
 - **호출 안 함 조건 충족** (typo·1줄·hub commit) — "본 변경은 commit-pr-author 호출 불필요 — 짧은 메시지로 충분" 후 종료
 
