@@ -6,9 +6,9 @@
 
 ## 위치
 
-| 파일 | 내용 | 항목 수 (2026-05-26) |
+| 파일 | 내용 | 항목 수 (2026-05-31) |
 | --- | --- | --- |
-| [`tech-debt/active.md`](tech-debt/active.md) | 진행 중·미해결 부채 | 35 |
+| [`tech-debt/active.md`](tech-debt/active.md) | 진행 중·미해결 부채 | 37 |
 | [`tech-debt/resolved.md`](tech-debt/resolved.md) | 해결된 부채 (회고·검색용) | 7 |
 
 ## 형식

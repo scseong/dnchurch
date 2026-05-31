@@ -1,4 +1,4 @@
-import { GNB_ITEMS } from '@/config/navigation';
+import { GNB_ITEMS, SPECIAL_PAGES } from '@/config/navigation';
 
 export type HeroMeta = {
   title: string;
@@ -12,10 +12,14 @@ const HERO_META: Record<string, HeroMeta> = {
   '/about': { title: '교회 소개', subtitle: '대구동남교회를 소개합니다', eyebrow: 'ABOUT' },
   '/next-gen': { title: '다음세대', subtitle: '믿음의 다음 세대를 세웁니다', eyebrow: 'NEXT GEN' },
   '/sermons': { title: '설교', subtitle: '주일 말씀과 강해 설교를 만나보세요', eyebrow: 'SERMONS' },
-  '/sermons/all': { title: '전체 설교', subtitle: '대구동남교회의 모든 설교를 검색·필터로 찾아보세요', eyebrow: 'ALL SERMONS' },
-  '/sermons/series': { title: '모든 시리즈', subtitle: '대구동남교회 강해 설교 시리즈 목록', eyebrow: 'SERMON SERIES' },
   '/community': { title: '교제', subtitle: '함께 기도하고 나누는 공동체', eyebrow: 'COMMUNITY' },
   '/news': { title: '교회 소식', subtitle: '교회의 소식을 전해드립니다', eyebrow: 'NEWS' },
+};
+
+/** GNB·HERO_META에 없는 특수 페이지(검색·알림)의 Hero subtitle·eyebrow. title은 SPECIAL_PAGES가 SSOT */
+const SPECIAL_HERO_META: Record<string, { subtitle: string; eyebrow?: string }> = {
+  '/search': { subtitle: '교회 콘텐츠를 한 곳에서 찾아보세요', eyebrow: 'SEARCH' },
+  '/notifications': { subtitle: '새로운 소식과 알림을 확인하세요', eyebrow: 'NOTIFICATIONS' },
 };
 
 /**
@@ -25,11 +29,18 @@ const HERO_META: Record<string, HeroMeta> = {
  * - GNB_ITEMS에 존재하는 페이지만 (상세 페이지 제외)
  */
 export function resolveHeroMeta(pathname: string): HeroMeta | null {
-  // direct match 우선 — HERO_META에 명시적으로 등록된 자식 라우트(예: /sermons/all)는 GNB_ITEMS children
-  // 매칭보다 우선한다. 향후 GNB_ITEMS에 같은 path의 children을 추가해도 HERO_META direct가 이긴다.
-  // child label 기반 동작이 필요해지면 이 분기를 loop 뒤로 옮기거나 HERO_META 엔트리를 제거해야 한다.
+  // direct match — HERO_META 키는 모두 카테고리 hub(/about·/sermons 등)이며 GNB_ITEMS 부모로도
+  // 매칭된다. 즉 direct에만 의존하는 라우트는 0건이라 아래 loop와 결과가 같다(중복 fast-path).
+  // /sermons/all·/sermons/series는 GNB '설교' children으로 옮겼으므로 loop가 라벨을 해석한다.
   const direct = HERO_META[pathname];
   if (direct) return direct;
+
+  // GNB·HERO_META 미등록 특수 페이지(검색·알림) — (content) 레이아웃에 Hero 슬롯이 노출된다.
+  const specialTitle = SPECIAL_PAGES[pathname];
+  if (specialTitle) {
+    const extra = SPECIAL_HERO_META[pathname];
+    return { title: specialTitle, subtitle: extra?.subtitle ?? '', eyebrow: extra?.eyebrow };
+  }
 
   let title = '';
   let categoryKey = '';

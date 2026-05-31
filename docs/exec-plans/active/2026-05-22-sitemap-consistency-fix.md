@@ -1,6 +1,6 @@
 # sitemap-consistency-fix
 
-- **상태**: 🟢 계획 완료 — 구현 진입 가능 (Open questions 4건 모두 D1~D4로 결정 완료 2026-05-26)
+- **상태**: 🟢 구현 완료 — 검증 통과(verify-task run 20260531-212130), 사용자 dev 수동 검증·커밋 승인 대기 (2026-05-31)
 - **시작일**: 2026-05-22
 - **브랜치**: feat/sitemap-consistency-fix (따로 브랜치 권장 — 스캐폴드는 현재 브랜치 `feat/sermons-publish-ssot`로 잡혔음)
 - **Open questions**: ✅ 4건 모두 결정 완료 (2026-05-26 — §의사결정 로그 D1~D4)
@@ -64,21 +64,21 @@
 ## 단계별 체크리스트
 
 - [x] 1. Q1~Q4 사용자 결정 완료(2026-05-26) — D1~D4 기록.
-- [ ] 2. `GNB_ITEMS` 부모 href 정정 — 다음세대/교제/교회 소식 → 카테고리 경로. 첫 자식 자동 이동이 필요하면 카테고리 `page.tsx`에서 `redirect()` 처리.
-- [ ] 3. `GNB_ITEMS` '설교' 항목에 children 추가 — `{전체 설교, /sermons/all}`, `{모든 시리즈, /sermons/series}` (Hero·Breadcrumb 라벨과 일치).
-- [ ] 3b. MobileNavigation 부모 카테고리 노출 — children 있는 항목의 부모 href가 Drawer에서도 직접 클릭 가능하도록 구조 조정. 부모를 별도 child로 추가하거나 button/link split (현재는 펼침 button만이라 부모 카테고리 페이지 이동 불가).
-- [ ] 4. `HERO_META`의 `/sermons/all`·`/sermons/series` direct entry 제거. `resolveHeroMeta` direct-match 분기는 코드 유지하되 의존 항목 0건임을 주석으로 명시.
-- [ ] 5. `BOTTOM_NAV_ITEMS` "소식" → "교회 소식". '전체'(`/menu`)는 클릭 시 Drawer 토글(D4) — `page.tsx` 신설 안 함.
-- [ ] 6. `ADMIN_NAV_SECTIONS` 가짜 badge 제거. 4개 빈 항목에 `comingSoon: true`.
-- [ ] 7. `AdminNavItem` 타입에 `comingSoon?: boolean` 추가. `AdminSidebar`에서 `comingSoon` 항목은 **`Link` 대신 `div` 또는 `span` 분기 렌더** (`href` 제거로 마우스 휠 클릭·우클릭 새 탭 진입 시 404 차단 — `preventDefault`만으로는 새 탭 진입 차단 안 됨) + 클릭 비활성(`aria-disabled` + `tabIndex={-1}`) + 시각적 회색 처리 + "준비 중" pill.
-- [ ] 8. `resolveAdminBreadcrumbs` 죽은 분기 정리 — sidebar 정책에 맞춰 제거하거나 "준비 중" 라벨 통일.
-- [ ] 8b. P8 — `SPECIAL_PAGES` (`/search`·`/notifications`) Hero·Breadcrumb 라벨 표시. `navigation.ts` `SPECIAL_PAGES` 라벨 정의를 Hero·Breadcrumb 컴포넌트가 참조하도록 구조 조정 (현재 MobileHeader만 참조 → fallback "대구동남교회"가 Hero/Breadcrumb에 그대로 노출).
-- [ ] 9a. D1 — `/fellowship` 디렉토리 삭제 + `rg "/fellowship" src` 0건 확인.
-- [ ] 9b. D2 — `GNB_ITEMS` '교회 소개' children에 `섬기는 사람들`(`/about/serving-people`) 추가.
-- [ ] 9c. D4 — BottomNav '전체' 클릭 → `drawerOpen ? closeDrawer : openDrawer` 토글 패턴 (open + close 양방향 — '전체' 두 번째 탭으로도 닫힘). 뒤로가기 시 Drawer 닫힘은 훅의 기존 `popstate` 핸들러가 이미 처리(`:36-46`) — D4는 훅 수정 없음. 라우트 이동 시 history 정리는 G7이 맡음.
-- [ ] 10. 사용자 dev 수동 검증 — 매트릭스 §3 P1·P2·P4·P6·P8 행.
-- [ ] 11. `yarn lint && yarn lint:styles && yarn build && yarn knip` PASS.
-- [ ] 12. `node scripts/verify-task.mjs sitemap-consistency-fix`.
+- [x] 2. `GNB_ITEMS` 부모 href 정정 — 다음세대 `/next-gen`·교제 `/community`·교회 소식 `/news`. 카테고리 `page.tsx`가 모두 실제 hub라 `redirect()` 불필요(EXPLORE 확인).
+- [x] 3. `GNB_ITEMS` '설교' 항목에 children 추가 — `{전체 설교, /sermons/all}`, `{모든 시리즈, /sermons/series}`.
+- [x] 3b. MobileNavigation 부모 카테고리 노출 — children 항목을 `Link`(부모 이동)+펼침 `button`으로 split(D8). 실제 경로는 `Header/MobileNavigation.tsx`(plan의 `MobileNavigation/` 표기와 다름).
+- [x] 4. `HERO_META`의 `/sermons/all`·`/sermons/series` direct entry 제거. direct-match 주석을 "direct 전용 의존 0건"으로 갱신. subtitle 일반화는 D6.
+- [x] 5. `BOTTOM_NAV_ITEMS` "소식" → "교회 소식". '전체'(`/menu`)는 Drawer 토글(D4) — `page.tsx` 신설 안 함.
+- [x] 6. `ADMIN_NAV_SECTIONS` 가짜 badge(`128`·`24`) 제거. 4개 빈 항목에 `comingSoon: true`.
+- [x] 7. `AdminNavItem`에 `comingSoon?: boolean` 추가. `AdminSidebar`에서 `comingSoon` 항목은 `Link` 대신 `div` + `aria-disabled` + `tabIndex={-1}` + 회색(`$txt-on-dark-nav-faint`) + "준비 중" pill.
+- [x] 8. `resolveAdminBreadcrumbs` 죽은 분기 제거(series/speakers/members/settings) — 4개 라우트 `page.tsx` 부재 확인(D10).
+- [x] 8b. P8 — `SPECIAL_PAGES` export → `resolveHeroMeta`·`resolveBreadcrumbSegments`가 참조. `/search`·`/notifications` Hero 제목·Breadcrumb 단일 세그먼트 표시. subtitle 카피 신규 작성(D7).
+- [x] 9a. D1 — `/fellowship` 디렉토리 삭제 + `grep "/fellowship" src` 0건. FeedContent 참조 2곳 `/community/sharing`로 재연결(D9).
+- [x] 9b. D2 — `GNB_ITEMS` '교회 소개' children에 `섬기는 사람들`(`/about/serving-people`) 추가.
+- [x] 9c. D4 — BottomNav '전체' 클릭 → `drawerOpen ? closeDrawer : openDrawer` 토글. 뒤로가기-Drawer 닫힘은 훅 기존 `popstate` 핸들러가 처리 — 훅 수정 없음.
+- [ ] 10. 사용자 dev 수동 검증 — 매트릭스 §3 P1·P2·P4·P6·P8 행. (사용자 진행)
+- [x] 11. ESLint·stylelint·build·knip PASS, knip 신규 항목 0건.
+- [x] 12. `node scripts/verify-task.mjs sitemap-consistency-fix` — 필수 4단계 통과(run 20260531-212130).
 
 ## Verification
 
@@ -116,6 +116,30 @@
   - 문제: BottomNav '전체'가 `/menu`를 가리키나 `page.tsx`가 없다. 전용 페이지 신설은 과하다.
   - 해결: '전체' 클릭 시 기존 메뉴 Drawer를 토글한다(page 신설 안 함). 더해 Drawer가 열린 상태에서 뒤로가기를 누르면 페이지가 이동하지 않고 Drawer만 닫히도록 `useDrawerHistory`를 처리한다. 모바일 '전체 메뉴' 패턴 + 뒤로가기 직관에 맞다.
   - 결과: `/menu` 페이지 불필요. 역할 분리: `useDrawerHistory`의 `popstate` 핸들러(`:36-46`)가 이미 뒤로가기-Drawer 닫힘을 처리하므로 D4는 훅 수정 없음(BottomNav '전체'를 `openDrawer`에 **연결**만 함). 라우트 이동 시 history 정리는 tech-debt-pre-release G7(Phase 3)이 맡음.
+- **D5 — `resolveMobileHeader`에 카테고리 하위 fallback 추가**
+  - 문제: '설교'에 children을 넣자 `/sermons/[id]` 상세에서 자식 매칭이 실패해 모바일 헤더 제목이 fallback "대구동남교회"로 떨어진다(매트릭스 Mh ✓ → 회귀).
+  - 해결: children 분기 안에서 자식 매칭 실패 시 `pathname.startsWith(item.href + '/')`이면 카테고리 라벨을 유지한다.
+  - 결과: `/sermons/[id]`·`/sermons/series/[id]` 제목이 "설교"로 복원. GNB 부모 href(`/about`·`/next-gen`·`/sermons`·`/community`·`/news`)가 서로 접두사 관계가 아니라 형제 카테고리 오매칭 없음(Codex 1차 확인).
+- **D6 — sermons 자식 subtitle 일반화 수용**
+  - 문제: `HERO_META` direct entry 제거로 `/sermons/all`·`/sermons/series`의 subtitle이 전용 문구("…검색·필터로 찾아보세요")에서 카테고리 `/sermons` subtitle("주일 말씀과 강해 설교를 만나보세요")로 바뀐다.
+  - 해결: SC가 제목·끝 라벨 일치만 요구하므로 일반화를 수용한다. 전용 subtitle 복원은 SSOT를 다시 둘로 가르는 일이라 옵션 A 범위 밖.
+  - 결과: 제목 "전체 설교"·"모든 시리즈"는 Breadcrumb 끝 라벨과 일치. subtitle만 카테고리 공통 문구.
+- **D7 — 검색·알림 Hero subtitle 신규 작성**
+  - 문제: P8 충족에 Hero subtitle이 필요하나 plan에 문구가 없다.
+  - 해결: `/search`="교회 콘텐츠를 한 곳에서 찾아보세요", `/notifications`="새로운 소식과 알림을 확인하세요"로 채택. title은 `SPECIAL_PAGES`(navigation.ts)가 SSOT.
+  - 결과: 두 페이지에서 Hero 제목·부제·Breadcrumb 표시. 추후 디자인 카피 확정 시 `SPECIAL_HERO_META`만 교체.
+- **D8 — MobileNavigation 부모를 button/link split**
+  - 문제: 부모를 별도 child로 추가하면 desktop mega·Breadcrumb까지 오염된다.
+  - 해결: drawer 컴포넌트에만 국한해 부모를 `Link`(카테고리 이동)+펼침 `button`으로 분리한다. desktop GNB의 부모 클릭 이동과 동작이 일치한다.
+  - 결과: drawer에서 부모 카테고리 페이지 직접 이동 가능. `aria-expanded`·`aria-label`로 펼침 버튼 a11y 보강.
+- **D9 — FeedContent `/fellowship` 참조 재연결**
+  - 문제: D1로 `/fellowship`을 삭제하면 home FeedContent의 '은혜 나눔' 링크 2곳이 깨진다(plan 미기재).
+  - 해결: GNB '교제 > 은혜 나눔'(`/community/sharing`)으로 재연결한다. D1의 "교제 콘텐츠는 `/community`가 담당" 방침과 일치.
+  - 결과: `grep "/fellowship" src` 0건. 홈 '은혜 나눔 더 보기'가 `/community/sharing`로 이동.
+- **D10 — admin breadcrumb 죽은 분기 제거 근거**
+  - 문제: `resolveAdminBreadcrumbs`의 series/speakers/members/settings 분기가 sidebar comingSoon 정책과 어긋난다.
+  - 해결: 4개 라우트 모두 `page.tsx` 부재(find로 확인)라 도달 시 404 — 분기를 제거한다. 라우트 신설 시 sidebar comingSoon 해제와 함께 복원하라는 주석을 남긴다.
+  - 결과: 사이드바(비활성)와 breadcrumb 정책 일치. 죽은 분기 4개 제거.
 
 ## 참고 자료
 
@@ -136,23 +160,40 @@
 
 ## Codex 계획 검증
 
-- **결론**: 미요청 (사용자 지시로 본 단계 생략)
-- **현재 판단**: 사용자가 plan을 직접 검토 후 진행 결정. Codex 위임은 이 plan 범위에서 명시적 생략.
-- **다음 행동**: Q1~Q4 결정 후 구현 진입. 구현 diff 단계에서 1차 검증은 ADR_TRIGGER 해당 없으므로 사용자 판단.
+- **결론**: PASS — PR #103 봇·Codex 리뷰에서 계획 결함을 정정하고 Q1~Q4를 D1~D4로 확정. 사용자가 본 세션 재검증을 생략하고 구현 진입을 지시.
+- **현재 판단**: 정정된 plan으로 구현. 구현 단계 검증은 Codex 1차 + Claude 2차로 대체(아래 두 섹션).
+- **다음 행동**: 구현 후 Codex 1차 검증 수행 — 완료.
 
 ## Codex 1차 검증
 
-- **결론**: 미요청
-- **현재 판단**: 미요청
-- **다음 행동**: 구현 diff 생성 후 갱신
+- **결론**: CHANGE_REQUEST (confidence medium)
+- **현재 판단**: 요약 diff 기반 지적 2건(타입·죽은 분기) 모두 실제 코드·파일 확인 후 무변경 해소. 상세는 검증 이력.
+- **다음 행동**: Claude 2차 검증에서 교차 확인 완료.
 
 ## Claude 2차 검증
 
-- **최종 판단**: 미작성
-- **현재 판단**: 미작성
-- **다음 행동**: verify-task 후 갱신
+- **최종 판단**: PASS
+- **현재 판단**: Codex CR 2건 근거 확인 후 코드 변경 없음. verify-task 필수 4단계 통과(아래 검증 결과 표), knip 신규 항목 0건.
+- **다음 행동**: 사용자 dev 수동 검증(체크리스트 10)·커밋 승인 대기.
 
 ## 검증 이력
+
+검증 결과:
+
+| 시점 | run-id | ESLint | stylelint | build(next) | knip 신규 |
+| --- | --- | --- | --- | --- | --- |
+| 2026-05-31 Claude 2차 | 20260531-212130 | ✓ | ✓ | ✓ | 0건 |
+
+knip이 잡은 항목(`resolveNavLabel`·`ADMIN_ROOT` 미사용 export 등)은 변경 전부터 있던 부채다. `SPECIAL_PAGES`는 hero.config가 import해 knip이 잡지 않는다. worktree 빌드가 처음 실패한 원인은 node_modules junction을 Turbopack이 거부한 것이라, 실제 `yarn install`과 main의 `.env*` 복사로 해소했다(코드 무관).
+
+<details>
+<summary>2026-05-31 Codex 1차 검증</summary>
+
+- 판정: CHANGE_REQUEST (medium)
+- 이유: 요약 diff 기반 지적 2건 — `SPECIAL_HERO_META` index signature 타입 오류, `resolveAdminBreadcrumbs` 죽은 분기 제거 안전성.
+- 조치: hero.config.ts:20 `Record<string,…>` annotate + `tsc --noEmit` exit 0 / 4개 라우트 page.tsx 부재 `find` 확인 — 둘 다 무변경.
+
+</details>
 
 <!--
 이전 판정·재검증만 여기에 둔다. 검증 섹션 본문에는 현재 판정만 남긴다.
@@ -172,6 +213,7 @@
 
 - **옵션 B 단일 매니페스트(`SITE_MAP`)** — `sitemap-manifest-migration` plan으로 분리.
   - 이유: 채널 간 SSOT 통합은 모든 nav 컴포넌트 시그니처를 동시에 손대므로 회귀 위험이 크다. 매트릭스 회귀 도구로 검증 자동화가 선행돼야 한다.
+  - 통합 시 함께 해소: segment-boundary 매칭 단일화(tech-debt `nav pathname 매칭이 segment boundary 무시`), `resolveHeroMeta` subtitle comparator(tech-debt `resolveHeroMeta subtitle comparator…`), resolver별 trailing-slash 정책 차이·분기 중복.
   - 다음 기준: 이 plan 머지 + 매트릭스 도구 plan 머지 후.
   - 기록 위치: `docs/research/2026-05-22-navigation-sitemap-audit.md` §4 옵션 B.
 - **매트릭스 회귀 테스트 도구** — `sitemap-matrix-regression` plan으로 분리.
