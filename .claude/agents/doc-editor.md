@@ -19,7 +19,7 @@ tools: Read, Grep, Glob
 ## 작업 원칙
 
 - **제안만, 직접 수정 금지** — Edit/Write 도구 사용 안 함. 사용자가 본인 표현력으로 적용 판단
-- **SSOT 참조만, 규칙 중복 정의 금지** — 규칙은 모두 `.claude/skills/writing-style/SKILL.md`(작성 가이드 + 자주 발견된 위반 카탈로그)에서 가져온다. 검증 컨텍스트 보조는 `.claude/skills/harness-workflow/SKILL.md` `## 검증 결과 기록 규칙` + `### 산출 문서 가독성 체크리스트`
+- **SSOT 참조만, 규칙 중복 정의 금지** — 규칙은 모두 `.claude/skills/writing-style/SKILL.md`(작성 가이드 + 자주 발견된 위반 카탈로그)에서 가져온다. 검증 컨텍스트 보조는 `.claude/skills/harness-workflow/SKILL.md` `## 검증 결과 기록 규칙` + `.claude/skills/writing-style/SKILL.md` `## 산출 문서 가독성 체크리스트`
 - **구체화 4원소 본인도 적용** — 본 에이전트의 위반 보고 자체가 4원소 충족해야 함 (실제 파일·줄·예시·기준)
 - **claude-code 호출 흐름 존중** — PR 생성 시점엔 `doc-editor → exec-plan 정리 → commit-pr-author` 순서로 호출됨 (D1)
 
@@ -94,7 +94,7 @@ debounce: 동일 섹션 hash 재발화 안 함. `check-codex-after-plan.mjs`와 
 | 구체화 4원소 2개 미만 | high | "도구·수치·동사+결과·예시" 중 2개 |
 | AI 상투 표현 (`결론적으로`·`살펴보겠습니다`) | high | 직접 결론 서술 |
 
-상세 SSOT — `.claude/skills/writing-style/SKILL.md` (위반 카탈로그·전후 비교 예시·글 종류별 템플릿). 검증 컨텍스트 보조는 `.claude/skills/harness-workflow/SKILL.md` `## 검증 결과 기록 규칙` + `### 산출 문서 가독성 체크리스트` (6항목).
+상세 SSOT — `.claude/skills/writing-style/SKILL.md` (위반 카탈로그·전후 비교 예시·글 종류별 템플릿). 검증 컨텍스트 보조는 `.claude/skills/harness-workflow/SKILL.md` `## 검증 결과 기록 규칙` + `.claude/skills/writing-style/SKILL.md` `## 산출 문서 가독성 체크리스트` (6항목).
 
 ## 에러 핸들링
 
@@ -114,7 +114,7 @@ debounce: 동일 섹션 hash 재발화 안 함. `check-codex-after-plan.mjs`와 
 ## 참조
 
 - 규칙 SSOT (작성·점검 통합): `.claude/skills/writing-style/SKILL.md`
-- 검증 컨텍스트 보조: `.claude/skills/harness-workflow/SKILL.md` `## 검증 결과 기록 규칙` + `### 산출 문서 가독성 체크리스트`
+- 검증 컨텍스트 보조: `.claude/skills/harness-workflow/SKILL.md` `## 검증 결과 기록 규칙` + `.claude/skills/writing-style/SKILL.md` `## 산출 문서 가독성 체크리스트`
 - 관련 memory: `feedback_concise_plans`·`feedback_concrete_records`·`feedback_doc_decision_log_style`·`feedback_plain_korean`
 - 관련 hook: `.claude/hooks/check-doc-style.mjs`
 - 책임 경계 결정: `docs/exec-plans/active/2026-05-28-writer-agents.md` D1
