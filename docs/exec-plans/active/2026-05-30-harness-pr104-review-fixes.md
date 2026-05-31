@@ -97,6 +97,33 @@ PR #104 11:08 재트리거 리뷰 8건을 머지 전 반영한다. 핵심은 본
 | --- | --- | --- | --- | --- | --- | --- |
 | 1차 | 20260530-231830 | ✅ | ✅ | ✅ | 0 | C7 회귀: `harness-gate --plan-file` → ✓ 통과 |
 
+## 회고
+
+### 잘 된 것
+
+- Codex 좀비화 즉시 인지·self-check 전환으로 stall 차단 — 사용자 신호 "Codex 응답 오류" + 본인 추가 발견 4시간+ 좀비. taskkill 슬래시 파싱 에러로 cancel 실패해도 본 task 진행 차단 안 됨.
+- C5 영향 범위 추가 조사로 plan보다 큰 영향 발견 → D1으로 즉시 plan 보강. 외과적 변경 원칙(변경 lines 모두 task 추적) + 영향 범위 전수 점검 패턴이 작동.
+- dogfood 입증 3건 실측 — C3 fix 후 completed plan 회고 변경이 즉시 새 hook 발화 / C7 fix 후 harness-gate가 자기 산출물 PASS / explorer.md 변경이 check-adr-needed + post-implementation-review 두 hook 동시 발화.
+- Codex stall 패턴을 즉시 tech-debt 등록 (사용자 결정 "지금 조치 안 함") + 본 PR 정직한 한계·후속 작업에 해결 방향 명시. 발견은 본 turn, 조치는 다음 task — 사이클 분리 정합.
+
+### 예상 못한 발견
+
+- **doc-editor·explorer·commit-pr-author 명시 호출 불가** — Claude Code agent registry는 세션 시작 시점에 등록, 본 PR이 만든 5 에이전트는 reload 후에야 활성화. 본 PR 사용 가치는 머지 후·다음 세션부터. 인계 노트의 #2 reload 검증이 본 turn에서 dogfood로 입증.
+- **C6 doc-editor 확장 필요** — C6 원래 지적은 explorer.md만이었으나, 본 turn 추가 조사로 doc-editor.md도 동일 패턴 결함(본문 "Edit/Write 도구 사용 안 함" vs frontmatter `tools` 누락). D2로 같은 commit에 포함 — 같은 패턴 결함은 한 commit 단위가 정합.
+- **codex-reviewer.md PASS_WITH_DECISION_LOG 정의 불일치** — `codex-reviewer.md:33`은 계획 검증 verdict 토큰으로만 PASS_WITH_DECISION_LOG 정의, 1차 검증 verdict 토큰 정의 없음. 1차 검증에서 PASS_WITH_DECISION_LOG 사용은 정책상 미정의 영역. 본 PR은 옵션 A 외과적(verdict 정정)으로 진행, 옵션 B(정책 통일)는 후속 task로 분리.
+- **승인 hook이 매 commit 인터럽트** — feedback_commit_approval 정책으로 매 commit 사용자 승인. 본 PR 3 commit 각각 승인 — 효율 vs 정책 정합 trade-off. 사용자 명시 정책이라 정합 ↑ 선택.
+
+### 후속 관찰 시점·항목
+
+- reload 후 doc-editor·explorer·commit-pr-author 명시 호출 작동 확인 (#2 reload 검증). 본 turn 발견을 reload 시점에 재확인.
+- Codex stall workaround(`scripts/codex-cancel.mjs` PowerShell wrapper) 도입 시점 — 코드 공유 또는 다른 환경 이전 시점. 현재 1인 환경은 manual 좀비 방치 가능.
+- C7 옵션 B(정책 통일) 도입 시점 — 1차 검증 expression-only 지적 2회 이상 누적 시. 본 task는 1회 발생(자기 회고).
+- hook 자동 발화 누적 부담 — 본 task 한 turn에 6+ hook reminder 발화. 인지 부담 임계점 데이터 수집은 #1 운영 신호 측정 인프라에서.
+
+### 본 task의 본질
+
+"PR이 만든 시스템을 PR 자체에서 자기검증" — 11:08 재트리거 리뷰가 신설 시스템의 자기모순 5건을 즉시 발견(harness-gate가 자기 산출물 차단·doc-style hook이 회고 시점 침묵·explorer wrapper 본문 미로드), 본 fix가 그 자기모순을 차단하며 자기검증 사이클을 한 번 더 완결. Codex 좀비화로 본인 self-check 전환했으나 결과적으로 검증 품질 동등(C5/C6 plan보다 큰 영향 본인 직접 발견·C7 회귀 실측 통과). **본 PR의 진짜 산출물은 PR #104(원본) + 본 후속 fix 합계 — PR 신설만으로는 자기모순 잔존, 자기검증 사이클이 신설된 시스템을 사용 가능한 상태로 다듬어줌**.
+
 ## 검증 이력
 
 <!--
