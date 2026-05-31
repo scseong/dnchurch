@@ -21,6 +21,10 @@ export const ADR_TRIGGER_PARTS = [
   "AGENTS.md",
   ".claude/settings.json",
   ".claude/hooks/",
+  ".claude/agents/",
   ".codex/",
   "scripts/",
+  ".github/workflows/",
+  ".github/PULL_REQUEST_TEMPLATE/",
+  ".github/PULL_REQUEST_TEMPLATE.md",
 ];
