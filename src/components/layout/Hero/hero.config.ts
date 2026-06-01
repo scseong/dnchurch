@@ -22,6 +22,9 @@ const SPECIAL_HERO_META: Record<string, { subtitle: string; eyebrow?: string }> 
   '/notifications': { subtitle: '새로운 소식과 알림을 확인하세요', eyebrow: 'NOTIFICATIONS' },
 };
 
+/** 자체 hero를 직접 렌더하는 hub 페이지 — 레이아웃 자동 Hero를 끈다(중복 렌더 방지). */
+const SELF_HERO_PATHS = new Set(['/about']);
+
 /**
  * pathname → HeroMeta 해석
  * - title: 현재 페이지의 GNB label (자식 레벨 우선)
@@ -29,6 +32,10 @@ const SPECIAL_HERO_META: Record<string, { subtitle: string; eyebrow?: string }> 
  * - GNB_ITEMS에 존재하는 페이지만 (상세 페이지 제외)
  */
 export function resolveHeroMeta(pathname: string): HeroMeta | null {
+  // 자체 hero 페이지(about/page.tsx의 다크 hero)는 자동 Hero를 끈다. HERO_META['/about']
+  // 엔트리는 자식(/about/welcome 등)의 subtitle 소스로 계속 쓰이므로 남긴다.
+  if (SELF_HERO_PATHS.has(pathname)) return null;
+
   // direct match — HERO_META 키는 모두 카테고리 hub(/about·/sermons 등)이며 GNB_ITEMS 부모로도
   // 매칭된다. 즉 direct에만 의존하는 라우트는 0건이라 아래 loop와 결과가 같다(중복 fast-path).
   // /sermons/all·/sermons/series는 GNB '설교' children으로 옮겼으므로 loop가 라벨을 해석한다.
