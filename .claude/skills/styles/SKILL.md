@@ -141,6 +141,8 @@ primitive를 쓰려는 순간 이 표를 먼저 확인한다.
 | `$beige-200` | `$border-card` | 카드·섹션 외곽 테두리 |
 | `$white` | `$txt-inverse` / `$bg-card` | 다크 배경 위 텍스트 / 카드·패널 배경 |
 
+**hex 하드코딩 금지** — hex 색을 직접 쓰지 않는다. 밝은 구분선·테두리(`#eee`·`#ccc`)는 `$border-primary`, 더 진한 테두리·focus는 위 표의 semantic 또는 `$focus-ring-color`로 바꾼다(`color-no-hex` stylelint warning).
+
 **예외 — semantic 미정 (사용처에 로컬 주석 필수)**
 - 다크 그라디언트: `linear-gradient($navy-900, $navy-950)` 등 Hero·배너 전용
 - rgba 투명도 조합: `rgba($gold-600, 0.18)` 등 기존 semantic으로 표현 불가한 케이스
