@@ -1,11 +1,19 @@
 # tech-debt-cleanup-phase1-5
 
-- **상태**: 📋 대기 (phase1 머지 후 시작)
-- **시작일**: 2026-05-01 (생성), 시작 미정
-- **브랜치**: 미정 (phase1 머지 후 결정)
+- **상태**: ⚠️ 폐기 (2026-06-01) — 전제로 잡은 위반 10건이 다른 작업으로 2건까지 줄었다. 남은 2건은 정당한 패턴이라 별도 작업이 필요 없다. 아래 폐기 사유 참조.
+- **시작일**: 2026-05-01 (생성), 시작하지 않음
+- **브랜치**: 없음 (착수 전 폐기)
 - **선행**: `tech-debt-cleanup-phase1` 머지 완료
 
-## 목표
+## 폐기 사유
+
+- **무엇이 바뀌었나**: 이 계획서는 `react-hooks/set-state-in-effect` 위반 10건(NoticeControlBar·AdvancedFilterSheet·SeriesBrowserSheet·SermonVideoTools·useListFilters·SermonListPage·Modal·BottomNav·DesktopHeader·useMediaQuery)을 고치려 만들었다. 2026-06-01 기준 이 10개 파일에는 위반이 남아 있지 않다.
+- **왜 사라졌나**: 위반 9건은 그 사이 진행한 컴포넌트 리팩터(useDialog 통합·SermonListPage 재구조 등) 과정에서 자연스럽게 없어졌다. active.md "ESLint `react-hooks/set-state-in-effect` (2건, 9건 정리됨)" 항목이 같은 내용을 추적한다.
+- **남은 2건은 다른 파일**: 지금 남은 위반은 `ConfirmModal/index.tsx:48`·`useDrawerHistory.ts:52` 두 곳뿐이고, 둘 다 외부 동기화가 정당한 패턴이라 line-disable + 사유 주석으로 유지한다. 이 계획서가 노린 10개 파일과 겹치지 않는다.
+- **확인**: `rg "react-hooks/set-state-in-effect" src -l` → 2 hits(ConfirmModal·useDrawerHistory). 이 계획서의 10개 대상 파일은 0 hit.
+- **남은 추적**: 위 2건은 active.md 항목과 tech-debt-pre-release Phase 3(G7, useDrawerHistory 정리)에서 다룬다.
+
+## 목표 (폐기됨)
 
 `react-hooks/set-state-in-effect` 룰 위반 10건을 케이스별로 검토·해결한다. ESLint errors를 0으로 만들어 `yarn lint` exit 0을 달성한다.
 

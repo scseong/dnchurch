@@ -52,11 +52,11 @@
   - [ ] `feat/sermons-publish-ssot` 머지 또는 stash 정리 후 base 확정
   - [ ] Open question(task-id 부여 방식) 결정 — phase별 신설로 결정 시 `start-task.mjs` phase 진입마다 호출
 
-- [ ] **Phase 1 — G1: Bulletin 업로드 안전성 (P0)**
-  - [ ] `_bulletin-helpers.ts` `Promise.all` → `Promise.allSettled`, fulfilled의 `public_id`를 `deleteImage`로 정리 후 rejection 재throw
-  - [ ] filename에 `${orderIndex}-${randomUUID().slice(0,8)}-${sanitized}` prefix 적용
-  - [ ] dev preset 1장 강제 실패 수동 검증 — Cloudinary 콘솔 orphan 0건 확인
-  - [ ] PR prefix: `Fix`
+- [x] **Phase 1 — G1: Bulletin 업로드 안전성 (P0)** — PR #105 머지 완료 (별도 plan `completed/2026-05-31-bulletin-upload-safety`)
+  - [x] `_bulletin-helpers.ts` `Promise.all` → `Promise.allSettled`, fulfilled의 `public_id`를 `deleteImage`로 정리 후 rejection 재throw
+  - [x] filename에 `${orderIndex}-${randomUUID().slice(0,8)}-${sanitized}` prefix 적용
+  - [ ] dev preset 1장 강제 실패 수동 검증 — Cloudinary 콘솔 orphan 0건 확인 (배포 프리뷰 실측 대기)
+  - [x] PR prefix: `Fix`
 
 - [ ] **Phase 2 — G2: Supabase silent fallback 로깅 (P0)**
   - [ ] `getSiteCollection` — **백틱 템플릿 리터럴 필수**: `if (error) console.error(\`[site-collections] ${key}\`, error)` (싱글쿼트 사용 시 `${key}` 치환 안 되고 문자열 그대로 출력)
