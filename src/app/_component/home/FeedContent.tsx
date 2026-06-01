@@ -114,7 +114,7 @@ export default function FeedContent({ notices }: Props) {
               <span className={styles.color_bar_sharing} />
               은혜 나눔
             </h3>
-            <Link href="/fellowship" className={styles.more_link}>
+            <Link href="/community/sharing" className={styles.more_link}>
               더 보기 →
             </Link>
           </div>
@@ -140,7 +140,7 @@ export default function FeedContent({ notices }: Props) {
       </div>
 
       <Link
-        href={activeTab === 'news' ? '/news/notices' : '/fellowship'}
+        href={activeTab === 'news' ? '/news/notices' : '/community/sharing'}
         className={styles.more_button}
         data-reveal
         style={getRevealStyle(notices.length)}

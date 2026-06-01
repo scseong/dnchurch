@@ -148,6 +148,27 @@
     color: $txt-inverse;
     font-weight: 600;
   }
+
+  &.coming_soon {
+    color: $txt-on-dark-nav-faint;
+    cursor: default;
+
+    &:hover {
+      background: transparent;
+      color: $txt-on-dark-nav-faint;
+    }
+  }
+}
+
+.soon {
+  padding: 2px 7px;
+  border-radius: 100px;
+  // 다크 nav 위 흰색 tint — semantic 토큰 부재(.badge와 동일 예외)
+  background: rgba(255, 255, 255, 0.06);
+  color: $txt-on-dark-nav-faint;
+  font-size: 10px;
+  font-weight: 600;
+  white-space: nowrap;
 }
 
 .icon {

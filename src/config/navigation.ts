@@ -26,11 +26,12 @@ export const GNB_ITEMS: NavItem[] = [
       { label: '예배안내', href: '/about/worship' },
       { label: '오시는 길', href: '/about/location' },
       { label: '환영합니다', href: '/about/welcome' },
+      { label: '섬기는 사람들', href: '/about/serving-people' },
     ],
   },
   {
     label: '다음세대',
-    href: '/next-gen/kindergarten',
+    href: '/next-gen',
     children: [
       { label: '유치부', href: '/next-gen/kindergarten' },
       { label: '유초등부', href: '/next-gen/elementary' },
@@ -38,10 +39,17 @@ export const GNB_ITEMS: NavItem[] = [
       { label: '청년부', href: '/next-gen/young-adult' },
     ],
   },
-  { label: '설교', href: '/sermons' },
+  {
+    label: '설교',
+    href: '/sermons',
+    children: [
+      { label: '전체 설교', href: '/sermons/all' },
+      { label: '모든 시리즈', href: '/sermons/series' },
+    ],
+  },
   {
     label: '교제',
-    href: '/community/prayer',
+    href: '/community',
     children: [
       { label: '기도제목', href: '/community/prayer' },
       { label: '은혜 나눔', href: '/community/sharing' },
@@ -50,7 +58,7 @@ export const GNB_ITEMS: NavItem[] = [
   },
   {
     label: '교회 소식',
-    href: '/news/notices',
+    href: '/news',
     children: [
       { label: '공지사항', href: '/news/notices' },
       { label: '주보', href: '/news/bulletins' },
@@ -62,20 +70,25 @@ export const GNB_ITEMS: NavItem[] = [
 export const BOTTOM_NAV_ITEMS: BottomNavItem[] = [
   { label: '홈', href: '/', icon: 'home' },
   { label: '설교', href: '/sermons', icon: 'book' },
-  { label: '소식', href: '/news/notices', icon: 'file' },
+  { label: '교회 소식', href: '/news/notices', icon: 'file' },
   { label: '교제', href: '/community/prayer', icon: 'users' },
   { label: '전체', href: '/menu', icon: 'menu' },
 ];
 
 // ── Active 판별 ──
 
+/** 경계 인식 경로 매칭 — href 자신 또는 그 하위 세그먼트만 true. bare startsWith의 형제 prefix 오탐(`/newsroom`이 `/news`에 걸림)을 막는다. */
+function isRouteMatch(pathname: string, href: string): boolean {
+  return pathname === href || pathname.startsWith(href + '/');
+}
+
 /** GNB 메뉴 활성 판별: children이 있으면 children href로도 매칭 */
 export function isActiveGnb(pathname: string, item: NavItem): boolean {
   if (item.href === '/') return pathname === '/';
 
-  if (pathname.startsWith(item.href)) return true;
+  if (isRouteMatch(pathname, item.href)) return true;
 
-  return item.children?.some((child) => pathname.startsWith(child.href)) ?? false;
+  return item.children?.some((child) => isRouteMatch(pathname, child.href)) ?? false;
 }
 
 /** BottomNav 활성 판별: 카테고리(첫 번째 세그먼트) 단위 매칭 */
@@ -84,7 +97,7 @@ export function isActiveBottomNav(pathname: string, href: string): boolean {
   if (href === '/menu') return false;
 
   const category = '/' + href.split('/').filter(Boolean)[0];
-  return pathname.startsWith(category);
+  return isRouteMatch(pathname, category);
 }
 
 // ── Label 해석 (Hero · MobileHeader) ──
@@ -121,7 +134,7 @@ export function resolveNavLabel(pathname: string): string {
 
 // ── MobileHeader ──
 
-const SPECIAL_PAGES: Record<string, string> = {
+export const SPECIAL_PAGES: Record<string, string> = {
   '/mypage': '마이페이지',
   '/search': '검색',
   '/notifications': '알림',
@@ -145,9 +158,14 @@ export function resolveMobileHeader(pathname: string): { title: string; showBack
 
     if (pathname === item.href) return { title: item.label, showBack: false };
 
-    const matched = item.children.find((c) => pathname.startsWith(c.href));
+    const matched = item.children.find((c) => isRouteMatch(pathname, c.href));
     if (matched) {
       return { title: item.label, showBack: pathname !== matched.href };
+    }
+
+    // 카테고리 하위지만 자식 목록에 없는 경로(예: /sermons/[id] 상세) — 카테고리 라벨 유지
+    if (pathname.startsWith(item.href + '/')) {
+      return { title: item.label, showBack: true };
     }
   }
 
@@ -158,7 +176,7 @@ export function resolveMobileHeader(pathname: string): { title: string; showBack
 export function resolveSiblingTabs(pathname: string): NavItem[] | null {
   for (const item of GNB_ITEMS) {
     if (!item.children?.length) continue;
-    if (item.children.some((c) => pathname.startsWith(c.href))) {
+    if (item.children.some((c) => isRouteMatch(pathname, c.href))) {
       return item.children;
     }
   }
@@ -179,12 +197,18 @@ export function resolveBreadcrumbSegments(
     segments.push({ label: item.label, href: item.href });
 
     if (item.children) {
-      const matched = item.children.find((c) => pathname.startsWith(c.href));
+      const matched = item.children.find((c) => isRouteMatch(pathname, c.href));
       if (matched) {
         segments.push({ label: matched.label, href: matched.href });
       }
     }
     break;
+  }
+
+  // GNB에 없는 특수 페이지(검색·알림 등)는 단일 세그먼트로 표시
+  if (segments.length === 0) {
+    const special = SPECIAL_PAGES[pathname];
+    if (special) segments.push({ label: special, href: pathname });
   }
 
   return segments;

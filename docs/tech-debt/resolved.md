@@ -4,6 +4,20 @@
 
 ---
 
+### ✅ nav pathname 매칭이 segment boundary 무시 (2026-05-31 해소)
+
+- **부채**: `isActiveGnb`·`resolveBreadcrumbSegments`·`isActiveBottomNav`·`resolveSiblingTabs`가 그냥 `pathname.startsWith(href)`로 매칭했다 — `/newsroom`이 `/news`에, `/about-us`가 `/about`에 걸리는 형제 prefix 오탐이 생길 수 있었다. resolver마다 경계 규칙(`startsWith` 단독 / `startsWith(href+'/')` / `===`)도 달랐다
+- **해소**: `navigation.ts`에 `isRouteMatch(pathname, href) = pathname === href || pathname.startsWith(href + '/')` 함수를 추가해 `isActiveGnb`·`isActiveBottomNav`·`resolveSiblingTabs`·`resolveBreadcrumbSegments`·`resolveMobileHeader` 자식 매칭에 일괄 적용했다. 현재 라우트에는 충돌이 없어 동작이 그대로이고, 앞으로 생길 형제 prefix 오탐을 미리 막는다
+- **확인**: `tsc --noEmit` exit 0, verify-task 필수 4단계 통과
+- **참고**: sitemap-consistency-fix Codex 유지보수 리뷰가 즉시 수정으로 지목, exec-plan `2026-05-22-sitemap-consistency-fix` 의사결정 로그 D11
+
+### ✅ resolveHeroMeta subtitle comparator 오류 (2026-05-31 해소)
+
+- **부채**: `for (key of HERO_META) if (categoryKey.startsWith(key) && key.length > subtitle.length)` — 경로 키 길이를 직전 최장 키 길이가 아니라 누적 subtitle 텍스트 길이와 비교하는 비교 로직 오류였다. 현재 데이터에선 도달할 수 없었으나 중첩 키를 추가하면 잘못된 subtitle을 표시할 위험이 있었다
+- **해소**: `categoryKey`가 항상 2-세그먼트 루트이고 `HERO_META` 키도 전부 2-세그먼트 루트라, 망가진 루프를 `const categoryMeta = HERO_META[categoryKey]` 직접 조회로 바꿨다. 동작은 그대로이고, 비교 로직 자체를 없앴다
+- **확인**: `tsc --noEmit` exit 0, `/sermons/all` Hero subtitle이 `/sermons` 카테고리 subtitle과 동일하게 유지됨
+- **참고**: sitemap-consistency-fix Codex 유지보수 리뷰가 즉시 수정으로 지목
+
 ### ✅ admin 토큰 통합 (ADR 0012) (2026-05-26 해소, PR #102)
 
 - **부채**: `AdminLayout/index.module.scss`의 `.shell` scope에 `--admin-*` 26종 + 레이아웃 3종(`--header-h`·`--sidebar-w`·`--sidebar-w-collapsed`) CSS 커스텀 프로퍼티가 메인 토큰과 분리된 채 admin 13 파일에서 340회 호출됨

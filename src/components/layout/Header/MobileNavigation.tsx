@@ -50,13 +50,23 @@ export default function MobileNavigation() {
             return (
               <li key={item.href} className={styles.menu_item}>
                 {hasChildren ? (
-                  <button
-                    className={clsx(styles.menu_header, isActive && styles.active)}
-                    onClick={() => handleToggle(item.href)}
-                  >
-                    {item.label}
-                    <span className={clsx(styles.nav_icon, isOpen && styles.nav_icon_open)} />
-                  </button>
+                  <div className={styles.menu_row}>
+                    <Link
+                      href={item.href}
+                      className={clsx(styles.menu_header, styles.menu_link, isActive && styles.active)}
+                    >
+                      {item.label}
+                    </Link>
+                    <button
+                      type="button"
+                      className={styles.expand_btn}
+                      onClick={() => handleToggle(item.href)}
+                      aria-label={`${item.label} 하위 메뉴 ${isOpen ? '접기' : '펼치기'}`}
+                      aria-expanded={isOpen}
+                    >
+                      <span className={clsx(styles.nav_icon, isOpen && styles.nav_icon_open)} />
+                    </button>
+                  </div>
                 ) : (
                   <Link
                     href={item.href}
