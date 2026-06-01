@@ -1,7 +1,7 @@
 import { notFound } from 'next/navigation';
 import MainContainer from '@/components/layout/container/MainContainer';
 import { BoardHeader, BoardBody, BoardFooter, BoardListLink } from '@/components/board';
-import { getCloudinaryUrl } from '@/utils/cloudinary';
+import { getOgImageUrl, getKakaoShareUrl } from '@/utils/cloudinary';
 import { generateFileDownloadList } from '@/utils/file';
 import { isNumeric } from '@/utils/validator';
 import { getAllBulletinIds, getBulletinById, getAdjacentBulletins } from '@/services/bulletin';
@@ -17,7 +17,7 @@ export async function generateMetadata({ params }: { params: Promise<{ id: strin
 
   const title = `${bulletin.title}`;
   const description = '이번 주 교회 주보에서 예배 일정과 소식을 살펴보세요.';
-  const firstImage = bulletin.bulletin_images?.[0];
+  const ogImage = getOgImageUrl(bulletin.bulletin_images?.[0]?.cloudinary_id);
 
   return {
     title,
@@ -25,7 +25,7 @@ export async function generateMetadata({ params }: { params: Promise<{ id: strin
     openGraph: {
       title,
       description,
-      images: firstImage ? [{ url: getCloudinaryUrl(firstImage.cloudinary_id) }] : []
+      images: ogImage ? [{ url: ogImage }] : []
     }
   };
 }
@@ -73,7 +73,7 @@ export default async function BulletinDetail({ params }: { params: Promise<{ id:
         userName="관리자"
         createdAt={created_at}
         userId={author_id ?? ''}
-        thumbnail={imageIds[0] ? getCloudinaryUrl(imageIds[0]) : ''}
+        thumbnail={getKakaoShareUrl(imageIds[0]) ?? ''}
         id={id.toString()}
         updateLink={`/news/bulletins/${id}/update`}
       />

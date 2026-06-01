@@ -7,7 +7,7 @@ import {
   incrementSermonViewCount
 } from '@/services/sermon';
 import { formatPreacherLabel, getSermonThumbnail } from '@/utils/sermon';
-import { getCloudinaryUrl } from '@/utils/cloudinary';
+import { getOgImageUrl } from '@/utils/cloudinary';
 import type { SermonWithRelations } from '@/types/sermon';
 import SermonDetailPage from '../_component/SermonDetailPage/SermonDetailPage';
 
@@ -24,7 +24,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const preacherLabel = formatPreacherLabel(sermon.preacher);
   const description = sermon.summary ?? `${preacherLabel}의 설교`;
   const thumbnail = getSermonThumbnail(sermon);
-  const ogImage = thumbnail ? getCloudinaryUrl(thumbnail) : null;
+  const ogImage = thumbnail ? getOgImageUrl(thumbnail) : null;
   const canonical = `${process.env.NEXT_PUBLIC_SITE_URL}/sermons/${id}`;
 
   return {

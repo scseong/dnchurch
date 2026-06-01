@@ -9,7 +9,7 @@ import SermonOtherByPreacher from '../SermonOtherByPreacher/SermonOtherByPreache
 import SermonMetaActions from './SermonMetaActions';
 import SermonDetailSections from './SermonDetailSections';
 import { formattedDate } from '@/utils/date';
-import { cloudinaryFetchUrl, getCloudinaryUrl } from '@/utils/cloudinary';
+import { cloudinaryFetchUrl, getKakaoShareUrl } from '@/utils/cloudinary';
 import { formatPreacherLabel, getSermonThumbnail } from '@/utils/sermon';
 import type { SermonWithRelations } from '@/types/sermon';
 import styles from './SermonDetailPage.module.scss';
@@ -80,7 +80,7 @@ function SermonMeta({ sermon, preacherLabel }: SermonMetaProps) {
   const series = sermon.sermon_series;
   const seriesOrder = sermon.series_order;
   const thumbnail = getSermonThumbnail(sermon);
-  const shareImageUrl = thumbnail ? getCloudinaryUrl(thumbnail) : undefined;
+  const shareImageUrl = getKakaoShareUrl(thumbnail) ?? undefined;
 
   return (
     <div className={styles.meta_block}>
