@@ -121,7 +121,7 @@ pre-commit 훅은 lint-staged로 변경 파일만 자동 검사 — error는 차
 
 ## ⚠️ Gotchas
 
-- `supabase` (named export from `client.ts`) deprecated → `getSupabaseBrowserClient()` 사용
+- 브라우저 클라이언트는 `getSupabaseBrowserClient()` 사용 (구 `supabase` named export는 제거됨)
 - Server Action과 뮤테이션은 **항상** `createServerSideClient()` (캐시 없음)
 - 공개 데이터 캐싱은 `createStaticClient()`, `createServerSideClient()` 아님
 - `_variables.scss`와 `_mixins.scss`는 `additionalData`로 자동 주입됨 — 각 `.module.scss`에서 `@import` 하지 않음

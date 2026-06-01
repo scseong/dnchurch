@@ -1,4 +1,4 @@
-import { supabase } from '@/lib/supabase/client';
+import { getSupabaseBrowserClient } from '@/lib/supabase/client';
 
 interface Credentials {
   email: string;
@@ -8,6 +8,7 @@ interface Credentials {
 }
 
 export async function signUp({ email, password, name, username }: Credentials) {
+  const supabase = getSupabaseBrowserClient();
   const { data, error } = await supabase.auth.signUp({
     email,
     password,
@@ -24,6 +25,7 @@ export async function signUp({ email, password, name, username }: Credentials) {
 }
 
 export async function signInWithPassword({ email, password }: Credentials) {
+  const supabase = getSupabaseBrowserClient();
   const { data, error } = await supabase.auth.signInWithPassword({
     email,
     password
@@ -35,6 +37,7 @@ export async function signInWithPassword({ email, password }: Credentials) {
 }
 
 export async function signInWithKakao(redirect = '/') {
+  const supabase = getSupabaseBrowserClient();
   const { data, error } = await supabase.auth.signInWithOAuth({
     provider: 'kakao',
     options: {
@@ -47,12 +50,14 @@ export async function signInWithKakao(redirect = '/') {
 }
 
 export async function signOut() {
+  const supabase = getSupabaseBrowserClient();
   const { error } = await supabase.auth.signOut();
 
   if (error) throw error;
 }
 
 export async function requestPasswordResetEmail(email: string) {
+  const supabase = getSupabaseBrowserClient();
   const { data, error } = await supabase.auth.resetPasswordForEmail(email, {
     redirectTo: `${process.env.NEXT_PUBLIC_SITE_URL}/auth/reset-password`
   });
@@ -62,6 +67,7 @@ export async function requestPasswordResetEmail(email: string) {
 }
 
 export async function updatePassword(password: string) {
+  const supabase = getSupabaseBrowserClient();
   const { data, error } = await supabase.auth.updateUser({
     password
   });
