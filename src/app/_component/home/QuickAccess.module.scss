@@ -59,7 +59,7 @@ $icon_box_size: 4.2rem;
 
     .arrow {
       opacity: 1;
-      transform: translateX(0.8rem);
+      transform: translateX($spacing-8);
     }
   }
 }
