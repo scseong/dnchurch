@@ -10,11 +10,13 @@ export const getSiteCollection = async <T extends Record<string, unknown>>(
     cache: 'force-cache'
   });
 
-  const { data } = await supabase
+  const { data, error } = await supabase
     .from('site_collections')
     .select('items')
     .eq('key', key)
     .maybeSingle();
+
+  if (error) console.error(`[site-collections] ${key} 조회 실패`, error);
 
   return (data?.items ?? []) as T[];
 };
