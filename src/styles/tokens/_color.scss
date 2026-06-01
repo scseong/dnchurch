@@ -81,6 +81,7 @@ $txt-on-dark-nav-faint: #6b7280;
 $bg-primary: $beige-50; // 페이지 전체 기본 배경
 $bg-card: $white; // 카드 배경 — $border-card와 쌍
 $bg-secondary: $beige-150; // 섹션·카드 정적 면 (decorative neutral) ★
+$bg-secondary-deep: $beige-300; // $bg-secondary보다 진한 따뜻한 면 — QuickAccess 배경·영상 그라데이션 끝
 $bg-beige-subtle: $beige-100; // 가장 옅은 beige 섹션 면 (secondary보다 옅음)
 $bg-hover: rgba($navy-800, 0.06); // 인터랙티브 hover 피드백 (cool, 면 종류 무관) — v4
 $bg-accent-subtle: rgba(196, 146, 74, 0.12); // CTA 섹션·환영 배너 (Gold 12% tint)
