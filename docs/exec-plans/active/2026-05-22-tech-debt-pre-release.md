@@ -1,6 +1,6 @@
 # tech-debt-pre-release
 
-- **상태**: 🟡 진행 중
+- **상태**: 🟡 거의 완료 — Phase 1~6을 처리했다(부채 그룹 G1·G2·G7·G3·G5·G4, PR #105와 `chore/pre-release-prep` 브랜치). Phase 7(G6)은 사용자 결정으로 후속으로 미뤘고, Phase 8(tech-debt 이관)은 머지 후에 한다
 - **시작일**: 2026-05-22
 - **브랜치**: phase별 분기 — `feat/sermons-publish-ssot` 머지 후 base branch에서 신설
 - **Open questions**:
@@ -58,47 +58,47 @@
   - [ ] dev preset 1장 강제 실패 수동 검증 — Cloudinary 콘솔 orphan 0건 확인 (배포 프리뷰 실측 대기)
   - [x] PR prefix: `Fix`
 
-- [ ] **Phase 2 — G2: Supabase silent fallback 로깅 (P0)**
-  - [ ] `getSiteCollection` — **백틱 템플릿 리터럴 필수**: `if (error) console.error(\`[site-collections] ${key}\`, error)` (싱글쿼트 사용 시 `${key}` 치환 안 되고 문자열 그대로 출력)
-  - [ ] `getSiteSettings`·`getActiveStaff` — 동일 패턴 (백틱 + `${변수}` 치환)
-  - [ ] PR prefix: `Fix`
+- [x] **Phase 2 — G2: Supabase silent fallback 로깅 (P0)** — chore/pre-release-prep, 2026-06-01
+  - [x] `getSiteCollection`·`getSiteSettings` — 쿼리 결과에서 error를 destructure해 백틱 `console.error` 1줄 기록
+  - [x] `getActiveStaff` — about `getPastorPageData`에서 결과 error 로깅 (getActiveStaff는 재사용 쿼리 빌더라 소비처에서 로깅)
+  - [x] PR prefix: `Fix`
 
-- [ ] **Phase 3 — G7: 잔재 정리 (P3 · 작은 마감)**
-  - [ ] `client.ts`의 `export const supabase` 제거, 2 호출처를 `getSupabaseBrowserClient()`로 교체
-  - [ ] CLAUDE.md gotcha 1줄 갱신 — `supabase named export deprecated` 항목 삭제
-  - [ ] `useDrawerHistory` pathname effect에 guarded cleanup 패턴 도입 — `if (pushed.current && history.state?.__drawer === true) { history.replaceState({ ...history.state, __drawer: undefined }, '', window.location.href); pushed.current = false; }`로 Drawer-pushed history entry의 `__drawer` 키만 제거 + 기존 history.state 다른 키(Next.js router 내부 state) 보존. **`history.back()` 금지** — route commit 직후 effect가 실행되면 방금 이동한 history entry를 되돌려 사용자가 이전 페이지로 튕김 (Drawer 안 Link 사용 시). **`replaceState` guard 필수** — Drawer가 push하지 않은 entry(Next.js router push)는 절대 건드리지 않음. 이 G7이 훅 수정을 맡음. sitemap D4는 BottomNav '전체'를 `openDrawer`에 **연결**해 이 훅을 쓰기만 함(수정 없음).
-  - [ ] PR prefix: `Refactor`
+- [x] **Phase 3 — G7: 잔재 정리 (P3 · 작은 마감)** — chore/pre-release-prep, 2026-06-01. 의도가 둘이라 commit 분리(Refactor: supabase / Fix: drawer)
+  - [x] `client.ts`의 `export const supabase` 제거, auth.ts 6함수·SessionContextProvider effect를 `getSupabaseBrowserClient()`로 교체
+  - [x] CLAUDE.md gotcha 갱신
+  - [x] useDrawerHistory 뒤로가기 버그 — ⚠️ **플랜의 effect cleanup 폐기**(D11 참조). 라우트 이동 직후 현재 history 항목이 새 경로라 `history.state.__drawer` guard가 절대 발동 안 함(Codex CHANGE_REQUEST + Chrome 실측 확인). 대신 `MobileNavigation`의 Link 5개에 `replace` 추가 — 드로어 열림 시 현재 항목이 sentinel이라 그 항목을 목적지로 교체해 가짜 항목 제거. 훅은 미수정. Chrome 실측: 드로어 링크 이동 후 뒤로가기 1회로 이전 페이지, history.length 불변(3→3)
+  - [x] PR prefix: `Refactor`(supabase) / `Fix`(drawer)
 
-- [ ] **Phase 4 — G3: Cloudinary 품질·preset (P1)**
-  - [ ] `createCloudinaryLoader`의 `q_${quality || 85}` → `q_auto:good` 일괄 전환
-  - [ ] `utils/cloudinary.ts`에 `getOgImageUrl(publicId)`·`getKakaoShareUrl(publicId)`·`getThumbnailUrl(publicId)` 함수 추가 (각 use-case 변환 파라미터 고정)
-  - [ ] OG metadata 사이트의 `generateMetadata`에서 신규 함수로 교체
-  - [ ] PR prefix: `Feat`
+- [x] **Phase 4 — G3: Cloudinary 품질·preset (P1)** — chore/pre-release-prep, 2026-06-01
+  - [x] 업로드 로더 `q_${quality || 85}` → `q_${quality || 'auto:good'}` (Next quality 인자 우선, 기본 auto:good)
+  - [x] `getOgImageUrl`(1200x630)·`getKakaoShareUrl`(800x400) 추가 — ⚠️ **플랜이 빠뜨린 외부 URL 처리 보완**(D12): public_id는 image/upload, 외부 URL(YouTube 썸네일)은 image/fetch로 같은 변환. `getThumbnailUrl`은 호출처가 없어 제외(knip 미사용 방지)
+  - [x] OG 이미지(sermons/[id]·series/[id]·bulletins/[id] 상세)를 getOgImageUrl로 교체
+  - [x] 카카오 공유(SermonDetailPage·bulletins)를 getKakaoShareUrl로 교체. Chrome 실측: /sermons/3 og:image가 fetch 변환 URL로 HTTP 200 image/jpeg
+  - [x] PR prefix: `Feat`
 
-- [ ] **Phase 5 — G5: typography 토큰 + about hex (P1)**
-  - [ ] `font-size: 0.9rem` 3건(SermonCard·NoticeTable·NoticeCategoryFilter) → `$font-size-11` 또는 `$font-size-12` 상향
-  - [ ] `0.8rem` 7건은 모두 padding/transform 용도(font-size 0건) → `$spacing-*` 토큰 분리
-  - [ ] about 영역 hex 1건(`serving-people/page.module.scss` `#eee`) 시맨틱 토큰 매핑
-  - [ ] PR prefix: `Style`
+- [x] **Phase 5 — G5: typography 토큰 + about hex (P1)** — chore/pre-release-prep, 2026-06-01
+  - [x] `font-size: 0.9rem` 3건(SermonCard·NoticeTable·NoticeCategoryFilter) → `$font-size-11`(1.1rem). fluid typography라 9px급→11px급 상향
+  - [x] `0.8rem` 7건 → `$spacing-8` — ⚠️ 고정 0.8rem 토큰이 없어 `$spacing-8`로 바꿨다. 데스크톱은 0.8rem 그대로이고 모바일만 0.6rem으로 줄어든다. 사용자 승인 후 적용
+  - [x] about `serving-people/page.module.scss` `#eee` → `$border-subtle`
+  - [x] PR prefix: `Style`
 
-- [ ] **Phase 6 — G4: focus-ring + `$beige-300` + home Hover Border (P1)**
-  - [ ] home Hover Border 남은 사례 rg 재카운트 — `:hover` 안 `border-color`/`border` 패턴 (Open question 해소)
-  - [ ] `$focus-ring-strong` 토큰 신설(`2px solid $primary-active`), `focus-ring($variant)` mixin 도입
-  - [ ] NoticeControlBar 4건·NoticeDrawer 2건·NoticeTable 2건 mixin 호출로 교체
-  - [ ] Pagination·ListItem·SermonNoteEditor는 변형 그대로 mixin 인자 전달
-  - [ ] `$bg-card-warm`·`$bg-gradient-warm-end` semantic 신설, QuickAccess·SermonVideoPlayer 사용처 치환
-  - [ ] home Hover Border 남은 사례가 있으면 hover-lift/shadow/text-underline 패턴으로 교체
-  - [ ] PR prefix: `Style` 또는 `Refactor`
+- [x] **Phase 6 — G4: focus-ring + `$beige-300` + home Hover Border (P1)** — chore/pre-release-prep, 2026-06-01. commit 분리(Style: $beige / Refactor: focus-ring)
+  - [x] home Hover Border 재카운트 — 2026-05-07 home cleanup에서 이미 해소 확인. FeedContent:25 `border-color` transition은 탭 활성/비활성 상태 전환이라 위반 아님. 추가 작업 없음
+  - [x] `$focus-ring-strong-color`($primary-active) 토큰 + `focus-ring($variant, $offset)` mixin 도입 — ⚠️ 플랜의 `$focus-ring-strong` 대신 색 토큰으로, `@content`로 border-radius 같은 추가 속성 수용
+  - [x] NoticeControlBar 4·NoticeDrawer 2·NoticeTable 2(안쪽 offset) mixin 교체
+  - [x] ListItem(안쪽 offset)·SermonNoteEditor mixin 교체. Pagination은 focus-visible 규칙 없음. admin은 box-shadow 패턴이라 범위 밖
+  - [x] `$bg-secondary-deep` 1개 신설(플랜의 2토큰을 같은 값·의미라 통합), QuickAccess·SermonVideoPlayer 치환
+  - [x] PR prefix: `Style`($beige) / `Refactor`(focus-ring)
 
-- [ ] **Phase 7 — G6: `app/→apis` 단계 정리 (P2)**
+- [ ] **Phase 7 — G6: `app/→apis` 단계 정리 (P2)** — 이번 PR 범위 밖. 사용자 결정으로 P0·작은마감·P1(G2·G7·G3·G5·G4)까지만 처리, G6는 후속
   - [ ] `about/serving-people/page.tsx`의 `getActiveStaff` 호출을 services 경유로 이동
   - [ ] home `Banner.tsx`/`AboutOurChurch.tsx` server component 전환 가능성 확인 — 가능하면 fetcher 경유, 불가능하면 이 plan 대상 아님으로 분리
   - [ ] auth 4건·UserProfileModal 1건은 이 plan 대상 아님 → 후속 작업 섹션에 기록
   - [ ] PR prefix: `Refactor`
 
 - [ ] **Phase 8 — 마무리**
-  - [ ] `docs/tech-debt-tracker.md`에서 처리 항목을 활성 → 해결됨으로 이동, 일부 처리 항목은 카운트만 갱신
-  - [ ] last-audit 날짜 갱신
+  - [ ] tech-debt active → resolved 이동(G2·G7×2·G3·G5·G4 해소분) + tracker 카운트 — chore/pre-release-prep 머지 후 complete-task에서
+  - [x] last-audit 날짜 — 같은 브랜치 첫 Docs commit에서 2026-06-01로 갱신됨
 
 ## Verification
 
@@ -172,6 +172,16 @@
   - 문제: 8건 일괄 정리 시 auth 정책(client 직접 호출 정당성)·home server component 전환 확인이 묶여 PR 비대화.
   - 해결: 일괄(정책 결정 부담)·현상 유지(부채 남음) 대신 단계 분리. about/serving-people 1건 즉시 services 경유, home Banner/AboutOurChurch 2건은 server component 전환 가능 시 fetcher로(불가능 시 후속), auth 4건은 따로 task에서 정책 결정, UserProfileModal 1건은 client signOut 정당화로 disable 주석 유지.
   - 결과: 이 phase에서 3건 정리(8→5), 남은 건 후속 작업 섹션에 기록.
+
+- **D11 — G7 드로어 뒤로가기: 플랜의 effect cleanup 폐기, Link `replace`로 전환**
+  - 문제: 플랜이 제시한 pathname effect의 `history.state?.__drawer === true` guard는 라우트 이동 직후 현재 history 항목이 새 경로라 절대 참이 안 된다. `replaceState`는 현재 항목만 바꿔서 묻힌 sentinel 항목을 못 지운다. Codex 검증도 CHANGE_REQUEST.
+  - 해결: 훅을 고치는 대신 `MobileNavigation`의 Link 5개에 `replace`를 붙였다. 드로어가 열린 상태에선 현재 history 항목이 sentinel이라, `<Link replace>`가 그 항목을 목적지로 교체해 가짜 항목을 남기지 않는다. 이유 — `history.back()` 비동기 경쟁이 없고 변경이 1파일로 좁다.
+  - 결과: Chrome 실측에서 드로어 링크 이동 후 뒤로가기 1회로 이전 페이지에 도달하고, history.length가 3에서 3으로 그대로다. 드로어만 열고 뒤로가기 시 페이지 유지·닫힘 회귀도 없다.
+
+- **D12 — G3 OG/공유 preset: 외부 URL도 image/fetch로 변환**
+  - 문제: 플랜의 `getOgImageUrl(publicId)`는 Cloudinary public_id만 가정했으나, 설교 OG 이미지는 `getSermonThumbnail`이 외부 YouTube 썸네일 URL을 돌려주는 경우가 많아 변환이 안 걸린다.
+  - 해결: helper가 입력을 분기한다 — public_id는 image/upload, 외부 URL은 image/fetch 경로로 같은 변환을 적용(Codex 설계). `getThumbnailUrl`은 호출처가 없어 추가하지 않았다(knip 미사용 방지).
+  - 결과: `/sermons/3` og:image가 YouTube 썸네일을 fetch 변환한 1200x630 URL로 생성되고 HTTP 200 image/jpeg를 돌려준다.
 
 ## 후속 작업
 
