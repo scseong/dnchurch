@@ -1,6 +1,6 @@
 # sitemap-consistency-fix
 
-- **상태**: 🟢 구현 완료 — 검증 통과(verify-task run 20260531-212130), 사용자 dev 수동 검증·커밋 승인 대기 (2026-05-31)
+- **상태**: ✅ 완료 (2026-06-01) — PR #106, verify-task 통과(run 20260531-221306), 브라우저 수동 검증 완료
 - **시작일**: 2026-05-22
 - **브랜치**: feat/sitemap-consistency-fix (따로 브랜치 권장 — 스캐폴드는 현재 브랜치 `feat/sermons-publish-ssot`로 잡혔음)
 - **Open questions**: ✅ 4건 모두 결정 완료 (2026-05-26 — §의사결정 로그 D1~D4)
@@ -76,7 +76,7 @@
 - [x] 9a. D1 — `/fellowship` 디렉토리 삭제 + `grep "/fellowship" src` 0건. FeedContent 참조 2곳 `/community/sharing`로 재연결(D9).
 - [x] 9b. D2 — `GNB_ITEMS` '교회 소개' children에 `섬기는 사람들`(`/about/serving-people`) 추가.
 - [x] 9c. D4 — BottomNav '전체' 클릭 → `drawerOpen ? closeDrawer : openDrawer` 토글. 뒤로가기-Drawer 닫힘은 훅 기존 `popstate` 핸들러가 처리 — 훅 수정 없음.
-- [ ] 10. 사용자 dev 수동 검증 — 매트릭스 §3 P1·P2·P4·P6·P8 행. (사용자 진행)
+- [x] 10. 매트릭스 §3 P1·P2·P4·P6·P8 + D1·D2·D4·D5·D6 행을 브라우저(Claude in Chrome)에서 dev 서버 실제 구동으로 확인.
 - [x] 11. ESLint·stylelint·build·knip PASS, knip 신규 항목 0건.
 - [x] 12. `node scripts/verify-task.mjs sitemap-consistency-fix` — 필수 4단계 통과(run 20260531-212130).
 
@@ -230,6 +230,26 @@ knip이 잡은 항목(`resolveNavLabel`·`ADMIN_ROOT` 미사용 export 등)은 �
 - **옵션 C 페이지 콜로케이션** — 보류.
   - 이유: 현재 라우트 규모(~35) 대비 빌드 파이프라인 신설 비용 과함.
   - 다음 기준: 라우트 70~80개 초과 시 재고.
+
+## 회고
+
+### 잘된 것
+
+- 옵션 A는 변경 범위를 데이터 결함 정정으로만 한정했다. nav 컴포넌트 시그니처를 손대지 않고 매트릭스 P1·P2·P4·P6·P8을 ✓로 바꿨다. 커밋도 데이터 정정(42aff14)과 매칭 단순화(1ba2ae6) 두 의도로 갈랐다.
+- '설교'에 children을 넣자 생긴 `/sermons/[id]` 모바일 헤더 회귀("대구동남교회"로 추락)를 구현 중에 발견해 D5 카테고리 하위 fallback으로 막았다. 매트릭스를 보고 회귀 지점을 짚었다.
+- Codex 유지보수 리뷰가 지목한 즉시 수정 2건(`isRouteMatch` 매칭 통일, `resolveHeroMeta` subtitle 조회 단순화)을 데이터 정정과 별도 커밋으로 나눠 의도를 섞지 않았다.
+- comingSoon 항목을 `Link` 대신 `div`로 그려, 휠클릭·우클릭 새 탭에서도 404로 빠지지 않게 막았다.
+
+### 다음에 할 것
+
+- 옵션 B 단일 매니페스트(`SITE_MAP`)는 `sitemap-manifest-migration` plan으로 분리한다 — SSOT 3분할·`SPECIAL_PAGES` 혼합 책임·admin breadcrumb `string[]` 통합을 맡는다.
+- 매트릭스 회귀 도구 `sitemap-matrix-regression` plan — 옵션 B 진입 전 안전망. 지금은 진단 문서 매트릭스를 수동 체크리스트로 쓴다.
+- bulletins create/update의 `(admin)` 이동(D3)은 `bulletins-admin-route-move` 후보로 분리한다.
+
+### 발견된 부채
+
+- 본 작업이 만든 신규 부채는 없다. Codex 리뷰가 지목한 2건(nav 매칭 경계 오탐, `resolveHeroMeta` subtitle 비교 로직)은 이번에 고쳐 `resolved.md`로 옮겼다.
+- knip이 잡은 `resolveNavLabel`·`ADMIN_ROOT` 미사용 export는 변경 전부터 있던 부채라 이번 범위 밖이다.
 
 ---
 
