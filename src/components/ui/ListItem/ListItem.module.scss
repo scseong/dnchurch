@@ -21,10 +21,7 @@
     background-color: $bg-hover;
   }
 
-  &:focus-visible {
-    outline: $spacing-2 solid $border-focus;
-    outline-offset: calc(-1 * #{$spacing-2});
-  }
+  @include focus-ring($offset: calc(-1 * #{$focus-ring-offset}));
 }
 
 .selected {
