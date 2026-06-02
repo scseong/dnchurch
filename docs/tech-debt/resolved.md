@@ -4,6 +4,60 @@
 
 ---
 
+### ✅ `supabase` named export deprecated 제거 (2026-06-02 해소, PR #108)
+
+- **부채**: `client.ts`의 deprecated `supabase` named export가 모듈 로드 시 클라이언트를 즉시 만들어 lazy 싱글톤과 인스턴스가 둘로 갈렸다
+- **해소**: export를 제거하고 `auth.ts` 6함수·SessionContextProvider를 `getSupabaseBrowserClient()` 호출로 교체했다. CLAUDE.md gotcha도 갱신했다
+- **확인**: `rg "import \{ supabase \}" src` → 0 hit
+
+### ✅ focus-ring 패턴 통일 (2026-06-02 해소, PR #108)
+
+- **부채**: `:focus-visible` outline이 10곳에 색·폭·offset 제각각으로 박혀 SSOT가 없었다
+- **해소**: `focus-ring($variant, $offset)` mixin(`@content`로 추가 속성 수용)과 `$focus-ring-strong-color` 토큰을 도입해 10곳(Notice 8·ListItem·SermonNoteEditor)을 교체했다
+- **확인**: 콘텐츠·ui의 raw `&:focus-visible` 0건. admin box-shadow 패턴은 범위 밖
+
+### ✅ useDrawerHistory 라우트 이동 시 가짜 history 항목 (2026-06-02 해소, PR #108)
+
+- **부채**: 드로어를 열고 메뉴로 이동하면 push한 sentinel 항목이 스택에 남아 뒤로가기를 두 번 눌러야 했다
+- **해소**: `MobileNavigation` Link 5개에 `replace`를 붙였다. 드로어가 열린 상태에선 현재 항목이 sentinel이라 그 항목을 목적지로 교체한다. 플랜의 effect cleanup은 라우트 이동 후 발동 불가로 폐기했다(D11)
+- **확인**: Chrome 실측 — 이동 후 뒤로가기 1회로 이전 페이지, history.length 불변
+
+### ✅ services/about Supabase silent fallback 로깅 부재 (2026-06-02 해소, PR #108)
+
+- **부채**: `getSiteCollection`·`getSiteSettings`·`getActiveStaff`가 DB error를 삼키고 빈 값으로 fallback해 운영에서 검출이 안 됐다
+- **해소**: 세 조회 지점에서 error를 백틱 `console.error`로 1줄 기록했다. 빈 값 fallback은 유지(ADR 0006 silent fallback)
+- **확인**: Vercel 함수 로그에 `[domain] ... 조회 실패`가 출력된다
+
+### ✅ about/serving-people 구분선 #eee (2026-06-02 해소, PR #108)
+
+- **부채**: `serving-people/page.module.scss`의 `.divide`가 `border: 1px solid #eee`로 hex를 하드코딩했다
+- **해소**: `$border-subtle`(얕은 구분선 토큰)로 교체했다
+- **확인**: about 영역 `.module.scss` hex 0건
+
+### ✅ typography 리터럴 0.8/0.9rem (2026-06-02 해소, PR #108)
+
+- **부채**: font-size 0.9rem 3곳과 0.8rem 7곳이 토큰 없이 박혀 있었다
+- **해소**: 0.9rem을 `$font-size-11`(접근성 상향)로, 0.8rem을 `$spacing-8`(반응형: 모바일 0.6rem, 데스크톱 0.8rem)로 바꿨다
+- **확인**: 해당 10곳의 0.8/0.9rem 리터럴 0건. Chrome 실측에서 배지 글자 1.1rem 적용
+
+### ✅ `$beige-300` semantic 매핑 부재 (2026-06-02 해소, PR #108)
+
+- **부채**: QuickAccess 배경과 SermonVideoPlayer 그라데이션이 primitive `$beige-300`을 직접 썼다
+- **해소**: `$bg-secondary-deep`($beige-300) 시맨틱 토큰을 신설해 두 곳을 치환했다. 플랜의 2토큰 제안은 같은 값·같은 의미라 1개로 통합했다
+- **확인**: `rg "\$beige-300" src/app src/components` → 0 hit. 값이 같아 시각 변화 0
+
+### ✅ Cloudinary 업로드 화질 q_85 고정 (2026-06-02 해소, PR #108)
+
+- **부채**: 업로드 로더가 `q_${quality || 85}`로 기본 화질을 85%로 고정했다
+- **해소**: `q_${quality || 'auto:good'}`로 바꿨다(Next가 quality 인자를 주면 그 값 우선, 기본은 auto:good). 외부 fetch 경로는 이미 q_auto
+- **확인**: `src/utils/cloudinary.ts:90` 로더가 q_auto:good
+
+### ✅ Cloudinary use-case preset 부재 (OG·카카오) (2026-06-02 해소, PR #108)
+
+- **부채**: OG·카카오 공유 이미지가 원본을 그대로 써서 크기·품질 통제가 없었다. 설교 OG는 외부 YouTube URL이라 변환도 안 걸렸다
+- **해소**: `getOgImageUrl`(1200x630)·`getKakaoShareUrl`(800x400)을 도입했다. public_id는 image/upload, 외부 URL은 image/fetch로 같은 변환을 건다(D12). sermons·series·bulletins OG와 공유에 연결했다
+- **확인**: `/sermons/3` og:image가 fetch 변환 URL로 HTTP 200 image/jpeg. `getThumbnailUrl`은 소비처가 없어 보류
+
 ### ✅ bulletin 업로드 부분 실패 시 orphan 이미지 잔존 (2026-05-31 해소, PR #105)
 
 - **부채**: `uploadBulletinImages`가 `Promise.all`로 5장을 병렬 업로드한다. 1장이라도 실패하면 throw로 끝나는데, 이미 올라간 이미지는 Cloudinary에 주인 없이(orphan) 남았다

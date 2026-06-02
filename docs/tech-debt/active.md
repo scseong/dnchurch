@@ -4,18 +4,6 @@
 
 ---
 
-### 🟢 `supabase` named export deprecated (2건 남음)
-
-- **무엇**: `src/lib/supabase/client.ts`의 `supabase` named export
-- **왜**: 초기에 단일 client 인스턴스로 시작했으나, 용도별 분리(browser/server-side/static/admin) 필요해짐
-- **마이그레이션 경로**: 남아 있는 2건을 `getSupabaseBrowserClient()`로 교체 → named export 자체 제거
-- **영향 범위** (2건):
-  - `src/context/SessionContextProvider.tsx:14`
-  - `src/apis/auth.ts:1`
-- **확인**: `rg "import \{ supabase \} from" src` → 2 hits
-- **발견일**: 미상 (CLAUDE.md Gotchas에 기존 기록)
-- **재확인일**: 2026-05-21 (다수 → 2건으로 축소 확인)
-
 ### 🟡 `app/ → apis/` 직접 호출 (레이어 위반, 8건)
 
 - **무엇**: 페이지·홈 컴포넌트가 `services/` 경유 없이 `apis/`를 직접 import
@@ -32,36 +20,6 @@
 - **발견일**: 2026-05-01 (ESLint 레이어 룰 도입 시)
 - **2026-05-02**: `worship/page.tsx` 해소 (`services/worship/` 도입) — 10건 → 9건
 - **2026-05-21**: `about/location/page.tsx` 해소 (`services/about/getLocationPageData` 경유) — 9건 → 8건
-
-### 🟢 focus-ring 패턴 통일 (10곳)
-
-- **무엇**: globals 외 10곳의 `:focus-visible` outline이 색·width·offset가 제각각. 색은 `$primary`/`$primary-active`/`$border-focus`/`$border-primary` 4종, width는 `0.2rem`/`2px` 혼재, offset은 양수·음수 혼재
-- **왜**: focus-ring 토큰(`$focus-ring-{width,offset,color}`)이 도입되기 전(2026-05-10 이전) 영역별로 자유롭게 작성됨. globals만 본 PR에서 토큰화 완료
-- **마이그레이션 경로**: 영역별 분리 PR로 새 토큰(또는 신설 mixin) 적용. 음수 offset(NoticeTable)·`$primary-active` 사용(NoticeDrawer/Table/ControlBar)·`$border-primary` 사용(Pagination)이 의도인지 케이스별 검토 후 통일 또는 토큰 다양성 추가
-- **영향 범위** (10곳):
-  - `src/components/ui/Pagination/Pagination.module.scss:39-40` — `$border-primary` 사용 (의도 검토 필요)
-  - `src/components/ui/ListItem/ListItem.module.scss:25-26` — `$border-focus` + negative offset
-  - `src/app/(content)/news/notices/_component/NoticeDrawer.module.scss:127-128, 207-208` — `$primary-active` + 2px
-  - `src/app/(content)/news/notices/_component/NoticeTable.module.scss:48-49, 204-205` — `$primary-active` + negative offset
-  - `src/app/(content)/news/notices/_component/NoticeControlBar.module.scss:51-52, 82-83, 107-108, 169-170` — `$primary-active` + 2px (4곳 동일 패턴)
-- **확인**: `rg ':focus|outline' src -g '*.scss'` (focus-state 전반 추적성 — outline-ring 외 :focus·:focus-within·outline:none 패턴도 함께 노출)
-- **발견일**: 2026-05-10 (transition-focus-tokens PR EXPLORE)
-
-### 🟢 useDrawerHistory: 라우트 이동 시 drawer history entry 미정리
-
-- **무엇**: `useDrawerHistory.ts`에서 drawer 열린 상태로 링크 클릭 등 라우트 이동이 발생하면, `history.pushState({ __drawer: true }, '')` 엔트리가 스택에서 제거되지 않아 뒤로가기 스택에 중복 URL이 남을 수 있음
-- **왜**: 초기 구현에서 `pathname` 변경 시 `setDrawerOpen(false)` 처리만 하고 쌓인 history entry 정리 정책이 미정의
-- **마이그레이션 경로**: `pathname` effect 또는 unmount cleanup에서 `history.back()` 또는 `history.replaceState` 호출로 entry 제거 정책 결정 후 적용
-- **영향 범위**: `src/hooks/useDrawerHistory.ts`, `src/components/layout/BottomNav/BottomNav.tsx`
-- **발견일**: 2026-05-10 (PR #81 Codex 리뷰)
-
-### 🟢 services/about: Supabase error silent fallback 로깅 부재
-
-- **무엇**: `getSiteCollection<T>` 및 `getSiteSettings`가 Supabase `error` 필드를 무시하고 빈 배열/기본값으로 fallback. 운영 중 DB 오류가 발생해도 로그 없이 빈 화면으로 렌더됨
-- **왜**: `worshipService`만 try/catch 보호. 나머지 API 호출은 silent fallback 정책으로 작성 (사용자 결정)
-- **마이그레이션 경로**: `error && console.error(...)` 최소 로깅 추가. 중요도에 따라 Sentry 등 외부 에러 추적 연동 검토
-- **영향 범위**: `src/apis/site-collections.ts`, `src/services/about/index.ts`
-- **발견일**: 2026-05-10 (PR #81 Codex 리뷰)
 
 ### 🟡 SCSS primitive 토큰 직접 사용 (143건)
 
@@ -144,34 +102,6 @@
 - **마이그레이션 경로**: 도입 결정 시 별도 ADR로 처리 — `_color.scss`에 dark 토큰 추가, `[data-theme="dark"]` 또는 `prefers-color-scheme` 셀렉터로 시맨틱 레이어 오버라이드
 - **발견일**: 2026-05-04 (design-system-v3, Tier 2 보류)
 
-### 🟢 about/ 경로 SCSS 정리 (1건 남음)
-
-- **무엇**: `src/app/(content)/about/serving-people/page.module.scss:72`의 `border: 1px solid #eee` hex 하드코딩 1건
-- **왜**: 디자인·내용 미확정으로 design-system-v3 pilot에서 제외됐던 영역. 그동안 about/page.module.scss 본체에 있던 hex 3종(`#eee`, `#f8f8f8`, `#fde5cf`)은 about-page-redesign(2026-05-08)에서 토큰으로 치환됨
-- **마이그레이션 경로**: `border: 1px solid #eee` → semantic border 토큰 매핑(`$border-card` 또는 `$border-subtle` 후보)
-- **영향 범위** (1건):
-  - `src/app/(content)/about/serving-people/page.module.scss:72`
-- **확인**: `rg "#[0-9a-fA-F]{3,6}" src/app/(content)/about -g "*.module.scss"` → 1 hit
-- **2026-05-21 갱신**: about/page.module.scss 본체 hex 3종 + 리터럴 2건 모두 해소됨. 남은 건 serving-people 1건뿐이라 항목 범위 축소
-- **발견일**: 2026-05-04 (design-system-v3 Non-goals)
-
-### 🟢 typography 리터럴 0.8rem / 0.9rem 토큰 부재 (10건)
-
-- **무엇**: 8/9px 리터럴(`0.8rem`·`0.9rem`)이 모듈 곳곳에 박혀 있음. font-size 3건 + padding 4건 + 위치(left/right) 2건 + margin 1건 + translate 1건 = 10건
-- **왜**: 현재 typography primitive는 `$font-size-11`이 최저. font-size 외 padding/위치 값은 spacing 토큰 체계(가장 작은 값이 `$spacing-4`=0.4rem)에서도 0.8rem 사용 가능한지 디자인 검토 필요
-- **마이그레이션 경로**:
-  - font-size 3건: (a) `$font-size-9`/`$font-size-8` 신규 primitive 도입 또는 (b) 디자인 검토 후 `$font-size-11`/`$font-size-12`로 상향
-  - 그 외 7건: spacing 토큰(`$spacing-8`)으로 치환 가능한지 케이스별 확인
-- **영향 범위** (10건):
-  - font-size: `src/app/_component/home/SermonCard.module.scss:46`, `src/app/(content)/news/notices/_component/NoticeCategoryFilter.module.scss:40`, `NoticeTable.module.scss:146`
-  - padding: `src/app/(content)/news/bulletins/_component/CreateBulletinButton.module.scss:5`, `BulletinForm.module.scss:13`, `src/app/(content)/about/page.module.scss:213`
-  - left/right: `src/app/(content)/about/page.module.scss:392`, `page.module.scss:393`
-  - margin-top: `src/app/(content)/about/vision/page.module.scss:375`
-  - transform: `src/app/_component/home/QuickAccess.module.scss:62`
-- **확인**: `rg -n '0\.[89]rem' -g '*.module.scss' src/` → 10 hits
-- **2026-05-21 갱신**: `FeedContent.module.scss:223` 0.8rem은 해소됨. 다른 위치 9건이 새로 보이므로 카운트 갱신 (2건 → 10건). 처음 발견 시 font-size만 보던 시야에서 padding/위치/margin/transform까지 같이 보는 시야로 넓힘
-- **발견일**: 2026-05-04 (design-system-v3 Step 3)
-
 ### 🟢 FeedContent `.badge_category` mixin 미적용
 
 - **무엇**: `src/app/_component/home/FeedContent.module.scss`의 카테고리 뱃지가 신규 caption mixin을 적용받지 않은 채 직접 토큰 조합
@@ -195,29 +125,15 @@
 - **마이그레이션 경로**: `eslint-plugin-import`의 `no-relative-parent-imports` 또는 `eslint-plugin-boundaries` 도입 검토 (별도 EXEC_PLAN)
 - **발견일**: 2026-05-01 (Codex 리뷰)
 
-### 🟢 Hover Border 위반 — 디자인 시스템 v4 미완 남은 부분 (10건)
+### 🟢 Hover Border 위반 — admin 영역 남은 분 (5건)
 
-- **무엇**: hover 시 `border-color`/`border` 변경 — `.claude/skills/styles/SKILL.md` Hover 3원칙 #3 위반
-- **왜**: v4 마이그레이션이 sermons/news 영역에 한정. home/admin은 후속 phase로 분리
-- **마이그레이션 경로**:
-  - home(5건): hover에서 border 코드 제거, 필요 시 `hover-lift` 또는 shadow 강조로 대체
-  - admin(5건): admin 토큰 ADR 결정 후 일괄
-- **영향 범위**:
-  - home: `src/app/_component/home/{FeedContent,SermonCard,RecentSermons,NewHere,AboutOurChurch}.module.scss`
-  - admin: `src/components/admin/sermons/SermonListPage/{dropdown,table}.module.scss`, `src/components/admin/sermons/SermonForm/index.module.scss`, `src/components/admin/layout/{PageHeader,AdminHeader}/index.module.scss`
+- **무엇**: hover 시 `border-color`/`border` 변경 — `.claude/skills/styles/SKILL.md` Hover 3원칙 #3 위반. admin 5건만 남음
+- **왜**: v4 마이그레이션이 sermons/news 영역에 한정됐다. home은 2026-05-07 home cleanup에서 해소(resolved.md), admin은 admin 토큰 ADR 결정 후로 분리
+- **마이그레이션 경로**: admin 5건은 admin 토큰 통합(ADR 0012)이 끝났으니 hover border를 제거하고 `hover-lift`/shadow로 대체
+- **영향 범위** (admin 5건):
+  - `src/components/admin/sermons/SermonListPage/{dropdown,table}.module.scss`, `src/components/admin/sermons/SermonForm/index.module.scss`, `src/components/admin/layout/{PageHeader,AdminHeader}/index.module.scss`
+- **2026-06-02 갱신**: home 5건은 2026-05-07 home cleanup에서 이미 해소 확인(FeedContent transition은 탭 상태 전환이라 위반 아님). 10건 → admin 5건으로 축소
 - **발견일**: 2026-05-07 (Codex 디자인 시스템 audit)
-
-### 🟢 `$beige-300` semantic 매핑 부재 (2건 남음)
-
-- **무엇**: `$beige-300: #e8e6e1` primitive가 2 모듈에서 직접 사용 중인데 semantic 토큰 매핑이 없음
-- **왜**: 2026-05-08 about-page-redesign에서 사용자 명시 요청으로 `$cream-300 → $beige-300` 매핑되어 도입됐으나, 같은 plan 시점에 semantic 이름까지 짝지을 시간이 없어 SKILL.md에 *"미정"*으로 기록 후 보류
-- **마이그레이션 경로**: 사용처 2 모듈 패턴(QuickAccess background, SermonVideoPlayer gradient `linear-gradient(135deg, $beige-150, $beige-300)`)에서 의미 뽑아내기 → `$bg-secondary-deep` 또는 `$bg-gradient-end-warm` 같은 semantic 신설 → 사용처 일괄 치환 → SKILL.md 갱신
-- **영향 범위** (2 파일 2건):
-  - `src/app/_component/home/QuickAccess.module.scss:4` — `background: $beige-300`
-  - `src/app/(content)/sermons/_component/SermonVideoPlayer/SermonVideoPlayer.module.scss:74` — gradient end
-- **확인**: `rg '\$beige-300' src/app src/components` → 2 hits
-- **2026-05-21 갱신**: GridCard·SermonCard gradient에서 사라짐(언제 어느 PR에서 빠졌는지는 git blame 필요). 5건 → 2건으로 축소
-- **발견일**: 2026-05-10 (style-tokens-cleanup PR Codex 1차 BLOCK 검증 중 발견)
 
 ### 🟢 토큰 부채 — 디자인 시스템 v4 미완 남은 부분 (hex/rgba 직접 사용)
 
@@ -237,23 +153,6 @@
 - **왜**: dnchurch dev/prod preset의 dynamic folder mode에서 경험적으로 검증된 조합. Cloudinary 공식은 dynamic folder mode에서 `asset_folder` + `public_id_prefix` 또는 `use_asset_folder_as_public_id_prefix`를 권장
 - **마이그레이션 경로**: 단순화 시도 전 smoke test 필수 — `folder` 제거 / `asset_folder` 전환 각각 시도 후 결과 `public_id` 형태와 폴더 위치 확인. 검증 통과 시 단순화
 - **영향 범위**: `src/apis/cloudinary.ts`
-- **발견일**: 2026-05-11 (PR #82 Codex 리뷰)
-
-### 🟢 Cloudinary 이미지 품질 `q_85` 고정 → `q_auto` 전환 검토
-
-- **무엇**: `src/utils/cloudinary.ts:90`의 업로드 로더(`createCloudinaryLoader`)가 `q_${quality || 85}`로 기본 화질 85% 고정. Cloudinary 공식 권장은 `q_auto`(또는 `q_auto:good`)로, 컨텐츠별 최적 품질로 자동 조정한다. 외부 호스트 fetch URL(`cloudinaryFetchUrl:58`·resize `:79`)은 이미 `q_auto`를 쓴다. 이번 부채는 업로드 로더 기본값 1곳만 남는다
-- **왜**: 명시적 품질 관리 의도. 자동화 결과 품질 변동성 우려로 보류
-- **마이그레이션 경로**: 일부 use-case(`hero`, `bulletin`)에서 A/B 비교 후 `q_auto:good` 전환. PSNR/SSIM 또는 시각 검토로 품질 회귀 없음 확인 → 전체 전환
-- **영향 범위**: `src/utils/cloudinary.ts`, 모든 `<CloudinaryImage>` 사용처
-- **참고**: https://cloudinary.com/documentation/image_optimization
-- **발견일**: 2026-05-11 (PR #82 Codex 리뷰)
-
-### 🟢 Cloudinary use-case별 preset 부재 (OG/카카오/다운로드)
-
-- **무엇**: `getCloudinaryUrl()`은 변환 없이 원본 URL 생성. OG 이미지·카카오 공유·다운로드 등 각 use-case에 적절한 사이즈/품질 변환이 일괄 적용되지 않음
-- **왜**: 초기에는 `<Image>` 컴포넌트만 사용하는 가정. OG/공유 등 외부 use-case 추가 시 case-by-case로 변환 추가
-- **마이그레이션 경로**: use-case별 명명된 preset 함수 도입 — 예: `getOgImageUrl(publicId)`, `getKakaoShareUrl(publicId)`, `getThumbnailUrl(publicId)`. 각각 `w`/`c`/`q`/`f` 조합 고정 → derived asset 종류 통제 → bandwidth/transformation 비용 절감
-- **영향 범위**: `src/utils/cloudinary.ts`, OG metadata 생성 사이트, 공유 버튼 컴포넌트
 - **발견일**: 2026-05-11 (PR #82 Codex 리뷰)
 
 ### 🟢 `CloudinaryImage` 불필요한 `'use client'` boundary

@@ -1,6 +1,6 @@
 # tech-debt-pre-release
 
-- **상태**: 🟡 거의 완료 — Phase 1~6을 처리했다(부채 그룹 G1·G2·G7·G3·G5·G4, PR #105와 `chore/pre-release-prep` 브랜치). Phase 7(G6)은 사용자 결정으로 후속으로 미뤘고, Phase 8(tech-debt 이관)은 머지 후에 한다
+- **상태**: ✅ 완료 (2026-06-02)
 - **시작일**: 2026-05-22
 - **브랜치**: phase별 분기 — `feat/sermons-publish-ssot` 머지 후 base branch에서 신설
 - **Open questions**:
@@ -223,6 +223,25 @@
 - **최종 판단**: PASS
 - **현재 판단**: verify-task(run 20260602-001031) ESLint·stylelint·Build 통과, Knip은 기존 부채. 드로어 뒤로가기와 /sermons/3 OG 이미지는 Chrome 실측으로 확인. Gemini·Codex 리뷰 0 이슈
 - **다음 행동**: harness-gate 통과 후 머지
+
+## 회고
+
+### 잘 된 것
+
+- 배포 전 P0·P1 부채 5개 그룹(G2·G7·G3·G5·G4)을 9 commit·1 PR(#108)로 정리했다. verify-task·Gemini·Codex 객관 리뷰가 모두 0 이슈로 끝났다.
+- 한 commit = 한 의도로 분리했다. G7은 supabase 잔재(Refactor)와 드로어 버그(Fix)로, G4는 $beige(Style)와 focus-ring(Refactor)으로 나눴다. 사용자에게 그룹별로 승인받아 진행했다.
+- 동작이 바뀌는 부분은 Claude in Chrome으로 실측했다. 드로어는 뒤로가기 1회·history.length 불변, Cloudinary OG는 /sermons/3에서 HTTP 200 image/jpeg를 확인했다.
+
+### 다음에 할 것
+
+- G6(`app/→apis` 직접 호출 3건을 services 경유로)은 사용자 결정으로 분리했다. active.md "app/→apis 직접 호출" 부채 항목이 추적한다.
+- 주보 업로드 orphan 실기기 QA(G1 잔여), bulletin 폼 border hex(black·#ccc), getThumbnailUrl 소비처가 생기면 추가.
+- supabase-cost-pass-1(성능)은 별도 plan으로 남아 있다.
+
+### 발견된 부채·관찰
+
+- 플랜의 사전 설계가 세 곳에서 틀렸다. 드로어 history guard는 라우트 이동 후 발동 안 함, Cloudinary 함수는 외부 YouTube URL을 빠뜨림, spacing 0.8rem→토큰은 무손실이 아니라 반응형 값 변경. 다음 plan은 History API 타이밍·외부 URL·반응형 스케일을 구현 전에 실측하거나 Codex로 검증하는 게 좋다.
+- Codex 백그라운드 호출이 샌드박스 셸 오류로 1회 부분 실패했다(Cloudinary 설계). diff·파일을 1개로 좁혀 Read하게 하면 회피된다.
 
 ## 검증 이력
 

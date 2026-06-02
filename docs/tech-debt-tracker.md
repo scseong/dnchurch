@@ -6,10 +6,10 @@
 
 ## 위치
 
-| 파일 | 내용 | 항목 수 (2026-06-01) |
+| 파일 | 내용 | 항목 수 (2026-06-02) |
 | --- | --- | --- |
-| [`tech-debt/active.md`](tech-debt/active.md) | 진행 중·미해결 부채 | 34 |
-| [`tech-debt/resolved.md`](tech-debt/resolved.md) | 해결된 부채 (회고·검색용) | 11 |
+| [`tech-debt/active.md`](tech-debt/active.md) | 진행 중·미해결 부채 | 25 |
+| [`tech-debt/resolved.md`](tech-debt/resolved.md) | 해결된 부채 (회고·검색용) | 20 |
 
 ## 형식
 
@@ -35,5 +35,5 @@
 - 형식 일관성 가이드: ADR 0011 (의사결정 로그 형식)
 - 부채 발견 → 등록 흐름: `.claude/skills/complete-task/SKILL.md`
 
-<!-- last-audit: 2026-06-01 -->
+<!-- last-audit: 2026-06-02 -->
 <!-- 변경 이력은 docs/exec-plans/completed/ 또는 git log 참조 -->
