@@ -61,5 +61,5 @@ next-gen 신규 도메인(Phase 3)을 짓기 전에 골격 표준이 없으면 �
 
 - 관련 exec-plan: `docs/exec-plans/active/2026-06-01-design-catalog.md`
 - 관련 감사: `docs/design-system/audit.md` (V1-1·V1-4·V2-2)
-- 관련 fix: `fix/about-hero` (dfc6f7b) — `SELF_HERO_PATHS`로 hero 중복 선반영
+- 관련 fix: 커밋 `4637e28` (본 PR에 cherry-pick) — `SELF_HERO_PATHS`로 `/about` hero 중복 제거
 - 관련 PR: Phase 2 PR에서 채움
