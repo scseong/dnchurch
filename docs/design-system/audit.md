@@ -10,9 +10,9 @@
 
 | 영역 | 핵심 발견 | 증거 카운트 |
 | --- | --- | --- |
-| 1. 컴포넌트 선택 | 페이지 컨테이너 2종 혼재(`LayoutContainer` 10·`MainContainer` 5). 카드 그리드 4종이 sermons 안에서 별도 컴포넌트로 공존. about 정적 페이지의 카드/스텝 패턴은 페이지 SCSS로 직접 작성 — 공통화 0. | 컨테이너 19, 카드 4 |
-| 2. 레이아웃 구조 | 36 페이지 중 16 페이지가 1줄짜리 placeholder(`<div>한글</div>` 또는 다른 경로 위임). 구현된 20 페이지도 hero·body·footer 배치가 도메인별로 다름. | 스켈레톤 16, hero 패턴 3종 |
-| 3. 시각 토큰 | `(content)` 영역만으로 primitive 토큰 직접 사용 36건, hex 하드코딩 3건, focus-ring 비표준 8건. semantic 도입 후에도 warm tint를 hover 면에 쓰는 Hover 3원칙 #1 위반. | 36 + 3 + 8 + 2 |
+| 1. 컴포넌트 선택 | 페이지 컨테이너 2종 혼재(`LayoutContainer` 10·`MainContainer` 6). 카드 그리드 4종이 sermons 안에서 별도 컴포넌트로 공존. about 정적 페이지의 카드/스텝 패턴은 페이지 SCSS로 직접 작성 — 공통화 0. | 컨테이너 16, 카드 4 |
+| 2. 레이아웃 구조 | 36 페이지 중 17 페이지가 1줄짜리 placeholder(`<div>한글</div>` 또는 다른 경로 위임). 구현된 19 페이지도 hero·body·footer 배치가 도메인별로 다름. | 스켈레톤 17, hero 패턴 3종 |
+| 3. 시각 토큰 | `(content)` 영역만으로 primitive 토큰 직접 사용 38건(occurrence 기준), hex 하드코딩 3건, focus-ring 비표준 8건. semantic 도입 후에도 warm tint를 hover 면에 쓰는 Hover 3원칙 #1 위반. | 38 + 3 + 8 + 2 |
 | 4. 상호작용·빈 상태 | `loading.tsx`·`error.tsx`·`not-found.tsx`·`EmptyState`가 sermons 도메인에 편중. news 부분 적용, 나머지 5 도메인 0. | sermons 11 / 그 외 7 / 5 도메인 0 |
 
 ## 페이지 유형 분류 (36 페이지)
@@ -24,23 +24,23 @@
 | `(content)` 루트 | `page.tsx` (홈) | — | — | — | — | — | — |
 | about | `about/page.tsx` | `about/serving-people/page.tsx` | — | `location`·`pastor`·`vision`·`welcome`·`worship` | — | — | — |
 | community | — | — | — | — | — | — | `community/page`·`groups`·`groups/[id]`·`prayer`·`prayer/[id]`·`sharing`·`sharing/[id]` (7) |
-| news | — | `news/bulletins/page.tsx`·`news/notices/page.tsx` | `news/bulletins/[id]/page.tsx`·`news/notices/[id]/page.tsx` | — | `news/bulletins/create/page.tsx`·`news/bulletins/[id]/update/page.tsx` | `news/page.tsx`(→bulletins) | `news/gallery/page`·`gallery/[id]` (2) |
+| news | — | `news/bulletins/page.tsx`·`news/notices/page.tsx` | `news/bulletins/[id]/page.tsx` | — | `news/bulletins/create/page.tsx`·`news/bulletins/[id]/update/page.tsx` | `news/page.tsx`(→bulletins) | `news/gallery/page`·`gallery/[id]`·`notices/[id]` (3) |
 | next-gen | — | — | — | — | — | — | `next-gen/page`·`elementary`·`kindergarten`·`young-adult`·`youth` (5) |
 | notifications | — | — | — | — | — | — | `notifications/page.tsx` |
 | search | — | — | — | — | — | — | `search/page.tsx` |
 | sermons | `sermons/page.tsx` | `sermons/all/page.tsx`·`sermons/series/page.tsx` | `sermons/[id]/page.tsx`·`sermons/series/[id]/page.tsx` | — | — | — | — |
-| **합계** | 3 | 5 | 4 | 5 | 2 | 1 | **16 (44%)** |
+| **합계** | 3 | 5 | 3 | 5 | 2 | 1 | **17 (47%)** |
 
-스켈레톤 16 페이지는 Phase 3(next-gen 신규) + Phase 4(기존 페이지 마이그레이션) 작업 큐.
+스켈레톤 17 페이지는 Phase 3(next-gen 신규) + Phase 4(기존 페이지 마이그레이션) 작업 큐. `news/notices/[id]/page.tsx`는 `<div>page</div>` 3줄 placeholder라 디테일이 아닌 스켈레톤이다(PR #107 리뷰가 지적, 코드·Codex 교차검증).
 
 ## 컨테이너 사용 분포
 
 | 컨테이너 | 페이지 수 | 사용처 |
 | --- | --- | --- |
-| `LayoutContainer` | 10 | about/* (5/6 — `serving-people` 제외)·sermons/* (5/5) |
-| `MainContainer` | 5 | `about/serving-people` + `news/bulletins/*` (3) + `news/notices/page.tsx` |
-| 컨테이너 없음 | 17 | 홈(자체 hero 섹션) + 스켈레톤 16 |
-| **합계** | 32 | (스켈레톤 일부 포함, 위임 1 = `news/page.tsx` 제외) |
+| `LayoutContainer` | 10 | about 정보형 5(`location`·`pastor`·`vision`·`welcome`·`worship`)·sermons 5(`page`·`all`·`[id]`·`series`·`series/[id]`) |
+| `MainContainer` | 6 | `about/serving-people` + `news/bulletins/*` 4(`page`·`create`·`[id]`·`[id]/update`) + `news/notices/page.tsx` |
+| 컨테이너 없음 | 20 | 홈·`about/page`(자체 hero) + 위임 `news/page` + 스켈레톤 17 |
+| **합계** | 36 | 10 + 6 + 20 = 36 (전체 일치) |
 
 `(content)` 라우트 그룹은 layout이 HeroSection + Breadcrumb를 자동 포함하지만 페이지 본문 컨테이너는 페이지가 직접 선택한다. about/serving-people만 about 도메인 안에서 `MainContainer`를 쓰는 이유는 staff list가 board(news와 같은 패턴)와 가까워서로 추정.
 
@@ -115,16 +115,16 @@
 
 ### 영역 2 — 레이아웃 구조 비일관
 
-#### V2-1. 스켈레톤 페이지 16개 — `(content)`의 44%
+#### V2-1. 스켈레톤 페이지 17개 — `(content)`의 47%
 
-- **현상**: 36 페이지 중 16 페이지가 1–3줄 placeholder. 라우트는 잡혀 있으나 콘텐츠·레이아웃 미구현.
+- **현상**: 36 페이지 중 17 페이지가 1–3줄 placeholder. 라우트는 잡혀 있으나 콘텐츠·레이아웃 미구현.
 - **증거**(전수 — Phase 3·4 작업 큐):
   - community: `community/page.tsx`·`groups/page.tsx`·`groups/[id]/page.tsx`·`prayer/page.tsx`·`prayer/[id]/page.tsx`·`sharing/page.tsx`·`sharing/[id]/page.tsx`
-  - news: `news/gallery/page.tsx`·`gallery/[id]/page.tsx`
+  - news: `news/gallery/page.tsx`·`gallery/[id]/page.tsx`·`news/notices/[id]/page.tsx`(`<div>page</div>` 3줄)
   - next-gen: `next-gen/page.tsx`·`elementary/page.tsx`·`kindergarten/page.tsx`·`young-adult/page.tsx`·`youth/page.tsx`
   - notifications: `notifications/page.tsx`
   - search: `search/page.tsx`
-- **권장 대체**: Phase 2 카탈로그 정의 → Phase 3에서 next-gen 5개부터 적용 → Phase 4에서 나머지 11개.
+- **권장 대체**: Phase 2 카탈로그 정의 → Phase 3에서 next-gen 5개부터 적용 → Phase 4에서 나머지 12개.
 
 #### V2-2. Hero 패턴 3종 공존
 
@@ -137,18 +137,20 @@
 
 ### 영역 3 — 시각 토큰 비일관
 
-#### V3-1. primitive 토큰 직접 사용 (`(content)` 영역 36건)
+#### V3-1. primitive 토큰 직접 사용 (`(content)` 영역 38건)
 
-- **현상**: stylelint warning이 이미 가시화한 부채(전체 143건 중 본 영역 36건). `(content)` 페이지·_component SCSS에서 primitive를 semantic 우회 없이 직접 사용.
-- **증거**(파일별 카운트, 대표 예):
+- **현상**: stylelint warning이 이미 가시화한 부채. `(content)` 페이지·_component SCSS에서 `$gray-`·`$beige-`·`$navy-`·`$gold-`·`$cream-` primitive를 semantic 우회 없이 직접 사용. occurrence 기준(한 줄에 primitive 2개면 2로 셈) 38건이다(`$black`·`$white`는 본 카운트 밖).
+- **증거**(파일별 카운트):
   - `src/app/(content)/news/notices/_component/NoticeTable.module.scss` — `$gray-` 5건
   - `src/app/(content)/news/notices/_component/NoticeDrawer.module.scss` — `$gray-` 4건
-  - `src/app/(content)/about/page.module.scss` — `$beige-` 7건, `$navy-` 1건
-  - `src/app/(content)/about/welcome/page.module.scss` — `$beige-` 2건, `$navy-` 1건
+  - `src/app/(content)/about/page.module.scss` — `$beige-`·`$navy-` 9건
+  - `src/app/(content)/about/welcome/page.module.scss` — `$beige-`·`$navy-` 3건
   - `src/app/(content)/about/vision/page.module.scss` — `$beige-` 3건
   - `src/app/(content)/about/worship/page.module.scss` — `$beige-` 2건
+  - `src/app/(content)/about/location/page.module.scss` — `$beige-` 1건
   - `src/app/(content)/about/worship/_component/AboutWorship.module.scss` — `$gold-` 7건
   - `src/app/(content)/about/worship/_component/SchoolGrid.module.scss` — `$gold-` 2건
+  - `src/app/(content)/sermons/_component/SermonVideoPlayer/SermonVideoPlayer.module.scss` — `$beige-150`·`$beige-300` 2건 (한 줄, 기존 감사 누락분)
 - **권장 대체**: `.claude/skills/styles/SKILL.md`의 "Primitive → Semantic 치트시트"대로 영역별 분리 PR(Phase 4). 모두 해소 후 stylelint 룰을 warning → error.
 - **연결**: `docs/tech-debt/active.md` "SCSS primitive 토큰 직접 사용 (143건)".
 

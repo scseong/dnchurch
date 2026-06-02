@@ -25,8 +25,11 @@ ADR 작성 전에 explorer로 7종 카드의 props·렌더 구조·layout을 조
 
 **카드를 한 컴포넌트로 통합하지 않는다. 중복되는 부품과 표면 스타일만 공유로 뺀다.**
 
-1. **설교 카드 4종** — 컴포넌트는 4종 그대로 둔다. 모든 카드가 쓰는 두 가지만 공유로 추출한다.
-   - `SermonThumb` — 썸네일 + 재생 버튼 + duration 오버레이(현재 4곳에 중복).
+1. **설교 카드 — 공유 부품 추출** — 카드 컴포넌트는 그대로 두고 두 가지만 공유로 뺀다.
+   - `SermonThumb` — 썸네일 + 재생 버튼 + duration 오버레이를 공유 부품으로 뺀다.
+     - 참조 3종: 재생 버튼이 있는 `GridCard`·`SermonCarouselCard`·`SeriesEpisodeCard`.
+     - 제외: `SeriesCard`는 cover 이미지에 재생 버튼이 없다(`IoPlay` 미사용).
+     - 포함: 같은 썸네일+재생 마크업을 따로 구현한 `SermonFeatured`·`SermonOtherByPreacher`. 이 둘을 빼면 중복이 남는다.
    - `card-surface` 믹스인 — `$bg-card`·`$border-card`·`$radius-s` 표면 스타일.
 2. **about 번호형 3종** — 컴포넌트로 묶지 않는다. "라벨 + 제목 + 설명" 텍스트 블록 스타일만 SCSS 믹스인으로 공유한다. 선두 마커(번호·아이콘)와 링크 여부는 각 페이지가 유지한다.
 
@@ -34,7 +37,7 @@ ADR 작성 전에 explorer로 7종 카드의 props·렌더 구조·layout을 조
 
 ### 긍정적
 
-- 중복 썸네일 마크업을 4곳에서 `SermonThumb` 1곳으로 줄인다.
+- 재생 버튼이 있는 카드 5곳(`GridCard`·`SermonCarouselCard`·`SeriesEpisodeCard`·`SermonFeatured`·`SermonOtherByPreacher`)의 중복 썸네일 마크업을 `SermonThumb` 1곳으로 줄인다.
 - 카드 표면 토큰(`$bg-card` 등)을 믹스인 1곳에서 관리해 카드마다 표면이 같아진다.
 - 데이터 타입·layout이 다른 카드를 한 컴포넌트로 묶지 않아 조건 분기가 안 생긴다.
 
@@ -45,7 +48,7 @@ ADR 작성 전에 explorer로 7종 카드의 props·렌더 구조·layout을 조
 
 ### 영향 범위
 
-- 코드: `src/app/(content)/sermons/_component/`(SermonThumb 신설, 카드 4종이 참조), `about` 페이지 SCSS(텍스트 블록 믹스인 적용). 실제 작업은 Phase 4.
+- 코드: `src/app/(content)/sermons/_component/`(SermonThumb 신설, 재생 버튼 카드 5곳이 참조), `about` 페이지 SCSS(텍스트 블록 믹스인 적용). 실제 작업은 Phase 4.
 - 운영: 본 ADR은 결정·문서까지다.
 
 ## Alternatives Considered

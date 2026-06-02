@@ -13,7 +13,7 @@ audit가 찾아낸 `(content)` 일관성 위반 14건(V1-1~V4-3)을 바탕으로
 ## 검증된 Assumptions
 
 - 기존 ADR은 0012까지 — `ls docs/decisions/`. 신규는 0013부터.
-- 페이지 컨테이너 2종: `LayoutContainer` 10곳·`MainContainer` 5곳 — audit.md 컨테이너 분포표.
+- 페이지 컨테이너 2종: `LayoutContainer` 10곳·`MainContainer` 6곳 — audit.md 컨테이너 분포표(PR #107 리뷰로 5→6 정정).
 - 설교 카드 4종: `GridCard`·`SermonCarouselCard`·`SeriesCard`·`SeriesEpisodeCard` — audit.md V1-2.
 - hero 처리 3종: 자동 `HeroSection`·자체 hero(`about/page.tsx`)·full-width 섹션(`welcome`·`vision`) — audit.md V2-2.
 - `.claude/skills/styles/SKILL.md`에 primitive→semantic 치트시트가 이미 있음 — context.md 자산 목록.
@@ -35,8 +35,8 @@ audit가 찾아낸 `(content)` 일관성 위반 14건(V1-1~V4-3)을 바탕으로
 - `docs/decisions/0013-*.md` (신규) — 페이지 골격 규약. audit V1-1(컨테이너 2종)·V1-4(`news/page` 위임)·V2-2(hero 3종)
 - `docs/decisions/0014-*.md` (신규) — 카드 컴포넌트 통합. audit V1-2(설교 카드 4종)·V1-3(about 번호형 카드)
 - `docs/decisions/0015-*.md` (신규) — 페이지 상태·SEO 정책. audit V1-5(빈 상태 비일관)·V4-1(route 상태 파일 편중)·V4-2(`EmptyState` 편중)·V4-3(JSON-LD 1페이지)
-- `docs/design-system/page-patterns.md` (신규) — 유형별 골격 가이드. audit V2-1(스켈레톤 16개)에 적용할 골격 제공
-- `.claude/skills/styles/SKILL.md` — 토큰·focus-ring 매핑 보강. audit V3-1(primitive 36건)·V3-2(hex 3건)·V3-3(focus 8건)·V3-4(hover warm)
+- `docs/design-system/page-patterns.md` (신규) — 유형별 골격 가이드. audit V2-1(스켈레톤 17개)에 적용할 골격 제공
+- `.claude/skills/styles/SKILL.md` — 토큰·focus-ring 매핑 보강. audit V3-1(primitive 38건)·V3-2(hex 3건)·V3-3(focus 8건)·V3-4(hover warm)
 - `docs/decisions/` 인덱스 — `update-adr-index.mjs` 산출
 
 ## 단계별 체크리스트
@@ -86,19 +86,20 @@ ADR 3개(0013·0014·0015) 신규 작성이 본 작업의 핵심. `docs/decision
 
 ## Codex 1차 검증
 
-- **결론**: 미요청
-- **현재 판단**: 산출물이 문서뿐이다(ADR 3개·page-patterns.md·styles SKILL hex 1줄·exec-plan·ADR 인덱스). src 코드·SCSS·config 변경 0건이라 구현 diff 1차 검증 실익이 없다. 계획 검증은 CHANGE_REQUEST를 받아 material 3건을 반영했다.
-- **다음 행동**: Claude 2차 검증으로 마무리.
+- **결론**: PR #107 자동 리뷰(gemini·Codex) 9건 → 코드 + Codex(`--wait`) 교차검증 → 8건 타당. audit·ADR·page-patterns 정정.
+- **현재 판단**: 첫 조사가 stylelint occurrence를 라인으로 세고 notices/[id]를 코드 확인 없이 디테일로 분류해 수치·분류 오류가 생겼다. 정정 — notices/[id] 디테일→스켈레톤(디테일 4→3·스켈레톤 16→17), MainContainer 5→6(bulletins/[id] 누락), primitive 36→38(occurrence 기준·SermonVideoPlayer 2건), 컨테이너 분포(없음 20·합계 36), ADR-0013 가로 padding 차이, page-patterns 디테일 hero null·variant 축 분리, ADR-0014 SermonThumb 3종(SeriesCard 제외)+SermonFeatured·SermonOtherByPreacher 포함.
+- **다음 행동**: 정정 후 verify-task 재실행 → Claude 2차 검증 갱신.
 
 ## Claude 2차 검증
 
 - **최종 판단**: 통과 — 필수 검증 4단계 중 3단계 통과, Knip는 기존 부채 warning(차단 X).
-- **현재 판단**: P2 diff = ADR 3개·`page-patterns.md`·styles SKILL hex 1줄·exec-plan·`README.md` 인덱스. 문서만이라 신규 unused 도입 가능성 없음. doc-editor 점검 2회(ADR-0013 / ADR-0014·0015·page-patterns) 지적을 모두 반영했다.
+- **현재 판단**: PR #107 자동 리뷰 9건을 코드·Codex로 교차검증해 audit·ADR·page-patterns를 정정했다(notices/[id] 스켈레톤·MainContainer 6·primitive 38·가로 padding·디테일 hero null·SermonThumb 3종). doc-editor 점검 3회 지적을 모두 반영했다. 문서만이라 신규 unused 도입 가능성 없다.
 - **다음 행동**: 사용자 승인 후 commit.
 
 | 시점 | run-id | lint | styles | build | knip신규 | 수동 확인 필요 |
 | --- | --- | --- | --- | --- | --- | --- |
 | 1차 | 20260602-001444 | ✅ | ✅ | ✅ | 0 | `/about` hero 중복 fix는 별도 브랜치(`fix/about-hero` dfc6f7b) |
+| 2차 | 20260602-154032 | ✅ | ✅ | ✅ | 0 | PR 리뷰 9건 정정 후 재검증. hero fix는 본 PR cherry-pick(4637e28)으로 포함 |
 
 ## 검증 이력
 
@@ -129,6 +130,11 @@ ADR 3개(0013·0014·0015) 신규 작성이 본 작업의 핵심. `docs/decision
   - 문제: 본 PLAN과 Phase 1 산출물(커밋 `344702e` 메시지·`2026-05-29-design-audit.md`)에 "위반 13건"으로 적었으나, `audit.md`의 실제 위반 섹션은 14개다 — `grep -c '^#### V' docs/design-system/audit.md`가 14를 반환(V1-1~V1-5 5개 + V2-1~V2-2 2개 + V3-1~V3-4 4개 + V4-1~V4-3 3개). audit.md 본문에는 총계 숫자가 없어 audit.md 자체는 14개를 정확히 나열하고, 오기는 요약 문구에만 있었다.
   - 해결: 본 PLAN과 앞으로의 문서·PR 본문은 14건으로 적는다. 이미 push된 커밋 `344702e` 메시지와 design-audit exec-plan의 "13건"은 사용자 결정으로 force push 없이 보존한다(브랜치 history를 손대지 않음). PR 본문에 "P1 커밋의 13건은 오기, 본 계획 검증이 14건으로 정정" 한 줄을 적는다.
   - 결과: Phase 2 기록은 14건으로 정확해졌고, 커밋 history는 그대로 남는다.
+
+- **D2 — PR #107 자동 리뷰 9건을 코드·Codex로 교차검증 후 정정**
+  - 문제: gemini·Codex 자동 리뷰가 audit·ADR·page-patterns의 수치·사실 오류 9건을 지적했다. 첫 조사가 stylelint occurrence를 라인 수로 세고(primitive 36 vs 실제 38), `news/notices/[id]/page.tsx`를 코드 확인 없이 디테일로 분류하는 등 부실했다.
+  - 해결: 9건을 직접 코드(`Read`·`rg --count-matches`)와 Codex `--wait` 교차검증으로 확인했다 — 8건 타당, 2건은 부분 정정($black/$white는 audit 정의 밖, 컨테이너 합산은 위임 처리 방식도 원인). audit(notices/[id] 스켈레톤·MainContainer 6·primitive 38·분포 합계 36)·ADR-0013(가로 padding 차이)·ADR-0014(SermonThumb 3종 + Featured·OtherByPreacher)·page-patterns(variant 축 분리·디테일 hero null)를 정정했다.
+  - 결과: Phase 1 snapshot 수치가 코드와 일치한다. Codex 백그라운드 호출이 결과를 회수하지 못해(미종료 프로세스 3개 잔존) `--wait` 동기 호출로 바꿔 처리했다.
 
 ---
 

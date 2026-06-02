@@ -10,7 +10,7 @@
 
 모든 `(content)` 페이지에 적용한다.
 
-- **컨테이너**: `PageContainer` 1종을 쓴다. 상하 여백은 variant로 고른다 — `flush`(여백 0) / `padded`(`$spacing-64`) / `fullBleed`(전폭 섹션). (ADR-0013)
+- **컨테이너**: `PageContainer` 1종을 쓴다. 여백과 너비는 **별개 축**이다 — 상하 여백은 `flush`(0)/`padded`(`$spacing-64`)로, 좌우 너비는 기본(컨테이너 폭 제한)/`fullBleed`(전폭)로 따로 고른다. (ADR-0013)
 - **hero**: layout 자동 `Hero`가 기본이다. 자체 hero를 그리는 페이지는 `resolveHeroMeta`의 `SELF_HERO_PATHS`에 등록해 자동 Hero를 끈다. (ADR-0013)
 - **빈 데이터·에러 표시**: `EmptyState`로 통일한다. 날것 `<div>` 빈 상태는 금지한다. (ADR-0015)
 - **카드 표면**: `card-surface` 믹스인(`$bg-card`·`$border-card`·`$radius-s`)을 쓴다. 카드는 한 컴포넌트로 통합하지 않고 공유 부품만 쓴다. (ADR-0014)
@@ -39,9 +39,9 @@
 
 ### 3. 디테일
 
-예: `/sermons/[id]`, `/sermons/series/[id]`, `/news/bulletins/[id]`, `/news/notices/[id]`
+예: `/sermons/[id]`, `/sermons/series/[id]`, `/news/bulletins/[id]` (`/news/notices/[id]`는 아직 스켈레톤)
 
-- **hero**: 자동 hero.
+- **hero**: 현재 자동 hero가 안 뜬다 — `resolveHeroMeta`가 동적 경로(`/sermons/[id]` 등)에서 `null`을 반환한다. 디테일은 hero 없이 본문부터 시작한다. 자동 hero가 필요하면 `resolveHeroMeta`에 동적 경로 메타 해석을 추가할지 Phase 3에서 결정한다.
 - **컨테이너**: `PageContainer padded`.
 - **상태**: `loading.tsx` + `not-found.tsx` 필수.
 - **SEO**: JSON-LD 필수 — sermons는 VideoObject, news는 Article schema. (ADR-0015)
