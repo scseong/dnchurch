@@ -4,6 +4,20 @@
 
 ---
 
+### ✅ bulletin 업로드 부분 실패 시 orphan 이미지 잔존 (2026-05-31 해소, PR #105)
+
+- **부채**: `uploadBulletinImages`가 `Promise.all`로 5장을 병렬 업로드한다. 1장이라도 실패하면 throw로 끝나는데, 이미 올라간 이미지는 Cloudinary에 주인 없이(orphan) 남았다
+- **해소**: `Promise.allSettled`로 바꿔, 일부 실패 시 성공한 `public_id`를 `deleteImage`로 모두 청소한 뒤 첫 rejection을 재throw한다. 호출처(create-bulletin·update-bulletin action)의 기존 try/catch cleanup 흐름은 그대로 둔다
+- **확인**: `src/actions/_bulletin-helpers.ts:22-42` Read 확인. verify-task(20260531-193838) lint·styles·build 통과
+- **참고**: exec-plan `completed/2026-05-31-bulletin-upload-safety`, tech-debt-pre-release Phase 1(G1)
+
+### ✅ bulletin 이미지 filename 충돌로 기존 자산 overwrite (2026-05-31 해소, PR #105)
+
+- **부채**: 업로드 filename이 sanitize만 거쳐서, 같은 날 폴더(`uploads/bulletins/YYYY/MM/DD`)에 같은 이름 파일을 다시 올리면 `public_id`가 겹쳐 기존 이미지를 덮어썼다
+- **해소**: filename을 `${orderIndex}-${randomUUID().slice(0,8)}-${sanitized}` 형식으로 바꿨다. orderIndex는 같은 폼 안 순서를 지킨다. 8자리 UUID는 다른 세션이나 같은 날 다시 올려도 충돌을 막는다
+- **확인**: `src/actions/_bulletin-helpers.ts:24-27` Read 확인. 같은 이름으로 다시 올려도 public_id 충돌 0
+- **참고**: exec-plan `completed/2026-05-31-bulletin-upload-safety`, tech-debt-pre-release Phase 1(G1)
+
 ### ✅ nav pathname 매칭이 segment boundary 무시 (2026-05-31 해소)
 
 - **부채**: `isActiveGnb`·`resolveBreadcrumbSegments`·`isActiveBottomNav`·`resolveSiblingTabs`가 그냥 `pathname.startsWith(href)`로 매칭했다 — `/newsroom`이 `/news`에, `/about-us`가 `/about`에 걸리는 형제 prefix 오탐이 생길 수 있었다. resolver마다 경계 규칙(`startsWith` 단독 / `startsWith(href+'/')` / `===`)도 달랐다

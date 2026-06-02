@@ -48,6 +48,22 @@ export const getCloudinaryUrl = (publicId: string) =>
 export const getCloudinaryDownloadUrl = (publicId: string) =>
   `${BASE_URL}/fl_attachment/${normalizePublicId(publicId)}`;
 
+// OG·카카오 공유처럼 <Image> 밖에서 쓰는 고정 변환 URL 빌더.
+// public_id는 image/upload, 외부 URL(YouTube 썸네일 등)은 image/fetch 경로로 같은 변환을 적용한다.
+const buildTransformedUrl = (input: string, transform: string): string | null => {
+  if (!CLOUD_NAME) return null;
+  if (/^https?:\/\//i.test(input)) {
+    return `https://res.cloudinary.com/${CLOUD_NAME}/image/fetch/${transform}/${encodeURIComponent(input)}`;
+  }
+  return `${BASE_URL}/${transform}/${normalizePublicId(input)}`;
+};
+
+export const getOgImageUrl = (input: string | null | undefined): string | null =>
+  input ? buildTransformedUrl(input, 'c_fill,w_1200,h_630,g_auto,f_auto,q_auto') : null;
+
+export const getKakaoShareUrl = (input: string | null | undefined): string | null =>
+  input ? buildTransformedUrl(input, 'c_fill,w_800,h_400,g_auto,f_auto,q_auto') : null;
+
 // 외부 호스트(YouTube 썸네일 등)를 Cloudinary fetch URL로 감싸 next/image의 res.cloudinary.com remotePattern을 통과시키는 helper.
 // public ID(http(s):// 미접두) 입력은 fetch가 아니라 image/upload 변환 대상이므로 그대로 반환 — 호출부에서 <CloudinaryImage> loader가 처리.
 export const cloudinaryFetchUrl = (remoteUrl: string | null): string | null => {
@@ -87,7 +103,7 @@ export function createCloudinaryLoader({ cropMode, gravity, aspectRatio }: Cloud
     } else {
       params.push('c_limit');
     }
-    params.push(`w_${width}`, `q_${quality || 85}`);
+    params.push(`w_${width}`, `q_${quality || 'auto:good'}`);
     return `${BASE_URL}/${params.join(',')}/${normalizePublicId(src)}`;
   };
 }

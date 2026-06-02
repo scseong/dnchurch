@@ -123,10 +123,7 @@
     background-color: $bg-hover;
   }
 
-  &:focus-visible {
-    outline: 2px solid $primary-active;
-    outline-offset: 2px;
-  }
+  @include focus-ring('strong');
 }
 
 .title {
@@ -203,9 +200,7 @@
     color: $txt-primary;
   }
 
-  &:focus-visible {
-    outline: 2px solid $primary-active;
-    outline-offset: 2px;
+  @include focus-ring('strong') {
     border-radius: 2px;
   }
 }

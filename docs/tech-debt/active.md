@@ -72,14 +72,15 @@
 - **확인**: `yarn lint:styles | grep "primitive 토큰 직접 사용"` (현재 143건)
 - **발견일**: 2026-05-10 (stylelint-primitive-guardrail PR 도입 시 정확 카운트)
 
-### 🟡 SCSS 하드코딩 색상 (49건)
+### 🟡 SCSS 하드코딩 색상 (23건)
 
 - **무엇**: `.module.scss` 파일 곳곳에서 hex 색상(`#xxxxxx`) 직접 사용. 토큰 변수가 아님
 - **왜**: stylelint 도입 전에 작성된 코드. 신규 작성은 stylelint warn으로 차단됨 (CLAUDE.md "하드코딩 절대 금지" 규칙)
 - **마이그레이션 경로**: 각 hex 값을 `src/styles/tokens/_color.scss`의 의미 단위 변수로 매핑 → 모두 해결 시 `.stylelintrc.json`의 `color-no-hex` 룰을 `warning` → 기본(error)로 올림
-- **영향 범위**: 약 49건, 주요 발생 위치는 `sermons/_component/`, `news/bulletins/_component/`, `admin/sermons/SermonForm/` 하위
-- **확인**: `yarn lint:styles` (warning으로 표시)
+- **영향 범위**: 23건 (14 파일), 주요 발생 위치는 `sermons/_component/`, `news/bulletins/_component/` 하위
+- **확인**: `rg "#[0-9a-fA-F]{3,8}" -g "*.module.scss" src` → 23 hits
 - **발견일**: 2026-05-01 (stylelint 도입 시)
+- **2026-06-01 재확인**: #102 admin 토큰 통합 작업으로 admin hex가 토큰에 흡수돼 49건에서 23건(14 파일)으로 줄었다. tech-debt-pre-release plan의 5월 26일 재측정값과 일치한다.
 
 ### 🟢 SCSS 네이밍 패턴 위반 (12건)
 
@@ -238,25 +239,9 @@
 - **영향 범위**: `src/apis/cloudinary.ts`
 - **발견일**: 2026-05-11 (PR #82 Codex 리뷰)
 
-### 🟡 bulletin 이미지 filename 충돌 위험
-
-- **무엇**: `src/actions/_bulletin-helpers.ts:20`에서 업로드 filename은 sanitize만 수행하고 uniqueness suffix 없음. 같은 날(`uploads/bulletins/YYYY/MM/DD`) 동일 이름 파일 재업로드 시 `public_id` 중복으로 overwrite 가능
-- **왜**: 단순 sanitize만으로 충분하다고 판단(날짜별 폴더 분리 가정). 실제로는 같은 날 같은 이름 파일 재업로드 시나리오가 가능
-- **마이그레이션 경로**: filename에 `${orderIndex}-${randomUUID().slice(0,8)}-${name}` 같은 prefix 추가. orderIndex만으로도 같은 폼 내 중복은 방지되지만, 다른 세션/같은 날 재업로드는 UUID로 보호
-- **영향 범위**: `src/actions/_bulletin-helpers.ts`
-- **발견일**: 2026-05-11 (PR #82 Codex 리뷰)
-
-### 🟡 bulletin 업로드 부분실패 orphan asset
-
-- **무엇**: `src/actions/_bulletin-helpers.ts:18` `Promise.all` 병렬 업로드 — 1장이라도 실패하면 throw로 끝나고, 이미 업로드 성공한 자산은 Cloudinary에 orphan으로 남음
-- **왜**: 초기 구현에서 happy-path만 고려. cleanup 정책 미정의
-- **마이그레이션 경로**: `Promise.allSettled` + fulfilled 결과의 `public_id`를 `deleteImage()`로 cleanup 후 rejection 재throw. sermon 업로드(`actions/sermon.action.ts`의 `removeStorageObjects`) 패턴 참고
-- **영향 범위**: `src/actions/_bulletin-helpers.ts`, `src/apis/cloudinary.ts`
-- **발견일**: 2026-05-11 (PR #82 Codex 리뷰)
-
 ### 🟢 Cloudinary 이미지 품질 `q_85` 고정 → `q_auto` 전환 검토
 
-- **무엇**: `src/utils/cloudinary.ts:72`의 loader가 `q_85` 고정. Cloudinary 공식 권장은 `q_auto` (또는 `q_auto:good`) — 컨텐츠별 최적 품질로 자동 조정
+- **무엇**: `src/utils/cloudinary.ts:90`의 업로드 로더(`createCloudinaryLoader`)가 `q_${quality || 85}`로 기본 화질 85% 고정. Cloudinary 공식 권장은 `q_auto`(또는 `q_auto:good`)로, 컨텐츠별 최적 품질로 자동 조정한다. 외부 호스트 fetch URL(`cloudinaryFetchUrl:58`·resize `:79`)은 이미 `q_auto`를 쓴다. 이번 부채는 업로드 로더 기본값 1곳만 남는다
 - **왜**: 명시적 품질 관리 의도. 자동화 결과 품질 변동성 우려로 보류
 - **마이그레이션 경로**: 일부 use-case(`hero`, `bulletin`)에서 A/B 비교 후 `q_auto:good` 전환. PSNR/SSIM 또는 시각 검토로 품질 회귀 없음 확인 → 전체 전환
 - **영향 범위**: `src/utils/cloudinary.ts`, 모든 `<CloudinaryImage>` 사용처

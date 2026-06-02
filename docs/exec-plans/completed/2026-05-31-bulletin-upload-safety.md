@@ -1,6 +1,6 @@
 # bulletin-upload-safety
 
-- **상태**: 🟡 진행 중
+- **상태**: ✅ 완료 (2026-05-31)
 - **시작일**: 2026-05-31
 - **브랜치**: fix/bulletin-upload-safety
 - **Open questions**: none
@@ -151,3 +151,27 @@
 - 의사결정 로그·검증 기록은 위 형식 고정. 압축·기호잇기·약어·한 항목 다결정 금지.
 -->
 
+
+## 회고
+
+### 잘 된 것
+
+- 주보 업로드 P0 결함 2건(고아 이미지와 덮어쓰기)을 트랜잭션식 롤백과 멱등 파일명으로 막았다. 호출처인 create action과 update action의 계약을 유지해 외과적 변경에 머물렀다.
+- Codex 1차 검증으로 단독 정확성을 확인하고, 2차 교차 검증에서 호출처 통합, 이중 cleanup, id 형식, 엣지 케이스를 점검했다. 두 라운드 모두 PASS로 통과했다.
+- doc-editor를 실전 plan에 처음 적용해 5건을 반영했다. "도구를 시연만 하고 실전엔 안 쓴다"는 직전 세션의 모순을 해소했다.
+- Gemini G2(변수명 시맨틱)는 반영하고 G1(헬퍼 추출)과 문서 GD1·GD2(기호 압축)는 유예했다. PR #103의 3라운드 cycle 교훈으로 일회성 문서 표현은 유예하는 판단을 적용했다.
+
+### 다음에 할 것
+
+- cleanup 실패 로그 보강은 tech-debt-pre-release Phase 2(G2)에서 처리한다.
+- 수동 검증: dev preset에서 5장 중 1장을 강제 실패시켜 Cloudinary 콘솔 orphan 0건을 실측한다.
+- 트랙 B 잔여 작업: sitemap-consistency-fix, supabase-cost-pass-1.
+
+### 발견된 부채·관찰
+
+- doc-editor가 기호잇기(·/+/→)를 못 잡고 Gemini가 보완했다. 같은 가독성 SSOT인데 두 점검자의 커버리지가 갈린다. 같은 유형이 반복되면 doc-editor 체크리스트 보강 또는 문서 lint를 검토한다.
+- Codex 좀비 2건(22시간·26시간)이 shared runtime을 점유해 새 Codex CLI 호출을 막았다. PowerShell `Stop-Process`로 정리했다. codex-companion cancel이 Git Bash 슬래시 파싱 에러로 실패할 때의 우회 패턴을 확정했다.
+
+### 본 task의 본질
+
+첫 제품 기능 작업이다(이전 #103과 #104는 harness와 docs였다). 이번 작업으로 하네스 검증 사이클(Codex 1차와 2차, doc-editor, Gemini)이 제품 코드에도 작동함을 확인했다. P0 데이터 손실을 외과적 수정으로 막아 포트폴리오의 "업로드 안정성 개선" 스토리를 확보했다.

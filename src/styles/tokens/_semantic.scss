@@ -100,5 +100,8 @@ $focus-ring-width: $spacing-2;
 /// 0.2rem — focus-visible outline-offset
 $focus-ring-offset: $spacing-2;
 
-/// $border-focus 별칭 — focus ring 색
+/// $border-focus 별칭 — focus ring 색 (기본)
 $focus-ring-color: $border-focus;
+
+/// 강조 focus ring 색 — Notice 등 인터랙티브 컨트롤
+$focus-ring-strong-color: $primary-active;

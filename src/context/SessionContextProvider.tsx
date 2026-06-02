@@ -11,7 +11,7 @@ import {
   useCallback,
   useMemo
 } from 'react';
-import { supabase } from '@/lib/supabase/client';
+import { getSupabaseBrowserClient } from '@/lib/supabase/client';
 import { AuthError, PostgrestError, Session } from '@supabase/supabase-js';
 import { getProfileById } from '@/apis/user';
 import { REDIRECT_AFTER_LOGIN_KEY } from '@/constants/auth';
@@ -81,6 +81,7 @@ function SessionContextProvider({ children }: PropsWithChildren) {
   );
 
   useEffect(() => {
+    const supabase = getSupabaseBrowserClient();
     const {
       data: { subscription }
     } = supabase.auth.onAuthStateChange(handleAuthStateChange);
