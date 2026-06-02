@@ -1,6 +1,6 @@
 # design-catalog
 
-- **상태**: 🟡 진행 중
+- **상태**: ✅ 완료 (2026-06-02)
 - **시작일**: 2026-06-01
 - **브랜치**: feat/design-system-unification
 - **Open questions**: none
@@ -135,6 +135,12 @@ ADR 3개(0013·0014·0015) 신규 작성이 본 작업의 핵심. `docs/decision
   - 문제: gemini·Codex 자동 리뷰가 audit·ADR·page-patterns의 수치·사실 오류 9건을 지적했다. 첫 조사가 stylelint occurrence를 라인 수로 세고(primitive 36 vs 실제 38), `news/notices/[id]/page.tsx`를 코드 확인 없이 디테일로 분류하는 등 부실했다.
   - 해결: 9건을 직접 코드(`Read`·`rg --count-matches`)와 Codex `--wait` 교차검증으로 확인했다 — 8건 타당, 2건은 부분 정정($black/$white는 audit 정의 밖, 컨테이너 합산은 위임 처리 방식도 원인). audit(notices/[id] 스켈레톤·MainContainer 6·primitive 38·분포 합계 36)·ADR-0013(가로 padding 차이)·ADR-0014(SermonThumb 3종 + Featured·OtherByPreacher)·page-patterns(variant 축 분리·디테일 hero null)를 정정했다.
   - 결과: Phase 1 snapshot 수치가 코드와 일치한다. Codex 백그라운드 호출이 결과를 회수하지 못해(미종료 프로세스 3개 잔존) `--wait` 동기 호출로 바꿔 처리했다.
+
+## 회고
+
+- **잘된 것**: audit 14건을 ADR 0013·0014·0015 + `page-patterns.md`로 표준화했다. explorer로 카드 7종을 조사해 "전면 통합 부적합 → 공유 부품 추출" 판단을 내려 추측성 추상화를 피했다. PR #107 자동 리뷰 9건을 코드·Codex로 교차검증한 뒤 정정했다.
+- **다음에 할 것**: ADR 작성 전 코드를 직접 센다. 본 작업이 audit 수치를 그대로 인용해 라인/occurrence 혼동·MainContainer 5 오류가 ADR로 전파됐고, gemini·Codex 자동 리뷰가 이를 잡았다. occurrence 기준은 문서에 명시한다.
+- **발견한 부채**: Phase 4 토큰 정리 큐 — primitive 38·focus-ring 8·hex 3·hover warm 2. codex-companion 미종료 프로세스 3개(D2).
 
 ---
 
