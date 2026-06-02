@@ -208,21 +208,21 @@
 
 ## Codex 계획 검증
 
-- **결론**: 미요청
-- **현재 판단**: 미요청
-- **다음 행동**: Codex 계획 검증 후 갱신
+- **결론**: PASS_WITH_DECISION_LOG — 마스터 플랜의 사전 Codex 검토는 별도 단계로 돌리지 않았다. 대신 구현 중 드러난 설계 결함 2건을 Codex 설계 검증으로 보정하고 D11·D12에 남겼다
+- **현재 판단**: 7개 그룹의 우선순위·범위는 유효했다. 드로어 effect cleanup과 Cloudinary public_id 전용 가정은 구현 단계에서 결함으로 확인돼 대안을 채택했다
+- **다음 행동**: Phase 7(G6)·tech-debt 이관은 머지 후 처리
 
 ## Codex 1차 검증
 
-- **결론**: 미요청
-- **현재 판단**: 미요청
-- **다음 행동**: 구현 diff 생성 후 갱신
+- **결론**: PASS — 드로어(D11)·Cloudinary OG(D12) 설계 검증과 PR #108 diff 객관 리뷰 모두 보고할 이슈 0건
+- **현재 판단**: lazy 브라우저 클라이언트·OG null 처리·getKakaoShareUrl fallback·focus-ring mixin·apis→app 레이어 방향을 Codex가 점검해 결함 없음
+- **다음 행동**: Claude 2차 교차 확인
 
 ## Claude 2차 검증
 
-- **최종 판단**: 미작성
-- **현재 판단**: 미작성
-- **다음 행동**: verify-task 후 갱신
+- **최종 판단**: PASS
+- **현재 판단**: verify-task(run 20260602-001031) ESLint·stylelint·Build 통과, Knip은 기존 부채. 드로어 뒤로가기와 /sermons/3 OG 이미지는 Chrome 실측으로 확인. Gemini·Codex 리뷰 0 이슈
+- **다음 행동**: harness-gate 통과 후 머지
 
 ## 검증 이력
 
