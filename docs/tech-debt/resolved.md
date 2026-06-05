@@ -12,9 +12,9 @@
 
 ### ✅ focus-ring 패턴 통일 (2026-06-02 해소, PR #108)
 
-- **부채**: `:focus-visible` outline이 10곳에 색·폭·offset 제각각으로 박혀 SSOT가 없었다
-- **해소**: `focus-ring($variant, $offset)` mixin(`@content`로 추가 속성 수용)과 `$focus-ring-strong-color` 토큰을 도입해 10곳(Notice 8·ListItem·SermonNoteEditor)을 교체했다
-- **확인**: 콘텐츠·ui의 raw `&:focus-visible` 0건. admin box-shadow 패턴은 범위 밖
+- **부채**: `:focus-visible` outline 10곳과 `Pagination.module.scss`의 `:focus` outline 1곳이 색·폭·offset을 직접 선언해 SSOT가 없었다
+- **해소**: `focus-ring($variant, $offset)` mixin(`@content`로 추가 속성 수용)과 `$focus-ring-strong-color` 토큰을 도입해 11곳(Notice 8·ListItem·SermonNoteEditor·Pagination)을 교체했다
+- **확인**: `rg -n ":focus|outline" src/components/ui/Pagination/Pagination.module.scss` → transition 선언 1건, focus outline 선언 0건. admin box-shadow 패턴은 범위 밖
 
 ### ✅ useDrawerHistory 라우트 이동 시 가짜 history 항목 (2026-06-02 해소, PR #108)
 
@@ -24,9 +24,9 @@
 
 ### ✅ services/about Supabase silent fallback 로깅 부재 (2026-06-02 해소, PR #108)
 
-- **부채**: `getSiteCollection`·`getSiteSettings`·`getActiveStaff`가 DB error를 삼키고 빈 값으로 fallback해 운영에서 검출이 안 됐다
-- **해소**: 세 조회 지점에서 error를 백틱 `console.error`로 1줄 기록했다. 빈 값 fallback은 유지(ADR 0006 silent fallback)
-- **확인**: Vercel 함수 로그에 `[domain] ... 조회 실패`가 출력된다
+- **부채**: `getSiteCollection`·`getSiteSettings`·`getActiveStaff`·`getWorshipGroupsSafe`가 DB error를 삼키고 빈 값으로 fallback해 운영에서 검출이 안 됐다
+- **해소**: 네 조회 흐름에서 error를 백틱 `console.error`로 1줄 기록했다. 빈 값 fallback은 유지(ADR 0006 silent fallback)
+- **확인**: Vercel 함수 로그에 `[domain] ... 조회 실패` 또는 `[about] getWorshipScheduleGroups 조회 실패`가 출력된다
 
 ### ✅ about/serving-people 구분선 #eee (2026-06-02 해소, PR #108)
 
@@ -43,8 +43,8 @@
 ### ✅ `$beige-300` semantic 매핑 부재 (2026-06-02 해소, PR #108)
 
 - **부채**: QuickAccess 배경과 SermonVideoPlayer 그라데이션이 primitive `$beige-300`을 직접 썼다
-- **해소**: `$bg-secondary-deep`($beige-300) 시맨틱 토큰을 신설해 두 곳을 치환했다. 플랜의 2토큰 제안은 같은 값·같은 의미라 1개로 통합했다
-- **확인**: `rg "\$beige-300" src/app src/components` → 0 hit. 값이 같아 시각 변화 0
+- **해소**: `$bg-secondary-deep`($beige-300) 시맨틱 토큰을 신설해 두 곳을 치환하고 `.claude/skills/styles/SKILL.md`의 매핑 표에도 추가했다. 플랜의 2토큰 제안은 같은 값·같은 의미라 1개로 통합했다
+- **확인**: `rg "\$beige-300" src/app src/components` → 0 hit. `rg "\$beige-300은 미정" .claude/skills/styles/SKILL.md` → 0 hit. 값이 같아 시각 변화 0
 
 ### ✅ Cloudinary 업로드 화질 q_85 고정 (2026-06-02 해소, PR #108)
 

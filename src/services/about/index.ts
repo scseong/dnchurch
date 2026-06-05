@@ -49,7 +49,8 @@ const getWorshipGroupsSafe = async (): Promise<{
 }> => {
   try {
     return await getWorshipScheduleGroups();
-  } catch {
+  } catch (error) {
+    console.error('[about] getWorshipScheduleGroups 조회 실패', error);
     return { sunday: [], weekday: [], school: [] };
   }
 };

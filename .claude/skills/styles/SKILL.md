@@ -65,7 +65,7 @@ description: SCSS 파일 생성/수정, 스타일 작성, 디자인 토큰 사�
 - **Gray**: `$gray-900` `$gray-700` `$gray-500` `$gray-400` `$gray-300` `$gray-200` `$gray-100` `$gray-50` `$black` `$white`
 - **Navy (Brand · Primary Action · Interactive cool)**: `$navy-950` `$navy-900` `$navy-800` `$navy-600`
 - **Gold (Accent)**: `$gold-600` `$gold-400` `$gold-100`
-- **Beige (Warm Decorative Surface)**: `$beige-50` `$beige-100` `$beige-150` `$beige-200` `$beige-300` — 정적 면 전용. (`$beige-50/100/150/200` = `$bg-primary`/`$bg-beige-subtle`/`$bg-secondary`/`$border-card`로 매핑 완료; `$beige-300`은 미정)
+- **Beige (Warm Decorative Surface)**: `$beige-50` `$beige-100` `$beige-150` `$beige-200` `$beige-300` — 정적 면 전용. (`$beige-50/100/150/200/300` = `$bg-primary`/`$bg-beige-subtle`/`$bg-secondary`/`$border-card`/`$bg-secondary-deep`로 매핑 완료)
 - **Status**: `$green-500` `$green-100` `$red-500` `$red-100` `$orange-600` `$orange-100`
 
 ### Semantic (역할 기반 — 컴포넌트에서 직접 사용)
@@ -75,11 +75,11 @@ description: SCSS 파일 생성/수정, 스타일 작성, 디자인 토큰 사�
 `$txt-image-subtle` (이미지 위 보조) `$txt-dark-muted` (다크배경 보조) `$txt-dark-faint` (다크배경 약한)
 
 **Background**
-- 정적 warm: `$bg-primary`(beige-50, 페이지 배경) `$bg-card`(#fff, 카드·패널) `$bg-secondary`(beige-150, 섹션·카드 정적 면) `$bg-beige-subtle`(beige-100, 가장 옅은 섹션 면) `$bg-accent-subtle`(gold 12% tint, CTA·배너 면)
+- 정적 warm: `$bg-primary`(beige-50, 페이지 배경) `$bg-card`(#fff, 카드·패널) `$bg-secondary`(beige-150, 섹션·카드 정적 면) `$bg-secondary-deep`(beige-300, 더 진한 정적 면) `$bg-beige-subtle`(beige-100, 가장 옅은 섹션 면) `$bg-accent-subtle`(gold 12% tint, CTA·배너 면)
 - 인터랙티브 cool: `$bg-hover`(navy 6% rgba) — 면 종류 무관, hover/active 피드백 전용 ★
 - 다크: `$bg-dark` `$bg-dark-card` `$bg-dark-nav`(헤더·푸터)
 
-> v4: `$bg-tertiary` **삭제**. hover 피드백은 `$bg-hover`로, 더 깊은 warm 면이 필요하면 `$bg-secondary` 재사용.
+> v4: `$bg-tertiary` **삭제**. hover 피드백은 `$bg-hover`로, 더 깊은 warm 면이 필요하면 `$bg-secondary-deep`을 쓴다.
 
 **Border**
 `$border-primary` `$border-subtle` `$border-strong` `$border-focus` `$border-warm`(cream·gold 배경 위)
@@ -139,6 +139,7 @@ primitive를 쓰려는 순간 이 표를 먼저 확인한다.
 | `$beige-100` | `$bg-beige-subtle` | 가장 옅은 섹션 면 |
 | `$beige-150` | `$bg-secondary` | 섹션·카드 정적 면 |
 | `$beige-200` | `$border-card` | 카드·섹션 외곽 테두리 |
+| `$beige-300` | `$bg-secondary-deep` | QuickAccess 배경·영상 그라데이션 끝 |
 | `$white` | `$txt-inverse` / `$bg-card` | 다크 배경 위 텍스트 / 카드·패널 배경 |
 
 **예외 — semantic 미정 (사용처에 로컬 주석 필수)**
