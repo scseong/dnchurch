@@ -35,10 +35,7 @@
     background-color: $bg-hover;
   }
 
-  &:focus {
-    outline: 0.2rem solid $border-primary;
-    outline-offset: 0.2rem;
-  }
+  @include focus-ring();
 }
 
 .page_link.current {
