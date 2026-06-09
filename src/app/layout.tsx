@@ -3,6 +3,7 @@ import { Noto_Serif_KR } from 'next/font/google';
 import ScrollToTop from '@/components/common/ScrollToTop';
 import ToastContainer from '@/components/common/Toast/ToastContainer';
 import SessionContextProvider from '@/context/SessionContextProvider';
+import { OPEN_GRAPH_BASE } from '@/config/seo';
 import '@/styles/globals.scss';
 import 'photoswipe/dist/photoswipe.css';
 
@@ -16,17 +17,7 @@ export const metadata: Metadata = {
   },
   description:
     '대한예수교장로회(합신) 대구동남교회 — 성경 위에 서서 예배·설교·교회 소식을 전합니다.',
-  openGraph: {
-    type: 'website',
-    locale: 'ko_KR',
-    siteName: '대구동남교회',
-    title: {
-      template: '%s | 대구동남교회',
-      default: '대구동남교회'
-    },
-    description: '주님의 기도를 배우는 교회(성도), 동남교회',
-    images: ['/images/aboutBanner.jpg']
-  },
+  openGraph: OPEN_GRAPH_BASE,
   twitter: {
     card: 'summary_large_image',
     title: '대구동남교회',
