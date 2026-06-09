@@ -66,6 +66,16 @@
   - 해결: Next.js는 metadata의 절대 URL은 그대로 두고 상대 URL만 `metadataBase`로 해석한다. 기존 페이지는 `${SITE_URL}/...` 절대 문자열이라 영향이 없다. 그래서 "기존 canonical을 상대경로로 리팩터"를 Non-goal로 유지한다.
   - 결과: 기존 설교·시리즈 페이지 canonical은 그대로 두고, 이번 작업은 root layout만 건드린다.
 
+- **D2 — canonical은 홈 페이지에서만 선언한다 (커밋 후 정정)**
+  - 문제: root `layout.tsx`에 `alternates.canonical: '/'`를 두니, 자체 canonical이 없는 하위 페이지(about·community·news·next-gen 등)가 전부 canonical=홈으로 상속받아 "홈의 중복 페이지"로 오선언됐다. 전체 라우트를 Lighthouse(SEO)로 측정하니 about·next-gen이 canonical 항목에서 실패로 떴다. 단일 홈 측정의 SEO 100은 홈에선 canonical=홈이 맞아 이 버그를 못 잡았다.
+  - 해결: root에서 `alternates.canonical`과 `openGraph.url`을 빼고, 홈 `(content)/page.tsx`에 `alternates.canonical: '/'`만 두었다. 설교 페이지는 이미 자체 canonical을 set하므로 그대로다. 하위 페이지는 canonical을 비워 각자 URL로 자기참조된다(Next.js·구글 기본 동작).
+  - 결과: curl 실측 — `/`는 canonical=홈, `/about`·`/next-gen`은 canonical 없음(자기참조), `/sermons/all`은 자체 canonical 유지. D1에서 "root만 건드린다"로 좁게 본 것이 이 버그를 놓친 원인이다. 단일 페이지만 보던 검증을 전체 라우트 측정으로 바꿔 잡아냈다.
+
+- **D3 — 홈에서 openGraph를 부분 선언하지 않는다 (Codex 교차검증이 잡음)**
+  - 문제: D2 1차 수정 때 홈에 `openGraph: { url: '/' }`도 같이 넣었다. 그런데 Next.js metadata는 openGraph를 shallow merge한다 — 자식이 openGraph를 부분 선언하면 root의 openGraph(og:image·locale·siteName)를 통째로 대체한다. curl 실측에서 홈의 og:image가 사라졌다(카카오톡 공유 카드 이미지 소실). Codex 인라인 교차검증이 이 위험을 지적했고 실측으로 확인했다.
+  - 해결: 홈 metadata에서 openGraph를 빼고 `alternates.canonical`만 남겼다. 홈은 root의 openGraph를 그대로 상속한다.
+  - 결과: curl 실측 — 홈에 og:image(aboutBanner.jpg)·og:locale(ko_KR)·og:site_name 복귀. og:url은 홈에서 비웠다(스크레이퍼가 페이지 URL을 쓰므로 허용). canonical은 D2대로 유지.
+
 ---
 
 <!-- 검증 섹션 — Codex/Claude 호출 후 verdict 1줄 갱신. harness-gate가 verdict token + placeholder denylist + 최소 30자 본문 강제. -->
@@ -137,6 +147,11 @@
 -->
 
 ## 후속 작업
+
+- 하위 페이지(about 등)가 자체 `openGraph`를 부분 선언한다. 그러면 root의 og:image가 shallow merge로 사라진다. `/about`은 og:image가 없다(curl 확인). task A 이전부터 있던 문제라 이번 범위 밖.
+  - 이유: 페이지별 generateMetadata 정비는 별도 작업(작업 A Non-goal).
+  - 다음 기준: 페이지별 공유 카드가 필요할 때(공유 유입 점검 시).
+  - 기록 위치: `docs/tech-debt/active.md` 등록 후보.
 
 <!-- 이번 범위 밖 일. Non-goals·체크리스트에 중복 기술 금지 — 여기에만.
 - <후속 항목>
