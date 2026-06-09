@@ -74,7 +74,22 @@
 - **D3 — 홈에서 openGraph를 부분 선언하지 않는다 (Codex 교차검증이 잡음)**
   - 문제: D2 1차 수정 때 홈에 `openGraph: { url: '/' }`도 같이 넣었다. 그런데 Next.js metadata는 openGraph를 shallow merge한다 — 자식이 openGraph를 부분 선언하면 root의 openGraph(og:image·locale·siteName)를 통째로 대체한다. curl 실측에서 홈의 og:image가 사라졌다(카카오톡 공유 카드 이미지 소실). Codex 인라인 교차검증이 이 위험을 지적했고 실측으로 확인했다.
   - 해결: 홈 metadata에서 openGraph를 빼고 `alternates.canonical`만 남겼다. 홈은 root의 openGraph를 그대로 상속한다.
-  - 결과: curl 실측 — 홈에 og:image(aboutBanner.jpg)·og:locale(ko_KR)·og:site_name 복귀. og:url은 홈에서 비웠다(스크레이퍼가 페이지 URL을 쓰므로 허용). canonical은 D2대로 유지.
+  - 결과: curl 실측 — 홈에 og:image(aboutBanner.jpg)·og:locale(ko_KR)·og:site_name 복귀. canonical은 D2대로 유지. (og:url은 이때 비웠다가 D4에서 복원함.)
+
+- **D4 — PR #110 리뷰 반영 (봇 2개 + Codex 교차검증)**
+  - 문제: PR #110에 Gemini와 Codex-connector 봇이 sitemap·홈 메타를 6건 지적했다. 전부 즉시 반영하면 범위가 번지므로, codex:rescue로 MUST/SHOULD/DEFER 우선순위를 갈랐다.
+  - 해결:
+    - C2(MUST): sitemap이 `NEXT_PUBLIC_SITE_URL`이 비면 DB 조회 전에 `return []`을 한다. 빈 값이면 모든 `<loc>`가 상대 URL이 돼 sitemap이 무효해지기 때문이다. Codex가 짚은 "가드를 DB 호출 앞에"도 함께 반영했다.
+    - C3(MUST): `STATIC_PATHS`에 공개 GNB 라우트를 보강했다(about/serving-people·next-gen 하위 4개·community 하위 3개·/news·/news/bulletins). sitemap loc가 20→30으로 늘었다.
+    - G2: 동적 조회를 try-catch로 감싸 실패 시 정적 경로만 반환하고, `sermon_date`가 없으면 `lastModified`를 생략한다.
+    - C4: 홈 openGraph를 공유 상수 `OPEN_GRAPH_BASE`(src/config/seo.ts)로 펼쳐 og:image를 유지하고 og:url을 복원했다(D3에서 비웠던 것을 되살림).
+    - G1: `1000`을 `SITEMAP_MAX_SERMONS`로 상수화했다. `revalidate`(86400)는 리터럴로 둔다 — 아래 결과 참조.
+    - C1(DEFER): 설교 1000건 초과 시 페이지네이션은 현재 약 5건이라 코드 주석으로 한계만 남겼다.
+  - 결과: 구현 중 빌드 실패와 curl 실측으로 막힌 곳 셋을 찾아 고쳤다.
+    - `revalidate`를 변수(`SECONDS_PER_DAY`)로 바꾸니 `next build`가 "Invalid segment configuration export"로 실패했다. 라우트 세그먼트 설정은 정적 리터럴이어야 해서 `86400`으로 되돌렸다.
+    - 홈 og:url을 상대 `'/'`로 두니 페이지 레벨에서 og:url이 emit되지 않았다. 설교 페이지와 같은 절대 env 방식(`process.env.NEXT_PUBLIC_SITE_URL`)으로 바꾸니 og:url이 emit됐다. env가 없으면 undefined가 돼 og:url을 생략한다.
+    - `OPEN_GRAPH_BASE`에 og title 템플릿을 넣으니 홈 og:title이 "대구동남교회 | 대구동남교회"로 중복됐다. 상수에서 title을 빼고 Next.js가 문서 title에서 자동 유도하게 했다.
+    - 최종 curl: 홈 og:title 단일·og:url·og:image 정상, `/about` canonical 자기참조, sitemap 30 loc.
 
 ---
 
@@ -148,6 +163,10 @@
 
 ## 후속 작업
 
+- sitemap이 설교를 한 번에 1000건(`SITEMAP_MAX_SERMONS`)까지만 싣는다. 1000건을 넘으면 그 이후 설교 상세가 sitemap에서 빠진다.
+  - 이유: 현재 공개 설교가 약 5건이라 당장 영향이 없다(Codex·봇 모두 P2/DEFER).
+  - 다음 기준: 공개 설교가 1000건에 근접할 때 `hasMore`/`total`로 반복 조회를 넣는다.
+  - 기록 위치: 없음(코드 주석으로 한계 표기).
 - 하위 페이지(about 등)가 자체 `openGraph`를 부분 선언한다. 그러면 root의 og:image가 shallow merge로 사라진다. `/about`은 og:image가 없다(curl 확인). task A 이전부터 있던 문제라 이번 범위 밖.
   - 이유: 페이지별 generateMetadata 정비는 별도 작업(작업 A Non-goal).
   - 다음 기준: 페이지별 공유 카드가 필요할 때(공유 유입 점검 시).
