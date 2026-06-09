@@ -16,14 +16,10 @@ export const metadata: Metadata = {
   },
   description:
     '대한예수교장로회(합신) 대구동남교회 — 성경 위에 서서 예배·설교·교회 소식을 전합니다.',
-  alternates: {
-    canonical: '/'
-  },
   openGraph: {
     type: 'website',
     locale: 'ko_KR',
     siteName: '대구동남교회',
-    url: '/',
     title: {
       template: '%s | 대구동남교회',
       default: '대구동남교회'
