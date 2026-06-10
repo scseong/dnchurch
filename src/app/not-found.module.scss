@@ -1,0 +1,355 @@
+// 루트 404 — 다크 풀블리드 takeover. 레이어를 z-index로 쌓는다:
+// z0 SVG 일러스트(폴백) · z1 사진 · z2 듀오톤 틴트 · z3 스크림 · z4 콘텐츠.
+// 모바일 퍼스트 — 기본값이 모바일, respond-up으로 상위 뷰포트 확장.
+
+.page {
+  position: relative;
+  min-height: 100vh;
+  min-height: 100dvh;
+  overflow: hidden;
+  background: $bg-dark-nav;
+  color: $txt-inverse;
+  font-size: $font-size-15;
+  line-height: $line-height-base;
+  letter-spacing: -0.02rem;
+  word-break: keep-all;
+}
+
+// ── z0: SVG 폴백 일러스트 (사진 로드 실패 시 노출) ──
+.scene {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+
+  svg {
+    display: block;
+    width: 100%;
+    height: 100%;
+  }
+}
+
+// ── z1: 사진 (full-bleed) — 어떤 사진이든 흑백으로 정규화 ──
+.photo {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+
+  img {
+    filter: grayscale(1) contrast(1.06) brightness(0.92);
+  }
+}
+
+// ── z2: 듀오톤 틴트 — 사진을 네이비/골드 브랜드 톤으로 재염색 ──
+.tint {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+}
+
+.tint_navy {
+  background: $bg-dark-nav;
+  mix-blend-mode: color;
+  opacity: 0.62;
+}
+
+.tint_gold {
+  background: linear-gradient(120deg, $bg-dark-nav 0%, $accent 60%, $accent-hover 100%);
+  mix-blend-mode: overlay;
+  opacity: 0.6;
+}
+
+// ── z3: 스크림 — 글자 가독성 ──
+.scrim {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  pointer-events: none;
+  background: linear-gradient(
+    180deg,
+    rgba($bg-dark-nav, 0.7) 0%,
+    rgba($bg-dark-nav, 0.88) 46%,
+    rgba($bg-dark-nav, 0.96) 100%
+  );
+
+  @include respond-up($breakpoint-tablet) {
+    background: linear-gradient(
+      102deg,
+      rgba($bg-dark-nav, 0.94) 0%,
+      rgba($bg-dark-nav, 0.82) 34%,
+      rgba($bg-dark-nav, 0.3) 62%,
+      rgba($bg-dark-nav, 0) 80%
+    );
+  }
+}
+
+.scrim_edge {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  pointer-events: none;
+  background: linear-gradient(
+    180deg,
+    rgba($bg-dark-nav, 0.5) 0%,
+    transparent 22%,
+    transparent 70%,
+    rgba($bg-dark-nav, 0.55) 100%
+  );
+}
+
+// ── z4: 콘텐츠 ──
+.frame {
+  position: relative;
+  z-index: 4;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  min-height: 100dvh;
+  max-width: 132rem;
+  margin: 0 auto;
+  padding: $spacing-28 $spacing-24;
+
+  @include respond-up($breakpoint-tablet) {
+    padding: $spacing-36 clamp($spacing-24, 5vw, $spacing-64);
+  }
+}
+
+.brand {
+  display: flex;
+  flex: none;
+  align-self: flex-start;
+  align-items: center;
+  gap: $spacing-10;
+}
+
+.brand_mark {
+  flex: none;
+  width: $spacing-40;
+  height: $spacing-40;
+  color: $accent-hover;
+}
+
+.brand_text {
+  display: flex;
+  flex-direction: column;
+}
+
+.brand_name {
+  font-family: $font-family-secondary;
+  font-size: $font-size-16;
+  font-weight: $font-weight-bold;
+  color: $txt-inverse;
+}
+
+.brand_sub {
+  font-size: $font-size-11;
+  letter-spacing: 0.05em;
+  color: $txt-on-dark-nav-faint;
+}
+
+.body {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  justify-content: center;
+  max-width: 56rem;
+  padding: $spacing-32 0;
+}
+
+.tag {
+  display: inline-flex;
+  align-items: center;
+  gap: $spacing-8;
+  margin-bottom: $spacing-20;
+  font-size: $font-size-12;
+  font-weight: $font-weight-bold;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: $accent-hover;
+
+  &::before {
+    content: '';
+    width: $spacing-24;
+    height: 1px;
+    background: rgba($accent-hover, 0.6);
+  }
+}
+
+.title {
+  font-family: $font-family-secondary;
+  font-size: $font-size-32;
+  font-weight: $font-weight-bold;
+  line-height: $line-height-tight;
+  letter-spacing: -0.05rem;
+  color: $txt-inverse;
+
+  @include respond-up($breakpoint-tablet) {
+    font-size: $font-size-42;
+  }
+}
+
+.lead {
+  max-width: 42rem;
+  margin-top: $spacing-20;
+  font-size: $font-size-15;
+  line-height: $line-height-loose;
+  color: $txt-on-dark-nav-muted;
+
+  @include respond-up($breakpoint-tablet) {
+    font-size: $font-size-16;
+  }
+}
+
+.actions {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-16;
+  margin-top: $spacing-36;
+
+  @include respond-up($breakpoint-tablet) {
+    flex-direction: row;
+    align-items: center;
+    gap: $spacing-20;
+  }
+}
+
+.btn_home {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: $spacing-8;
+  padding: $spacing-16 $spacing-32;
+  border-radius: $radius-circle;
+  background: $accent;
+  color: $bg-dark-nav;
+  font-size: $font-size-15;
+  font-weight: $font-weight-bold;
+  transition: background 0.22s ease, transform 0.22s ease;
+
+  .arrow {
+    transition: transform 0.22s ease;
+  }
+
+  &:hover {
+    background: $accent-hover;
+    transform: translateY(-2px);
+
+    .arrow {
+      transform: translateX(3px);
+    }
+  }
+
+  @include respond-up($breakpoint-tablet) {
+    width: auto;
+  }
+}
+
+.link_back {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: $spacing-6;
+  font-family: $font-family-base;
+  font-size: $font-size-14;
+  font-weight: $font-weight-semibold;
+  color: $txt-on-dark-nav-muted;
+  cursor: pointer;
+  transition: color 0.22s ease;
+
+  .arrow {
+    transition: transform 0.22s ease;
+  }
+
+  &:hover {
+    color: $txt-inverse;
+
+    .arrow {
+      transform: translateX(-3px);
+    }
+  }
+}
+
+.foot {
+  display: flex;
+  flex: none;
+  flex-direction: column;
+  gap: $spacing-16;
+  align-items: flex-start;
+  padding-top: $spacing-24;
+  border-top: 1px solid rgba($border-inverse, 0.12);
+
+  @include respond-up($breakpoint-tablet) {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    gap: $spacing-16;
+  }
+}
+
+.quick {
+  display: flex;
+  flex-wrap: wrap;
+  gap: $spacing-20;
+
+  a {
+    font-size: $font-size-13;
+    font-weight: $font-weight-semibold;
+    color: $txt-on-dark-nav-muted;
+    transition: color 0.22s ease;
+
+    &:hover {
+      color: $accent-hover;
+    }
+  }
+}
+
+.verse {
+  font-family: $font-family-secondary;
+  font-size: $font-size-13;
+  color: rgba($accent-hover, 0.72);
+}
+
+.verse_ref {
+  margin-left: $spacing-8;
+  font-family: $font-family-base;
+  font-size: $font-size-11;
+  font-weight: $font-weight-bold;
+  letter-spacing: 0.1em;
+  color: rgba($accent-hover, 0.5);
+}
+
+// 진입 애니메이션 — 모션 선호 사용자에게만
+@media (prefers-reduced-motion: no-preference) {
+  .rise {
+    opacity: 0;
+    transform: translateY(1.6rem);
+    animation: rise 0.8s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+  }
+
+  .d1 {
+    animation-delay: 0.1s;
+  }
+
+  .d2 {
+    animation-delay: 0.24s;
+  }
+
+  .d3 {
+    animation-delay: 0.38s;
+  }
+
+  .d4 {
+    animation-delay: 0.52s;
+  }
+
+  .d5 {
+    animation-delay: 0.8s;
+  }
+}
+
+@keyframes rise {
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
