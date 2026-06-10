@@ -4,6 +4,9 @@ import ScrollToTop from '@/components/common/ScrollToTop';
 import ToastContainer from '@/components/common/Toast/ToastContainer';
 import SessionContextProvider from '@/context/SessionContextProvider';
 import { OPEN_GRAPH_BASE } from '@/config/seo';
+// Pretendard(본문 폰트)를 jsdelivr 외부 스타일시트 대신 self-host. 외부 도메인 렌더 차단(DNS·TLS) 비용 제거.
+// dynamic-subset CSS라 unicode-range로 필요한 한글 슬라이스만 받는 효율은 그대로. woff2는 Turbopack이 같은 출처 자산으로 emit한다.
+import 'pretendard/dist/web/variable/pretendardvariable-dynamic-subset.css';
 import '@/styles/globals.scss';
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL;
@@ -44,12 +47,7 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
   return (
     <html lang="ko" className={`${notoserifKR.variable}`}>
       <head>
-        <link rel="preconnect" href="https://cdn.jsdelivr.net" crossOrigin="anonymous" />
         <link rel="preconnect" href="https://res.cloudinary.com" />
-        <link
-          rel="stylesheet"
-          href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css"
-        />
       </head>
       <body>
         <div id="root">

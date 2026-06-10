@@ -4,7 +4,7 @@
 - **시작일**: 2026-06-10
 - **브랜치**: perf/optimize-measure
 - **Open questions**: none
-- **ADR needed**: no
+- **ADR needed**: no — `pretendard` 의존성 추가는 이미 쓰던 CDN 폰트를 self-host로 옮긴 것뿐, 아키텍처·패턴 변경이 아님(D3)
 
 ## 목표
 
@@ -148,18 +148,21 @@ before/after (전체 기록: `docs/research/perf-optimize/baseline-summary.md`):
   - 문제: jsdelivr Pretendard `<link rel=stylesheet>`가 렌더를 1,146ms 막는다. 본문 폰트라 효과는 크지만 손대기 까다롭다.
   - 해결: Codex 계획 검증이 셋을 비교했다 — `media=print onload` async swap은 본문 한글 FOUT·CLS 위험, `preload+유지`는 렌더 차단 성격을 못 없애 1,146ms를 온전히 못 얻음, `next/font/local` self-host는 가장 안전하지만 폰트 자산 소유·preload·라이선스 운영 표면이 새로 생긴다. 그래서 이번엔 보류하고 별도 PR로 조사한다. 레버 1·2를 먼저 적용한다.
   - 결과: 본문 가독성 회귀 위험 없이 안전한 레버부터 처리한다. Pretendard는 후속 작업으로 남긴다.
+  - ⚠️ 정정(D3 참조): 보류 → 승격. 측정 결과 레버 1이 LCP를 못 움직였고 진짜 병목이 Pretendard라, 같은 작업에서 A2 방식으로 처리했다.
 
 - **D2 — 렌더 차단 CSS 101KiB는 세리프 @font-face라 레버 1에 흡수된다**
   - 문제: Codex가 폰트 다음 큰 레버로 렌더 차단 로컬 CSS 101KiB(전송)·306KB(원본)를 지목했다. 별도 CSS 축소 작업이 필요한지 의심했다.
   - 해결: 그 CSS를 분석하니 Noto Serif KR `@font-face`가 496블록(weight 4 × CJK unicode-range 슬라이스), unicode-range 선언만 247KB로 ~80%를 차지했다. 앱 SCSS 과다 유입이 아니라 세리프 폰트 CSS다. 그래서 별도 CSS 레버를 만들지 않고, 세리프 weight를 줄이는 레버 1이 @font-face 수와 이 CSS를 함께 절반으로 줄이게 둔다.
   - 결과: 레버 1이 폰트 바이트와 렌더 차단 CSS 둘 다 친다 — 주력 레버로 확정.
 
+- **D3 — 측정 결과로 레버 3(Pretendard self-host)을 승격한다 (D1 정정)**
+  - 문제: 레버 1·2 적용 후 Vercel preview를 브라우저로 실측하니, 세리프 CSS는 절반(306→153KB)인데 홈 LCP는 안 움직였다(BEFORE 3,220ms / AFTER 3,256ms, FCP=LCP). 레버 1은 페이로드만 줄였고 LCP 병목이 아니었다. (위 Claude 2차의 localhost median 표 LCP -563ms는 노이즈였고, Vercel 실측이 정확하다.)
+  - 해결: 홈 LCP는 히어로 이미지이고 FCP와 같은 시점에 그려진다. FCP를 가장 늦추는 것(long pole)은 외부 jsdelivr의 Pretendard 렌더 차단 스타일시트였다. 별도 도메인이라 DNS 조회와 TLS 핸드셰이크가 더 든다. 그래서 보류했던 레버 3을 승격한다(D1 정정). Codex 설계 검증으로 세 방식을 비교해 dynamic-subset을 같은 출처에서 self-host하는 방식(A2)을 택했다 — 단일 1.3MB 묶음(A1)은 히어로 이미지(LCP)와 대역폭을 다투고, 비차단 async swap(B)은 본문 폰트가 늦게 떠 글자가 한 번 바뀐다(FOUT). `pretendard` npm을 의존성으로 추가하고 dynamic-subset CSS를 import해 jsdelivr `<link>`·preconnect를 제거했다. woff2는 Turbopack이 같은 출처 자산으로 emit해 커밋되는 바이너리는 0이고, unicode-range로 필요한 한글 슬라이스만 받는 효율은 유지된다.
+  - 결과: jsdelivr 참조 0, Pretendard가 같은 출처에서 로드된다(외부 렌더 차단 스타일시트 제거, curl 확인). LCP가 실제로 줄었는지는 아직 미측정 — Vercel preview 재측정 결과를 아래 검증에 기록한다.
+
 ## 후속 작업
 
-- Pretendard(본문 폰트) jsdelivr 스타일시트가 렌더를 1,146ms 막는다. self-host(`next/font/local`)로 옮기면 렌더 차단을 없애고 fallback 메트릭까지 통제할 수 있다.
-  - 이유: 본문 폰트라 async 전환은 FOUT·CLS 위험, self-host는 폰트 자산 운영 표면이 새로 생겨 별도 PR감(D1).
-  - 다음 기준: 이번 레버 1·2 적용 후에도 홈 FCP가 목표 미달일 때, 또는 폰트 운영을 정비할 때.
-  - 기록 위치: `docs/tech-debt/active.md` 등록 후보.
+- A2도 여전히 렌더를 막는 스타일시트다(같은 출처로 바뀌었을 뿐). 완전히 안 막는 방식은 폰트 파일을 직접 호스팅(`next/font/local` 단일 subset woff2)해야 하는데, 폰트 자산을 직접 관리하는 부담이 크다. 홈 LCP를 더 줄여야 할 때 다시 본다.
 
 <!-- 이번 범위 밖 일. Non-goals·체크리스트에 중복 기술 금지 — 여기에만.
 - <후속 항목>
