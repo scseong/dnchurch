@@ -240,3 +240,19 @@
 - **마이그레이션 경로**: og:image가 필요한 하위 페이지의 `openGraph`를 `OPEN_GRAPH_BASE` 펼침으로 바꾸거나, 페이지별 전용 공유 이미지를 set. 공유 유입 점검 시 우선순위 결정
 - **영향 범위**: `src/app/(content)/about/**` 등 자체 `openGraph`를 선언하는 하위 페이지
 - **발견일**: 2026-06-09 (PR #110 site-seo-meta, 전체 라우트 curl 확인)
+
+### 🟢 라우트·영역별 not-found 미세분화 부족 (not-found-page 후속)
+
+- **상태**: 등록만 (not-found-page 범위 밖)
+- **무엇**: 루트 다크 404가 모든 `notFound()`를 받지만 일부는 맥락에 안 맞거나 아예 안 걸린다.
+  - 설교: `sermons/[id]`·`sermons/series/[id]`의 `notFound()`가 루트의 일반 "페이지를 찾을 수 없습니다"로 떨어진다. "설교를 찾을 수 없습니다 + 전체 설교 보기" 같은 전용 안내가 없다.
+  - admin: `admin/sermons/[id]/edit`의 `notFound()`도 루트의 교회 다크 화면으로 떨어진다. admin 셸과 톤이 안 맞는다.
+  - 공지 상세: `news/notices/[id]/page.tsx`가 미구현 스텁(`<div>page</div>`)이라 없는 공지 id로 가도 `notFound()`를 안 불러 HTTP 200 "page"가 뜬다. notices not-found는 리스트의 잘못된 쿼리(`/news/notices?page=abc`)로는 404가 뜨지만, 없는 공지 id 경로에선 `notFound()`가 안 불린다.
+- **왜**: not-found-page는 루트 404와 notices 스텁 정리까지만 범위. 라우트별 맞춤 404와 미구현 상세 라우트는 별도 작업이다.
+- **마이그레이션 경로**:
+  - 설교: `src/app/(content)/sermons/not-found.tsx` 추가 — 설교 맥락 메시지 + 전체 설교 링크.
+  - admin: `src/app/(admin)/not-found.tsx` 추가 — admin 셸 톤의 미니멀 404.
+  - 공지 상세: `news/notices/[id]/page.tsx`를 구현할 때 조회 결과가 없으면 `notFound()` 호출.
+- **영향 범위**: `src/app/(content)/sermons/`, `src/app/(admin)/`, `src/app/(content)/news/notices/[id]/`
+- **확인**: `grep -rln "notFound()" src/app` (호출처 7곳, not-found 파일은 bulletins·notices·root 3개)
+- **발견일**: 2026-06-10 (not-found-page 작업 중 `notFound()` 호출처 스캔)
