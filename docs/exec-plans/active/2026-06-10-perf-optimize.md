@@ -158,7 +158,7 @@ before/after (전체 기록: `docs/research/perf-optimize/baseline-summary.md`):
 - **D3 — 측정 결과로 레버 3(Pretendard self-host)을 승격한다 (D1 정정)**
   - 문제: 레버 1·2 적용 후 Vercel preview를 브라우저로 실측하니, 세리프 CSS는 절반(306→153KB)인데 홈 LCP는 안 움직였다(BEFORE 3,220ms / AFTER 3,256ms, FCP=LCP). 레버 1은 페이로드만 줄였고 LCP 병목이 아니었다. (위 Claude 2차의 localhost median 표 LCP -563ms는 노이즈였고, Vercel 실측이 정확하다.)
   - 해결: 홈 LCP는 히어로 이미지이고 FCP와 같은 시점에 그려진다. FCP를 가장 늦추는 것(long pole)은 외부 jsdelivr의 Pretendard 렌더 차단 스타일시트였다. 별도 도메인이라 DNS 조회와 TLS 핸드셰이크가 더 든다. 그래서 보류했던 레버 3을 승격한다(D1 정정). Codex 설계 검증으로 세 방식을 비교해 dynamic-subset을 같은 출처에서 self-host하는 방식(A2)을 택했다 — 단일 1.3MB 묶음(A1)은 히어로 이미지(LCP)와 대역폭을 다투고, 비차단 async swap(B)은 본문 폰트가 늦게 떠 글자가 한 번 바뀐다(FOUT). `pretendard` npm을 의존성으로 추가하고 dynamic-subset CSS를 import해 jsdelivr `<link>`·preconnect를 제거했다. woff2는 Turbopack이 같은 출처 자산으로 emit해 커밋되는 바이너리는 0이고, unicode-range로 필요한 한글 슬라이스만 받는 효율은 유지된다.
-  - 결과: jsdelivr 참조 0, Pretendard가 같은 출처에서 로드된다(외부 렌더 차단 스타일시트 제거, curl 확인). LCP가 실제로 줄었는지는 아직 미측정 — Vercel preview 재측정 결과를 아래 검증에 기록한다.
+  - 결과: jsdelivr 참조가 사라지고, Pretendard를 같은 출처에서 받는다(외부 렌더 차단 스타일시트 제거). Vercel preview를 Lighthouse로 6회씩 측정하니, jsdelivr 렌더 차단이 BEFORE 6/6회 → AFTER 0/6회로 사라졌고 홈 LCP 중앙값이 8,040ms → 7,465ms로 약 575ms 줄었다(두 분포가 거의 겹치지 않음: AFTER 7251–7862 vs BEFORE 7783–8115). LCP가 안 움직인 레버 1과 달리 레버 3은 움직여, 진짜 병목이 Pretendard였다는 가설이 측정으로 뒷받침됐다. FCP·Perf·TBT는 편차가 커(FCP 분포 2.3초, TBT는 JS 무변경인데 이동) 읽지 않는다.
 
 ## 후속 작업
 
