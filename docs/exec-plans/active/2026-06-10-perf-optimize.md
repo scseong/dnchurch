@@ -126,6 +126,8 @@ before/after (전체 기록: `docs/research/perf-optimize/baseline-summary.md`):
 
 측정 방법: 같은 머신·prod 빌드. Lighthouse 모바일 5회 median+min/max(LCP variance 커 median 필요). 결정적 지표는 `.next` 청크·@font-face 카운트. Chrome은 `encodedBodySize`(캐시 무관). 시각 회귀: 브라우저로 홈 확인 — 브랜드 세리프·히어로 정상, 세리프 weight 변경(RecentSermons 500→400·QuickAccess 600→700)은 미세하고 의도된 매핑. 빌드: photoswipe.css를 client 컴포넌트에 둬도 App Router 빌드 통과(Codex 계획 검증 우려 미발생).
 
+PR #112 Codex 봇 리뷰(P2) 반영: 처음엔 홈만 스캔해 RecentSermons(500)·QuickAccess(600)만 매핑했는데, 홈 밖에도 세리프-500/600이 있었다. AboutWorship `.verse`·SchoolGrid `.time`(500→400), NoticeDrawer 제목(600→700)을 명시 매핑해 세리프 weight 축소를 전 페이지로 완성했다. 이 값들은 weight 제거 후 브라우저가 이미 같은 weight로 스냅하던 것이라 렌더 결과는 그대로고, 의도만 코드에 분명히 했다.
+
 ## 검증 이력
 
 <!--

@@ -130,7 +130,8 @@
   margin-bottom: $spacing-8;
   font-family: $font-family-secondary;
   font-size: $font-size-18;
-  font-weight: $font-weight-semibold;
+  // 세리프 weight 400·700만 유지하므로 semibold(600)→bold(700) 명시 매핑 (브라우저 자동 매칭과 동일)
+  font-weight: $font-weight-bold;
   color: $txt-primary;
   word-break: keep-all;
   line-height: map-get($heading-line-heights, 'h5');
