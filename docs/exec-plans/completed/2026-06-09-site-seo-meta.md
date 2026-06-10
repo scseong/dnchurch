@@ -1,6 +1,6 @@
 # site-seo-meta
 
-- **상태**: 🟡 진행 중
+- **상태**: ✅ 완료 (2026-06-10)
 - **시작일**: 2026-06-09
 - **브랜치**: chore/site-audit-followup
 - **Open questions**: none
@@ -170,7 +170,13 @@
 - 하위 페이지(about 등)가 자체 `openGraph`를 부분 선언한다. 그러면 root의 og:image가 shallow merge로 사라진다. `/about`은 og:image가 없다(curl 확인). task A 이전부터 있던 문제라 이번 범위 밖.
   - 이유: 페이지별 generateMetadata 정비는 별도 작업(작업 A Non-goal).
   - 다음 기준: 페이지별 공유 카드가 필요할 때(공유 유입 점검 시).
-  - 기록 위치: `docs/tech-debt/active.md` 등록 후보.
+  - 기록 위치: `docs/tech-debt/active.md`에 등록함(이번 완료 처리 시).
+
+## 회고
+
+- **잘된 것**: 검증 범위를 홈 단일 측정에서 전체 라우트 Lighthouse로 넓혀 canonical이 하위 페이지로 줄줄이 상속되는 버그(D2)를 잡았다. 홈만 보면 canonical=홈이 맞아 SEO 100이 떠 버그가 가려졌다. og:image shallow-merge 회귀(D3)는 Codex 인라인 교차검증이 커밋 전에 막았다.
+- **다음에 할 것**: 메타 회귀는 빌드 후 `curl`로 실제 HTML의 `<meta>`를 보는 게 가장 빨랐다. 다음 메타·OG 작업도 dev DOM보다 prod 빌드 curl을 먼저 본다. 라우트 세그먼트 설정(`revalidate` 등)은 변수가 아니라 리터럴이어야 한다 — 변수로 두면 `next build`가 막는다.
+- **발견된 부채**: 하위 페이지가 `openGraph`를 부분 선언하면 root의 og:image가 사라진다. `/about`은 현재 og:image가 없다. task A 이전부터 있던 문제라 이번 범위 밖으로 두고 `docs/tech-debt/active.md`에 등록했다.
 
 <!-- 이번 범위 밖 일. Non-goals·체크리스트에 중복 기술 금지 — 여기에만.
 - <후속 항목>

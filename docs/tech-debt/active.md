@@ -231,3 +231,12 @@
 - **영향 범위**: 본 저장소 `codex:rescue` 모든 백그라운드 호출. Windows 환경 직접 영향. Linux/macOS는 미확인
 - **확인**: `node "<plugin-path>/codex-companion.mjs" status --all --json` 후 `running` 배열의 `elapsed` 비정상치(30분+) 검출
 - **발견일**: 2026-05-30 (PR #104 후속 fix 진행 중 stall 2건 동시 관측, 인계 노트와 동일 패턴)
+
+### 🟢 하위 페이지 og:image 소실 — openGraph 부분 선언 (PR #110 site-seo-meta)
+
+- **상태**: 등록만 (site-seo-meta 범위 밖)
+- **무엇**: about 등 하위 페이지가 `generateMetadata`에서 `openGraph`를 부분 선언하면, Next.js의 shallow merge로 root layout의 og:image가 사라진다. `/about`은 현재 og:image가 없다(curl 확인)
+- **왜**: 이 문제는 site-seo-meta(작업 A) 이전부터 있었고, 페이지별 메타 정비는 작업 A의 Non-goal. 홈은 공유 상수 `OPEN_GRAPH_BASE`(`src/config/seo.ts`)를 펼쳐 이 문제를 피했다. 하위 페이지에는 아직 적용하지 않았다
+- **마이그레이션 경로**: og:image가 필요한 하위 페이지의 `openGraph`를 `OPEN_GRAPH_BASE` 펼침으로 바꾸거나, 페이지별 전용 공유 이미지를 set. 공유 유입 점검 시 우선순위 결정
+- **영향 범위**: `src/app/(content)/about/**` 등 자체 `openGraph`를 선언하는 하위 페이지
+- **발견일**: 2026-06-09 (PR #110 site-seo-meta, 전체 라우트 curl 확인)
