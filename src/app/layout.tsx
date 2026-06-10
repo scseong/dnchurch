@@ -5,7 +5,6 @@ import ToastContainer from '@/components/common/Toast/ToastContainer';
 import SessionContextProvider from '@/context/SessionContextProvider';
 import { OPEN_GRAPH_BASE } from '@/config/seo';
 import '@/styles/globals.scss';
-import 'photoswipe/dist/photoswipe.css';
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL;
 
@@ -32,8 +31,10 @@ export const viewport: Viewport = {
   viewportFit: 'cover'
 };
 
+// 세리프는 로고타입·헤딩·인용구 강조용. CJK 폰트는 weight마다 unicode-range @font-face가 생성돼
+// 렌더 차단 CSS와 폰트 바이트가 weight 수에 비례한다. 실제 쓰는 400·700만 남긴다(500→400, 600→700로 매핑).
 const notoserifKR = Noto_Serif_KR({
-  weight: ['400', '500', '700', '800'],
+  weight: ['400', '700'],
   subsets: ['latin'],
   variable: '--font-notoserifKR',
   display: 'swap'
