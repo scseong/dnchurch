@@ -1,6 +1,6 @@
 # refactor-dedup-cleanup
 
-- **상태**: 🟡 진행 중
+- **상태**: ✅ 완료 (2026-06-11)
 - **시작일**: 2026-06-11
 - **브랜치**: refactor/dedup-cleanup
 - **Open questions**: none
@@ -223,6 +223,24 @@ Success Criteria 최종 확인 (grep):
   - 이유: 호출처마다 동기화 구조가 달라(구독·스크롤·URL 파싱) 일괄 치환이 안 된다
   - 다음 기준: useSearchSync 패턴(이벤트 핸들러 + prev-state 보정)을 참고해 별도 작업으로
   - 기록 위치: `docs/tech-debt/active.md` "queueMicrotask로 set-state-in-effect 우회 (4건)"
+
+## 회고
+
+**잘된 것**
+
+- Codex 계획 검증 CR이 구현 전에 설계 결함 2개를 막았다 — 옵션 3개짜리 파라미터 헬퍼(과추상화)와 공용 Pagination 교체(admin 0건 표시 사라짐). 둘 다 코드를 쓴 뒤였으면 되돌리는 비용이 컸다.
+- queueMicrotask 제거(8단계)를 설계 검증 → 구현 → 1차 검증 순서로 돌린 것이 맞아떨어졌다. stale 타이머 버그를 코드 작성 전에 잡아서 수정 비용이 프롬프트 1회였다.
+- PR 봇 리뷰 4건을 Codex 교차 검증으로 판정했다. 기각 2건(useEffect 교체·unused import)을 react-dom 19.2.1 소스 근거로 회신해 근거 없는 수용을 피했다.
+- Claude in Chrome 브라우저 검증으로 admin 검색 동작 계약 5건을 실제 화면에서 확인했다. 로그인 세션이 필요한 페이지라 curl 요청으로는 확인할 수 없던 부분이다.
+
+**다음에 할 것**
+
+- verify-task는 `git add` 뒤에 돌린다. 2단계에서 add 전에 돌려 "diff 불일치" 경고가 떴다. 같은 이유로 머지 직전 harness-gate도 다시 검증해야 했다.
+- 봇 리뷰가 기존 버그(clear-all 경쟁)를 찾아줬다. 동작 보존 리팩토링이라도 옮기는 로직의 edge case를 EXPLORE 단계에서 한 번 훑는다 — 기존 버그까지 그대로 보존되기 때문이다.
+
+**부채**
+
+- 잔여 queueMicrotask 4곳 — `docs/tech-debt/active.md`에 등록 완료. 신규 부채 없음.
 
 ---
 
