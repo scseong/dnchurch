@@ -83,7 +83,9 @@ enabled = true
 file_size_limit = "50MiB"
 
 [storage.image_transformation]
-enabled = true
+# 이미지는 Cloudinary로 처리한다. Supabase 이미지 변환은 쓰지 않으며, 무료 티어에서 켜면
+# Preview 브랜치가 402(유료 필요)로 실패한다.
+enabled = false
 
 # Uncomment to configure local storage buckets
 # [storage.buckets.images]
