@@ -132,10 +132,12 @@ export const sermonService = (supabase: SupabaseClient<Database>) => ({
       SeriesWithSermonCount & { sermons: Array<{ count: number }> }
     >;
 
-    return rows.map(({ sermons, ...rest }) => ({
-      ...rest,
-      sermon_count: sermons?.[0]?.count ?? 0
-    }));
+    return rows
+      .map(({ sermons, ...rest }) => ({
+        ...rest,
+        sermon_count: sermons?.[0]?.count ?? 0
+      }))
+      .filter((series) => series.sermon_count > 0);
   },
 
   /** 시리즈 slug에 속한 설교 전체를 연재 순서로 조회 */
@@ -198,7 +200,11 @@ export const sermonService = (supabase: SupabaseClient<Database>) => ({
     };
   },
 
-  /** 활성 설교자 전체 + published + 미삭제 설교 편수 조회 (inner join — 노출 0편 설교자는 결과에서 제외) */
+  /**
+   * 활성 설교자 전체 + published + 미삭제 설교 편수 조회.
+   * `sermons!inner(count)`는 집계 lateral이라 발행 0편 설교자가 count:0으로 새어 나올 수 있다
+   * (미발행·삭제 설교만 가진 설교자). 반환 직전 count > 0 가드로 0편을 거른다.
+   */
   allPreachers: async (): Promise<PreacherWithSermonCount[]> => {
     const res = await supabase
       .from('preachers')
@@ -214,10 +220,12 @@ export const sermonService = (supabase: SupabaseClient<Database>) => ({
       PreacherWithSermonCount & { sermons: Array<{ count: number }> }
     >;
 
-    return rows.map(({ sermons, ...rest }) => ({
-      ...rest,
-      sermon_count: sermons?.[0]?.count ?? 0
-    }));
+    return rows
+      .map(({ sermons, ...rest }) => ({
+        ...rest,
+        sermon_count: sermons?.[0]?.count ?? 0
+      }))
+      .filter((preacher) => preacher.sermon_count > 0);
   },
 
   /** 최근 설교를 경량 필드셋으로 조회 (홈 카드용) */
