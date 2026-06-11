@@ -78,6 +78,14 @@
 - **확인**: `yarn knip`
 - **발견일**: 2026-05-01
 
+### 🟡 queueMicrotask로 set-state-in-effect 우회 (4건)
+
+- **무엇**: effect 안 setState를 `queueMicrotask`로 감싸 `react-hooks/set-state-in-effect` 경고만 끄고 연쇄 재렌더는 그대로 남긴 코드. `useListFilters.ts:27`, `NoticeControlBar.tsx:26`, `DesktopHeader.tsx:21`, `useMediaQuery.ts:10`
+- **왜**: 커밋 0e8fd31(2026-05-02)이 React Compiler 룰 격상에 대응하며 10곳을 일괄 우회했고, 이후 queueMicrotask 전면 금지가 사용자 규칙으로 정해짐
+- **마이그레이션 경로**: `useSearchSync` 사례(refactor-dedup-cleanup 8단계 — 이벤트 핸들러 디바운스 + 렌더 중 prev-state 보정)처럼 호출처별 재설계. `useMediaQuery`는 `useSyncExternalStore` 전환 후보
+- **확인**: `rg "queueMicrotask" src` → 4 hits
+- **발견일**: 2026-06-11 (refactor-dedup-cleanup 8단계에서 useSearchSync 1건 해소하며 잔여분 등록)
+
 ### 🟢 `complete-task.mjs` 패턴 매칭 부정확
 
 - **무엇**: `phase1` 입력 시 `phase1-5`도 매치되어 다중 매칭 차단됨. `phase1.md` 입력은 `*phase1.md*.md`로 깨짐

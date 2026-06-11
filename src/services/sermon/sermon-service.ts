@@ -1,7 +1,7 @@
 import { handleResponse } from '@/services/handle-response';
 import { buildBaseSlug } from '@/lib/sermon-slug';
 import type { SermonDbInsert, SermonDbUpdate } from '@/lib/sermon-form-mapper';
-import type { SupabaseClient } from '@supabase/supabase-js';
+import type { PostgrestResponse, SupabaseClient } from '@supabase/supabase-js';
 import type { Database } from '@/types/database.types';
 import type {
   SermonListParams,
@@ -48,6 +48,21 @@ const NONE_SERIES_SENTINEL = '__none';
 
 function escapeOrToken(value: string): string {
   return value.replace(/[(),]/g, ' ');
+}
+
+/** `select('*, sermons(count)')` 응답의 `sermons: [{ count }]`를 `sermon_count` 평탄 필드로 바꾼다 */
+export function mapRowsWithSermonCount<T extends { sermon_count: number }>(
+  res: PostgrestResponse<unknown>
+): T[] {
+  const handled = handleResponse(res);
+  const rows = (handled.data ?? []) as unknown as Array<
+    T & { sermons: Array<{ count: number }> }
+  >;
+
+  return rows.map(({ sermons, ...rest }) => ({
+    ...rest,
+    sermon_count: sermons?.[0]?.count ?? 0
+  })) as unknown as T[];
 }
 
 /** 설교 도메인 Supabase 쿼리 계층 */
@@ -127,15 +142,7 @@ export const sermonService = (supabase: SupabaseClient<Database>) => ({
       .order('started_at', { ascending: false })
       .order('sort_order', { ascending: true, nullsFirst: false });
 
-    const handled = handleResponse(res);
-    const rows = (handled.data ?? []) as unknown as Array<
-      SeriesWithSermonCount & { sermons: Array<{ count: number }> }
-    >;
-
-    return rows.map(({ sermons, ...rest }) => ({
-      ...rest,
-      sermon_count: sermons?.[0]?.count ?? 0
-    }));
+    return mapRowsWithSermonCount<SeriesWithSermonCount>(res);
   },
 
   /** 시리즈 slug에 속한 설교 전체를 연재 순서로 조회 */
@@ -214,15 +221,7 @@ export const sermonService = (supabase: SupabaseClient<Database>) => ({
       .order('sort_order', { ascending: true })
       .order('name', { ascending: true });
 
-    const handled = handleResponse(res);
-    const rows = (handled.data ?? []) as unknown as Array<
-      PreacherWithSermonCount & { sermons: Array<{ count: number }> }
-    >;
-
-    return rows.map(({ sermons, ...rest }) => ({
-      ...rest,
-      sermon_count: sermons?.[0]?.count ?? 0
-    }));
+    return mapRowsWithSermonCount<PreacherWithSermonCount>(res);
   },
 
   /** 최근 설교를 경량 필드셋으로 조회 (홈 카드용) */

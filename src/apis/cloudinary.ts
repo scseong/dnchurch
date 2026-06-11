@@ -49,11 +49,8 @@ export async function deleteImage(publicId: string) {
   try {
     const result = await cloudinary.uploader.destroy(toFullyQualifiedPublicId(publicId));
     return result;
-  } catch (error: any) {
-    console.error('[Cloudinary Delete Error] ', {
-      publicId,
-      error: error.response?.data || error.message
-    });
+  } catch (error) {
+    console.error('[Cloudinary Delete Error] ', { publicId, error });
     throw error;
   }
 }

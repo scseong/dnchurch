@@ -10,21 +10,28 @@ import type {
   BulletinWithImages
 } from '@/types/bulletin';
 
+/** list·summary가 공유하는 목록 쿼리 — 연도 필터 + 최신순 + 페이지 range */
+const listQuery = (
+  supabase: SupabaseClient<Database>,
+  { year, page = 1, limit = 10 }: BulletinParams = {}
+) => {
+  let query = supabase
+    .from(BULLETIN_BUCKET)
+    .select('*, bulletin_images(*)', { count: 'exact' })
+    .is('deleted_at', null)
+    .order('sunday_date', { ascending: false });
+
+  if (year) {
+    query = query.gte('sunday_date', `${year}-01-01`).lte('sunday_date', `${year}-12-31`);
+  }
+
+  const from = (page - 1) * limit;
+  return query.range(from, from + limit - 1);
+};
+
 export const bulletinService = (supabase: SupabaseClient<Database>) => ({
-  list: async ({ year, page = 1, limit = 10 }: BulletinParams = {}) => {
-    let query = supabase
-      .from(BULLETIN_BUCKET)
-      .select('*, bulletin_images(*)', { count: 'exact' })
-      .is('deleted_at', null)
-      .order('sunday_date', { ascending: false });
-
-    if (year) {
-      query = query.gte('sunday_date', `${year}-01-01`).lte('sunday_date', `${year}-12-31`);
-    }
-
-    const from = (page - 1) * limit;
-    const to = from + limit - 1;
-    const res = await query.range(from, to);
+  list: async (params: BulletinParams = {}) => {
+    const res = await listQuery(supabase, params);
 
     return handleResponse(res);
   },
@@ -50,24 +57,9 @@ export const bulletinService = (supabase: SupabaseClient<Database>) => ({
     return handleResponse(res);
   },
 
-  summary: async ({ year, page = 1, limit = 10 }: BulletinParams) => {
-    let itemsQuery = supabase
-      .from(BULLETIN_BUCKET)
-      .select('*, bulletin_images(*)', { count: 'exact' })
-      .is('deleted_at', null)
-      .order('sunday_date', { ascending: false });
-
-    if (year) {
-      itemsQuery = itemsQuery
-        .gte('sunday_date', `${year}-01-01`)
-        .lte('sunday_date', `${year}-12-31`);
-    }
-
-    const from = (page - 1) * limit;
-    const to = from + limit - 1;
-
+  summary: async (params: BulletinParams) => {
     const [itemsRes, allDatesRes, latestRes] = await Promise.all([
-      itemsQuery.range(from, to),
+      listQuery(supabase, params),
       supabase.from(BULLETIN_BUCKET).select('sunday_date').is('deleted_at', null),
       supabase
         .from(BULLETIN_BUCKET)

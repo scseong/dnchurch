@@ -9,6 +9,7 @@ import {
   HiOutlineTrash
 } from 'react-icons/hi';
 import { formattedDate, formatRelativeTime } from '@/utils/date';
+import { getTotalPages } from '@/utils/pagination';
 import SermonEmptyState from './SermonEmptyState';
 import {
   deriveSermonStatus,
@@ -44,7 +45,7 @@ export default function MobileCardList({
   onCreateNew,
   isLoading = false
 }: MobileCardListProps) {
-  const totalPages = Math.max(1, Math.ceil(total / pageSize));
+  const totalPages = getTotalPages(total, pageSize);
   const isFirst = currentPage === 1;
   const isLast = currentPage === totalPages;
   const isEmpty = sermons.length === 0;

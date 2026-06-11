@@ -20,6 +20,7 @@ import {
   resolvePreacherName,
   resolveSeriesSlug
 } from '@/utils/sermon';
+import { getTotalPages } from '@/utils/pagination';
 import styles from '../_component/SermonListPage/SermonListPage.module.scss';
 
 const PAGE_DESCRIPTION = '대구동남교회의 모든 설교를 검색·필터로 찾아보세요';
@@ -110,7 +111,7 @@ export default async function AllSermonsPage({ searchParams }: PageProps) {
   });
 
   const filteredTotal = listResult.total;
-  const totalPages = Math.max(1, Math.ceil(filteredTotal / FILTER_PAGE_SIZE));
+  const totalPages = getTotalPages(filteredTotal, FILTER_PAGE_SIZE);
 
   // Out-of-range page → 마지막 페이지로 redirect
   if (filteredTotal > 0 && page > totalPages) {
