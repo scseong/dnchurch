@@ -9,11 +9,11 @@ import type { StaffType } from '@/types/common';
 import styles from './page.module.scss';
 
 export const metadata: Metadata = {
-  title: '섬기는 이',
+  title: '섬기는 사람들',
   description: '각 사역자들의 역할과 사역에 대한 정보를 확인해 보세요.',
   openGraph: {
     ...OPEN_GRAPH_BASE,
-    title: '섬기는 이',
+    title: '섬기는 사람들',
     description: '각 사역자들의 역할과 사역에 대한 정보를 확인해 보세요.'
   }
 };

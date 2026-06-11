@@ -8,7 +8,10 @@ export const revalidate = 86400;
 // 현재 공개 설교는 수십 건 규모라 단일 조회로 충분하다. 1000건을 넘으면 hasMore/total로 반복 조회가 필요하다.
 const SITEMAP_MAX_SERMONS = 1000;
 
-// 공개 GNB(src/config/navigation.ts)의 정적 라우트. 동적 상세(설교·시리즈)는 아래에서 추가한다.
+// 공개 GNB(src/config/navigation.ts)의 정적 라우트 중 실제 콘텐츠가 있는 페이지만 넣는다.
+// next-gen·community·news/gallery는 아직 미구현 stub(`<div>다음세대</div>` 수준)이라
+// 색인 신호를 주지 않으려고 제외한다. 페이지를 실제로 만들면 경로를 다시 추가한다.
+// 동적 상세(설교·시리즈)는 아래에서 추가한다.
 const STATIC_PATHS = [
   '',
   '/about',
@@ -21,18 +24,8 @@ const STATIC_PATHS = [
   '/sermons',
   '/sermons/all',
   '/sermons/series',
-  '/next-gen',
-  '/next-gen/kindergarten',
-  '/next-gen/elementary',
-  '/next-gen/youth',
-  '/next-gen/young-adult',
-  '/community',
-  '/community/groups',
-  '/community/prayer',
-  '/community/sharing',
   '/news',
   '/news/notices',
-  '/news/gallery',
   '/news/bulletins'
 ];
 
