@@ -8,11 +8,11 @@ import { displaySettingValue } from '@/utils/site-settings';
 import styles from './page.module.scss';
 
 export const metadata: Metadata = {
-  title: '교회 소개 - 대구동남교회',
+  title: '교회 소개',
   description: '대구동남교회를 소개합니다',
   openGraph: {
     ...OPEN_GRAPH_BASE,
-    title: '교회 소개 - 대구동남교회',
+    title: '교회 소개',
     description: '대구동남교회를 소개합니다'
   }
 };

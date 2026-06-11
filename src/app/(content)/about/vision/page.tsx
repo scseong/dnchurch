@@ -7,11 +7,11 @@ import { getVisionPageData } from '@/services/about';
 import styles from './page.module.scss';
 
 export const metadata: Metadata = {
-  title: '교회의 비전 - 대구동남교회',
+  title: '교회의 비전',
   description: '2025년 교회목표 - 주님의 기도를 배우는 교회(성도)',
   openGraph: {
     ...OPEN_GRAPH_BASE,
-    title: '교회의 비전 - 대구동남교회',
+    title: '교회의 비전',
     description: '2025년 교회목표 - 주님의 기도를 배우는 교회(성도)'
   }
 };
