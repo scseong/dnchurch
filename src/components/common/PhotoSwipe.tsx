@@ -14,6 +14,8 @@ import {
 import PhotoSwipeType, { type PhotoSwipeOptions } from 'photoswipe';
 import { type ImageState, type PhotoSwipeProps } from '@/types/photoswipe';
 import styles from './PhotoSwipe.module.scss';
+// 갤러리에서만 쓰는 CSS — 전역(layout) 대신 이 컴포넌트가 실리는 라우트에만 로드한다.
+import 'photoswipe/dist/photoswipe.css';
 
 export default function PhotoSwipe({
   images,

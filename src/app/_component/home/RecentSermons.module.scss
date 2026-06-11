@@ -35,7 +35,8 @@
 
 .header h2 {
   font-family: $font-family-secondary;
-  font-weight: $font-weight-medium;
+  // 세리프 weight를 400·700로 줄이며 medium(500)→regular(400)로 명시 매핑 (브라우저 자동 매칭과 동일)
+  font-weight: $font-weight-regular;
   color: $white;
 }
 
