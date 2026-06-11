@@ -114,7 +114,7 @@
 
 ## Claude 2차 검증
 
-- **최종 판단**: 통과 (verify-task green + Codex PASS 교차 확인)
+- **최종 판단**: PASS (verify-task green + Codex 1차 PASS·FIX_APPLIED 교차 확인)
 - **현재 판단**: verify-task 4단계가 통과했다(Knip 경고는 기존 부채). Codex 1차 PASS와 diff를 교차 확인했고 가드 순서·og 키 순서·SCSS 변수 성격이 모두 일치한다. 남은 점검: (1) DB `church_history`를 수정하기 전까지는 /about 연혁·통계 항목 수가 줄어든 것처럼 보인다 — D2가 의도한 임시 상태다. (2) about 7개 페이지가 og 이미지 `aboutBanner.jpg`를 공유한다 — 페이지별로 다른 이미지가 필요 없다는 전제이고, 지금 root og와 같다. (3) admin not-found는 admin primary 색조와 시각이 맞는지만 실화면에서 확인하면 된다.
 - **다음 행동**: 사용자 커밋 승인 → E-데이터(연혁·통계 실값) 도착 시 DB dev·prod 갱신.
 
