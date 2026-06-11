@@ -51,6 +51,8 @@
 - [x] 6. `Refactor: SermonListPage 검색 동기화 hook 추출` — 디바운스 useEffect 2개와 ref를 별도 hook으로 분리 (daeb7d7, Codex 1차 PASS)
 - [x] 7. `Refactor: SermonMetaActions 북마크·공유 hook 분리` — localStorage 북마크 / 공유 4종 각각 hook으로 (f827bd9, Codex 1차 PASS)
 - [x] 8. `Refactor: useSearchSync queueMicrotask 제거` — 이벤트 핸들러 디바운스 + 렌더 중 prev-state 보정으로 재설계 (692dd58, 사용자 요청으로 범위 추가, Codex 설계 CR 반영 + 1차 PASS)
+- [x] 9. `Fix: 전체 초기화 시 대기 중인 검색 디바운스 타이머 취소` — PR #114 Codex 봇 리뷰 중간 심각도(P2) 항목 반영. search prop이 ''→''로 안 바뀌는 clear-all 경로에서 타이머가 살아남는 경쟁 차단 — 원본 코드에도 있던 기존 버그 (5454e9d)
+- [x] 10. `Fix: getTotalPages pageSize 0 이하 방어` — PR #114 Gemini 리뷰 반영. `.gemini/styleguide.md` 범위 검사 정책 준수 (e496577)
 
 ## Non-goals
 
@@ -140,7 +142,13 @@ Codex 지적 (요지 verbatim):
 
 풀이: 재설계된 hook이 6개 동작 계약(디바운스·echo 보존·외부 변경 즉시 반영·pending 표시·clear)을 지키면서 queueMicrotask와 effect 안 setState를 모두 없앴다는 확인이다.
 
-Codex 결과 (verbatim):
+PR #114 봇 리뷰 4건 판정 Codex 교차 검증 (verbatim, 전건 AGREE → PASS, confidence: high):
+
+> Item 1: AGREE - `useListFilters`의 `setSearch('')`와 `clearAll()`은 같은 이벤트에서 functional `setState`로 순서대로 큐잉되어 최종 상태가 `clearAll`로 수렴하므로 URL 순서 문제는 없고, clear-all wrapper가 가장 국소적인 fix입니다. (중략) Item 3: AGREE - 로컬 `react-dom@19.2.1` server renderer는 `useLayoutEffect: noop`이고 경고 문자열이 없으며 (중략) `useEffect`와 stale-timer 차단 타이밍은 동등하지 않습니다.
+
+풀이: 봇 리뷰 4건에 대한 수용 2건(clear-all 타이머 취소, pageSize guard)·기각 2건(useEffect 교체, unused import) 판정이 모두 타당하다는 확인이다. 수용분은 9·10단계 커밋, 기각 사유는 PR 답글로 회신했다.
+
+3단계 Codex 결과 (verbatim):
 
 > `PostgrestResponse<unknown>`는 Supabase 타입상 `PostgrestSingleResponse<unknown[]>`라서 네 호출부의 배열 응답과 구조적으로 호환됩니다. `as unknown as T[]`도 기존 각 호출부의 `as unknown as Array<...>` 뒤 동일한 `sermons?.[0]?.count ?? 0` 변환을 수행하므로 런타임 동작 변화는 없습니다. (중략) `handleResponse` import 제거는 실제 unused 제거라 범위 내입니다. `git diff --check` 통과 확인했습니다.
 
