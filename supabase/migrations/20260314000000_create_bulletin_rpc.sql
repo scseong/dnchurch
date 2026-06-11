@@ -67,3 +67,31 @@ BEGIN
   RETURN QUERY SELECT * FROM bulletins WHERE id = p_bulletin_id;
 END;
 $$;
+
+-- get_adjacent_bulletins: 주보 상세의 이전/다음 네비게이션 (id 기준 인접)
+CREATE OR REPLACE FUNCTION get_adjacent_bulletins(target_id BIGINT)
+RETURNS TABLE(prev_id BIGINT, prev_title TEXT, next_id BIGINT, next_title TEXT)
+LANGUAGE plpgsql
+STABLE
+SECURITY DEFINER
+SET search_path = public, pg_temp
+AS $$
+DECLARE
+  prev_row record;
+  next_row record;
+BEGIN
+  SELECT id, title INTO prev_row
+  FROM public.bulletins
+  WHERE id < target_id AND deleted_at IS NULL
+  ORDER BY id DESC
+  LIMIT 1;
+
+  SELECT id, title INTO next_row
+  FROM public.bulletins
+  WHERE id > target_id AND deleted_at IS NULL
+  ORDER BY id ASC
+  LIMIT 1;
+
+  RETURN QUERY SELECT prev_row.id, prev_row.title, next_row.id, next_row.title;
+END;
+$$;
