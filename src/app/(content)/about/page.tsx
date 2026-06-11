@@ -68,7 +68,7 @@ export default async function AboutHub() {
     { num: 'TODO', label: '기도일' }
   ];
   // 실값이 채워지기 전 placeholder("TODO") 항목은 화면에 노출하지 않는다.
-  const historyMini = history.filter((item) => item.year !== 'TODO').slice(0, 4);
+  const historyMini = history.filter((item) => item?.year !== 'TODO').slice(0, 4);
 
   const address = displaySettingValue(settings.church_address, '준비 중');
   const phone = displaySettingValue(settings.church_phone, '');

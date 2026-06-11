@@ -132,12 +132,10 @@ export const sermonService = (supabase: SupabaseClient<Database>) => ({
       SeriesWithSermonCount & { sermons: Array<{ count: number }> }
     >;
 
-    return rows
-      .map(({ sermons, ...rest }) => ({
-        ...rest,
-        sermon_count: sermons?.[0]?.count ?? 0
-      }))
-      .filter((series) => series.sermon_count > 0);
+    return rows.map(({ sermons, ...rest }) => ({
+      ...rest,
+      sermon_count: sermons?.[0]?.count ?? 0
+    }));
   },
 
   /** 시리즈 slug에 속한 설교 전체를 연재 순서로 조회 */
@@ -202,8 +200,9 @@ export const sermonService = (supabase: SupabaseClient<Database>) => ({
 
   /**
    * 활성 설교자 전체 + published + 미삭제 설교 편수 조회.
-   * `sermons!inner(count)`는 집계 lateral이라 발행 0편 설교자가 count:0으로 새어 나올 수 있다
-   * (미발행·삭제 설교만 가진 설교자). 반환 직전 count > 0 가드로 0편을 거른다.
+   * `sermons!inner(count)`는 집계 lateral이라 발행 0편 설교자도 count:0으로 함께 반환된다(REST 응답으로 확인).
+   * 이 전체 목록은 URL preacher 파라미터 해석(resolvePreacherName)과 admin 설교자 선택에 필요하므로 그대로 둔다.
+   * 필터 UI에서 0편을 숨기는 일은 표시 직전(`sermons/all/page.tsx`)에서 한다.
    */
   allPreachers: async (): Promise<PreacherWithSermonCount[]> => {
     const res = await supabase
@@ -220,12 +219,10 @@ export const sermonService = (supabase: SupabaseClient<Database>) => ({
       PreacherWithSermonCount & { sermons: Array<{ count: number }> }
     >;
 
-    return rows
-      .map(({ sermons, ...rest }) => ({
-        ...rest,
-        sermon_count: sermons?.[0]?.count ?? 0
-      }))
-      .filter((preacher) => preacher.sermon_count > 0);
+    return rows.map(({ sermons, ...rest }) => ({
+      ...rest,
+      sermon_count: sermons?.[0]?.count ?? 0
+    }));
   },
 
   /** 최근 설교를 경량 필드셋으로 조회 (홈 카드용) */

@@ -124,13 +124,15 @@ export default async function Vision() {
             <h3 className={styles.history_title}>걸어온 길</h3>
           </header>
           <ol className={styles.history_list}>
-            {history.map((item, index) => (
-              <li key={index} className={styles.history_item}>
-                <span className={styles.history_year}>{item.year}</span>
-                <span className={styles.history_dot} aria-hidden="true" />
-                <span className={styles.history_text}>{item.text}</span>
-              </li>
-            ))}
+            {history
+              .filter((item) => item?.year !== 'TODO')
+              .map((item, index) => (
+                <li key={index} className={styles.history_item}>
+                  <span className={styles.history_year}>{item.year}</span>
+                  <span className={styles.history_dot} aria-hidden="true" />
+                  <span className={styles.history_text}>{item.text}</span>
+                </li>
+              ))}
           </ol>
         </div>
       </section>
