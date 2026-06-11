@@ -57,6 +57,7 @@
   - 문제: `allPreachers`/`allSeries`가 `sermons!inner(count)`로 0편 항목을 거른다고 봤으나, 이 집계는 PostgREST lateral 서브쿼리라 자식 0건이어도 부모가 `count:0`으로 반환될 수 있다. 박지권은 발행 0편이지만 미발행 sermon 1건을 가져(`total_count=1`) 실제로 새어 나올 수 있는 경우다. plain SQL inner-join으로 재현한 결과는 PostgREST 실제 동작과 달라, 항목을 빼도 된다는 근거가 되지 못한다(Codex 계획 검증 지적).
   - 해결: 쿼리 동작에 기대지 않고 서비스 반환 직전 `filter(x => x.sermon_count > 0)`를 넣는다. 1줄이고 PostgREST 버전에 비의존적이라 검증 비용 대비 가장 싸다. 쿼리 자체 수정(필터 푸시다운 재작성)은 회귀 위험이 더 크다.
   - 결과: 0편 설교자·시리즈가 필터에서 사라진다. "전체" 카운트는 별도 `totalCount`라 영향 없다.
+  - ⚠️ 정정(PR #113 Codex 1차 리뷰): 서비스 필터는 그 쿼리를 공유하는 URL 해석·admin 선택까지 깨 폐기 → D4 참조.
 
 - **D2 — 설립연도·연혁은 DB 수동 UPDATE(dev·prod), TODO는 머지 안전 가드로 가린다**
   - 문제: 설립연도(1952→1958)·연혁 실값은 `site_collections` 데이터라 코드 diff에 안 남는다. 실제 값은 사용자 제공 대기. 값 없이 머지하면 "TODO" 행이 사용자에게 노출된다.
@@ -72,6 +73,12 @@
   - 해결: (1) 두 페이지의 `metadata.title`·`openGraph.title`에서 ` - 대구동남교회`를 떼 '교회 소개'·'교회의 비전'으로 바꿔 템플릿이 suffix를 한 번만 붙이게 했다. (2) 누락 11개(전부 server 컴포넌트 stub)에 nav 라벨 기준 `metadata.title`을 추가했다(다음세대·유치부·유초등부·중고등부·청년부·교제·소모임·기도제목·은혜 나눔·교회 소식·갤러리).
   - 결과: sitemap 전 경로가 "메인 제목 | 대구동남교회" 한 형태로 통일된다. 동적 상세(`/sermons/[id]`·`/sermons/series/[id]`)는 본래 설교·시리즈 제목을 써 이미 정상이라 손대지 않았다.
   - 관찰(후속 아님, 기록만): 11개 누락 페이지는 `<div>다음세대</div>` 같은 미구현 stub이다. sitemap에 넣을지와 실제 구현은 별도 작업으로 남긴다.
+
+- **D4 — 0편 설교자 필터를 서비스가 아니라 렌더 직전에서 거른다 (PR #113 Codex 1차 리뷰 반영)**
+  - 문제: D1의 서비스 필터(`allPreachers`/`allSeries`)는 그 쿼리를 공유하는 곳을 모두 바꾼다. PostgREST 실응답으로 박지권이 `count:0`으로 반환됨을 확인했는데, 서비스에서 빼면 `resolvePreacherName('박지권')`이 매칭에 실패해 `?preacher=박지권` URL이 필터 없이 전체 설교로 떨어지고, admin 설교자 선택에서도 박지권이 사라진다.
+  - 해결: 서비스는 전체 목록(0편 포함)을 그대로 반환한다 — URL 해석·`isUnknownSeries` 판정·admin 선택에 필요하다. `sermons/all/page.tsx`에서 UI에 넘기기 직전 `filterableSeries`/`filterablePreachers`로 0편을 거른다. 선언을 early-return 앞에 둬 미매칭 분기와 본 렌더가 같은 변수를 공유한다.
+  - 결과: 필터 UI에는 박지권이 안 뜨고, `?preacher=박지권`은 빈 결과로 떨어진다(전체 아님). admin 선택에도 박지권이 남는다. dev 서버 curl로 확인 — 김성규 결과 있음, 박지권 0건, vision TODO 없음.
+  - 함께 처리: vision 연혁(`history.map`)도 `year==='TODO'` 가드를 받게 했다(about만 막았던 누락, Codex P2). 미매칭 설교자 파라미터가 시리즈와 다르게 동작하는 점은 `docs/tech-debt/active.md`에 적었다.
 
 ## Verification
 
@@ -89,9 +96,9 @@
 
 ## Codex 1차 검증
 
-- **결론**: PASS
-- **현재 판단**: diff만으로 검토. (A) `sermon_count > 0` 가드 — map이 필드를 부여한 뒤 filter가 읽으므로 순서가 안전하다. count는 집계 number라 타입 문제가 없다. (B) og spread — BASE에 title 키가 없어 페이지 리터럴 title이 최종값이 되고 중복 og:title이 없다. (C) admin not-found 글로벌 토큰 — 컴파일타임 SCSS 변수라 `.shell` CSS custom property scope와 무관해 누수 위험이 없다. material CR은 없다.
-- **다음 행동**: Claude 2차 검증. 남은 점검 3건(아래)은 diff 범위 밖이거나 시각 확인 수준.
+- **결론**: PASS(1차 구현) → FIX_APPLIED(PR #113 리뷰 반영분)
+- **현재 판단**: 1차 — `sermon_count > 0` 가드 순서·타입, og spread 키 순서, admin not-found 컴파일타임 토큰 모두 정상. material CR 없었다. 리뷰 반영분 — 봇 리뷰 3건(allPreachers 필터 회귀·vision TODO 누락·null 안전)을 PostgREST 실응답(박지권 count:0 반환)으로 진단해 서비스 필터를 폐기하고 표시 레이어로 옮긴 뒤 재검증. Codex 판정 FIX_APPLIED — 레이어 선택이 옳고 회귀 위험 낮음. self-check 2건(선언 위치·미매칭 비대칭) 모두 해소(선언은 early-return 앞, 비대칭은 tech-debt 기록).
+- **다음 행동**: Claude 2차 검증.
 
 ## Claude 2차 검증
 
@@ -102,6 +109,7 @@
 | 시점 | run-id | lint | styles | build | knip신규 | 수동 확인 필요 |
 | --- | --- | --- | --- | --- | --- | --- |
 | 1차 | 20260611-135724 | ✅ | ✅ | ✅ | 0 | 브라우저 검증 완료(아래) — admin 404 색조만 admin 로그인 필요로 미확인 |
+| 리뷰반영 | 20260611-153641 | ✅ | ✅ | ✅ | 0 | curl 확인: 김성규 결과 있음·박지권 0건·vision TODO 없음 |
 
 브라우저 검증(localhost, dev DB):
 

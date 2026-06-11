@@ -256,3 +256,12 @@
 - **영향 범위**: `src/app/(content)/sermons/`, `src/app/(admin)/`, `src/app/(content)/news/notices/[id]/`
 - **확인**: `grep -rln "notFound()" src/app` (호출처 7곳, not-found 파일은 bulletins·notices·root 3개)
 - **발견일**: 2026-06-10 (not-found-page 작업 중 `notFound()` 호출처 스캔)
+
+### 🟢 알 수 없는 `?preacher=` 값이 필터 없이 전체 설교를 보여준다 (content-ux-polish PR #113)
+
+- **상태**: 등록만 (PR #113 범위 밖)
+- **무엇**: `/sermons/all?preacher=zzz`처럼 매칭되는 설교자가 없는 값은 `resolvePreacherName`이 `undefined`를 반환해 필터가 안 걸리고 전체 설교가 뜬다. 존재하지만 발행 0편인 설교자(`?preacher=박지권`)는 정상 해석돼 빈 결과를 보이는 것과 동작이 어긋난다.
+- **왜**: 시리즈에는 `isUnknownSeries` 가드(미매칭 slug → 빈 상태)가 있으나 설교자에는 대응 가드가 없다. PR #113은 0편 필터 표시·회귀 해소까지만 범위.
+- **마이그레이션 경로**: `sermons/all/page.tsx`에 `isUnknownPreacher`(원문 `preacher`가 있는데 `allPreachers`에 없음) 가드를 추가해 `isUnknownSeries`와 같은 EmptyState로 떨어뜨린다.
+- **영향 범위**: `src/app/(content)/sermons/all/page.tsx`, `src/utils/sermon.ts`
+- **발견일**: 2026-06-11 (PR #113 Codex 1차 검증)
