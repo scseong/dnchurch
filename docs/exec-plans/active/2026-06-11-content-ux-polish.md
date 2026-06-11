@@ -49,7 +49,9 @@
 - [x] 5. not-found: `(content)/sermons/not-found.tsx`(+module) (완료)
 - [x] 6. not-found: `(admin)/not-found.tsx`(+module) — build 그룹 충돌 없음 확인 (완료)
 - [x] 7. D3 메타 title 정비: 중복 2건(`/about`·`/about/vision`) + 누락 11건(next-gen·community·news·gallery) title 통일 (완료)
-- [ ] 8. E-데이터(사용자 값 도착 후): DB `church_history` dev·prod 1952→1958 + TODO 4줄 실값, 통계 카드 실값 (대기)
+- [x] 8. D4 PR 리뷰 반영: 0편 필터 표시 레이어 이동·vision TODO 가드·null 안전 (완료)
+- [x] 9. D5 미구현 stub 10개 sitemap 제외 + serving-people 라벨 '섬기는 사람들' 통일 (완료)
+- [ ] 10. E-데이터(사용자 값 도착 후): DB `church_history` dev·prod 1952→1958 + TODO 4줄 실값, 통계 카드 실값 (대기)
 
 ## 의사결정 로그
 
@@ -79,6 +81,16 @@
   - 해결: 서비스는 전체 목록(0편 포함)을 그대로 반환한다 — URL 해석·`isUnknownSeries` 판정·admin 선택에 필요하다. `sermons/all/page.tsx`에서 UI에 넘기기 직전 `filterableSeries`/`filterablePreachers`로 0편을 거른다. 선언을 early-return 앞에 둬 미매칭 분기와 본 렌더가 같은 변수를 공유한다.
   - 결과: 필터 UI에는 박지권이 안 뜨고, `?preacher=박지권`은 빈 결과로 떨어진다(전체 아님). admin 선택에도 박지권이 남는다. dev 서버 curl로 확인 — 김성규 결과 있음, 박지권 0건, vision TODO 없음.
   - 함께 처리: vision 연혁(`history.map`)도 `year==='TODO'` 가드를 받게 했다(about만 막았던 누락, Codex P2). 미매칭 설교자 파라미터가 시리즈와 다르게 동작하는 점은 `docs/tech-debt/active.md`에 적었다.
+
+- **D5 — 미구현 stub 페이지를 sitemap에서 빼고 serving-people 라벨을 맞춘다 (브라우저 검증·Codex 논의 후)**
+  - 문제: 빈 stub 페이지 10개(next-gen 5개, community 4개, news/gallery 1개)는 `<div>다음세대</div>` 수준인데 sitemap `STATIC_PATHS`(priority 0.7)에 들어 있어 검색에 색인된다. 이번 PR에서 이들에 meta title을 달아 색인 유인이 더 커졌다. 또 `/about/serving-people`는 탭 제목('섬기는 이')과 GNB·카드 라벨('섬기는 사람들')이 어긋난다.
+  - 해결: 빈 stub 10개 경로를 `STATIC_PATHS`에서 뺀다. noindex 메타 대신 목록에서 빼는 이유는 세 가지다.
+    - 목록 등재 자체가 "색인해 달라"는 신호라, 빼는 게 정직하다.
+    - 페이지를 완성하면 경로 한 줄로 되살린다.
+    - 11개 파일에 흩은 noindex는 나중에 못 지우면 완성한 페이지가 영구 noindex로 남는다.
+
+    `/news`는 주보 목록을 띄우는 실제 페이지라 남긴다. serving-people 탭 제목은 노출 빈도가 높은 GNB 라벨에 맞춰 '섬기는 사람들'로 바꾼다.
+  - 결과: 빈 페이지가 검색 결과에 안 뜬다. `sitemap.xml`에 next-gen·community·gallery 없음, serving-people 제목 '섬기는 사람들 | 대구동남교회'를 curl로 확인했다. 0편 설교자 필터의 빈 상태는 새 동작이라 후속 작업으로 미룬다(tech-debt 기록). /about 연혁·통계 실값은 데이터가 와야 채우므로 그대로 둔다.
 
 ## Verification
 
