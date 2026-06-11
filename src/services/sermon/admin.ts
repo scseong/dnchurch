@@ -1,8 +1,7 @@
 import 'server-only';
 
 import { createServerSideClient } from '@/lib/supabase/server';
-import { handleResponse } from '@/services/handle-response';
-import { sermonService } from '@/services/sermon/sermon-service';
+import { mapRowsWithSermonCount, sermonService } from '@/services/sermon/sermon-service';
 import type {
   AdminSermonListParams,
   AdminSermonListResult,
@@ -43,15 +42,7 @@ export const getAdminPreachers = async (): Promise<PreacherWithSermonCount[]> =>
     .order('sort_order', { ascending: true })
     .order('name', { ascending: true });
 
-  const handled = handleResponse(res);
-  const rows = (handled.data ?? []) as unknown as Array<
-    PreacherWithSermonCount & { sermons: Array<{ count: number }> }
-  >;
-
-  return rows.map(({ sermons, ...rest }) => ({
-    ...rest,
-    sermon_count: sermons?.[0]?.count ?? 0
-  }));
+  return mapRowsWithSermonCount<PreacherWithSermonCount>(res);
 };
 
 /** 공개 `getAllSeries`와 같지만 inner join 해제. count 의미는 공개와 동일(발행+미삭제 회차 수). */
@@ -65,13 +56,5 @@ export const getAdminSeries = async (): Promise<SeriesWithSermonCount[]> => {
     .order('started_at', { ascending: false })
     .order('sort_order', { ascending: true, nullsFirst: false });
 
-  const handled = handleResponse(res);
-  const rows = (handled.data ?? []) as unknown as Array<
-    SeriesWithSermonCount & { sermons: Array<{ count: number }> }
-  >;
-
-  return rows.map(({ sermons, ...rest }) => ({
-    ...rest,
-    sermon_count: sermons?.[0]?.count ?? 0
-  }));
+  return mapRowsWithSermonCount<SeriesWithSermonCount>(res);
 };
