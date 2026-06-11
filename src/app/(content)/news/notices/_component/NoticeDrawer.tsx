@@ -9,11 +9,11 @@ import useScrollLock from '@/hooks/useScrollLock';
 import { ListItem, Label } from '@/components/ui';
 import { NOTICE_CATEGORIES } from '@/constants/notice';
 import { formattedDate, isRecent } from '@/utils/date';
-import type { NoticeType } from '@/types/notice';
+import type { NoticeDrawerItem } from '@/types/notice';
 import styles from './NoticeDrawer.module.scss';
 
 type Props = {
-  notice: NoticeType | null;
+  notice: NoticeDrawerItem | null;
   onClose: () => void;
   onNavigate: (direction: 'prev' | 'next') => void;
   hasPrev: boolean;
