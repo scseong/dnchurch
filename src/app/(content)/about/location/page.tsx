@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import LayoutContainer from '@/components/layout/container/LayoutContainer';
 import { getLocationPageData } from '@/services/about';
 import { displaySettingValue, parseFiniteFloat } from '@/utils/site-settings';
+import { OPEN_GRAPH_BASE } from '@/config/seo';
 import LocationMapClient from './_component/LocationMapClient';
 import AddressActions from './_component/AddressActions';
 import styles from './page.module.scss';
@@ -10,6 +11,7 @@ export const metadata: Metadata = {
   title: '오시는 길',
   description: '대구동남교회에 오시는 방법을 안내합니다.',
   openGraph: {
+    ...OPEN_GRAPH_BASE,
     title: '오시는 길',
     description: '대구동남교회에 오시는 방법을 안내합니다.'
   }

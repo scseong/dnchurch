@@ -1,0 +1,19 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: $spacing-24;
+}
+
+.link {
+  padding: $spacing-12 $spacing-20;
+  border-radius: $radius-s;
+  background-color: $primary;
+  color: $txt-inverse;
+  font-weight: $font-weight-semibold;
+  transition: background-color 0.2s;
+
+  &:hover {
+    background-color: $primary-hover;
+  }
+}

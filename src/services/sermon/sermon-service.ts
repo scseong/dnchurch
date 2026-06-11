@@ -198,7 +198,12 @@ export const sermonService = (supabase: SupabaseClient<Database>) => ({
     };
   },
 
-  /** 활성 설교자 전체 + published + 미삭제 설교 편수 조회 (inner join — 노출 0편 설교자는 결과에서 제외) */
+  /**
+   * 활성 설교자 전체 + published + 미삭제 설교 편수 조회.
+   * `sermons!inner(count)`는 집계 lateral이라 발행 0편 설교자도 count:0으로 함께 반환된다(REST 응답으로 확인).
+   * 이 전체 목록은 URL preacher 파라미터 해석(resolvePreacherName)과 admin 설교자 선택에 필요하므로 그대로 둔다.
+   * 필터 UI에서 0편을 숨기는 일은 표시 직전(`sermons/all/page.tsx`)에서 한다.
+   */
   allPreachers: async (): Promise<PreacherWithSermonCount[]> => {
     const res = await supabase
       .from('preachers')

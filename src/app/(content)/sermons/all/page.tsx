@@ -57,6 +57,11 @@ export default async function AllSermonsPage({ searchParams }: PageProps) {
   const activeSeries = series ?? null;
   const activePreacher = preacher ?? null;
 
+  // 필터 UI에는 발행 0편 항목을 숨긴다. 해석(resolve*)·미매칭 판정은 전체 목록을 써야
+  // 0편 설교자·시리즈 URL(예: ?preacher=박지권)도 매칭돼 빈 결과로 떨어진다.
+  const filterableSeries = allSeries.filter((item) => item.sermon_count > 0);
+  const filterablePreachers = allPreachers.filter((item) => item.sermon_count > 0);
+
   // 시리즈 미매칭 — slug가 있지만 'none'도 아니고 allSeries에도 없음.
   // resolveSeriesSlug는 미매칭 slug를 원문 그대로 반환하므로, 조회 전에 차단하지 않으면
   // raw slug가 UUID 컬럼(series_id)에 들어가 Supabase에서 throw된다.
@@ -70,8 +75,8 @@ export default async function AllSermonsPage({ searchParams }: PageProps) {
       <LayoutContainer>
         <div className={styles.body}>
           <SermonSidebar
-            allSeries={allSeries}
-            allPreachers={allPreachers}
+            allSeries={filterableSeries}
+            allPreachers={filterablePreachers}
             totalCount={totalCount}
             standaloneCount={standaloneCount}
             activeSeries={activeSeries}
@@ -80,7 +85,7 @@ export default async function AllSermonsPage({ searchParams }: PageProps) {
             params={params}
           />
           <div className={styles.main}>
-            <SermonToolbar allSeries={allSeries} allPreachers={allPreachers} />
+            <SermonToolbar allSeries={filterableSeries} allPreachers={filterablePreachers} />
             <EmptyState
               title="해당 시리즈를 찾을 수 없습니다"
               description="URL이 올바른지 확인하거나 사이드바에서 다른 시리즈를 선택해 주세요."
@@ -116,8 +121,8 @@ export default async function AllSermonsPage({ searchParams }: PageProps) {
     <LayoutContainer>
       <div className={styles.body}>
         <SermonSidebar
-          allSeries={allSeries}
-          allPreachers={allPreachers}
+          allSeries={filterableSeries}
+          allPreachers={filterablePreachers}
           totalCount={totalCount}
           standaloneCount={standaloneCount}
           activeSeries={activeSeries}
@@ -126,7 +131,7 @@ export default async function AllSermonsPage({ searchParams }: PageProps) {
           params={params}
         />
         <div className={styles.main}>
-          <SermonToolbar allSeries={allSeries} allPreachers={allPreachers} />
+          <SermonToolbar allSeries={filterableSeries} allPreachers={filterablePreachers} />
           <SermonResultHeader
             resultCount={filteredTotal}
             currentPage={page}

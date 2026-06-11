@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 import LayoutContainer from '@/components/layout/container/LayoutContainer';
 import { EmptyState } from '@/components/ui';
+import { OPEN_GRAPH_BASE } from '@/config/seo';
 import { getWorshipPageData } from '@/services/about';
 import styles from './page.module.scss';
 
@@ -10,6 +11,7 @@ export const metadata: Metadata = {
   description:
     '대구동남교회 예배안내 - 주일낮예배(11:00), 주일저녁예배(18:00), 새벽기도회(05:30), 수요기도회(19:00), 금요기도회(20:00)',
   openGraph: {
+    ...OPEN_GRAPH_BASE,
     title: '예배안내',
     description:
       '대구동남교회 예배안내 - 주일낮예배(11:00), 주일저녁예배(18:00), 새벽기도회(05:30), 수요기도회(19:00), 금요기도회(20:00)'
