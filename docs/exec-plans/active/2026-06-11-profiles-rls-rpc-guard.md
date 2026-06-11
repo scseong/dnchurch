@@ -33,7 +33,13 @@
 
 - `supabase/migrations/20260611000000_profiles_rls_lockdown.sql` (신규)
 - `supabase/migrations/20260611000001_harden_bulletin_rpc.sql` (신규)
-- src/ 코드 변경 없음.
+- `src/actions/update-bulletin.action.ts` (PR #115 리뷰 반영 — Cloudinary 교차 삭제 차단)
+- `supabase/config.toml` (PR #115 리뷰 반영 — 이미지 변환 off, Preview 402 해소)
+- `.gitignore` (마이그레이션 추적 전환)
+
+## ADR 판단
+
+불필요 — `update-bulletin.action.ts`는 기존 `getBulletinByIdSSR` 재사용으로 삭제 대상을 DB 검증하는 국소 수정이다. 새 레이어·라이브러리·데이터 흐름 변경 없음. `config.toml`은 로컬 CLI 설정값 1줄.
 
 ## Non-goals
 
@@ -70,9 +76,9 @@
 
 ## Codex 1차 검증
 
-- **결론**: PASS (confidence high)
-- **현재 판단**: 두 SQL 파일을 검토해 4개 점검(구문·로직 / RLS 잠금이 signup 트리거를 안 깨는지 / 가드·author_id·이미지 바인딩·search_path / REVOKE·GRANT 시그니처 일치) 모두 "이상 없음". 무시되는 `p_author_id` 파라미터 잔존도 문제 없음 판정.
-- **다음 행동**: Claude 2차 검증 기록 후 커밋 승인 요청.
+- **결론**: PASS (PR #115 리뷰 반영분 재검증 후)
+- **현재 판단**: 1차(두 SQL)는 PASS(high)였다. PR #115 리뷰 반영분(`url` 제거, Cloudinary 교차 삭제 차단, config 402)을 Codex가 재검증해 SQL `url` 제거·config 변경은 "이상 없음", 액션 수정은 의도·순서(RPC 전 fetch) 맞다고 확인했다. CHANGE_REQUEST 사유였던 `img.id` vs `imageId` 타입 비교는 직접 확인 결과 구현 차단 사유가 아니었고(아래 D2), `Number()` 강제 변환으로 한 번 더 막았다.
+- **다음 행동**: verify-task 재실행 후 Claude 2차 검증 갱신.
 
 ## Claude 2차 검증
 
@@ -82,7 +88,8 @@
 
 | 시점 | run-id | lint | styles | build | knip신규 | 수동 확인 필요 |
 | --- | --- | --- | --- | --- | --- | --- |
-| 2차 | 20260611-220451 | ✅ | ✅ | ✅ | 0 | dev 적용 완료 — prod(INACTIVE) 활성화 시 동일 마이그레이션 적용 필요 |
+| 2차 | 20260611-220451 | ✅ | ✅ | ✅ | 0 | 보안 마이그레이션 dev 적용 |
+| 리뷰반영 | 20260612-001026 | ✅ | ✅ | ✅ | 0 | `url` 제거 후 이미지 포함 create_bulletin dev 재검증(1 image row) — prod는 미사용, MVP 후 일괄 적용 |
 
 dev 실측 검증 결과(`SET LOCAL ROLE`로 anon·authenticated 시뮬레이션):
 
@@ -103,6 +110,11 @@ dev 실측 검증 결과(`SET LOCAL ROLE`로 anon·authenticated 시뮬레이션
   - 문제: 1차 호출이 10분간 멈췄다. 로그 라인 138에서 결론을 쓰기 직전 프로세스가 죽었고, 레지스트리에는 running으로 남았다(pid 35676 부재). `docs/tech-debt/active.md`의 "Codex 백그라운드 멈춤(큰 질의 + 다수 rg)" 항목과 같은 증상이다.
   - 해결: 그 tech-debt가 적은 대응책("짧은 질의 + foreground")을 따랐다. 코드 검색을 막고 예/아니오 3문항으로 줄여 한 번만 다시 요청했다. 같은 질의를 무작정 반복하지 않았다.
   - 결과: 다시 요청한 호출이 97초 만에 PASS(신뢰도 high)를 냈다. 1차 멈춤은 도구 문제이지 계획 결함이 아니다.
+
+- **D2 — PR #115 리뷰 3건을 한 PR로 반영하고 baseline 복구는 미뤘다**
+  - 문제: Gemini·GitHub Codex 리뷰가 3건을 지적했다. (1) 보안 마이그레이션이 삭제된 `bulletin_images.url`을 재참조해 이미지 있는 주보 생성 시 런타임 오류가 난다, (2) 추적 시작한 레거시 마이그레이션이 baseline 테이블 부재·sermon 스키마 드리프트로 빈 DB를 못 만든다, (3) `update-bulletin.action.ts`가 폼의 `cloudinaryId`로 Cloudinary 원본을 지워 교차 삭제가 된다. Supabase Preview 실패는 별개로 무료 티어 402(이미지 변환)였다.
+  - 해결: prod가 비어 있고 MVP 완성 후에야 prod 마이그레이션을 한다는 점을 근거로, 보안 fix만 한 PR로 반영하는 쪽을 택했다. (1) `url`을 제거하고 이미지 포함 케이스를 다시 검증했다. (3) 삭제 대상 `cloudinary_id`를 폼이 아니라 `getBulletinByIdSSR`로 DB에서 `bulletinId` 소속만 추려 지운다. 402는 `config.toml` 이미지 변환을 off로 바꿔 해소했다. (2) baseline 복구는 sermon 스키마까지 걸린 큰 작업이라 보안 PR과 분리해 tech-debt에 "prod 마이그레이션 전 필수"로 등록했다.
+  - 결과: 보안 구멍 차단을 한 PR로 마치고, 깨진 baseline을 정식 마이그레이션으로 굳히지 않았다. Codex CR 사유(타입 비교)는 `ExistingImageItem.imageId`가 `number`이고 JSON이 number를 보존함을 확인해 구현 차단 사유가 아니라고 판정했고, `Number()`로 강제 변환해 한 번 더 막았다.
 
 ## 검증 이력
 
