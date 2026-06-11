@@ -1,5 +1,6 @@
-import { useEffect, useRef, useState } from 'react';
-import { useDebounce } from '@/hooks/useDebounce';
+import { useEffect, useLayoutEffect, useRef, useState } from 'react';
+
+const SEARCH_DEBOUNCE_MS = 300;
 
 type SearchSync = {
   searchInput: string;
@@ -8,36 +9,66 @@ type SearchSync = {
   clearSearch: () => void;
 };
 
-/** 검색 입력값과 외부 필터 search를 디바운스를 사이에 두고 양방향 동기화한다 */
+/**
+ * 검색 입력값과 외부 필터 search를 디바운스를 사이에 두고 양방향 동기화한다.
+ * effect 안 setState(구 queueMicrotask 우회) 대신 이벤트 핸들러 디바운스 +
+ * 렌더 중 보정(prev-state 패턴)을 쓴다 — exec-plan D3.
+ */
 export function useSearchSync(
   search: string,
   setSearch: (value: string) => void
 ): SearchSync {
-  const [searchInput, setSearchInput] = useState(search);
-  const debouncedSearch = useDebounce(searchInput, 300);
-  const lastExternalSearchRef = useRef(search);
+  // draft가 null이면 입력값은 외부 search를 그대로 따른다
+  const [draft, setDraft] = useState<string | null>(null);
+  // 마지막으로 setSearch에 보낸 값 — echo(우리가 보낸 값의 왕복)와 진짜 외부 변경을 구분한다
+  const [lastSent, setLastSent] = useState(search);
+  const [prevSearch, setPrevSearch] = useState(search);
+  const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  // URL/외부 변경 → 입력값 동기화 (디바운스 우회)
+  // 외부 변경(뒤로가기·필터 초기화) → draft 폐기. echo(search === lastSent)면 입력 중인 값 유지
+  if (search !== prevSearch) {
+    setPrevSearch(search);
+    if (search !== lastSent) {
+      setDraft(null);
+    }
+  }
+
+  // 외부 변경 채택 직후 남은 디바운스 타이머 취소 — 안 하면 stale 타이머가 외부 변경을 되돌린다 (Codex CR 반영)
+  useLayoutEffect(() => {
+    if (draft === null && search !== lastSent && timerRef.current) {
+      clearTimeout(timerRef.current);
+      timerRef.current = null;
+    }
+  }, [draft, search, lastSent]);
+
   useEffect(() => {
-    if (search === lastExternalSearchRef.current) return;
-    lastExternalSearchRef.current = search;
-    queueMicrotask(() => setSearchInput(search));
-  }, [search]);
+    return () => {
+      if (timerRef.current) clearTimeout(timerRef.current);
+    };
+  }, []);
 
-  // 디바운스된 입력 → 필터 (외부 sync로 들어온 값은 skip)
-  useEffect(() => {
-    if (debouncedSearch === lastExternalSearchRef.current) return;
-    lastExternalSearchRef.current = debouncedSearch;
-    setSearch(debouncedSearch);
-  }, [debouncedSearch, setSearch]);
-
-  const isSearchPending = searchInput !== debouncedSearch;
+  const setSearchInput = (value: string) => {
+    setDraft(value);
+    if (timerRef.current) clearTimeout(timerRef.current);
+    timerRef.current = setTimeout(() => {
+      timerRef.current = null;
+      setSearch(value);
+      setLastSent(value);
+    }, SEARCH_DEBOUNCE_MS);
+  };
 
   const clearSearch = () => {
-    setSearchInput('');
-    lastExternalSearchRef.current = '';
+    if (timerRef.current) {
+      clearTimeout(timerRef.current);
+      timerRef.current = null;
+    }
+    setDraft('');
+    setLastSent('');
     setSearch('');
   };
+
+  const searchInput = draft ?? search;
+  const isSearchPending = draft !== null && draft !== lastSent;
 
   return { searchInput, setSearchInput, isSearchPending, clearSearch };
 }
