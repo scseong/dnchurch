@@ -4,6 +4,7 @@ import MainContainer from '@/components/layout/container/MainContainer';
 // eslint-disable-next-line no-restricted-imports -- 점진 마이그레이션 대상 (tech-debt-tracker.md)
 import { getActiveStaff } from '@/apis/staff';
 import CloudinaryImage from '@/components/common/CloudinaryImage';
+import { OPEN_GRAPH_BASE } from '@/config/seo';
 import type { StaffType } from '@/types/common';
 import styles from './page.module.scss';
 
@@ -11,6 +12,7 @@ export const metadata: Metadata = {
   title: '섬기는 이',
   description: '각 사역자들의 역할과 사역에 대한 정보를 확인해 보세요.',
   openGraph: {
+    ...OPEN_GRAPH_BASE,
     title: '섬기는 이',
     description: '각 사역자들의 역할과 사역에 대한 정보를 확인해 보세요.'
   }

@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import { OPEN_GRAPH_BASE } from '@/config/seo';
 import Link from 'next/link';
 import { LuClock, LuTrainFront } from 'react-icons/lu';
 import LayoutContainer from '@/components/layout/container/LayoutContainer';
@@ -10,6 +11,7 @@ export const metadata: Metadata = {
   title: '교회 소개 - 대구동남교회',
   description: '대구동남교회를 소개합니다',
   openGraph: {
+    ...OPEN_GRAPH_BASE,
     title: '교회 소개 - 대구동남교회',
     description: '대구동남교회를 소개합니다'
   }
@@ -65,7 +67,8 @@ export default async function AboutHub() {
     { num: 'TODO', label: '교구' },
     { num: 'TODO', label: '기도일' }
   ];
-  const historyMini = history.slice(0, 4);
+  // 실값이 채워지기 전 placeholder("TODO") 항목은 화면에 노출하지 않는다.
+  const historyMini = history.filter((item) => item.year !== 'TODO').slice(0, 4);
 
   const address = displaySettingValue(settings.church_address, '준비 중');
   const phone = displaySettingValue(settings.church_phone, '');
@@ -87,15 +90,17 @@ export default async function AboutHub() {
             이웃과 함께 자라는 교회.
           </h1>
           <p className={styles.hero_desc}>
-            1952년에 설립되어, 오늘도 같은 자리에서 이웃과 함께합니다.
+            1958년에 설립되어, 오늘도 같은 자리에서 이웃과 함께합니다.
           </p>
           <div className={styles.stats}>
-            {stats.map((stat) => (
-              <div key={stat.label} className={styles.stat_item}>
-                <p className={styles.stat_num}>{stat.num}</p>
-                <p className={styles.stat_label}>{stat.label}</p>
-              </div>
-            ))}
+            {stats
+              .filter((stat) => stat.num !== 'TODO')
+              .map((stat) => (
+                <div key={stat.label} className={styles.stat_item}>
+                  <p className={styles.stat_num}>{stat.num}</p>
+                  <p className={styles.stat_label}>{stat.label}</p>
+                </div>
+              ))}
           </div>
         </LayoutContainer>
       </section>

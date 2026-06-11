@@ -2,12 +2,14 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 import LayoutContainer from '@/components/layout/container/LayoutContainer';
 import { getWelcomePageData } from '@/services/about';
+import { OPEN_GRAPH_BASE } from '@/config/seo';
 import styles from './page.module.scss';
 
 export const metadata: Metadata = {
   title: '환영합니다',
   description: '대구동남교회에 처음 오시는 분을 위한 안내',
   openGraph: {
+    ...OPEN_GRAPH_BASE,
     title: '환영합니다',
     description: '대구동남교회에 처음 오시는 분을 위한 안내'
   }
