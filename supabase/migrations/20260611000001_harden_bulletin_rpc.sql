@@ -39,11 +39,10 @@ BEGIN
   RETURNING id INTO v_bulletin_id;
 
   IF jsonb_array_length(p_images) > 0 THEN
-    INSERT INTO bulletin_images (bulletin_id, cloudinary_id, url, order_index)
+    INSERT INTO bulletin_images (bulletin_id, cloudinary_id, order_index)
     SELECT
       v_bulletin_id,
       (img->>'cloudinary_id')::TEXT,
-      (img->>'url')::TEXT,
       (img->>'order_index')::INT
     FROM jsonb_array_elements(p_images) AS img;
   END IF;
@@ -88,11 +87,10 @@ BEGIN
   END IF;
 
   IF jsonb_array_length(p_images_to_add) > 0 THEN
-    INSERT INTO bulletin_images (bulletin_id, cloudinary_id, url, order_index)
+    INSERT INTO bulletin_images (bulletin_id, cloudinary_id, order_index)
     SELECT
       p_bulletin_id,
       (img->>'cloudinary_id')::TEXT,
-      (img->>'url')::TEXT,
       (img->>'order_index')::INT
     FROM jsonb_array_elements(p_images_to_add) AS img;
   END IF;
