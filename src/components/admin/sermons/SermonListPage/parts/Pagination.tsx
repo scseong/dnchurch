@@ -2,6 +2,7 @@
 
 import clsx from 'clsx';
 import { HiChevronLeft, HiChevronRight } from 'react-icons/hi';
+import { getTotalPages } from '@/utils/pagination';
 import styles from '../table.module.scss';
 
 interface PaginationProps {
@@ -22,7 +23,7 @@ export default function Pagination({
   onPageChange,
   onPageSizeChange
 }: PaginationProps) {
-  const totalPages = Math.max(1, Math.ceil(total / pageSize));
+  const totalPages = getTotalPages(total, pageSize);
   const startItem = total === 0 ? 0 : (currentPage - 1) * pageSize + 1;
   const endItem = Math.min(currentPage * pageSize, total);
 

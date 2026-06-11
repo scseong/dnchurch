@@ -10,6 +10,7 @@ import { useDebounce } from '@/hooks/useDebounce';
 import { useMediaQuery } from '@/hooks/useMediaQuery';
 import { useToastStore } from '@/store/toast.store';
 import { deleteSermonAction } from '@/actions/sermon.action';
+import { getTotalPages } from '@/utils/pagination';
 import type {
   AdminSermon,
   AdminSermonListParams,
@@ -114,7 +115,7 @@ export default function SermonListPage({
     onClickOutside: () => setOpenDropdown(null)
   });
 
-  const totalPages = Math.max(1, Math.ceil(total / filters.pageSize));
+  const totalPages = getTotalPages(total, filters.pageSize);
   const safePage = Math.min(filters.page, totalPages);
 
   const hasActiveFilters = Boolean(
