@@ -108,9 +108,16 @@ export default function SermonListPage({
       filters.dateTo
   );
 
+  // 검색 타이머·draft까지 함께 정리 — clearAll만 호출하면 search prop이 ''→''로 안 바뀌어
+  // 대기 중인 디바운스 타이머가 살아남아 방금 초기화한 필터를 검색 상태로 되돌린다 (PR #114 Codex 리뷰)
+  const handleClearAll = () => {
+    handleSearchClear();
+    filters.clearAll();
+  };
+
   const handleClearFilters = () => {
     filters.setStatusTab('all');
-    filters.clearAll();
+    handleClearAll();
   };
 
   const handleCreateNew = () => router.push('/admin/sermons/new');
@@ -177,7 +184,7 @@ export default function SermonListPage({
           onRemoveSeries={filters.toggleSeries}
           onClearSearch={handleSearchClear}
           onClearDate={filters.clearDate}
-          onClearAll={filters.clearAll}
+          onClearAll={handleClearAll}
         />
         <SermonTable
           sermons={sermons}
