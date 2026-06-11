@@ -48,7 +48,8 @@
 - [x] 4. E-안전망(D2): 통계 카드 `num==='TODO'` + 연혁 `year==='TODO'` 렌더 숨김 (완료)
 - [x] 5. not-found: `(content)/sermons/not-found.tsx`(+module) (완료)
 - [x] 6. not-found: `(admin)/not-found.tsx`(+module) — build 그룹 충돌 없음 확인 (완료)
-- [ ] 7. E-데이터(사용자 값 도착 후): DB `church_history` dev·prod 1952→1958 + TODO 4줄 실값, 통계 카드 실값 (대기)
+- [x] 7. D3 메타 title 정비: 중복 2건(`/about`·`/about/vision`) + 누락 11건(next-gen·community·news·gallery) title 통일 (완료)
+- [ ] 8. E-데이터(사용자 값 도착 후): DB `church_history` dev·prod 1952→1958 + TODO 4줄 실값, 통계 카드 실값 (대기)
 
 ## 의사결정 로그
 
@@ -65,6 +66,12 @@
     - 관찰: dev DB를 1958로 고쳐도 `.next/cache`만 지우고 서버를 재시작했을 때는 화면이 1952 그대로였다. `.next`를 통째로 지우고 재시작하니 stat·history가 1958로 바뀌었다.
     - 원인: 캐시가 무기한이라 DB만 고쳐서는 반영되지 않는다.
     - 대응: `revalidateTag('site-collection-church_history')`를 부르거나 재배포가 있어야 한다. 빌드가 데이터 캐시를 비우기 때문이다. prod 설립연도 UPDATE는 머지 시점에 하면 Vercel 배포가 캐시를 비워 자연히 반영된다.
+
+- **D3 — sitemap 모든 페이지의 메타 title을 전수 확인하고 바로잡음 (사용자 요청 추가)**
+  - 문제: sitemap 24개 정적 경로의 `<title>`을 curl로 전수 확인하니 두 부류가 어긋났다. (1) `/about`·`/about/vision`은 title이 이미 ` - 대구동남교회`를 담고 있어 루트 템플릿(`%s | 대구동남교회`)이 한 번 더 붙어 "교회 소개 - 대구동남교회 | 대구동남교회"로 중복됐다. (2) next-gen 5개·community 4개·news·news/gallery 합 11개는 metadata가 아예 없어 루트 기본값 "대구동남교회"만 떴다(섹션 layout에도 title이 없음).
+  - 해결: (1) 두 페이지의 `metadata.title`·`openGraph.title`에서 ` - 대구동남교회`를 떼 '교회 소개'·'교회의 비전'으로 바꿔 템플릿이 suffix를 한 번만 붙이게 했다. (2) 누락 11개(전부 server 컴포넌트 stub)에 nav 라벨 기준 `metadata.title`을 추가했다(다음세대·유치부·유초등부·중고등부·청년부·교제·소모임·기도제목·은혜 나눔·교회 소식·갤러리).
+  - 결과: sitemap 전 경로가 "메인 제목 | 대구동남교회" 한 형태로 통일된다. 동적 상세(`/sermons/[id]`·`/sermons/series/[id]`)는 본래 설교·시리즈 제목을 써 이미 정상이라 손대지 않았다.
+  - 관찰(후속 아님, 기록만): 11개 누락 페이지는 `<div>다음세대</div>` 같은 미구현 stub이다. sitemap에 넣을지와 실제 구현은 별도 작업으로 남긴다.
 
 ## Verification
 
