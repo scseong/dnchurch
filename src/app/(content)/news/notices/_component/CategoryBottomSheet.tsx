@@ -1,5 +1,3 @@
-'use client';
-
 import { IoCheckmark } from 'react-icons/io5';
 import { BottomSheet, ListItem } from '@/components/ui';
 import { NOTICE_CATEGORIES } from '@/constants/notice';
