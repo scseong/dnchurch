@@ -1,0 +1,38 @@
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: $spacing-8;
+  min-height: 100vh;
+  padding: $section-gap-40 $spacing-20;
+  text-align: center;
+}
+
+.title {
+  margin: 0;
+  font-size: $font-size-18;
+  font-weight: $font-weight-bold;
+  color: $txt-primary;
+}
+
+.description {
+  margin: 0;
+  font-size: $font-size-14;
+  color: $txt-secondary;
+  word-break: keep-all;
+}
+
+.retry {
+  margin-top: $spacing-8;
+  padding: $spacing-10 $spacing-24;
+  font-size: $font-size-14;
+  font-weight: $font-weight-semibold;
+  color: $txt-inverse;
+  background-color: $primary;
+  border: none;
+  border-radius: $radius-s;
+  cursor: pointer;
+
+  @include hover-bg-shift($primary-hover);
+}

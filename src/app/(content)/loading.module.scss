@@ -1,0 +1,15 @@
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: $content-gap-m;
+  padding: $section-gap-40 0;
+}
+
+.row {
+  display: flex;
+  gap: $content-gap-m;
+
+  > * {
+    flex: 1;
+  }
+}
