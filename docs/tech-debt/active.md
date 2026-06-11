@@ -4,9 +4,9 @@
 
 ---
 
-### 🔴 마이그레이션이 DB를 재현하지 못함 — prod 마이그레이션 전 필수 (profiles-rls-rpc-guard PR #115)
+### ✅ 마이그레이션이 DB를 재현하지 못함 — 해소 (migration-ssot-recovery, PR #115)
 
-- **상태**: 등록만 (PR #115 범위 밖, MVP 완성 후 prod 올리기 직전에 처리)
+- **상태**: 해소 (2026-06-12). baseline 마이그레이션 + `001` 재작성 + `get_adjacent_bulletins` 추가로 Preview 빈 DB가 dev와 일치(테이블·컬럼·enum·RLS·트리거). 남은 문제: dev 자체에 `custom_access_token_hook` 함수가 없어 마이그레이션과 어긋난다(fresh 빌드는 함수를 만들므로 미래 prod는 정상). 아래는 작업 전 기록.
 - **무엇**: `supabase/migrations/`만으로 빈 DB를 만들면 실패한다. `profiles`·`bulletins`·`bulletin_images`·`notices`의 `CREATE TABLE`이 어느 마이그레이션에도 없다(대시보드에서 손으로 생성). `20260314000000_create_bulletin_rpc.sql`이 `bulletins`에 INSERT하지만 그 테이블을 만드는 마이그레이션이 앞에 없어 `supabase db reset`·Preview replay가 깨진다. 더해 `001_sermon_schema.sql`이 실제 스키마와 어긋난다 — `sermons.id`가 파일은 `UUID`인데 실제는 `bigint`, 컬럼명 `date` vs `sermon_date`. `seed.sql`도 `date` 컬럼명을 쓴다.
 - **왜 지금 안 하나**: prod가 비어 있고 사용 안 함. dev에는 실제 스키마가 이미 있어 동작에 지장 없다. PR #115는 보안 구멍 차단이 범위라 baseline 복구(sermon 스키마까지)를 섞으면 비대해진다.
 - **왜 미루면 안 되나(데드라인)**: 계획이 "MVP 완성 후 마이그레이션으로 prod 구축"인데, 지금 세트로는 그 prod 구축이 실패한다. **prod 마이그레이션 직전에 반드시 해소해야 한다.**
