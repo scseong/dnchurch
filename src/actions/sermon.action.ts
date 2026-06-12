@@ -42,7 +42,13 @@ function validateSermonAction(formData: SermonFormData): string | null {
 
 // ─── Storage 헬퍼 ────────────────────────────────────────────────────────────
 
-function buildResourcePath(sermonDate: string, originalName: string): string {
+// fileIndex: 같은 배치(Promise.allSettled)에서 Date.now()가 같은 ms로 겹쳐도
+// 경로가 충돌하지 않도록 파일 순번을 붙인다 (한글 파일명은 sanitize 후 모두 'file'이 됨).
+function buildResourcePath(
+  sermonDate: string,
+  originalName: string,
+  fileIndex: number
+): string {
   const folder = formattedDate(sermonDate, 'YYYY/MM');
   const ext = originalName.split('.').pop() ?? 'bin';
   const baseName = originalName.replace(/\.[^.]+$/, '');
@@ -52,7 +58,7 @@ function buildResourcePath(sermonDate: string, originalName: string): string {
       .replace(/[^a-zA-Z0-9-]/g, '')
       .replace(/-+/g, '-')
       .replace(/^-|-$/g, '') || 'file';
-  return `${folder}/${sanitized}-${Date.now()}.${ext}`;
+  return `${folder}/${sanitized}-${Date.now()}-${fileIndex}.${ext}`;
 }
 
 async function uploadResourceFiles(
@@ -65,11 +71,12 @@ async function uploadResourceFiles(
   const results = await Promise.allSettled(
     resources.map(
       async (
-        resource
+        resource,
+        fileIndex
       ): Promise<{ resource: SermonResourceInput; path: string | null }> => {
         if (!resource.file) return { resource, path: null };
 
-        const path = buildResourcePath(sermonDate, resource.name);
+        const path = buildResourcePath(sermonDate, resource.name, fileIndex);
 
         const { error } = await adminClient.storage
           .from(RESOURCE_BUCKET)
