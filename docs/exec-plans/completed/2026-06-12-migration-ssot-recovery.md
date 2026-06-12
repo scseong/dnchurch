@@ -1,6 +1,6 @@
 # migration-ssot-recovery
 
-- **상태**: 🟡 진행 중
+- **상태**: ✅ 완료 (2026-06-12)
 - **시작일**: 2026-06-12
 - **브랜치**: fix/profiles-rls-rpc-guard
 - **Open questions**: none
@@ -151,3 +151,9 @@ dev ↔ Preview 빈 DB 정합 (Preview = 마이그레이션만으로 생성):
 - 의사결정 로그·검증 기록은 위 형식 고정. 압축·기호잇기·약어·한 항목 다결정 금지.
 -->
 
+
+## 회고
+
+- **잘된 것**: `supabase db dump`이 Docker를 요구해 막혔지만, `pg_catalog`/`information_schema` 직접 조회로 스키마를 재구성했다. Preview 빈 DB를 dev와 1:1로 대조해(테이블·컬럼·enum·RLS·트리거·함수) 정확성을 실측으로 확인했다.
+- **배운 것**: Supabase Preview 브랜치는 같은 버전 마이그레이션을 다시 돌리지 않아, 파일을 고쳐도 `reset_branch` 전에는 반영되지 않는다. 그리고 테이블만 대조하면 빠진 함수를 놓친다 — dev↔preview 함수 대조가 `get_adjacent_bulletins` 누락을 잡았다.
+- **부채**: dev에 `custom_access_token_hook` 함수가 없는 드리프트는 남는다(fresh 빌드는 함수를 만들므로 미래 prod는 정상). dev에만 있는 고아 함수 `handle_updated_at`·`rls_auto_enable`은 트리거가 안 써서 마이그레이션에 넣지 않았다.

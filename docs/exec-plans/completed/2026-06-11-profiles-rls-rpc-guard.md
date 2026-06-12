@@ -1,6 +1,6 @@
 # profiles-rls-rpc-guard
 
-- **상태**: 🟡 진행 중
+- **상태**: ✅ 완료 (2026-06-12)
 - **시작일**: 2026-06-11
 - **브랜치**: develop
 - **Open questions**: none
@@ -152,3 +152,9 @@ dev 실측 검증 결과(`SET LOCAL ROLE`로 anon·authenticated 시뮬레이션
 - 나머지 DEFINER 함수 `search_path` 고정 + `server-only` 가드(#5).
   - 이유: 회귀 방어용, 이번 치명 구멍과 분리.
   - 기록 위치: `docs/tech-debt/active.md`
+
+## 회고
+
+- **잘된 것**: Supabase advisor와 `pg_catalog` 직접 조회로 코드 리뷰가 못 잡는 DB 설정 구멍 2개(profiles RLS 비활성, 가드 없는 bulletin RPC)를 찾았다. `SET LOCAL ROLE`로 anon·authenticated를 흉내 내 차단을 dev에서 실측했고, Codex가 수정안의 허점(본인행 정책만으로는 role 변경이 안 막힘, `PUBLIC` revoke 누락)을 짚어 보강했다.
+- **다음에 할 것**: prod는 비어 있어 MVP 완성 시 이 마이그레이션 세트로 빌드한다. 그때 보안 마이그레이션 2개가 함께 적용되는지 확인한다.
+- **부채**: 주보 수정 시 Cloudinary 삭제를 RPC 반환값으로 검증(1차 보강은 했고 더 견고한 방식은 후속), 나머지 SECURITY DEFINER 함수 `search_path` 고정 + `server-only` 가드 — 모두 `docs/tech-debt/active.md`에 등록.
