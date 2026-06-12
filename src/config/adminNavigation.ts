@@ -9,6 +9,8 @@ export type AdminNavItem = {
   href: string;
   icon: AdminIconName;
   badge?: string;
+  /** page.tsx가 아직 없는 항목 — 사이드바에서 클릭 비활성·"준비 중"으로 표시 */
+  comingSoon?: boolean;
 };
 
 export type AdminNavSection = {
@@ -26,18 +28,18 @@ export const ADMIN_NAV_SECTIONS: AdminNavSection[] = [
   {
     title: '설교',
     items: [
-      { label: '설교 관리', href: '/admin/sermons', icon: 'play', badge: '128' },
-      { label: '시리즈 관리', href: '/admin/sermons/series', icon: 'folder', badge: '24' },
-      { label: '설교자 관리', href: '/admin/sermons/speakers', icon: 'user' }
+      { label: '설교 관리', href: '/admin/sermons', icon: 'play' },
+      { label: '시리즈 관리', href: '/admin/sermons/series', icon: 'folder', comingSoon: true },
+      { label: '설교자 관리', href: '/admin/sermons/speakers', icon: 'user', comingSoon: true }
     ]
   },
   {
     title: '멤버',
-    items: [{ label: '멤버 관리', href: '/admin/members', icon: 'users' }]
+    items: [{ label: '멤버 관리', href: '/admin/members', icon: 'users', comingSoon: true }]
   },
   {
     title: '시스템',
-    items: [{ label: '설정', href: '/admin/settings', icon: 'cog' }]
+    items: [{ label: '설정', href: '/admin/settings', icon: 'cog', comingSoon: true }]
   }
 ];
 
@@ -56,10 +58,13 @@ export function isActiveAdminNav(pathname: string, href: string): boolean {
 
 /**
  * 어드민 경로 → AdminHeader 브레드크럼 라벨 배열.
- * 정적 라벨이 필요한 dynamic 경로(설교 수정)는 임시 플레이스홀더를 사용하며,
- * 실제 설교 제목 주입은 추후 페이지 단에서 컨텍스트/props로 대체한다.
+ * dynamic 경로(설교 수정)는 페이지가 `useAdminBreadcrumbStore.setDynamicLabel`로
+ * 실제 라벨을 주입한다. 미주입 시 임시 플레이스홀더로 fallback.
  */
-export function resolveAdminBreadcrumbs(pathname: string): string[] {
+export function resolveAdminBreadcrumbs(
+  pathname: string,
+  dynamicLabel?: string | null
+): string[] {
   const root = '관리자';
 
   if (pathname === '/admin') return [root, '대시보드'];
@@ -67,13 +72,10 @@ export function resolveAdminBreadcrumbs(pathname: string): string[] {
   if (pathname === '/admin/sermons') return [root, '설교 관리'];
   if (pathname === '/admin/sermons/new') return [root, '설교 관리', '새 설교 등록'];
   if (/^\/admin\/sermons\/[^/]+\/edit$/.test(pathname))
-    return [root, '설교 관리', '(설교 제목)'];
+    return [root, '설교 관리', dynamicLabel?.trim() || '(설교 제목)'];
 
-  if (pathname === '/admin/sermons/series') return [root, '설교 관리', '시리즈 관리'];
-  if (pathname === '/admin/sermons/speakers') return [root, '설교 관리', '설교자 관리'];
-
-  if (pathname.startsWith('/admin/members')) return [root, '멤버 관리'];
-  if (pathname.startsWith('/admin/settings')) return [root, '설정'];
+  // 시리즈·설교자·멤버·설정은 page.tsx가 없어 사이드바에서 comingSoon으로 비활성(도달 불가).
+  // 라우트 신설 시 사이드바 comingSoon 해제와 함께 분기를 다시 추가한다.
 
   return [root];
 }

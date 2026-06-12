@@ -1,0 +1,238 @@
+.root {
+  display: flex;
+  flex-direction: column;
+  gap: $section-gap-40;
+  padding: $spacing-20 0 $section-gap-80;
+}
+
+// ── main: Featured + 캐러셀 2종 ──
+
+.featured {
+  display: flex;
+  flex-direction: column;
+  gap: $content-gap-s;
+
+  @include respond-up($breakpoint-pc-sm) {
+    flex-direction: row;
+  }
+}
+
+.feat_video {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  border-radius: $radius-m;
+
+  @include respond-up($breakpoint-pc-sm) {
+    flex: 0 0 58%;
+  }
+}
+
+.feat_meta {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-8;
+  padding: $spacing-4 0;
+
+  @include respond-up($breakpoint-pc-sm) {
+    flex: 1;
+    justify-content: center;
+  }
+}
+
+.section {
+  display: flex;
+  flex-direction: column;
+  gap: $content-gap-s;
+}
+
+.carousel {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: 62%;
+  gap: $content-gap-s;
+  overflow: hidden;
+
+  @include respond-up($breakpoint-tablet) {
+    grid-auto-columns: 30%;
+  }
+
+  @include respond-up($breakpoint-pc-sm) {
+    grid-auto-flow: row;
+    grid-template-columns: repeat(4, 1fr);
+    grid-auto-columns: unset;
+  }
+}
+
+.v_card {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-6;
+}
+
+.v_thumb {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  border-radius: $radius-s;
+}
+
+.v_meta {
+  margin-top: $spacing-4;
+}
+
+// ── archive: 사이드바 + 결과 리스트 ──
+
+.body {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: $content-gap-m;
+
+  @include respond-up($breakpoint-pc-sm) {
+    grid-template-columns: 16rem 1fr;
+  }
+}
+
+.sidebar_card {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-12;
+  padding: $spacing-16;
+  background-color: $bg-card;
+  border: 1px solid $border-card;
+  border-radius: $radius-m;
+  height: fit-content;
+}
+
+.search_bar {
+  width: 100%;
+  height: 2.8rem;
+  border-radius: $radius-s;
+}
+
+.sidebar_section {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-8;
+}
+
+.opt_row {
+  width: 100%;
+  height: 2.2rem;
+  border-radius: $radius-xs;
+}
+
+.main_col {
+  display: flex;
+  flex-direction: column;
+  gap: $content-gap-s;
+}
+
+.toolbar {
+  width: 100%;
+  height: 2.8rem;
+  border-radius: $radius-s;
+}
+
+.result_bar {
+  margin: $spacing-4 0;
+}
+
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: $content-gap-s;
+}
+
+// ── 가로형 카드 (결과 리스트 / 회차) ──
+
+.h_card {
+  display: grid;
+  grid-template-columns: 11rem 1fr;
+  gap: $content-gap-s;
+  padding: $spacing-12;
+  background-color: $bg-card;
+  border: 1px solid $border-card;
+  border-radius: $radius-s;
+
+  @include respond-up($breakpoint-tablet) {
+    grid-template-columns: 14rem 1fr;
+  }
+}
+
+.h_thumb {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  border-radius: $radius-xs;
+}
+
+.h_meta {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-6;
+  min-width: 0;
+}
+
+.h_foot {
+  margin-top: auto;
+}
+
+// ── sermon 상세: 영상 + 메타 + 사이드바 ──
+
+.detail {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: $content-gap-m;
+
+  @include respond-up($breakpoint-pc-sm) {
+    grid-template-columns: 1fr 20rem;
+  }
+}
+
+.d_main {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-8;
+}
+
+.d_video {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  border-radius: $radius-m;
+  margin-bottom: $spacing-8;
+}
+
+.d_block {
+  width: 100%;
+  height: 6rem;
+  border-radius: $radius-s;
+  margin: $spacing-8 0;
+}
+
+// ── series 상세: 헤로 + 회차 그리드 ──
+
+.hero {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  border-radius: $radius-m;
+
+  @include respond-up($breakpoint-pc-sm) {
+    aspect-ratio: 24 / 9;
+  }
+}
+
+.ep_header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  padding-bottom: $spacing-12;
+  border-bottom: 1px solid $border-subtle;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: $content-gap-s;
+
+  @include respond-up($breakpoint-pc-sm) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}

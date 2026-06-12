@@ -47,9 +47,7 @@
     color: $txt-primary;
   }
 
-  &:focus-visible {
-    outline: 2px solid $primary-active;
-    outline-offset: 2px;
+  @include focus-ring('strong') {
     border-radius: 2px;
   }
 }
@@ -78,10 +76,7 @@
     color: $txt-primary;
   }
 
-  &:focus-visible {
-    outline: 2px solid $primary-active;
-    outline-offset: 2px;
-  }
+  @include focus-ring('strong');
 }
 
 .category_btn {
@@ -103,10 +98,7 @@
     color: $txt-primary;
   }
 
-  &:focus-visible {
-    outline: 2px solid $primary-active;
-    outline-offset: 2px;
-  }
+  @include focus-ring('strong');
 }
 
 .search_form {
@@ -165,9 +157,7 @@
     color: $txt-primary;
   }
 
-  &:focus-visible {
-    outline: 2px solid $primary-active;
-    outline-offset: 2px;
+  @include focus-ring('strong') {
     border-radius: 2px;
   }
 }

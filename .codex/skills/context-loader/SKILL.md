@@ -13,7 +13,7 @@ Codex 작업 시작 시 항상 사용. `docs/` 전체 무차별 로딩이 아닌
 2. `CLAUDE.md` — 오케스트레이터 워크플로우·프로젝트 지도
 3. `docs/README.md` — 문서 인덱스
 4. `docs/ARCHITECTURE.md` — 라우트·레이어·외부 의존
-5. `docs/tech-debt-tracker.md` — 알려진 부채·baseline
+5. `docs/tech-debt/active.md` — 알려진 부채·baseline (인덱스: `docs/tech-debt-tracker.md`)
 
 ## 작업 유형별 라우팅
 
@@ -24,10 +24,10 @@ Codex 작업 시작 시 항상 사용. `docs/` 전체 무차별 로딩이 아닌
 | 새 파일, 파일 이동, 컴포넌트 위치, barrel export | `.claude/skills/file-structure/SKILL.md` |
 | 다단계 구현 계획 리뷰 | `docs/exec-plans/active/`의 관련 계획. 없으면 Claude Code에 EXEC_PLAN 작성 요청 |
 | 아키텍처 또는 라이브러리 결정 | `docs/decisions/README.md`와 관련 ADR |
-| 기존 버그/회귀 | 관련 active/completed exec plan, `docs/tech-debt-tracker.md`, 영향받는 소스 |
+| 기존 버그/회귀 | 관련 active/completed exec plan, `docs/tech-debt/active.md`(과거 회상: `docs/tech-debt/resolved.md`), 영향받는 소스 |
 | 외부 라이브러리 동작 | `docs/references/` 먼저. 없거나 오래됐으면 공식 문서만 |
 | 현재 작업 외부 자료 | `docs/research/`의 관련 노트 |
-| 구현 후 1차 검증 | active EXEC_PLAN, 변경 파일, `docs/tech-debt-tracker.md`, 검증 출력 |
+| 구현 후 1차 검증 | active EXEC_PLAN, 변경 파일, `docs/tech-debt/active.md`, 검증 출력 |
 
 ## 로딩 예산
 

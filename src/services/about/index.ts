@@ -49,7 +49,8 @@ const getWorshipGroupsSafe = async (): Promise<{
 }> => {
   try {
     return await getWorshipScheduleGroups();
-  } catch {
+  } catch (error) {
+    console.error('[about] getWorshipScheduleGroups 조회 실패', error);
     return { sunday: [], weekday: [], school: [] };
   }
 };
@@ -90,6 +91,7 @@ export const getHubPageData = async (): Promise<{
 
 export const getPastorPageData = async (): Promise<{ pastor: PastorData | null }> => {
   const result = await getActiveStaff();
+  if (result.error) console.error('[about] getActiveStaff 조회 실패', result.error);
   const rows = (result.data ?? []) as StaffType[];
   return { pastor: toPastorData(findSeniorPastor(rows)) };
 };

@@ -1,12 +1,14 @@
+@use 'sass:color';
+
 .wrapper {
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
   gap: 16px;
   padding: 20px 24px;
-  border: 1px solid var(--admin-bd);
+  border: 1px solid $border-admin;
   border-radius: 10px;
-  background: var(--admin-bg-card);
+  background: $bg-card;
 
   @media (max-width: 767px) {
     flex-direction: column;
@@ -26,7 +28,7 @@
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.08em;
-  color: var(--admin-t3);
+  color: $txt-admin-tertiary;
 }
 
 .title_row {
@@ -41,7 +43,7 @@
   font-size: 22px;
   font-weight: 800;
   line-height: 1.25;
-  color: var(--admin-t1);
+  color: $txt-primary;
 
   @media (max-width: 767px) {
     font-size: 19px;
@@ -51,8 +53,8 @@
 .badge {
   padding: 2px 8px;
   border-radius: 100px;
-  background: var(--admin-accent-bg);
-  color: var(--admin-accent);
+  background: $primary-soft-subtle;
+  color: $primary-soft;
   font-size: 11px;
   font-weight: 600;
 }
@@ -60,7 +62,7 @@
 .description {
   margin: 0;
   font-size: 13px;
-  color: var(--admin-t2);
+  color: $txt-secondary;
 }
 
 .actions {
@@ -92,13 +94,13 @@
     color 0.15s;
 
   &.outline {
-    border: 1px solid var(--admin-bd);
-    background: var(--admin-bg-card);
-    color: var(--admin-t2);
+    border: 1px solid $border-admin;
+    background: $bg-card;
+    color: $txt-secondary;
 
     &:hover {
-      border-color: var(--admin-t3);
-      color: var(--admin-t1);
+      border-color: $txt-admin-tertiary;
+      color: $txt-primary;
     }
 
     // 640px 이하에서는 outline 액션을 숨기고 primary만 노출.
@@ -110,11 +112,11 @@
 
   &.pri {
     border: 0;
-    background: var(--admin-pri);
+    background: $primary;
     color: #fff;
 
     &:hover {
-      background: color-mix(in srgb, var(--admin-pri), #fff 8%);
+      background: color.mix(#fff, $primary, 8%);
     }
   }
 }

@@ -2,10 +2,12 @@ import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import MainContainer from '@/components/layout/container/MainContainer';
 import NoticeControlBar from '@/app/(content)/news/notices/_component/NoticeControlBar';
-import NoticeListClient from '@/app/(content)/news/notices/_component/NoticeListClient';
+import NoticeDrawerProvider from '@/app/(content)/news/notices/_component/NoticeDrawerProvider';
+import NoticeTable from '@/app/(content)/news/notices/_component/NoticeTable';
+import { Pagination } from '@/components/ui';
 import { getNotices } from '@/services/notice';
 import { validateSearchParams, validate } from '@/utils/common';
-import { NOTICE_CATEGORIES } from '@/constants/notice';
+import { NOTICE_CATEGORIES, DEFAULT_PAGE_SIZE } from '@/constants/notice';
 import type { NoticeCategory } from '@/types/notice';
 import styles from './page.module.scss';
 
@@ -37,11 +39,32 @@ export default async function Notice({ searchParams }: Props) {
 
   const { data: posts, count } = await getNotices({ page, category, search });
 
+  // drawer에는 읽는 필드만 내려 RSC payload에 전체 row가 중복 직렬화되지 않게 한다
+  const drawerItems = (posts ?? []).map(
+    ({ id, title, category: noticeCategory, content, created_at, view_count, attachment_url }) => ({
+      id,
+      title,
+      category: noticeCategory,
+      content,
+      created_at,
+      view_count,
+      attachment_url
+    })
+  );
+
   return (
     <MainContainer title="공지사항">
       <div className={styles.wrap}>
         <NoticeControlBar total={Number(count)} currentCategory={category} currentSearch={search} />
-        <NoticeListClient data={posts ?? []} total={Number(count)} currentPage={page} />
+        <NoticeDrawerProvider notices={drawerItems}>
+          <NoticeTable data={posts ?? []} total={Number(count)} currentPage={page} />
+          <Pagination
+            totalCount={Number(count)}
+            currentPage={page}
+            pageSize={DEFAULT_PAGE_SIZE}
+            maxVisiblePages={5}
+          />
+        </NoticeDrawerProvider>
       </div>
     </MainContainer>
   );

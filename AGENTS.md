@@ -14,13 +14,14 @@ Codex CLI용 부트스트랩 지도. 상세 규칙은 SSOT를 가리키고 본 �
 
 - 프로젝트 요약 / 필수 규칙 / 행동 가드레일 / 검증 명령 / 기록 위치: `CLAUDE.md`
 - Codex 작업별 라우팅 / 항상 로딩 세트 / 1차 검증 절차 / 5체크 / 핸드오프 형식: `.codex/skills/context-loader/SKILL.md`
+- 문서·메시지 작성 (commit·PR·exec-plan·ADR·tech-debt·검증 기록·Codex 인용)의 표현 규칙·템플릿·위반 카탈로그: `.claude/skills/writing-style/SKILL.md` — Codex가 한국어 산출물 작성 시 단일 SSOT (R1~R4 hook 검증 정책은 `.claude/skills/harness-workflow/SKILL.md` `## 커밋 메시지`)
 
 ## Codex 협업 원칙 (진입점-only)
 
 - 질의·응답은 영어로 정확히, 사용자 보고는 한국어로.
 - 메인 구현은 수행하지 않는다. 1차 검증의 국소 수정(명백한 버그·타입·누락 guard·검증 실패 직접 원인)만 가능.
 - 다음은 직접 수정하지 않고 Claude Code에 반환: 계획 변경, 새 라이브러리, 데이터 흐름 변경, 인증/캐시/배포 정책 변경, 외과적 변경 위반.
-- 계획 리뷰 결론은 `PASS` / `CHANGE_REQUEST` / `BLOCK` 중 하나로 명시.
+- 계획 리뷰 결론은 `PASS` / `PASS_WITH_DECISION_LOG` / `CHANGE_REQUEST` / `BLOCK` 중 하나로 명시. PASS_WITH_DECISION_LOG는 material risk 없고 expression-only 지적만 있을 때 — exec-plan `## 의사결정 로그`에 사유 기록 후 통과.
 - 직접 수정한 경우 변경 파일, 수정 이유, 검증 결과, 남은 리스크를 마지막에 적는다.
 
 ## 리뷰 지침

@@ -38,13 +38,14 @@
 - **CODEX_PLAN_REVIEW** 트리거: 다단계 / 구조 변경 / `scripts/_shared-config.mjs`의 `ADR_TRIGGER_PARTS` 해당 파일. 결론 `PASS` / `CHANGE_REQUEST` / `BLOCK`. 재요청도 BLOCK이면 사용자 에스컬레이션
 - **WORK**: 한 번에 한 관심사. 계획 벗어나면 plan부터 갱신
 - **CODEX_FIRST_PASS**: 구현 diff 생성 시 Codex에 1차 검증 요청. 결과는 exec-plan `## Codex 1차 검증`에 기록
-- **VERIFY**: `node scripts/verify-task.mjs <slug>` → `logs/<task-id>/<run-id>/` (커밋 X). 실패 시 `docs/tech-debt-tracker.md` 대조. Codex가 1차 수정했으면 diff 교차 확인 후 `## Claude 2차 검증`에 기록
+- **VERIFY**: `node scripts/verify-task.mjs <slug>` → `logs/<task-id>/<run-id>/` (커밋 X). 실패 시 `docs/tech-debt/active.md` 대조. Codex가 1차 수정했으면 diff 교차 확인 후 `## Claude 2차 검증`에 기록
 
 ### COMMIT — 승인 후 커밋
 - 커밋 전 pre-commit 훅이 변경 파일 lint와 최신 검증 기록을 확인한다.
 - `VERIFY_ENFORCE=1` 환경에서는 검증 기록이 없거나 diff가 바뀌면 커밋이 차단된다.
 - 머지/릴리스 전에는 `node scripts/harness-gate.mjs <slug>`로 검증 증적, Codex/Claude 검증 기록, ADR 판단을 강제 확인한다.
 - `--no-verify`로 우회 금지
+- **한 commit = 한 의도. 작성 시작 전 분리한다** — 여러 의도가 묶이면 `git add`를 분리해 별도 commit. subject에 `+`가 떠오르는 순간이 분리 누락 신호 (commit-msg hook R4는 사후 안전망).
 - **사용자 승인 후 커밋한다. 자동 커밋 금지.**
 - prefix는 6개만: Feat · Fix · Style · Refactor · Docs · Chore
 - 머지 후 `node scripts/complete-task.mjs <slug>`로 exec-plan을 `completed/`로 이동, 회고 작성
@@ -52,12 +53,15 @@
 
 ## 에이전트 역할 분담
 
-전략은 [ADR 0001](docs/decisions/0001-codex-orchestration-strategy.md) — 이 파일은 요약.
+전략·역할 분담·위임 트리거 SSOT는 [ADR 0001](docs/decisions/0001-codex-orchestration-strategy.md). 이 파일은 요약, `.claude/agents/`는 실행용 정의(에이전트별 입출력 프로토콜·에러 핸들링·협업 매트릭스)로 ADR을 운영화한 파일이다 — 충돌 시 ADR 0001을 우선한다.
 
-| 에이전트 | 책임 |
-| --- | --- |
-| **Claude Code** (이 에이전트) | 오케스트레이터, 초기 계획, 메인 구현, Codex 결과 통합, 2차 검증, 기록·커밋 책임 |
-| **Codex** (`codex:rescue` 스킬) | 계획 검증, 깊은 추론, 설계 판단, 트레이드오프 분석, 막힌 디버깅, 구현 후 1차 검증, 제한적 수정 |
+| 에이전트 | 정의 파일 | 책임 |
+| --- | --- | --- |
+| **claude-code** (이 에이전트) | `.claude/agents/claude-code.md` | 오케스트레이터, 초기 계획, 메인 구현, Codex 결과 통합, 2차 검증, 기록·커밋 책임 |
+| **codex-reviewer** (`codex:rescue` 스킬) | `.claude/agents/codex-reviewer.md` | 계획 검증, 깊은 추론, 설계 판단, 트레이드오프 분석, 막힌 디버깅, 구현 후 1차 검증, 제한적 수정 |
+| **explorer** (`Agent subagent_type: explorer`) | `.claude/agents/explorer.md` | 광역 코드 탐색 위임 래퍼 (3회 이상 검색 예상 / 대용량 결과 / 메인 컨텍스트 보호) |
+| **doc-editor** (`Agent subagent_type: doc-editor`) | `.claude/agents/doc-editor.md` | exec-plan·ADR·검증 기록·tech-debt·Codex 인용 표현 점검 (직접 수정 X, file:line + 수정 초안 제안만) |
+| **commit-pr-author** (`Agent subagent_type: commit-pr-author`) | `.claude/agents/commit-pr-author.md` | commit 메시지·PR 본문·메타데이터(label·assignee·template) 초안 (직접 실행 X, 사용자 승인 후 명령 실행) |
 
 **Codex 위임 트리거** (다음 시점에 `codex:rescue` 호출 검토):
 - 계획 작성 직후 — 구현 전 plan 품질 검증
@@ -67,6 +71,16 @@
 - 구현 후 1차 검증 — 큰 diff, 고위험 파일, 레이어 변경, 검증 실패
 
 **위임 안 함**: 단순 수정(typo·rename·한 줄), 표준 작업(commit·lint·build), 답이 명확한 코드.
+
+### 하네스 변경 이력
+
+| 날짜 | 변경 내용 | 대상 | 사유 |
+| --- | --- | --- | --- |
+| 2026-05-01 | 초기 구성 (ADR 0001 채택) | docs/decisions/0001, .claude/hooks/, scripts/ | Codex 오케스트레이션 전략 도입 |
+| 2026-05-28 | 에이전트 정의 파일 분리 | .claude/agents/ (claude-code, codex-reviewer, explorer) | `harness:harness` 메타 스킬 적용 — ADR 0001을 재사용 가능한 정의로 분리 |
+| 2026-05-28 | 공통 writer 에이전트 2종 + doc-style hook 추가 | .claude/agents/ (doc-editor, commit-pr-author), .claude/hooks/check-doc-style.mjs | 1인 작업 자기 리뷰 사각지대 보완 — memory feedback 11건(커밋·PR 7 + 문서 4) 누적 패턴 사전 차단 |
+| 2026-05-28 | writing-style SKILL 신설 (작성용 단일 SSOT) | .claude/skills/writing-style/, harness-workflow SKILL reference 1줄 | 작성 시점 표현 가이드 부재 해소 — 사후 점검만으로는 같은 위반 반복(본 task dogfood에서 plan 자체에 5건 위반 발견). description 트리거로 작성 시점 자동 로딩 |
+| 2026-05-29 | PR 생성 시점 commit-pr-author 호출 의무화 + PreToolUse hook 신설 | .claude/hooks/check-pr-before-create.mjs, .claude/settings.json PreToolUse 블록, claude-code.md, harness-workflow SKILL | gh pr create 시점은 PostToolUse hook 사각지대 — 결정적 reminder + 워크플로우 의무 + COMMIT 단계 명시 3 계층 방어 |
 
 ## HOW (검증 루프)
 
@@ -102,10 +116,12 @@ pre-commit 훅은 lint-staged로 변경 파일만 자동 검사 — error는 차
 - 스타일 작성: **모바일 퍼스트** — 기본값이 모바일, `respond-up($width)`으로 상위 뷰포트 확장
 - 커밋 메시지 본문은 **bullet(`-`)으로 항목 구분**
 - 외부 에이전트(Codex 등) 호출 시 **질의는 영어(정확도 확보), 응답은 한국어로 요청** — `codex:rescue`는 stdout을 verbatim 출력하므로 한국어 응답이 곧 사용자 보고가 된다. 위임 프롬프트 말미에 "Respond in Korean." 명시 필수.
+- 모든 산출물은 자연스러운 한국어로 쓴다. 번역투와 외래어 직역을 뺀다.
+- AI 상투구·한자어 `-化` 어미(정합화·단일화·직관화)·무생물 주어+사람 동사·추상명사 끝맺음을 쓰지 않는다. 한 문장은 한 가지만 담고 서술어로 끝낸다. 치환표·구조 6항목 체크리스트는 `.claude/skills/writing-style/SKILL.md` '산출 문서 가독성 체크리스트'를 참조한다 (단일 SSOT).
 
 ## ⚠️ Gotchas
 
-- `supabase` (named export from `client.ts`) deprecated → `getSupabaseBrowserClient()` 사용
+- 브라우저 클라이언트는 `getSupabaseBrowserClient()` 사용 (구 `supabase` named export는 제거됨)
 - Server Action과 뮤테이션은 **항상** `createServerSideClient()` (캐시 없음)
 - 공개 데이터 캐싱은 `createStaticClient()`, `createServerSideClient()` 아님
 - `_variables.scss`와 `_mixins.scss`는 `additionalData`로 자동 주입됨 — 각 `.module.scss`에서 `@import` 하지 않음
@@ -124,7 +140,7 @@ pre-commit 훅은 lint-staged로 변경 파일만 자동 검사 — error는 차
 | 진행 중 작업 (EXEC_PLAN) | `docs/exec-plans/active/` | 작업 시작 시 |
 | 완료된 작업 (회고·검색) | `docs/exec-plans/completed/` | 머지 후 이동 |
 | 영구 결정 (ADR) | `docs/decisions/` | 구조·라이브러리·패턴 변경 시 |
-| 기술 부채·마이그레이션 | `docs/tech-debt-tracker.md` | 발견 즉시 |
+| 기술 부채·마이그레이션 (활성·해결) | `docs/tech-debt/active.md`, `docs/tech-debt/resolved.md` (인덱스: `docs/tech-debt-tracker.md`) | 발견 즉시 |
 | 자동 생성 (DB 스키마 등) — **수정 금지** | `docs/generated/` | 스크립트 실행 시만 |
 | 외부 라이브러리 참조 (llms.txt) | `docs/references/` | 라이브러리 업데이트 시 |
 | 작업별 외부 자료 발췌 (일회성) | `docs/research/` | EXEC_PLAN 진행 중 |
@@ -132,7 +148,8 @@ pre-commit 훅은 lint-staged로 변경 파일만 자동 검사 — error는 차
 | Codex 컨텍스트 로더 | `.codex/skills/context-loader/` | 컨텍스트 라우팅 변경 시 |
 | Claude Hook 자동 제안 | `.claude/hooks/` + `.claude/settings.json` | 협업 타이밍 변경 시 |
 | 워크플로우 자동화 스크립트 | `scripts/` | 스크립트 추가/변경 시 |
-| 작업별 how-to (자동 로딩) | `.claude/skills/{supabase,styles,file-structure,ui-components}/` | 트리거 시 자동 |
+| 작업별 how-to (자동 로딩) | `.claude/skills/{supabase,styles,file-structure,ui-components,writing-style}/` | 트리거 시 자동 |
+| **작성용 SSOT** (한국어 표현·커밋·PR·exec-plan·ADR·tech-debt 템플릿) | `.claude/skills/writing-style/SKILL.md` | 모든 문서·메시지 작성 시 자동 로딩 |
 
 스킬 트리거:
 
@@ -143,6 +160,7 @@ pre-commit 훅은 lint-staged로 변경 파일만 자동 검사 — error는 차
 | 새 파일 위치, 디렉토리 구조, barrel export     | `.claude/skills/file-structure/` |
 | Button·TextField·Modal·BottomSheet·Tabs 등 공용 UI 사용·확장·신규 추가 | `.claude/skills/ui-components/` |
 | 하네스 워크플로우, PLAN Mode, task-id, exec-plan, Codex 검증, harness-gate | `.claude/skills/harness-workflow/` |
+| 문서·메시지 작성 (exec-plan, ADR, tech-debt, 검증 기록, commit, PR, Codex 인용) | `.claude/skills/writing-style/` |
 
 <!-- last-audit: 2026-05-01 -->
 

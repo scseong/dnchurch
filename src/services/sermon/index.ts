@@ -6,10 +6,7 @@ import { createStaticClient } from '@/lib/supabase/static';
 import { createServerSideClient } from '@/lib/supabase/server';
 import type { SermonListParams } from '@/types/sermon';
 
-// 아카이브 초기 로드는 최신 설교 N개(featured 1 + 그리드 나머지).
-// 지난 연도는 연도 필터(`?year=YYYY`)로 진입 시 서버 쿼리로 해당 연도만 로드.
-const ARCHIVE_RECENT_COUNT = 12;
-const FILTER_PAGE_SIZE = 24;
+export const FILTER_PAGE_SIZE = 24;
 
 export const getSermons = (params: SermonListParams = {}) => {
   const supabase = createStaticClient(sermonCache.list());
@@ -31,6 +28,12 @@ export const getSermonsBySeries = (seriesSlug: string) => {
   return sermonService(supabase).bySeriesSlug(seriesSlug);
 };
 
+/** 시리즈 상세(`/sermons/series/[id]`)용: id 기준 시리즈 단건 + 회차 (완료 포함) */
+export const getSeriesDetail = (id: string) => {
+  const supabase = createStaticClient(sermonCache.seriesDetail(id));
+  return sermonService(supabase).bySeriesId(id);
+};
+
 export const getAllPreachers = () => {
   const supabase = createStaticClient(sermonCache.preacherList());
   return sermonService(supabase).allPreachers();
@@ -41,20 +44,23 @@ export const getRecentSermons = (limit = 4) => {
   return sermonService(supabase).recent(limit);
 };
 
+// 최신 published 설교 1건 (관계 join 포함). 정렬은 sermon-service.ts:68 `sermon_date desc` 기본값에 의존.
+// `is_featured` 컬럼 미존재로 인한 정책 — 어드민 수동 마킹 도입 시 단일 교체 지점.
+export const getFeaturedSermon = async () => {
+  const { sermons } = await getSermons({ pageSize: 1 });
+  return sermons[0] ?? null;
+};
+
 export const incrementSermonViewCount = async (sermonId: number) => {
   const supabase = await createServerSideClient();
   return sermonService(supabase).incrementViewCount(sermonId);
 };
 
-/** 아카이브 모드용: 최신 설교 N개 로드 (sermon_date desc) */
-export const getSermonArchiveList = () =>
-  getSermons({ pageSize: ARCHIVE_RECENT_COUNT });
-
 /** 필터 모드용: 서버 쿼리로 매칭 페이지만 로드 */
 export const getFilteredSermons = (
   params: Pick<
     SermonListParams,
-    'seriesId' | 'preacherId' | 'search' | 'year' | 'page'
+    'seriesId' | 'preacherId' | 'search' | 'year' | 'page' | 'sort'
   >
 ) => getSermons({ pageSize: FILTER_PAGE_SIZE, ...params });
 
@@ -62,12 +68,6 @@ export const getFilteredSermons = (
 export const getSermonsTotalCount = () => {
   const supabase = createStaticClient(sermonCache.list());
   return sermonService(supabase).totalCount();
-};
-
-/** 연도별 설교 편수 집계 (지난 설교 연도 그리드용) */
-export const getSermonYearCounts = () => {
-  const supabase = createStaticClient(sermonCache.list());
-  return sermonService(supabase).yearCounts();
 };
 
 /** [어드민] 수정용 설교 조회 — 캐시 없음, 초안 포함 */

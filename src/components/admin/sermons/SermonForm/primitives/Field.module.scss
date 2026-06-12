@@ -13,7 +13,7 @@
 .label {
   font-size: 13px;
   font-weight: 600;
-  color: var(--admin-t1);
+  color: $txt-primary;
 }
 
 .required {
@@ -24,8 +24,8 @@
 .optional {
   padding: 1px 6px;
   border-radius: 100px;
-  background: var(--admin-bg-w);
-  color: var(--admin-t3);
+  background: $bg-admin-subtle;
+  color: $txt-admin-tertiary;
   font-size: 10px;
   font-weight: 600;
 }
@@ -38,12 +38,12 @@
 
 .hint {
   font-size: 11px;
-  color: var(--admin-t3);
+  color: $txt-admin-tertiary;
 }
 
 .counter {
   margin-left: auto;
-  color: var(--admin-t3);
+  color: $txt-admin-tertiary;
   font-size: 11px;
   font-variant-numeric: tabular-nums;
 }

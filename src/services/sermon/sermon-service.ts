@@ -1,13 +1,15 @@
 import { handleResponse } from '@/services/handle-response';
 import { buildBaseSlug } from '@/lib/sermon-slug';
 import type { SermonDbInsert, SermonDbUpdate } from '@/lib/sermon-form-mapper';
-import type { SupabaseClient } from '@supabase/supabase-js';
+import type { PostgrestResponse, SupabaseClient } from '@supabase/supabase-js';
 import type { Database } from '@/types/database.types';
 import type {
   SermonListParams,
   SermonWithRelations,
   SermonListItem,
   SeriesWithSermonCount,
+  SeriesDetail,
+  PreacherWithSermonCount,
   YearCount,
   AdminSermon,
   AdminSermonListParams,
@@ -48,6 +50,21 @@ function escapeOrToken(value: string): string {
   return value.replace(/[(),]/g, ' ');
 }
 
+/** `select('*, sermons(count)')` 응답의 `sermons: [{ count }]`를 `sermon_count` 평탄 필드로 바꾼다 */
+export function mapRowsWithSermonCount<T extends { sermon_count: number }>(
+  res: PostgrestResponse<unknown>
+): T[] {
+  const handled = handleResponse(res);
+  const rows = (handled.data ?? []) as unknown as Array<
+    T & { sermons: Array<{ count: number }> }
+  >;
+
+  return rows.map(({ sermons, ...rest }) => ({
+    ...rest,
+    sermon_count: sermons?.[0]?.count ?? 0
+  })) as unknown as T[];
+}
+
 /** 설교 도메인 Supabase 쿼리 계층 */
 export const sermonService = (supabase: SupabaseClient<Database>) => ({
   /** 필터 + 페이지네이션이 적용된 설교 목록 조회 */
@@ -58,14 +75,15 @@ export const sermonService = (supabase: SupabaseClient<Database>) => ({
     preacherId,
     serviceType,
     year,
-    search
+    search,
+    sort = 'recent'
   }: SermonListParams = {}) => {
     let query = supabase
       .from('sermons')
       .select(SERMON_WITH_RELATIONS_SELECT, { count: 'exact' })
       .eq('is_published', true)
       .is('deleted_at', null)
-      .order('sermon_date', { ascending: false });
+      .order('sermon_date', { ascending: sort === 'oldest' });
 
     if (seriesId === '__none') {
       query = query.is('series_id', null);
@@ -77,9 +95,7 @@ export const sermonService = (supabase: SupabaseClient<Database>) => ({
     if (serviceType) query = query.eq('service_type', serviceType);
 
     if (year) {
-      query = query
-        .gte('sermon_date', `${year}-01-01`)
-        .lte('sermon_date', `${year}-12-31`);
+      query = query.gte('sermon_date', `${year}-01-01`).lte('sermon_date', `${year}-12-31`);
     }
 
     if (search) {
@@ -115,24 +131,18 @@ export const sermonService = (supabase: SupabaseClient<Database>) => ({
     return (handled.data as unknown as SermonWithRelations | null) ?? null;
   },
 
-  /** 활성 시리즈 전체를 설교 개수와 함께 조회 */
+  /** 활성 시리즈 전체를 published + 미삭제 설교 개수와 함께 조회 */
   allSeries: async (): Promise<SeriesWithSermonCount[]> => {
     const res = await supabase
       .from('sermon_series')
-      .select('*, sermons(count)')
+      .select('*, sermons!inner(count)')
       .eq('is_active', true)
+      .eq('sermons.is_published', true)
+      .is('sermons.deleted_at', null)
       .order('started_at', { ascending: false })
       .order('sort_order', { ascending: true, nullsFirst: false });
 
-    const handled = handleResponse(res);
-    const rows = (handled.data ?? []) as unknown as Array<
-      SeriesWithSermonCount & { sermons: Array<{ count: number }> }
-    >;
-
-    return rows.map(({ sermons, ...rest }) => ({
-      ...rest,
-      sermon_count: sermons?.[0]?.count ?? 0
-    }));
+    return mapRowsWithSermonCount<SeriesWithSermonCount>(res);
   },
 
   /** 시리즈 slug에 속한 설교 전체를 연재 순서로 조회 */
@@ -160,17 +170,58 @@ export const sermonService = (supabase: SupabaseClient<Database>) => ({
     return (handled.data ?? []) as unknown as SermonWithRelations[];
   },
 
-  /** 활성 설교자 전체 조회 */
-  allPreachers: async () => {
+  /**
+   * id로 시리즈 단건 + 회차(설교) 조회. `is_active`는 공개 노출 게이트라 유지
+   * — 완료 시리즈는 `ended_at`으로 판별되며 is_active=true로 그대로 노출.
+   * 숨김(is_active=false)·미존재 시 null. sermon_count는 노출 회차 수.
+   */
+  bySeriesId: async (id: string): Promise<SeriesDetail | null> => {
+    const seriesRes = await supabase
+      .from('sermon_series')
+      .select('*')
+      .eq('id', id)
+      .eq('is_active', true)
+      .maybeSingle();
+
+    const seriesHandled = handleResponse(seriesRes);
+    if (!seriesHandled.data) return null;
+
+    const res = await supabase
+      .from('sermons')
+      .select(SERMON_WITH_RELATIONS_SELECT)
+      .eq('series_id', id)
+      .eq('is_published', true)
+      .is('deleted_at', null)
+      .order('series_order', { ascending: true, nullsFirst: false })
+      .order('sermon_date', { ascending: true });
+
+    const handled = handleResponse(res);
+    const episodes = (handled.data ?? []) as unknown as SermonWithRelations[];
+    const seriesRow = seriesHandled.data as unknown as SeriesWithSermonCount;
+
+    return {
+      series: { ...seriesRow, sermon_count: episodes.length },
+      episodes
+    };
+  },
+
+  /**
+   * 활성 설교자 전체 + published + 미삭제 설교 편수 조회.
+   * `sermons!inner(count)`는 집계 lateral이라 발행 0편 설교자도 count:0으로 함께 반환된다(REST 응답으로 확인).
+   * 이 전체 목록은 URL preacher 파라미터 해석(resolvePreacherName)과 admin 설교자 선택에 필요하므로 그대로 둔다.
+   * 필터 UI에서 0편을 숨기는 일은 표시 직전(`sermons/all/page.tsx`)에서 한다.
+   */
+  allPreachers: async (): Promise<PreacherWithSermonCount[]> => {
     const res = await supabase
       .from('preachers')
-      .select('*')
+      .select('*, sermons!inner(count)')
       .eq('is_active', true)
+      .eq('sermons.is_published', true)
+      .is('sermons.deleted_at', null)
       .order('sort_order', { ascending: true })
       .order('name', { ascending: true });
 
-    const handled = handleResponse(res);
-    return handled.data ?? [];
+    return mapRowsWithSermonCount<PreacherWithSermonCount>(res);
   },
 
   /** 최근 설교를 경량 필드셋으로 조회 (홈 카드용) */
@@ -201,9 +252,7 @@ export const sermonService = (supabase: SupabaseClient<Database>) => ({
       const y = new Date(sermon_date).getFullYear();
       map.set(y, (map.get(y) ?? 0) + 1);
     }
-    return Array.from(map, ([year, count]) => ({ year, count })).sort(
-      (a, b) => b.year - a.year
-    );
+    return Array.from(map, ([year, count]) => ({ year, count })).sort((a, b) => b.year - a.year);
   },
 
   /** 활성 설교 전체 수 (count-only, rows 없이 head로 조회) */
@@ -276,10 +325,7 @@ export const sermonService = (supabase: SupabaseClient<Database>) => ({
 
   /** [어드민] 발행 상태별 카운트 — is_published projection만 가져와 JS 집계 */
   adminStatusCounts: async (): Promise<Record<SermonStatusTab, number>> => {
-    const res = await supabase
-      .from('sermons')
-      .select('is_published')
-      .is('deleted_at', null);
+    const res = await supabase.from('sermons').select('is_published').is('deleted_at', null);
     const handled = handleResponse(res);
     const rows = (handled.data ?? []) as Array<{ is_published: boolean }>;
     let published = 0;
@@ -312,17 +358,13 @@ export const sermonService = (supabase: SupabaseClient<Database>) => ({
 
     if (params.selectedSeries.length > 0) {
       const includesNone = params.selectedSeries.includes(NONE_SERIES_SENTINEL);
-      const realIds = params.selectedSeries.filter(
-        (id) => id !== NONE_SERIES_SENTINEL
-      );
+      const realIds = params.selectedSeries.filter((id) => id !== NONE_SERIES_SENTINEL);
       if (includesNone && realIds.length === 0) {
         query = query.is('series_id', null);
       } else if (!includesNone && realIds.length > 0) {
         query = query.in('series_id', realIds);
       } else {
-        query = query.or(
-          `series_id.is.null,series_id.in.(${realIds.join(',')})`
-        );
+        query = query.or(`series_id.is.null,series_id.in.(${realIds.join(',')})`);
       }
     }
 

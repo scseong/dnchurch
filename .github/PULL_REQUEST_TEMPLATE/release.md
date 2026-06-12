@@ -20,7 +20,7 @@
 - **관련 ADR**:
   - `docs/decisions/...` / 해당 없음
 - **관련 tech debt**:
-  - `docs/tech-debt-tracker.md` / 해당 없음
+  - `docs/tech-debt/active.md` / 해당 없음
 - **Known Issues / 남은 리스크**:
   - 없음 / ...
 

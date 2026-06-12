@@ -1,0 +1,2 @@
+# husky 훅은 sh로 실행되므로 항상 LF (autocrlf가 CRLF로 바꾸면 ENOEXEC)
+.husky/** text eol=lf

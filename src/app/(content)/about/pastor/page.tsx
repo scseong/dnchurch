@@ -2,12 +2,14 @@ import type { Metadata } from 'next';
 import LayoutContainer from '@/components/layout/container/LayoutContainer';
 import CloudinaryImage from '@/components/common/CloudinaryImage';
 import { getPastorPageData } from '@/services/about';
+import { OPEN_GRAPH_BASE } from '@/config/seo';
 import styles from './page.module.scss';
 
 export const metadata: Metadata = {
   title: '인사말',
   description: '대구동남교회 담임목사 인사말',
   openGraph: {
+    ...OPEN_GRAPH_BASE,
     title: '인사말',
     description: '대구동남교회 담임목사 인사말'
   }

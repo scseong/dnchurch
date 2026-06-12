@@ -27,6 +27,8 @@
     background: $bg-primary;
     border-color: $primary;
   }
+
+  @include focus-ring();
 }
 
 .hint {

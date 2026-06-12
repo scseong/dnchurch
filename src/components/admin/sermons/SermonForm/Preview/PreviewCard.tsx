@@ -1,7 +1,8 @@
 import clsx from 'clsx';
 import { HiOutlineEye, HiOutlinePhotograph } from 'react-icons/hi';
 import { formattedDate } from '@/utils/date';
-import type { SeriesWithSermonCount } from '@/types/sermon';
+import { formatPreacherLabel } from '@/utils/sermon';
+import type { Preacher, SeriesWithSermonCount } from '@/types/sermon';
 import type { SermonFormData } from '@/types/sermon-form';
 import parent from '../index.module.scss';
 import styles from './preview.module.scss';
@@ -9,13 +10,15 @@ import styles from './preview.module.scss';
 interface PreviewCardProps {
   formData: SermonFormData;
   series: SeriesWithSermonCount[];
+  preachers: Preacher[];
 }
 
-export default function PreviewCard({ formData, series }: PreviewCardProps) {
+export default function PreviewCard({ formData, series, preachers }: PreviewCardProps) {
   const { title, sermonDate, preacherId, seriesId, summary, thumbnailUrl } = formData;
+  const preacher = preachers.find((p) => p.id === preacherId) ?? null;
   const metaParts = [
     sermonDate ? formattedDate(sermonDate, 'YYYY년 M월 D일') : '',
-    preacherId
+    formatPreacherLabel(preacher)
   ].filter(Boolean);
   const seriesLabel = series.find((s) => s.id === seriesId)?.title ?? '단독 설교';
 

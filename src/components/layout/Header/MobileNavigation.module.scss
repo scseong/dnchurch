@@ -57,6 +57,26 @@
   }
 }
 
+// 부모 카테고리: 라벨(Link, 카테고리 페이지 이동) + 펼침 버튼 분리
+.menu_row {
+  display: flex;
+  align-items: center;
+}
+
+.menu_link {
+  flex: 1;
+}
+
+.expand_btn {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  padding: $spacing-16 $spacing-20;
+  background-color: transparent;
+  border: 0;
+  cursor: pointer;
+}
+
 .sub_menu_wrapper {
   display: grid;
   grid-template-rows: 0fr;

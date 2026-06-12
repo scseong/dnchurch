@@ -67,6 +67,23 @@ export default function AdminSidebar({
             <h3 className={styles.section_title}>{section.title}</h3>
             <ul className={styles.items}>
               {section.items.map((item) => {
+                if (item.comingSoon) {
+                  // page.tsx 부재 — Link 대신 div로 렌더해 휠 클릭·우클릭 새 탭 진입(404)을 원천 차단
+                  return (
+                    <li key={item.href}>
+                      <div
+                        className={clsx(styles.item, styles.coming_soon)}
+                        aria-disabled="true"
+                        tabIndex={-1}
+                      >
+                        <span className={styles.icon}>{ICONS[item.icon]}</span>
+                        <span className={styles.label}>{item.label}</span>
+                        <span className={styles.soon}>준비 중</span>
+                      </div>
+                    </li>
+                  );
+                }
+
                 const active = isActiveAdminNav(pathname, item.href);
                 return (
                   <li key={item.href}>

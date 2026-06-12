@@ -53,7 +53,8 @@
 .verse {
   font-family: $font-family-secondary;
   font-size: $font-size-16;
-  font-weight: $font-weight-medium;
+  // 세리프 weight 400·700만 유지하므로 medium(500)→regular(400) 명시 매핑 (브라우저 자동 매칭과 동일)
+  font-weight: $font-weight-regular;
   line-height: $line-height-relaxed;
   letter-spacing: $letter-spacing-body;
   color: $txt-inverse;

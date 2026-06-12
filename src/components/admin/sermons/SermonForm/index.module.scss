@@ -1,9 +1,19 @@
+@use 'sass:color';
+
+// 모바일 하단 고정 액션 바의 대략 높이(버튼 42px + 위아래 패딩·테두리). 미리보기 오버레이가 이만큼 비워 바를 가리지 않는다.
+$action-bar-height: 64px;
+
 .wrap {
   display: flex;
   flex-direction: column;
   gap: 24px;
   max-width: 1400px;
   margin: 16px auto 0;
+  padding-bottom: 80px;
+
+  @media (min-width: 1024px) {
+    padding-bottom: 0;
+  }
 
   @media (min-width: 1280px) {
     display: grid;
@@ -26,15 +36,15 @@
     flex-direction: column;
     gap: 14px;
     position: sticky;
-    top: calc(var(--header-h) + 24px);
+    top: calc($admin-header-height + 24px);
   }
 }
 
 // Section Card — 5개 섹션 카드가 공유하는 공통 쉘.
 // sections/*.tsx 에서 ../index.module.scss 경유로 소비.
 .card {
-  background: var(--admin-bg-card);
-  border: 1px solid var(--admin-bd);
+  background: $bg-card;
+  border: 1px solid $border-admin;
   border-radius: 10px;
 }
 
@@ -43,7 +53,7 @@
   align-items: flex-start;
   gap: 12px;
   padding: 16px 20px 12px;
-  border-bottom: 1px solid var(--admin-bd);
+  border-bottom: 1px solid $border-admin;
 }
 
 .card_number {
@@ -54,8 +64,8 @@
   width: 22px;
   height: 22px;
   border-radius: 50%;
-  background: var(--admin-bg-w);
-  color: var(--admin-t2);
+  background: $bg-admin-subtle;
+  color: $txt-secondary;
   font-size: 11px;
   font-weight: 700;
 }
@@ -65,18 +75,18 @@
   font-family: var(--font-notoserifKR), 'Noto Serif KR', serif;
   font-size: 14px;
   font-weight: 700;
-  color: var(--admin-t1);
+  color: $txt-primary;
 }
 
 .card_heading_desc {
   margin: 3px 0 0;
   font-size: 12px;
-  color: var(--admin-t3);
+  color: $txt-admin-tertiary;
 }
 
 .card_body {
   padding: 18px 20px 20px;
-  color: var(--admin-t3);
+  color: $txt-admin-tertiary;
   font-size: 13px;
 }
 
@@ -123,9 +133,9 @@
   gap: 8px;
   width: 100%;
   padding: 22px 18px;
-  border: 1.5px dashed var(--admin-bd-s);
+  border: 1.5px dashed $border-primary;
   border-radius: 10px;
-  background: var(--admin-bg);
+  background: $bg-admin;
   font-family: inherit;
   text-align: center;
   cursor: pointer;
@@ -134,8 +144,8 @@
     background 0.15s;
 
   &:hover {
-    border-color: var(--admin-accent);
-    background: var(--admin-accent-bg);
+    border-color: $primary-soft;
+    background: $primary-soft-subtle;
   }
 }
 
@@ -146,24 +156,24 @@
   width: 40px;
   height: 40px;
   border-radius: 50%;
-  background: var(--admin-bg-card);
-  color: var(--admin-accent);
+  background: $bg-card;
+  color: $primary-soft;
   font-size: 20px;
 }
 
 .upload_text {
   font-size: 13px;
   font-weight: 600;
-  color: var(--admin-t2);
+  color: $txt-secondary;
 }
 
 .upload_accent {
-  color: var(--admin-accent);
+  color: $primary-soft;
 }
 
 .upload_desc {
   font-size: 11px;
-  color: var(--admin-t3);
+  color: $txt-admin-tertiary;
 }
 
 // 썸네일 자동 미리보기 (YouTube)
@@ -171,9 +181,9 @@
   position: relative;
   overflow: hidden;
   aspect-ratio: 16 / 9;
-  border: 1px solid var(--admin-bd);
+  border: 1px solid $border-admin;
   border-radius: 8px;
-  background: var(--admin-bg);
+  background: $bg-admin;
 
   img {
     width: 100%;
@@ -209,9 +219,9 @@
   align-items: center;
   gap: 12px;
   padding: 10px 12px;
-  border: 1px solid var(--admin-bd);
+  border: 1px solid $border-admin;
   border-radius: 8px;
-  background: var(--admin-bg);
+  background: $bg-admin;
 }
 
 .resource_icon {
@@ -222,8 +232,8 @@
   width: 32px;
   height: 32px;
   border-radius: 6px;
-  background: var(--admin-bg-card);
-  color: var(--admin-t3);
+  background: $bg-card;
+  color: $txt-admin-tertiary;
   font-size: 16px;
 }
 
@@ -238,7 +248,7 @@
 .resource_name {
   font-size: 13px;
   font-weight: 500;
-  color: var(--admin-t1);
+  color: $txt-primary;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -249,14 +259,14 @@
   align-items: center;
   gap: 8px;
   font-size: 11px;
-  color: var(--admin-t3);
+  color: $txt-admin-tertiary;
 }
 
 .resource_badge {
   padding: 2px 6px;
   border-radius: 4px;
-  background: var(--admin-bg-w);
-  color: var(--admin-t2);
+  background: $bg-admin-subtle;
+  color: $txt-secondary;
   font-size: 10px;
   font-weight: 600;
   text-transform: uppercase;
@@ -272,7 +282,7 @@
   border: 0;
   border-radius: 6px;
   background: transparent;
-  color: var(--admin-t3);
+  color: $txt-admin-tertiary;
   font-size: 16px;
   cursor: pointer;
   transition:
@@ -280,13 +290,13 @@
     color 0.15s;
 
   &:hover {
-    background: var(--admin-bg-hover);
-    color: var(--admin-warn);
+    background: $bg-admin-hover;
+    color: $status-warning-soft;
   }
 }
 
 .resource_uploading {
-  color: var(--admin-accent);
+  color: $primary-soft;
 }
 
 // 업로드 거부 파일 경고 (ResourcesCard — 크기 초과·미지원 확장자).
@@ -294,10 +304,10 @@
   margin: 10px 0 0;
   padding: 10px 12px;
   list-style: none;
-  border: 1px solid var(--admin-warn);
+  border: 1px solid $status-warning-soft;
   border-radius: 6px;
-  background: var(--admin-warn-bg);
-  color: var(--admin-warn);
+  background: $status-warning-soft-bg;
+  color: $status-warning-soft;
   font-size: 12px;
 
   li + li {
@@ -318,10 +328,10 @@
   width: 100%;
   margin-top: 10px;
   padding: 10px;
-  border: 1px dashed var(--admin-bd-s);
+  border: 1px dashed $border-primary;
   border-radius: 8px;
   background: transparent;
-  color: var(--admin-t2);
+  color: $txt-secondary;
   font-family: inherit;
   font-size: 12px;
   font-weight: 500;
@@ -331,8 +341,8 @@
     color 0.15s;
 
   &:hover {
-    border-color: var(--admin-accent);
-    color: var(--admin-accent);
+    border-color: $primary-soft;
+    color: $primary-soft;
   }
 }
 
@@ -344,10 +354,10 @@
 
 .provider_tab {
   padding: 7px 14px;
-  border: 1px solid var(--admin-bd);
+  border: 1px solid $border-admin;
   border-radius: 6px;
-  background: var(--admin-bg-card);
-  color: var(--admin-t2);
+  background: $bg-card;
+  color: $txt-secondary;
   font-family: inherit;
   font-size: 13px;
   font-weight: 500;
@@ -358,14 +368,14 @@
     color 0.15s;
 
   &:hover {
-    border-color: var(--admin-t3);
-    color: var(--admin-t1);
+    border-color: $txt-admin-tertiary;
+    color: $txt-primary;
   }
 
   &.on {
-    border-color: var(--admin-accent);
-    background: var(--admin-accent-bg);
-    color: var(--admin-accent);
+    border-color: $primary-soft;
+    background: $primary-soft-subtle;
+    color: $primary-soft;
     font-weight: 600;
   }
 }
@@ -385,7 +395,7 @@
   padding: 0;
   font-size: 13px;
   font-weight: 600;
-  color: var(--admin-t1);
+  color: $txt-primary;
 }
 
 .sr_only {
@@ -405,7 +415,7 @@
   gap: 4px;
   padding: 4px;
   border-radius: 10px;
-  background: var(--admin-bg-w);
+  background: $bg-admin-subtle;
 }
 
 .toggle {
@@ -418,7 +428,7 @@
   border: 0;
   border-radius: 8px;
   background: transparent;
-  color: var(--admin-t2);
+  color: $txt-secondary;
   font-family: inherit;
   cursor: pointer;
   transition:
@@ -427,9 +437,9 @@
     box-shadow 0.15s;
 
   &.on {
-    background: var(--admin-bg-card);
-    box-shadow: var(--admin-sh-s);
-    color: var(--admin-t1);
+    background: $bg-card;
+    box-shadow: $shadow-sm;
+    color: $txt-primary;
 
     .main {
       font-weight: 600;
@@ -444,17 +454,17 @@
 
 .sub {
   font-size: 11px;
-  color: var(--admin-t3);
+  color: $txt-admin-tertiary;
 }
 
 // 안내 박스 — PublishCard 발행 조건 안내 등.
 .warn_box {
   margin-top: 14px;
   padding: 10px 12px;
-  border: 1px solid var(--admin-warn);
+  border: 1px solid $status-warning-soft;
   border-radius: 6px;
-  background: var(--admin-warn-bg);
-  color: var(--admin-warn);
+  background: $status-warning-soft-bg;
+  color: $status-warning-soft;
   font-size: 12px;
   font-weight: 500;
 }
@@ -462,45 +472,48 @@
 .ok_box {
   margin-top: 14px;
   padding: 10px 12px;
-  border: 1px solid var(--admin-ok);
+  border: 1px solid $status-positive-soft;
   border-radius: 6px;
-  background: var(--admin-ok-bg);
-  color: var(--admin-ok);
+  background: $status-positive-soft-bg;
+  color: $status-positive-soft;
   font-size: 12px;
   font-weight: 500;
 }
 
-// ── 모바일 하단 액션 바 ──
-// PC에서는 PageHeader 액션(임시저장/발행)을 우측에 두고, 모바일(<640px)에서 outline은 숨긴다.
-// 본 바는 숨겨진 임시저장을 복원하고 미리보기 시트 토글 버튼을 제공한다.
-.mobile_bar {
+// ── 하단 액션 바 ──
+// 모바일: 화면 하단에 fixed 고정. PC: form_col 흐름 안에서 PublishCard 다음 위치.
+.action_bar {
   position: fixed;
   bottom: 0;
   left: 0;
   right: 0;
   z-index: 30;
   display: flex;
-  gap: 6px;
+  align-items: center;
+  gap: 8px;
   padding: 10px 16px;
-  background: var(--admin-bg-card);
-  border-top: 1px solid var(--admin-bd);
+  background: $bg-card;
+  border-top: 1px solid $border-admin;
 
   @media (min-width: 1024px) {
-    display: none;
+    position: static;
+    padding: 12px 0;
+    background: none;
+    border-top: 0;
   }
 }
 
-.mobile_preview_button {
+.action_bar_preview {
   flex-shrink: 0;
   display: inline-flex;
   align-items: center;
   justify-content: center;
   width: 42px;
   height: 42px;
-  border: 1px solid var(--admin-bd);
+  border: 1px solid $border-admin;
   border-radius: 6px;
-  background: var(--admin-bg-card);
-  color: var(--admin-t2);
+  background: $bg-card;
+  color: $txt-secondary;
   font-size: 18px;
   cursor: pointer;
   transition:
@@ -508,47 +521,74 @@
     color 0.15s;
 
   &:hover {
-    border-color: var(--admin-t3);
-    color: var(--admin-t1);
+    border-color: $txt-admin-tertiary;
+    color: $txt-primary;
+  }
+
+  @media (min-width: 1024px) {
+    display: none;
   }
 }
 
-.mobile_button {
-  flex: 1;
+.action_bar_actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-left: auto;
+}
+
+.action_bar_cancel {
   display: inline-flex;
   align-items: center;
   justify-content: center;
   height: 42px;
-  padding: 0 14px;
+  padding: 0 16px;
+  border: 1px solid $border-admin;
   border-radius: 6px;
+  background: $bg-card;
+  color: $txt-secondary;
   font-family: inherit;
   font-size: 13px;
   font-weight: 600;
   cursor: pointer;
   transition:
-    background 0.15s,
     border-color 0.15s,
     color 0.15s;
 
-  &.outline {
-    border: 1px solid var(--admin-bd);
-    background: var(--admin-bg-card);
-    color: var(--admin-t2);
-
-    &:hover {
-      border-color: var(--admin-t3);
-      color: var(--admin-t1);
-    }
+  &:hover {
+    border-color: $txt-admin-tertiary;
+    color: $txt-primary;
   }
 
-  &.primary {
-    border: 0;
-    background: var(--admin-pri);
-    color: #fff;
+  &:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+}
 
-    &:hover {
-      background: color-mix(in srgb, var(--admin-pri), #fff 8%);
-    }
+.action_bar_submit {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 42px;
+  padding: 0 20px;
+  border: 0;
+  border-radius: 6px;
+  background: $primary;
+  color: #fff;
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s;
+
+  &:hover {
+    background: color.mix(#fff, $primary, 8%);
+  }
+
+  &:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
   }
 }
 
@@ -556,7 +596,8 @@
 // PC(1024px+)에서는 우측 PreviewCard가 역할을 하므로 시트 자체가 불필요.
 .preview_overlay {
   position: fixed;
-  inset: 0;
+  // 하단을 액션 바 높이만큼 비워 모바일 고정 바가 dim 위로 노출되도록.
+  inset: 0 0 $action-bar-height 0;
   z-index: 300;
   display: none;
   align-items: flex-end;
@@ -578,7 +619,7 @@
   width: 100%;
   max-height: 90vh;
   border-radius: 14px 14px 0 0;
-  background: var(--admin-bg);
+  background: $bg-admin;
 }
 
 .preview_sheet_bar {
@@ -587,7 +628,7 @@
   height: 3px;
   margin: 8px auto 0;
   border-radius: 999px;
-  background: var(--admin-bd-s);
+  background: $border-primary;
 }
 
 .preview_sheet_header {
@@ -596,7 +637,7 @@
   align-items: center;
   justify-content: space-between;
   padding: 12px 20px 10px;
-  border-bottom: 1px solid var(--admin-bd);
+  border-bottom: 1px solid $border-admin;
 }
 
 .preview_sheet_title {
@@ -604,7 +645,7 @@
   font-family: var(--font-notoserifKR), 'Noto Serif KR', serif;
   font-size: 14px;
   font-weight: 700;
-  color: var(--admin-t1);
+  color: $txt-primary;
 }
 
 .preview_sheet_close {
@@ -616,7 +657,7 @@
   border: 0;
   border-radius: 6px;
   background: transparent;
-  color: var(--admin-t2);
+  color: $txt-secondary;
   font-size: 18px;
   cursor: pointer;
   transition:
@@ -624,8 +665,8 @@
     color 0.15s;
 
   &:hover {
-    background: var(--admin-bg-hover);
-    color: var(--admin-t1);
+    background: $bg-admin-hover;
+    color: $txt-primary;
   }
 }
 

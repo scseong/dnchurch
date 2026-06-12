@@ -1,0 +1,116 @@
+.section {
+  display: flex;
+  flex-direction: column;
+  gap: $content-gap-m;
+  padding-top: $section-gap-40;
+  border-top: 1px solid $border-subtle;
+}
+
+.title {
+  margin: 0;
+  font-size: $font-size-15;
+  font-weight: $font-weight-bold;
+  color: $txt-primary;
+  letter-spacing: $letter-spacing-body;
+}
+
+// 768px 이하 — /sermons/all 카드 섹션(GridCard) 재사용. 768px↑는 기존 3-col 유지.
+.grid_mobile {
+  display: flex;
+  flex-direction: column;
+  gap: $content-gap-m;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+
+  @include respond-up($breakpoint-tablet) {
+    display: none;
+  }
+}
+
+.grid {
+  display: none;
+
+  @include respond-up($breakpoint-tablet) {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: $content-gap-m;
+  }
+}
+
+.card {
+  display: flex;
+  flex-direction: column;
+  background-color: $bg-card;
+  border: 1px solid $border-card;
+  border-radius: $radius-s;
+  overflow: hidden;
+  text-decoration: none;
+  color: inherit;
+  // PC drag-ghost 차단 (Phase 1-2 D5)
+  user-select: none;
+  -webkit-user-drag: none;
+}
+
+.thumb_box {
+  position: relative;
+  aspect-ratio: 16 / 9;
+  background: $overlay-image;
+  overflow: hidden;
+}
+
+.thumb {
+  object-fit: cover;
+  -webkit-user-drag: none;
+  pointer-events: none;
+}
+
+.play {
+  @include sermon-play-hint-sm;
+}
+
+.card:hover .play {
+  opacity: 1;
+}
+
+.body {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-6;
+  padding: $spacing-12 $spacing-16;
+}
+
+.card_title {
+  margin: 0;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  font-size: $font-size-13;
+  font-weight: $font-weight-semibold;
+  color: $txt-primary;
+  line-height: $line-height-snug;
+  word-break: keep-all;
+}
+
+.meta {
+  display: flex;
+  align-items: center;
+  gap: $spacing-4;
+  font-size: $font-size-11;
+  color: $txt-tertiary;
+  font-variant-numeric: tabular-nums;
+}
+
+.scripture {
+  color: $primary;
+  font-weight: $font-weight-semibold;
+}
+
+.dot {
+  opacity: 0.4;
+}
+
+.date {
+  font-variant-numeric: tabular-nums;
+}

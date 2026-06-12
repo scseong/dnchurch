@@ -1,16 +1,16 @@
 .block {
   padding: $spacing-20;
-  background: $primary-subtle;
-  border-left: 3px solid $primary;
-  border-radius: 0 $radius-s $radius-s 0;
+  background: $bg-accent-subtle;
+  border-left: 3px solid $accent;
+  border-radius: $radius-s;
 }
 
 .ref {
   margin-bottom: $content-gap-s;
-  font-family: $font-family-secondary;
-  font-size: $font-size-16;
-  font-weight: $font-weight-bold;
-  color: $txt-primary;
+  font-size: $font-size-12;
+  font-weight: $font-weight-semibold;
+  letter-spacing: 0.18em;
+  color: $accent;
 }
 
 .text_wrap {
@@ -35,7 +35,7 @@
   left: 0;
   right: 0;
   height: 4.8rem;
-  background: linear-gradient(to bottom, transparent, $primary-subtle);
+  background: linear-gradient(to bottom, transparent, $bg-accent-subtle);
   pointer-events: none;
 }
 

@@ -42,7 +42,7 @@ export default function BottomNav() {
                     aria-label={item.label}
                     aria-expanded={drawerOpen}
                     aria-haspopup="dialog"
-                    onClick={openDrawer}
+                    onClick={drawerOpen ? closeDrawer : openDrawer}
                   >
                     <span className={styles.tab_icon}>
                       <Icon />

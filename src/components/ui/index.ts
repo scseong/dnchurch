@@ -11,6 +11,9 @@ export type { ButtonVariant, ButtonSize, ButtonProps } from './Button/Button';
 
 export { BottomSheet } from './BottomSheet/BottomSheet';
 
+export { Carousel, useCarousel, CarouselArrows } from './Carousel/Carousel';
+export type { UseCarouselReturn } from './Carousel/Carousel';
+
 export { EmptyState } from './EmptyState/EmptyState';
 
 export { Label } from './Label/Label';

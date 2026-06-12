@@ -1,15 +1,15 @@
 'use client';
 
-import { useEffect, useRef, useState, useTransition } from 'react';
+import { useState, useTransition } from 'react';
 import { useRouter } from 'next/navigation';
 import { HiPlus } from 'react-icons/hi';
 import PageHeader from '@/components/admin/layout/PageHeader';
 import ConfirmModal from '@/components/admin/common/ConfirmModal';
 import { useClickOutside } from '@/hooks/useClickOutside';
-import { useDebounce } from '@/hooks/useDebounce';
 import { useMediaQuery } from '@/hooks/useMediaQuery';
 import { useToastStore } from '@/store/toast.store';
 import { deleteSermonAction } from '@/actions/sermon.action';
+import { getTotalPages } from '@/utils/pagination';
 import type {
   AdminSermon,
   AdminSermonListParams,
@@ -25,6 +25,7 @@ import DateRangeFilter from './parts/DateRangeFilter';
 import ActiveFilters from './parts/ActiveFilters';
 import SermonTable from './parts/SermonTable';
 import { useListFilters } from './hooks/useListFilters';
+import { useSearchSync } from './hooks/useSearchSync';
 import styles from './index.module.scss';
 
 type DropdownKey = 'preacher' | 'series' | 'date';
@@ -54,31 +55,12 @@ export default function SermonListPage({
   const [deleteTarget, setDeleteTarget] = useState<AdminSermon | null>(null);
   const [isDeleting, startDeleteTransition] = useTransition();
 
-  const [searchInput, setSearchInput] = useState(filters.search);
-  const debouncedSearch = useDebounce(searchInput, 300);
-  const lastExternalSearchRef = useRef(filters.search);
-
-  // URL/외부 변경 → 입력값 동기화 (디바운스 우회)
-  useEffect(() => {
-    if (filters.search === lastExternalSearchRef.current) return;
-    lastExternalSearchRef.current = filters.search;
-    queueMicrotask(() => setSearchInput(filters.search));
-  }, [filters.search]);
-
-  // 디바운스된 입력 → 필터 (외부 sync로 들어온 값은 skip)
-  useEffect(() => {
-    if (debouncedSearch === lastExternalSearchRef.current) return;
-    lastExternalSearchRef.current = debouncedSearch;
-    filters.setSearch(debouncedSearch);
-  }, [debouncedSearch, filters.setSearch]);
-
-  const isSearchPending = searchInput !== debouncedSearch;
-
-  const handleSearchClear = () => {
-    setSearchInput('');
-    lastExternalSearchRef.current = '';
-    filters.setSearch('');
-  };
+  const {
+    searchInput,
+    setSearchInput,
+    isSearchPending,
+    clearSearch: handleSearchClear
+  } = useSearchSync(filters.search, filters.setSearch);
 
   const toggleDropdown = (key: DropdownKey) =>
     setOpenDropdown((current) => (current === key ? null : key));
@@ -114,7 +96,7 @@ export default function SermonListPage({
     onClickOutside: () => setOpenDropdown(null)
   });
 
-  const totalPages = Math.max(1, Math.ceil(total / filters.pageSize));
+  const totalPages = getTotalPages(total, filters.pageSize);
   const safePage = Math.min(filters.page, totalPages);
 
   const hasActiveFilters = Boolean(
@@ -126,9 +108,16 @@ export default function SermonListPage({
       filters.dateTo
   );
 
+  // 검색 타이머·draft까지 함께 정리 — clearAll만 호출하면 search prop이 ''→''로 안 바뀌어
+  // 대기 중인 디바운스 타이머가 살아남아 방금 초기화한 필터를 검색 상태로 되돌린다 (PR #114 Codex 리뷰)
+  const handleClearAll = () => {
+    handleSearchClear();
+    filters.clearAll();
+  };
+
   const handleClearFilters = () => {
     filters.setStatusTab('all');
-    filters.clearAll();
+    handleClearAll();
   };
 
   const handleCreateNew = () => router.push('/admin/sermons/new');
@@ -195,7 +184,7 @@ export default function SermonListPage({
           onRemoveSeries={filters.toggleSeries}
           onClearSearch={handleSearchClear}
           onClearDate={filters.clearDate}
-          onClearAll={filters.clearAll}
+          onClearAll={handleClearAll}
         />
         <SermonTable
           sermons={sermons}

@@ -34,6 +34,16 @@ export type SermonCardItem = SermonListItem &
 
 export type SeriesWithSermonCount = SermonSeries & { sermon_count: number };
 
+/** 시리즈 상세 페이지: 시리즈 단건 + 회차(설교) */
+export type SeriesDetail = {
+  series: SeriesWithSermonCount;
+  episodes: SermonWithRelations[];
+};
+
+export type PreacherWithSermonCount = Preacher & { sermon_count: number };
+
+export type SermonSortKey = 'recent' | 'oldest';
+
 export interface SermonListParams {
   page?: number;
   pageSize?: number;
@@ -42,17 +52,12 @@ export interface SermonListParams {
   serviceType?: ServiceType;
   year?: number;
   search?: string;
+  sort?: SermonSortKey;
 }
 
 export type YearCount = {
   year: number;
   count: number;
-};
-
-export type SermonArchiveView = {
-  featured: SermonWithRelations | null;
-  recentSermons: SermonWithRelations[];
-  yearCounts: YearCount[];
 };
 
 // ─── Admin: 발행 상태 + 목록 응답 타입 ───────────────────────────────────────

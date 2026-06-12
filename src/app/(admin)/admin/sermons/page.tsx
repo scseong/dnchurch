@@ -1,7 +1,6 @@
 import SermonListPage from '@/components/admin/sermons/SermonListPage';
 import { parseListFilterParams } from '@/components/admin/sermons/SermonListPage/hooks/list-filter-params';
-import { getAdminSermons } from '@/services/sermon/admin';
-import { getAllPreachers, getAllSeries } from '@/services/sermon';
+import { getAdminPreachers, getAdminSermons, getAdminSeries } from '@/services/sermon/admin';
 
 interface Props {
   searchParams: Promise<Record<string, string | string[] | undefined>>;
@@ -24,8 +23,8 @@ export default async function SermonAdminListPage({ searchParams }: Props) {
 
   const [{ sermons, total, statusCounts }, preachers, series] = await Promise.all([
     getAdminSermons(params),
-    getAllPreachers(),
-    getAllSeries()
+    getAdminPreachers(),
+    getAdminSeries()
   ]);
 
   return (

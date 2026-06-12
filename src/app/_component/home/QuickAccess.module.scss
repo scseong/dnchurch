@@ -1,7 +1,7 @@
 $icon_box_size: 4.2rem;
 
 .quick_wrap {
-  background: $beige-300;
+  background: $bg-secondary-deep;
 }
 
 .quick_container {
@@ -59,7 +59,7 @@ $icon_box_size: 4.2rem;
 
     .arrow {
       opacity: 1;
-      transform: translateX(0.8rem);
+      transform: translateX($spacing-8);
     }
   }
 }
@@ -99,7 +99,8 @@ $icon_box_size: 4.2rem;
 .label {
   font-family: $font-family-secondary;
   font-size: $font-size-15;
-  font-weight: $font-weight-semibold;
+  // 세리프 weight를 400·700로 줄이며 semibold(600)→bold(700)로 명시 매핑 (기존에도 600 미요청이라 700로 스냅됨)
+  font-weight: $font-weight-bold;
   color: $txt-primary;
 }
 
