@@ -218,6 +218,10 @@ Codex 재검증 결론 verbatim:
   - 이유: cache miss 첫 화면이 빈 hero로 보일 수 있음 (Codex 설계 검증 지적) — 효과 대비 디자인 비용으로 이번 범위 제외
   - 다음 기준: 홈 UX 다듬기 작업 시
   - 기록 위치: 없음 (본 exec-plan)
+- 가입 폼 닉네임(username)을 `profiles.display_name`으로 저장하는 경로 설계
+  - 이유: 폼이 닉네임을 받아 검증까지 하는데 `profiles`에 `username` 컬럼이 없고 metadata 소비 코드도 없어 어디에도 저장되지 않음 (PR #116 Gemini 리뷰 #1 — 본 PR 이전부터 있던 결함이라 분리)
+  - 다음 기준: 프로필 생성 트리거(DB) 확인 후 별도 Feat task
+  - 기록 위치: `docs/tech-debt/active.md`
 - TextField에 "server parent에서 함수 prop 전달 금지" 주의 주석 추가
   - 이유: 지시어 제거로 server 사용이 열렸는데 InputHTMLAttributes가 이벤트 prop을 허용 (Codex 설계 검증 지적)
   - 다음 기준: TextField 첫 실사용 도입 시
