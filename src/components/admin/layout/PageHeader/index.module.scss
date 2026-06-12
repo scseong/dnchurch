@@ -1,3 +1,5 @@
+@use 'sass:color';
+
 .wrapper {
   display: flex;
   justify-content: space-between;
@@ -114,7 +116,7 @@
     color: #fff;
 
     &:hover {
-      background: mix(#fff, $primary, 8%);
+      background: color.mix(#fff, $primary, 8%);
     }
   }
 }

@@ -1,3 +1,5 @@
+@use 'sass:color';
+
 // 모바일 하단 고정 액션 바의 대략 높이(버튼 42px + 위아래 패딩·테두리). 미리보기 오버레이가 이만큼 비워 바를 가리지 않는다.
 $action-bar-height: 64px;
 
@@ -581,7 +583,7 @@ $action-bar-height: 64px;
   transition: background 0.15s;
 
   &:hover {
-    background: mix(#fff, $primary, 8%);
+    background: color.mix(#fff, $primary, 8%);
   }
 
   &:disabled {

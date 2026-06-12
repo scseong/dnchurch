@@ -1,3 +1,5 @@
+@use 'sass:map';
+
 // ── PC 슬라이드업 애니메이션 ──
 @keyframes nb-slide-up {
   from {
@@ -134,7 +136,7 @@
   font-weight: $font-weight-bold;
   color: $txt-primary;
   word-break: keep-all;
-  line-height: map-get($heading-line-heights, 'h5');
+  line-height: map.get($heading-line-heights, 'h5');
 
   &.urgent {
     color: $status-negative;
