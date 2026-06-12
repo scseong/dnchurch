@@ -7,23 +7,6 @@ interface Credentials {
   username?: string;
 }
 
-export async function signUp({ email, password, name, username }: Credentials) {
-  const supabase = getSupabaseBrowserClient();
-  const { data, error } = await supabase.auth.signUp({
-    email,
-    password,
-    options: {
-      data: {
-        name
-      }
-    }
-  });
-
-  if (error) throw error;
-
-  return data;
-}
-
 export async function signInWithPassword({ email, password }: Credentials) {
   const supabase = getSupabaseBrowserClient();
   const { data, error } = await supabase.auth.signInWithPassword({
