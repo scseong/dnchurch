@@ -4,8 +4,7 @@ import { useState } from 'react';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import useTimer from '@/hooks/useTimer';
 import { FormField, FormAlertMessage, FormSubmitButton } from '@/components/form';
-// eslint-disable-next-line no-restricted-imports -- 점진 마이그레이션 대상 (tech-debt-tracker.md)
-import { requestPasswordResetEmail } from '@/apis/auth';
+import { requestPasswordResetEmailAction } from '@/actions/auth.action';
 import { EMAIL_RESEND_DELAY_SECONDS } from '@/constants/auth';
 import { FORM_VALIDATIONS } from '@/constants/validation';
 import { generateErrorMessage } from '@/utils/error';
@@ -39,7 +38,14 @@ export default function EmailVerificationRequestForm() {
     setAlertType('');
 
     try {
-      await requestPasswordResetEmail(email);
+      const result = await requestPasswordResetEmailAction(email);
+
+      if (!result.success) {
+        setAlertMessage(result.message);
+        setAlertType('error');
+        return;
+      }
+
       setAlertMessage('이메일을 확인해 주세요. 링크는 1시간 후에 만료됩니다.');
       setAlertType('success');
       start(EMAIL_RESEND_DELAY_SECONDS);

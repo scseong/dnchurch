@@ -17,6 +17,30 @@ type SignUpData = {
   hasSession: boolean;
 };
 
+export async function requestPasswordResetEmailAction(email: string): Promise<ActionResult> {
+  // 클라이언트 폼 검증은 UX 보조 — 서버에서 항상 다시 검증한다 (ADR 0016)
+  if (!EMAIL_REGEX.test(email)) {
+    return { success: false, message: '올바른 이메일 형식이 아닙니다.' };
+  }
+
+  // env가 비면 'undefined/auth/...' 링크가 담긴 메일이 나간다 — 보내기 전에 막는다 (Codex 1차 지적)
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL;
+  if (!siteUrl) {
+    return { success: false, message: '서버 설정 오류로 메일을 보낼 수 없습니다. 잠시 후 다시 시도해주세요.' };
+  }
+
+  const supabase = await createServerSideClient();
+  const { error } = await supabase.auth.resetPasswordForEmail(email, {
+    redirectTo: `${siteUrl}/auth/reset-password`
+  });
+
+  if (error) {
+    return { success: false, message: generateErrorMessage(error) };
+  }
+
+  return { success: true, message: '인증 메일을 보냈습니다.' };
+}
+
 export async function signUpAction({
   email,
   password,

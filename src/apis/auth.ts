@@ -39,16 +39,6 @@ export async function signOut() {
   if (error) throw error;
 }
 
-export async function requestPasswordResetEmail(email: string) {
-  const supabase = getSupabaseBrowserClient();
-  const { data, error } = await supabase.auth.resetPasswordForEmail(email, {
-    redirectTo: `${process.env.NEXT_PUBLIC_SITE_URL}/auth/reset-password`
-  });
-
-  if (error) throw error;
-  return data;
-}
-
 export async function updatePassword(password: string) {
   const supabase = getSupabaseBrowserClient();
   const { data, error } = await supabase.auth.updateUser({
