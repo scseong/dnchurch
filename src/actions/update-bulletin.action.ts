@@ -4,7 +4,7 @@ import { redirect } from 'next/navigation';
 import { revalidatePath, updateTag } from 'next/cache';
 import { isRedirectError } from 'next/dist/client/components/redirect-error';
 import { deleteImage } from '@/apis/cloudinary';
-import { updateBulletin } from '@/services/bulletin';
+import { getBulletinByIdSSR, updateBulletin } from '@/services/bulletin';
 import { validateFiles } from '@/utils/file';
 import { checkAdminPermission, uploadBulletinImages } from '@/actions/_bulletin-helpers';
 import type { BulletinImageInput, ExistingImageItem } from '@/types/bulletin';
@@ -37,10 +37,20 @@ export const updateBulletinAction = async (formData: FormData) => {
       ? JSON.parse(deletedImagesJson)
       : [];
 
-    const imageIdsToDelete = deletedImages.map((img) => img.imageId);
+    const imageIdsToDelete = deletedImages.map((img) => Number(img.imageId));
     const retainedCount = existingImages.filter(
       (img) => !imageIdsToDelete.includes(img.imageId)
     ).length;
+
+    // 삭제할 Cloudinary id는 폼이 보낸 값이 아니라 해당 주보에 실제 속한 이미지로 한정한다.
+    // 폼 값을 그대로 믿으면 다른 주보의 cloudinary_id를 섞어 보내 그 원본을 지울 수 있다.
+    let cloudinaryIdsToDelete: string[] = [];
+    if (imageIdsToDelete.length > 0) {
+      const { data: current } = await getBulletinByIdSSR(bulletinId);
+      cloudinaryIdsToDelete = (current?.bulletin_images ?? [])
+        .filter((img) => imageIdsToDelete.includes(img.id))
+        .map((img) => img.cloudinary_id);
+    }
 
     let newImages: BulletinImageInput[] = [];
     if (files.length > 0) {
@@ -74,8 +84,8 @@ export const updateBulletinAction = async (formData: FormData) => {
       return { success: false, message: '주보 수정에 실패했습니다.' };
     }
 
-    if (deletedImages.length > 0) {
-      await Promise.all(deletedImages.map((img) => deleteImage(img.cloudinaryId)));
+    if (cloudinaryIdsToDelete.length > 0) {
+      await Promise.all(cloudinaryIdsToDelete.map(deleteImage));
     }
 
     revalidatePath('/news/bulletins');

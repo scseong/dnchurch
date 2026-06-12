@@ -4,6 +4,32 @@
 
 ---
 
+### ✅ 마이그레이션이 DB를 재현하지 못함 — 해소 (migration-ssot-recovery, PR #115)
+
+- **상태**: 해소 (2026-06-12). baseline 마이그레이션 + `001` 재작성 + `get_adjacent_bulletins` 추가로 Preview 빈 DB가 dev와 일치(테이블·컬럼·enum·RLS·트리거). 남은 문제: dev 자체에 `custom_access_token_hook` 함수가 없어 마이그레이션과 어긋난다(fresh 빌드는 함수를 만들므로 미래 prod는 정상). 아래는 작업 전 기록.
+- **무엇**: `supabase/migrations/`만으로 빈 DB를 만들면 실패한다. `profiles`·`bulletins`·`bulletin_images`·`notices`의 `CREATE TABLE`이 어느 마이그레이션에도 없다(대시보드에서 손으로 생성). `20260314000000_create_bulletin_rpc.sql`이 `bulletins`에 INSERT하지만 그 테이블을 만드는 마이그레이션이 앞에 없어 `supabase db reset`·Preview replay가 깨진다. 더해 `001_sermon_schema.sql`이 실제 스키마와 어긋난다 — `sermons.id`가 파일은 `UUID`인데 실제는 `bigint`, 컬럼명 `date` vs `sermon_date`. `seed.sql`도 `date` 컬럼명을 쓴다.
+- **왜 지금 안 하나**: prod가 비어 있고 사용 안 함. dev에는 실제 스키마가 이미 있어 동작에 지장 없다. PR #115는 보안 구멍 차단이 범위라 baseline 복구(sermon 스키마까지)를 섞으면 비대해진다.
+- **왜 미루면 안 되나(데드라인)**: 계획이 "MVP 완성 후 마이그레이션으로 prod 구축"인데, 지금 세트로는 그 prod 구축이 실패한다. **prod 마이그레이션 직전에 반드시 해소해야 한다.**
+- **함께 있는 드리프트**: `custom_access_token_hook`이 `config.toml:174`엔 선언됐으나 dev에는 함수가 없다.
+- **마이그레이션 경로**:
+  1. dev DB에서 `supabase db dump`(또는 `db diff`)로 `profiles`·`bulletins`·`bulletin_images`·`notices` 정의(컬럼 + enum `role_enum`/`profile_status_enum` + 인덱스 + RLS + 트리거 `handle_new_user`)를 baseline 마이그레이션으로 추출한다.
+  2. `001_sermon_schema.sql`을 실제 스키마와 맞추고 `seed.sql`의 `date` 컬럼명을 `sermon_date`로 고친다.
+  3. 빈 DB에 `supabase db reset`을 돌려 dev와 같은지 확인한다. prod가 비어 있어 prod 대조는 불필요하고 위험이 낮다.
+  4. `custom_access_token_hook` 함수를 dev에 적용해 config 선언과 맞춘다.
+- **영향 범위**: `supabase/migrations/*`, `supabase/seed.sql`
+- **확인**: `supabase db reset` 또는 Supabase Preview replay 성공 여부
+- **발견일**: 2026-06-11 (PR #115에서 마이그레이션 추적 시작 시 Gemini·Codex 리뷰가 동시 지적)
+
+### 🟢 주보 수정 시 Cloudinary 삭제를 RPC 반환값으로 검증 (profiles-rls-rpc-guard PR #115)
+
+- **상태**: 등록만 (PR #115에서 1차 보강 완료, 더 견고한 방식은 후속)
+- **무엇**: `updateBulletinAction`이 폼의 `cloudinaryId`로 Cloudinary 원본을 지우던 교차 삭제 갭은 PR #115에서 "RPC 전에 DB에서 `bulletinId` 소속 `cloudinary_id`를 조회해 그 값만 삭제"로 1차로 막았다. 다만 조회와 RPC 삭제가 분리돼, 그 사이에 값이 바뀔 틈(TOCTOU)이 남는다.
+- **마이그레이션 경로**: `update_bulletin` RPC가 실제 삭제한 `cloudinary_id[]`를 반환하게 바꾸고, 액션은 그 반환값만 `deleteImage`에 넘긴다. SQL 함수 반환 타입 + 서비스 타입까지 2-3파일.
+- **영향 범위**: `supabase/migrations/`(update_bulletin), `src/services/bulletin/`, `src/actions/update-bulletin.action.ts`
+- **발견일**: 2026-06-11 (PR #115 GitHub Codex 리뷰 P2)
+
+---
+
 ### 🟡 `app/ → apis/` 직접 호출 (레이어 위반, 8건)
 
 - **무엇**: 페이지·홈 컴포넌트가 `services/` 경유 없이 `apis/`를 직접 import
