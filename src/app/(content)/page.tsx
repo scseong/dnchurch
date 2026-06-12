@@ -1,6 +1,12 @@
+import { Suspense } from 'react';
 import type { Metadata } from 'next';
 import { OPEN_GRAPH_BASE } from '@/config/seo';
 import { Banner, QuickAccess, RecentSermons, NewHere, FeedSection } from '../_component/home';
+import {
+  BannerFallback,
+  RecentSermonsFallback,
+  FeedSectionFallback
+} from '../_component/home/SectionFallbacks';
 
 // canonical은 홈에서만 선언한다. root layout에 두면 하위 페이지가 canonical=홈으로 상속받아 중복 페이지로 오선언된다.
 // openGraph는 공유 상수 전체를 펼친 뒤 url만 더한다 — Next.js는 shallow merge라 부분 선언 시 og:image 등이 사라진다.
@@ -13,11 +19,17 @@ export const metadata: Metadata = {
 export default async function Home() {
   return (
     <>
-      <Banner />
+      <Suspense fallback={<BannerFallback />}>
+        <Banner />
+      </Suspense>
       <QuickAccess />
-      <RecentSermons />
+      <Suspense fallback={<RecentSermonsFallback />}>
+        <RecentSermons />
+      </Suspense>
       <NewHere />
-      <FeedSection />
+      <Suspense fallback={<FeedSectionFallback />}>
+        <FeedSection />
+      </Suspense>
     </>
   );
 }

@@ -1,5 +1,3 @@
-'use client';
-
 import FilterDropdown from './FilterDropdown';
 import DropdownItem from './DropdownItem';
 import { NONE_SERIES_ID } from '@/lib/utils/sermon-filter';

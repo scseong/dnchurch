@@ -1,5 +1,3 @@
-'use client';
-
 import PhotoSwipe from '@/components/common/PhotoSwipe';
 import styles from './BoardBody.module.scss';
 

@@ -1,5 +1,3 @@
-'use client';
-
 import { InputHTMLAttributes, ReactNode, useId } from 'react';
 import clsx from 'clsx';
 import styles from './TextField.module.scss';

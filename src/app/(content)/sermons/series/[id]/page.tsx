@@ -12,6 +12,9 @@ import styles from '../../_component/SeriesDetailPage/SeriesDetailPage.module.sc
 const UUID_RE =
   /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 
+// 형제 상세(sermons/[id]·bulletins/[id])와 같은 주기로 ISR 통일
+export const revalidate = 86400;
+
 type PageProps = {
   params: Promise<{ id: string }>;
 };

@@ -1,5 +1,3 @@
-'use client';
-
 import FilterDropdown from './FilterDropdown';
 import DropdownItem from './DropdownItem';
 import type { Preacher } from '@/types/sermon';

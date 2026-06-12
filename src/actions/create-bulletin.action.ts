@@ -1,7 +1,7 @@
 'use server';
 
 import { redirect } from 'next/navigation';
-import { revalidatePath, updateTag } from 'next/cache';
+import { updateTag } from 'next/cache';
 import { isRedirectError } from 'next/dist/client/components/redirect-error';
 import { deleteImage } from '@/apis/cloudinary';
 import { createBulletin } from '@/services/bulletin';
@@ -42,9 +42,8 @@ export const createBulletinAction = async (formData: FormData) => {
       return { success: false, message: '주보 업로드에 실패했습니다.' };
     }
 
-    revalidatePath('/news/bulletins');
-    revalidatePath('/news');
-    updateTag('bulletin-nav');
+    // ROOT 태그 1개로 목록·요약·상세·nav 캐시 전체 갱신 (ADR 0016 — 캐시 키는 bulletin-cache.ts)
+    updateTag('bulletin');
     redirect('/news/bulletins');
   } catch (error) {
     if (isRedirectError(error)) throw error;

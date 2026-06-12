@@ -1,7 +1,7 @@
 'use server';
 
 import { redirect } from 'next/navigation';
-import { revalidatePath, updateTag } from 'next/cache';
+import { updateTag } from 'next/cache';
 import { isRedirectError } from 'next/dist/client/components/redirect-error';
 import { deleteImage } from '@/apis/cloudinary';
 import { getBulletinByIdSSR, updateBulletin } from '@/services/bulletin';
@@ -88,10 +88,8 @@ export const updateBulletinAction = async (formData: FormData) => {
       await Promise.all(cloudinaryIdsToDelete.map(deleteImage));
     }
 
-    revalidatePath('/news/bulletins');
-    revalidatePath('/news');
-    updateTag('bulletin-detail');
-    updateTag('bulletin-detail-nav');
+    // ROOT 태그 1개로 목록·요약·상세·nav 캐시 전체 갱신 (ADR 0016 — 기존 bulletin-detail-nav는 캐시 키에 없던 태그)
+    updateTag('bulletin');
     redirect(`/news/bulletins/${bulletinId}`);
   } catch (error) {
     if (isRedirectError(error)) throw error;

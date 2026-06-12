@@ -1,11 +1,10 @@
-'use client';
-
 import clsx from 'clsx';
 import { IoEyeOutline } from 'react-icons/io5';
 import { BsPinAngleFill, BsPaperclip } from 'react-icons/bs';
 import { NOTICE_CATEGORIES, DEFAULT_PAGE_SIZE } from '@/constants/notice';
 import { formattedDate, isRecent } from '@/utils/date';
 import { Label } from '@/components/ui';
+import { NoticeTableRowTrigger, NoticeMobileRowTrigger } from './NoticeRowTrigger';
 import type { NoticeType } from '@/types/notice';
 import styles from './NoticeTable.module.scss';
 
@@ -13,14 +12,13 @@ type Props = {
   data: NoticeType[];
   total: number;
   currentPage: number;
-  onRowClick: (notice: NoticeType) => void;
 };
 
 function getFileExt(url: string): string {
   return url.match(/\.(\w+)$/)?.[1].toUpperCase() ?? '파일';
 }
 
-export default function NoticeTable({ data, total, currentPage, onRowClick }: Props) {
+export default function NoticeTable({ data, total, currentPage }: Props) {
   if (data.length === 0) {
     return <div className={styles.empty}>등록된 공지사항이 없습니다.</div>;
   }
@@ -44,18 +42,15 @@ export default function NoticeTable({ data, total, currentPage, onRowClick }: Pr
             const isUrgent = notice.category === '긴급';
 
             return (
-              <tr
+              <NoticeTableRowTrigger
                 key={notice.id}
+                noticeId={notice.id}
+                label={notice.title}
                 className={clsx(
                   styles.row,
                   notice.is_pinned && styles.pinned,
                   isUrgent && styles.urgent_row
                 )}
-                onClick={() => onRowClick(notice)}
-                tabIndex={0}
-                onKeyDown={(e) => e.key === 'Enter' && onRowClick(notice)}
-                role="button"
-                aria-label={notice.title}
               >
                 <td className={styles.col_pin}>
                   {notice.is_pinned ? (
@@ -93,7 +88,7 @@ export default function NoticeTable({ data, total, currentPage, onRowClick }: Pr
                     <span>{notice.view_count.toLocaleString()}</span>
                   </span>
                 </td>
-              </tr>
+              </NoticeTableRowTrigger>
             );
           })}
         </tbody>
@@ -105,15 +100,14 @@ export default function NoticeTable({ data, total, currentPage, onRowClick }: Pr
           const isUrgent = notice.category === '긴급';
 
           return (
-            <button
+            <NoticeMobileRowTrigger
               key={notice.id}
-              type="button"
+              noticeId={notice.id}
               className={clsx(
                 styles.mobile_row,
                 notice.is_pinned && styles.pinned,
                 isUrgent && styles.urgent_row
               )}
-              onClick={() => onRowClick(notice)}
             >
               <div className={styles.mobile_top}>
                 <div className={styles.mobile_meta}>
@@ -149,7 +143,7 @@ export default function NoticeTable({ data, total, currentPage, onRowClick }: Pr
                   {notice.view_count.toLocaleString()}
                 </span>
               </div>
-            </button>
+            </NoticeMobileRowTrigger>
           );
         })}
       </div>
