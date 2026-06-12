@@ -28,6 +28,27 @@
 - **영향 범위**: `supabase/migrations/`(update_bulletin), `src/services/bulletin/`, `src/actions/update-bulletin.action.ts`
 - **발견일**: 2026-06-11 (PR #115 GitHub Codex 리뷰 P2)
 
+### 🟡 가입 닉네임이 어디에도 저장되지 않음 (username → display_name 경로 부재)
+
+- **무엇**: 가입 폼이 닉네임(`username`)을 받아 길이 검증까지 하지만, `supabase.auth.signUp`의 metadata에 넣지 않고 `profiles`에 `username` 컬럼도 없다 (후보는 nullable `display_name`). `user_metadata.username`을 읽는 코드도 `src/`에 0건 — 입력값이 어디에도 저장되지 않는다.
+- **왜 지금 안 하나**: PR #116 이전 클라이언트 `signUp`부터 `name`만 전송하던 기존 결함이라, Server Action 전환(PR #116)은 동작을 보존했다. metadata 1줄 추가만으로는 해결되지 않아(소비처 없음) 분리했다.
+- **마이그레이션 경로**: ① 프로필 생성 트리거(`handle_new_user`)가 읽는 metadata 키를 DB에서 확인 → ② `signUpAction`의 `options.data`에 `username`을 추가하고 트리거가 `display_name`으로 저장하게 수정 (또는 액션이 가입 직후 `profiles`를 UPDATE)
+- **영향 범위**: `src/actions/auth.action.ts`, supabase 프로필 생성 트리거, 가입 폼 안내 문구
+- **발견일**: 2026-06-12 (PR #116 Gemini 리뷰 — Codex 교차 검증으로 기존 결함 확인)
+
+### 🟡 queueMicrotask 사용 4건 (금지 규칙 위반)
+
+- **무엇**: `DesktopHeader.tsx:21`, `useListFilters.ts:27`, `useMediaQuery.ts:10`, `NoticeControlBar.tsx:26` — 프로젝트 금지 규칙(memory `feedback_no_queue_microtask`)과 어긋난다.
+- **왜 지금 안 하나**: PR #116 범위(렌더 경계 정리)와 관심사가 달라 외과적 변경 원칙으로 분리했다.
+- **마이그레이션 경로**: 각 사용처의 호출 시점을 useEffect 또는 이벤트 핸들러로 옮기는 별도 Fix task. 4건이 같은 패턴이라 한 task로 묶는다.
+- **발견일**: 2026-06-11 (server-client-boundary Phase 0 진단)
+
+### 🟢 쓰이지 않는 코드 2건 (SeriesEpisodeList·updatePassword)
+
+- **무엇**: `SeriesEpisodeList`는 import 0건이고 `SermonSeriesSidebar`가 같은 기능을 서버 컴포넌트로 따로 구현해 중복이다. `apis/auth.ts`의 `updatePassword`는 호출자 0건 — 실제 비밀번호 변경은 reset-password Server Action이 담당한다.
+- **마이그레이션 경로**: 별도 Chore task에서 제거 (SeriesEpisodeList는 제거 전 활성화 의도가 있었는지 확인)
+- **발견일**: 2026-06-11 (server-client-boundary Phase 0 진단)
+
 ---
 
 ### 🟡 `app/ → apis/` 직접 호출 (레이어 위반, 8건)

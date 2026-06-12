@@ -49,6 +49,6 @@ mutation은 Server Action으로 통일하는 방향인데, 패턴이 도메인�
 
 ## References
 
-- 관련 PR: (커밋 6~8 포함 PR에서 기입)
-- 관련 exec-plan: `docs/exec-plans/active/2026-06-11-server-client-boundary.md` (D2~D7)
+- 관련 PR: #116
+- 관련 exec-plan: `docs/exec-plans/completed/2026-06-11-server-client-boundary.md` (의사결정 로그 D2부터 D8까지 — 위치·검증·반환·갱신 결정의 근거)
 - 관련 ADR: 0001 (Codex 오케스트레이션)

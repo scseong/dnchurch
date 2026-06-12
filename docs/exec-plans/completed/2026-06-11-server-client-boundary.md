@@ -1,6 +1,6 @@
 # server-client-boundary
 
-- **상태**: 🟡 진행 중
+- **상태**: ✅ 완료 (2026-06-12)
 - **시작일**: 2026-06-11
 - **브랜치**: refactor/server-client-boundary
 - **Open questions**: none
@@ -230,3 +230,21 @@ Codex 재검증 결론 verbatim:
 ## 참고 자료
 
 - Phase 0 진단·Phase 1 계획·Codex 교차 검증 전문: `docs/research/server-client-boundary/2026-06-11-phase0-diagnosis.md`
+
+## 회고 (2026-06-12, PR #116 머지)
+
+**잘된 것**
+
+- Phase 0 전수 진단이 시작 가정을 뒤집어 불필요한 단계를 작업 전에 제거했다 — "데이터 페칭 서버 이동"은 클라 초기 페칭이 0건이라 할 일이 없었고, 진짜 문제는 렌더 경계(설교 상세 90%·공지 목록 85%)였다.
+- Codex 검증 루프가 단계마다 실수를 잡았다 — 계획 CR(태그 갱신 누락 시 86400초 stale), 구현 WARNING 2건(open redirect·env 가드), 설계 리뷰 보완 2건(notices DTO·광역 loading 제거), 진단 문서 오류 4건 정정. 전부 머지 전에 반영했다.
+- 커밋 9개 분할이 리뷰·롤백 단위로 동작했다 — Gemini 리뷰 반영도 2개 파일 1커밋으로 끝났다.
+
+**다음에 할 것**
+
+- PowerShell 문자열 치환으로 소스 파일을 고치지 않는다 — 한글이 깨져 빌드가 1회 실패했다(NoticeDrawer). Read·Edit 도구만 쓴다.
+- 검증 기록은 처음부터 `## 검증 이력`의 details에 쌓는다 — 본문에 인라인 누적한 뒤 재정리하느라 편집 비용이 들었다.
+
+**부채 (tech-debt/active.md 등록 완료)**
+
+- 가입 닉네임 → `profiles.display_name` 저장 경로 부재 (PR #116 Gemini 리뷰)
+- queueMicrotask 4건, 쓰이지 않는 코드 2건 (Phase 0 진단)
