@@ -39,6 +39,8 @@ export default function NoticeDrawerProvider({ notices, children }: Props) {
     (direction: 'prev' | 'next') => {
       if (!drawerNotice) return;
       const currentIndex = notices.findIndex((notice) => notice.id === drawerNotice.id);
+      // drawer가 열린 채 URL 파라미터로 목록이 바뀌면 현재 공지가 목록에 없을 수 있다 (PR #116 리뷰 반영)
+      if (currentIndex === -1) return;
       const nextIndex = direction === 'prev' ? currentIndex - 1 : currentIndex + 1;
       if (nextIndex >= 0 && nextIndex < notices.length) {
         setDrawerNotice(notices[nextIndex]);
@@ -59,7 +61,7 @@ export default function NoticeDrawerProvider({ notices, children }: Props) {
         onClose={handleCloseDrawer}
         onNavigate={handleNavigate}
         hasPrev={currentIndex > 0}
-        hasNext={currentIndex < notices.length - 1}
+        hasNext={currentIndex !== -1 && currentIndex < notices.length - 1}
       />
     </NoticeDrawerContext.Provider>
   );

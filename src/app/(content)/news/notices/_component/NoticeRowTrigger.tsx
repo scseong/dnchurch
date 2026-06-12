@@ -23,7 +23,13 @@ export function NoticeTableRowTrigger({
       className={className}
       onClick={() => openNotice(noticeId)}
       tabIndex={0}
-      onKeyDown={(event) => event.key === 'Enter' && openNotice(noticeId)}
+      onKeyDown={(event) => {
+        // role="button"은 Enter·Space 둘 다 동작해야 한다. Space는 페이지 스크롤 기본 동작을 막는다.
+        if (event.key === 'Enter' || event.key === ' ') {
+          if (event.key === ' ') event.preventDefault();
+          openNotice(noticeId);
+        }
+      }}
       role="button"
       aria-label={label}
     >
