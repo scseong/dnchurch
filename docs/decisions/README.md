@@ -45,5 +45,6 @@
 | [0013](0013-page-shell-convention.md) | 페이지 골격 규약: 컨테이너 단일화·자동/자체 hero 분기·news 랜딩 신설 | Accepted | 2026-06-01 |
 | [0014](0014-card-component-strategy.md) | 카드 컴포넌트: 전면 통합 대신 공유 부품·스타일 추출 | Accepted | 2026-06-02 |
 | [0015](0015-page-state-seo-policy.md) | 페이지 상태·SEO 정책: 유형별 상태 파일 최소 요구 + news 디테일 JSON-LD 확대 | Accepted | 2026-06-02 |
+| [0016](0016-server-action-conventions.md) | Server Action 공통 패턴 (위치·검증·반환·revalidate) | Accepted | 2026-06-12 |
 
 <!-- last-audit: 2026-05-01 -->
