@@ -4,10 +4,12 @@ import { useSearchParams } from 'next/navigation';
 import { useState, useEffect } from 'react';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { signUpAction } from '@/actions/auth.action';
-import { FormField, FormAlertMessage, FormSubmitButton } from '@/components/form';
+import { FormAlertMessage } from '@/components/form';
+import { Button, TextField } from '@/components/ui';
 import { generateErrorMessage } from '@/utils/error';
 import { FORM_VALIDATIONS } from '@/constants/validation';
 import { REDIRECT_AFTER_LOGIN_KEY } from '@/constants/auth';
+import styles from './authForm.module.scss';
 
 type Inputs = {
   email: string;
@@ -66,53 +68,55 @@ export default function SignUpForm() {
   }, [password]);
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)}>
-      <FormField
+    <form onSubmit={handleSubmit(onSubmit)} className={styles.form} noValidate>
+      <TextField
         id="email"
         label="이메일"
-        register={register('email', FORM_VALIDATIONS.email)}
-        error={errors.email?.message}
-        placeholder="example@service.com"
         required
+        placeholder="example@service.com"
+        error={errors.email?.message}
+        {...register('email', FORM_VALIDATIONS.email)}
       />
-      <FormField
+      <TextField
         id="password"
         label="비밀번호"
         type="password"
-        register={register('password', FORM_VALIDATIONS.password)}
-        error={errors.password?.message}
-        placeholder="영문, 숫자 포함 8자 이상"
         required
+        placeholder="영문, 숫자 포함 8자 이상"
+        error={errors.password?.message}
+        {...register('password', FORM_VALIDATIONS.password)}
       />
-      <FormField
+      <TextField
         id="confirm-password"
         label="비밀번호 확인"
         type="password"
-        register={register('confirmPassword', {
+        required
+        placeholder="비밀번호 재입력"
+        error={errors.confirmPassword?.message}
+        {...register('confirmPassword', {
           required: '비밀번호 확인을 입력해주세요.',
           validate: (value) => value === password || '두 비밀번호가 일치하지 않습니다.'
         })}
-        error={errors.confirmPassword?.message}
-        placeholder="비밀번호 재입력"
-        required
       />
-      <FormField
+      <TextField
         id="name"
         label="이름"
-        register={register('name', FORM_VALIDATIONS.name)}
-        error={errors.name?.message}
-        placeholder="홍길동"
         required
+        placeholder="홍길동"
+        error={errors.name?.message}
+        {...register('name', FORM_VALIDATIONS.name)}
       />
-      <FormField
+      <TextField
         id="username"
         label="프로필 이름 (닉네임)"
-        register={register('username', FORM_VALIDATIONS.username)}
-        error={errors.username?.message}
-        placeholder="사용할 닉네임 10자 이내"
         required
+        placeholder="사용할 닉네임 10자 이내"
+        error={errors.username?.message}
+        {...register('username', FORM_VALIDATIONS.username)}
       />
-      <FormSubmitButton isDisabled={!isValid} isSubmitting={isSubmitting} label="회원가입" />
+      <Button type="submit" fullWidth size="lg" loading={isSubmitting} disabled={!isValid}>
+        회원가입
+      </Button>
       {signUpError && <FormAlertMessage type="error" message={signUpError} />}
     </form>
   );

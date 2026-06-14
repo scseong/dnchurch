@@ -1,9 +1,11 @@
-import { InputHTMLAttributes, ReactNode, useId } from 'react';
+import { InputHTMLAttributes, ReactNode, useId, forwardRef } from 'react';
 import clsx from 'clsx';
 import styles from './TextField.module.scss';
 
 type TextFieldProps = Omit<InputHTMLAttributes<HTMLInputElement>, 'id'> & {
   label?: string;
+  /** label을 시각적으로만 숨긴다(sr-only). htmlFor 연결은 유지 — placeholder가 시각 단서. */
+  hideLabel?: boolean;
   /** 입력 가이드 텍스트. 입력 규칙·범위·예시. */
   helper?: string;
   /** 에러 메시지. 지정 시 input이 error 스타일. */
@@ -33,19 +35,23 @@ type TextFieldProps = Omit<InputHTMLAttributes<HTMLInputElement>, 'id'> & {
  * <TextField label="이름" leadingIcon={<IoPerson />} success="사용 가능한 이름입니다" />
  * ```
  */
-export function TextField({
-  label,
-  helper,
-  error,
-  success,
-  id,
-  required,
-  disabled,
-  leadingIcon,
-  trailingSlot,
-  className,
-  ...inputProps
-}: TextFieldProps) {
+export const TextField = forwardRef<HTMLInputElement, TextFieldProps>(function TextField(
+  {
+    label,
+    hideLabel,
+    helper,
+    error,
+    success,
+    id,
+    required,
+    disabled,
+    leadingIcon,
+    trailingSlot,
+    className,
+    ...inputProps
+  },
+  ref
+) {
   const autoId = useId();
   const inputId = id ?? autoId;
   const messageId = `${inputId}-message`;
@@ -56,7 +62,10 @@ export function TextField({
   return (
     <div className={clsx(styles.field, className)}>
       {label && (
-        <label htmlFor={inputId} className={clsx(styles.label, required && styles.required)}>
+        <label
+          htmlFor={inputId}
+          className={clsx(styles.label, required && styles.required, hideLabel && styles.label_hidden)}
+        >
           {label}
         </label>
       )}
@@ -70,6 +79,7 @@ export function TextField({
       >
         {leadingIcon && <span className={styles.leading}>{leadingIcon}</span>}
         <input
+          ref={ref}
           id={inputId}
           required={required}
           disabled={disabled}
@@ -87,6 +97,7 @@ export function TextField({
       {hasMessage && (
         <p
           id={messageId}
+          role={error ? 'alert' : undefined}
           className={clsx(
             styles.message,
             error && styles.message_error,
@@ -98,4 +109,4 @@ export function TextField({
       )}
     </div>
   );
-}
+});

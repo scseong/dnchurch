@@ -3,10 +3,12 @@
 import { useRouter } from 'next/navigation';
 import { useState, useEffect } from 'react';
 import { useForm, SubmitHandler } from 'react-hook-form';
-import { FormField, FormAlertMessage, FormSubmitButton } from '@/components/form';
+import { FormAlertMessage } from '@/components/form';
+import { Button, TextField } from '@/components/ui';
 import { updatePasswordAndSignOut } from '@/app/reset-password/actions';
 import { generateErrorMessage } from '@/utils/error';
 import { FORM_VALIDATIONS } from '@/constants/validation';
+import styles from './authForm.module.scss';
 
 type Inputs = {
   password: string;
@@ -46,33 +48,31 @@ export default function PasswordUpdateForm() {
   };
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)}>
-      <FormField
+    <form onSubmit={handleSubmit(onSubmit)} className={styles.form} noValidate>
+      <TextField
         id="password"
         label="비밀번호"
         type="password"
-        register={register('password', FORM_VALIDATIONS.password)}
-        error={errors.password?.message}
-        placeholder="영문, 숫자 포함 8자 이상"
         required
+        placeholder="영문, 숫자 포함 8자 이상"
+        error={errors.password?.message}
+        {...register('password', FORM_VALIDATIONS.password)}
       />
-      <FormField
+      <TextField
         id="confirm-password"
         label="비밀번호 확인"
         type="password"
-        register={register('confirmPassword', {
+        required
+        placeholder="비밀번호 재입력"
+        error={errors.confirmPassword?.message}
+        {...register('confirmPassword', {
           required: '비밀번호 확인을 입력해주세요.',
           validate: (value) => value === password || '두 비밀번호가 일치하지 않습니다.'
         })}
-        error={errors.confirmPassword?.message}
-        placeholder="비밀번호 재입력"
-        required
       />
-      <FormSubmitButton
-        isDisabled={!isValid}
-        isSubmitting={isSubmitting}
-        label="비밀번호 변경하기"
-      />
+      <Button type="submit" fullWidth size="lg" loading={isSubmitting} disabled={!isValid}>
+        비밀번호 변경하기
+      </Button>
       {error && <FormAlertMessage type="error" message={error} />}
     </form>
   );

@@ -1,0 +1,7 @@
+// auth 4폼(SignIn·SignUp·PasswordUpdate·EmailVerificationRequest) 공용 레이아웃.
+// ui/TextField는 외부 margin이 없어, 필드 간 세로 간격을 form 컨테이너가 소유한다.
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: $content-gap-s;
+}

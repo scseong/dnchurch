@@ -98,3 +98,27 @@
     filter: brightness(0.8);
   }
 }
+
+// ── Loading ──
+
+.spinner {
+  display: inline-block;
+  width: 1em;
+  height: 1em;
+  border: 2px solid currentColor;
+  border-bottom-color: transparent;
+  border-radius: 50%;
+  box-sizing: border-box;
+  animation: button-spin 0.8s linear infinite;
+}
+
+// loading 중 children은 시각만 숨기고 스크린 리더용으로 남긴다 (accessible name 보존)
+.blind_label {
+  @include blind;
+}
+
+@keyframes button-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
