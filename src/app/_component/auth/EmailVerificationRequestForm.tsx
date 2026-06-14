@@ -9,6 +9,7 @@ import { requestPasswordResetEmailAction } from '@/actions/auth.action';
 import { EMAIL_RESEND_DELAY_SECONDS } from '@/constants/auth';
 import { FORM_VALIDATIONS } from '@/constants/validation';
 import { generateErrorMessage } from '@/utils/error';
+import styles from './authForm.module.scss';
 
 type Inputs = {
   email: string;
@@ -58,7 +59,7 @@ export default function EmailVerificationRequestForm() {
   };
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)}>
+    <form onSubmit={handleSubmit(onSubmit)} className={styles.form}>
       <TextField
         id="email"
         label="이메일"

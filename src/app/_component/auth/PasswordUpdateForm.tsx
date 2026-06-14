@@ -8,6 +8,7 @@ import { Button, TextField } from '@/components/ui';
 import { updatePasswordAndSignOut } from '@/app/reset-password/actions';
 import { generateErrorMessage } from '@/utils/error';
 import { FORM_VALIDATIONS } from '@/constants/validation';
+import styles from './authForm.module.scss';
 
 type Inputs = {
   password: string;
@@ -47,7 +48,7 @@ export default function PasswordUpdateForm() {
   };
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)}>
+    <form onSubmit={handleSubmit(onSubmit)} className={styles.form}>
       <TextField
         id="password"
         label="비밀번호"

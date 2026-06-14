@@ -9,6 +9,7 @@ import { Button, TextField } from '@/components/ui';
 import { generateErrorMessage } from '@/utils/error';
 import { FORM_VALIDATIONS } from '@/constants/validation';
 import { REDIRECT_AFTER_LOGIN_KEY } from '@/constants/auth';
+import styles from './authForm.module.scss';
 
 type Inputs = {
   email: string;
@@ -67,7 +68,7 @@ export default function SignUpForm() {
   }, [password]);
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)}>
+    <form onSubmit={handleSubmit(onSubmit)} className={styles.form}>
       <TextField
         id="email"
         label="이메일"

@@ -88,6 +88,13 @@ auth 4폼(SignIn·SignUp·PasswordUpdate·EmailVerificationRequest)을 `componen
 | --- | --- | --- | --- | --- | --- | --- |
 | 2차 | 20260613-222314 | ✅ | ✅ | ✅ | 0 | Chrome `/login`·`/sign-up`·`/forget-password` 렌더·register 동작 ✅ / `/reset-password`는 복구 토큰 필요로 미검증 |
 
+## 회귀 수정 — 폼 필드 세로 간격이 0으로 붙음
+
+- **문제**: ui/ 이관 후 auth 4폼의 입력칸·버튼이 세로 간격 0으로 붙었다. 레거시 `FormField`가 갖던 `margin-bottom: $spacing-12`가 사라졌다. `ui/TextField`는 외부 margin을 두지 않는데(컴포넌트가 외부 간격을 소유하지 않는 설계), `<form>`도 그 간격을 대신 주지 않았다.
+- **발견**: Claude in Chrome으로 BEFORE(`develop`)/AFTER 헤드리스 캡처를 비교하던 중 사용자가 패딩이 깨졌다고 지적했다.
+- **해결**: auth 4폼 공용 `src/app/_component/auth/authForm.module.scss`를 새로 만들어 `.form { display: flex; flex-direction: column; gap: $content-gap-s }`(12px — 레거시 값과 동일)을 정의하고, 4폼의 `<form>`에 `className`을 붙였다. RHF·제출 동작은 그대로다.
+- **결과**: 헤드리스 재캡처로 `/login`(hideLabel)·`/sign-up`(라벨 5필드) 간격이 복원됐다(라벨↔입력 8px < 필드↔필드 12px). stylelint PASS, eslint 0 error(경고 4건은 기존 `watch()`·exhaustive-deps 부채), tsc 0 error. production build는 사용자 dev 서버의 `.next` 충돌을 피하려고 보류했다.
+
 ## 검증 이력
 
 <details>
