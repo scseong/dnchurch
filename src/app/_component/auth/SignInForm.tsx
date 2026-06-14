@@ -3,7 +3,8 @@
 import { useSearchParams } from 'next/navigation';
 import { useState } from 'react';
 import { useForm, SubmitHandler } from 'react-hook-form';
-import { FormField, FormAlertMessage, FormSubmitButton } from '@/components/form';
+import { FormAlertMessage } from '@/components/form';
+import { Button, TextField } from '@/components/ui';
 // eslint-disable-next-line no-restricted-imports -- 점진 마이그레이션 대상 (tech-debt-tracker.md)
 import { signInWithPassword } from '@/apis/auth';
 import { FORM_VALIDATIONS } from '@/constants/validation';
@@ -38,24 +39,26 @@ export default function SignInForm() {
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
-      <FormField
+      <TextField
         id="email"
         label="이메일"
+        hideLabel
         placeholder="이메일 입력"
-        register={register('email', FORM_VALIDATIONS.email)}
         error={errors.email?.message}
-        blindLabel
+        {...register('email', FORM_VALIDATIONS.email)}
       />
-      <FormField
+      <TextField
         id="password"
         label="비밀번호"
+        hideLabel
         type="password"
         placeholder="비밀번호 입력 (영문 숫자 포함 8자 이상)"
-        register={register('password', FORM_VALIDATIONS.password)}
         error={errors.password?.message}
-        blindLabel={true}
+        {...register('password', FORM_VALIDATIONS.password)}
       />
-      <FormSubmitButton isDisabled={!isValid} isSubmitting={isSubmitting} label="이메일로 로그인" />
+      <Button type="submit" fullWidth size="lg" loading={isSubmitting} disabled={!isValid}>
+        이메일로 로그인
+      </Button>
       {logInError && <FormAlertMessage type="error" message={logInError} />}
     </form>
   );
