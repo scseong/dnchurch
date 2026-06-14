@@ -329,3 +329,15 @@
 - **마이그레이션 경로**: `sermons/all/page.tsx`에 `isUnknownPreacher`(원문 `preacher`가 있는데 `allPreachers`에 없음) 가드를 추가해 `isUnknownSeries`와 같은 EmptyState로 떨어뜨린다.
 - **영향 범위**: `src/app/(content)/sermons/all/page.tsx`, `src/utils/sermon.ts`
 - **발견일**: 2026-06-11 (PR #113 Codex 1차 검증)
+
+### 🟢 figma-console DTCG export — 숫자 scale 이름↔값 불일치 + alias 미해결 (figma-sync PR #118)
+
+- **상태**: 등록만 (figma-console 재연결 후 규명 — Figma 근본 디자인 시스템 개선 → 코드 이식 작업 때)
+- **무엇**: `docs/design-system/tokens.tokens.json`(Figma→DTCG 피벗)에 두 가지가 있다. ① 숫자 scale 토큰의 이름과 값이 어긋난다 — `spacing.scale.32`=24, `radius.scale.40`=32 등, spacing·radius 두 컬렉션에서 같이 나타난다. ② `$value`가 `{gold.600}` 형태인데 실제 primitive는 `primitives.gold.600`에 있어 alias 47개가 표준 DTCG resolver에서 미해결로 남는다. PR #118 자동 리뷰(Gemini·Codex)가 지적, Claude 교차 검증으로 확인.
+- **왜 지금 안 하나**: 손으로 쓴 `src/styles/tokens/*`는 그대로라 앱이 무관하고, 색 드리프트 점검(raw-hex 41개 0건)도 유효하다. 이 피벗을 정본·재import 원본으로 쓰기 전까지는 막지 않는다. 원인(export 직렬화 문제 vs Figma 변수 값)을 가리려면 figma-console 재연결이 필요한데 지금 끊겨 있다.
+- **마이그레이션 경로**:
+  - ① figma-console 재연결 후 `figma_get_variables`로 Figma 원본 spacing·radius 값을 직접 읽어 export 결과와 대조한다. export 버그면 도구 쪽을 우회·설정하고, Figma 값 문제면 Figma를 고친다.
+  - ② alias는 `figma_import_tokens` 왕복이 `{gold.600}`을 푸는지 확인한다. 외부 resolver를 붙일 거면 `primitives.` 접두 경로로 정규화한다.
+- **영향 범위** (2건): `docs/design-system/tokens.tokens.json`(생성물 — 손으로 고치지 말 것) / figma-console export 설정. 앱(`src/`) 무관
+- **확인**: `git show feat/ds-figma-sync:docs/design-system/tokens.tokens.json` → spacing.scale(약 1911행)·radius.scale(약 1547행)에서 키↔`$value` 대조
+- **발견일**: 2026-06-14 (PR #118 Gemini·Codex 자동 리뷰 + Claude 교차 검증)

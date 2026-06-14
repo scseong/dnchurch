@@ -44,6 +44,15 @@ figma_import_tokens(format=dtcg, dryRun=true)        # diff 미리보기 → dry
 - 결과: 비교 대상 41개 중 40개 정확 일치, 1개 값-동일(`$white`: Figma `#FFFFFF` = 소스 `#fff`). **값 드리프트 0건.**
 - semantic 16개는 Figma가 hex로 해석하고 소스는 alias(`$txt-primary: $gray-900`)라 자동 비교에서 빠진다. 이름 매핑 자동 비교는 후속 과제.
 
+## 알려진 한계 (export 데이터 품질, 2026-06-14)
+
+PR #118 자동 리뷰(Gemini·Codex)가 짚은 점이다. 이 DTCG 피벗은 아직 정본(canonical)이나 재import 원본으로 쓰지 못한다. 지금 쓰임은 색 드리프트 점검과 참조까지다.
+
+- **숫자 scale 토큰 이름↔값 불일치 (spacing·radius)**: 생성된 `tokens.tokens.json`에서 `spacing.scale.32`의 값이 24, `radius.scale.40`의 값이 32처럼 키 이름과 값이 어긋난다. radius·spacing 두 컬렉션에서 같이 나타난다. 원인은 아직 못 정했다. 후보 둘 — (a) figma-console export의 직렬화 문제 (b) Figma 변수 자체의 값. figma-console 재연결 뒤 `figma_get_variables`로 Figma 원본 값을 직접 대조해 가린다. 색 토큰은 영향이 없다(위 드리프트 베이스라인 0건). 손으로 쓴 `src/styles/tokens/*`도 무관하다.
+- **DTCG alias 경로 미해결 (47건)**: `$value`가 `{gold.600}`인데 실제 primitive는 `primitives.gold.600`에 있다. figma-console 자체 왕복(export↔import)이 이를 푸는지는 확인하지 않았다. 표준 DTCG/Style Dictionary resolver에 그대로 넣으면 미해결로 남는다. 외부 resolver나 재import 원본으로 쓰기 전에 해석 동작을 확인한다.
+
+> `tokens.config.json`의 `"canonical": "dtcg"`는 디자인 레이어 기준 원본을 DTCG로 옮기겠다는 목표를 적은 것이지, 지금 이 파일이 정본으로 검증됐다는 뜻이 아니다. 위 두 한계를 풀기 전까지는 색 드리프트 점검·참조로만 쓴다.
+
 ## 텍스트·이펙트 스타일 — DTCG 미포함
 
 `figma_export_tokens`는 변수 174개만 뽑는다. Figma의 텍스트 스타일 12종과 이펙트 스타일 4종은 변수가 아니라 별도 스타일이다. 그래서 DTCG에 안 들어간다. 코드 기준 원본은 `_typography.scss`·`_effect.scss`이고, 아래는 Figma에 만든 스타일 스펙이다(모바일 값, 2026-06-13 `figma_get_text_styles`로 확인).
