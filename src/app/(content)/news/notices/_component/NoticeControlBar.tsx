@@ -5,7 +5,7 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import clsx from 'clsx';
 import { IoClose } from 'react-icons/io5';
 import { RiArrowDownSLine } from 'react-icons/ri';
-import { SearchField } from '@/components/ui';
+import { SearchField, Select } from '@/components/ui';
 import CategoryBottomSheet from '@/app/(content)/news/notices/_component/CategoryBottomSheet';
 import { NOTICE_CATEGORIES } from '@/constants/notice';
 import type { NoticeCategory } from '@/types/notice';
@@ -91,23 +91,17 @@ export default function NoticeControlBar({ total, currentCategory, currentSearch
       {/* 우측: 분류 + 검색 */}
       <div className={styles.bar_right}>
         {/* PC: select */}
-        <select
-          className={clsx(
-            styles.category_select,
-            styles.pc_only,
-            currentCategory && styles.selected
-          )}
+        <Select
+          className={styles.pc_only}
           value={currentCategory ?? ''}
-          onChange={(e) => handleCategoryChange(e.target.value)}
+          onChange={handleCategoryChange}
+          options={[
+            { value: '', label: '전체 분류' },
+            ...Object.entries(NOTICE_CATEGORIES).map(([key, label]) => ({ value: key, label }))
+          ]}
+          emphasized={Boolean(currentCategory)}
           aria-label="분류 선택"
-        >
-          <option value="">전체 분류</option>
-          {Object.entries(NOTICE_CATEGORIES).map(([key, label]) => (
-            <option key={key} value={key}>
-              {label}
-            </option>
-          ))}
-        </select>
+        />
 
         {/* Mobile: text button */}
         <button

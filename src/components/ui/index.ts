@@ -31,6 +31,9 @@ export { Pill } from './Pill/Pill';
 
 export { SearchField } from './SearchField/SearchField';
 
+export { Select } from './Select/Select';
+export type { SelectOption } from './Select/Select';
+
 export { Skeleton } from './Skeleton/Skeleton';
 
 export { Tabs } from './Tabs/Tabs';

@@ -406,21 +406,7 @@
   display: inline-flex;
   align-items: center;
   gap: 6px;
-
-  select {
-    padding: 5px 8px;
-    background: $bg-card;
-    border: 1px solid $border-admin;
-    border-radius: 5px;
-    color: $txt-secondary;
-    font-size: 12px;
-    cursor: pointer;
-
-    &:focus {
-      outline: none;
-      border-color: $primary-soft;
-    }
-  }
+  // select 스타일은 ui/Select가 소유.
 }
 
 .mobile_list {

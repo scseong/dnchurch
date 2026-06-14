@@ -19,6 +19,7 @@ import { Button, TextField, Modal, Label } from '@/components/ui';
 | **Button** | 액션 트리거 | `variant`(primary/secondary/ghost/danger), `size`(sm/md/lg), `leadingIcon`/`trailingIcon`, `fullWidth` |
 | **TextField** | 단일 줄 입력 | `label`, `helper`/`error`/`success`, `leadingIcon`/`trailingSlot` |
 | **Textarea** | 멀티라인 입력 | `label`, `error`/`success`, `showCounter` + `maxLength`, `autoGrow` |
+| **Select** | 단일 값 선택 (styled native `<select>`) | `value`/`onChange(value)`, `options[]`, `emphasized`(활성 필터 강조) |
 | **Modal** | PC 우선 다이얼로그 | `open`, `title`, `size`(sm 32rem / md 48rem / lg 64rem), `role`(dialog/alertdialog), `footer` |
 | **BottomSheet** | 모바일 시트 (PC ≥pc-sm 이상은 중앙 모달) | `open`, `title`, `showClose`, `footer` |
 | **Tabs** | 탭 네비게이션 | `variant`(underline/pill), `size`, `items`(label/count/leadingIcon/panelId), `fitted` |

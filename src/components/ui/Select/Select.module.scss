@@ -1,0 +1,35 @@
+// display는 선언하지 않는다 — 반응형 노출(pc_only 등)은 호출부 className이 소유한다.
+// (cross-module cascade 충돌을 피하려고 ui/Select가 display를 잡지 않음)
+.select {
+  padding: $spacing-8 $spacing-32 $spacing-8 $spacing-12;
+  font-size: $font-size-13;
+  font-family: inherit;
+  color: $txt-primary;
+  background-color: $bg-card;
+  border: 1px solid $border-primary;
+  border-radius: $radius-xs;
+  cursor: pointer;
+  appearance: none;
+
+  // chevron — $txt-tertiary 계열 회색. data-uri라 토큰을 직접 주입할 수 없어 16진값 고정.
+  background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='10' viewBox='0 0 24 24' fill='none' stroke='%23737373' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right $spacing-10 center;
+
+  &:focus-visible {
+    outline: none;
+    border-color: $border-focus;
+  }
+
+  &:disabled {
+    cursor: not-allowed;
+    color: $txt-disabled;
+  }
+}
+
+// 비기본 값(활성 필터) 강조. `.select` 뒤에 와서 같은 모듈 내 cascade로 안전하게 덮는다.
+.emphasized {
+  color: $primary;
+  background-color: $primary-subtle;
+  border-color: $primary;
+}

@@ -293,31 +293,12 @@ $radio-dot-size: 0.4rem;
 }
 
 .sort_select {
-  // mobile은 BottomSheet의 정렬 섹션이 단일 진입점 — sort_select 비표시
+  // 스타일은 ui/Select가 소유. 여기선 PC 전용 노출만(모바일은 BottomSheet 정렬 섹션).
   display: none;
-  padding: $spacing-8 $spacing-32 $spacing-8 $spacing-12;
-  font-size: $font-size-12;
-  font-weight: $font-weight-semibold;
-  font-family: inherit;
-  color: $txt-primary;
-  background-color: $bg-card;
-  border: 1px solid $border-primary;
-  border-radius: $radius-xs;
-  cursor: pointer;
-  appearance: none;
-  background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='10' viewBox='0 0 24 24' fill='none' stroke='%23737373' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
-  background-repeat: no-repeat;
-  background-position: right $spacing-10 center;
 
   @include respond-up($breakpoint-pc-sm) {
     display: inline-block;
   }
-}
-
-.sort_select_active {
-  color: $primary;
-  background-color: $primary-subtle;
-  border-color: $primary;
 }
 
 // ── Series Meta Card (시리즈 필터 활성 시) ──

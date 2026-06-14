@@ -1,6 +1,6 @@
 'use client';
 
-import clsx from 'clsx';
+import { Select } from '@/components/ui';
 import useSermonFilter from '@/hooks/useSermonFilter';
 import type { SermonSortKey } from '@/types/sermon';
 import styles from './SermonListPage.module.scss';
@@ -50,15 +50,17 @@ export default function SermonResultHeader({
           {sort === 'oldest' ? '오래된순' : '최신순'}
         </span>
       )}
-      <select
-        className={clsx(styles.sort_select, isActive && styles.sort_select_active)}
+      <Select
+        className={styles.sort_select}
         value={sort}
-        onChange={(event) => setSort(event.target.value as SermonSortKey)}
+        onChange={(value) => setSort(value as SermonSortKey)}
+        options={[
+          { value: 'recent', label: '정렬: 최신순' },
+          { value: 'oldest', label: '정렬: 오래된순' }
+        ]}
+        emphasized={isActive}
         aria-label="설교 정렬"
-      >
-        <option value="recent">정렬: 최신순</option>
-        <option value="oldest">정렬: 오래된순</option>
-      </select>
+      />
     </header>
   );
 }
