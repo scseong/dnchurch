@@ -76,13 +76,13 @@
 
 ## Codex 1차 검증
 
-- **결론**: 조건부 통과 — 버그·레이어·타입 결함 0. LANDMINE 2건·A11Y 다수는 권고.
+- **결론**: FIX_APPLIED — 버그·레이어·타입 결함 0. Codex가 짚은 spread 순서·`onClear` JSDoc 2건 반영, LANDMINE·A11Y 권고는 근거와 함께 보류.
 - **현재 판단**: spread 순서·`onClear` JSDoc 2건을 반영했다. landmark 충돌·loading live region·조건부 타입·hit target은 보류했다(근거는 검증 이력). 점검 중 NoticeSearchBar가 dead code(src import 0)임을 찾아 이관 대신 삭제로 돌렸다.
 - **다음 행동**: verify-task + Claude in Chrome.
 
 ## Claude 2차 검증
 
-- **최종 판단**: 통과. 자동 검증 4종 PASS(verify 로그), Chrome 5경로 동작 확인(아래 표).
+- **최종 판단**: PASS — 자동 검증 4종 통과(verify 로그), Chrome 5경로 동작 확인(아래 표).
 - **자동 검증**: ESLint·stylelint·build 통과. Knip은 신규 0 — 미사용 파일이 15개에서 13개로 줄었고, `NOTICE_SORT_OPTIONS`는 안 떴고, 새 `SearchField` export는 4곳이 쓴다.
 
 | 경로 | 렌더 | 입력·clear·focus | landmark | 콘솔 |
