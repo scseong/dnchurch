@@ -3,8 +3,9 @@
 import { useState, useCallback, useEffect } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import clsx from 'clsx';
-import { IoSearchOutline, IoCloseCircle, IoClose } from 'react-icons/io5';
+import { IoClose } from 'react-icons/io5';
 import { RiArrowDownSLine } from 'react-icons/ri';
+import { SearchField } from '@/components/ui';
 import CategoryBottomSheet from '@/app/(content)/news/notices/_component/CategoryBottomSheet';
 import { NOTICE_CATEGORIES } from '@/constants/notice';
 import type { NoticeCategory } from '@/types/notice';
@@ -124,26 +125,16 @@ export default function NoticeControlBar({ total, currentCategory, currentSearch
         </button>
 
         {/* 검색창 */}
-        <form className={styles.search_form} onSubmit={handleSearch} role="search">
-          <IoSearchOutline className={styles.search_icon} aria-hidden="true" />
-          <input
+        <search className={styles.search_form}>
+          <SearchField
             value={query}
-            onChange={(e) => setQuery(e.target.value)}
+            onChange={setQuery}
+            onClear={handleSearchClear}
+            onSubmit={handleSearch}
             placeholder="검색…"
-            className={styles.search_input}
             aria-label="공지사항 검색"
           />
-          {query && (
-            <button
-              type="button"
-              className={styles.search_clear}
-              onClick={handleSearchClear}
-              aria-label="검색어 초기화"
-            >
-              <IoCloseCircle aria-hidden="true" />
-            </button>
-          )}
-        </form>
+        </search>
       </div>
 
       <CategoryBottomSheet
