@@ -1,6 +1,6 @@
 # ds-token-sync-pipeline
 
-- **상태**: 🟢 검증 통과 (커밋 승인 대기)
+- **상태**: ✅ 완료 (2026-06-14, PR #118 머지)
 - **시작일**: 2026-06-13
 - **브랜치**: feat/ds-figma-sync
 - **Open questions**: 유료 Code Connect 전환은 PoC 후 판단 (ADR 0017)
@@ -133,3 +133,9 @@ Figma와 코드 토큰을 명령 한 번으로 맞추는 파이프라인을 만�
   - 이유: 이번엔 raw-hex 41개만 자동 비교. semantic 16개는 소스가 alias라 빠짐.
   - 다음 기준: 드리프트가 실제로 생기기 시작할 때(Phase C 토큰 추가 후).
   - 기록 위치: 없음
+
+## 회고
+
+- **잘된 것**: 비파괴를 probe로 먼저 확인했다. 무인자 export가 `src/styles/tokens/`를 0줄 건드리는 것을 보고 진행해 손으로 쓴 SCSS를 보존했다. 색 드리프트도 raw-hex 41개 0건으로 실측했고, Codex 계획·1차 지적(probe·gitignore)을 가정이 아니라 실제 호출로 해소했다.
+- **다음에 할 것**: export 검증을 색에만 한정하지 않는다. 숫자 scale(spacing·radius)의 이름과 값이 어긋나는지를 색만 비교해 놓쳐서 PR #118 리뷰가 뒤늦게 잡았다. figma-console 재연결 때 `figma_get_variables`로 Figma 원본 spacing·radius를 직접 대조해 export 버그 여부를 가린다.
+- **발견된 부채 (→ tech-debt/active.md 옮길 것)**: 등록 완료. DTCG export가 숫자 scale(spacing·radius)의 이름과 값을 어긋나게 뽑는다. alias 47개는 아직 안 풀린다. semantic 토큰 16개는 소스가 alias라 자동 드리프트 비교에서 빠진다.

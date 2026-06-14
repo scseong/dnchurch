@@ -1,6 +1,6 @@
 # auth-form-ui-migration
 
-- **상태**: 🟡 진행 중
+- **상태**: ✅ 완료 (2026-06-14)
 - **시작일**: 2026-06-13
 - **브랜치**: feat/ds-form-unification
 - **Open questions**: none
@@ -127,3 +127,9 @@ auth 4폼(SignIn·SignUp·PasswordUpdate·EmailVerificationRequest)을 `componen
   - 이유: 폼-레벨 알림은 필드와 다른 관심사. ui/ 알림 컴포넌트가 선행돼야 한다.
   - 다음 기준: 폼-레벨 알림이 3곳 이상에서 필요해질 때.
   - 기록 위치: 없음
+
+## 회고
+
+- **잘된 것**: `ui/TextField` 실사용을 0에서 4폼으로 늘려 입력 어휘를 ui/ 하나로 모았다. Button `loading`은 옵션 A(스피너 `aria-hidden` + children `@include blind`)로 accessible name을 보존했고(Codex 계획 검증 반영), Claude in Chrome으로 렌더·register·a11y·ref·noValidate를 실측했다.
+- **다음에 할 것**: 컴포넌트를 교체할 때 "기존 외형을 누가 책임지나(margin/gap)"를 먼저 본다. 이번에 `FormField`의 `margin-bottom` 간격 손실을 놓쳐 폼이 붙었다. 그리고 가정은 실측으로 확인한다 — TextField ref가 spread로 전달된다고 exec-plan에 적었으나 React 19 의미를 검증하지 않았다.
+- **발견된 부채 (→ tech-debt/active.md 옮길 것)**: 등록 완료. `ui/Button` disabled를 opacity로만 흐리게 해서 navy가 진해 비활성 구분이 약하다. `form/` 디렉토리가 남아 있다 — `BulletinForm`·`ImageUpload` 2개가 아직 ui/로 안 옮겨졌다.
