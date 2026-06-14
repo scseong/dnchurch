@@ -1,9 +1,9 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { IoClose, IoSearch } from 'react-icons/io5';
 import { useDebounce } from '@/hooks/useDebounce';
 import useSermonFilter from '@/hooks/useSermonFilter';
+import { SearchField } from '@/components/ui';
 import styles from './SermonListPage.module.scss';
 
 export default function SermonSearchForm() {
@@ -36,27 +36,14 @@ export default function SermonSearchForm() {
 
   return (
     <search className={styles.search_form}>
-      <form role="search" onSubmit={handleSubmit}>
-        <IoSearch className={styles.search_icon} aria-hidden="true" />
-        <input
-          type="text"
-          className={styles.search_input}
-          placeholder="제목·성경구절"
-          value={input}
-          onChange={(event) => setInput(event.target.value)}
-          aria-label="설교 검색"
-        />
-        {input && (
-          <button
-            type="button"
-            className={styles.search_clear}
-            onClick={handleClear}
-            aria-label="검색어 지우기"
-          >
-            <IoClose />
-          </button>
-        )}
-      </form>
+      <SearchField
+        value={input}
+        onChange={setInput}
+        onClear={handleClear}
+        onSubmit={handleSubmit}
+        placeholder="제목·성경구절"
+        aria-label="설교 검색"
+      />
     </search>
   );
 }

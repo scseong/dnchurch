@@ -51,10 +51,10 @@
 
 ### 🟢 portal 컴포넌트 하이드레이션 불일치 (typeof window guard, systemic)
 
-- **무엇**: `BottomSheet.tsx:54`·`Modal.tsx:78`·`SortBottomSheet.tsx:36`이 `if (typeof window === 'undefined') return null` 뒤에 `createPortal`을 호출한다. 서버는 null을 렌더하고 클라이언트는 portal을 렌더해 hydration mismatch가 난다. `/sermons/[id]`의 공유 BottomSheet(`SermonMetaActions.tsx:65`)에서 React 콘솔 에러 "Hydration failed because the server rendered HTML didn't match the client"로 확인했다. 경고는 dev 모드에서만 출력되지만, 분기에 `NODE_ENV` 조건이 없어 mismatch 자체는 프로덕션에서도 동일하게 발생한다.
+- **무엇**: `BottomSheet.tsx:54`·`Modal.tsx:78`이 `if (typeof window === 'undefined') return null` 뒤에 `createPortal`을 호출한다. 서버는 null을 렌더하고 클라이언트는 portal을 렌더해 hydration mismatch가 난다. `/sermons/[id]`의 공유 BottomSheet(`SermonMetaActions.tsx:65`)에서 React 콘솔 에러 "Hydration failed because the server rendered HTML didn't match the client"로 확인했다. 경고는 dev 모드에서만 출력되지만, 분기에 `NODE_ENV` 조건이 없어 mismatch 자체는 프로덕션에서도 동일하게 발생한다.
 - **왜 지금 안 하나**: 기존 코드이고 사용자가 겪는 화면 문제가 없다. 닫힌 시트는 `aria-hidden`·`inert`·`opacity: 0`·`pointer-events: none`(`BottomSheet.module.scss:8`)이라 클라이언트가 다시 그리는 서브트리가 화면에 안 보인다. 페이지 본문·영상은 정상 SSR이고 `/sermons/1`이 HTTP 200을 반환한다. release-2026-06-12은 누적 작업을 모은 릴리스라 공용 UI 수정과 묶을 일이 아니어서 분리한다.
 - **마이그레이션 경로**: 컴포넌트마다 흩어진 `typeof window` guard와 `document.getElementById('modal-root')` 조회를 공통 `ClientPortal` 헬퍼 하나로 모은다. 헬퍼가 `mounted` 상태(`useState` + `useEffect`)로 서버와 첫 클라이언트 render를 모두 null로 맞춘 뒤 portal을 마운트한다. "client component니까 portal을 무조건 렌더"하는 방법은 `document.getElementById`가 browser API라 서버 render에서 깨지므로 채택하지 않는다. `NoticeDrawer.tsx:40`은 `!isOpen` 조건이라 같은 mismatch인지 별도로 확인한다.
-- **영향 범위**: `src/components/ui/BottomSheet/BottomSheet.tsx`, `src/components/ui/Modal/Modal.tsx`, `src/app/(content)/news/notices/_component/SortBottomSheet.tsx`, 확인 대상 `NoticeDrawer.tsx`. 신규 공통 `src/components/ui/ClientPortal` 후보.
+- **영향 범위**: `src/components/ui/BottomSheet/BottomSheet.tsx`, `src/components/ui/Modal/Modal.tsx`, 확인 대상 `NoticeDrawer.tsx`. 신규 공통 `src/components/ui/ClientPortal` 후보. (`SortBottomSheet.tsx`는 ui-search-select 작업에서 import 0건 dead code로 확인해 삭제했고, 그래서 이 항목 영향 범위에서 뺐다)
 - **확인**: dev 콘솔에서 `/sermons/[id]` 등 portal 화면의 hydration 경고 0건
 - **발견일**: 2026-06-12 (release-2026-06-12 데모 캡처 중 발견). Codex 교차 검증 PASS — 진단·마이그레이션 경로 모두 타당하다고 판단
 

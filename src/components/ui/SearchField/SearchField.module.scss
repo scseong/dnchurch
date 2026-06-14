@@ -1,0 +1,78 @@
+.field {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  background-color: $bg-primary;
+  border: 1px solid $border-primary;
+  border-radius: $radius-s;
+  transition: border-color 0.15s ease;
+
+  &:hover {
+    border-color: $border-strong;
+  }
+
+  &:focus-within {
+    border-color: $border-focus;
+  }
+}
+
+.leading {
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  padding-left: $spacing-12;
+  font-size: $font-size-16;
+  color: $txt-tertiary;
+}
+
+.input {
+  flex: 1 1 auto;
+  min-width: 0;
+  padding: $spacing-12 $spacing-8;
+  font-size: $font-size-16; // iOS auto-zoom 방지
+  font-family: inherit;
+  color: $txt-primary;
+  background: transparent;
+  border: none;
+  outline: none;
+
+  &::placeholder {
+    color: $txt-tertiary;
+  }
+}
+
+.clear {
+  flex-shrink: 0;
+  align-self: stretch;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 $spacing-12;
+  font-size: $font-size-16;
+  color: $txt-tertiary;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+
+  &:hover {
+    color: $txt-primary;
+  }
+}
+
+// loading 스피너 — leading 슬롯의 currentColor(=$txt-tertiary)·1em 크기를 따른다
+.spinner {
+  display: inline-block;
+  width: 1em;
+  height: 1em;
+  border: 2px solid currentColor;
+  border-bottom-color: transparent;
+  border-radius: 50%;
+  box-sizing: border-box;
+  animation: search-spin 0.8s linear infinite;
+}
+
+@keyframes search-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
