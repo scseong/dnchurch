@@ -211,6 +211,16 @@
   - rgba: `news/notices/_component/NoticeDrawer.module.scss:27`, `sermons/_component/{SortBottomSheet:4, GridCard:59,77,93, SermonCard:69,87,109}`
 - **발견일**: 2026-05-07 (Codex 디자인 시스템 audit)
 
+### 🟢 ui/Button disabled가 전용 색 없이 `opacity: 0.5`로만 처리됨 (auth-form-ui-migration)
+
+- **상태**: 등록만 (상태 토큰화는 "완전한 디자인 시스템 구축" 단계에서 진행 — 2026-06-14 사용자 결정)
+- **무엇**: `ui/Button`의 disabled가 `Button.module.scss:11-14`에서 `opacity: 0.5`만 건다. variant별 전용 disabled 색이 없어, `.primary`(`$primary` = navy-800)가 비활성일 때 연회색이 아니라 "navy를 50% 투명도로 깐 진한 회색-네이비"로 보인다. 레거시 `FormSubmitButton.module.scss:10-15`는 `background: $gray-200` + `$gray-300` 보더의 전용 disabled 색이라 비활성이 더 분명했다. auth 폼을 ui/로 모으면서 두 버튼의 disabled 모습 차이가 드러났다.
+- **왜 지금 안 하나**: opacity 방식은 흔한 관례라 회귀가 아니다. disabled를 전용 색으로 바꾸면 모든 `ui/Button`(전역)의 비활성 모습이 함께 바뀌어 영향이 넓다. 컴포넌트 상태(hover·active·disabled) 스펙을 한 번에 정의하면 세 상태가 같은 토큰 체계를 따른다.
+- **마이그레이션 경로**: ① Figma(디자인 값 출처, SoT)에 Button 상태 스펙(hover·active·disabled)을 명시한다 ② `_color.scss`에 disabled 시맨틱 토큰을 정의한다(`$txt-disabled` 재사용 + variant별 disabled 배경 신설 등) ③ `Button.module.scss`의 `opacity: 0.5`를 variant별 `&:disabled` 색 규칙으로 교체한다. hover·active도 같은 단계에서 토큰으로 정의한다.
+- **영향 범위**: `src/components/ui/Button/Button.module.scss`(전역 — 모든 Button 소비처), Figma Button 컴포넌트 스펙
+- **확인**: `rg -n "opacity|:disabled" src/components/ui/Button/Button.module.scss` → 현재 `opacity: 0.5` 1건, variant별 `&:disabled` 색 규칙 0건
+- **발견일**: 2026-06-14 (auth-form-ui-migration BEFORE/AFTER 비교 중 사용자 지적)
+
 ### 🟢 Cloudinary `uploadImage()` `folder` + `public_id` 중복 전달
 
 - **무엇**: `src/apis/cloudinary.ts:36-39`에서 `cloudinary.uploader.upload()`에 `folder`와 fully-qualified `public_id`를 동시 전달
