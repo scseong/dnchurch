@@ -1,4 +1,4 @@
-import { InputHTMLAttributes, ReactNode, useId } from 'react';
+import { InputHTMLAttributes, ReactNode, useId, forwardRef } from 'react';
 import clsx from 'clsx';
 import styles from './TextField.module.scss';
 
@@ -35,20 +35,23 @@ type TextFieldProps = Omit<InputHTMLAttributes<HTMLInputElement>, 'id'> & {
  * <TextField label="이름" leadingIcon={<IoPerson />} success="사용 가능한 이름입니다" />
  * ```
  */
-export function TextField({
-  label,
-  hideLabel,
-  helper,
-  error,
-  success,
-  id,
-  required,
-  disabled,
-  leadingIcon,
-  trailingSlot,
-  className,
-  ...inputProps
-}: TextFieldProps) {
+export const TextField = forwardRef<HTMLInputElement, TextFieldProps>(function TextField(
+  {
+    label,
+    hideLabel,
+    helper,
+    error,
+    success,
+    id,
+    required,
+    disabled,
+    leadingIcon,
+    trailingSlot,
+    className,
+    ...inputProps
+  },
+  ref
+) {
   const autoId = useId();
   const inputId = id ?? autoId;
   const messageId = `${inputId}-message`;
@@ -76,6 +79,7 @@ export function TextField({
       >
         {leadingIcon && <span className={styles.leading}>{leadingIcon}</span>}
         <input
+          ref={ref}
           id={inputId}
           required={required}
           disabled={disabled}
@@ -93,6 +97,7 @@ export function TextField({
       {hasMessage && (
         <p
           id={messageId}
+          role={error ? 'alert' : undefined}
           className={clsx(
             styles.message,
             error && styles.message_error,
@@ -104,4 +109,4 @@ export function TextField({
       )}
     </div>
   );
-}
+});

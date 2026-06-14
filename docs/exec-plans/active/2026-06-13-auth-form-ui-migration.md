@@ -95,6 +95,17 @@ auth 4폼(SignIn·SignUp·PasswordUpdate·EmailVerificationRequest)을 `componen
 - **해결**: auth 4폼 공용 `src/app/_component/auth/authForm.module.scss`를 새로 만들어 `.form { display: flex; flex-direction: column; gap: $content-gap-s }`(12px — 레거시 값과 동일)을 정의하고, 4폼의 `<form>`에 `className`을 붙였다. RHF·제출 동작은 그대로다.
 - **결과**: 헤드리스 재캡처로 `/login`(hideLabel)·`/sign-up`(라벨 5필드) 간격이 복원됐다(라벨↔입력 8px < 필드↔필드 12px). stylelint PASS, eslint 0 error(경고 4건은 기존 `watch()`·exhaustive-deps 부채), tsc 0 error. production build는 사용자 dev 서버의 `.next` 충돌을 피하려고 보류했다.
 
+## PR #119 리뷰 대응 (2026-06-14)
+
+자동 리뷰(Gemini·Codex) 4건을 Codex 교차 검증과 브라우저 실측으로 판정했다.
+
+- **TextField ref 전달 (Gemini HIGH) — 오탐**: React 19에선 `ref`가 일반 prop이라 `...inputProps`를 타고 `<input>`까지 흘러간다. 무효 폼을 강제 제출하니 email 칸에 포커스가 잡혔고, 이로써 React Hook Form(RHF)의 ref 전달을 실측 확인했다(`activeElement.id === 'email'`). 동작은 정상이나 ref가 드러나지 않게 전달돼서, 공용 컴포넌트의 안전을 위해 `forwardRef`로 직접 연결했다(`Button`과 같은 패턴). 호출부 영향 0.
+- **noValidate 누락 (Gemini) — 타당**: `required`가 input에 네이티브 `required`를 걸어 브라우저 검증 말풍선이 RHF 커스텀 에러보다 먼저 뜬다. auth 4폼 `<form>`에 `noValidate`를 더했다. 실측 `form.noValidate === true`.
+- **필드 에러 a11y (Codex) — 타당**: ui/TextField 에러 `<p>`에 `role={error ? 'alert' : undefined}`를 더해, onChange 에러가 스크린리더에 즉시 읽힌다. 실측 에러 `<p>` 2개 모두 `role="alert"`.
+- **필드 간격 collapse (Codex)**: 위 "회귀 수정"(6992b9a)에서 이미 해결.
+
+검증: eslint 0 error, tsc 0 error, 브라우저 실측 3건(ref 포커스·noValidate·role) 모두 통과.
+
 ## 검증 이력
 
 <details>

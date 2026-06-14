@@ -48,7 +48,7 @@ export default function PasswordUpdateForm() {
   };
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className={styles.form}>
+    <form onSubmit={handleSubmit(onSubmit)} className={styles.form} noValidate>
       <TextField
         id="password"
         label="비밀번호"

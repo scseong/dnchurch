@@ -59,7 +59,7 @@ export default function EmailVerificationRequestForm() {
   };
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className={styles.form}>
+    <form onSubmit={handleSubmit(onSubmit)} className={styles.form} noValidate>
       <TextField
         id="email"
         label="이메일"
