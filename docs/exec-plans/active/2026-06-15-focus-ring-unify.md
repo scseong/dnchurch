@@ -35,7 +35,7 @@ content/ui와 admin의 `:focus` 표시를 일관된 토큰·패턴으로 모은�
 - `src/components/ui/Select/Select.module.scss` — 수동 outline → `@include focus-ring()`
 - `src/components/form/FormField.module.scss` — `:focus` `!important` 제거
 - `src/components/admin/sermons/SermonForm/primitives/primitives.module.scss` — rgba ×2 → `$primary-soft-subtle`
-- `src/components/admin/sermons/SermonListPage/dropdown.module.scss` — focus `$primary`/`$primary-subtle` → `$primary-soft`/`$primary-soft-subtle`
+- `src/components/admin/sermons/SermonListPage/dropdown.module.scss` — `.date_input:focus`를 peri(`$primary-soft`/`$primary-soft-subtle`)로. **리뷰 반영(PR #124)**: 실제 트리거 버튼 `.filter_trigger`·메뉴 `.dropdown_item`·`.date_clear`에 focus 규칙이 없어 전역 navy outline으로 폴백하던 것을 peri focus로 추가(아래 D2·리뷰 반영 섹션)
 - `src/components/admin/layout/AdminHeader/index.module.scss` — `:focus-visible`를 `:hover`와 분리 + admin recipe 적용(`outline:none` 유지. `$primary-soft` border가 포커스 표시 — hover의 gray border와 구분, glow는 보조)
 - `docs/tech-debt/resolved.md` — PR #108 focus-ring 항목에 잔여 사이트(Select·admin) 완료 note 추가 / `docs/design-system/context.md` — 활성 부채 발췌의 stale focus-ring 줄을 해소로 정정 (active.md엔 focus-ring 항목 없음 — 이미 PR #108에서 resolved로 이관됨)
 
@@ -69,9 +69,12 @@ content/ui와 admin의 `:focus` 표시를 일관된 토큰·패턴으로 모은�
 
 ## Codex 1차 검증
 
-- **결론**: 생략 (저위험 SCSS). CODEX_FIRST_PASS 위임 트리거(큰 diff·고위험 파일·레이어 변경·검증 실패) 어디에도 해당 안 됨. 계획 단계 Codex 검증(CHANGE_REQUEST)을 이미 반영했고, Codex 윈도 런타임이 이번 세션에 3번 멈춰서(hang) 직접 측정으로 대신한다.
-- **현재 판단**: 구현 diff는 SCSS 줄 단위 교체뿐(토큰·믹스인 1:1 치환, 신규 로직 0). verify-task build가 `@include focus-ring()`·`$primary-soft`·`$primary-soft-subtle` 해석을 실증한다. Claude 자체 교차 확인 — 5개 diff 모두 토큰/믹스인 치환이고, AdminHeader만 hover/focus 규칙 분리를 더했다.
-- **다음 행동**: Claude 2차(verify-task) 기록 → COMMIT.
+- **결론**: PASS — 원 구현은 저위험 SCSS 치환(토큰·믹스인 1:1, 신규 로직 0)이라 1차 위임 트리거에 안 걸려 build·Claude 교차로 대신했다. 이후 PR #124 자동 리뷰 4건을 `codex:rescue`로 교차검증했다 — 수정 필요 1건(P2), 확인 3건(①·②·P3).
+- **현재 판단**: Codex verbatim —
+  > P2가 가장 무겁고 fix 범위가 `.filter_trigger` 하나에서 `.dropdown_item`, `.date_clear`까지 확장된다는 점이 사용자 판단과의 핵심 차이다. ①②는 같은 PR이 건드린 파일의 일관성 문제라 deferred할 이유가 없다. P3는 커밋된 doc에 생긴 내부 충돌이므로 같이 정리하는 것이 맞다.
+
+  풀이: 트리거가 `.filter_trigger` 하나가 아니라 셋이라 P2 범위를 넓혔고, 짚은 4건을 모두 반영했다. 버튼별 처리는 D2, FormField·context.md 안전성은 리뷰 반영 섹션 참조.
+- **다음 행동**: Claude 2차(verify-task 220114) 기록 → COMMIT.
 
 ## Claude 2차 검증
 
@@ -82,8 +85,26 @@ content/ui와 admin의 `:focus` 표시를 일관된 토큰·패턴으로 모은�
 | 시점 | run-id | lint | styles | build | knip신규 | 수동 확인 필요 |
 | --- | --- | --- | --- | --- | --- | --- |
 | 2차 | 20260615-181611 | ✅ | ✅ | ✅ | 0(기존 부채만) | Chrome 실측 — admin focus 4곳이 같은 peri recipe로, Select가 공통 링으로 떴다 (키보드 포커스 확인) |
+| 리뷰 반영 | 20260615-220114 | ✅ | ✅ | ✅ | 0(기존 부채만) | PR #124 리뷰 4건 반영 후 build·stylelint 통과(상세는 리뷰 반영 섹션). `.filter_trigger`는 원 PR에서 실측한 border+glow와 같은 토큰. `.dropdown_item` inset 링·`.date_clear` outline은 새 합성이라 build 컴파일만 확인(시각 미실측) |
+
+## 리뷰 반영 (PR #124 자동 리뷰 + Codex 교차검증)
+
+PR #124에 GitHub 자동 리뷰(Gemini 2 + Codex 2)가 4건을 지적했고, `codex:rescue` 교차검증으로 모두 확인한 뒤 반영했다.
+
+- **P2 (Codex, 핵심)**: focus 통일이 `.date_input`만 덮고 실제 dropdown 트리거 버튼은 빠졌다. `.filter_trigger`·`.dropdown_item`·`.date_clear`(전부 `<button>`)에 focus 규칙이 없어 전역 navy outline(`globals.scss:173`)으로 폴백했다. 셋 다 peri focus를 더했다(요소 형태별 처리는 아래 D2). Codex 교차검증이 `.dropdown_item`·`.date_clear`를 추가로 짚어 범위를 넓혔다.
+- **① (Gemini)**: `AdminHeader`의 `:focus-visible` glow가 `transition` 목록에 `box-shadow`가 없어 즉시 떴다. `transition`에 `box-shadow 0.15s`를 더해 `primitives`와 맞췄다(CONFIRMED).
+- **② (Gemini)**: `FormField` `:focus`가 `border` 단축을 다시 선언했다. 부모 `input`이 `1px solid $border-primary`라 `border-color: $border-focus`로 바꿔도 안전하다(CONFIRMED).
+- **P3 (Codex)**: `context.md:43`이 focus-ring 해소를 표시하는데 같은 문서 `:68`·`:83`에 "focus-ring 10곳"이 위반·로드맵으로 남아 모순이었다. 두 줄에서 지웠다(CONFIRMED).
 
 ## 의사결정 로그
+
+- **D2 — dropdown focus 통일을 트리거 버튼까지 넓힌다 (PR #124 리뷰 반영)**
+  - 문제: 원래 plan은 dropdown focus를 `.date_input`만 peri로 바꿨다. 리뷰가 실제 트리거 버튼 `.filter_trigger`와 메뉴 `.dropdown_item`·`.date_clear`는 focus 규칙이 없어 전역 navy outline으로 떠서, "admin dropdown focus 통일"이 미완임을 짚었다.
+  - 해결: 세 버튼에 peri focus를 더한다. 색은 셋 다 `$primary-soft`로 모으되, 요소 형태가 달라 한 recipe를 그대로 못 쓴다:
+    - `.filter_trigger` — border가 있어 `border-color` + glow (transition에 `box-shadow` 추가).
+    - `.dropdown_item` — borderless 메뉴라 inset peri 링.
+    - `.date_clear` — 패딩 0 텍스트 버튼이라 peri outline.
+  - 결과: dropdown 안 키보드 focus가 navy 없이 peri로 통일됐다. item active(`dropdown:142-149`)의 navy 배경은 focus가 아니라 selected 상태라 이번 범위 밖이다.
 
 - **D1 — admin focus accent를 `$primary-soft`(peri)로 통일**
   - 문제: admin focus가 dropdown(`$primary` navy + `$primary-subtle`), primitives(`$primary-soft` peri + 하드코딩 rgba), AdminHeader(`$txt-admin-tertiary`)로 제각각이다. admin 안에서 peri와 navy가 섞여 있다 — dropdown은 filter active를 peri로 두지만(`dropdown:32-40`) 트리거 focus는 navy(`dropdown:235`)다.
