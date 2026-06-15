@@ -201,6 +201,74 @@ node scripts/harness-gate.mjs <task-id>
 node scripts/complete-task.mjs <task-id>
 ```
 
+### 8. PR_REVIEW (조건부 — event-driven)
+
+COMMIT 이후, PR에 달린 리뷰에 대응하는 루프다. 파이프라인 8번째 필수 단계가 아니다 — 번호는 이 SKILL 본문의 절 순번일 뿐이다. CLAUDE.md 최상단 워크플로우 문자열(`EXPLORE→…→COMMIT`)에는 PR_REVIEW가 없다.
+
+**진입 조건 (둘 다 충족)**:
+- PR에 리뷰·CI 실패·인라인 코멘트가 달려 있다.
+- 사용자가 리뷰 대응을 요청했다 (예: "PR #119 리뷰 봐줘").
+
+리뷰는 비동기로 와서 결정적 hook 타이밍이 없다. 백그라운드 폴링·자동 실행을 하지 않는다. `agent-router` hook이 "객관 리뷰" 신호에 넛지를 줄 뿐, 절차를 자동으로 돌리지 않는다.
+
+**루프**: 수집 → 검증 → 처리 → 답글.
+
+1. **수집** — 사실부터 모은다. 명령은 `## PR 리뷰 명령` 참조.
+   - `gh pr view`(reviewDecision·reviews) + `gh pr checks` + `gh api .../comments`(인라인).
+2. **검증 — 중계 금지(relay)가 핵심.** 봇·사람 지적을 코드 확인 없이 그대로 옮기면 틀린다 (실제 오탐: #118 `dryRun`, #119 React 19 ref).
+   - 지적마다 실제 코드를 직접 확인한다. SSOT는 코드, 코멘트는 주장이다.
+   - 비자명·다툼·고위험은 Codex 교차 검증(`codex:rescue`), UI·동작은 브라우저 실측.
+   - 내 판단이 증거를 넘으면 단정하지 않는다 ("버그 확정" → "원인 미확정").
+3. **처리**
+   - 타당 → 수정 + exec-plan `## PR 리뷰 대응`에 판정·근거·커밋 ref 기록.
+   - 오탐 → 기각. 근거를 같이 남긴다.
+4. **답글 — Evidence block 3줄 필수.** 코멘트별로 다음 3줄을 채운다.
+   - `Claim:` 봇·리뷰어가 주장한 것.
+   - `Checked with:` 확인에 쓴 명령 또는 `file:line`.
+   - `Result:` 반영 / 오탐 / 이미 해결 (+ 커밋 ref).
+   - **hard rule**: 명령이나 `file:line` 근거가 없으면 그 지적엔 답글을 달지 않는다. `Checked with:`이 비면 검증 단계로 돌아가 코드를 다시 확인한다 — 무시하거나 근거 없이 기각하지 않는다.
+   - **게시 전 사용자 승인 필수** (공개 글이라 되돌리기 어렵다).
+
+**답글 owner**: claude-code가 검증 맥락을 쥐고 초안을 쓴다. 긴·민감한 답글만 `commit-pr-author`에 문체 다듬기를 위임한다 (PR 본문 owner 경계와 충돌하지 않음). 게시는 사용자 승인 후 claude-code가 한다.
+
+## PR 리뷰 명령
+
+저장소: `scseong/dnchurch`. Windows + Git Bash 환경 기준.
+
+**수집할 증거 필드 (고정)**: 코멘트 `URL/id` · `file:line` · 봇 주장 · 확인 명령 · 판정. 이 5개를 빠뜨리면 답글 추적이 끊긴다.
+
+이 레시피는 **인라인 리뷰 코멘트 스레드 답글** 기준이다 (#118·#119의 실제 케이스). PR 일반 코멘트(`issues/{PR#}/comments`)·새 리뷰 제출(`pulls/{PR#}/reviews`)은 범위 밖 — 필요해지면 추가한다.
+
+수집:
+
+```bash
+gh pr view <PR#> --json reviewDecision,state,mergeable,reviews
+gh pr checks <PR#>
+# 인라인 코멘트 id·위치 (gh 내장 --jq 사용 — 셸 파이프 | jq 는 Git Bash에 jq 미설치라 안 됨)
+gh api repos/scseong/dnchurch/pulls/<PR#>/comments \
+  --jq '.[] | "id=\(.id) | \(.user.login) | \(.path):\(.line // .original_line)"'
+# 코멘트 본문
+gh api repos/scseong/dnchurch/pulls/<PR#>/comments --jq '.[] | "=== \(.user.login) ===\n\(.body)\n"'
+```
+
+답글 게시 (jq 없음 → PowerShell `ConvertTo-Json`으로 본문 JSON 생성):
+
+```powershell
+$replyFile = "reply.md"                                     # 코멘트별 답글 본문(Evidence block 3줄)을 적은 .md
+$body = [System.IO.File]::ReadAllText($replyFile)
+$json = @{ body = $body } | ConvertTo-Json -Compress
+$tmp  = [System.IO.Path]::GetTempFileName()
+[System.IO.File]::WriteAllText($tmp, $json, [System.Text.UTF8Encoding]::new($false))  # BOM 없는 UTF-8
+& gh api "repos/scseong/dnchurch/pulls/<PR#>/comments/<commentId>/replies" --method POST --input $tmp --jq '.html_url'
+```
+
+**Windows gotcha 3건**:
+- `jq`는 Git Bash(MINGW)에 미설치 — `| jq`는 실패한다. gh 내장 `--jq`만 쓴다.
+- PowerShell 스크립트 끝에 `Remove-Item ".../replies..."` 류가 있으면 안전 가드가 그 URL을 삭제 경로로 오인 차단한다 — 임시 파일 정리는 별도 실행하거나 Git Bash `rm`으로.
+- 답글 엔드포인트: `POST /repos/{owner}/{repo}/pulls/{pr}/comments/{commentId}/replies` (인라인 코멘트 스레드 답글).
+
+**스크립트 승격 기준**: PR 2건 이상에서 같은 PowerShell 레시피를 반복하거나 thread 상태 필터가 필요해지면 `scripts/pr-review.mjs`로 옮긴다. 그전까지는 레시피만 유지한다.
+
 ## 검증 결과 기록 규칙
 
 `## Codex 계획 검증`, `## Codex 1차 검증`, `## Claude 2차 검증`의 결과를 exec-plan에 기록할 때 작성용 SSOT는 `.claude/skills/writing-style/SKILL.md`다. 본 SKILL은 검증 워크플로우 메타 정보만 담고, 표현 규칙(추상 표현 금지·구체화 4원소·Codex 결과 인용·나쁜/좋은 예·의사결정 로그 형식·한글 문장 규칙·검증 섹션 구조·검증 결과 표)은 모두 그쪽에 통합되어 있다.
