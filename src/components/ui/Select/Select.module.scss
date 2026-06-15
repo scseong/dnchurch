@@ -1,3 +1,8 @@
+@use 'sass:string';
+
+// chevron stroke 색은 $txt-tertiary를 따른다. data-uri라 #을 %23로 인코딩해 주입한다.
+$chevron-stroke: '%23' + string.slice('#{$txt-tertiary}', 2);
+
 // display는 선언하지 않는다 — 반응형 노출(pc_only 등)은 호출부 className이 소유한다.
 // (cross-module cascade 충돌을 피하려고 ui/Select가 display를 잡지 않음)
 .select {
@@ -11,14 +16,16 @@
   cursor: pointer;
   appearance: none;
 
-  // chevron — $txt-tertiary 계열 회색. data-uri라 토큰을 직접 주입할 수 없어 16진값 고정.
-  background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='10' viewBox='0 0 24 24' fill='none' stroke='%23737373' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
+  // chevron — 색은 위 $chevron-stroke($txt-tertiary)를 따른다.
+  background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='10' viewBox='0 0 24 24' fill='none' stroke='#{$chevron-stroke}' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
   background-repeat: no-repeat;
   background-position: right $spacing-10 center;
 
+  // border-color는 emphasized와 같은 $primary로 묻히므로, border와 분리된 offset
+  // outline으로 포커스를 표시한다 (일반·emphasized 상태 모두에서 보이게).
   &:focus-visible {
-    outline: none;
-    border-color: $border-focus;
+    outline: 2px solid $border-focus;
+    outline-offset: 2px;
   }
 
   &:disabled {
