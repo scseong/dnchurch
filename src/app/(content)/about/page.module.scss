@@ -8,7 +8,7 @@
 // ── Self Hero ──
 
 .hero {
-  background: linear-gradient(180deg, $bg-dark, $navy-950);
+  background: linear-gradient(180deg, $bg-dark, $bg-dark-nav);
   overflow: hidden;
 }
 
@@ -135,6 +135,7 @@
 .row_line {
   flex: 1;
   height: 0.1rem;
+  // semantic 미정: beige-200 라인 — 값 같은 $bg 토큰 없음(D2)
   background: $beige-200;
 }
 
@@ -186,7 +187,7 @@
   display: flex;
   align-items: flex-end;
   padding: $spacing-12;
-  background: linear-gradient(135deg, $beige-100, $beige-150);
+  background: linear-gradient(135deg, $bg-beige-subtle, $bg-secondary);
   border: 0.1rem solid $border-card;
   border-radius: $radius-s;
   overflow: hidden;
@@ -198,8 +199,8 @@
   inset: 0;
   opacity: 0.5;
   background-image:
-    linear-gradient($beige-150 0.1rem, transparent 0.1rem),
-    linear-gradient(90deg, $beige-150 0.1rem, transparent 0.1rem);
+    linear-gradient($bg-secondary 0.1rem, transparent 0.1rem),
+    linear-gradient(90deg, $bg-secondary 0.1rem, transparent 0.1rem);
   background-size: 2rem 2rem;
 }
 
@@ -211,7 +212,7 @@
   display: inline-block;
   margin-bottom: $spacing-4;
   padding: 0.3rem $spacing-8;
-  background: $white;
+  background: $bg-card;
   border: 0.1rem solid $border-card;
   border-radius: $radius-circle;
   font-size: $font-size-11;
@@ -235,7 +236,7 @@
 .index_grid {
   display: grid;
   grid-template-columns: 1fr;
-  background: $beige-50;
+  background: $bg-primary;
   border: 0.1rem solid $border-card;
   border-radius: $radius-m;
   overflow: hidden;
@@ -285,7 +286,7 @@
     }
   }
 
-  @include hover-bg-shift($beige-100);
+  @include hover-bg-shift($bg-beige-subtle);
 
   &[data-featured='true'] {
     background: $accent-subtle;
@@ -349,7 +350,7 @@
 
 .bottom_card {
   padding: $spacing-16 $spacing-20;
-  background: $white;
+  background: $bg-card;
   border: 0.1rem solid $border-card;
   border-radius: $radius-s;
 }
@@ -392,7 +393,7 @@
     left: $spacing-8;
     right: $spacing-8;
     height: 0.1rem;
-    background: $beige-150;
+    background: $bg-secondary;
   }
 }
 
@@ -408,7 +409,7 @@
   width: 1.2rem;
   height: 1.2rem;
   border-radius: $radius-circle;
-  background: $white;
+  background: $bg-card;
   border: 0.2rem solid $accent;
 }
 
