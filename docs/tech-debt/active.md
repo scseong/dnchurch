@@ -74,6 +74,15 @@
 - **영향 범위**: `src/app/**/*.module.scss`, `src/components/**/*.module.scss` 다수
 - **확인**: `yarn lint:styles | grep "primitive 토큰 직접 사용"` (현재 143건)
 - **발견일**: 2026-05-10 (stylelint-primitive-guardrail PR 도입 시 정확 카운트)
+- **2026-06-15 갱신(공유 컴포넌트)**: 공유 컴포넌트 10개 `.module.scss`에서 값 동일 별칭 19건을 semantic으로 바꿨다 — 공유 컴포넌트 survey 37 → 18. 화면은 안 바뀐다. 치환 상세는 exec-plan `2026-06-15-components-tokens` D1 참조. (`refactor/components-tokens`)
+- **DS 공백 18건(값 동일 별칭 없음 — 결정 필요)**: 값이 같은 semantic이 없어 그대로 둔다. 시각을 바꾸거나(news 결정 B 방식) 신규 토큰을 만드는 결정이 필요하고, 토큰 추가보다 단순화를 선호하는 기준상 사용자 결정 전까지 둔다. home의 `$gray-200` divider 보류분과 같은 줄기. 종류별:
+  - `$black` 굵은 검정 하이라인 9건 (MobileNavigation 5·board 4)
+  - 로고 브랜드 색 `$navy-950` 1건 (Header)
+  - `$beige-150` 헤더·하단탭 테두리 3건 (Header 2·BottomNav 1)
+  - `$beige-200` 활성 메뉴 배경 1건 (Header)
+  - 스켈레톤 `$gray-100`·`$gray-200` 2건 (PhotoSwipe)
+  - 비활성 버튼 배경 `$gray-200` 1건 (FormSubmitButton)
+  - Hero 그라데이션 `$navy-900`·`$navy-950` 1건
 
 ### 🟡 SCSS 하드코딩 색상 (23건)
 
