@@ -40,7 +40,7 @@
 
 `docs/tech-debt/active.md`에 등록된 항목 중 디자인 시스템 통합에 직결되는 것:
 
-- **focus-ring 패턴 통일 (10곳)** — `$primary`/`$primary-active`/`$border-focus`/`$border-primary` 4종 혼재. width `2px`·`0.2rem` 혼재. offset 양수·음수 혼재. globals만 `$focus-ring-*` 토큰화 완료.
+- ~~focus-ring 패턴 통일~~ → ✅ 해소: `focus-ring` mixin·`$focus-ring-*` 토큰으로 통일하고, 남아 있던 `ui/Select`와 admin focus까지 바꿨다(PR #108 + focus-ring-unify 2026-06-15). 상세는 [`../tech-debt/resolved.md`](../tech-debt/resolved.md).
 - **SCSS primitive 토큰 직접 사용 (143건)** — `$gray-*`·`$navy-*`·`$gold-*`·`$beige-*`를 컴포넌트 SCSS에서 직접 사용. stylelint warning은 도입돼 있지만 error는 못 올림.
 - **SCSS 하드코딩 색상 (49건)** — `.module.scss`에서 hex 색 직접 사용. `color-no-hex` 룰을 warning으로 운영.
 - **SCSS 네이밍 패턴 위반 (12건)** — snake_case 위반 className 5건, kebab-case 위반 SCSS 변수 7건.

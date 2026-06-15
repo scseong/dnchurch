@@ -21,6 +21,7 @@
 - **부채**: `:focus-visible` outline 10곳과 `Pagination.module.scss`의 `:focus` outline 1곳이 색·폭·offset을 직접 선언해 SSOT가 없었다
 - **해소**: `focus-ring($variant, $offset)` mixin(`@content`로 추가 속성 수용)과 `$focus-ring-strong-color` 토큰을 도입해 11곳(Notice 8·ListItem·SermonNoteEditor·Pagination)을 교체했다
 - **확인**: `rg -n ":focus|outline" src/components/ui/Pagination/Pagination.module.scss` → transition 선언 1건, focus outline 선언 0건. admin box-shadow 패턴은 범위 밖
+- **후속 (2026-06-15, focus-ring-unify)**: PR #108이 범위 밖으로 둔 마지막 두 곳을 마무리했다. `ui/Select`의 수동 `outline: 2px`를 `focus-ring` mixin으로 바꾸고(고정 px → 공통 토큰 링), admin focus(`dropdown`·`primitives`·`AdminHeader`)를 admin accent `$primary-soft` + glow `$primary-soft-subtle` 한 recipe로 통일했다. 하드코딩 `rgba(91,107,165,0.08)`도 `$primary-soft-subtle` 토큰으로 바꿨다. content/ui 입력 4개는 이미 `border-color: $border-focus`로 일관해 손대지 않았다.
 
 ### ✅ useDrawerHistory 라우트 이동 시 가짜 history 항목 (2026-06-02 해소, PR #108)
 
