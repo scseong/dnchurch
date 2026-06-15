@@ -74,6 +74,7 @@
 - **영향 범위**: `src/app/**/*.module.scss`, `src/components/**/*.module.scss` 다수
 - **확인**: `yarn lint:styles | grep "primitive 토큰 직접 사용"` (현재 143건)
 - **발견일**: 2026-05-10 (stylelint-primitive-guardrail PR 도입 시 정확 카운트)
+- **2026-06-15 갱신**: about 영역 8파일에서 primitive 36건 중 32건을 값이 같은 semantic 별칭으로 바꿨다(화면 색 무변화). 남은 4건은 값이 같은 면 토큰이 없어 `$beige-200` background를 주석과 함께 유지했다. (`refactor/about-tokens`, exec-plan `2026-06-15-about-tokens`)
 
 ### 🟡 SCSS 하드코딩 색상 (23건)
 
