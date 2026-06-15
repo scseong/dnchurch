@@ -77,7 +77,7 @@
 // ── 헤더 ──
 .header {
   padding: $spacing-24 $spacing-24 $spacing-16;
-  border-bottom: 1px solid $gray-200;
+  border-bottom: 1px solid $border-subtle;
   flex-shrink: 0;
 
   @include respond($breakpoint-tablet-sm) {
@@ -186,7 +186,7 @@
   display: flex;
   align-items: center;
   gap: $spacing-4;
-  border-top: 1px solid $gray-200;
+  border-top: 1px solid $border-subtle;
   font-size: $font-size-12;
   color: $primary-active;
   flex-shrink: 0;
@@ -211,7 +211,7 @@
 // ── 이전/다음 ──
 .nav {
   display: flex;
-  border-top: 1px solid $gray-200;
+  border-top: 1px solid $border-subtle;
   flex-shrink: 0;
   padding-bottom: env(safe-area-inset-bottom, 0);
 }
@@ -225,7 +225,7 @@
   font-size: $font-size-13;
 
   &:first-child {
-    border-right: 1px solid $gray-200;
+    border-right: 1px solid $border-subtle;
   }
 
   &[disabled],
