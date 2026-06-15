@@ -85,7 +85,7 @@ content/ui와 admin의 `:focus` 표시를 일관된 토큰·패턴으로 모은�
 | 시점 | run-id | lint | styles | build | knip신규 | 수동 확인 필요 |
 | --- | --- | --- | --- | --- | --- | --- |
 | 2차 | 20260615-181611 | ✅ | ✅ | ✅ | 0(기존 부채만) | Chrome 실측 — admin focus 4곳이 같은 peri recipe로, Select가 공통 링으로 떴다 (키보드 포커스 확인) |
-| 리뷰 반영 | 20260615-220114 | ✅ | ✅ | ✅ | 0(기존 부채만) | PR #124 리뷰 4건 반영 후 build·stylelint 통과(상세는 리뷰 반영 섹션). `.filter_trigger`는 원 PR에서 실측한 border+glow와 같은 토큰. `.dropdown_item` inset 링·`.date_clear` outline은 새 합성이라 build 컴파일만 확인(시각 미실측) |
+| 리뷰 반영 | 20260615-220114 | ✅ | ✅ | ✅ | 0(기존 부채만) | PR #124 리뷰 4건 반영 후 build·stylelint 통과. Chrome `/admin/sermons` served-CSS 실측: `.filter_trigger`·`.dropdown_item`·`.date_clear`·AdminHeader `.search` focus가 전부 peri `rgb(91,107,165)`(`$primary-soft`)로 렌더, navy 0곳. AdminHeader transition에 `box-shadow 0.15s` 포함 확인(① 반영) |
 
 ## 리뷰 반영 (PR #124 자동 리뷰 + Codex 교차검증)
 
