@@ -1,6 +1,6 @@
 # ui-search-select
 
-- **상태**: 🟡 진행 중
+- **상태**: ✅ 완료 (2026-06-15)
 - **시작일**: 2026-06-14
 - **브랜치**: feat/ui-search-select
 - **Open questions**: none (admin/content 분기 제거 — SearchField는 기본 시맨틱 토큰 1벌. `.shell` cascade는 WORK 중 불가 판명, 사용자 승인으로 폐기)
@@ -140,3 +140,9 @@
   - 이유: 포털·스크롤락 직접 재구현이라 ui/BottomSheet 재사용이 맞다.
   - 다음 기준: ui/Select 정착 후.
   - 기록 위치: `docs/tech-debt/active.md`(이번에 등록)
+
+## 회고
+
+- **잘된 것**: 검색 5종을 ui/SearchField 하나로 모으고 SermonSearchForm↔SeriesSearchForm 복제 마크업을 없앴다. clear 아이콘 3종(`HiX`·`IoClose`·`IoCloseCircle`)을 `IoClose` 1종으로 통일했다. 점검 중 `NoticeSearchBar`가 src import 0건 dead code임을 찾아 이관 대신 삭제로 돌려, 선언·폴백 없는 `--notice-*` 깨진 참조 12건이 한꺼번에 사라졌다. `.shell` cascade로 admin 톤을 주려던 계획이 WORK 중 불가(`.shell`은 CSS Module 해시 클래스 + ADR 0012로 admin 토큰이 컴파일타임 SCSS 변수)로 드러나자, 가정을 우기지 않고 Option C(기본 토큰 1벌)로 바꿔 사용자 승인을 받았다.
+- **다음에 할 것**: `SearchField`의 `disabled` 처리가 반쪽이다 — `disabled`는 `{...inputProps}`로 `<input>`엔 전달되지만 clear `<button>`엔 안 붙어, disabled 상태에서 값이 있으면 X가 여전히 클릭된다(gemini 자동 리뷰 #120). 호출부 5곳 모두 `disabled`를 안 써 지금은 드러나지 않으므로 보류했다(사용자 B 결정). 실제 `disabled` 호출부가 생기면 input·button 양쪽에 적용한다.
+- **발견된 부채 (→ tech-debt/active.md 옮길 것)**: 새로 등록한 부채 없음. portal hydration 항목은 `SortBottomSheet` 삭제를 반영해 영향 범위에서 빼는 것으로 갱신됐다(신규 아님). 공지 sort plumbing(`NOTICE_SORT_OPTIONS` 상수·`sort` 파라미터)은 SortBottomSheet 삭제로 UI는 사라졌으나 상수·서비스 경로가 남아 있다 — "공지 sort 기능 dead 여부"는 별도 검토로 분리(미등록).
