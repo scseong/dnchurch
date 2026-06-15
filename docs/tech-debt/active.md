@@ -340,3 +340,12 @@
 - **영향 범위** (2건): `docs/design-system/tokens.tokens.json`(생성물 — 손으로 고치지 말 것) / figma-console export 설정. 앱(`src/`) 무관
 - **확인**: `git show feat/ds-figma-sync:docs/design-system/tokens.tokens.json` → spacing.scale(약 1911행)·radius.scale(약 1547행)에서 키↔`$value` 대조
 - **발견일**: 2026-06-14 (PR #118 Gemini·Codex 자동 리뷰 + Claude 교차 검증)
+
+### 🟢 ui/Select 반응형(custom listbox) 보류 — native select 유지
+
+- **상태**: 등록만 (2026-06-15 Codex 2라운드 논의로 보류 결정)
+- **무엇**: `ui/Select`는 styled native `<select>`라 닫힌 트리거는 일관되지만 열린 옵션 목록은 브라우저·OS마다 외형이 다르다. 모든 뷰포트에서 같게 맞추려면 PC는 custom listbox(`role=listbox/option`·키보드·포커스 복귀·바깥 클릭·포지셔닝)를 직접 구현해야 하고, 모바일은 BottomSheet가 필요하다. 호출부 3곳 중 모바일 시트가 실제 필요한 곳은 `NoticeControlBar`(분류) 하나뿐이다 — 설교 정렬은 `AdvancedFilterSheet` 경로가 따로 있고, admin `Pagination`의 page-size Select는 모바일에 렌더되지 않는다.
+- **왜 지금 안 하나**: 현재 native `<select>`는 기능·접근성 결함이 없다. `aria-label`·키보드·option 의미를 브라우저와 보조기술이 처리한다. 차이는 열린목록 외형뿐이라, 결함 없는 native select를 custom listbox로 바꾸면 WAI-ARIA 접근성 계약을 직접 떠안아 회귀 위험만 커진다. 모바일 시트가 필요한 소비처도 하나뿐이라 공유 컴포넌트로 묶을 근거가 약하다.
+- **마이그레이션 경로**: "PC 열린목록까지 외형을 같게 맞춘다"가 제품 요구로 확정되면 별도 exec-plan으로 custom listbox를 최소 a11y 범위(트리거 role, `listbox/option`, `aria-selected`, Arrow/Enter/Esc/Home/End, 바깥 클릭 닫기, 포커스 복귀)로 만든다. PC/모바일 분기는 `useMediaQuery` 대신 CSS로 trigger를 숨긴다(`useMediaQuery`는 서버에서 `false`를 반환하고, 금지된 `queueMicrotask`에 의존한다). `NoticeControlBar`의 수동 PC select + 모바일 BottomSheet 중복은 그 작업에서 함께 정리한다.
+- **영향 범위**: `src/components/ui/Select/`, `src/app/(content)/news/notices/_component/NoticeControlBar.tsx` (현재 코드 변경 없음)
+- **발견일**: 2026-06-15 (ui-select-responsive 설계 분석 — Codex 2라운드 논의로 선택지 C(custom listbox) 보류)
