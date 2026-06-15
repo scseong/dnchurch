@@ -60,7 +60,7 @@
     display: block;
     font-size: $font-size-13;
     letter-spacing: 0.05rem;
-    color: $gold-600;
+    color: $accent;
   }
 
   h1 {
@@ -71,7 +71,7 @@
 
     .title_highlight {
       font-weight: $font-weight-bold;
-      color: $gold-600;
+      color: $accent;
     }
   }
 
@@ -109,12 +109,12 @@
     }
 
     .btn_primary {
-      background-color: $gold-600;
+      background-color: $accent;
       font-weight: $font-weight-bold;
       transition: background-color 0.2s ease;
 
       &:hover {
-        background-color: $gold-400;
+        background-color: $accent-hover;
       }
     }
 
