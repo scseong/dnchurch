@@ -1,6 +1,6 @@
 # client-portal-hydration
 
-- **상태**: 🟡 진행 중
+- **상태**: ✅ 완료 (2026-06-15)
 - **시작일**: 2026-06-15
 - **브랜치**: fix/client-portal-hydration
 - **Open questions**: none (focus-timing 리스크는 호출부 6곳 전부 closed-start 확인으로 해소)
@@ -113,3 +113,9 @@ Modal·BottomSheet의 hydration mismatch(서버 null vs 첫 클라 portal)를 �
   - 이유: ClientPortal 첫 패스가 null이라 그 시점 focus effect가 panel 부재로 skip.
   - 다음 기준: open=true로 mount하는 호출부가 생길 때.
   - 기록 위치: 없음 (본 plan 후속)
+
+## 회고
+
+- **잘된 것**: Modal·BottomSheet의 hydration mismatch를 공통 `ui/ClientPortal`(mounted two-pass) 하나로 해소하고, 3파일에 흩어진 `getElementById('modal-root')` 타깃 해석을 모았다. NoticeDrawer는 `!isOpen` 가드라 SSR에서 mismatch가 없음을 확인해, ClientPortal 통일 대신 redundant `typeof window` 한 줄만 지워 per-open 지연을 피했다. focus-timing 리스크는 호출부 6곳이 전부 closed-start임을 전수·실측 확인해 useDialog를 안 건드리고 닫았다.
+- **다음에 할 것**: Codex의 윈도 샌드박스가 이번 세션에 두 번 spawn에 실패했다(1차 검증은 BLOCK 뒤 재시도해 PASS, 리뷰 검증은 비동기 hiccup). Codex 위임 시 "환경 오류"와 "코드 판정"을 검증 이력에서 구분해 적고, 실패하면 Claude 실측(build+Chrome)으로 보완하는 흐름을 기본으로 둔다.
+- **발견된 부채 (→ tech-debt/active.md 옮길 것)**: portal hydration 항목은 resolved.md로 옮겼다(PR #122). gemini가 HIGH로 올린 3건(NoticeDrawer SSR·Modal/BottomSheet focus)은 현재 코드 기준 전부 오탐으로 확인하고 PR 스레드에 근거 답글을 달았다. 다만 미래에 ClientPortal을 처음부터 열린 상태나 조건부 렌더로 쓰면 focus를 놓치는 함정은 실제로 남아 있어, useDialog focus를 callback-ref로 견고하게 만드는 일은 후속 작업으로 분리했다.

@@ -4,6 +4,12 @@
 
 ---
 
+### ✅ portal 컴포넌트 하이드레이션 불일치 (2026-06-15 해소, PR #122)
+
+- **부채**: `BottomSheet.tsx`·`Modal.tsx`이 `typeof window` 가드 뒤 `createPortal`을 호출하면서 항상 렌더된다. 서버는 null, 첫 클라는 portal이라 hydration mismatch가 났다. `/sermons/[id]` 공유 BottomSheet에서 React 콘솔 에러로 확인했다(dev 출력, prod도 동일)
+- **해소**: 공통 `src/components/ui/ClientPortal`(mounted two-pass)로 서버·첫 클라 렌더를 둘 다 null로 맞춘 뒤 `useEffect` 이후 portal을 만들고, `getElementById('modal-root') ?? document.body` 타깃 해석도 모았다. Modal·BottomSheet를 래핑하고, NoticeDrawer는 `!isOpen`이라 SSR에서 mismatch가 없어 redundant `typeof window`만 제거했다
+- **확인**: `/sermons/2` 하드 리로드 시 콘솔 hydration 경고 0(Chrome 실측). 공유 BottomSheet가 정상으로 열린다. verify-task·Codex 계획·1차 모두 PASS
+
 ### ✅ `supabase` named export deprecated 제거 (2026-06-02 해소, PR #108)
 
 - **부채**: `client.ts`의 deprecated `supabase` named export가 모듈 로드 시 클라이언트를 즉시 만들어 lazy 싱글톤과 인스턴스가 둘로 갈렸다
