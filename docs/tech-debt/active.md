@@ -74,6 +74,7 @@
 - **영향 범위**: `src/app/**/*.module.scss`, `src/components/**/*.module.scss` 다수
 - **확인**: `yarn lint:styles | grep "primitive 토큰 직접 사용"` (현재 143건)
 - **발견일**: 2026-05-10 (stylelint-primitive-guardrail PR 도입 시 정확 카운트)
+- **2026-06-15 갱신**: news 영역 4파일에서 primitive 11건을 전부 정리했다(`$gray-200` divider→`$border-subtle`, hover→`$bg-hover`, `$white`→`$txt-inverse`). 값이 같은 별칭이 없어 DS semantic으로 바꿔 시각이 미세하게 달라졌다(사용자 결정 B). 배경·Hover 효과는 exec-plan `2026-06-15-news-tokens` D1 참조. (`refactor/news-tokens`)
 
 ### 🟡 SCSS 하드코딩 색상 (23건)
 
