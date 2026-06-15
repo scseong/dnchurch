@@ -45,8 +45,9 @@ $thumb-sub-w: 14rem;
   z-index: 1;
   font-size: $font-size-11;
   font-weight: $font-weight-bold;
+  // semantic 미정: gold 배지 위 dark navy 텍스트 — 값 보존
   color: $navy-950;
-  background: $gold-600;
+  background: $accent;
   padding: $padding-inline-xs;
   border-radius: $radius-xs;
   text-transform: uppercase;
@@ -75,7 +76,7 @@ $thumb-sub-w: 14rem;
 }
 
 .title {
-  @include text-body-emphasis($color: $white);
+  @include text-body-emphasis($color: $txt-inverse);
   @include ellipsis-multi(1);
 }
 
@@ -118,9 +119,9 @@ $thumb-sub-w: 14rem;
   width: $play-btn-size;
   height: $play-btn-size;
   border-radius: $radius-circle;
-  background: rgba($gold-600, 0.18);
-  border: 1px solid rgba($gold-600, 0.35);
-  color: $gold-600;
+  background: rgba($accent, 0.18);
+  border: 1px solid rgba($accent, 0.35);
+  color: $accent;
   transition:
     background 0.2s ease,
     color 0.2s ease;
@@ -137,7 +138,8 @@ $thumb-sub-w: 14rem;
 }
 
 .card:hover .play_btn {
-  background: $gold-600;
+  background: $accent;
+  // semantic 미정: gold 위 dark navy 아이콘 — 값 보존
   color: $navy-950;
 }
 
@@ -155,9 +157,9 @@ $thumb-sub-w: 14rem;
     width: $play-btn-size-lg;
     height: $play-btn-size-lg;
     border-radius: $radius-circle;
-    background: rgba($gold-600, 0.25);
-    border: 1px solid rgba($gold-600, 0.5);
-    color: $gold-600;
+    background: rgba($accent, 0.25);
+    border: 1px solid rgba($accent, 0.5);
+    color: $accent;
     align-items: center;
     justify-content: center;
     opacity: 0;

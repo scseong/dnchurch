@@ -51,7 +51,7 @@ $divider-height: 0.2rem;
   bottom: calc(-1 * $spacing-16);
   right: calc(-1 * $spacing-16);
   padding: $spacing-20 $spacing-24;
-  background: $navy-950;
+  background: $bg-dark-nav;
   border-radius: $radius-xs;
   text-align: center;
   display: flex;
@@ -63,14 +63,14 @@ $divider-height: 0.2rem;
   font-family: $font-family-secondary;
   font-size: $font-size-32;
   font-weight: $font-weight-regular;
-  color: $gold-600;
+  color: $accent;
   line-height: $line-height-reset;
 }
 
 .year_label {
   font-size: $font-size-11;
   font-weight: $font-weight-regular;
-  color: rgba($white, 0.5);
+  color: rgba($txt-inverse, 0.5);
   letter-spacing: 0.1rem;
 }
 
@@ -96,7 +96,7 @@ $divider-height: 0.2rem;
 .caption {
   margin-bottom: $spacing-12;
   display: inline-block;
-  @include text-caption-small($color: $gold-600);
+  @include text-caption-small($color: $accent);
   text-transform: uppercase;
   letter-spacing: $letter-spacing-wider;
 }
@@ -115,7 +115,7 @@ $divider-height: 0.2rem;
 .divider {
   width: $divider-width;
   height: $divider-height;
-  background: $gold-600;
+  background: $accent;
   margin: $spacing-16 0;
 }
 
@@ -153,7 +153,7 @@ $divider-height: 0.2rem;
   transition: color $transition-duration-normal $transition-easing-default;
 
   &:hover {
-    color: $gold-600;
+    color: $accent;
   }
 
   @include respond-up($breakpoint-tablet) {
@@ -167,7 +167,7 @@ $divider-height: 0.2rem;
 
 .faq_toggle {
   font-size: $font-size-18;
-  color: $gold-600;
+  color: $accent;
   line-height: $line-height-reset;
   flex-shrink: 0;
   transition: transform 0.2s ease;
@@ -205,7 +205,7 @@ $divider-height: 0.2rem;
   padding-bottom: $spacing-2;
   font-size: $font-size-13;
   font-weight: $font-weight-semibold;
-  color: $gold-600;
+  color: $accent;
   text-decoration: underline;
   text-decoration-color: transparent;
   text-underline-offset: 0.3rem;
@@ -214,7 +214,7 @@ $divider-height: 0.2rem;
     opacity $transition-duration-normal $transition-easing-default;
 
   &:hover {
-    text-decoration-color: $gold-600;
+    text-decoration-color: $accent;
     opacity: 0.8;
   }
 }
@@ -227,9 +227,9 @@ $divider-height: 0.2rem;
   width: fit-content;
   font-size: $font-size-13;
   font-weight: $font-weight-semibold;
-  color: $gold-600;
+  color: $accent;
   text-decoration: underline;
-  text-decoration-color: rgba($gold-600, 0.3);
+  text-decoration-color: rgba($accent, 0.3);
   text-underline-offset: 0.3rem;
   padding-bottom: $spacing-4;
   transition:
@@ -237,7 +237,7 @@ $divider-height: 0.2rem;
     opacity $transition-duration-normal $transition-easing-default;
 
   &:hover {
-    text-decoration-color: $gold-600;
+    text-decoration-color: $accent;
     opacity: 0.8;
   }
 }
