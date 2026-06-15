@@ -74,6 +74,7 @@
 - **영향 범위**: `src/app/**/*.module.scss`, `src/components/**/*.module.scss` 다수
 - **확인**: `yarn lint:styles | grep "primitive 토큰 직접 사용"` (현재 143건)
 - **발견일**: 2026-05-10 (stylelint-primitive-guardrail PR 도입 시 정확 카운트)
+- **2026-06-15 갱신**: stylelint 재측정 135건. home 영역(`app/_component/home` 7파일) 45건을 정리 — 42건은 값 동일 semantic 별칭으로 치환(`$accent`=`$gold-600`·`$bg-dark-nav`=`$navy-950` 등, 화면 무변화), 3건은 semantic 미정 예외(navy 텍스트·gray-200 divider, 주석). 잔여 약 93건. (`refactor/home-tokens`, exec-plan `2026-06-15-home-tokens`)
 
 ### 🟡 SCSS 하드코딩 색상 (23건)
 
