@@ -73,7 +73,7 @@
     color $transition-duration-normal $transition-easing-default;
 
   &:hover {
-    background-color: $gold-600;
+    background-color: $accent;
     color: $txt-inverse;
   }
 
@@ -111,7 +111,7 @@
   transition: color $transition-duration-normal $transition-easing-default;
 
   &:hover {
-    color: $gold-600;
+    color: $accent;
   }
 }
 
