@@ -100,10 +100,15 @@
     border-color 0.15s,
     color 0.15s;
 
-  &:hover,
-  &:focus-visible {
+  &:hover {
     border-color: $txt-admin-tertiary;
     color: $txt-secondary;
+  }
+
+  &:focus-visible {
+    border-color: $primary-soft;
+    color: $txt-secondary;
+    box-shadow: 0 0 0 3px $primary-soft-subtle;
     outline: none;
   }
 

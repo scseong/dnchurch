@@ -232,8 +232,8 @@
 
   &:focus {
     outline: none;
-    border-color: $primary;
-    box-shadow: 0 0 0 3px $primary-subtle;
+    border-color: $primary-soft;
+    box-shadow: 0 0 0 3px $primary-soft-subtle;
   }
 
   @include respond-up($breakpoint-pc-sm) {

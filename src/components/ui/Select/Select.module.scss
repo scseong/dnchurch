@@ -21,12 +21,9 @@ $chevron-stroke: '%23' + string.slice('#{$txt-tertiary}', 2);
   background-repeat: no-repeat;
   background-position: right $spacing-10 center;
 
-  // border-color는 emphasized와 같은 $primary로 묻히므로, border와 분리된 offset
-  // outline으로 포커스를 표시한다 (일반·emphasized 상태 모두에서 보이게).
-  &:focus-visible {
-    outline: 2px solid $border-focus;
-    outline-offset: 2px;
-  }
+  // border-color는 emphasized와 같은 $primary로 묻히므로, border와 분리된 outline 링으로
+  // 포커스를 표시한다 (일반·emphasized 모두에서 보이게). focus-ring 토큰을 공통으로 쓴다.
+  @include focus-ring();
 
   &:disabled {
     cursor: not-allowed;

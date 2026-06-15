@@ -22,7 +22,7 @@
 
   &:focus-visible {
     border-color: $primary-soft;
-    box-shadow: 0 0 0 3px rgba(91, 107, 165, 0.08);
+    box-shadow: 0 0 0 3px $primary-soft-subtle;
   }
 
   &:disabled {
@@ -67,7 +67,7 @@
 
   &:focus-within {
     border-color: $primary-soft;
-    box-shadow: 0 0 0 3px rgba(91, 107, 165, 0.08);
+    box-shadow: 0 0 0 3px $primary-soft-subtle;
   }
 
   .control {
