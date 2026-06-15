@@ -37,7 +37,7 @@ export default function NoticeDrawer({ notice, onClose, onNavigate, hasPrev, has
     return () => document.removeEventListener('keydown', handleKeyDown);
   }, [isOpen, handleKeyDown]);
 
-  if (!isOpen || typeof window === 'undefined') return null;
+  if (!isOpen) return null;
 
   const isNew = isRecent(notice.created_at);
   const isUrgent = notice.category === '긴급';

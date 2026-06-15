@@ -1,10 +1,10 @@
 'use client';
 
 import { MouseEvent, PropsWithChildren, ReactNode, useRef } from 'react';
-import { createPortal } from 'react-dom';
 import clsx from 'clsx';
 import { IoClose } from 'react-icons/io5';
 import { useDialog } from '@/hooks/useDialog';
+import { ClientPortal } from '../ClientPortal/ClientPortal';
 import styles from './BottomSheet.module.scss';
 
 type Props = PropsWithChildren<{
@@ -51,52 +51,51 @@ export function BottomSheet({
     componentName: 'BottomSheet'
   });
 
-  if (typeof window === 'undefined') return null;
-
   const showHeader = Boolean(trimmedTitle) || showClose;
 
   const handleOverlayClick = (e: MouseEvent<HTMLDivElement>) => {
     if (e.target === overlayRef.current) onClose();
   };
 
-  return createPortal(
-    <div
-      ref={overlayRef}
-      className={clsx(styles.overlay, open && styles.open)}
-      onClick={handleOverlayClick}
-      aria-hidden={!open}
-      inert={!open}
-    >
+  return (
+    <ClientPortal>
       <div
-        ref={panelRef}
-        className={clsx(styles.sheet, open && styles.open)}
-        role="dialog"
-        aria-modal="true"
-        {...(trimmedTitle
-          ? { 'aria-labelledby': titleId }
-          : { 'aria-label': accessibleLabel })}
-        tabIndex={-1}
+        ref={overlayRef}
+        className={clsx(styles.overlay, open && styles.open)}
+        onClick={handleOverlayClick}
+        aria-hidden={!open}
+        inert={!open}
       >
-        <div className={styles.handle} aria-hidden="true" />
-        {showHeader && (
-          <header className={styles.header}>
-            {trimmedTitle && <h2 id={titleId} className={styles.title}>{title}</h2>}
-            {showClose && (
-              <button
-                type="button"
-                className={styles.close_btn}
-                onClick={onClose}
-                aria-label="닫기"
-              >
-                <IoClose />
-              </button>
-            )}
-          </header>
-        )}
-        <div className={styles.body}>{children}</div>
-        {footer && <footer className={styles.footer}>{footer}</footer>}
+        <div
+          ref={panelRef}
+          className={clsx(styles.sheet, open && styles.open)}
+          role="dialog"
+          aria-modal="true"
+          {...(trimmedTitle
+            ? { 'aria-labelledby': titleId }
+            : { 'aria-label': accessibleLabel })}
+          tabIndex={-1}
+        >
+          <div className={styles.handle} aria-hidden="true" />
+          {showHeader && (
+            <header className={styles.header}>
+              {trimmedTitle && <h2 id={titleId} className={styles.title}>{title}</h2>}
+              {showClose && (
+                <button
+                  type="button"
+                  className={styles.close_btn}
+                  onClick={onClose}
+                  aria-label="닫기"
+                >
+                  <IoClose />
+                </button>
+              )}
+            </header>
+          )}
+          <div className={styles.body}>{children}</div>
+          {footer && <footer className={styles.footer}>{footer}</footer>}
+        </div>
       </div>
-    </div>,
-    document.getElementById('modal-root') ?? document.body
+    </ClientPortal>
   );
 }
