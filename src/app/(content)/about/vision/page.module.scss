@@ -169,7 +169,7 @@
   align-items: flex-start;
   gap: $spacing-12;
   padding: $spacing-16;
-  background: $white;
+  background: $bg-card;
   border: 0.1rem solid $border-card;
   border-radius: $radius-m;
 
@@ -198,6 +198,7 @@
   height: 4.4rem;
   border-radius: $radius-m;
 
+  // semantic 미정: beige-200 면 — 값 같은 $bg 토큰 없음(D2)
   background: $beige-200;
 
   svg {
@@ -270,7 +271,7 @@
 
 .history_section {
   padding: $spacing-32 $container-padding;
-  background: $beige-100;
+  background: $bg-beige-subtle;
   border-top: 0.1rem solid $border-card;
 
   @include respond-up($breakpoint-pc-sm) {
@@ -327,6 +328,7 @@
     bottom: 0.6rem;
     left: 5.6rem;
     width: 0.1rem;
+    // semantic 미정: beige-200 라인 — 값 같은 $bg 토큰 없음(D2)
     background: $beige-200;
 
     @include respond-up($breakpoint-pc-sm) {
@@ -365,7 +367,7 @@
   height: 1rem;
   margin-top: 0.4rem;
   border-radius: $radius-circle;
-  background: $white;
+  background: $bg-card;
   border: 0.2rem solid $accent;
   justify-self: center;
 

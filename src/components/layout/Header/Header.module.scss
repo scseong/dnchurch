@@ -15,7 +15,7 @@ $indicator-height: 0.2rem;
   position: sticky;
   top: 0;
   z-index: $z-header;
-  background-color: $white;
+  background-color: $bg-card;
   border-bottom: 0.1rem solid $beige-150;
 
   @include respond-up($header-breakpoint) {
@@ -106,7 +106,7 @@ $indicator-height: 0.2rem;
   z-index: calc($z-header - 1);
   overflow-x: auto;
   scrollbar-width: none;
-  background-color: $white;
+  background-color: $bg-card;
   border-bottom: 0.1rem solid $border-card;
 
   &::-webkit-scrollbar {
@@ -154,7 +154,7 @@ $indicator-height: 0.2rem;
 // ── Top Bar ──
 
 .top_bar {
-  background-color: $navy-950;
+  background-color: $bg-dark-nav;
   color: $txt-inverse;
 }
 
@@ -205,7 +205,7 @@ $indicator-height: 0.2rem;
   position: sticky;
   top: 0;
   z-index: $z-header;
-  background-color: $white;
+  background-color: $bg-card;
   border-bottom: 0.1rem solid $beige-150;
   transition: border-bottom-color $transition-duration-normal $transition-easing-default;
 }
@@ -319,7 +319,7 @@ $indicator-height: 0.2rem;
   left: 50%;
   transform: translateX(-50%);
   padding: $spacing-8;
-  background-color: $white;
+  background-color: $bg-card;
   border-top: $indicator-height solid $primary;
   border-radius: 0 0 $radius-s $radius-s;
   box-shadow: $shadow-md;
@@ -411,12 +411,12 @@ $indicator-height: 0.2rem;
   width: $icon-button-size-sm;
   height: $icon-button-size-sm;
   border-radius: $radius-circle;
-  background-color: $gold-600;
-  color: $white;
+  background-color: $accent;
+  color: $txt-inverse;
   transition: background-color $transition-duration-normal $transition-easing-default;
 
   &:hover {
-    background-color: $gold-400;
+    background-color: $accent-hover;
   }
 
   @include respond-up($breakpoint-pc-sm) {

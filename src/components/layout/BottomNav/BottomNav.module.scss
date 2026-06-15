@@ -10,7 +10,7 @@
   left: 0;
   right: 0;
   z-index: $z-bottom-nav;
-  background-color: $white;
+  background-color: $bg-card;
   border-top: 0.1rem solid $beige-150;
   // iOS 홈 인디케이터 영역만큼 배경을 확장
   padding-bottom: env(safe-area-inset-bottom, 0);

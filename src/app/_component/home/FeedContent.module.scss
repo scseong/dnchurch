@@ -27,8 +27,8 @@
 
 .tab_active {
   font-weight: $font-weight-semibold;
-  color: $gold-600;
-  border-bottom-color: $gold-600;
+  color: $accent;
+  border-bottom-color: $accent;
 }
 
 .tab_inactive {
@@ -95,11 +95,11 @@
 }
 
 .color_bar_news {
-  background: $gold-600;
+  background: $accent;
 }
 
 .color_bar_sharing {
-  background: $gold-600;
+  background: $accent;
 }
 
 .more_link {
@@ -107,24 +107,24 @@
   display: block;
   width: fit-content;
   text-decoration: underline;
-  text-decoration-color: rgba($gold-600, 0.2);
+  text-decoration-color: rgba($accent, 0.2);
   text-underline-offset: 0.3rem;
   font-size: $font-size-13;
   font-weight: $font-weight-medium;
-  color: rgba($gold-600, 0.8);
+  color: rgba($accent, 0.8);
   transition:
     color $transition-duration-normal $transition-easing-default,
     text-decoration-color $transition-duration-normal $transition-easing-default;
 
   &:hover {
-    color: $gold-600;
-    text-decoration-color: $gold-600;
+    color: $accent;
+    text-decoration-color: $accent;
   }
 }
 
 // ─── List Card ──────────────────────────────────────
 .list_card {
-  background: $white;
+  background: $bg-card;
   border-radius: $radius-xs;
   border: $spacing-1 solid $border-primary;
   overflow: hidden;
@@ -139,6 +139,7 @@
   transition: background-color $transition-duration-normal $transition-easing-default;
 
   &:not(:last-child) {
+    // semantic 미정: $gray-200 divider — $border-primary(gray-300)·$border-subtle와 값이 달라 보존
     border-bottom: $spacing-1 solid $gray-200;
   }
 
