@@ -19,7 +19,7 @@
 }
 
 .row {
-  border-bottom: 1px solid $gray-200;
+  border-bottom: 1px solid $border-subtle;
   cursor: pointer;
   transition: background-color 0.12s ease;
 
@@ -29,7 +29,7 @@
   }
 
   &:hover {
-    background-color: $gray-200;
+    background-color: $bg-hover;
   }
 
   &.pinned {
@@ -171,18 +171,18 @@
   display: flex;
   flex-direction: column;
   gap: $spacing-4;
-  border-top: 1px solid $gray-200;
+  border-top: 1px solid $border-subtle;
   text-align: left;
   cursor: pointer;
   transition: background-color 0.12s ease;
   width: 100%;
 
   &:last-child {
-    border-bottom: 1px solid $gray-200;
+    border-bottom: 1px solid $border-subtle;
   }
 
   &:hover {
-    background-color: $gray-200;
+    background-color: $bg-hover;
   }
 
   &.pinned {
