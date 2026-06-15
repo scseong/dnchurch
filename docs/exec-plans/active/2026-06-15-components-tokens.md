@@ -49,15 +49,15 @@
 
 ## Codex 계획 검증
 
-- **결론**: 생략 (저위험 + 기존 토큰). 19곳 전부 `_color.scss`에서 값이 같은 별칭이고 신규 토큰·로직이 없다. SCSS 변수는 컴파일 시점에 같은 hex로 풀리므로 화면이 안 바뀐다. build·stylelint·Chrome 실측으로 확인한다.
-- **현재 판단**: 공유 컴포넌트라 영향 범위는 넓지만 변경은 별칭 치환뿐이라 무시각 변경이다.
-- **다음 행동**: WORK 1단계.
+- **결론**: PASS — 계획이 단순(값 동일 별칭만 치환, 신규 토큰·로직 0)해 사전 plan 리뷰 대신 머지 직전 Codex 구현 리뷰로 계획의 핵심 전제(무시각 변경)가 지켜졌는지까지 확인했다. 상세는 아래 Codex 1차 검증.
+- **현재 판단**: 공유 컴포넌트라 영향 범위는 넓지만 변경은 별칭 치환뿐이라 무시각 변경이다. Codex가 `_color.scss` 정의와 대조해 전제를 확인했다.
+- **다음 행동**: Codex 1차 검증 결과 반영.
 
 ## Codex 1차 검증
 
-- **결론**: 생략 (별칭 치환). diff가 primitive→값 동일 semantic 치환뿐이라 Codex 추론이 더할 게 없다.
-- **현재 판단**: 별칭 치환이라 5체크 해당 없음 — 값 동일성은 `_color.scss` 정의로 결정적이고 build가 컴파일을 검증한다.
-- **다음 행동**: Claude 2차 검증으로 마무리
+- **결론**: PASS — 머지 직전(PR #123) Codex가 home·about·news·공유 컴포넌트 4영역 SCSS diff를 `_color.scss`와 대조 검증했다. Codex verbatim: "non-news 치환은 모두 value-identical, news 값 변경은 명시된 예외 범위, border 제거도 렌더링 변화 없는 중복 제거입니다."
+- **현재 판단**: Codex가 (1) non-news 치환 전부 값 동일(`_color.scss` 11개 별칭 대조), (2) 잘못된 컨텍스트 치환 없음, (3) FormSubmitButton `.disabled_button` border 제거는 값 동일 중복(`$border-primary`=`$gray-300`=#d1d5db), (4) 깨진 셀렉터·문법 없음을 확인했다. news는 결정 B의 의도된 값 변경으로 확인.
+- **다음 행동**: Claude 2차 검증으로 마무리(완료).
 
 ## Claude 2차 검증
 
@@ -67,7 +67,8 @@
 
 | 시점 | run-id | lint | styles | build | knip신규 | 수동 확인 |
 | --- | --- | --- | --- | --- | --- | --- |
-| 2차 | 20260615-202844 | ✅ | ✅ | ✅ | 0(기존 부채만) | 공유 컴포넌트 primitive 37→18. Chrome 홈에서 navy-950 9곳·gold-600 100곳·white 64곳이 기대 hex 그대로 렌더(`mobile_header` 배경 `rgb(255,255,255)`) |
+| Codex 1차 | — | — | — | — | — | PASS — 4영역 치환 non-news 값 동일·news 결정 B·FormSubmitButton border 중복 제거 확인 (verbatim 위) |
+| Claude 2차 | 20260615-212205 | ✅ | ✅ | ✅ | 0(기존 부채만) | 공유 컴포넌트 primitive 37→18. Chrome 홈에서 navy-950 9곳·gold-600 100곳·white 64곳이 기대 hex 그대로 렌더(`mobile_header` 배경 `rgb(255,255,255)`) |
 
 ## 의사결정 로그
 
