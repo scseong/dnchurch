@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useEffect, useLayoutEffect, useState, useCallback } from 'react';
-import { IoSearchOutline, IoNotificationsOutline, IoHeartOutline } from 'react-icons/io5';
+import { IoHeartOutline } from 'react-icons/io5';
 import clsx from 'clsx';
 import LayoutContainer from '@/components/layout/container/LayoutContainer';
 import { GNB_ITEMS, isActiveGnb, type NavItem } from '@/config/navigation';
@@ -121,12 +121,6 @@ export default function DesktopHeader() {
 
           {/* 유틸리티 */}
           <div className={styles.utility}>
-            <Link href="/search" className={styles.utility_btn} aria-label="검색">
-              <IoSearchOutline />
-            </Link>
-            <button type="button" className={styles.utility_btn} aria-label="알림">
-              <IoNotificationsOutline />
-            </button>
             <Link href="/about/welcome" className={styles.cta_btn}>
               <IoHeartOutline className={styles.cta_icon} />
               <span className={styles.cta_text}>처음 오셨나요?</span>

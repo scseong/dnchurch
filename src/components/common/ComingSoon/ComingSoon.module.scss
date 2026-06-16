@@ -1,0 +1,38 @@
+.wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: $content-gap-m;
+  padding: $section-gap-64 $container-padding;
+}
+
+.badge {
+  @include text-caption-strong($color: $accent);
+}
+
+.title {
+  @include text-card-title;
+}
+
+.desc {
+  max-width: 42rem;
+
+  @include text-sub;
+}
+
+.home_link {
+  display: inline-flex;
+  align-items: center;
+  margin-top: $content-gap-s;
+  padding: $padding-control;
+  border-radius: $radius-xs;
+  background-color: $primary;
+
+  @include text-label-emphasis($color: $txt-inverse);
+  @include hover-bg-shift($primary-hover);
+
+  &:active {
+    background-color: $primary-active;
+  }
+}

@@ -69,35 +69,6 @@ $indicator-height: 0.2rem;
   text-overflow: ellipsis;
 }
 
-.mobile_actions {
-  display: flex;
-  align-items: center;
-  gap: $spacing-4;
-  margin-right: calc(-1 * $spacing-10);
-  flex-shrink: 0;
-}
-
-.mobile_action_btn {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  min-width: 4.2rem;
-  min-height: 4.2rem;
-  border-radius: $radius-circle;
-  color: $txt-secondary;
-  transition: color $transition-duration-normal $transition-easing-default;
-
-  &:hover {
-    color: $txt-primary;
-    background-color: $overlay-subtle;
-  }
-
-  svg {
-    width: 2.2rem;
-    height: 2.2rem;
-  }
-}
-
 // ── 하단 행: 형제 페이지 탭 (references/Greeting.jsx MSubTabs 일치) ──
 
 .mobile_tabs {
@@ -367,39 +338,6 @@ $indicator-height: 0.2rem;
   align-items: center;
   gap: $spacing-6;
   flex-shrink: 0;
-}
-
-.utility_btn {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: $icon-button-size-sm;
-  height: $icon-button-size-sm;
-  border-radius: $radius-circle;
-  color: $txt-secondary;
-  transition:
-    color $transition-duration-normal $transition-easing-default,
-    background-color $transition-duration-normal $transition-easing-default;
-
-  &:hover {
-    color: $txt-primary;
-    background-color: $overlay-subtle;
-  }
-
-  svg {
-    width: 2rem;
-    height: 2rem;
-  }
-
-  @include respond-up($breakpoint-pc-sm) {
-    width: $icon-button-size;
-    height: $icon-button-size;
-
-    svg {
-      width: 2.2rem;
-      height: 2.2rem;
-    }
-  }
 }
 
 // ── CTA 버튼 ──

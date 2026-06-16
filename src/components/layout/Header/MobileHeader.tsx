@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
-import { IoChevronBack, IoSearchOutline } from 'react-icons/io5';
+import { IoChevronBack } from 'react-icons/io5';
 import clsx from 'clsx';
 import { resolveMobileHeader, resolveSiblingTabs } from '@/config/navigation';
 import styles from './Header.module.scss';
@@ -31,12 +31,6 @@ export default function MobileHeader() {
         </div>
 
         <h1 className={styles.mobile_title}>{title}</h1>
-
-        <div className={styles.mobile_actions}>
-          <Link href="/search" className={styles.mobile_action_btn} aria-label="검색">
-            <IoSearchOutline />
-          </Link>
-        </div>
       </div>
 
       {/* 하단 행: 형제 페이지 탭 */}
