@@ -129,6 +129,21 @@ Codex stdout verbatim (verdict 근거 핵심):
 
 </details>
 
+## PR 리뷰 대응
+
+PR #125 리뷰를 § 8 절차로 처리했다 (수집 → 코드/문서 대조 검증 → 반영). 봇 2 + Codex 1, 고유 6건.
+
+| 지적 | 출처 | Checked with | 판정 | 반영 |
+| --- | --- | --- | --- | --- |
+| `--paginate` 없으면 코멘트 30개 초과 누락 | PR 봇 + Codex | GitHub 문서: 기본 per_page=30·최대 100 | 타당 | 수집 2줄에 `--paginate` |
+| 답글은 최상위 comment id만 | PR 봇 + Codex | GitHub 문서: "replies to replies not supported" | 타당 | `select(.in_reply_to_id==null)` + gotcha 1줄 |
+| CI 실패 로그 수집 필요 | PR 봇 | `gh pr checks`는 상태만, 로그는 `gh run view --log-failed`(Actions 한정) | 타당 | 레시피 2줄 + 외부 CI 주석 |
+| Evidence `Checked with:`에 수집 명령만 적어도 통과 | Codex Q3 | 규칙 문구 직접 확인 | 타당 | hard rule을 "수집 명령은 근거 아님"으로 강화 |
+| 새 writing 규칙이 기존 예시와 충돌 | Codex Q4 | writing-style `:335-338` 짧은 2문장 | 타당 | "표 셀·3개+, 짧은 2문장 예외"로 한정 |
+| `GetTempFileName` 임시파일 누적 | Codex 보조 | gotcha #2가 이미 정리 안내 | 중복 | 안 함 |
+
+오탐: gemini는 API 경로 지적을 스스로 오탐 처리(우리 판정에 동의). 최종 검증에서 Codex가 FIX ③↔④ 충돌(④가 ③의 CI 로그·문서 인용까지 배제)을 잡아, ④ 허용 목록을 넓혀 해소.
+
 ## 후속 작업
 
 - PR 리뷰 수집·답글 범위 확장 (issue 코멘트 + 새 리뷰 제출)

@@ -224,9 +224,9 @@ COMMIT 이후, PR에 달린 리뷰에 대응하는 루프다. 파이프라인 8�
    - 오탐 → 기각. 근거를 같이 남긴다.
 4. **답글 — Evidence block 3줄 필수.** 코멘트별로 다음 3줄을 채운다.
    - `Claim:` 봇·리뷰어가 주장한 것.
-   - `Checked with:` 확인에 쓴 명령 또는 `file:line`.
+   - `Checked with:` 지적을 직접 확인·반증한 산출물 — 코드 열람(`file:line`)·빌드/타입체크/테스트·CI 실패 로그·공식 문서나 API 인용·브라우저 실측. **수집 명령(`gh api .../comments`·`gh pr view`)은 근거가 아니다** — 무엇을 검증할지 고를 뿐 주장을 확인하지 않는다.
    - `Result:` 반영 / 오탐 / 이미 해결 (+ 커밋 ref).
-   - **hard rule**: 명령이나 `file:line` 근거가 없으면 그 지적엔 답글을 달지 않는다. `Checked with:`이 비면 검증 단계로 돌아가 코드를 다시 확인한다 — 무시하거나 근거 없이 기각하지 않는다.
+   - **hard rule**: 위 산출물 근거가 없으면(`Checked with:`이 비거나 수집 명령뿐이면) 그 지적엔 답글을 달지 않는다. 검증 단계로 돌아가 코드를 다시 확인한다 — 무시하거나 근거 없이 기각하지 않는다.
    - **게시 전 사용자 승인 필수** (공개 글이라 되돌리기 어렵다).
 
 **답글 owner**: claude-code가 검증 맥락을 쥐고 초안을 쓴다. 긴·민감한 답글만 `commit-pr-author`에 문체 다듬기를 위임한다 (PR 본문 owner 경계와 충돌하지 않음). 게시는 사용자 승인 후 claude-code가 한다.
@@ -244,11 +244,15 @@ COMMIT 이후, PR에 달린 리뷰에 대응하는 루프다. 파이프라인 8�
 ```bash
 gh pr view <PR#> --json reviewDecision,state,mergeable,reviews
 gh pr checks <PR#>
+# CI 실패 진입 시 (GitHub Actions에 한함): 상태만으론 부족 — 실패 step 로그까지
+gh run view <run-id> --log-failed       # run-id는 위 checks의 실패 항목 링크에서
+# (Vercel·Supabase 등 외부 CI는 해당 플랫폼 로그 URL을 Evidence에 직접 첨부)
 # 인라인 코멘트 id·위치 (gh 내장 --jq 사용 — 셸 파이프 | jq 는 Git Bash에 jq 미설치라 안 됨)
-gh api repos/scseong/dnchurch/pulls/<PR#>/comments \
-  --jq '.[] | "id=\(.id) | \(.user.login) | \(.path):\(.line // .original_line)"'
-# 코멘트 본문
-gh api repos/scseong/dnchurch/pulls/<PR#>/comments --jq '.[] | "=== \(.user.login) ===\n\(.body)\n"'
+# --paginate: 코멘트 30개 초과 PR도 전부 (기본 per_page=30). select(in_reply_to_id==null): 답글 대상은 최상위 코멘트만
+gh api --paginate repos/scseong/dnchurch/pulls/<PR#>/comments \
+  --jq '.[] | select(.in_reply_to_id == null) | "id=\(.id) | \(.user.login) | \(.path):\(.line // .original_line)"'
+# 코멘트 본문 (답글·맥락 포함 전체)
+gh api --paginate repos/scseong/dnchurch/pulls/<PR#>/comments --jq '.[] | "=== \(.user.login) ===\n\(.body)\n"'
 ```
 
 답글 게시 (jq 없음 → PowerShell `ConvertTo-Json`으로 본문 JSON 생성):
@@ -265,7 +269,7 @@ $tmp  = [System.IO.Path]::GetTempFileName()
 **Windows gotcha 3건**:
 - `jq`는 Git Bash(MINGW)에 미설치 — `| jq`는 실패한다. gh 내장 `--jq`만 쓴다.
 - PowerShell 스크립트 끝에 `Remove-Item ".../replies..."` 류가 있으면 안전 가드가 그 URL을 삭제 경로로 오인 차단한다 — 임시 파일 정리는 별도 실행하거나 Git Bash `rm`으로.
-- 답글 엔드포인트: `POST /repos/{owner}/{repo}/pulls/{pr}/comments/{commentId}/replies` (인라인 코멘트 스레드 답글).
+- 답글 엔드포인트: `POST /repos/{owner}/{repo}/pulls/{pr}/comments/{commentId}/replies` (인라인 코멘트 스레드 답글). `<commentId>`는 **최상위 코멘트(`in_reply_to_id==null`)만** — 답글의 id로는 게시 실패(GitHub은 replies-to-replies 미지원). 그래서 위 수집 `--jq`에서 root만 추린다.
 
 **스크립트 승격 기준**: PR 2건 이상에서 같은 PowerShell 레시피를 반복하거나 thread 상태 필터가 필요해지면 `scripts/pr-review.mjs`로 옮긴다. 그전까지는 레시피만 유지한다.
 
