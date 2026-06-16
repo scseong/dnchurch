@@ -1,6 +1,6 @@
 # home-tokens
 
-- **상태**: 🟡 진행 중
+- **상태**: ✅ 완료 (2026-06-16)
 - **시작일**: 2026-06-15
 - **브랜치**: refactor/home-tokens
 - **Open questions**: none
@@ -87,3 +87,9 @@
   - 문제: `border-bottom: ... $gray-200`(divider)은 `$border-primary`(gray-300)·`$border-subtle`(rgba gray-500 22%)와 값이 달라 별칭으로 못 바꾼다.
   - 해결: 값을 보존하려 `$gray-200`을 두고 주석을 달았다. 다른 border 토큰으로 바꾸면 색이 미세하게 달라진다.
   - 결과: 시각을 보존했다. divider 색 정책이 정해지면 일괄 정리한다.
+
+## 회고
+
+- **잘된 것**: 값 동일 별칭만 치환해 무시각 변경을 보장했고, `rgba($gold-600, α)`를 `rgba($accent, α)`로 흡수해 stylelint 경고까지 없앴다. Chrome 실측(eyebrow·배지·다크 면)으로 색이 같음을 확인했다.
+- **다음에 할 것**: 남은 예외 3건(gold 위 navy 텍스트 2·`$gray-200` divider 1)은 text-on-accent·divider 토큰 정책이 정해지면 정리한다.
+- **발견된 부채**: gold 위 navy 텍스트·`$gray-200` divider에 값 동일 semantic이 없다 → `docs/tech-debt/active.md` primitive 항목 통합 노트(디자인 시스템(DS) 공백)에 기록했다.

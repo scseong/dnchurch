@@ -1,6 +1,6 @@
 # focus-ring-unify
 
-- **상태**: 🟡 진행 중
+- **상태**: ✅ 완료 (2026-06-16)
 - **시작일**: 2026-06-15
 - **브랜치**: style/focus-ring-unify
 - **Open questions**: none
@@ -117,3 +117,9 @@ PR #124에 GitHub 자동 리뷰(Gemini 2 + Codex 2)가 4건을 지적했고, `co
   - 이유: glow는 admin 폼 컨트롤의 의도된 시각 언어라 outline 링으로 바꾸면 변화가 크다.
   - 다음 기준: admin/content focus 시각을 완전히 한 가지로 통일하기로 결정될 때.
   - 기록 위치: 없음 (본 plan 후속)
+
+## 회고
+
+- **잘된 것**: Select와 admin focus를 공통 토큰·peri recipe로 모았다. PR #124 자동 리뷰 4건을 `codex:rescue` 교차검증으로 확인하고 반영했는데, Codex가 focus 트리거에서 빠진 선택자(`.dropdown_item`·`.date_clear`)를 추가로 찾아준 게 컸다. served-CSS 실측으로 focus가 전부 peri임을 확인했다.
+- **다음에 할 것**: admin과 content focus 시각을 완전히 한 가지로 통일할지 결정한다. dropdown item active의 navy도 범위 밖으로 남았다.
+- **발견된 부채**: 해당 없음 (리뷰 findings 전부 반영).

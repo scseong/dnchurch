@@ -1,6 +1,6 @@
 # components-tokens
 
-- **상태**: 🟡 진행 중
+- **상태**: ✅ 완료 (2026-06-16)
 - **시작일**: 2026-06-15
 - **브랜치**: refactor/components-tokens
 - **Open questions**: none
@@ -88,3 +88,9 @@
   - 이유: 값이 같은 semantic이 없어 시각 변경 또는 신규 토큰 결정이 필요하다.
   - 다음 기준: 사용자가 검정 하이라인·스켈레톤·로고 색·beige 테두리의 토큰화 방향을 정하면.
   - 기록 위치: `docs/tech-debt/active.md` primitive 항목
+
+## 회고
+
+- **잘된 것**: 전 페이지에 뜨는 공유 컴포넌트인데 값 동일 별칭 19곳만 치환해 무시각으로 끝냈다. Chrome 실측으로 navy-950·gold-600·white가 기대 hex로 떴고, 머지 직전 Codex 1차 검증도 PASS였다.
+- **다음에 할 것**: DS 공백 18건(검정 하이라인·beige 테두리·스켈레톤·로고색 등)은 신규 토큰 또는 시각 변경 결정 후 정리한다.
+- **발견된 부채**: `$black` 하이라인 9·`$beige` 테두리/배경·스켈레톤 등 18건에 값 동일 semantic이 없다 → `docs/tech-debt/active.md` 디자인 시스템(DS) 공백 노트에 종류별로 기록했다.

@@ -1,6 +1,6 @@
 # news-tokens
 
-- **상태**: 🟡 진행 중
+- **상태**: ✅ 완료 (2026-06-16)
 - **시작일**: 2026-06-15
 - **브랜치**: refactor/news-tokens
 - **Open questions**: none
@@ -77,3 +77,9 @@
   - 문제: news 11건 중 9건이 `$gray-200` divider·hover다. `$gray-200`은 값 동일 semantic이 `$label-neutral-bg`(라벨 배경)뿐이라, divider·hover에 쓰면 의미가 어긋난다. 값을 보존하면 9건이 예외로 남아 정리가 안 된다.
   - 해결: divider는 `$border-subtle`, hover는 `$bg-hover`로 바꾼다. 값이 미세하게 달라지지만(얕은 line·navy tint hover) DS border·Hover 정책과 맞고 primitive가 실제로 사라진다. 신규 토큰은 안 만든다. 사용자가 B(시각 미세 변화 허용)를 골랐다.
   - 결과: news primitive가 0이 된다. row hover가 gray에서 navy tint로 바뀌어 Hover 3원칙(#2)도 맞춰진다. home의 gray-200 divider(D3 보류분)도 같은 기준으로 후속 정리할 근거가 생긴다.
+
+## 회고
+
+- **잘된 것**: 값 동일 별칭이 없는 영역이라 사용자 결정 B(시각 미세 변화 허용)로 `$gray-200` divider·hover를 DS semantic으로 바꿔 primitive를 0으로 만들었다. row hover가 navy tint로 통일돼 Hover 정책과도 맞았다.
+- **다음에 할 것**: home의 `$gray-200` divider 보류분도 같은 기준(결정 B)으로 후속 정리한다.
+- **발견된 부채**: 해당 없음 (news 영역 primitive 0).

@@ -1,6 +1,6 @@
 # about-tokens
 
-- **상태**: 🟡 진행 중
+- **상태**: ✅ 완료 (2026-06-16)
 - **시작일**: 2026-06-15
 - **브랜치**: refactor/about-tokens
 - **Open questions**: none
@@ -78,3 +78,9 @@
   - 문제: about의 `background: $beige-200`(page·welcome·vision 4곳)은 값이 같은 `$bg` 토큰이 없다. `$border-card`만 `$beige-200`인데 테두리 토큰이라 면에 쓰면 의미가 어긋난다. `$bg-secondary`(beige-150)·`$bg-secondary-deep`(beige-300)는 값이 달라 별칭이 아니다.
   - 해결: 값을 보존하려 `$beige-200`을 두고 `// semantic 미정` 주석을 단다. 면용 beige-200 토큰을 새로 만들지 않는다(추측성).
   - 결과: 화면 색을 보존한다. beige 면 단계가 정리되면 일괄 토큰화한다.
+
+## 회고
+
+- **잘된 것**: `$beige-*`·`$gold-*`·`$navy-950`(gradient 포함)을 값 동일 semantic 32곳으로 치환해 화면을 그대로 뒀다. `/about` 하위(welcome·location·worship·vision)까지 Chrome으로 실측했다.
+- **다음에 할 것**: `$beige-200` 배경 4곳은 beige 면 단계 토큰이 잡히면 정리한다.
+- **발견된 부채**: `$beige-200` 배경에 값 동일 `$bg` 토큰이 없다 → `docs/tech-debt/active.md` 디자인 시스템(DS) 공백 노트에 기록했다.
