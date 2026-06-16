@@ -364,3 +364,15 @@
 - **마이그레이션 경로**: "PC 열린목록까지 외형을 같게 맞춘다"가 제품 요구로 확정되면 별도 exec-plan으로 custom listbox를 최소 a11y 범위(트리거 role, `listbox/option`, `aria-selected`, Arrow/Enter/Esc/Home/End, 바깥 클릭 닫기, 포커스 복귀)로 만든다. PC/모바일 분기는 `useMediaQuery` 대신 CSS로 trigger를 숨긴다(`useMediaQuery`는 서버에서 `false`를 반환하고, 금지된 `queueMicrotask`에 의존한다). `NoticeControlBar`의 수동 PC select + 모바일 BottomSheet 중복은 그 작업에서 함께 정리한다.
 - **영향 범위**: `src/components/ui/Select/`, `src/app/(content)/news/notices/_component/NoticeControlBar.tsx` (현재 코드 변경 없음)
 - **발견일**: 2026-06-15 (ui-select-responsive 설계 분석 — Codex 2라운드 논의로 선택지 C(custom listbox) 보류)
+
+### 🟢 하네스 변경 전파 검증 없음, § 8 역할이 에이전트 정의에 안 적힘 (harness-pr-review-step 감사, PR #125)
+
+- **상태**: 등록만 (실행 무해 — 하네스 확장 시 처리)
+- **무엇**: 두 가지다. ① `### 8. PR_REVIEW` 신규 절차가 `harness-workflow/SKILL.md` 본문에만 들어가고, 그 역할을 쓰는 에이전트 정의에 전파되지 않았다 — `claude-code.md`에 PR_REVIEW 단계·답글 owner 역할 없음, `commit-pr-author.md`에 "긴·민감 답글 문체 위임" 역할 없음(SKILL `:235`이 위임 지시). ② 하네스 정책을 추가할 때 동기화 대상(에이전트 정의·CLAUDE 변경 이력·hooks README·SSOT 포인터·폐기어)을 강제 점검하는 절차가 없다. 같은 PR에서 D5(답글 산문화)를 6곳에 못 옮겼고, hooks README도 한 달간 옛 내용으로 남았다. 둘 다 같은 원인이다.
+- **왜 지금 안 하나**: § 8은 skill 트리거로 로딩돼 실제 실행은 정상이다. 에이전트 정의는 "역할 문서"라, 누락돼도 동작이 깨지지 않고 새 세션이 역할을 재구성할 때만 사각이다. PR #125는 산출물 정합성 최소 수정이 범위라, 역할 전파·체크리스트 신설까지 섞으면 비대해진다.
+- **마이그레이션 경로**:
+  - ① `claude-code.md`에 "PR 리뷰 대응(조건부)" 절 추가(§ 8 루프·답글 작성 주체), `commit-pr-author.md` 적용 범위표에 "PR 리뷰 공개 답글 문체 위임" 1행 추가. 출처 `harness-workflow/SKILL.md:235`.
+  - ② `harness-workflow/SKILL.md` `## 하네스 변경 이력` 부근에 "§ N 변경 시 동기화 대상" 체크리스트 1블록. 폐기어는 `check-doc-style` hook denylist로 강제 검토.
+- **다음 기준**: § 9 이상의 새 절차나 에이전트를 추가할 때 함께.
+- **영향 범위** (3건): `.claude/agents/claude-code.md`·`.claude/agents/commit-pr-author.md`·`.claude/skills/harness-workflow/SKILL.md` (현재 코드·실행 변경 없음)
+- **발견일**: 2026-06-16 (harness-pr-review-step 정합성 감사 — 감사 에이전트 3 + Codex 교차, Codex가 근본 원인 적발)
