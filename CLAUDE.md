@@ -53,7 +53,7 @@
 
 ### PR_REVIEW — 조건부 (COMMIT 이후)
 - PR에 리뷰·CI 실패·인라인 코멘트가 달리고 **사용자가 대응을 요청하면** harness-workflow `### 8. PR_REVIEW`로 처리한다. 항상 도는 단계가 아니라 조건부 진입 — 최상단 워크플로우 문자열에 넣지 않는다.
-- 루프: 수집 → 검증(코드 직접 확인, **relay 금지**) → 처리 → 답글. 답글은 Evidence block 3줄(`Claim`/`Checked with`/`Result`), **게시 전 사용자 승인 필수**. 상세·명령 레시피는 `.claude/skills/harness-workflow/SKILL.md` `### 8`·`## PR 리뷰 명령`
+- 루프: 수집 → 검증(코드 직접 확인, **relay 금지**) → 처리 → 답글. 답글은 Evidence block 3줄(`주장`/`대조`/`결과`), **게시 전 사용자 승인 필수**. 상세·명령 레시피는 `.claude/skills/harness-workflow/SKILL.md` `### 8`·`## PR 리뷰 명령`
 
 ## 에이전트 역할 분담
 

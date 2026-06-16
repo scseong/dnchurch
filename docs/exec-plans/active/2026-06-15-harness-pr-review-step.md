@@ -20,7 +20,7 @@ PR 생성 이후 리뷰 대응(수집 → 코드 대조 검증 → 수정/기각
 ## Success Criteria
 
 - [ ] SKILL.md에 `### 8. PR_REVIEW` 절이 있다. 진입 조건을 본문에 명시한다 — "PR에 리뷰·CI·인라인 코멘트가 달렸을 때" **AND** "사용자가 리뷰 대응을 요청했을 때"(둘 다 충족 시 진입, 백그라운드 자동 실행 없음).
-- [ ] 답글마다 Evidence block 3줄(`Claim` / `Checked with` / `Result`)을 요구하고, "명령·file:line 근거 없으면 답글 금지" hard rule이 있다.
+- [ ] 답글마다 Evidence block 3줄(`주장` / `대조` / `결과`)을 요구하고, "명령·file:line 근거 없으면 답글 금지" hard rule이 있다.
 - [ ] SKILL에 Windows gotcha 3건이 명시된다 — ① `jq` 미설치로 `| jq` 실패(gh 내장 `--jq`만 사용) ② PowerShell `Remove-Item`이 replies URL을 삭제 경로로 오인 차단(임시파일 정리는 별도 실행 또는 Git Bash `rm`) ③ 답글 엔드포인트 `POST /repos/{owner}/{repo}/pulls/{pr}/comments/{commentId}/replies`.
 - [ ] CLAUDE.md Workflow 절에 포인터 1줄 + "하네스 변경 이력" 표 1행이 추가된다.
 - [ ] `node scripts/verify-task.mjs harness-pr-review-step` 통과(문서만 변경 — lint/build 회귀 0).
@@ -62,7 +62,7 @@ ADR 불필요. `.claude/`·`CLAUDE.md`는 ADR_TRIGGER_PARTS이나, 이번 변경
 
 - **D2 — 답글마다 Evidence block 3줄을 강제하고 근거 없으면 답글을 금지한다**
   - 문제: 체크리스트만 추가하면 "확인했다" 한 줄로 퇴화한다. #118·#119 오탐 두 건은 모두 코드·라이브러리 확인 없이 봇 지적을 중계한 결과였다.
-  - 해결: 답글 초안마다 `Claim` / `Checked with <명령 or file:line>` / `Result` 3줄을 요구하고, "명령·file:line 근거 없는 봇 지적엔 답글 금지"를 hard rule로 둔다. hook 없이 텍스트 규칙으로 도장 찍듯 통과하는 것을 막는다. Codex Q4 권고.
+  - 해결: 답글 초안마다 `주장` / `대조 <명령 or file:line>` / `결과` 3줄을 요구하고, "명령·file:line 근거 없는 봇 지적엔 답글 금지"를 hard rule로 둔다. hook 없이 텍스트 규칙으로 도장 찍듯 통과하는 것을 막는다. Codex Q4 권고.
   - 결과: 코드를 짚지 않으면 답글이 안 나온다. 중계 금지(relay) 교훈이 형식으로 박힌다.
 
 - **D3 — 헬퍼 스크립트 `pr-review.mjs`를 지금 만들지 않는다 (문서만)**
@@ -113,7 +113,7 @@ Codex stdout verbatim (verdict 근거 핵심):
 | A-2/E-4 답글 API 경로에 PR 번호 빼라 | material 주장 | **오탐 기각** | GitHub 공식 문서: `POST /repos/{owner}/{repo}/pulls/{pull_number}/comments/{comment_id}/replies` — pull_number 포함이 정답(`docs.github.com/en/rest/pulls/comments` WebFetch 확인). handoff 기준 #118·#119에서 이 명령으로 실제 답글 게시 성공 |
 | A-1 `--jq` 표현 혼란 | expression | **오탐 기각** | 깨진 텍스트 오독. 실제 SKILL 문장은 "gh 내장 `--jq`만 사용 — `\| jq`는 jq 미설치라 안 됨"으로 정확 |
 | A-3/E-1 `$replyFile` 미정의 | material | **반영** | 레시피에 `$replyFile = "reply.md"` 한 줄 + 주석 추가 |
-| C `Checked with:` 빌 때 동작 모호 | material | **반영** | hard rule을 "검증 단계로 돌아가 코드 재확인 — 무시·근거 없는 기각 아님"으로 명료화 |
+| C `대조:`(구 Checked with) 빌 때 동작 모호 | material | **반영** | hard rule을 "검증 단계로 돌아가 코드 재확인 — 무시·근거 없는 기각 아님"으로 명료화 |
 | A-5 issue 코멘트 수집 누락 | material | **후속** | 인라인 스레드 답글이 #118·#119 실제 케이스. 범위 경계 1줄 명시 + 후속 등록 |
 | E-2 새 리뷰 제출 구분 없음 | material | **후속** | 위와 같음 — 필요해지면 추가 |
 | B 번호 / D 모순 | — | 이상 없음 | Codex도 동의 |
@@ -133,12 +133,12 @@ Codex stdout verbatim (verdict 근거 핵심):
 
 PR #125 리뷰를 § 8 절차로 처리했다 (수집 → 코드/문서 대조 검증 → 반영). 봇 2 + Codex 1, 고유 6건.
 
-| 지적 | 출처 | Checked with | 판정 | 반영 |
+| 지적 | 출처 | 대조 | 판정 | 반영 |
 | --- | --- | --- | --- | --- |
 | `--paginate` 없으면 코멘트 30개 초과 누락 | PR 봇 + Codex | GitHub 문서: 기본 per_page=30·최대 100 | 타당 | 수집 2줄에 `--paginate` |
 | 답글은 최상위 comment id만 | PR 봇 + Codex | GitHub 문서: "replies to replies not supported" | 타당 | `select(.in_reply_to_id==null)` + gotcha 1줄 |
 | CI 실패 로그 수집 필요 | PR 봇 | `gh pr checks`는 상태만, 로그는 `gh run view --log-failed`(Actions 한정) | 타당 | 레시피 2줄 + 외부 CI 주석 |
-| Evidence `Checked with:`에 수집 명령만 적어도 통과 | Codex Q3 | 규칙 문구 직접 확인 | 타당 | hard rule을 "수집 명령은 근거 아님"으로 강화 |
+| Evidence `대조:`에 수집 명령만 적어도 통과 | Codex Q3 | 규칙 문구 직접 확인 | 타당 | hard rule을 "수집 명령은 근거 아님"으로 강화 |
 | 새 writing 규칙이 기존 예시와 충돌 | Codex Q4 | writing-style `:335-338` 짧은 2문장 | 타당 | "표 셀·3개+, 짧은 2문장 예외"로 한정 |
 | `GetTempFileName` 임시파일 누적 | Codex 보조 | gotcha #2가 이미 정리 안내 | 중복 | 안 함 |
 
