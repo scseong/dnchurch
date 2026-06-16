@@ -40,7 +40,7 @@
 
 `docs/tech-debt/active.md`에 등록된 항목 중 디자인 시스템 통합에 직결되는 것:
 
-- **focus-ring 패턴 통일 (10곳)** — `$primary`/`$primary-active`/`$border-focus`/`$border-primary` 4종 혼재. width `2px`·`0.2rem` 혼재. offset 양수·음수 혼재. globals만 `$focus-ring-*` 토큰화 완료.
+- ~~focus-ring 패턴 통일~~ → ✅ 해소: `focus-ring` mixin·`$focus-ring-*` 토큰으로 통일하고, 남아 있던 `ui/Select`와 admin focus까지 바꿨다(PR #108 + focus-ring-unify 2026-06-15). 상세는 [`../tech-debt/resolved.md`](../tech-debt/resolved.md).
 - **SCSS primitive 토큰 직접 사용 (143건)** — `$gray-*`·`$navy-*`·`$gold-*`·`$beige-*`를 컴포넌트 SCSS에서 직접 사용. stylelint warning은 도입돼 있지만 error는 못 올림.
 - **SCSS 하드코딩 색상 (49건)** — `.module.scss`에서 hex 색 직접 사용. `color-no-hex` 룰을 warning으로 운영.
 - **SCSS 네이밍 패턴 위반 (12건)** — snake_case 위반 className 5건, kebab-case 위반 SCSS 변수 7건.
@@ -65,7 +65,7 @@ Phase 1 감사가 이 가설들을 file:line 증거로 검증한다. 가설이 �
 
 - semantic 토큰을 도입했지만 영역별로 다른 토큰을 쓰지 않나.
 - 확인 방법: primitive 직접 사용 카운트(`rg "\$gray-|\$beige-|\$navy-|\$gold-" src -g '*.scss'`), semantic 분포 샘플.
-- 이미 알려진 위반: focus-ring 10곳, primitive 직접 사용 143건, 하드코딩 색상 49건.
+- 이미 알려진 위반: primitive 직접 사용 143건, 하드코딩 색상 49건. (focus-ring은 해소 — 위 활성 tech-debt 발췌 참조)
 
 ### 4. 상호작용·빈 상태 비일관
 
@@ -80,7 +80,7 @@ Phase 1 감사가 이 가설들을 file:line 증거로 검증한다. 가설이 �
 | **P1. 감사** | 1주 | `(content)` 7 도메인·36 페이지를 유형별로 분류하고 4 영역 위반을 file:line 증거로 식별 | `docs/design-system/audit.md` + 신규 tech-debt 후보 |
 | **P2. 페이지 유형 카탈로그** | 1주 | 발견된 유형(리스트·디테일·아카이브·랜딩·폼)별 표준 패턴 정의와 ADR 작성 | `docs/design-system/page-patterns.md` + 신규 ADR |
 | **P3. next-gen 신규 도메인** | 1–2주 | 카탈로그를 첫 적용 사례로 next-gen 페이지 구축 | next-gen 페이지·컴포넌트·SCSS |
-| **P4. 기존 페이지 마이그레이션** | 2주+ | 카탈로그에 맞춰 sermons 외 도메인 정리. focus-ring 10곳·primitive 직접 사용 등 활성 부채 포함 | 페이지별 분리 PR |
+| **P4. 기존 페이지 마이그레이션** | 2주+ | 카탈로그에 맞춰 sermons 외 도메인 정리. primitive 직접 사용 등 활성 부채 포함 | 페이지별 분리 PR |
 | **P5. 자동화** | 1–2주 | 페이지간 일관성 감사 에이전트 + 시각 회귀 테스트(Playwright) | 신규 에이전트·CI 설정 |
 
 각 Phase는 별도 task + 분리 PR. develop으로 단계별 머지. 본 표는 진행 결과에 따라 갱신한다.
