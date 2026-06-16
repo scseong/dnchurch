@@ -20,7 +20,7 @@ PR 생성 이후 리뷰 대응(수집 → 코드 대조 검증 → 수정/기각
 ## Success Criteria
 
 - [ ] SKILL.md에 `### 8. PR_REVIEW` 절이 있다. 진입 조건을 본문에 명시한다 — "PR에 리뷰·CI·인라인 코멘트가 달렸을 때" **AND** "사용자가 리뷰 대응을 요청했을 때"(둘 다 충족 시 진입, 백그라운드 자동 실행 없음).
-- [ ] 답글마다 Evidence block 3줄(`주장` / `대조` / `결과`)을 요구하고, "명령·file:line 근거 없으면 답글 금지" hard rule이 있다.
+- [ ] 공개 답글은 자연 산문으로 쓰고(고정 라벨 금지), 내부 기록은 표로 분리하며, "근거(코드·문서·실측) 없으면 답글 금지" hard rule이 있다. (당초 Evidence block 3줄 → D5에서 산문으로 변경)
 - [ ] SKILL에 Windows gotcha 3건이 명시된다 — ① `jq` 미설치로 `| jq` 실패(gh 내장 `--jq`만 사용) ② PowerShell `Remove-Item`이 replies URL을 삭제 경로로 오인 차단(임시파일 정리는 별도 실행 또는 Git Bash `rm`) ③ 답글 엔드포인트 `POST /repos/{owner}/{repo}/pulls/{pr}/comments/{commentId}/replies`.
 - [ ] CLAUDE.md Workflow 절에 포인터 1줄 + "하네스 변경 이력" 표 1행이 추가된다.
 - [ ] `node scripts/verify-task.mjs harness-pr-review-step` 통과(문서만 변경 — lint/build 회귀 0).
@@ -37,6 +37,7 @@ PR 생성 이후 리뷰 대응(수집 → 코드 대조 검증 → 수정/기각
 
 - `.claude/skills/harness-workflow/SKILL.md` — `### 8. PR_REVIEW` + 명령 레시피
 - `CLAUDE.md` — Workflow 포인터 1줄 + 이력 표 1행
+- `.claude/skills/writing-style/SKILL.md` — 연속 문장 분리 규칙(원칙 2·체크리스트 ⑦) + 답글 산문 전환 정합 (PR #125 리뷰 중 추가)
 
 ## 단계별 체크리스트
 
@@ -64,6 +65,7 @@ ADR 불필요. `.claude/`·`CLAUDE.md`는 ADR_TRIGGER_PARTS이나, 이번 변경
   - 문제: 체크리스트만 추가하면 "확인했다" 한 줄로 퇴화한다. #118·#119 오탐 두 건은 모두 코드·라이브러리 확인 없이 봇 지적을 중계한 결과였다.
   - 해결: 답글 초안마다 `주장` / `대조 <명령 or file:line>` / `결과` 3줄을 요구하고, "명령·file:line 근거 없는 봇 지적엔 답글 금지"를 hard rule로 둔다. hook 없이 텍스트 규칙으로 도장 찍듯 통과하는 것을 막는다. Codex Q4 권고.
   - 결과: 코드를 짚지 않으면 답글이 안 나온다. 중계 금지(relay) 교훈이 형식으로 박힌다.
+  - ⚠️ 정정(PR #125): 공개 답글의 Evidence block 라벨형은 폐기 → 산문으로 변경 (D5 참조). "근거 없으면 답글 금지" hard rule은 유지.
 
 - **D3 — 헬퍼 스크립트 `pr-review.mjs`를 지금 만들지 않는다 (문서만)**
   - 문제: 스크립트를 처음부터 만들면 GitHub API shape·shell quoting·thread 상태 처리를 한 번에 고정해야 한다. Windows + jq 부재 환경에서 위험이 크다.
@@ -148,6 +150,18 @@ PR #125 리뷰를 § 8 절차로 처리했다 (수집 → 코드/문서 대조 �
 | `GetTempFileName` 임시파일 누적 | Codex 보조 | gotcha #2가 이미 정리 안내 | 중복 | 안 함 |
 
 오탐: gemini는 API 경로 지적을 스스로 오탐 처리(우리 판정에 동의). 최종 검증에서 Codex가 FIX ③↔④ 충돌(④가 ③의 CI 로그·문서 인용까지 배제)을 잡아, ④ 허용 목록을 넓혀 해소.
+
+**2차 라운드** — 답글 산문화(D5) 이후 봇이 재리뷰. 봇 4 + Codex 추가 3, 전부 코드로 검증해 타당.
+
+| 지적 | 출처 | 대조 | 판정 | 반영 |
+| --- | --- | --- | --- | --- |
+| 레시피 주석이 아직 "Evidence block 3줄" | PR 봇 | `SKILL:264` ↔ `:225` 산문 규칙 충돌 — D5 전파 누락 | 타당 | 주석을 "산문 답글"로 |
+| 코드 수정 시 VERIFY→COMMIT 복귀 지시 없음 | PR 봇 | `SKILL:223` 처리 → `:228` 커밋 ref, 재검증 지시 없음 | 타당 | 처리에 "수정 시 VERIFY+COMMIT 후 답글" 1줄 |
+| 수집 두 명령 불일치(id목록 root필터 / 본문 무필터) | PR 봇 | `SKILL:255-258` 비교 | 타당 | 한 명령으로 병합(root필터+id+본문) |
+| 영향 파일에 writing-style 누락 | PR 봇 | 영향파일 2개인데 실제 diff에 writing-style 변경 | 타당 | 영향 파일에 추가 |
+| CLAUDE.md·SC·writing 예시에 "Evidence block" 잔재 | Codex(봇 미탐) | `CLAUDE:56,88`·`plan:23`·`writing:345,353` | 타당 | 산문/근거 표현으로 일소 |
+
+근본 원인: D5(산문)를 § 8 step 4만 고치고 같은 개념 참조 6곳을 안 고침. Codex가 봇이 놓친 잔재까지 잡아 일괄 정리.
 
 ## 후속 작업
 

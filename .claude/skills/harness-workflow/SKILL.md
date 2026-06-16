@@ -220,7 +220,7 @@ COMMIT 이후, PR에 달린 리뷰에 대응하는 루프다. 파이프라인 8�
    - 비자명·다툼·고위험은 Codex 교차 검증(`codex:rescue`), UI·동작은 브라우저 실측.
    - 내 판단이 증거를 넘으면 단정하지 않는다 ("버그 확정" → "원인 미확정").
 3. **처리**
-   - 타당 → 수정 + exec-plan `## PR 리뷰 대응`에 판정·근거·커밋 ref 기록.
+   - 타당 → 수정. **코드·문서를 고쳤으면 답글 전에 VERIFY 통과 + COMMIT까지 끝낸다** — 로컬 수정만 해두고 "고쳤다(+커밋 ref)"라고 답하지 않는다. 그 뒤 exec-plan `## PR 리뷰 대응`에 판정·근거·커밋 ref 기록.
    - 오탐 → 기각. 근거를 같이 남긴다.
 4. **답글 — 자연 산문으로, 근거 없으면 금지.** 고정 라벨(`주장:`/`대조:` 류) 나열 금지 — 라벨만 적으면 읽는 사람이 각 줄의 뜻을 못 잡는다. 한 흐름의 문장에 담는다.
    - 무엇을 지적했는지 짧게 되짚는다.
@@ -250,18 +250,16 @@ gh pr checks <PR#>
 # CI 실패 진입 시 (GitHub Actions에 한함): 상태만으론 부족 — 실패 step 로그까지
 gh run view <run-id> --log-failed       # run-id는 위 checks의 실패 항목 링크에서
 # (Vercel·Supabase 등 외부 CI는 해당 플랫폼 로그 URL을 Evidence에 직접 첨부)
-# 인라인 코멘트 id·위치 (gh 내장 --jq 사용 — 셸 파이프 | jq 는 Git Bash에 jq 미설치라 안 됨)
-# --paginate: 코멘트 30개 초과 PR도 전부 (기본 per_page=30). select(in_reply_to_id==null): 답글 대상은 최상위 코멘트만
+# 인라인 코멘트 — id·위치·본문을 한 레코드로 (gh 내장 --jq, 셸 파이프 | jq 는 jq 미설치라 안 됨)
+# --paginate: 30개 초과도 전부(기본 per_page=30). select(in_reply_to_id==null): 답글 대상 최상위만 — 이 id를 그대로 commentId로 쓴다
 gh api --paginate repos/scseong/dnchurch/pulls/<PR#>/comments \
-  --jq '.[] | select(.in_reply_to_id == null) | "id=\(.id) | \(.user.login) | \(.path):\(.line // .original_line)"'
-# 코멘트 본문 (답글·맥락 포함 전체)
-gh api --paginate repos/scseong/dnchurch/pulls/<PR#>/comments --jq '.[] | "=== \(.user.login) ===\n\(.body)\n"'
+  --jq '.[] | select(.in_reply_to_id == null) | "=== id=\(.id) | \(.user.login) | \(.path):\(.line // .original_line) ===\n\(.body)\n"'
 ```
 
 답글 게시 (jq 없음 → PowerShell `ConvertTo-Json`으로 본문 JSON 생성):
 
 ```powershell
-$replyFile = "reply.md"                                     # 코멘트별 답글 본문(Evidence block 3줄)을 적은 .md
+$replyFile = "reply.md"                                     # 코멘트별 공개 답글(§8 step 4 산문)을 적은 .md
 $body = [System.IO.File]::ReadAllText($replyFile)
 $json = @{ body = $body } | ConvertTo-Json -Compress
 $tmp  = [System.IO.Path]::GetTempFileName()
