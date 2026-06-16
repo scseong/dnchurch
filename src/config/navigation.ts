@@ -32,12 +32,6 @@ export const GNB_ITEMS: NavItem[] = [
   {
     label: '다음세대',
     href: '/next-gen',
-    children: [
-      { label: '유치부', href: '/next-gen/kindergarten' },
-      { label: '유초등부', href: '/next-gen/elementary' },
-      { label: '중고등부', href: '/next-gen/youth' },
-      { label: '청년부', href: '/next-gen/young-adult' },
-    ],
   },
   {
     label: '설교',
@@ -50,11 +44,6 @@ export const GNB_ITEMS: NavItem[] = [
   {
     label: '교제',
     href: '/community',
-    children: [
-      { label: '기도제목', href: '/community/prayer' },
-      { label: '은혜 나눔', href: '/community/sharing' },
-      { label: '소모임', href: '/community/groups' },
-    ],
   },
   {
     label: '교회 소식',
@@ -71,7 +60,7 @@ export const BOTTOM_NAV_ITEMS: BottomNavItem[] = [
   { label: '홈', href: '/', icon: 'home' },
   { label: '설교', href: '/sermons', icon: 'book' },
   { label: '교회 소식', href: '/news/notices', icon: 'file' },
-  { label: '교제', href: '/community/prayer', icon: 'users' },
+  { label: '교제', href: '/community', icon: 'users' },
   { label: '전체', href: '/menu', icon: 'menu' },
 ];
 
