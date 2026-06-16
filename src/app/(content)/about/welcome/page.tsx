@@ -110,9 +110,8 @@ export default async function WelcomePage() {
               <p className={styles.cta_eyebrow}>NEXT STEP</p>
               <p className={styles.cta_title}>먼저 인사 나누고 싶으신가요?</p>
             </div>
-            {/* TODO: 실제 방문 등록 페이지 경로로 교체 */}
-            <Link href="#" className={styles.cta_button}>
-              방문 등록하기
+            <Link href="/about/location" className={styles.cta_button}>
+              오시는 길 보기
               <span aria-hidden="true">→</span>
             </Link>
           </div>

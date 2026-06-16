@@ -43,8 +43,6 @@ const WELCOME = {
     '주일낮예배는 오전 11시, 대예배실에서 드립니다. 예배 10분 전까지 오시면 안내를 받으실 수 있습니다.',
   ctas: [
     { label: '오시는 길', href: '/about/location' },
-    // TODO: 주차 안내 페이지 경로로 교체
-    { label: '주차 안내', href: '#' },
     { label: '새가족 안내', href: '/about/welcome' }
   ]
 };

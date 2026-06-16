@@ -13,25 +13,6 @@
   color: $black;
 }
 
-.auth_links {
-  display: flex;
-  align-items: center;
-  gap: $spacing-8;
-  font-size: $font-size-14;
-  color: $txt-secondary;
-  transition: color 0.2s;
-
-  & > a:hover {
-    font-weight: $font-weight-semibold;
-  }
-}
-
-.nav_divider {
-  width: 0.15rem;
-  height: 1rem;
-  background-color: $txt-secondary;
-}
-
 .menu_list {
   border-top: 0.2rem solid $black;
 

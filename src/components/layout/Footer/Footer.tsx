@@ -59,6 +59,8 @@ const SNS_LINKS = [
 ];
 
 export default function Footer() {
+  const visibleSns = SNS_LINKS.filter((sns) => sns.href !== '#');
+
   return (
     <footer className={styles.footer}>
       <LayoutContainer>
@@ -71,20 +73,22 @@ export default function Footer() {
               <br />
               동남교회
             </p>
-            <div className={styles.footer_sns}>
-              {SNS_LINKS.map((sns) => (
-                <a
-                  key={sns.label}
-                  href={sns.href}
-                  className={styles.footer_sns_btn}
-                  aria-label={sns.label}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  {sns.icon}
-                </a>
-              ))}
-            </div>
+            {visibleSns.length > 0 && (
+              <div className={styles.footer_sns}>
+                {visibleSns.map((sns) => (
+                  <a
+                    key={sns.label}
+                    href={sns.href}
+                    className={styles.footer_sns_btn}
+                    aria-label={sns.label}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    {sns.icon}
+                  </a>
+                ))}
+              </div>
+            )}
           </div>
 
           {/* 교회 안내 */}
@@ -132,8 +136,6 @@ export default function Footer() {
             &copy; 2026 DONGNAM CHURCH. ALL RIGHTS RESERVED.
           </p>
           <div className={styles.footer_bottom_links}>
-            <a href="#">개인정보처리방침</a>
-            <a href="#">이용약관</a>
             <span>DESIGNED BY SCSEONG</span>
           </div>
         </div>
