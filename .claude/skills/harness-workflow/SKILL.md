@@ -249,7 +249,7 @@ gh pr view <PR#> --json reviewDecision,state,mergeable,reviews
 gh pr checks <PR#>
 # CI 실패 진입 시 (GitHub Actions에 한함): 상태만으론 부족 — 실패 step 로그까지
 gh run view <run-id> --log-failed       # run-id는 위 checks의 실패 항목 링크에서
-# (Vercel·Supabase 등 외부 CI는 해당 플랫폼 로그 URL을 Evidence에 직접 첨부)
+# (Vercel·Supabase 등 외부 CI는 해당 플랫폼 로그 URL을 답글 근거로 직접 첨부)
 # 인라인 코멘트 — id·위치·본문을 한 레코드로 (gh 내장 --jq, 셸 파이프 | jq 는 jq 미설치라 안 됨)
 # --paginate: 30개 초과도 전부(기본 per_page=30). select(in_reply_to_id==null): 답글 대상 최상위만 — 이 id를 그대로 commentId로 쓴다
 gh api --paginate repos/scseong/dnchurch/pulls/<PR#>/comments \

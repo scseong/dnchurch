@@ -13,6 +13,8 @@ Claude Code와 Codex CLI 협업 타이밍을 제안하는 Hook 모음이다. Hoo
 | `post-implementation-review.mjs` | `PostToolUse: Write/Edit/MultiEdit` | Claude 구현 후 Codex 1차 검증 및 제한적 수정 제안 |
 | `check-adr-needed.mjs` | `PostToolUse: Write/Edit/MultiEdit` | 구조·라이브러리·정책 변경 후 ADR 작성 제안 |
 | `post-test-analysis.mjs` | `PostToolUseFailure: Bash` | lint/build/test 실패 후 Codex 분석 제안 |
+| `check-doc-style.mjs` | `PostToolUse: Write/Edit/MultiEdit` | repo 문서(검증 기록·Codex 인용·의사결정 로그·ADR·tech-debt) 표현 규칙 위반 시 doc-editor 호출 제안 |
+| `check-pr-before-create.mjs` | `PreToolUse: Bash` | `gh pr create` 직전 commit-pr-author 호출 reminder |
 
 ## 운영 원칙
 
@@ -91,4 +93,4 @@ Return:
 Respond in Korean.
 ```
 
-<!-- last-audit: 2026-05-01 -->
+<!-- last-audit: 2026-06-16 -->
