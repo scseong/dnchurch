@@ -8,7 +8,7 @@
 
 ## 목표
 
-정보 사이트로 먼저 출시하기 위해 헤더의 로그인·회원가입 진입점을 숨기고, `#`로 걸린 죽은 링크 8개(Footer SNS·정책, 환영 방문등록, 예배 주차안내)를 정리한다. 홈 피드가 공지를 빈 stub 페이지로 링크하던 것도 함께 끊는다. 방문자가 동작하지 않는 링크를 만나지 않게 한다.
+정보 사이트로 먼저 출시하기 위해 헤더의 로그인·회원가입 진입점을 숨기고, `#`로 걸린 죽은 링크 8개(Footer SNS·정책, 환영 방문등록, 예배 주차안내)를 정리한다. 홈 피드가 공지를 빈 stub 페이지로 링크하던 것도 끊고, 가짜 '은혜 나눔' 데이터와 숨긴 섹션의 직접 URL 스텁 13개도 들어낸다. 방문자가 동작하지 않는 링크나 미완성 화면을 만나지 않게 한다.
 
 ## 검증된 Assumptions
 
@@ -25,7 +25,8 @@
 - 환영 방문등록 CTA가 `/about/location`으로 연결되고 라벨이 목적지와 맞는다.
 - 홈 피드에서 공지를 클릭하면 빈 화면이 아니라 공지 목록으로 간다. `/news/notices/[id]` stub 라우트가 없다.
 - 홈에 가짜 데이터(은혜 나눔 `SHARING_ITEMS`)·탭이 없고, FeedSection 헤더에 교회 소식만 적혀 있다.
-- `yarn lint`·`yarn build` 통과, 신규 knip 0.
+- 숨긴 섹션의 직접 URL 스텁 13개가 없고(→404), 살아있는 링크가 그 경로를 가리키지 않는다.
+- `yarn lint`·`yarn build` 통과, knip은 baseline과 동일(신규 0).
 
 ## 영향받는 파일
 
@@ -40,6 +41,10 @@
 - `src/app/_component/home/FeedContent.tsx` — "은혜 나눔" 탭·가짜 데이터 제거, 단일 교회 소식 피드로 재작성(client→server).
 - `src/app/_component/home/FeedSection.tsx` — 헤더 "교회 소식과 은혜 나눔"을 "교회 소식"으로, 부제 갱신.
 - `src/app/_component/home/FeedContent.module.scss` — 미사용 된 tab·grid·sharing 규칙 제거.
+- `src/app/(content)/{next-gen,community,news/gallery,search,notifications}/**` — 숨긴 섹션 직접 URL 스텁 13개 삭제(→404). 섹션 ComingSoon 페이지 3개(next-gen·community·news/gallery)는 보존.
+- `src/config/navigation.ts` — `SPECIAL_PAGES`에서 검색·알림 제거 + 외부 import가 끊겨 `SPECIAL_PAGES`를 un-export(내부 전용).
+- `src/components/layout/Hero/hero.config.ts` — 검색·알림 삭제로 사장된 `SPECIAL_HERO_META`·resolveHeroMeta 특수 블록·`SPECIAL_PAGES` import 제거.
+- `src/utils/reveal.ts` — 죽은 `REVEAL_STEP` 삭제 + 내부 전용 `REVEAL_STEP_CONTENT` un-export.
 
 ## Non-goals
 
@@ -55,7 +60,9 @@
 - [x] 3. welcome 방문등록 CTA를 오시는 길로 다시 연결 + worship 주차안내 제거
 - [x] 4. 홈 피드 공지 링크를 목록으로 + 빈 stub 라우트 제거
 - [x] 5. 홈 "은혜 나눔" 가짜 데이터·탭 제거, 단일 교회 소식 피드로 (FeedSection 헤더 포함)
-- [ ] 6. verify-task (lint·build·knip) — 사용자 dev 서버 중단 확인 후
+- [x] 6. 숨긴 섹션 직접 URL 스텁 13개 삭제 + navigation·hero.config 정리
+- [x] 7. reveal.ts 죽은 export 정리 (REVEAL_STEP 삭제·REVEAL_STEP_CONTENT un-export)
+- [x] 8. verify-task — stale .next 1회 정리 후 통과, knip baseline 완전 복귀
 
 ## Verification
 
@@ -88,9 +95,19 @@
   - 해결: 커뮤니티가 출시 후 과제라 실데이터가 없다. D2처럼 숨기고 나중에 되살리는 길도 있으나, 은혜 나눔은 탭·칼럼·데이터가 한 묶음이라 숨김 분기를 남기면 죽은 토글이 그대로 남는다. 그래서 탭·칼럼·`SHARING_ITEMS`를 지우고 단일 교회 소식 피드로 바꿨다. FeedSection 헤더·부제도 교회 소식만 다루게 고쳤다. 탭 토글이 사라져 `FeedContent`는 client에서 server 컴포넌트가 됐다.
   - 결과: 홈에 가짜 데이터가 없다. 커뮤니티 출시 때 은혜 나눔을 실데이터로 되살린다.
 
+- **D6 — 숨긴 섹션 직접 URL 스텁 13개를 삭제(→404), 검색·알림은 config까지 정리**
+  - 문제: hide-unbuilt-menus가 메뉴 진입점만 막아, 서브 스텁(`next-gen/유초등`, `community/groups` 등 13개, `<div>유초등부</div>` 수준)이 직접 URL로는 그대로 열렸다. 검색·알림은 D3에서 페이지가 살아 있어 `SPECIAL_PAGES`·`SPECIAL_HERO_META`를 일부러 보존했다.
+  - 해결: 리다이렉트 대신 삭제(→깔끔한 404)를 택했다. 미완성 회원용 화면이라 ComingSoon으로 옮길 가치가 낮고, 삭제가 dead code를 가장 적게 남긴다. 검색·알림은 페이지를 지우며 D3 cascade를 완결 — `SPECIAL_HERO_META`, resolveHeroMeta 특수 블록, `SPECIAL_PAGES`의 두 항목을 함께 지웠다. hero.config가 `SPECIAL_PAGES` import를 끊어 `SPECIAL_PAGES`도 내부 전용으로 un-export.
+  - 결과: 직접 URL로 열리던 스텁이 모두 404가 됐다. 검색·알림이 끊겨 사장된 코드(`SPECIAL_HERO_META`·resolveHeroMeta 특수 블록)도 남지 않았다. 섹션 ComingSoon 3개는 보존돼 "준비 중" 예고는 유지된다.
+
+- **D7 — reveal.ts 죽은 export 정리를 이번 PR에서 완료 (PR A에 묶어 안전해짐)**
+  - 문제: commit 3에서 FeedContent의 미사용 import를 제거하자 `REVEAL_STEP`(미사용)·`REVEAL_STEP_CONTENT`(내부 전용 export)가 knip에 +2로 표면화됐다. develop 기준이면 옛 FeedContent가 `REVEAL_STEP`을 import해 reveal.ts를 고치면 빌드가 깨져, 처음엔 후속으로 미뤘다.
+  - 해결: B(차단·reveal)를 별도 PR이 아니라 PR A 브랜치에 묶기로 했다(사용자 제안). 이 브랜치엔 정리된 FeedContent가 이미 있어 `REVEAL_STEP` 삭제·`REVEAL_STEP_CONTENT` un-export가 안전하다. 같은 패턴인 `SPECIAL_PAGES` over-export도 함께 정리했다.
+  - 결과: knip이 baseline으로 완전 복귀(신규 0). reveal.ts 후속이 해소됐다.
+
 ## ADR 판단
 
-- **ADR needed**: no — UI 링크 제거·repoint만 한다. apis/services/actions/lib/supabase/config/scripts 변경이 없다. 인증 시스템·미들웨어가 그대로라 인증 정책 변경이 아니다.
+- **ADR needed**: no — UI 링크 제거·repoint·미완성 스텁 라우트 삭제와 그에 딸린 config 정리(navigation·hero.config·reveal.ts)다. ADR 트리거 파일(apis/services/actions/lib/supabase, next.config 등)을 건드리지 않고, 인증 시스템·미들웨어·라우팅 정책이 그대로다.
 
 ---
 
@@ -104,19 +121,19 @@
 
 ## Codex 1차 검증
 
-- **결론**: 생략 (의사결정 로그 D1 연장)
-- **현재 판단**: diff가 모두 링크 제거·재연결·SCSS 정리·홈 피드 링크 수정·죽은 라우트 삭제·은혜 나눔 가짜 데이터 제거다. 큰 diff·고위험 파일·레이어 변경·검증 실패 중 어느 것도 없다(build 통과). Claude가 각 편집을 직접 검토했다.
-- **다음 행동**: 머지 전 harness-gate에서 재확인.
+- **결론**: PASS — commit 1-3은 생략(D1). commit 4는 Codex 1차 검증을 시도했으나 Windows 샌드박스 실행 실패로, Claude가 직접 검증해 통과했다.
+- **현재 판단**: commit 4(스텁 13개 삭제 + navigation·hero.config·reveal.ts 정리)는 라우팅 config 로직이 바뀌어 Codex 1차 검증을 요청했다. 그러나 Codex CLI가 이 Windows 환경에서 파일 접근 단계부터 실패했다(`windows sandbox: spawn setup` 오류 — 환경 문제이지 BLOCK이 아니다). Claude가 직접 확인했다: eslint·build 통과, `REVEAL_STEP`·`SPECIAL_HERO_META` grep 0건. hero.config 특수 블록이 사장된 근거는, 검색·알림이 유일한 (content) `SPECIAL_PAGES` 항목이고 mypage·login·sign-up은 app-root라 resolveHeroMeta가 호출되지 않기 때문이다.
+- **다음 행동**: 머지 전 harness-gate에서 재확인. Codex 환경 복구되면 재요청 가능.
 
 ## Claude 2차 검증
 
 - **최종 판단**: 통과
-- **현재 판단**: 필수 검증(ESLint·stylelint·build) 통과. 은혜 나눔 가짜 데이터 제거까지 포함해 재검증했다(run 20260617-152137). Knip은 +2(`REVEAL_STEP`·`REVEAL_STEP_CONTENT`)인데, reveal.ts의 기존 죽은 export가 FeedContent의 미사용 import 제거로 표면화된 것이라 신규 회귀가 아니다. reveal.ts 정리는 후속으로 남겼다.
-- **다음 행동**: 사용자 승인 후 commit 3 커밋.
+- **현재 판단**: 필수 검증(ESLint·stylelint·build) 통과. 스텁 13개 삭제 + navigation·hero.config·reveal.ts 정리까지 재검증했다(run 20260617-160558). 첫 빌드는 실패했다 — 이전 dev 서버가 남긴 `.next/dev/types`가 삭제된 라우트(`community/groups/[id]`)를 참조했다. `.next`를 비우고 다시 빌드하니 통과했고, 코드 문제가 아니었다. Knip은 baseline(run 20260617-140046)과 완전 동일하다 — reveal.ts와 `SPECIAL_PAGES` over-export까지 정리해 신규 0이다.
+- **다음 행동**: 사용자 승인 후 commit 4·5 커밋.
 
 | 시점 | run-id | lint | styles | build | knip신규 | 수동 확인 |
 | --- | --- | --- | --- | --- | --- | --- |
-| 최종 | 20260617-152137 | ✅ | ✅ | ✅ | 0 회귀 (+2 표면화) | 은혜 나눔 제거 포함 · +2는 reveal.ts 기존 죽은 export 표면화(회귀 아님) |
+| 최종 | 20260617-160558 | ✅ | ✅ | ✅ | 0 | 스텁 13개 삭제·config 정리 포함 · knip baseline 완전 복귀 · stale .next 1회 정리 |
 
 ## 검증 이력
 
@@ -136,10 +153,8 @@
 
 ## 후속 작업
 
-- `src/utils/reveal.ts` 죽은 export 정리 — `REVEAL_STEP`(어디서도 미사용)·`REVEAL_STEP_CONTENT`(reveal.ts 내부 전용인데 export). 주석의 "QuickAccess·SermonCard 사용" 언급도 stale하다.
-  - 이유: 이번엔 FeedContent의 미사용 import만 정리했다(외과적). reveal.ts 본체 수정은 task 범위 밖이라 보고만 한다(기존 dead code 규칙).
-  - 다음 기준: 별도 Chore 커밋이나 다음 정리 PR에서 처리한다.
-  - 기록 위치: 본 후속 + 필요 시 `docs/tech-debt/active.md`.
+- reveal.ts 죽은 export 정리는 commit 5로 **이번 PR에서 완료**했다(D7). B를 PR A에 묶어 안전해진 덕이다.
+- 이번 PR 범위 밖 후속은 실서비스 MVP 로드맵에서 추적한다 — 은혜 나눔 실데이터(커뮤니티 출시 시), `DesktopHeader.tsx:21` `queueMicrotask` 제거.
 
 ---
 
