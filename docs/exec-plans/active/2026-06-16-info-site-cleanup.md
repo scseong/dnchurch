@@ -24,6 +24,7 @@
 - Footer SNS는 실제 주소가 없으면 블록째 숨고, 주소를 채우면 그 항목만 노출된다.
 - 환영 방문등록 CTA가 `/about/location`으로 연결되고 라벨이 목적지와 맞는다.
 - 홈 피드에서 공지를 클릭하면 빈 화면이 아니라 공지 목록으로 간다. `/news/notices/[id]` stub 라우트가 없다.
+- 홈에 가짜 데이터(은혜 나눔 `SHARING_ITEMS`)·탭이 없고, FeedSection 헤더에 교회 소식만 적혀 있다.
 - `yarn lint`·`yarn build` 통과, 신규 knip 0.
 
 ## 영향받는 파일
@@ -36,6 +37,9 @@
 - `src/app/(content)/about/worship/page.tsx` — 죽은 주차안내 CTA 제거.
 - `src/app/_component/home/FeedContent.tsx` — 홈 피드 공지 링크를 `/news/notices`로 바꿔 빈 stub으로 가지 않게 한다.
 - `src/app/(content)/news/notices/[id]/page.tsx` — 도달 불가한 빈 stub 라우트 제거(드로어가 상세를 담당).
+- `src/app/_component/home/FeedContent.tsx` — "은혜 나눔" 탭·가짜 데이터 제거, 단일 교회 소식 피드로 재작성(client→server).
+- `src/app/_component/home/FeedSection.tsx` — 헤더 "교회 소식과 은혜 나눔"을 "교회 소식"으로, 부제 갱신.
+- `src/app/_component/home/FeedContent.module.scss` — 미사용 된 tab·grid·sharing 규칙 제거.
 
 ## Non-goals
 
@@ -50,7 +54,8 @@
 - [x] 2. Footer SNS 실제 href만 렌더(블록 조건부) + 정책 죽은 링크 제거
 - [x] 3. welcome 방문등록 CTA를 오시는 길로 다시 연결 + worship 주차안내 제거
 - [x] 4. 홈 피드 공지 링크를 목록으로 + 빈 stub 라우트 제거
-- [ ] 5. verify-task (lint·build·knip) — 사용자 dev 서버 중단 확인 후
+- [x] 5. 홈 "은혜 나눔" 가짜 데이터·탭 제거, 단일 교회 소식 피드로 (FeedSection 헤더 포함)
+- [ ] 6. verify-task (lint·build·knip) — 사용자 dev 서버 중단 확인 후
 
 ## Verification
 
@@ -78,6 +83,11 @@
   - 해결: 상세 페이지를 새로 만들 수도 있으나, 공지는 회원용이라 비신자 유입과 거리가 멀고 `board` 컴포넌트도 재사용이 안 맞는다(`BoardFooter`는 prev/next가 bulletins URL로 하드코딩). 단순함을 택해 홈 링크를 목록(`/news/notices`)으로 돌리고 도달 불가한 stub 라우트를 지웠다. 사용자가 린 안을 택했다(2026-06-17).
   - 결과: 홈에서 공지를 클릭해도 빈 화면이 없다. `getNoticeById`·`getAllNoticeIds`는 여전히 미사용이나 기존 부채라 보고만 한다(상세 페이지를 만들 때 사용).
 
+- **D5 — 홈 "은혜 나눔" 가짜 데이터·탭 제거 (단일 교회 소식 피드)**
+  - 문제: `FeedContent`의 "은혜 나눔" 탭이 지어낸 이름 5건(`SHARING_ITEMS` 하드코딩)을 보여주고 "더 보기"는 숨긴 `/community/sharing`으로 갔다. `FeedSection` 헤더도 "은혜 나눔"을 가리켰다. 홈은 첫인상 지점이라 가짜 간증은 신뢰를 깎는다.
+  - 해결: 커뮤니티가 출시 후 과제라 실데이터가 없다. D2처럼 숨기고 나중에 되살리는 길도 있으나, 은혜 나눔은 탭·칼럼·데이터가 한 묶음이라 숨김 분기를 남기면 죽은 토글이 그대로 남는다. 그래서 탭·칼럼·`SHARING_ITEMS`를 지우고 단일 교회 소식 피드로 바꿨다. FeedSection 헤더·부제도 교회 소식만 다루게 고쳤다. 탭 토글이 사라져 `FeedContent`는 client에서 server 컴포넌트가 됐다.
+  - 결과: 홈에 가짜 데이터가 없다. 커뮤니티 출시 때 은혜 나눔을 실데이터로 되살린다.
+
 ## ADR 판단
 
 - **ADR needed**: no — UI 링크 제거·repoint만 한다. apis/services/actions/lib/supabase/config/scripts 변경이 없다. 인증 시스템·미들웨어가 그대로라 인증 정책 변경이 아니다.
@@ -95,18 +105,18 @@
 ## Codex 1차 검증
 
 - **결론**: 생략 (의사결정 로그 D1 연장)
-- **현재 판단**: diff가 모두 링크 제거·재연결·SCSS 정리·홈 피드 링크 수정·죽은 라우트 삭제다. 큰 diff·고위험 파일·레이어 변경·검증 실패 중 어느 것도 없다(build 통과). Claude가 각 편집을 직접 검토했다.
+- **현재 판단**: diff가 모두 링크 제거·재연결·SCSS 정리·홈 피드 링크 수정·죽은 라우트 삭제·은혜 나눔 가짜 데이터 제거다. 큰 diff·고위험 파일·레이어 변경·검증 실패 중 어느 것도 없다(build 통과). Claude가 각 편집을 직접 검토했다.
 - **다음 행동**: 머지 전 harness-gate에서 재확인.
 
 ## Claude 2차 검증
 
 - **최종 판단**: 통과
-- **현재 판단**: 필수 검증(ESLint·stylelint·build) 통과. 홈 피드 공지 링크 수정·빈 stub 삭제까지 포함해 재검증했다(run 20260617-140046). Knip은 baseline(20260616-221006)과 카운트·항목이 같아 신규 0이다(diff는 출력 순서 차이뿐). flagged 항목은 내가 건드린 파일과 무관하다.
-- **다음 행동**: 사용자 승인 후 commit 2 커밋.
+- **현재 판단**: 필수 검증(ESLint·stylelint·build) 통과. 은혜 나눔 가짜 데이터 제거까지 포함해 재검증했다(run 20260617-152137). Knip은 +2(`REVEAL_STEP`·`REVEAL_STEP_CONTENT`)인데, reveal.ts의 기존 죽은 export가 FeedContent의 미사용 import 제거로 표면화된 것이라 신규 회귀가 아니다. reveal.ts 정리는 후속으로 남겼다.
+- **다음 행동**: 사용자 승인 후 commit 3 커밋.
 
 | 시점 | run-id | lint | styles | build | knip신규 | 수동 확인 |
 | --- | --- | --- | --- | --- | --- | --- |
-| 최종 | 20260617-140046 | ✅ | ✅ | ✅ | 0 | 홈 피드 공지 링크·stub 삭제 포함 전체 재검증 · knip baseline 동일 |
+| 최종 | 20260617-152137 | ✅ | ✅ | ✅ | 0 회귀 (+2 표면화) | 은혜 나눔 제거 포함 · +2는 reveal.ts 기존 죽은 export 표면화(회귀 아님) |
 
 ## 검증 이력
 
@@ -126,11 +136,10 @@
 
 ## 후속 작업
 
-<!-- 이번 범위 밖 일. Non-goals·체크리스트에 중복 기술 금지 — 여기에만.
-- <후속 항목>
-  - 이유: <왜 이번에 안 하나>
-  - 다음 기준: <언제 다시 하나>
-  - 기록 위치: `docs/tech-debt/active.md` 또는 없음 -->
+- `src/utils/reveal.ts` 죽은 export 정리 — `REVEAL_STEP`(어디서도 미사용)·`REVEAL_STEP_CONTENT`(reveal.ts 내부 전용인데 export). 주석의 "QuickAccess·SermonCard 사용" 언급도 stale하다.
+  - 이유: 이번엔 FeedContent의 미사용 import만 정리했다(외과적). reveal.ts 본체 수정은 task 범위 밖이라 보고만 한다(기존 dead code 규칙).
+  - 다음 기준: 별도 Chore 커밋이나 다음 정리 PR에서 처리한다.
+  - 기록 위치: 본 후속 + 필요 시 `docs/tech-debt/active.md`.
 
 ---
 
