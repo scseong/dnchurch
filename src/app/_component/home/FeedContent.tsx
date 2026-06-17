@@ -78,7 +78,7 @@ export default function FeedContent({ notices }: Props) {
             {notices.map((notice, i) => (
               <Link
                 key={notice.id}
-                href={`/news/notices/${notice.id}`}
+                href="/news/notices"
                 className={styles.item}
                 data-reveal
                 style={getRevealStyle(i)}

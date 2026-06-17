@@ -8,7 +8,7 @@
 
 ## 목표
 
-정보 사이트로 먼저 출시하기 위해 헤더의 로그인·회원가입 진입점을 숨기고, `#`로 걸린 죽은 링크 8개(Footer SNS·정책, 환영 방문등록, 예배 주차안내)를 정리한다. 방문자가 동작하지 않는 링크를 만나지 않게 한다.
+정보 사이트로 먼저 출시하기 위해 헤더의 로그인·회원가입 진입점을 숨기고, `#`로 걸린 죽은 링크 8개(Footer SNS·정책, 환영 방문등록, 예배 주차안내)를 정리한다. 홈 피드가 공지를 빈 stub 페이지로 링크하던 것도 함께 끊는다. 방문자가 동작하지 않는 링크를 만나지 않게 한다.
 
 ## 검증된 Assumptions
 
@@ -23,6 +23,7 @@
 - src 전체에서 `#` href 검색 결과가 0건이다.
 - Footer SNS는 실제 주소가 없으면 블록째 숨고, 주소를 채우면 그 항목만 노출된다.
 - 환영 방문등록 CTA가 `/about/location`으로 연결되고 라벨이 목적지와 맞는다.
+- 홈 피드에서 공지를 클릭하면 빈 화면이 아니라 공지 목록으로 간다. `/news/notices/[id]` stub 라우트가 없다.
 - `yarn lint`·`yarn build` 통과, 신규 knip 0.
 
 ## 영향받는 파일
@@ -33,6 +34,8 @@
 - `src/components/layout/Footer/Footer.tsx` — SNS는 실제 href만 렌더한다(없으면 블록째 숨김). 정책 링크 2개(개인정보처리방침·이용약관)를 제거한다.
 - `src/app/(content)/about/welcome/page.tsx` — 방문등록 CTA를 `/about/location`으로 연결, 라벨 조정.
 - `src/app/(content)/about/worship/page.tsx` — 죽은 주차안내 CTA 제거.
+- `src/app/_component/home/FeedContent.tsx` — 홈 피드 공지 링크를 `/news/notices`로 바꿔 빈 stub으로 가지 않게 한다.
+- `src/app/(content)/news/notices/[id]/page.tsx` — 도달 불가한 빈 stub 라우트 제거(드로어가 상세를 담당).
 
 ## Non-goals
 
@@ -46,7 +49,8 @@
 - [x] 1. DesktopHeader·MobileNavigation 인증 진입점 제거 + unused SCSS 정리
 - [x] 2. Footer SNS 실제 href만 렌더(블록 조건부) + 정책 죽은 링크 제거
 - [x] 3. welcome 방문등록 CTA를 오시는 길로 다시 연결 + worship 주차안내 제거
-- [ ] 4. verify-task (lint·build·knip) — 사용자 dev 서버 중단 확인 후
+- [x] 4. 홈 피드 공지 링크를 목록으로 + 빈 stub 라우트 제거
+- [ ] 5. verify-task (lint·build·knip) — 사용자 dev 서버 중단 확인 후
 
 ## Verification
 
@@ -69,6 +73,11 @@
   - 해결: 가장 가까운 실제 다음 행동은 직접 방문이라 `/about/location`(오시는 길)으로 연결하고 라벨을 목적지에 맞췄다. 전화·카톡 문의 같은 더 직접적인 전환 동선은 사용자 콘텐츠 결정이라 후속으로 둔다.
   - 결과: 죽은 CTA가 사라지고 방문자가 오시는 길로 이어진다. 문의형 CTA는 사용자가 원하면 나중에 교체한다.
 
+- **D4 — 홈 피드 공지 링크를 목록으로 돌리고 빈 stub 제거 (상세 페이지는 안 만듦)**
+  - 문제: 처음엔 공지 클릭이 빈 화면이라 단정했으나, 확인해 보니 목록 페이지는 드로어(`NoticeDrawer`)로 상세를 정상 렌더한다. 진짜 문제는 홈 피드(`FeedContent.tsx:81`)만 공지를 빈 stub `/news/notices/[id]`로 링크하던 것이다.
+  - 해결: 상세 페이지를 새로 만들 수도 있으나, 공지는 회원용이라 비신자 유입과 거리가 멀고 `board` 컴포넌트도 재사용이 안 맞는다(`BoardFooter`는 prev/next가 bulletins URL로 하드코딩). 단순함을 택해 홈 링크를 목록(`/news/notices`)으로 돌리고 도달 불가한 stub 라우트를 지웠다. 사용자가 린 안을 택했다(2026-06-17).
+  - 결과: 홈에서 공지를 클릭해도 빈 화면이 없다. `getNoticeById`·`getAllNoticeIds`는 여전히 미사용이나 기존 부채라 보고만 한다(상세 페이지를 만들 때 사용).
+
 ## ADR 판단
 
 - **ADR needed**: no — UI 링크 제거·repoint만 한다. apis/services/actions/lib/supabase/config/scripts 변경이 없다. 인증 시스템·미들웨어가 그대로라 인증 정책 변경이 아니다.
@@ -86,18 +95,18 @@
 ## Codex 1차 검증
 
 - **결론**: 생략 (의사결정 로그 D1 연장)
-- **현재 판단**: diff 6파일이 모두 링크 제거·재연결·SCSS 정리다. 큰 diff·고위험 파일·레이어 변경·검증 실패 중 어느 것도 없다(build 통과). Claude가 각 편집을 직접 검토했다.
+- **현재 판단**: diff가 모두 링크 제거·재연결·SCSS 정리·홈 피드 링크 수정·죽은 라우트 삭제다. 큰 diff·고위험 파일·레이어 변경·검증 실패 중 어느 것도 없다(build 통과). Claude가 각 편집을 직접 검토했다.
 - **다음 행동**: 머지 전 harness-gate에서 재확인.
 
 ## Claude 2차 검증
 
 - **최종 판단**: 통과
-- **현재 판단**: 필수 검증(ESLint·stylelint·build) 통과. Knip 경고는 모두 기존 부채다 — 내 diff는 파일·import·export를 지우지 않고 JSX 요소·SCSS 규칙·배열 항목만 제거했다(신규 0). flagged된 `signOut`·`resolveNavLabel`·`getNoticeById` 등은 내가 건드린 6파일과 무관하다.
-- **다음 행동**: 사용자 승인 후 커밋.
+- **현재 판단**: 필수 검증(ESLint·stylelint·build) 통과. 홈 피드 공지 링크 수정·빈 stub 삭제까지 포함해 재검증했다(run 20260617-140046). Knip은 baseline(20260616-221006)과 카운트·항목이 같아 신규 0이다(diff는 출력 순서 차이뿐). flagged 항목은 내가 건드린 파일과 무관하다.
+- **다음 행동**: 사용자 승인 후 commit 2 커밋.
 
 | 시점 | run-id | lint | styles | build | knip신규 | 수동 확인 |
 | --- | --- | --- | --- | --- | --- | --- |
-| 2차 | 20260616-221006 | ✅ | ✅ | ✅ | 0 | 변경 tsx eslint error 0 · diff 외과적(+20/−46) |
+| 최종 | 20260617-140046 | ✅ | ✅ | ✅ | 0 | 홈 피드 공지 링크·stub 삭제 포함 전체 재검증 · knip baseline 동일 |
 
 ## 검증 이력
 
