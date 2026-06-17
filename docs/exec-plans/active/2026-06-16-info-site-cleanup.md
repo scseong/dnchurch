@@ -115,9 +115,9 @@
 
 ## Codex 계획 검증
 
-- **결론**: 생략 (의사결정 로그 D1)
-- **현재 판단**: UI 링크 제거·repoint이라 답이 명확하고 회귀 위험이 낮다. hide-unbuilt-menus와 같은 성격이라 계획 검증을 생략했다.
-- **다음 행동**: 구현 diff 크기를 보고 CODEX_FIRST_PASS 여부를 판단한다.
+- **결론**: PASS (Codex 계획 검증 생략 — D1, Claude 자체 판단으로 plan 통과)
+- **현재 판단**: UI 링크 제거·repoint·미완성 스텁 삭제라 답이 명확하고 회귀 위험이 낮다. 새 추상화·라이브러리·데이터 흐름 변경이 없고 git으로 즉시 복구된다. hide-unbuilt-menus와 같은 성격이라 Codex 계획 검증을 생략하고 Claude가 plan을 직접 판단했다.
+- **다음 행동**: 구현 diff를 보고 CODEX_FIRST_PASS 여부를 판단했다(commit 4에서 시도 → 환경 실패 → Claude 직접 검증).
 
 ## Codex 1차 검증
 
@@ -127,7 +127,7 @@
 
 ## Claude 2차 검증
 
-- **최종 판단**: 통과
+- **최종 판단**: PASS
 - **현재 판단**: 필수 검증(ESLint·stylelint·build) 통과. 스텁 13개 삭제 + navigation·hero.config·reveal.ts 정리까지 재검증했다(run 20260617-160558). 첫 빌드는 실패했다 — 이전 dev 서버가 남긴 `.next/dev/types`가 삭제된 라우트(`community/groups/[id]`)를 참조했다. `.next`를 비우고 다시 빌드하니 통과했고, 코드 문제가 아니었다. Knip은 baseline(run 20260617-140046)과 완전 동일하다 — reveal.ts와 `SPECIAL_PAGES` over-export까지 정리해 신규 0이다.
 - **다음 행동**: 사용자 승인 후 commit 4·5 커밋.
 
