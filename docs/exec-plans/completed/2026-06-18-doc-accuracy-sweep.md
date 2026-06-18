@@ -1,6 +1,6 @@
 # doc-accuracy-sweep
 
-- **상태**: 🟡 진행 중
+- **상태**: ✅ 완료 (2026-06-18)
 - **시작일**: 2026-06-18
 - **브랜치**: develop
 - **Open questions**: none
@@ -87,9 +87,9 @@ CLAUDE.md와 supabase 스킬이 `services`를 읽기 전용처럼 보이게 하�
 
 ## Codex 1차 검증
 
-- **결론**: 미요청
-- **현재 판단**: 미요청
-- **다음 행동**: 구현 diff 생성 후 갱신
+- **결론**: 생략 — doc-only diff(`.md` 4개)라 Codex 1차 대신 Claude 2차 검증으로 갈음.
+- **현재 판단**: 버그·타입·레이어 변경이 없는 문서 표현 정정이다. 정확성은 grep·verify-task로 확인(Claude 2차 참조).
+- **다음 행동**: 없음 (완료).
 
 ## Claude 2차 검증
 
@@ -128,11 +128,30 @@ CLAUDE.md와 supabase 스킬이 `services`를 읽기 전용처럼 보이게 하�
 
 ## 후속 작업
 
-<!-- 이번 범위 밖 일. Non-goals·체크리스트에 중복 기술 금지 — 여기에만.
-- <후속 항목>
-  - 이유: <왜 이번에 안 하나>
-  - 다음 기준: <언제 다시 하나>
-  - 기록 위치: `docs/tech-debt/active.md` 또는 없음 -->
+- doc-editor 지적 5건 중 2건(`ROOT 태그` 풀이·"걸리나" 의인화)은 경미해 미적용.
+  - 이유: 표현 스타일 수준이라 구현·정확성에 영향 없음.
+  - 다음 기준: 다음 exec-plan에서 같은 표현을 쓰면 그때 풀어쓴다.
+  - 기록 위치: 없음 (tech-debt 아님)
+- 레이어 읽기·쓰기 라벨을 이번엔 4개 문서만 확인했다(CLAUDE.md·ARCHITECTURE.md·supabase 스킬·README).
+  - 이유: 이 4곳이 레이어를 설명하는 1차 문서라 우선 정리.
+  - 다음 기준: 다른 overview 문서에서 같은 라벨을 발견하면 같은 기준으로 정정.
+  - 기록 위치: 없음
+
+## 회고
+
+**잘된 것**
+
+- Codex가 계획 검증 1차에서 `docs/ARCHITECTURE.md` 누락을 material로 잡아냈고, 초안이 놓친 아키텍처 SSOT를 범위에 넣었다(D1). Agent A는 이 파일을 "정확"으로 오판했는데 Codex가 다이어그램 라벨(22-26)을 짚어 바로잡았다.
+- `services`를 읽기 전용처럼 읽히게 한 표현을 CLAUDE.md·ARCHITECTURE.md·supabase 스킬·README 4곳에서 한 기준(import 서열 + 읽기·쓰기 공존)으로 맞췄다. 코드와 어긋난 `revalidateTag`도 `updateTag` ROOT 패턴(ADR 0016)으로 정정했다.
+- verify-task 필수 검증(ESLint·stylelint·build)을 통과했다. doc-only라 신규 회귀 0.
+
+**다음에 할 것**
+
+- `## 후속 작업` 참조 — doc-editor 경미 지적 2건, 다른 overview 문서의 같은 읽기·쓰기 라벨 점검.
+
+**발견된 부채**
+
+- 없음. Knip 경고는 `.md`와 무관한 기존 `.ts`/`.tsx` 부채라 이번 작업 산물이 아니다.
 
 ---
 
