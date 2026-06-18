@@ -5,6 +5,7 @@ import LatestBulletin from '@/app/(content)/news/bulletins/_component/LatestBull
 import BulletinTableSection from '@/app/(content)/news/bulletins/_component/BulletinTableSection';
 import { getBulletinSummary } from '@/services/bulletin';
 import { validateSearchParams, validate } from '@/utils/common';
+import { OPEN_GRAPH_BASE } from '@/config/seo';
 import styles from './page.module.scss';
 
 type Props = {
@@ -15,6 +16,7 @@ export const metadata: Metadata = {
   title: '주보',
   description: '이번 주 교회 주보에서 예배 일정과 소식을 살펴보세요.',
   openGraph: {
+    ...OPEN_GRAPH_BASE,
     title: '주보',
     description: '이번 주 교회 주보에서 예배 일정과 소식을 살펴보세요.'
   }

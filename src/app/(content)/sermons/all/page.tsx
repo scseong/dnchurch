@@ -21,6 +21,7 @@ import {
   resolveSeriesSlug
 } from '@/utils/sermon';
 import { getTotalPages } from '@/utils/pagination';
+import { OPEN_GRAPH_BASE } from '@/config/seo';
 import styles from '../_component/SermonListPage/SermonListPage.module.scss';
 
 const PAGE_DESCRIPTION = '대구동남교회의 모든 설교를 검색·필터로 찾아보세요';
@@ -31,10 +32,10 @@ export const metadata: Metadata = {
   description: PAGE_DESCRIPTION,
   alternates: { canonical: PAGE_CANONICAL },
   openGraph: {
+    ...OPEN_GRAPH_BASE,
     title: '전체 설교',
     description: PAGE_DESCRIPTION,
-    url: PAGE_CANONICAL,
-    type: 'website'
+    url: PAGE_CANONICAL
   },
   twitter: { card: 'summary', title: '전체 설교', description: PAGE_DESCRIPTION }
 };

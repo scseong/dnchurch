@@ -8,6 +8,7 @@ import {
 } from '@/services/sermon';
 import { formatPreacherLabel, getSermonThumbnail } from '@/utils/sermon';
 import { getOgImageUrl } from '@/utils/cloudinary';
+import { OG_FALLBACK_IMAGE } from '@/config/seo';
 import type { SermonWithRelations } from '@/types/sermon';
 import SermonDetailPage from '../_component/SermonDetailPage/SermonDetailPage';
 
@@ -35,14 +36,14 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
       title,
       description,
       url: canonical,
-      images: ogImage ? [{ url: ogImage }] : [],
+      images: ogImage ? [{ url: ogImage }] : [OG_FALLBACK_IMAGE],
       type: 'article'
     },
     twitter: {
       card: 'summary_large_image',
       title,
       description,
-      images: ogImage ? [ogImage] : []
+      images: ogImage ? [ogImage] : [OG_FALLBACK_IMAGE]
     }
   };
 }

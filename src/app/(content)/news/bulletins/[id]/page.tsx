@@ -5,6 +5,7 @@ import { getOgImageUrl, getKakaoShareUrl } from '@/utils/cloudinary';
 import { generateFileDownloadList } from '@/utils/file';
 import { isNumeric } from '@/utils/validator';
 import { getAllBulletinIds, getBulletinById, getAdjacentBulletins } from '@/services/bulletin';
+import { OG_FALLBACK_IMAGE } from '@/config/seo';
 
 export async function generateMetadata({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
@@ -25,7 +26,7 @@ export async function generateMetadata({ params }: { params: Promise<{ id: strin
     openGraph: {
       title,
       description,
-      images: ogImage ? [{ url: ogImage }] : []
+      images: ogImage ? [{ url: ogImage }] : [OG_FALLBACK_IMAGE]
     }
   };
 }
