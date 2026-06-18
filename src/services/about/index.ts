@@ -16,6 +16,15 @@ const HUB_SETTING_KEYS = [
   'directions_subway'
 ] as const;
 
+// 홈 JSON-LD 구조화 데이터용 — 식별·위치에 필요한 최소 키만. location 페이지의 worship-groups fetch를 안 딸려오게 분리.
+const CHURCH_IDENTITY_SETTING_KEYS = [
+  'church_phone',
+  'church_email',
+  'church_zipcode',
+  'church_lat',
+  'church_lng'
+] as const;
+
 const LOCATION_SETTING_KEYS = [
   'church_address',
   'church_lat',
@@ -109,6 +118,11 @@ export const getVisionPageData = async (): Promise<{ history: HistoryItem[] }> =
 export const getWorshipPageData = async () => {
   const groups = await getWorshipGroupsSafe();
   return { groups };
+};
+
+export const getChurchIdentityData = async (): Promise<{ settings: SiteSettings }> => {
+  const settings = await getSiteSettings([...CHURCH_IDENTITY_SETTING_KEYS]);
+  return { settings };
 };
 
 export const getLocationPageData = async () => {

@@ -12,3 +12,22 @@ export const OPEN_GRAPH_BASE: Metadata['openGraph'] = {
   description: '주님의 기도를 배우는 교회(성도), 동남교회',
   images: ['/images/aboutBanner.jpg']
 };
+
+// JSON-LD 구조화 데이터와 location 페이지가 공유하는 교회 식별·위치 상수.
+// site_settings DB가 비어 있어도 유효한 구조화 데이터가 나오도록 안정 불변값(좌표·주소·교단)을 fallback으로 둔다.
+// phone/email/zipcode는 여기 두지 않는다 — site_settings에서 받아 시드 후 두 출처가 어긋날 위험을 없앤다.
+export const CHURCH_INFO = {
+  name: '대구동남교회',
+  legalName: '대한예수교장로회(합신) 대구동남교회',
+  address: {
+    streetAddress: '달구벌대로307길 58',
+    addressLocality: '달서구',
+    addressRegion: '대구광역시',
+    addressCountry: 'KR'
+  },
+  geo: {
+    latitude: 35.85262832577055,
+    longitude: 128.53467835707838
+  },
+  image: '/images/aboutBanner.jpg'
+} as const;

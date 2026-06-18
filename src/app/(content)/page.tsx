@@ -1,7 +1,14 @@
 import { Suspense } from 'react';
 import type { Metadata } from 'next';
 import { OPEN_GRAPH_BASE } from '@/config/seo';
-import { Banner, QuickAccess, RecentSermons, NewHere, FeedSection } from '../_component/home';
+import {
+  Banner,
+  QuickAccess,
+  RecentSermons,
+  NewHere,
+  FeedSection,
+  ChurchJsonLd
+} from '../_component/home';
 import {
   BannerFallback,
   RecentSermonsFallback,
@@ -19,6 +26,9 @@ export const metadata: Metadata = {
 export default async function Home() {
   return (
     <>
+      <Suspense fallback={null}>
+        <ChurchJsonLd />
+      </Suspense>
       <Suspense fallback={<BannerFallback />}>
         <Banner />
       </Suspense>
