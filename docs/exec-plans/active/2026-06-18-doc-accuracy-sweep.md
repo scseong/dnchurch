@@ -93,9 +93,13 @@ CLAUDE.md와 supabase 스킬이 `services`를 읽기 전용처럼 보이게 하�
 
 ## Claude 2차 검증
 
-- **최종 판단**: PASS — doc-only 변경(`.md` 4개). 좁은 검증으로 Success Criteria 충족 확인.
-- **현재 판단**: supabase 스킬 `revalidateTag`/`revalidatePath` 0건(grep), CLAUDE.md 스킬 표 2곳에 `complete-task` 존재, 오해 라벨("read 중심"·"쿼리 (read)" 등) 전 저장소 0건. build·knip은 `.md`에 무관(`yarn dev` 가동 가능성으로 build 생략), doc-editor는 exec-plan 표현 5건(경미)만 지적.
-- **다음 행동**: doc 4파일 + 본 exec-plan만 stage 후 Docs 커밋 (church-jsonld WIP 제외).
+- **최종 판단**: PASS — `verify-task` 필수 검증(ESLint·stylelint·build) 통과. doc-only라 신규 회귀 0.
+- **현재 판단**: supabase 스킬 `revalidateTag`/`revalidatePath` 0건(grep), CLAUDE.md 스킬 표 2곳에 `complete-task` 존재, 오해 라벨("read 중심"·"쿼리 (read)" 등) 전 저장소 0건. Knip 경고는 `.md` 변경과 무관한 기존 부채(`.ts`/`.tsx` 미사용 코드).
+- **다음 행동**: 커밋 완료(`9c8a496`, PR #128). 머지 후 `complete-task`.
+
+| 시점 | run-id | lint | styles | build | knip신규 | 수동 확인 필요 |
+| --- | --- | --- | --- | --- | --- | --- |
+| 2차 | 20260618-200641 | ✅ | ✅ | ✅ | 0 | — |
 
 ## 검증 이력
 
