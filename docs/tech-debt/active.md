@@ -376,3 +376,13 @@
 - **다음 기준**: § 9 이상의 새 절차나 에이전트를 추가할 때 함께.
 - **영향 범위** (3건): `.claude/agents/claude-code.md`·`.claude/agents/commit-pr-author.md`·`.claude/skills/harness-workflow/SKILL.md` (현재 코드·실행 변경 없음)
 - **발견일**: 2026-06-16 (harness-pr-review-step 정합성 감사 — 감사 에이전트 3 + Codex 교차, Codex가 근본 원인 적발)
+
+### 🟢 설교 상세 JSON-LD가 `<` 이스케이프 없이 삽입됨 (church-jsonld PR #128 Gemini XSS 리뷰)
+
+- **상태**: 등록만 (church-jsonld 범위 밖 — 홈 JSON-LD만 대상)
+- **무엇**: `src/app/(content)/sermons/[id]/page.tsx`의 `buildJsonLd`가 `JSON.stringify(jsonLd)`를 이스케이프 없이 `dangerouslySetInnerHTML`에 넣는다. `sermon.title`·`summary`가 admin 편집값이라 `</script>`가 섞이면 스크립트 태그가 일찍 닫혀 코드가 주입될 여지가 있다(교차 사이트 스크립팅, XSS). church-jsonld에서는 같은 패턴을 `.replace(/</g, '\\u003c')`로 막았는데 sermons에는 같은 갭이 남았다.
+- **왜 지금 안 하나**: church-jsonld 작업은 홈 JSON-LD 추가가 범위라 sermons 파일은 외과적 변경 원칙으로 분리했다. 공개 사용자가 직접 넣는 입력이 아니라 admin이 편집하는 값이라 위험이 낮다.
+- **마이그레이션 경로**: `buildJsonLd` 반환을 `script`에 넣을 때 `JSON.stringify(jsonLd).replace(/</g, '\\u003c')`를 적용한다(church `ChurchJsonLd.tsx`와 같은 방식).
+- **영향 범위**: `src/app/(content)/sermons/[id]/page.tsx`
+- **확인**: `rg "dangerouslySetInnerHTML" src/app/(content)/sermons/\[id\]` → 1 hit, `replace` 없음
+- **발견일**: 2026-06-18 (church-jsonld PR #128 Gemini XSS 리뷰에서 같은 갭이 sermons에 잔존 확인)

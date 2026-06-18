@@ -1,6 +1,6 @@
 # church-jsonld
 
-- **상태**: 🟡 진행 중
+- **상태**: ✅ 완료 (2026-06-18)
 - **시작일**: 2026-06-18
 - **브랜치**: feat/church-jsonld
 - **Open questions**: none
@@ -161,3 +161,24 @@
   - 문제: openingHours·sameAs까지 넣으면 미확정 종료시각·placeholder SNS로 부정확하거나 빈 값이 들어간다.
   - 해결: v1은 name·url·image·description·address·geo + 조건부 telephone/email까지만. 나머지는 값이 확정된 뒤 후속으로 추가.
   - 결과: v1 JSON-LD에 빈 `openingHours`나 placeholder `sameAs`가 안 들어간다.
+
+## 회고
+
+**잘된 것**
+
+- 레이어 위반(`app`→`apis` 직접 import)을 verify-task의 ESLint에서 잡아 `getChurchIdentityData` service 경유로 바로 고쳤다. 구현 중 자가 적발.
+- 미시드 DB와 `NEXT_PUBLIC_SITE_URL` 미설정을 양쪽 조건부로 막아 깨진 구조화 데이터가 0건이다. 로컬 SSR HTML에서 실제 출력(우편번호 42632·전화 053-552-3403·좌표·절대 URL)을 눈으로 확인했다.
+- Codex 1차 CHANGE_REQUEST를 시드 파일(`20260509000000_create_site_collections.sql:61-63`)과 sentinel 계약 확인으로 기각했다. 봇·Codex 지적을 코드로 검증해 거짓 양성을 걸러냈다.
+- PR 봇 4건(XSS·타입·SRP·주소)을 Gemini·Codex foreground·Claude 3자 합의로 정리했다. #1~#3은 반영하고 #4는 상수 유지 근거를 기록했다.
+
+**다음에 할 것**
+
+- exec-plan 문서를 verify-task 실행 뒤에 또 고쳐 검증 기록이 HEAD와 어긋났다. 매 커밋 직전 verify를 한 번 더 돌려야 했다. 다음엔 문서 편집을 verify 전에 마치는 순서로 한다.
+- JSON-LD 컴포넌트를 처음부터 순수 빌더 + fetch 분리로 짰으면 SRP 지적을 안 받았다. `sermons/[id]`의 `buildJsonLd`라는 순수 함수 선례가 이미 있었으니 처음부터 참고했어야 한다.
+
+**부채·후속**
+
+- `openingHours`(예배 종료시각 미확정)·`sameAs`(SNS href가 전부 `#`)는 v1에서 뺐다. 값 확정 후 같은 `ChurchJsonLd`에 추가한다.
+- 배포 + `NEXT_PUBLIC_SITE_URL` 실도메인 설정 후 Google Rich Results Test로 외부 검증이 필요하다.
+- `sermons/[id]/page.tsx`의 `buildJsonLd`도 `JSON.stringify` 결과를 이스케이프 없이 `dangerouslySetInnerHTML`에 넣는다 — 이번에 church에서 고친 것과 같은 XSS 갭. tech-debt에 등록했다.
+- 이 PR에 doc-accuracy-sweep 커밋 2개(9c8a496·3234b67)가 섞여 머지됐다. 한 PR에 한 의도만 담는 규칙을 어겼다. 다음엔 브랜치를 분리한다.
