@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import LayoutContainer from '@/components/layout/container/LayoutContainer';
 import { getLocationPageData } from '@/services/about';
 import { displaySettingValue, parseFiniteFloat } from '@/utils/site-settings';
-import { OPEN_GRAPH_BASE } from '@/config/seo';
+import { CHURCH_INFO, OPEN_GRAPH_BASE } from '@/config/seo';
 import LocationMapClient from './_component/LocationMapClient';
 import AddressActions from './_component/AddressActions';
 import styles from './page.module.scss';
@@ -20,8 +20,8 @@ export const metadata: Metadata = {
 export default async function Directions() {
   const { settings, worship } = await getLocationPageData();
 
-  const lat = parseFiniteFloat(settings.church_lat, 35.85262832577055);
-  const lng = parseFiniteFloat(settings.church_lng, 128.53467835707838);
+  const lat = parseFiniteFloat(settings.church_lat, CHURCH_INFO.geo.latitude);
+  const lng = parseFiniteFloat(settings.church_lng, CHURCH_INFO.geo.longitude);
 
   const address = displaySettingValue(settings.church_address);
   const zipcode = displaySettingValue(settings.church_zipcode);

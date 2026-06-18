@@ -5,3 +5,4 @@ export { default as NewHere } from './NewHere';
 export { default as FeedSection } from './FeedSection';
 export { default as AboutOurChurch } from './AboutOurChurch';
 export { default as ChurchVision } from './ChurchVision';
+export { default as ChurchJsonLd } from './ChurchJsonLd';
