@@ -124,6 +124,21 @@
   - 다음 기준: Vercel 배포 + `NEXT_PUBLIC_SITE_URL` 설정 후.
   - 기록 위치: 없음.
 
+## PR 리뷰 대응 (#128)
+
+봇 2개(gemini-code-assist·chatgpt-codex-connector)·Codex 독립 리뷰(foreground)·Claude 직접 검토에서 같은 4건이 겹쳤고, 처리 방향도 일치했다. 처리 결과는 아래와 같다.
+
+| 지적 | 출처 | 처리 |
+| --- | --- | --- |
+| `<script>`에 `JSON.stringify` 값을 직접 삽입 → 값에 `</script>`가 섞이면 스크립트 태그가 일찍 닫혀 코드가 주입되는 XSS | Gemini(security-high) | 적용. 출력 문자열의 `<`를 유니코드 이스케이프(`\\u003c`)로 치환 |
+| `cleanValue` 인자 타입이 `string \| undefined` (DB value는 런타임 null 가능) | Gemini(medium) | 적용. `string \| null \| undefined`로 넓혀 형제 util(`displaySettingValue`)과 맞춤 |
+| fetch(I/O)와 JSON 빌드가 한 함수에 섞임 + `SITE_URL` 끝 슬래시 | Gemini(high) | 적용. 순수 `generateChurchJsonLd(settings, siteUrl)` 분리(sermons `buildJsonLd` 패턴), `siteUrl.replace(/\/$/, '')`로 `//images` 이중 슬래시 제거 |
+| JSON-LD 주소가 항상 상수라 admin이 `church_address`를 바꿔도 검색엔진엔 옛 주소 | Codex-connector(P2) | 상수 유지로 결정(사용자 선택 A). `PostalAddress`는 streetAddress·locality·region 구조 분해가 필요한데 DB는 자유형 문자열 1개라 분해 불가. 교회 주소는 안 바뀌는 값이고, 바뀌면 `CHURCH_INFO.address` 상수를 갱신한다 |
+
+- XSS 이스케이프 근거: `site_settings`는 admin이 편집하는 값이라, 같은 텍스트가 `<script>`에 들어가면 위 주입 경로가 열린다. 공개 사용자 입력은 아니지만 이스케이프로 막는다.
+- Codex foreground 재시도 verdict: **CHANGE_REQUEST (high)**, 4건 동의·추가 발견 없음. `@type ['Church','Organization']` 배열 유효·Suspense 중복 없음·좌표 dedup 안전 재확인.
+- 재검증: `verify-task church-jsonld`(run `20260618-202620`) ESLint·stylelint·Build 통과, 신규 knip 0.
+
 ## 의사결정 로그
 
 - **D1 — 교회 정보 출처는 DB `site_settings` + 상수 fallback**
