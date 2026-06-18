@@ -58,9 +58,9 @@ const SNS_LINKS = [
   { label: 'KakaoTalk', icon: <KakaoIcon />, href: '#' },
 ];
 
-export default function Footer() {
-  const visibleSns = SNS_LINKS.filter((sns) => sns.href !== '#');
+const visibleSns = SNS_LINKS.filter((sns) => sns.href !== '#');
 
+export default function Footer() {
   return (
     <footer className={styles.footer}>
       <LayoutContainer>

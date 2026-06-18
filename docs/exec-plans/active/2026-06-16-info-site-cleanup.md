@@ -151,6 +151,16 @@
 </details>
 -->
 
+## PR 리뷰 대응
+
+PR #127에 gemini-code-assist 봇이 medium 코멘트 3건을 남겼다. 코드를 직접 확인해 처리했다(Codex 객관 리뷰는 이 Windows 환경에서 3회 실패 — 샌드박스 spawn 실패·git diff stall·job 미실행 — Claude 직접 검증으로 갈음, 판정 PASS).
+
+| 지적 | 출처 | 대조(코드 확인) | 판정 |
+| --- | --- | --- | --- |
+| Footer `visibleSns` filter가 매 렌더 실행 | `Footer.tsx:62` | `SNS_LINKS`는 모듈 정적 배열이라 컴포넌트 안 filter가 불필요하다 | 타당 → 적용(모듈 스코프 호이스팅) |
+| 홈 피드 reveal 순서 — 헤더 `getRevealStyle(1)`인데 첫 아이템 `getRevealStyle(0)`라 아이템이 먼저 뜸 | `FeedContent.tsx:34` | 헤더 0.18s vs 아이템0 0s를 코드로 확인 | 타당 → 적용(아이템 `i+2`, 하단 더보기 `length+2`) |
+| 홈 공지 클릭이 목록으로만 가서 다시 찾아야 함 — `?id=`+드로어 딥링크 제안 | `FeedContent.tsx` | 의도된 결정(D4 린 안). 공지는 회원용이라 비신자 유입과 거리가 멀어 MVP 범위 밖이다 | 기각 → 후속 검토 |
+
 ## 후속 작업
 
 - reveal.ts 죽은 export 정리는 commit 5로 **이번 PR에서 완료**했다(D7). B를 PR A에 묶어 안전해진 덕이다.

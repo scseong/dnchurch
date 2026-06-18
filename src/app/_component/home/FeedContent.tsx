@@ -31,7 +31,7 @@ export default function FeedContent({ notices }: Props) {
               href="/news/notices"
               className={styles.item}
               data-reveal
-              style={getRevealStyle(i)}
+              style={getRevealStyle(i + 2)}
             >
               <div className={styles.item_body}>
                 <div className={styles.item_content}>
@@ -61,7 +61,7 @@ export default function FeedContent({ notices }: Props) {
         href="/news/notices"
         className={styles.more_button}
         data-reveal
-        style={getRevealStyle(notices.length)}
+        style={getRevealStyle(notices.length + 2)}
       >
         더 보기
       </Link>
