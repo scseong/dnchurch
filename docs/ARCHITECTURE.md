@@ -18,13 +18,12 @@ src/app/
 
 ## 데이터 흐름
 
+레이어 의존 서열이다 (위가 하위 레이어). 각 층은 자신보다 위(하위)만 import하고 아래(상위)는 참조하지 못한다 — 순차 데이터 파이프라인이 아니다.
+
 ```
-apis/         ← Supabase 쿼리 (read 중심)
-  ↓
-services/     ← 비즈니스 로직 / 트랜스폼 / 정렬·필터
-  ↓
-actions/      ← Server Action (write·뮤테이션, "use server")
-  ↓
+apis/         ← 횡단 쿼리 (인증·설정·스태프). 도메인 파일 없음
+services/     ← 도메인 읽기·쓰기 (쿼리 조합·정렬·필터 + RPC 뮤테이션)
+actions/      ← Server Action 진입점 ("use server" + 검증·인증·캐시 갱신)
 app/          ← 페이지·레이아웃 (RSC 기본)
 ```
 
@@ -58,4 +57,4 @@ app/          ← 페이지·레이아웃 (RSC 기본)
 
 상세는 `.claude/skills/file-structure/`.
 
-<!-- last-audit: 2026-05-01 -->
+<!-- last-audit: 2026-06-18 -->

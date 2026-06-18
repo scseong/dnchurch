@@ -160,8 +160,8 @@ dnchurch/
 ├── scripts/                # 워크플로우 자동화 (.mjs)
 ├── supabase/               # 마이그레이션, seed, config.toml
 └── src/
-    ├── actions/            # Server Action (mutation)
-    ├── apis/               # Supabase 쿼리 (read)
+    ├── actions/            # Server Action 진입점 (mutation)
+    ├── apis/               # 횡단 쿼리 (인증·설정·스태프)
     ├── app/                # App Router 라우트
     │   ├── (admin)/        # 관리자 그룹 (.shell scope)
     │   ├── (content)/      # 일반 사용자 그룹 (Hero + Breadcrumb)
@@ -173,7 +173,7 @@ dnchurch/
     ├── hooks/              # 12개 커스텀 훅
     ├── lib/                # supabase 클라이언트 4종 + 도메인 유틸
     ├── proxy.ts            # Next 16 미들웨어 (구 middleware.ts)
-    ├── services/           # 비즈니스 로직 (bulletin/notice/sermon/worship)
+    ├── services/           # 도메인 읽기·쓰기 (bulletin/notice/sermon/worship)
     ├── store/              # zustand (toast)
     ├── styles/             # 토큰·믹스인·globals
     ├── types/              # database.types(자동) + 도메인 타입
@@ -194,15 +194,13 @@ dnchurch/
 
 ## 데이터 레이어
 
-### 흐름
+### 의존 서열
 
 ```
-apis/  →  services/  →  actions/  →  app/
-  ↑           ↑           ↑           ↑
-Supabase    비즈니스    Server      페이지/
-쿼리(read)  로직·RPC   Action      레이아웃
-                       (write)
+apis  →  services  →  actions  →  app
 ```
+
+화살표는 의존 서열이다 (왼쪽=하위, 오른쪽=상위). 순차 데이터 흐름이 아니다 — `services/`가 도메인 읽기·쓰기(쿼리 조합 + RPC 뮤테이션)를 함께 갖고, `actions/`는 검증·인증·캐시 갱신을 입힌 서버 뮤테이션 진입점이다.
 
 레이어 의존 방향은 ESLint로 강제됩니다 (`eslint.config.mjs`):
 
