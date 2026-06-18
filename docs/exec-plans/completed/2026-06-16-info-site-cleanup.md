@@ -1,6 +1,6 @@
 # info-site-cleanup
 
-- **상태**: 🟡 진행 중
+- **상태**: ✅ 완료 (2026-06-18)
 - **시작일**: 2026-06-16
 - **브랜치**: feat/info-site-cleanup
 - **Open questions**: none
@@ -165,6 +165,12 @@ PR #127에 gemini-code-assist 봇이 medium 코멘트 3건을 남겼다. 코드�
 
 - reveal.ts 죽은 export 정리는 commit 5로 **이번 PR에서 완료**했다(D7). B를 PR A에 묶어 안전해진 덕이다.
 - 이번 PR 범위 밖 후속은 실서비스 MVP 로드맵에서 추적한다 — 은혜 나눔 실데이터(커뮤니티 출시 시), `DesktopHeader.tsx:21` `queueMicrotask` 제거.
+
+## 회고
+
+- **잘된 것**: "홈에서 공지를 클릭하면 빈 화면"이라는 첫 단정을 코드로 직접 확인해 정정했다 — 목록 페이지는 드로어로 정상이었고, 진짜 블로커는 홈 피드 링크 한 곳(`FeedContent.tsx:81`)이었다(D4). 봇·자기 단정을 코드로 대조해 오진을 PR에 싣지 않은 게 핵심이다. B(스텁 차단·reveal 정리)를 PR A에 묶어(D7) 표면화된 죽은 export까지 같은 PR에서 정리했고, knip을 baseline으로 지켰다.
+- **다음에 할 것**: 이전 dev 서버가 남긴 stale `.next/dev/types`가 삭제된 라우트(`community/groups/[id]`)를 참조해 build가 한 번 깨졌다. dev를 켠 채 라우트를 지우면 `.next`를 비우고 빌드한다(feedback_no_build_during_dev의 구체 사례). Codex 객관 리뷰가 이 Windows 환경에서 3회 실패했으니(샌드박스 spawn·git diff stall·job 미실행), 다음 위임 전에 Codex CLI를 Windows에서 1회 재현해 원인을 잡는다.
+- **발견된 부채**: `DesktopHeader.tsx:21` `queueMicrotask`(feedback_no_queue_microtask 위반)와 미사용 `getNoticeById`·`getAllNoticeIds`(공지 상세 미구현)는 기존 부채로 분류해 이번 PR 범위 밖으로 뒀다. 홈 공지 딥링크(드로어 자동 열기)는 gemini 제안이나 회원용이라 D4로 미뤘다.
 
 ---
 
