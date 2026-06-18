@@ -1,4 +1,4 @@
-import { GNB_ITEMS, SPECIAL_PAGES } from '@/config/navigation';
+import { GNB_ITEMS } from '@/config/navigation';
 
 export type HeroMeta = {
   title: string;
@@ -14,12 +14,6 @@ const HERO_META: Record<string, HeroMeta> = {
   '/sermons': { title: '설교', subtitle: '주일 말씀과 강해 설교를 만나보세요', eyebrow: 'SERMONS' },
   '/community': { title: '교제', subtitle: '함께 기도하고 나누는 공동체', eyebrow: 'COMMUNITY' },
   '/news': { title: '교회 소식', subtitle: '교회의 소식을 전해드립니다', eyebrow: 'NEWS' },
-};
-
-/** GNB·HERO_META에 없는 특수 페이지(검색·알림)의 Hero subtitle·eyebrow. title은 SPECIAL_PAGES가 SSOT */
-const SPECIAL_HERO_META: Record<string, { subtitle: string; eyebrow?: string }> = {
-  '/search': { subtitle: '교회 콘텐츠를 한 곳에서 찾아보세요', eyebrow: 'SEARCH' },
-  '/notifications': { subtitle: '새로운 소식과 알림을 확인하세요', eyebrow: 'NOTIFICATIONS' },
 };
 
 /** 자체 hero를 직접 렌더하는 hub 페이지 — 레이아웃 자동 Hero를 끈다(중복 렌더 방지). */
@@ -41,13 +35,6 @@ export function resolveHeroMeta(pathname: string): HeroMeta | null {
   // /sermons/all·/sermons/series는 GNB '설교' children으로 옮겼으므로 loop가 라벨을 해석한다.
   const direct = HERO_META[pathname];
   if (direct) return direct;
-
-  // GNB·HERO_META 미등록 특수 페이지(검색·알림) — (content) 레이아웃에 Hero 슬롯이 노출된다.
-  const specialTitle = SPECIAL_PAGES[pathname];
-  if (specialTitle) {
-    const extra = SPECIAL_HERO_META[pathname];
-    return { title: specialTitle, subtitle: extra?.subtitle ?? '', eyebrow: extra?.eyebrow };
-  }
 
   let title = '';
   let categoryKey = '';

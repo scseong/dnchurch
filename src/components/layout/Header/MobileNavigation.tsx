@@ -33,11 +33,6 @@ export default function MobileNavigation() {
           <br />
           <strong>대구동남교회</strong>입니다.
         </div>
-        <div className={styles.auth_links}>
-          <Link href="/login" replace>로그인</Link>
-          <span className={styles.nav_divider} />
-          <Link href="/sign-up" replace>회원가입</Link>
-        </div>
       </div>
 
       <nav>

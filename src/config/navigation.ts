@@ -123,10 +123,8 @@ export function resolveNavLabel(pathname: string): string {
 
 // ── MobileHeader ──
 
-export const SPECIAL_PAGES: Record<string, string> = {
+const SPECIAL_PAGES: Record<string, string> = {
   '/mypage': '마이페이지',
-  '/search': '검색',
-  '/notifications': '알림',
   '/login': '로그인',
   '/sign-up': '회원가입',
 };

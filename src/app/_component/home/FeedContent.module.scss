@@ -1,68 +1,6 @@
-// ─── Tab Switcher (Mobile Only) ─────────────────────
-.tab_switcher {
-  display: flex;
-  border-bottom: $spacing-1 solid $border-primary;
-  margin-bottom: $spacing-32;
-
-  @include respond-up($breakpoint-tablet) {
-    display: none;
-  }
-}
-
-.tab_active,
-.tab_inactive {
-  flex: 1;
-  padding: $spacing-12 0;
-  border: none;
-  border-bottom: 0.1rem solid transparent;
-  margin-bottom: calc(-1 * $spacing-1);
-  background: none;
-  font-size: $font-size-14;
-  font-family: $font-family-base;
-  cursor: pointer;
-  transition:
-    color $transition-duration-normal $transition-easing-default,
-    border-color $transition-duration-normal $transition-easing-default;
-}
-
-.tab_active {
-  font-weight: $font-weight-semibold;
-  color: $accent;
-  border-bottom-color: $accent;
-}
-
-.tab_inactive {
-  font-weight: $font-weight-regular;
-  color: $txt-tertiary;
-
-  &:hover {
-    color: $txt-secondary;
-  }
-}
-
-// ─── Grid ───────────────────────────────────────────
-.grid {
-  min-width: 0;
-  overflow: hidden;
-
-  @include respond-up($breakpoint-tablet) {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: $spacing-24;
-  }
-}
-
 // ─── Column ─────────────────────────────────────────
 .column {
   min-width: 0;
-}
-
-.column_hidden {
-  display: none;
-
-  @include respond-up($breakpoint-tablet) {
-    display: block;
-  }
 }
 
 // ─── Column Header (PC Only) ────────────────────────
@@ -84,21 +22,13 @@
   gap: $spacing-8;
 }
 
-.color_bar_news,
-.color_bar_sharing {
+.color_bar_news {
   width: $spacing-4;
   height: 2.2rem;
   border-radius: $radius-xs;
   display: inline-block;
   flex-shrink: 0;
   transform: translateY(-0.1rem);
-}
-
-.color_bar_news {
-  background: $accent;
-}
-
-.color_bar_sharing {
   background: $accent;
 }
 
@@ -198,10 +128,6 @@
   display: flex;
   align-items: center;
   gap: $spacing-8;
-}
-
-.item_author {
-  @include text-caption;
 }
 
 .item_date {

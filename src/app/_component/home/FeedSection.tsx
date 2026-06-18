@@ -11,11 +11,9 @@ export default async function FeedSection() {
     <section className={styles.section}>
       <LayoutContainer>
         <div data-reveal style={getRevealStyle()} className={styles.header}>
-          <span className={styles.caption}>Church Feeds</span>
-          <h2>교회 소식과 은혜 나눔</h2>
-          <p className={styles.subtitle}>
-            교회의 최신 소식과 성도님들의 은혜로운 나눔을 확인하세요
-          </p>
+          <span className={styles.caption}>Church News</span>
+          <h2>교회 소식</h2>
+          <p className={styles.subtitle}>교회의 최신 소식을 확인하세요</p>
         </div>
         <FeedContent notices={notices ?? []} />
       </LayoutContainer>
