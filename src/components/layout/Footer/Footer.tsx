@@ -136,6 +136,7 @@ export default function Footer() {
             &copy; 2026 DONGNAM CHURCH. ALL RIGHTS RESERVED.
           </p>
           <div className={styles.footer_bottom_links}>
+            <Link href="/privacy-policy">개인정보처리방침</Link>
             <span>DESIGNED BY SCSEONG</span>
           </div>
         </div>

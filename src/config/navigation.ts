@@ -127,6 +127,7 @@ const SPECIAL_PAGES: Record<string, string> = {
   '/mypage': '마이페이지',
   '/login': '로그인',
   '/sign-up': '회원가입',
+  '/privacy-policy': '개인정보처리방침',
 };
 
 /** 모바일 헤더 타이틀 + 뒤로가기 상태 해석 */
