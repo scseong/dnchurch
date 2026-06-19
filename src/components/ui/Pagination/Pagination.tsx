@@ -86,11 +86,11 @@ function PageLink({ page, isCurrent, href }: { page: number; isCurrent: boolean;
 function PrevButton({ disabled, href }: { disabled: boolean; href: string }) {
   return disabled ? (
     <span className={clsx(styles.page_link, styles.disabled)} aria-disabled="true">
-      <IoIosArrowBack /> <span className="hidden-on-mobile">이전</span>
+      <IoIosArrowBack /> <span className="hidden_on_mobile">이전</span>
     </span>
   ) : (
     <Link href={href} className={styles.page_link}>
-      <IoIosArrowBack /> <span className="hidden-on-mobile">이전</span>
+      <IoIosArrowBack /> <span className="hidden_on_mobile">이전</span>
     </Link>
   );
 }
@@ -98,11 +98,11 @@ function PrevButton({ disabled, href }: { disabled: boolean; href: string }) {
 function NextButton({ disabled, href }: { disabled: boolean; href: string }) {
   return disabled ? (
     <span className={clsx(styles.page_link, styles.disabled)} aria-disabled="true">
-      <span className="hidden-on-mobile">다음</span> <IoIosArrowForward />
+      <span className="hidden_on_mobile">다음</span> <IoIosArrowForward />
     </span>
   ) : (
     <Link href={href} className={styles.page_link}>
-      <span className="hidden-on-mobile">다음</span> <IoIosArrowForward />
+      <span className="hidden_on_mobile">다음</span> <IoIosArrowForward />
     </Link>
   );
 }

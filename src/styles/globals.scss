@@ -201,7 +201,7 @@ button {
   z-index: 9999;
 }
 
-.hidden-on-mobile {
+.hidden_on_mobile {
   display: none;
 
   @include respond-up($breakpoint-mobile-lg) {

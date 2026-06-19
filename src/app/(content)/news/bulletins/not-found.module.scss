@@ -15,11 +15,11 @@
     margin-bottom: $spacing-24;
   }
 
-  .buttonGroup {
+  .button_group {
     display: flex;
     gap: $spacing-16;
 
-    .primaryButton {
+    .primary_button {
       padding: $spacing-12 $spacing-20;
       background-color: $primary;
       color: $txt-inverse;

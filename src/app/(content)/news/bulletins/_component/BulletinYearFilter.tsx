@@ -8,7 +8,7 @@ type Props = {
 
 export default function BulletinYearFilter({ selectedYear, years }: Props) {
   return (
-    <ul className={styles.yearList}>
+    <ul className={styles.year_list}>
       <li>
         <Link href="/news/bulletins" scroll={false}>
           전체
