@@ -138,6 +138,29 @@
   - 문제: 동의 UI 없이 처리방침만 배포하면 준수 상태로 오해될 수 있다.
   - 해결: 실사용자 수집이 없는 오픈 전 단계(사용자 확인)라, 페이지 최상단에 강한 초안 경고를 달고 배포한다. Codex 2차도 "수집 기능이 안 열렸으면 초안 경고로 공개 OK"로 판단.
   - 결과: 표준 문서를 미리 갖추고, 동의 UI·전문가 검토는 런칭 게이트로 남긴다.
+- **D4 — 라우트를 `(content)/privacy-policy`로 정정 (앞서 app 루트로 둔 결정 폐기)**
+  - 문제: 처음엔 login·sign-up처럼 app 루트(`src/app/privacy-policy/`)에 뒀다. PR #130 Codex 리뷰가 짚었듯 Header·Footer·BottomNav·모바일 헤더는 `(content)/layout.tsx`만 렌더한다. 그래서 Footer 링크가 nav 없는 맨 페이지로 떨어지고 `SPECIAL_PAGES` 모바일 헤더 매핑도 죽은 코드였다.
+  - 해결: `git mv`로 `(content)/privacy-policy/`에 옮긴다. URL은 route group이라 `/privacy-policy` 그대로다. `resolveHeroMeta`가 GNB 미등록 경로엔 null을 반환해 Hero는 안 뜬다(`hero.config.ts` Read 확인). `SPECIAL_PAGES`·Footer 링크는 그대로 두면 이제 정상 작동한다.
+  - 결과: 이동 후 prod에서 Footer·Header nav가 렌더되고(이동 전 0건), 모바일 헤더에 "개인정보처리방침"이 뜬다. Hero는 안 뜬다.
+- **D5 — `(content)` 이동에 따른 제3자 스크립트 로드 수용**
+  - 문제: 공통 `(content)` 레이아웃이 Kakao Maps SDK와 scroll-reveal 스크립트를 전 페이지에 로드한다. 법적 고지 페이지에도 로드된다.
+  - 해결: 페이지별 레이아웃 분기는 과한 변경이라 수용한다. 법적 고지 페이지에도 스크립트가 로드(외부 서버 요청 발생)되나, 맵 인스턴스는 생성하지 않는다.
+  - 결과: 처리방침 페이지가 Kakao SDK 스크립트 1건을 외부 요청하되, `new kakao.maps.Map()` 호출이 없어 지도 인스턴스 생성·위치 수집은 0건이다.
+
+## PR 리뷰 대응 (#130)
+
+Gemini·Codex-connector 봇 4건을 코드로 검증하고 Codex foreground 2라운드(수정안·확정 문안)로 교차 확인했다.
+
+| 지적 | 출처 | 처리 |
+| --- | --- | --- |
+| §8 권리 행사가 보호책임자를 "제11조"로 참조(실제 §14) | Gemini(medium) | 적용. `제14조`로 정정. 페이지 내부 `제N조` 참조를 전수 확인해 §2·§5·§6은 정확하고 §8이 유일 오류임을 확인했다 |
+| `/privacy-policy`가 app 루트라 Header·Footer·모바일 헤더 없음 | Codex-connector(P2) | 적용. `(content)/privacy-policy/`로 이동(D4). prod 렌더로 공통 UI(Header·Footer·BottomNav) 노출 확인 |
+| §9 민감정보 "별도 동의를 받아 처리합니다" 현재형이 동의 UI 부재와 어긋남 | Codex-connector(P2) | 적용. "필요한 경우 별도 동의 절차가 마련된 범위 내에서 동의를 받은 후 처리"로 완화(Codex 제안 문안) |
+| 가입 폼 근처에 정책 링크 없음 | Codex-connector(P2) | 후속(런칭 게이트).<br>오픈 전이고 실제 수집이 없어 미룬다.<br>`/sign-up`이 실제 제출 가능해지면 런칭 차단 사유.<br>동의 UI와 함께 추가. |
+
+- Codex 검증: 수정안은 PASS_WITH_DECISION_LOG(high), 확정 문안 사인오프에서 Kakao 로그 문구만 보정 요구(D5에 반영) 후 PASS.
+- 재검증: `verify-task privacy-policy`(run `20260619-170926`) ESLint·stylelint·Build 통과. prod 실측 — 이동 후 `/privacy-policy`가 Footer·Header nav를 렌더한다(이동 전엔 0건). §8 `제14조`·§9 완화 문구 반영, 옛 `제11조` 제거, 15조항 유지 확인.
+- 사고 기록: dev 서버가 도는 중에 `git mv`를 실행하자 Next dev 워처가 라우트 변경을 처리하다 멈췄다. 라우트 파일 이동은 dev를 끈 뒤 한다.
 
 ## ADR 판단
 
