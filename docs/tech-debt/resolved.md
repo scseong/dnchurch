@@ -4,6 +4,12 @@
 
 ---
 
+### ✅ 하위 페이지 og:image 소실 — openGraph 부분 선언 (2026-06-19 해소, PR #129)
+
+- **부채**: 하위 페이지가 `generateMetadata`에서 `openGraph`를 부분 선언하면, Next.js가 `openGraph` 객체를 얕게 병합(shallow merge)하면서 root layout의 og:image(기본 배너)가 사라졌다. 공유·검색 미리보기 이미지가 빈 상태였다. about/*는 그 사이 `OPEN_GRAPH_BASE` 펼침으로 고쳐졌고, sermons·news 계열이 남아 있었다
+- **해소**: `src/config/seo.ts`에 `OG_FALLBACK_IMAGE` 상수를 두고 `OPEN_GRAPH_BASE`·`CHURCH_INFO.image`가 참조하게 모았다. 정적 목록 4개(`sermons`·`sermons/all`·`sermons/series`·`news/bulletins`)는 `...OPEN_GRAPH_BASE`를 펼쳐 배너를 상속하고, 동적 상세 3개(`sermons/[id]`·`sermons/series/[id]`·`news/bulletins/[id]`)는 콘텐츠 이미지가 없을 때 `[{ url: x || OG_FALLBACK_IMAGE }]`로 배너를 채운다. `openGraph` 미선언 페이지는 root를 상속해 원래 정상이었다
+- **확인**: prod 서버(빌드 산출물)에서 목록 4개가 `og:image = .../images/aboutBanner.jpg` 출력, 상세 `/sermons/3`은 Cloudinary 콘텐츠 썸네일 유지. verify-task(`20260619-145827`)·harness-gate 통과. PR 봇은 Gemini 3건 반영·Codex 👍
+
 ### ✅ portal 컴포넌트 하이드레이션 불일치 (2026-06-15 해소, PR #122)
 
 - **부채**: `BottomSheet.tsx`·`Modal.tsx`이 `typeof window` 가드 뒤 `createPortal`을 호출하면서 항상 렌더된다. 서버는 null, 첫 클라는 portal이라 hydration mismatch가 났다. `/sermons/[id]` 공유 BottomSheet에서 React 콘솔 에러로 확인했다(dev 출력, prod도 동일)
