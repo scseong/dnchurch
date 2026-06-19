@@ -72,7 +72,19 @@ export default async function AllSermonsPage({ searchParams }: PageProps) {
     series !== 'none' &&
     !allSeries.some((item) => item.slug === series);
 
-  if (isUnknownSeries) {
+  // 설교자 미매칭 — 이름이 있지만 allPreachers에 없음. resolvePreacherName이 undefined를
+  // 반환해 필터가 안 걸리면 전체 설교가 떠서, 시리즈 미매칭(빈 상태)과 동작이 어긋난다.
+  const isUnknownPreacher =
+    !!preacher && !allPreachers.some((item) => item.name === preacher);
+
+  if (isUnknownSeries || isUnknownPreacher) {
+    const emptyTitle = isUnknownSeries
+      ? '해당 시리즈를 찾을 수 없습니다'
+      : '해당 설교자를 찾을 수 없습니다';
+    const emptyDescription = isUnknownSeries
+      ? 'URL이 올바른지 확인하거나 사이드바에서 다른 시리즈를 선택해 주세요.'
+      : 'URL이 올바른지 확인하거나 사이드바에서 다른 설교자를 선택해 주세요.';
+
     return (
       <LayoutContainer>
         <div className={styles.body}>
@@ -88,11 +100,7 @@ export default async function AllSermonsPage({ searchParams }: PageProps) {
           />
           <div className={styles.main}>
             <SermonToolbar allSeries={filterableSeries} allPreachers={filterablePreachers} />
-            <EmptyState
-              title="해당 시리즈를 찾을 수 없습니다"
-              description="URL이 올바른지 확인하거나 사이드바에서 다른 시리즈를 선택해 주세요."
-              announce
-            />
+            <EmptyState title={emptyTitle} description={emptyDescription} announce />
           </div>
         </div>
       </LayoutContainer>
