@@ -4,6 +4,17 @@
 
 ---
 
+### 🟡 가입 폼에 민감정보(종교)·국외이전 별도 동의 UI가 없음 (privacy-policy PR #130 — 런칭 게이트)
+
+- **상태**: 등록만 (오픈 전 단계라 실수집 없음 — 런칭 전 필수)
+- **무엇**: 개인정보처리방침 페이지(`/privacy-policy`)는 만들었으나, 회원가입 폼(`SignUpForm`)에 (1) 종교 관련 민감정보(교인 여부·소속 부서·사역, 제23조) 별도 동의, (2) 국외이전(Supabase·Cloudinary·Vercel) 고지·동의 체크박스가 없다. 처리방침 §9는 "별도 동의 절차가 마련된 범위 내에서" 처리한다고 고지하나 실제 동의 UI가 없어 문서와 앱이 어긋난다.
+- **왜 지금 안 하나**: privacy-policy task는 처리방침 문서 페이지만 범위였다. 동의 UI는 가입 흐름 변경이라 분리했다. 현재 오픈 전 단계로 실사용자 수집이 없어 활성 위반은 아니다.
+- **왜 미루면 안 되나(데드라인)**: `/sign-up`이 실제 제출 가능해져 실사용자가 가입하면 제23조 민감정보 별도 동의 공백이 즉시 출시를 막는 사유가 된다. **7/1 런칭 전 반드시 추가한다.**
+- **마이그레이션 경로**: `SignUpForm`(또는 가입 Server Action 동의 단계)에 민감정보·국외이전 별도 동의 체크박스 + `/privacy-policy` 링크를 추가하고, 동의 값을 저장·검증한다. `/sign-up`·`/login`은 `(content)` 밖 root라 Footer가 없으므로 폼 안에 링크를 둔다.
+- **영향 범위**: `src/app/_component/auth/SignUpForm`, `src/actions/auth.action.ts`, 가입 흐름
+- **확인**: 가입 폼에 민감정보·국외이전 별도 동의 체크박스 존재 여부
+- **발견일**: 2026-06-19 (privacy-policy PR #130 Codex 리뷰 — 처리방침 문구와 동의 UI 정합성 지적)
+
 ### ✅ 마이그레이션이 DB를 재현하지 못함 — 해소 (migration-ssot-recovery, PR #115)
 
 - **상태**: 해소 (2026-06-12). baseline 마이그레이션 + `001` 재작성 + `get_adjacent_bulletins` 추가로 Preview 빈 DB가 dev와 일치(테이블·컬럼·enum·RLS·트리거). 남은 문제: dev 자체에 `custom_access_token_hook` 함수가 없어 마이그레이션과 어긋난다(fresh 빌드는 함수를 만들므로 미래 prod는 정상). 아래는 작업 전 기록.
