@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import { redirect } from 'next/navigation';
 import { LayoutContainer } from '@/components/layout';
+import { OPEN_GRAPH_BASE } from '@/config/seo';
 import { getAllSeries, getFeaturedSermon, getSermons } from '@/services/sermon';
 import SermonFeatured from './_component/SermonFeatured/SermonFeatured';
 import SermonRecentCarousel from './_component/SermonRecentCarousel/SermonRecentCarousel';
@@ -17,10 +18,10 @@ export const metadata: Metadata = {
   description: PAGE_DESCRIPTION,
   alternates: { canonical: PAGE_CANONICAL },
   openGraph: {
+    ...OPEN_GRAPH_BASE,
     title: '설교',
     description: PAGE_DESCRIPTION,
-    url: PAGE_CANONICAL,
-    type: 'website'
+    url: PAGE_CANONICAL
   },
   twitter: { card: 'summary', title: '설교', description: PAGE_DESCRIPTION }
 };

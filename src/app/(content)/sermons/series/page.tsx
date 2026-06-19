@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import { LayoutContainer } from '@/components/layout';
 import { getAllSeries } from '@/services/sermon';
 import { filterSeries, parseSeriesParams } from '@/utils/sermon';
+import { OPEN_GRAPH_BASE } from '@/config/seo';
 import SeriesFilterSidebar from '../_component/SeriesListPage/SeriesFilterSidebar';
 import SeriesToolbar from '../_component/SeriesListPage/SeriesToolbar';
 import SeriesResultHeader from '../_component/SeriesListPage/SeriesResultHeader';
@@ -17,10 +18,10 @@ export const metadata: Metadata = {
   description: PAGE_DESCRIPTION,
   alternates: { canonical: PAGE_CANONICAL },
   openGraph: {
+    ...OPEN_GRAPH_BASE,
     title: '모든 시리즈',
     description: PAGE_DESCRIPTION,
-    url: PAGE_CANONICAL,
-    type: 'website'
+    url: PAGE_CANONICAL
   },
   twitter: { card: 'summary', title: '모든 시리즈', description: PAGE_DESCRIPTION }
 };

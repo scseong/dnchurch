@@ -1,5 +1,9 @@
 import type { Metadata } from 'next';
 
+// 공유 미리보기(og:image)·JSON-LD의 기본 이미지. 페이지·콘텐츠 전용 이미지가 없을 때 fallback으로 쓴다.
+// 한 곳에 모아 OPEN_GRAPH_BASE와 CHURCH_INFO가 같은 배너를 가리키게 한다(경로 드리프트 방지).
+export const OG_FALLBACK_IMAGE = '/images/aboutBanner.jpg';
+
 // root layout과 홈이 공유하는 OpenGraph 기본값.
 // 홈은 여기에 url만 더해 전체를 선언한다 — Next.js는 openGraph를 shallow merge하므로,
 // 부분만 선언하면 여기 없는 필드(og:image 등)가 사라진다.
@@ -10,7 +14,7 @@ export const OPEN_GRAPH_BASE: Metadata['openGraph'] = {
   locale: 'ko_KR',
   siteName: '대구동남교회',
   description: '주님의 기도를 배우는 교회(성도), 동남교회',
-  images: ['/images/aboutBanner.jpg']
+  images: [OG_FALLBACK_IMAGE]
 };
 
 // JSON-LD 구조화 데이터와 location 페이지가 공유하는 교회 식별·위치 상수.
@@ -29,5 +33,5 @@ export const CHURCH_INFO = {
     latitude: 35.85262832577055,
     longitude: 128.53467835707838
   },
-  image: '/images/aboutBanner.jpg'
+  image: OG_FALLBACK_IMAGE
 } as const;

@@ -3,6 +3,7 @@ import { notFound } from 'next/navigation';
 import { LayoutContainer } from '@/components/layout';
 import { getSeriesDetail } from '@/services/sermon';
 import { getOgImageUrl } from '@/utils/cloudinary';
+import { OG_FALLBACK_IMAGE } from '@/config/seo';
 import SeriesDetailHero from '../../_component/SeriesDetailPage/SeriesDetailHero';
 import EpisodeGrid from '../../_component/SeriesDetailPage/EpisodeGrid';
 import styles from '../../_component/SeriesDetailPage/SeriesDetailPage.module.scss';
@@ -42,14 +43,14 @@ export async function generateMetadata({
       title,
       description,
       url: canonical,
-      images: image ? [{ url: image }] : [],
+      images: [{ url: image || OG_FALLBACK_IMAGE }],
       type: 'website'
     },
     twitter: {
       card: 'summary_large_image',
       title,
       description,
-      images: image ? [image] : []
+      images: [image || OG_FALLBACK_IMAGE]
     }
   };
 }
