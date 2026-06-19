@@ -36,14 +36,14 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
       title,
       description,
       url: canonical,
-      images: ogImage ? [{ url: ogImage }] : [OG_FALLBACK_IMAGE],
+      images: [{ url: ogImage || OG_FALLBACK_IMAGE }],
       type: 'article'
     },
     twitter: {
       card: 'summary_large_image',
       title,
       description,
-      images: ogImage ? [ogImage] : [OG_FALLBACK_IMAGE]
+      images: [ogImage || OG_FALLBACK_IMAGE]
     }
   };
 }

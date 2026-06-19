@@ -26,7 +26,7 @@ export async function generateMetadata({ params }: { params: Promise<{ id: strin
     openGraph: {
       title,
       description,
-      images: ogImage ? [{ url: ogImage }] : [OG_FALLBACK_IMAGE]
+      images: [{ url: ogImage || OG_FALLBACK_IMAGE }]
     }
   };
 }

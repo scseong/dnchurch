@@ -43,14 +43,14 @@ export async function generateMetadata({
       title,
       description,
       url: canonical,
-      images: image ? [{ url: image }] : [OG_FALLBACK_IMAGE],
+      images: [{ url: image || OG_FALLBACK_IMAGE }],
       type: 'website'
     },
     twitter: {
       card: 'summary_large_image',
       title,
       description,
-      images: image ? [image] : [OG_FALLBACK_IMAGE]
+      images: [image || OG_FALLBACK_IMAGE]
     }
   };
 }

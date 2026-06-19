@@ -82,6 +82,12 @@ sermons·news 하위 페이지가 SNS·검색 공유 시 미리보기 이미지(
   - 이미지 없는 상세의 `[OG_FALLBACK_IMAGE]` 분기는 build로 검증된 한 줄 상수 치환(표본에 이미지 없는 항목이 없어 런타임 미관측).
 - **다음 행동**: 사용자 승인 후 커밋.
 
+## PR 리뷰 대응 (#129)
+
+- **Gemini 지적**: 상세 3개(`sermons/[id]`·`sermons/series/[id]`·`news/bulletins/[id]`)에서 삼항 `x ? [{ url: x }] : [OG_FALLBACK_IMAGE]`를 `[{ url: x || OG_FALLBACK_IMAGE }]`로 바꾸면 배열 원소 타입이 항상 `{ url: string }`로 일관된다 (medium, 3건 동일).
+- **처리**: 3건 모두 수용. `getOgImageUrl`이 `string | null`을 반환하므로 `x || OG_FALLBACK_IMAGE`는 삼항과 결과 og:image URL이 같고, 배열이 항상 `[{ url: string }]`이라 혼합 타입(`{ url: string }[] | string[]`)이 사라진다. 프로젝트 `.gemini/styleguide.md §7`(삼항보다 `||` 선호)과도 맞는다.
+- **재검증**: `verify-task subpage-og-image`(run `20260619-143446`) ESLint·stylelint·Build 통과.
+
 ## 검증 이력
 
 <!--
