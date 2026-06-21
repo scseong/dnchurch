@@ -1,4 +1,4 @@
-$icon_box_size: 4.2rem;
+$icon-box-size: 4.2rem;
 
 .quick_wrap {
   background: $bg-secondary-deep;
@@ -70,18 +70,18 @@ $icon_box_size: 4.2rem;
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
-  width: $icon_box_size;
-  height: $icon_box_size;
+  width: $icon-box-size;
+  height: $icon-box-size;
   background: $bg-dark-nav;
   border-radius: $radius-xs;
-  font-size: calc($icon_box_size / 1.8);
+  font-size: calc($icon-box-size / 1.8);
   color: $accent;
 
   @include respond-up($breakpoint-tablet) {
     margin-right: $spacing-16;
-    width: $icon_box_size;
-    height: $icon_box_size;
-    font-size: calc($icon_box_size / 1.8);
+    width: $icon-box-size;
+    height: $icon-box-size;
+    font-size: calc($icon-box-size / 1.8);
   }
 
   svg {

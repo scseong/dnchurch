@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useCallback, useEffect } from 'react';
+import { useState, useCallback } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import clsx from 'clsx';
 import { IoClose } from 'react-icons/io5';
@@ -23,9 +23,12 @@ export default function NoticeControlBar({ total, currentCategory, currentSearch
   const [query, setQuery] = useState(currentSearch ?? '');
   const [showCategorySheet, setShowCategorySheet] = useState(false);
 
-  useEffect(() => {
-    queueMicrotask(() => setQuery(currentSearch ?? ''));
-  }, [currentSearch]);
+  // currentSearch(URL search) 변경 → query 동기화 (렌더 중 prev-state 보정)
+  const [prevSearch, setPrevSearch] = useState(currentSearch);
+  if (currentSearch !== prevSearch) {
+    setPrevSearch(currentSearch);
+    setQuery(currentSearch ?? '');
+  }
 
   const updateParams = useCallback(
     (updates: Record<string, string | null>) => {

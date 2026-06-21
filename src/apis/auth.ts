@@ -38,13 +38,3 @@ export async function signOut() {
 
   if (error) throw error;
 }
-
-export async function updatePassword(password: string) {
-  const supabase = getSupabaseBrowserClient();
-  const { data, error } = await supabase.auth.updateUser({
-    password
-  });
-
-  if (error) throw error;
-  return data;
-}

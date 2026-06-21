@@ -9,8 +9,8 @@ export default function NotFound() {
         입력하신 주소의 형식이 올바르지 않거나, <br />
         해당 주보가 이미 삭제되었을 수 있습니다.
       </p>
-      <div className={styles.buttonGroup}>
-        <Link href="/news/bulletins" className={styles.primaryButton}>
+      <div className={styles.button_group}>
+        <Link href="/news/bulletins" className={styles.primary_button}>
           주보 목록으로 가기
         </Link>
       </div>

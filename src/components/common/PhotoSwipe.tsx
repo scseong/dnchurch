@@ -74,7 +74,7 @@ export default function PhotoSwipe({
                   <div
                     ref={ref}
                     className={clsx(
-                      styles.imageBox,
+                      styles.image_box,
                       className,
                       state?.loaded ? styles.visible : styles.hidden
                     )}

@@ -5,7 +5,8 @@ import path from "node:path";
 import process from "node:process";
 import { ADR_TRIGGER_PARTS } from "./_shared-config.mjs";
 
-const pattern = process.argv[2] ?? "";
+// `.md` suffix를 떼어 `phase1.md` 입력도 slug `phase1`로 매치되게 한다 (tab 완성 입력 대응).
+const pattern = (process.argv[2] ?? "").replace(/\.md$/, "");
 const harnessEnforce = process.env.HARNESS_ENFORCE === "1";
 
 function fail(message) {
