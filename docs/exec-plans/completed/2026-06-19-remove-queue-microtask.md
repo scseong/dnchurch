@@ -1,6 +1,6 @@
 # remove-queue-microtask
 
-- **상태**: 🟡 진행 중
+- **상태**: ✅ 완료 (2026-06-21)
 - **시작일**: 2026-06-19
 - **브랜치**: refactor/remove-queue-microtask
 - **Open questions**: none
@@ -106,11 +106,16 @@
 
 ## 후속 작업
 
-<!-- 이번 범위 밖 일. Non-goals·체크리스트에 중복 기술 금지 — 여기에만.
-- <후속 항목>
-  - 이유: <왜 이번에 안 하나>
-  - 다음 기준: <언제 다시 하나>
-  - 기록 위치: `docs/tech-debt/active.md` 또는 없음 -->
+- `useMediaQuery`의 `MediaQueryList`를 `useMemo`로 메모이즈
+  - 이유: PR #131에서 Gemini가 제안했으나, 소비처 admin 2곳·고정 쿼리 1개라 `matchMedia` 반복 호출이 병목이라는 근거가 측정으로 없었다. Codex 교차 검증도 범위 밖 성능 지적이라 받지 않기로 했다(REJECT).
+  - 다음 기준: 소비처가 늘거나 프로파일링에서 `matchMedia`가 잡힐 때.
+  - 기록 위치: 없음 (측정 전까지 부채로 올리지 않음)
+
+## 회고
+
+- **잘된 것**: queueMicrotask 4건을 사이트별 올바른 패턴으로 바꿨다. `useMediaQuery`는 `useSyncExternalStore`로, 나머지 셋은 렌더 중 prev-state 보정으로 옮겨 금지 규칙 위반과 `set-state-in-effect` 경고를 함께 없앴다. Codex가 Windows 샌드박스 오류로 계획·1차 검증을 못 했을 때 Claude 직접 검증으로 대체해 막히지 않고 진행했다. PR #131에서 Gemini가 낸 성능 제안은 코드를 직접 확인하고 Codex로 교차 검증해 범위 밖임을 확인했다. 근거를 남기고 기각했다.
+- **다음에 할 것**: `useMediaQuery` 메모이즈는 위 후속 작업으로 분리했다.
+- **발견된 부채 (→ tech-debt/active.md 옮길 것)**: 없다. 4건 모두 PR #131에서 닫았다. 신규 부채 0.
 
 ---
 

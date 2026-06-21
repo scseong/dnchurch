@@ -1,6 +1,6 @@
 # tech-debt-small-batch
 
-- **상태**: 🟡 진행 중
+- **상태**: ✅ 완료 (2026-06-21)
 - **시작일**: 2026-06-19
 - **브랜치**: chore/tech-debt-small-batch
 - **Open questions**: none
@@ -124,11 +124,16 @@
 
 ## 후속 작업
 
-<!-- 이번 범위 밖 일. Non-goals·체크리스트에 중복 기술 금지 — 여기에만.
-- <후속 항목>
-  - 이유: <왜 이번에 안 하나>
-  - 다음 기준: <언제 다시 하나>
-  - 기록 위치: `docs/tech-debt/active.md` 또는 없음 -->
+- SCSS primitive 토큰 31건·hex 22건을 semantic 토큰으로 치환 (영역별 분할)
+  - 이유: 값 동일 semantic이 없는 건 디자인 결정이 필요하고, 영역별 점진 치환 방침이라 묶음에서 뺐다.
+  - 다음 기준: 영역별(home/about/sermons…) PR을 잡을 때.
+  - 기록 위치: `docs/tech-debt/active.md` (SCSS primitive 직접 사용 항목)
+
+## 회고
+
+- **잘된 것**: 작은 부채 4건을 의도별 커밋으로 분리해 한 묶음에 닫았다. Codex 계획 검증·1차 검증 모두 PASS. JSON-LD XSS·preacher 미매칭은 코드를 직접 열어 사실을 확인한 뒤 고쳤고, SCSS 네이밍은 stylelint 경고를 8건에서 0건으로 줄였다. PR #131에서 queueMicrotask 묶음과 합쳐 한 PR로 올렸다.
+- **다음에 할 것**: 범위 내에서는 완결했다. SCSS primitive 토큰·hex는 위 후속 작업으로 분리했다.
+- **발견된 부채 (→ tech-debt/active.md 옮길 것)**: 없다. complete-task.mjs의 substring 매칭 버그는 이미 정확 일치로 고쳐져 있었고(D2), 이번엔 `.md` 입력만 받아주는 1줄을 더했다. 신규 부채 0.
 
 ---
 

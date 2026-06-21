@@ -47,19 +47,6 @@
 - **영향 범위**: `src/actions/auth.action.ts`, supabase 프로필 생성 트리거, 가입 폼 안내 문구
 - **발견일**: 2026-06-12 (PR #116 Gemini 리뷰 — Codex 교차 검증으로 기존 결함 확인)
 
-### 🟡 queueMicrotask 사용 4건 (금지 규칙 위반)
-
-- **무엇**: `DesktopHeader.tsx:21`, `useListFilters.ts:27`, `useMediaQuery.ts:10`, `NoticeControlBar.tsx:26` — 프로젝트 금지 규칙(memory `feedback_no_queue_microtask`)과 어긋난다.
-- **왜 지금 안 하나**: PR #116 범위(렌더 경계 정리)와 관심사가 달라 외과적 변경 원칙으로 분리했다.
-- **마이그레이션 경로**: 각 사용처의 호출 시점을 useEffect 또는 이벤트 핸들러로 옮기는 별도 Fix task. 4건이 같은 패턴이라 한 task로 묶는다.
-- **발견일**: 2026-06-11 (server-client-boundary Phase 0 진단)
-
-### 🟢 쓰이지 않는 코드 2건 (SeriesEpisodeList·updatePassword)
-
-- **무엇**: `SeriesEpisodeList`는 import 0건이고 `SermonSeriesSidebar`가 같은 기능을 서버 컴포넌트로 따로 구현해 중복이다. `apis/auth.ts`의 `updatePassword`는 호출자 0건 — 실제 비밀번호 변경은 reset-password Server Action이 담당한다.
-- **마이그레이션 경로**: 별도 Chore task에서 제거 (SeriesEpisodeList는 제거 전 활성화 의도가 있었는지 확인)
-- **발견일**: 2026-06-11 (server-client-boundary Phase 0 진단)
-
 ### 🟡 `app/ → apis/` 직접 호출 (레이어 위반, 8건)
 
 - **무엇**: 페이지·홈 컴포넌트가 `services/` 경유 없이 `apis/`를 직접 import
@@ -111,14 +98,6 @@
 - **발견일**: 2026-05-01 (stylelint 도입 시)
 - **2026-06-01 재확인**: #102 admin 토큰 통합 작업으로 admin hex가 토큰에 흡수돼 49건에서 23건(14 파일)으로 줄었다. tech-debt-pre-release plan의 5월 26일 재측정값과 일치한다.
 
-### 🟢 SCSS 네이밍 패턴 위반 (12건)
-
-- **무엇**: snake_case 아닌 className 5건, kebab-case 아닌 SCSS 변수 7건
-- **왜**: 컨벤션 통일 전에 작성된 코드. 신규 작성은 stylelint warn으로 차단됨
-- **마이그레이션 경로**: rename → 모두 해결 시 stylelint 룰을 error로 올림
-- **확인**: `yarn lint:styles` (warning)
-- **발견일**: 2026-05-01
-
 ### 🟢 ESLint `react-hooks/set-state-in-effect` (2건, 9건 정리됨)
 
 - **무엇**: useEffect 내 setState 직접 호출 (cascading rerender 가능성)
@@ -148,14 +127,6 @@
 - **마이그레이션 경로**: `tech-debt-cleanup-knip` EXEC_PLAN — 항목별 false positive 검증 후 삭제
 - **확인**: `yarn knip`
 - **발견일**: 2026-05-01
-
-### 🟡 queueMicrotask로 set-state-in-effect 우회 (4건)
-
-- **무엇**: effect 안 setState를 `queueMicrotask`로 감싸 `react-hooks/set-state-in-effect` 경고만 끄고 연쇄 재렌더는 그대로 남긴 코드. `useListFilters.ts:27`, `NoticeControlBar.tsx:26`, `DesktopHeader.tsx:21`, `useMediaQuery.ts:10`
-- **왜**: 커밋 0e8fd31(2026-05-02)이 React Compiler 룰 격상에 대응하며 10곳을 일괄 우회했고, 이후 queueMicrotask 전면 금지가 사용자 규칙으로 정해짐
-- **마이그레이션 경로**: `useSearchSync` 사례(refactor-dedup-cleanup 8단계 — 이벤트 핸들러 디바운스 + 렌더 중 prev-state 보정)처럼 호출처별 재설계. `useMediaQuery`는 `useSyncExternalStore` 전환 후보
-- **확인**: `rg "queueMicrotask" src` → 4 hits
-- **발견일**: 2026-06-11 (refactor-dedup-cleanup 8단계에서 useSearchSync 1건 해소하며 잔여분 등록)
 
 ### 🟢 `complete-task.mjs` 패턴 매칭 부정확
 
@@ -252,14 +223,6 @@
 - **영향 범위**: `src/components/common/CloudinaryImage.tsx`
 - **발견일**: 2026-05-11 (PR #82 Codex 리뷰)
 
-### 🟢 `<SeriesEpisodeList>` 컴포넌트 미사용 (sermons-detail-series-sidebar 머지 이후)
-
-- **무엇**: `src/app/(content)/sermons/_component/SeriesEpisodeList/SeriesEpisodeList.tsx` + `.module.scss` — 이 컴포넌트는 PR #90(`feat/sermons-detail`)에서 `SermonDetailPage`의 회차 목록 노출을 `<SermonSeriesSidebar>`로 옮기며 사용처가 사라짐
-- **왜**: 1차 의도(sermons-detail-series-sidebar D4 / Codex CR-c)는 Phase 2-4 모바일 회차 목록에서 재사용 후보로 남기는 것이었으나, Phase 2-4 mobile reshuffle도 같은 PR에 흡수돼 `SermonSeriesSidebar`가 모바일 stack에서도 시리즈 회차 책임 → 이 컴포넌트 재사용처 0건 확정
-- **마이그레이션 경로**: 별도 task에서 (a) 디렉토리 + module SCSS 삭제 + Knip warn 정리, (b) 다른 use case(예: 어드민 사이드 패널 회차 목록) 발견 시 그 task에서 재사용
-- **영향 범위**: `src/app/(content)/sermons/_component/SeriesEpisodeList/` (2 파일, 약 100줄)
-- **발견일**: 2026-05-14 (PR #90 Codex 객관 리뷰 발견)
-
 ### 🟢 `getAllSeries`/`getAllPreachers` `select('*')` payload 미최적화 (PR #91 Gemini 리뷰)
 
 - **무엇**: `src/services/sermon/sermon-service.ts:124,171` `allSeries`/`allPreachers`가 `select('*, sermons!inner(count)')`로 전체 컬럼 조회. 사이드바·필터 시트는 일부 필드만 사용
@@ -337,15 +300,6 @@
 - **확인**: `grep -rln "notFound()" src/app` (호출처 7곳, not-found 파일은 bulletins·notices·root 3개)
 - **발견일**: 2026-06-10 (not-found-page 작업 중 `notFound()` 호출처 스캔)
 
-### 🟢 알 수 없는 `?preacher=` 값이 필터 없이 전체 설교를 보여준다 (content-ux-polish PR #113)
-
-- **상태**: 등록만 (PR #113 범위 밖)
-- **무엇**: `/sermons/all?preacher=zzz`처럼 매칭되는 설교자가 없는 값은 `resolvePreacherName`이 `undefined`를 반환해 필터가 안 걸리고 전체 설교가 뜬다. 존재하지만 발행 0편인 설교자(`?preacher=박지권`)는 정상 해석돼 빈 결과를 보이는 것과 동작이 어긋난다.
-- **왜**: 시리즈에는 `isUnknownSeries` 가드(미매칭 slug → 빈 상태)가 있으나 설교자에는 대응 가드가 없다. PR #113은 0편 필터 표시·회귀 해소까지만 범위.
-- **마이그레이션 경로**: `sermons/all/page.tsx`에 `isUnknownPreacher`(원문 `preacher`가 있는데 `allPreachers`에 없음) 가드를 추가해 `isUnknownSeries`와 같은 EmptyState로 떨어뜨린다.
-- **영향 범위**: `src/app/(content)/sermons/all/page.tsx`, `src/utils/sermon.ts`
-- **발견일**: 2026-06-11 (PR #113 Codex 1차 검증)
-
 ### 🟢 figma-console DTCG export — 숫자 scale 이름↔값 불일치 + alias 미해결 (figma-sync PR #118)
 
 - **상태**: 등록만 (figma-console 재연결 후 규명 — Figma 근본 디자인 시스템 개선 → 코드 이식 작업 때)
@@ -363,7 +317,7 @@
 - **상태**: 등록만 (2026-06-15 Codex 2라운드 논의로 보류 결정)
 - **무엇**: `ui/Select`는 styled native `<select>`라 닫힌 트리거는 일관되지만 열린 옵션 목록은 브라우저·OS마다 외형이 다르다. 모든 뷰포트에서 같게 맞추려면 PC는 custom listbox(`role=listbox/option`·키보드·포커스 복귀·바깥 클릭·포지셔닝)를 직접 구현해야 하고, 모바일은 BottomSheet가 필요하다. 호출부 3곳 중 모바일 시트가 실제 필요한 곳은 `NoticeControlBar`(분류) 하나뿐이다 — 설교 정렬은 `AdvancedFilterSheet` 경로가 따로 있고, admin `Pagination`의 page-size Select는 모바일에 렌더되지 않는다.
 - **왜 지금 안 하나**: 현재 native `<select>`는 기능·접근성 결함이 없다. `aria-label`·키보드·option 의미를 브라우저와 보조기술이 처리한다. 차이는 열린목록 외형뿐이라, 결함 없는 native select를 custom listbox로 바꾸면 WAI-ARIA 접근성 계약을 직접 떠안아 회귀 위험만 커진다. 모바일 시트가 필요한 소비처도 하나뿐이라 공유 컴포넌트로 묶을 근거가 약하다.
-- **마이그레이션 경로**: "PC 열린목록까지 외형을 같게 맞춘다"가 제품 요구로 확정되면 별도 exec-plan으로 custom listbox를 최소 a11y 범위(트리거 role, `listbox/option`, `aria-selected`, Arrow/Enter/Esc/Home/End, 바깥 클릭 닫기, 포커스 복귀)로 만든다. PC/모바일 분기는 `useMediaQuery` 대신 CSS로 trigger를 숨긴다(`useMediaQuery`는 서버에서 `false`를 반환하고, 금지된 `queueMicrotask`에 의존한다). `NoticeControlBar`의 수동 PC select + 모바일 BottomSheet 중복은 그 작업에서 함께 정리한다.
+- **마이그레이션 경로**: "PC 열린목록까지 외형을 같게 맞춘다"가 제품 요구로 확정되면 별도 exec-plan으로 custom listbox를 최소 a11y 범위(트리거 role, `listbox/option`, `aria-selected`, Arrow/Enter/Esc/Home/End, 바깥 클릭 닫기, 포커스 복귀)로 만든다. PC/모바일 분기는 `useMediaQuery` 대신 CSS로 trigger를 숨긴다(`useMediaQuery`는 서버에서 `false`를 반환해 첫 렌더가 모바일로 고정된다). `NoticeControlBar`의 수동 PC select + 모바일 BottomSheet 중복은 그 작업에서 함께 정리한다.
 - **영향 범위**: `src/components/ui/Select/`, `src/app/(content)/news/notices/_component/NoticeControlBar.tsx` (현재 코드 변경 없음)
 - **발견일**: 2026-06-15 (ui-select-responsive 설계 분석 — Codex 2라운드 논의로 선택지 C(custom listbox) 보류)
 
@@ -379,12 +333,3 @@
 - **영향 범위** (3건): `.claude/agents/claude-code.md`·`.claude/agents/commit-pr-author.md`·`.claude/skills/harness-workflow/SKILL.md` (현재 코드·실행 변경 없음)
 - **발견일**: 2026-06-16 (harness-pr-review-step 정합성 감사 — 감사 에이전트 3 + Codex 교차, Codex가 근본 원인 적발)
 
-### 🟢 설교 상세 JSON-LD가 `<` 이스케이프 없이 삽입됨 (church-jsonld PR #128 Gemini XSS 리뷰)
-
-- **상태**: 등록만 (church-jsonld 범위 밖 — 홈 JSON-LD만 대상)
-- **무엇**: `src/app/(content)/sermons/[id]/page.tsx`의 `buildJsonLd`가 `JSON.stringify(jsonLd)`를 이스케이프 없이 `dangerouslySetInnerHTML`에 넣는다. `sermon.title`·`summary`가 admin 편집값이라 `</script>`가 섞이면 스크립트 태그가 일찍 닫혀 코드가 주입될 여지가 있다(교차 사이트 스크립팅, XSS). church-jsonld에서는 같은 패턴을 `.replace(/</g, '\\u003c')`로 막았는데 sermons에는 같은 갭이 남았다.
-- **왜 지금 안 하나**: church-jsonld 작업은 홈 JSON-LD 추가가 범위라 sermons 파일은 외과적 변경 원칙으로 분리했다. 공개 사용자가 직접 넣는 입력이 아니라 admin이 편집하는 값이라 위험이 낮다.
-- **마이그레이션 경로**: `buildJsonLd` 반환을 `script`에 넣을 때 `JSON.stringify(jsonLd).replace(/</g, '\\u003c')`를 적용한다(church `ChurchJsonLd.tsx`와 같은 방식).
-- **영향 범위**: `src/app/(content)/sermons/[id]/page.tsx`
-- **확인**: `rg "dangerouslySetInnerHTML" src/app/(content)/sermons/\[id\]` → 1 hit, `replace` 없음
-- **발견일**: 2026-06-18 (church-jsonld PR #128 Gemini XSS 리뷰에서 같은 갭이 sermons에 잔존 확인)

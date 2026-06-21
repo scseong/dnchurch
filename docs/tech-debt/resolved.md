@@ -4,6 +4,36 @@
 
 ---
 
+### ✅ queueMicrotask 4건 — effect 안 setState 우회 (2026-06-21 해소, PR #131)
+
+- **부채**: `useMediaQuery.ts`·`useListFilters.ts`·`DesktopHeader.tsx`·`NoticeControlBar.tsx`가 effect 안 setState를 `queueMicrotask`로 감싸 `react-hooks/set-state-in-effect` 경고만 껐다. 정작 연쇄 재렌더는 그대로 두었다. 프로젝트 금지 규칙(memory `feedback_no_queue_microtask`) 위반이었다. active.md에 "사용 4건"과 "set-state-in-effect 우회 4건" 두 항목으로 적혀 있었으나 가리키는 대상은 같은 4개 파일이다.
+- **해소**: 사이트별로 다른 패턴을 썼다. `useMediaQuery`는 `useSyncExternalStore(subscribe, getSnapshot, getServerSnapshot=()=>false)`로 전환해 effect·setState 자체를 없앴다. 나머지 셋은 렌더 중 prev-state 보정(`if (x !== prevX) { setPrevX(x); ... }`)으로 바꿔 외부 값이 바뀔 때만 한 번 보정한다. `useSearchSync`가 쓰던 검증된 패턴이다 (remove-queue-microtask task)
+- **확인**: `grep -rn "queueMicrotask" src` → 실제 호출 0건(주석 2건만). verify-task(`20260619-221353`) lint·styles·build 통과, ESLint `set-state-in-effect` 신규 0. Codex는 Windows 샌드박스 오류로 막혀 Claude 직접 검증으로 대체(PASS). PR #131 Gemini의 `useMemo` 메모이즈 제안은 범위 밖 성능 지적이라 받지 않기로 하고(Codex 교차 검증 REJECT) 기각
+
+### ✅ 쓰이지 않는 코드 2건 — SeriesEpisodeList·updatePassword (2026-06-21 해소, PR #131)
+
+- **부채**: `SeriesEpisodeList` 디렉토리(`.tsx`+`.module.scss`)는 import 0건이었다. PR #90 이후 `SermonSeriesSidebar`가 같은 회차 목록 기능을 서버 컴포넌트로 따로 구현해 중복이었다. `apis/auth.ts`의 `updatePassword`는 호출자 0건이고, 실제 비밀번호 변경은 reset-password의 `updatePasswordAndSignOut`이 담당했다. active.md에 "쓰이지 않는 코드 2건"과 "SeriesEpisodeList 컴포넌트 미사용" 두 항목으로 적혀 있었다
+- **해소**: 두 코드를 삭제했다 (tech-debt-small-batch task). `apis/auth.ts`의 `getSupabaseBrowserClient`는 남은 함수가 계속 써서 미사용 import가 생기지 않았다
+- **확인**: `rg "SeriesEpisodeList" src` → 0 hit, `rg "\bupdatePassword\b" src` → 0 hit. Knip 미사용 목록에서 두 항목이 빠졌다. verify-task(`20260619-213402`) 통과
+
+### ✅ SCSS 네이밍 패턴 위반 (2026-06-21 해소, PR #131)
+
+- **부채**: className이 snake_case가 아닌 5건(`imageBox`·`buttonGroup`·`primaryButton`·`yearList`·`hidden-on-mobile`), SCSS 변수가 kebab-case가 아닌 3건(`icon_box_size`·`modal_padding`·`image_max_width`). active.md는 12건으로 적었으나 stylelint 실측은 8건이었다
+- **해소**: className 5건을 snake_case로, 변수 3건을 kebab-case로 바꿨다. className은 scss 정의와 `.tsx` 참조(`styles.x`·class 문자열)를 함께 고쳤다 (tech-debt-small-batch task)
+- **확인**: `npx stylelint "src/**/*.scss"`의 selector-class-pattern·dollar-variable-pattern 경고가 8건에서 0건. verify-task(`20260619-213402`) stylelint 통과
+
+### ✅ 알 수 없는 `?preacher=` 값이 전체 설교를 보여줌 (2026-06-21 해소, PR #131)
+
+- **부채**: `/sermons/all?preacher=<없는이름>`은 `resolvePreacherName`이 `undefined`를 반환해 필터가 걸리지 않고 전체 설교가 떴다. 존재하지만 발행 0편인 설교자(빈 결과)와 동작이 어긋났다. 시리즈에는 `isUnknownSeries` 가드가 있었으나 설교자에는 대응 가드가 없었다
+- **해소**: `sermons/all/page.tsx`에 `isUnknownPreacher`(원문 `preacher`가 있는데 `allPreachers`에 없음)를 더하고, 기존 `isUnknownSeries` 반환 블록에 `||`로 합쳐 같은 EmptyState로 떨어뜨렸다. series 가드가 먼저 평가돼 `resolveSeriesSlug` 전에 빠져나가던 기존 throw 방지도 유지된다 (tech-debt-small-batch task)
+- **확인**: Codex 계획·1차 검증 PASS. verify-task(`20260619-213402`) 통과. 사용자 영향 — 미매칭 설교자 URL이 이제 빈 상태를 보인다
+
+### ✅ 설교 상세 JSON-LD가 `<` 이스케이프 없이 삽입됨 (2026-06-21 해소, PR #131)
+
+- **부채**: `sermons/[id]/page.tsx`의 `buildJsonLd`가 `JSON.stringify(jsonLd)`를 이스케이프 없이 `dangerouslySetInnerHTML`에 넣었다. `sermon.title`·`summary`가 admin 편집값이라 `</script>`가 섞이면 스크립트 태그가 일찍 닫혀 코드가 주입될 여지가 있었다(XSS). church-jsonld(PR #128)는 홈 JSON-LD에 같은 패턴을 막았으나 sermons에는 갭이 남아 있었다
+- **해소**: `JSON.stringify(jsonLd).replace(/</g, '\\u003c')`를 적용해 `<` 문자를 이스케이프했다. 홈 `ChurchJsonLd.tsx:62`와 같은 방식이다 (tech-debt-small-batch task)
+- **확인**: `dangerouslySetInnerHTML` 3곳 전수 확인 — `ChurchJsonLd`·sermons 둘 다 이스케이프됨, `layout.tsx`는 숫자 상수만 삽입(갭 아님). Codex 1차 검증 PASS
+
 ### ✅ 하위 페이지 og:image 소실 — openGraph 부분 선언 (2026-06-19 해소, PR #129)
 
 - **부채**: 하위 페이지가 `generateMetadata`에서 `openGraph`를 부분 선언하면, Next.js가 `openGraph` 객체를 얕게 병합(shallow merge)하면서 root layout의 og:image(기본 배너)가 사라졌다. 공유·검색 미리보기 이미지가 빈 상태였다. about/*는 그 사이 `OPEN_GRAPH_BASE` 펼침으로 고쳐졌고, sermons·news 계열이 남아 있었다
