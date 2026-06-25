@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 import { execFileSync, spawnSync } from "node:child_process";
-import { copyFileSync, existsSync, mkdirSync, writeFileSync } from "node:fs";
+import { copyFileSync, existsSync, mkdirSync, readdirSync, rmSync, writeFileSync } from "node:fs";
 import path from "node:path";
 import process from "node:process";
 
@@ -109,11 +109,36 @@ const color = {
 
 const VERBOSE = process.env.VERIFY_VERBOSE === "1";
 const TAIL_LINES = 100;
+// 작업당 보존할 run 디렉토리 개수. 초과분은 오래된 것부터 삭제한다(로그 무한 누적 방지).
+const KEEP_RUNS = 10;
 
 function tailLines(text, n) {
   const lines = text.split(/\r?\n/);
   if (lines.length <= n) return text;
   return lines.slice(-n).join("\n");
+}
+
+// 작업 로그 디렉토리에서 최근 keep개 run dir만 남기고 오래된 것을 지운다.
+// 현재 run(currentRunId)은 후보에서 빼 절대 삭제하지 않는다 — 미래 이름 dir이나
+// 시계 오차로 현재 run이 "오래된 항목"으로 분류돼 지워지는 일을 막는다.
+function pruneOldRuns(dir, keep, currentRunId) {
+  let entries;
+  try {
+    entries = readdirSync(dir, { withFileTypes: true });
+  } catch {
+    return; // 디렉토리가 없으면 정리할 것도 없다.
+  }
+  // run dir만 대상: 디렉토리이면서 이름이 YYYYMMDD-HHMMSS 형식. latest.json 등 파일은 제외된다.
+  const runDirs = entries
+    .filter((entry) => entry.isDirectory() && /^\d{8}-\d{6}$/.test(entry.name))
+    .map((entry) => entry.name)
+    .filter((name) => name !== currentRunId)
+    .sort(); // zero-padded라 사전순 = 시간순.
+  // 현재 run이 한 자리를 차지하므로 나머지에서 keep-1개만 남긴다(총 보존 = keep).
+  const stale = runDirs.slice(0, Math.max(0, runDirs.length - (keep - 1)));
+  for (const name of stale) {
+    rmSync(path.join(dir, name), { recursive: true, force: true });
+  }
 }
 
 const failed = [];
@@ -218,6 +243,9 @@ logBoth(`HEAD=${headSha}`);
 logBoth(`STARTED_AT=${startedAt}`);
 
 for (const step of STEPS) runStep(step.label, step.args, step.warningOnly ?? false);
+
+// 단계 완료 후·결과 요약 전에 오래된 run dir 정리(pass·fail 양쪽 공통 경로).
+pruneOldRuns(logDir, KEEP_RUNS, runId);
 
 logBoth("");
 logBoth(`${color.bold}━━━ 결과 요약 ━━━${color.reset}`);
