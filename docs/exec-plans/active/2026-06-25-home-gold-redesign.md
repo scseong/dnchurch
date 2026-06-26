@@ -60,6 +60,9 @@
   - 문제: 사용자가 Header·BottomNav도 목업대로 원함. 목업 바텀나비 5탭(홈/소개/다음세대/설교/소식)에는 '전체'(메뉴) 탭이 없어, 그대로 바꾸면 모바일 전체메뉴(Drawer = MobileNavigation)가 사라져 깊은 페이지(예배안내·오시는길·주보·갤러리·교제·검색·알림) 접근이 끊긴다.
   - 해결: 바텀나비를 5탭으로 바꾸고, Drawer 트리거(useDrawerHistory)·overlay·Drawer 렌더를 BottomNav에서 MobileHeader로 옮긴다. 모바일 헤더에 골드 로고(leaf)+세리프 교회명+메뉴(햄버거)를 둔다(로그인 링크는 사용자 요청으로 제거). 처음에는 전역 토큰(`$accent`·`$font-family-secondary`)으로 두었으나, 사용자가 "Header·BottomNav만 bg 톤이 안 맞는다"고 해 BottomNav·Header 배경·active 색을 `$home-bg`·`$home-gold-strong` 등 홈 토큰으로 맞췄다. 이유: 사용자가 고른 "헤더 메뉴 버튼" 방식 — 목업 5탭 유지 + 네비게이션 손실 0 + 콘텐츠 크림 톤과 레이아웃 톤 일치.
   - 결과: BottomNav 5탭+골드 active(`$home-gold-strong`), MobileHeader 목업화+Drawer 보유(렌더 확인), 데스크톱 로고 골드+세리프. 공용 BottomNav·Header에 홈 토큰을 적용했으므로 콘텐츠 전 페이지에 크림 톤이 깔린다(`_home.scss` 주석에 사용처 반영). (BottomNav.module.scss의 옛 `drawer_overlay` 클래스는 미사용으로 남음 — 후속 정리.)
+  - ⚠️ 정정(PR #132 리뷰):
+    - 5번째 탭은 '소식'이 아니라 '마이페이지'다(사용자가 마지막 열을 마이페이지로 변경 요청).
+    - `/mypage`가 `(content)` 밖이라 Header·BottomNav 없이 빈 화면에 갇혔다 — 코드 리뷰 #6 지적으로 `src/app/(content)/mypage/`로 옮겨 헤더·하단바가 함께 뜨게 했다.
 - **D10 — Hero 캐러셀을 직접 구현에서 Embla Carousel로 교체 (2026-06-26)**
   - 문제: 직접 구현한 캐러셀(touch 핸들러 + setInterval autoplay)은 관성 스크롤·무한 루프·기기별 터치 이벤트 파편화를 제대로 못 다룬다. 또 클라이언트 컴포넌트에서 레이아웃 배럴을 import해 blank 렌더 버그도 났었다.
   - 해결: `embla-carousel-react` + `embla-carousel-autoplay`(8.6.0) 도입. `loop: true` + `Autoplay({ delay: 5500, stopOnInteraction: false, stopOnMouseEnter: true })`. headless라 기존 SCSS·마크업 구조를 그대로 쓰고, 직접 만든 touch/타이머/transform 로직은 제거. 도트는 `emblaApi.scrollTo`·`selectedScrollSnap`·`on('select')`로 연결. 이유: 사용자가 관성 스크롤·무한 루프·터치 안정성·headless·경량(~4KB)을 근거로 명시 요청.
@@ -72,6 +75,7 @@
   - 문제: 목업은 3슬라이드인데 site_settings는 단일 배너용 키만 있다. 3슬라이드를 전부 DB화하면 admin 입력 모델까지 신규로 커진다.
   - 해결: 슬라이드 1은 기존 `banner_*` site_settings(실데이터), 슬라이드 2~3(수련회·방문 안내)은 정적 편집 콘텐츠로 둔다. 이유: 가장 자주 바뀌는 메인 배너만 운영 데이터로 두고, 홍보성 슬라이드는 코드 상수로 충분하다. 슬라이드 전체 DB화는 후속.
   - 결과: Phase 3은 UI·캐러셀 로직 중심. 데이터 모델 신규 최소화.
+  - ⚠️ 정정(PR #132 리뷰): 사용자가 'Hero 전부 더미 데이터 사용'을 명시 요청해 슬라이드 1~3 모두 정적 `SLIDES`(Banner.tsx)로 바꿨다. `banner_*` site_settings 연결은 하지 않는다 — 정식 운영 시 후속. (리뷰 P1 지적은 운영 전 상태라 회귀 아님.)
 - **D4 — 이번 주 주보는 기존 `summary()`/팩토리를 재사용, 쿼리 복제 금지 (Codex F2)**
   - 문제: 홈 카드용 "최신 1건"을 따로 짜면 정렬·`deleted_at` 필터·`bulletin_images(*)` join이 `bulletin-service.ts:60` `summary()`와 2벌로 갈라진다.
   - 해결: 공유 헬퍼 `latestQuery(supabase)`를 추출해 `summary()`의 latest 쿼리와 새 `latest()` 메서드가 같이 쓴다. `services/bulletin/index.ts`에 `getLatestBulletin = () => bulletinService(createStaticClient(bulletinCache.summary())).latest()` 래퍼를 둔다. 이유: 쿼리 조건을 한 곳에서만 관리해 중복을 없애고, 캐시 태그(`bulletin`·`bulletin-summary`)는 주보 mutation의 기존 `updateTag('bulletin')`이 무효화하므로 새 태그가 필요 없다.
@@ -158,6 +162,23 @@
 | 2차(Claude, 구 P1) | 20260625-223208 | ✅ | ✅ | ✅ | 0 | Chrome 3섹션 렌더 |
 | 재작업(Claude) | 20260625-225615 | ✅ | ✅ | ✅ | 0 | 목업 웜 톤 — verse/bulletin/login + 크림 bg |
 | 최종(Codex 1차 + Claude 2차) | 20260626-164443 | ✅ | ✅ | ✅ | 2(후속분리) | 폰트 CR 수정 · 폰트 사슬 구조 확인 |
+
+## PR 리뷰 대응
+
+PR #132 자동 리뷰(gemini·codex-connector) 8건을 코드로 직접 확인하고 Codex로 교차 검증했다(두 검증 판정 일치).
+
+| # | 지적 | 출처 | 코드 대조 | 판정 | 조치 |
+| --- | --- | --- | --- | --- | --- |
+| 1 | getSiteSettings null 반환 → null 참조 크래시(NPE) | gemini HIGH | `site-settings.ts:18` `Object.fromEntries((data ?? [])…)`가 항상 객체 반환 | 오탐 | 없음(이중 guard) |
+| 2 | 주보 `sunday_date.split` 크래시 | gemini MED | `database.types.ts` `sunday_date: string` non-null + `!bulletin` 가드 | 오탐 | 없음 |
+| 3 | verify-task rmSync try-catch | gemini MED | PR diff에 `scripts/verify-task.mjs` 없음(base ec00f48) | 범위 밖 | 없음 |
+| 4 | Banner 더미 → admin 배너 끊김 | codex P1 | `Banner.tsx` 정적 SLIDES, 사이트 운영 전 상태 | 의도됨 | D3 정정 |
+| 5 | `/`에 h1 없음 | codex P2 | home·page.tsx에 h1 0건, 슬라이드 제목은 h2 | REAL | page.tsx에 `blind` h1 추가 |
+| 6 | 마이페이지 탭 빈 화면 trap | codex P2 | `mypage/page.tsx`=`<div>Mypage</div>`, (content) 밖 | REAL | `(content)/mypage`로 이동 |
+| 7 | 개인정보처리방침 링크가 사라짐 | codex P2 | Footer 삭제, src에 `/privacy-policy` 링크 0건 | REAL | MobileNavigation 하단에 링크 추가 |
+| 8 | 비활성 슬라이드 CTA 포커스 | codex P2 | 슬라이드에 inert/aria-hidden 없음 | REAL | 비활성 슬라이드 `inert`+`aria-hidden` |
+
+봇이 매긴 심각도가 실제 위험과 맞지 않았다. HIGH(#1)·P1(#4)은 오탐이거나 의도한 동작이고, 사용자가 실제로 막히는 건 P2로 분류된 #6·#7이었다.
 
 ## 검증 이력
 
