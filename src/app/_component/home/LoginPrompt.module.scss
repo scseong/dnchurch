@@ -1,5 +1,5 @@
 .section {
-  padding: $content-gap-l 0 $section-gap-40;
+  padding: $spacing-20 0 $section-gap-40;
 }
 
 .card {
@@ -58,7 +58,7 @@
   background-color: $home-gold;
   color: $home-cream-text;
   font-size: $font-size-13;
-  font-weight: $font-weight-bold;
+  font-weight: $font-weight-semibold;
   white-space: nowrap;
 
   @include hover-bg-shift($home-gold-hover);

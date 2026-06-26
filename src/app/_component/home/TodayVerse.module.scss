@@ -1,5 +1,5 @@
 .section {
-  padding: $content-gap-l 0 0;
+  padding: $spacing-20 0 0;
 }
 
 .card {
@@ -19,7 +19,7 @@
 .eyebrow {
   margin: 0 0 $spacing-12;
   font-size: $font-size-12;
-  font-weight: $font-weight-bold;
+  font-weight: $font-weight-semibold;
   letter-spacing: $letter-spacing-wider;
   color: $home-eyebrow;
 }
@@ -39,7 +39,7 @@
   margin-top: $spacing-12;
   font-size: $font-size-13;
   font-style: normal;
-  font-weight: $font-weight-bold;
+  font-weight: $font-weight-semibold;
   letter-spacing: $letter-spacing-wide;
   color: $home-eyebrow-ref;
 }

@@ -63,7 +63,7 @@ $slide-scrim: linear-gradient(180deg, rgba(20, 30, 18, 0.05) 0%, rgba(16, 26, 15
 
 .eyebrow {
   font-size: $font-size-12;
-  font-weight: $font-weight-bold;
+  font-weight: $font-weight-semibold;
   letter-spacing: $letter-spacing-wider;
   color: $home-eyebrow;
 }
@@ -103,7 +103,7 @@ $slide-scrim: linear-gradient(180deg, rgba(20, 30, 18, 0.05) 0%, rgba(16, 26, 15
   height: 4.6rem;
   border-radius: $radius-s;
   font-size: $font-size-14;
-  font-weight: $font-weight-bold;
+  font-weight: $font-weight-semibold;
 }
 
 .primary {
