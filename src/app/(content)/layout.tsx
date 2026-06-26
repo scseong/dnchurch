@@ -1,6 +1,6 @@
 import Script from 'next/script';
 import { PropsWithChildren } from 'react';
-import { Header, Hero, Footer, BottomNav } from '@/components/layout';
+import { Header, Hero, BottomNav } from '@/components/layout';
 import KakaoScript from '@/components/lib/KakaoScript';
 import { SCROLL_THRESHOLD } from '@/constants';
 
@@ -21,7 +21,6 @@ export default function ContentLayout({ children }: PropsWithChildren) {
         <Hero />
         {children}
       </main>
-      <Footer />
       <BottomNav />
       <Script
         id="scroll-reveal-observer"

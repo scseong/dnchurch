@@ -10,8 +10,9 @@
   left: 0;
   right: 0;
   z-index: $z-bottom-nav;
-  background-color: $bg-card;
-  border-top: 0.1rem solid $beige-150;
+  // 홈 크림 배경과 톤 일치 (목업: 바텀나비가 콘텐츠 크림에 녹아듦). 공용이라 콘텐츠 페이지에도 적용됨.
+  background-color: $home-bg;
+  border-top: 0.1rem solid $border-warm;
   // iOS 홈 인디케이터 영역만큼 배경을 확장
   padding-bottom: env(safe-area-inset-bottom, 0);
 
@@ -62,9 +63,9 @@
   line-height: $line-height-reset;
 }
 
-// references/shared.jsx — active = primary color + bold label + bolder icon
+// active = 홈 골드 + bold label + bolder icon (목업 하단탭). 홈 톤과 일치.
 .active {
-  color: $primary;
+  color: $home-gold-strong;
 
   .tab_label {
     font-weight: $font-weight-bold;
