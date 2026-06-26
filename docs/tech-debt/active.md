@@ -15,6 +15,35 @@
 - **확인**: 가입 폼에 민감정보·국외이전 별도 동의 체크박스 존재 여부
 - **발견일**: 2026-06-19 (privacy-policy PR #130 Codex 리뷰 — 처리방침 문구와 동의 UI 정합성 지적)
 
+### 🟡 홈 Hero 캐러셀에 자동재생 정지 수단이 없음 (WCAG 2.2.2)
+
+- **상태**: 등록만 (home-gold-redesign PR #132에서 분리)
+- **무엇**: `HeroCarousel`이 5.5초 간격 무한 자동재생인데 멈출 버튼이 없다. `stopOnMouseEnter`는 hover에서만 멈추고, `stopOnInteraction: false`라 도트·터치 조작 뒤에도 계속 돈다. 모바일·키보드 사용자나 천천히 읽는 사용자가 움직임을 제어하지 못한다.
+- **마이그레이션 경로**: `prefers-reduced-motion`을 존중해 모션 최소화 설정에서 자동재생을 끄고, 정지·재생 토글 버튼을 추가한다.
+- **영향 범위**: `src/app/_component/home/HeroCarousel.tsx`
+- **발견일**: 2026-06-26 (PR #132 codex 재리뷰 #D)
+
+### 🟡 마이페이지가 미완성 — 인증 확인·본문 없음 (BottomNav 상시 탭)
+
+- **상태**: 등록만 (home-gold-redesign PR #132에서 분리)
+- **무엇**: BottomNav 5번째 탭 `/mypage`가 `src/app/(content)/mypage/page.tsx`에서 `Mypage` 텍스트만 렌더한다. 인증 확인·로그인 리다이렉트가 없어 상시 노출 탭이 미완성 화면으로 이어진다. (헤더·하단바 없이 갇히던 문제는 `(content)`로 옮겨 해소했다.)
+- **왜 지금 안 하나**: 홈 리디자인 범위는 레이아웃·탭 구성까지였다. 회원 페이지 본문·인증 흐름은 별도 작업이다.
+- **마이그레이션 경로**: 실제 회원 페이지를 만들고 `/login?redirect=/mypage` 인증 흐름을 붙인다. 인증 진입점 노출은 가입 동의 UI 런칭 게이트와 함께 판단한다.
+- **영향 범위**: `src/app/(content)/mypage/`, 인증 흐름
+- **발견일**: 2026-06-26 (PR #132 codex 재리뷰 #C)
+
+### 🟢 홈 리디자인으로 생긴 미사용 코드 정리
+
+- **상태**: 등록만 (home-gold-redesign PR #132에서 분리)
+- **무엇**: 미사용 코드가 여러 곳에 남았다.
+  - 이번 리디자인으로 새로 고아가 된 export: `getRevealStyle`(`src/utils/reveal.ts`), `NOTICE_CATEGORY_VARIANT`(`src/constants/notice.ts`)
+  - 이전부터 미사용: `AboutOurChurch`·`ChurchVision`(컴포넌트 파일 + `src/app/_component/home/index.ts` export)
+  - 미사용 스타일: `BottomNav.module.scss`의 옛 `drawer_overlay` 클래스
+- **왜 지금 안 하나**: 고아 export는 홈 밖 공용 파일이라 외과적 변경 범위를 넘어 분리했다. `reveal.ts`의 `revealStyle`은 `AboutOurChurch`·`ChurchVision`이 아직 써서 함께 묶어 지워야 한다.
+- **마이그레이션 경로**: `AboutOurChurch`·`ChurchVision` 삭제 여부를 정하고, 그에 딸린 `revealStyle`·`getRevealStyle`·`NOTICE_CATEGORY_VARIANT`·`drawer_overlay`를 한 번에 제거한다. `yarn knip`으로 확인한다.
+- **영향 범위**: `src/utils/reveal.ts`, `src/constants/notice.ts`, `src/app/_component/home/`, `src/components/layout/BottomNav/`
+- **발견일**: 2026-06-26 (PR #132 knip + 리뷰)
+
 ### ✅ 마이그레이션이 DB를 재현하지 못함 — 해소 (migration-ssot-recovery, PR #115)
 
 - **상태**: 해소 (2026-06-12). baseline 마이그레이션 + `001` 재작성 + `get_adjacent_bulletins` 추가로 Preview 빈 DB가 dev와 일치(테이블·컬럼·enum·RLS·트리거). 남은 문제: dev 자체에 `custom_access_token_hook` 함수가 없어 마이그레이션과 어긋난다(fresh 빌드는 함수를 만들므로 미래 prod는 정상). 아래는 작업 전 기록.
