@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from 'next';
-import { Noto_Serif_KR } from 'next/font/google';
+import { Noto_Serif_KR, Gowun_Batang } from 'next/font/google';
 import ScrollToTop from '@/components/common/ScrollToTop';
 import ToastContainer from '@/components/common/Toast/ToastContainer';
 import SessionContextProvider from '@/context/SessionContextProvider';
@@ -43,9 +43,17 @@ const notoserifKR = Noto_Serif_KR({
   display: 'swap'
 });
 
+// 홈(목업 톤) 전용 명조. 로고·헤딩·인용구에 사용. 적용은 홈 모듈로 한정($font-family-home-serif).
+const gowunBatang = Gowun_Batang({
+  weight: ['400', '700'],
+  subsets: ['latin'],
+  variable: '--font-gowunBatang',
+  display: 'swap'
+});
+
 export default async function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="ko" className={`${notoserifKR.variable}`}>
+    <html lang="ko" className={`${notoserifKR.variable} ${gowunBatang.variable}`}>
       <head>
         <link rel="preconnect" href="https://res.cloudinary.com" />
       </head>

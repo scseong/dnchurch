@@ -1,0 +1,39 @@
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: $content-gap-m;
+  max-width: 64rem;
+  margin: 0 auto $content-gap-s;
+}
+
+.title {
+  font-size: $font-size-18;
+  font-weight: $font-weight-bold;
+  letter-spacing: $letter-spacing-body;
+  color: $home-text;
+}
+
+.link {
+  display: inline-flex;
+  align-items: center;
+  gap: $spacing-4;
+  flex-shrink: 0;
+  font-size: $font-size-13;
+  font-weight: $font-weight-semibold;
+  color: $home-gold-strong;
+  white-space: nowrap;
+  transition: color $transition-duration-normal $transition-easing-default;
+
+  svg {
+    transition: transform $transition-duration-normal $transition-easing-default;
+  }
+
+  &:hover {
+    color: $home-gold;
+
+    svg {
+      transform: translateX(0.3rem);
+    }
+  }
+}

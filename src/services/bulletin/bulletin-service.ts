@@ -29,6 +29,16 @@ const listQuery = (
   return query.range(from, from + limit - 1);
 };
 
+/** 최신 1건 — 홈 카드(latest)와 summary가 공유. 정렬·deleted_at·images join을 한 곳에서 관리. */
+const latestQuery = (supabase: SupabaseClient<Database>) =>
+  supabase
+    .from(BULLETIN_BUCKET)
+    .select('*, bulletin_images(*)')
+    .is('deleted_at', null)
+    .order('sunday_date', { ascending: false })
+    .limit(1)
+    .maybeSingle();
+
 export const bulletinService = (supabase: SupabaseClient<Database>) => ({
   list: async (params: BulletinParams = {}) => {
     const res = await listQuery(supabase, params);
@@ -57,17 +67,17 @@ export const bulletinService = (supabase: SupabaseClient<Database>) => ({
     return handleResponse(res);
   },
 
+  latest: async () => {
+    const res = await latestQuery(supabase);
+
+    return handleResponse(res);
+  },
+
   summary: async (params: BulletinParams) => {
     const [itemsRes, allDatesRes, latestRes] = await Promise.all([
       listQuery(supabase, params),
       supabase.from(BULLETIN_BUCKET).select('sunday_date').is('deleted_at', null),
-      supabase
-        .from(BULLETIN_BUCKET)
-        .select('*, bulletin_images(*)')
-        .is('deleted_at', null)
-        .order('sunday_date', { ascending: false })
-        .limit(1)
-        .maybeSingle()
+      latestQuery(supabase)
     ]);
 
     const years = [

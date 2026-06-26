@@ -1,0 +1,6 @@
+// 홈 전용 웜 크림 배경 — 목업의 radial 크림 톤. 다른 (content) 페이지는 이 wrapper를 쓰지 않는다.
+.home {
+  background:
+    radial-gradient(110rem 70rem at 80% -10%, $home-bg-glow, transparent 60%),
+    $home-bg;
+}

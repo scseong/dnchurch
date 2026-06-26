@@ -1,0 +1,45 @@
+.section {
+  padding: $content-gap-l 0 0;
+}
+
+.card {
+  max-width: 64rem;
+  margin: 0 auto;
+  padding: $spacing-24 $spacing-20;
+  border-radius: $radius-m;
+  background: linear-gradient(135deg, $home-gold, $home-gold-deep);
+  box-shadow: 0 1rem 2.4rem rgba($home-gold-strong, 0.22);
+  text-align: center;
+
+  @include respond-up($breakpoint-tablet) {
+    padding: $spacing-32 $spacing-24;
+  }
+}
+
+.eyebrow {
+  margin: 0 0 $spacing-12;
+  font-size: $font-size-12;
+  font-weight: $font-weight-bold;
+  letter-spacing: $letter-spacing-wider;
+  color: $home-eyebrow;
+}
+
+.quote {
+  margin: 0;
+  font-family: $font-family-home-serif;
+  font-size: $font-size-18;
+  font-weight: $font-weight-regular;
+  line-height: $line-height-loose;
+  letter-spacing: $letter-spacing-body;
+  color: $home-cream-text;
+}
+
+.reference {
+  display: block;
+  margin-top: $spacing-12;
+  font-size: $font-size-13;
+  font-style: normal;
+  font-weight: $font-weight-bold;
+  letter-spacing: $letter-spacing-wide;
+  color: $home-eyebrow-ref;
+}

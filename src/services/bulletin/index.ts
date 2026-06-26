@@ -20,6 +20,11 @@ export const getBulletinSummary = (params: BulletinParams) => {
   return bulletinService(supabase).summary(params);
 };
 
+export const getLatestBulletin = () => {
+  const supabase = createStaticClient(bulletinCache.summary());
+  return bulletinService(supabase).latest();
+};
+
 export const getAllBulletinIds = () => {
   const supabase = createStaticClient();
   return bulletinService(supabase).allIds();

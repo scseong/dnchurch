@@ -1,0 +1,62 @@
+.section {
+  padding: $content-gap-l 0 0;
+}
+
+.scroller {
+  display: flex;
+  gap: $spacing-12;
+  max-width: 64rem;
+  margin: 0 auto;
+  overflow-x: auto;
+  scrollbar-width: none;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+.item {
+  flex: 0 0 auto;
+}
+
+.card {
+  display: block;
+  position: relative;
+  width: 15.2rem;
+  border-radius: $radius-m;
+  overflow: hidden;
+  border: 1px solid $home-border;
+  box-shadow: $shadow-sm;
+
+  @include hover-lift;
+}
+
+.thumb {
+  display: block;
+  width: 100%;
+  height: 11.6rem;
+}
+
+.worship {
+  background: linear-gradient(160deg, $home-gold-deep, $home-gold);
+}
+
+.fellowship {
+  background: linear-gradient(160deg, $home-gold, $home-gold-strong);
+}
+
+.nextgen {
+  background: linear-gradient(160deg, $home-gold-strong, $home-gold-deep);
+}
+
+.label {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  padding: $spacing-20 $spacing-12 $spacing-10;
+  font-size: $font-size-13;
+  font-weight: $font-weight-bold;
+  color: $home-cream-text;
+  background: linear-gradient(transparent, rgba(0, 0, 0, 0.62));
+}

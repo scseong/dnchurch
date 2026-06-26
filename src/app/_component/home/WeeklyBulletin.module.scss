@@ -1,0 +1,71 @@
+.section {
+  padding: $content-gap-l 0 0;
+}
+
+.card {
+  display: flex;
+  align-items: center;
+  gap: $content-gap-s;
+  max-width: 64rem;
+  margin: 0 auto;
+  padding: $padding-card-compact;
+  border-radius: $radius-m;
+  background: $home-tint-card;
+  border: 1px solid $home-border-gold;
+
+  @include hover-lift;
+}
+
+.date {
+  flex-shrink: 0;
+  width: 5rem;
+  height: 5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border-radius: $radius-s;
+  background: $home-card;
+  color: $home-gold-strong;
+}
+
+.day {
+  font-size: $font-size-18;
+  font-weight: $font-weight-bold;
+  line-height: $line-height-reset;
+}
+
+.month {
+  margin-top: $spacing-2;
+  font-size: $font-size-11;
+  font-weight: $font-weight-bold;
+}
+
+.text {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-2;
+}
+
+.title {
+  font-size: $font-size-15;
+  font-weight: $font-weight-bold;
+  letter-spacing: $letter-spacing-body;
+  color: $home-gold-strong;
+}
+
+.desc {
+  font-size: $font-size-13;
+  color: $home-text-sub;
+
+  @include ellipsis-multi(1);
+}
+
+.icon {
+  flex-shrink: 0;
+  width: 2.2rem;
+  height: 2.2rem;
+  color: $home-gold-strong;
+}

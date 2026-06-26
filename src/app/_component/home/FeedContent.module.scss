@@ -1,80 +1,27 @@
-// ─── Column ─────────────────────────────────────────
 .column {
+  max-width: 64rem;
+  margin: 0 auto;
   min-width: 0;
 }
 
-// ─── Column Header (PC Only) ────────────────────────
-.column_header {
-  display: none;
-
-  @include respond-up($breakpoint-tablet) {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-bottom: $spacing-12;
-  }
-}
-
-.column_title {
-  @include text-card-title;
-  display: flex;
-  align-items: center;
-  gap: $spacing-8;
-}
-
-.color_bar_news {
-  width: $spacing-4;
-  height: 2.2rem;
-  border-radius: $radius-xs;
-  display: inline-block;
-  flex-shrink: 0;
-  transform: translateY(-0.1rem);
-  background: $accent;
-}
-
-.more_link {
-  padding-bottom: $spacing-2;
-  display: block;
-  width: fit-content;
-  text-decoration: underline;
-  text-decoration-color: rgba($accent, 0.2);
-  text-underline-offset: 0.3rem;
-  font-size: $font-size-13;
-  font-weight: $font-weight-medium;
-  color: rgba($accent, 0.8);
-  transition:
-    color $transition-duration-normal $transition-easing-default,
-    text-decoration-color $transition-duration-normal $transition-easing-default;
-
-  &:hover {
-    color: $accent;
-    text-decoration-color: $accent;
-  }
-}
-
-// ─── List Card ──────────────────────────────────────
 .list_card {
-  background: $bg-card;
-  border-radius: $radius-xs;
-  border: $spacing-1 solid $border-primary;
+  background: $home-card;
+  border-radius: $radius-m;
+  border: 1px solid $home-border;
   overflow: hidden;
 }
 
-// ─── Item Row ───────────────────────────────────────
 .item {
   display: block;
   padding: $padding-card-compact;
-  text-decoration: none;
-  cursor: pointer;
   transition: background-color $transition-duration-normal $transition-easing-default;
 
   &:not(:last-child) {
-    // semantic 미정: $gray-200 divider — $border-primary(gray-300)·$border-subtle와 값이 달라 보존
-    border-bottom: $spacing-1 solid $gray-200;
+    border-bottom: 1px solid $home-border-divider;
   }
 
   &:hover {
-    background-color: $bg-hover;
+    background-color: $home-card-soft;
   }
 
   @include respond-up($breakpoint-tablet) {
@@ -82,7 +29,6 @@
   }
 }
 
-// ─── Item Body ──────────────────────────────────────
 .item_body {
   display: flex;
   align-items: center;
@@ -101,26 +47,29 @@
 .item_chevron {
   flex-shrink: 0;
   font-size: $font-size-14;
-  color: $txt-tertiary;
-  transition: color $transition-duration-normal $transition-easing-default;
-
-  .item:hover & {
-    color: $txt-secondary;
-  }
+  color: $home-text-muted;
 }
 
-// ─── Item Content ───────────────────────────────────
 .item_title_row {
   display: flex;
   align-items: center;
-  gap: $spacing-4;
+  gap: $spacing-8;
   min-width: 0;
   overflow: hidden;
 }
 
+// 카테고리 — 컬러 배지 대신 제목 앞 평문 라벨
+.item_category {
+  flex-shrink: 0;
+  font-size: $font-size-13;
+  font-weight: $font-weight-semibold;
+  color: $home-gold-strong;
+}
+
 .item_title {
-  color: $txt-primary;
+  color: $home-text;
   font-size: $font-size-14;
+
   @include ellipsis-multi(1);
 }
 
@@ -131,33 +80,6 @@
 }
 
 .item_date {
-  @include text-caption;
-}
-
-// ─── More Button (Mobile Only) ──────────────────────
-.more_button {
-  display: block;
-  width: 100%;
-  padding: $spacing-12 0;
-  border-radius: $radius-xs;
-  border: $spacing-1 solid $border-primary;
-  background: transparent;
-  color: $txt-secondary;
   font-size: $font-size-13;
-  font-weight: $font-weight-semibold;
-  margin-top: $spacing-12;
-  text-align: center;
-  text-decoration: none;
-  transition:
-    background-color $transition-duration-normal $transition-easing-default,
-    color $transition-duration-normal $transition-easing-default;
-
-  &:hover {
-    background-color: $bg-hover;
-    color: $txt-primary;
-  }
-
-  @include respond-up($breakpoint-tablet) {
-    display: none;
-  }
+  color: $home-text-muted;
 }
