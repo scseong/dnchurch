@@ -1,0 +1,105 @@
+// 교회 푸터 — claude.ai/design "교회 푸터" 목업 기반. 로고+교회명·예배안내·오시는곳·법적 링크.
+// 홈 크림 톤과 맞춰 공용 레이아웃에 적용한다(BottomNav·Header와 같은 스코프 — D9).
+.footer {
+  background-color: $home-bg;
+  border-top: 0.1rem solid $border-warm;
+  // 모바일 고정 BottomNav에 가리지 않도록 그만큼 아래로 띄운다
+  padding-bottom: $tab-bar-height;
+
+  @include respond-up($header-breakpoint) {
+    padding-bottom: 0;
+  }
+}
+
+.top {
+  max-width: 64rem;
+  margin: 0 auto;
+  padding: $spacing-24 $container-padding $spacing-20;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: $spacing-8;
+}
+
+.logo {
+  display: grid;
+  place-items: center;
+  width: 2.8rem;
+  height: 2.8rem;
+  background-color: $home-gold;
+  border-radius: $radius-s;
+  color: $home-cream-text;
+
+  svg {
+    width: 1.6rem;
+    height: 1.6rem;
+  }
+}
+
+.name {
+  font-family: $font-family-home-serif;
+  font-size: $font-size-18;
+  font-weight: $font-weight-bold;
+  letter-spacing: $letter-spacing-tight;
+  color: $home-text;
+}
+
+.info {
+  margin: $spacing-16 0 0;
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-12;
+}
+
+.row {
+  display: flex;
+  align-items: flex-start;
+  gap: $spacing-12;
+}
+
+.label {
+  flex: 0 0 5.6rem;
+  margin: 0;
+  padding-top: 0.2rem;
+  font-size: $font-size-12;
+  font-weight: $font-weight-bold;
+  color: $home-text-muted;
+}
+
+.value {
+  margin: 0;
+  font-size: $font-size-13;
+  font-weight: $font-weight-semibold;
+  line-height: $line-height-loose;
+  color: $home-text;
+}
+
+.bottom {
+  max-width: 64rem;
+  margin: 0 auto;
+  padding: $spacing-12 $container-padding;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: $spacing-8;
+  flex-wrap: wrap;
+  border-top: 0.1rem solid $border-warm;
+}
+
+.copyright {
+  font-size: $font-size-11;
+  color: $home-text-muted;
+}
+
+.policy {
+  font-size: $font-size-11;
+  font-weight: $font-weight-semibold;
+  color: $home-gold-strong;
+  transition: color 0.2s;
+
+  &:hover {
+    color: $home-gold;
+  }
+}

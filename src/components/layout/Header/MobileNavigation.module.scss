@@ -107,20 +107,3 @@
 .nav_icon_open {
   transform: rotate(-135deg);
 }
-
-// Footer 제거 후 개인정보처리방침 도달 경로 — 전체 메뉴 하단 유틸 링크
-.utility {
-  margin-top: $spacing-24;
-  padding: $spacing-16 $spacing-20;
-  border-top: 0.1rem solid $border-primary;
-}
-
-.utility_link {
-  font-size: $font-size-13;
-  color: $txt-tertiary;
-  transition: color 0.2s;
-
-  &:hover {
-    color: $txt-primary;
-  }
-}

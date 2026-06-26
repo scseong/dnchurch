@@ -98,12 +98,6 @@ export default function MobileNavigation() {
           })}
         </ul>
       </nav>
-
-      <div className={styles.utility}>
-        <Link href="/privacy-policy" replace className={styles.utility_link}>
-          개인정보처리방침
-        </Link>
-      </div>
     </div>
   );
 }
