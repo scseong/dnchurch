@@ -8,7 +8,7 @@ export type NavItem = {
   children?: NavItem[];
 };
 
-export type IconName = 'home' | 'book' | 'file' | 'users' | 'menu';
+export type IconName = 'home' | 'about' | 'nextgen' | 'sermon' | 'mypage';
 
 export type BottomNavItem = {
   label: string;
@@ -58,10 +58,10 @@ export const GNB_ITEMS: NavItem[] = [
 
 export const BOTTOM_NAV_ITEMS: BottomNavItem[] = [
   { label: '홈', href: '/', icon: 'home' },
-  { label: '설교', href: '/sermons', icon: 'book' },
-  { label: '교회 소식', href: '/news/notices', icon: 'file' },
-  { label: '교제', href: '/community', icon: 'users' },
-  { label: '전체', href: '/menu', icon: 'menu' },
+  { label: '소개', href: '/about', icon: 'about' },
+  { label: '다음세대', href: '/next-gen', icon: 'nextgen' },
+  { label: '설교', href: '/sermons', icon: 'sermon' },
+  { label: '마이페이지', href: '/mypage', icon: 'mypage' },
 ];
 
 // ── Active 판별 ──

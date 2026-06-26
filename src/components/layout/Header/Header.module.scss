@@ -15,8 +15,8 @@ $indicator-height: 0.2rem;
   position: sticky;
   top: 0;
   z-index: $z-header;
-  background-color: $bg-card;
-  border-bottom: 0.1rem solid $beige-150;
+  // 홈 크림 배경과 톤 일치 (목업: 헤더가 콘텐츠 크림에 녹아듦). 공용이라 콘텐츠 페이지에도 적용됨.
+  background-color: $home-bg;
 
   @include respond-up($header-breakpoint) {
     display: none;
@@ -29,16 +29,104 @@ $indicator-height: 0.2rem;
 .mobile_top {
   display: flex;
   align-items: center;
+  justify-content: space-between;
   gap: $spacing-10;
   height: 5.4rem;
-  padding: 0 $spacing-16;
+  padding: 0 $container-padding;
 }
 
-.mobile_slot_left {
+.mobile_left {
   display: flex;
   align-items: center;
+  gap: $spacing-8;
+  min-width: 0;
+  flex: 1;
+}
+
+.mobile_logo {
+  display: flex;
+  align-items: center;
+  gap: $spacing-8;
+}
+
+.mobile_logo_icon {
+  display: grid;
+  place-items: center;
+  width: 2.8rem;
+  height: 2.8rem;
+  border-radius: $radius-xs;
+  background-color: $accent;
+  color: $txt-inverse;
   flex-shrink: 0;
-  margin-left: calc(-1 * $spacing-10);
+
+  svg {
+    width: 1.7rem;
+    height: 1.7rem;
+  }
+}
+
+.mobile_logo_text {
+  font-family: $font-family-secondary;
+  font-size: $font-size-18;
+  font-weight: $font-weight-bold;
+  color: $txt-primary;
+  letter-spacing: $letter-spacing-tight;
+  white-space: nowrap;
+}
+
+.mobile_actions {
+  display: flex;
+  align-items: center;
+  gap: $spacing-8;
+  flex-shrink: 0;
+}
+
+.mobile_login {
+  display: inline-flex;
+  align-items: center;
+  height: 3.4rem;
+  padding: 0 $spacing-12;
+  border-radius: $radius-circle;
+  background-color: $accent;
+  color: $txt-inverse;
+  font-size: $font-size-13;
+  font-weight: $font-weight-bold;
+  white-space: nowrap;
+  transition: background-color $transition-duration-normal $transition-easing-default;
+
+  &:hover {
+    background-color: $accent-hover;
+  }
+}
+
+.mobile_menu {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 4rem;
+  height: 4rem;
+  color: $txt-primary;
+  flex-shrink: 0;
+
+  svg {
+    width: 2.2rem;
+    height: 2.2rem;
+  }
+}
+
+.drawer_overlay {
+  position: fixed;
+  inset: 0;
+  z-index: $z-drawer-backdrop;
+  background-color: $overlay-scrim;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity $transition-duration-normal $transition-easing-default;
+}
+
+.drawer_overlay_open {
+  opacity: 1;
+  pointer-events: auto;
 }
 
 .mobile_back {
@@ -210,10 +298,11 @@ $indicator-height: 0.2rem;
 .logo_icon {
   width: 2.4rem;
   height: 2.4rem;
-  color: $navy-950;
+  color: $accent;
 }
 
 .logo_text {
+  font-family: $font-family-secondary;
   font-size: $font-size-16;
   font-weight: $font-weight-bold;
   color: $txt-primary;

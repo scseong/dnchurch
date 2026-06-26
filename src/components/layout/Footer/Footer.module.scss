@@ -1,165 +1,105 @@
-// ══════════════════════════════════════════
-// FOOTER — 모바일 퍼스트
-// 모바일: 단일 컬럼 세로 스택 / tablet+: 4컬럼 그리드
-// ══════════════════════════════════════════
-
+// 교회 푸터 — claude.ai/design "교회 푸터" 목업 기반. 로고+교회명·예배안내·오시는곳·법적 링크.
+// 홈 크림 톤과 맞춰 공용 레이아웃에 적용한다(BottomNav·Header와 같은 스코프 — D9).
 .footer {
-  display: block;
-  background-color: $bg-dark;
-  color: $txt-inverse;
-  padding: $spacing-48 $container-padding $spacing-32;
+  background-color: $home-bg;
+  border-top: 0.1rem solid $border-warm;
+  // 모바일 고정 BottomNav에 가리지 않도록 그만큼 아래로 띄운다
+  padding-bottom: $tab-bar-height;
 
   @include respond-up($header-breakpoint) {
-    padding: 4rem $spacing-24 2.8rem;
-  }
-
-  @include respond-up($breakpoint-pc-sm) {
-    padding: 5.6rem $spacing-24 3.2rem;
+    padding-bottom: 0;
   }
 }
 
-// ── 4컬럼 그리드 ──
-
-.footer_grid {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: $spacing-32;
-  padding-bottom: $spacing-32;
-
-  @include respond-up($header-breakpoint) {
-    grid-template-columns: 1.5fr repeat(3, 1fr);
-  }
+.top {
+  max-width: 64rem;
+  margin: 0 auto;
+  padding: $spacing-24 $container-padding $spacing-20;
 }
 
-// ── 브랜드 컬럼 ──
-
-.footer_brand {
-  display: flex;
-  flex-direction: column;
-  gap: $spacing-12;
-}
-
-.footer_logo {
-  font-family: $font-family-secondary;
-  font-size: $font-size-20;
-  font-weight: $font-weight-bold;
-  color: $txt-inverse;
-  letter-spacing: $letter-spacing-tight;
-}
-
-.footer_slogan {
-  font-size: $font-size-13;
-  color: $txt-image-subtle;
-  line-height: $line-height-base;
-}
-
-.footer_sns {
-  display: flex;
-  gap: $spacing-8;
-  margin-top: $spacing-8;
-}
-
-.footer_sns_btn {
+.brand {
   display: flex;
   align-items: center;
-  justify-content: center;
-  width: 3.6rem;
-  height: 3.6rem;
-  border-radius: $radius-circle;
-  border: 0.1rem solid $border-dark-subtle;
-  color: $txt-image-subtle;
-  transition:
-    background-color $transition-duration-normal $transition-easing-default,
-    color $transition-duration-normal $transition-easing-default;
+  gap: $spacing-8;
+}
 
-  &:hover {
-    background-color: $accent;
-    color: $txt-inverse;
-  }
+.logo {
+  display: grid;
+  place-items: center;
+  width: 2.8rem;
+  height: 2.8rem;
+  background-color: $home-gold;
+  border-radius: $radius-s;
+  color: $home-cream-text;
 
   svg {
-    width: 1.8rem;
-    height: 1.8rem;
+    width: 1.6rem;
+    height: 1.6rem;
   }
 }
 
-// ── 링크 컬럼 ──
+.name {
+  font-family: $font-family-home-serif;
+  font-size: $font-size-18;
+  font-weight: $font-weight-bold;
+  letter-spacing: $letter-spacing-tight;
+  color: $home-text;
+}
 
-.footer_col {
+.info {
+  margin: $spacing-16 0 0;
   display: flex;
   flex-direction: column;
   gap: $spacing-12;
 }
 
-.footer_col_title {
-  font-size: $font-size-14;
-  font-weight: $font-weight-bold;
-  color: $txt-inverse;
-}
-
-.footer_col_list {
+.row {
   display: flex;
-  flex-direction: column;
-  gap: $spacing-8;
-  list-style: none;
+  align-items: flex-start;
+  gap: $spacing-12;
 }
 
-.footer_col_link {
+.label {
+  flex: 0 0 5.6rem;
+  margin: 0;
+  padding-top: 0.2rem;
+  font-size: $font-size-12;
+  font-weight: $font-weight-bold;
+  color: $home-text-muted;
+}
+
+.value {
+  margin: 0;
   font-size: $font-size-13;
-  color: $txt-dark-muted;
-  text-decoration: none;
-  transition: color $transition-duration-normal $transition-easing-default;
-
-  &:hover {
-    color: $accent;
-  }
+  font-weight: $font-weight-semibold;
+  line-height: $line-height-loose;
+  color: $home-text;
 }
 
-// ── Contact ──
-
-.footer_address {
-  font-style: normal;
-  font-size: $font-size-13;
-  color: $txt-dark-muted;
-  line-height: $line-height-base;
-}
-
-// ── 카피라이트 ──
-
-.footer_bottom {
+.bottom {
+  max-width: 64rem;
+  margin: 0 auto;
+  padding: $spacing-12 $container-padding;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding-top: $spacing-24;
-  border-top: 0.1rem solid $border-dark-faint;
-
-  @include respond($breakpoint-pc-sm) {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: $spacing-12;
-  }
-}
-
-.footer_copyright {
-  font-size: $font-size-12;
-  color: $txt-dark-faint;
-}
-
-.footer_bottom_links {
-  display: flex;
+  gap: $spacing-8;
   flex-wrap: wrap;
-  align-items: center;
-  gap: $spacing-16;
-  font-size: $font-size-12;
-  color: $txt-dark-faint;
+  border-top: 0.1rem solid $border-warm;
+}
 
-  a {
-    color: $txt-dark-faint;
-    text-decoration: none;
-    transition: color $transition-duration-normal $transition-easing-default;
+.copyright {
+  font-size: $font-size-11;
+  color: $home-text-muted;
+}
 
-    &:hover {
-      color: $txt-image-subtle;
-    }
+.policy {
+  font-size: $font-size-11;
+  font-weight: $font-weight-semibold;
+  color: $home-gold-strong;
+  transition: color 0.2s;
+
+  &:hover {
+    color: $home-gold;
   }
 }

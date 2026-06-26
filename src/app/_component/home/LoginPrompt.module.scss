@@ -1,0 +1,65 @@
+.section {
+  padding: $content-gap-l 0 $section-gap-40;
+}
+
+.card {
+  display: flex;
+  align-items: center;
+  gap: $content-gap-s;
+  max-width: 64rem;
+  margin: 0 auto;
+  padding: $padding-card;
+  border-radius: $radius-m;
+  background: linear-gradient(135deg, $home-card-soft, $home-tint);
+  border: 1px solid $home-border-gold;
+}
+
+.icon_box {
+  flex-shrink: 0;
+  width: 4.2rem;
+  height: 4.2rem;
+  display: grid;
+  place-items: center;
+  border-radius: $radius-xs;
+  background: $home-card;
+  color: $home-gold;
+}
+
+.icon {
+  width: 2.2rem;
+  height: 2.2rem;
+}
+
+.text {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-2;
+}
+
+.title {
+  font-size: $font-size-14;
+  font-weight: $font-weight-bold;
+  letter-spacing: $letter-spacing-body;
+  color: $home-gold-on-tint;
+}
+
+.desc {
+  font-size: $font-size-13;
+  line-height: $line-height-relaxed;
+  color: $home-gold-strong;
+}
+
+.button {
+  flex-shrink: 0;
+  padding: $padding-control;
+  border-radius: $radius-xs;
+  background-color: $home-gold;
+  color: $home-cream-text;
+  font-size: $font-size-13;
+  font-weight: $font-weight-bold;
+  white-space: nowrap;
+
+  @include hover-bg-shift($home-gold-hover);
+}
