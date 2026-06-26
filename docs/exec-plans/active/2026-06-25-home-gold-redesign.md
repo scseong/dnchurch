@@ -180,6 +180,17 @@ PR #132 자동 리뷰(gemini·codex-connector) 8건을 코드로 직접 확인�
 
 봇이 매긴 심각도가 실제 위험과 맞지 않았다. HIGH(#1)·P1(#4)은 오탐이거나 의도한 동작이고, 사용자가 실제로 막히는 건 P2로 분류된 #6·#7이었다.
 
+### 2차 재리뷰 (codex-connector, 수정 push 후)
+
+수정 push 뒤 codex가 4건을 더 지적했다. 코드·문서로 다시 확인했다.
+
+| # | 지적 | 판정 | 조치 |
+| --- | --- | --- | --- |
+| A | 데스크톱에 `/privacy-policy` 링크 없음(1차 #7 수정이 모바일 Drawer만 커버) | REAL | claude.ai/design '교회 푸터' 목업을 본떠 `src/components/layout/Footer/`를 새로 만들고 데스크톱·모바일 공통으로 노출한다(로고·교회명, 예배안내, 오시는길, 개인정보처리방침)<br>예배안내는 `(content)/layout`(app 레이어)에서 `worship_schedules`(예배 일정 원본)를 읽어 props로 내려준다 — `components/`는 `services/`를 직접 import할 수 없어서다<br>연락처(`site_settings` 미설정)·이용약관(페이지 없음)은 넣지 않았다<br>기존 Drawer 링크는 Footer로 모으고 Drawer에서는 지웠다 |
+| B | LoginPrompt가 로그인 진입점을 재노출 — info-site-cleanup이 정한 인증 진입점 숨김, 가입 동의 UI 런칭 게이트와 충돌 | REAL(정책) | 사용자 결정으로 유지한다<br>동의 UI는 tech-debt 런칭 게이트(7/1 전)로 이미 추적한다 |
+| C | 마이페이지 탭이 인증 체크 없는 미완성 페이지로 연결 | 부분 타당 | 사용자 결정으로 탭을 유지한다(빈 화면은 1차 #6 이동으로 해소)<br>페이지 본문과 인증은 후속으로 미룬다 |
+| D | 자동재생 캐러셀에 정지 수단 없음(WCAG 2.2.2) | REAL(a11y) | 이번 PR에서는 보류한다<br>prefers-reduced-motion 대응과 정지 버튼은 후속으로 미룬다 |
+
 ## 검증 이력
 
 <!--
