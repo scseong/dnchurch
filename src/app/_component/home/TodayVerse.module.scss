@@ -6,7 +6,7 @@
   max-width: 64rem;
   margin: 0 auto;
   padding: $spacing-24 $spacing-20;
-  border-radius: $radius-m;
+  border-radius: $radius-l;
   background: linear-gradient(135deg, $home-gold, $home-gold-deep);
   box-shadow: 0 1rem 2.4rem rgba($home-gold-strong, 0.22);
   text-align: center;
@@ -32,6 +32,14 @@
   line-height: $line-height-loose;
   letter-spacing: $letter-spacing-body;
   color: $home-cream-text;
+
+  &::before {
+    content: '\201C';
+  }
+
+  &::after {
+    content: '\201D';
+  }
 }
 
 .reference {
