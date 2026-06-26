@@ -27,6 +27,7 @@ export const metadata: Metadata = {
 export default async function Home() {
   return (
     <div className={styles.home}>
+      <h1 className={styles.blind}>대구동남교회</h1>
       <ChurchJsonLd />
       <Banner />
       <TodayVerse />

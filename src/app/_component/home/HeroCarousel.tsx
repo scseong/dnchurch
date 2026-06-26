@@ -46,8 +46,13 @@ export default function HeroCarousel({ slides }: { slides: HeroSlide[] }) {
       <div className={styles.viewport}>
         <div className={styles.embla} ref={emblaRef}>
           <div className={styles.container}>
-            {slides.map((slide) => (
-              <div key={slide.title} className={clsx(styles.slide, styles[slide.tone])}>
+            {slides.map((slide, index) => (
+              <div
+                key={slide.title}
+                className={clsx(styles.slide, styles[slide.tone])}
+                aria-hidden={index !== selectedIndex}
+                inert={index !== selectedIndex ? true : undefined}
+              >
                 <span className={styles.scrim} aria-hidden="true" />
                 <div className={styles.content}>
                   <span className={styles.eyebrow}>{slide.eyebrow}</span>
