@@ -1,7 +1,7 @@
 // 교회 푸터 — claude.ai/design "교회 푸터" 목업 기반. 로고+교회명·예배안내·오시는곳·법적 링크.
 // 홈 크림 톤과 맞춰 공용 레이아웃에 적용한다(BottomNav·Header와 같은 스코프 — D9).
 .footer {
-  background-color: $home-bg;
+  // [실험] 크림 배경 제거 — body $bg-primary 단일 톤 미리보기 (평가 후 복원/교체)
   border-top: 0.1rem solid $border-warm;
   // 모바일 고정 BottomNav(높이 + iOS 홈인디케이터 safe-area)에 가리지 않도록 그만큼 아래로 띄운다
   padding-bottom: calc(#{$tab-bar-height} + env(safe-area-inset-bottom, 0rem));
