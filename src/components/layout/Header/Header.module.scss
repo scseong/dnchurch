@@ -15,7 +15,8 @@ $indicator-height: 0.2rem;
   position: sticky;
   top: 0;
   z-index: $z-header;
-  // [실험] 크림 배경 제거 — body $bg-primary 단일 톤 미리보기 (평가 후 복원/교체)
+  // 홈 크림 배경과 톤 일치 (목업: 헤더가 콘텐츠 크림에 녹아듦). 공용이라 콘텐츠 페이지에도 적용됨.
+  background-color: $home-bg;
 
   @include respond-up($header-breakpoint) {
     display: none;
