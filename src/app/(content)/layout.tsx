@@ -4,6 +4,7 @@ import { Header, Hero, Footer, BottomNav } from '@/components/layout';
 import KakaoScript from '@/components/lib/KakaoScript';
 import { getWorshipScheduleGroups } from '@/services/worship';
 import { SCROLL_THRESHOLD } from '@/constants';
+import styles from './layout.module.scss';
 
 const API_KEY = `//dapi.kakao.com/v2/maps/sdk.js?appkey=${process.env.NEXT_PUBLIC_KAKAO_API_KEY}&libraries=services,clusterer&autoload=false`;
 
@@ -21,12 +22,14 @@ export default async function ContentLayout({ children }: PropsWithChildren) {
           __html: `if(window.scrollY>${SCROLL_THRESHOLD})document.documentElement.setAttribute('data-scrolled','');`
         }}
       />
-      <Header />
-      <main id="main">
-        <Hero />
-        {children}
-      </main>
-      <Footer worshipLine={worshipLine} />
+      <div className={styles.content_shell}>
+        <Header />
+        <main id="main">
+          <Hero />
+          {children}
+        </main>
+        <Footer worshipLine={worshipLine} />
+      </div>
       <BottomNav />
       <Script
         id="scroll-reveal-observer"

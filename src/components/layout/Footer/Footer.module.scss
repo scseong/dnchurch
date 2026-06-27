@@ -3,12 +3,6 @@
 .footer {
   background-color: $home-bg;
   border-top: 0.1rem solid $border-warm;
-  // 모바일 고정 BottomNav(높이 + iOS 홈인디케이터 safe-area)에 가리지 않도록 그만큼 아래로 띄운다
-  padding-bottom: calc(#{$tab-bar-height} + env(safe-area-inset-bottom, 0rem));
-
-  @include respond-up($header-breakpoint) {
-    padding-bottom: 0;
-  }
 }
 
 .top {
