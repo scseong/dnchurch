@@ -10,7 +10,7 @@
   margin: 0 auto;
   padding: $padding-card;
   border-radius: $radius-l;
-  background: linear-gradient(135deg, $home-card-soft, $home-tint);
+  background: $home-tint-card;
   border: 1px solid $home-border-gold;
 
   // 좁은 폰에서 텍스트가 버튼을 압박해 깨지는 것 방지 — 버튼을 아래 줄 전체폭으로 내린다
