@@ -5,15 +5,11 @@
 .card {
   max-width: 64rem;
   margin: 0 auto;
-  padding: $spacing-24 $spacing-20;
+  padding: $padding-card-lg;
   border-radius: $radius-l;
   background: linear-gradient(135deg, $home-gold, $home-gold-deep);
   box-shadow: 0 1rem 2.4rem rgba($home-gold-strong, 0.22);
   text-align: center;
-
-  @include respond-up($breakpoint-tablet) {
-    padding: $spacing-32 $spacing-24;
-  }
 }
 
 .eyebrow {

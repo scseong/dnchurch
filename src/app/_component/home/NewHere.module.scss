@@ -5,15 +5,11 @@
 .card {
   max-width: 64rem;
   margin: 0 auto;
-  padding: $spacing-20;
+  padding: $padding-card-lg;
   border-radius: $radius-xl;
   background: $home-card;
   border: 1px solid $home-border;
   box-shadow: $shadow-sm;
-
-  @include respond-up($breakpoint-tablet) {
-    padding: $spacing-24;
-  }
 }
 
 .title {
@@ -41,7 +37,7 @@
   display: flex;
   flex-direction: column;
   gap: $spacing-4;
-  padding: $spacing-12 $spacing-16;
+  padding: $padding-card-compact;
   border-radius: $radius-s;
   background: $home-card-soft;
   border: 1px solid $home-border;
@@ -62,7 +58,7 @@
 
 .notice {
   margin-top: $content-gap-s;
-  padding: $spacing-12 $spacing-16;
+  padding: $padding-card-compact;
   border-radius: $radius-s;
   background: $home-tint;
   font-size: $font-size-13;
