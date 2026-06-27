@@ -23,11 +23,11 @@
 .quote {
   margin: 0;
   font-family: $font-family-home-serif;
-  font-size: $font-size-18;
+  font-size: $font-size-16;
   font-weight: $font-weight-regular;
-  line-height: $line-height-loose;
+  line-height: $line-height-relaxed;
   letter-spacing: $letter-spacing-body;
-  color: $home-cream-text;
+  color: $txt-inverse;
 
   &::before {
     content: '\201C';

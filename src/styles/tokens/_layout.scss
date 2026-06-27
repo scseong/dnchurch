@@ -22,7 +22,7 @@ $screensize-h-min: var(--screensize-h-min);
 $top-bar-height: 3.6rem;
 $header-height: 7.2rem;
 $app-header-height: 5.2rem;
-$tab-bar-height: 5.4rem;
+$tab-bar-height: 5.8rem; // BottomNav .tab_list 높이 SSOT — Footer 하단 패딩이 이 값 + safe-area를 참조
 $lnb-min-height: 25rem;
 
 // Header (tablet compact)
