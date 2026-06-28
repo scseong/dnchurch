@@ -16,6 +16,7 @@ export default function MobileHeader() {
   const router = useRouter();
   const { title, showBack } = resolveMobileHeader(pathname);
   const tabs = resolveSiblingTabs(pathname);
+  const centeredTitle = pathname === '/about/pastor'; // 목업 재설계 About 헤더 — 타이틀 가운데 정렬
   const { drawerOpen, openDrawer, closeDrawer } = useDrawerHistory();
   const overlayRef = useRef<HTMLDivElement>(null);
 
@@ -34,7 +35,9 @@ export default function MobileHeader() {
                 >
                   <IoChevronBack />
                 </button>
-                <h1 className={styles.mobile_title}>{title}</h1>
+                <h1 className={clsx(styles.mobile_title, centeredTitle && styles.mobile_title_centered)}>
+                  {title}
+                </h1>
               </>
             ) : (
               <Link href="/" className={styles.mobile_logo} aria-label="대구동남교회 홈">

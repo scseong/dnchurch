@@ -98,11 +98,17 @@ export const getHubPageData = async (): Promise<{
   return { history, settings };
 };
 
-export const getPastorPageData = async (): Promise<{ pastor: PastorData | null }> => {
-  const result = await getActiveStaff();
-  if (result.error) console.error('[about] getActiveStaff 조회 실패', result.error);
-  const rows = (result.data ?? []) as StaffType[];
-  return { pastor: toPastorData(findSeniorPastor(rows)) };
+export const getPastorPageData = async (): Promise<{
+  pastor: PastorData | null;
+  history: HistoryItem[];
+}> => {
+  const [staffResult, history] = await Promise.all([
+    getActiveStaff(),
+    getSiteCollection<HistoryItem>('church_history')
+  ]);
+  if (staffResult.error) console.error('[about] getActiveStaff 조회 실패', staffResult.error);
+  const rows = (staffResult.data ?? []) as StaffType[];
+  return { pastor: toPastorData(findSeniorPastor(rows)), history };
 };
 
 export const getWelcomePageData = async (): Promise<{ faq: FaqItem[] }> => {
