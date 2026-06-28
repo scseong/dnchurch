@@ -24,7 +24,7 @@
 .tab_list {
   display: grid;
   grid-template-columns: repeat(5, 1fr);
-  height: 5.8rem;
+  height: $tab-bar-height;
 }
 
 .tab_item {

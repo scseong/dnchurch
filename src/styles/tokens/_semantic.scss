@@ -14,11 +14,15 @@ $padding-control: $spacing-8 $spacing-12;
 /// 1.2rem 2.4rem — CTA 링크 버튼 (가로:세로 ≈ 4:3)
 $padding-control-wide: $spacing-12 $spacing-24;
 
-/// 1.6rem 2rem — 카드, 패널 내부 여백
-$padding-card: $spacing-16 $spacing-20;
+// 카드 padding은 대칭만 사용한다(가로=세로). 카드 종류 → 토큰 1:1 매핑.
+/// 20/24px(모바일/데스크톱, 대칭) — 대형·피처 카드 (히어로 등)
+$padding-card-lg: $spacing-24;
 
-/// 1.2rem 1.6rem — 작은 카드, 리스트 아이템 내부 여백
-$padding-card-compact: $spacing-12 $spacing-16;
+/// 16/20px(모바일/데스크톱, 대칭) — 표준 카드·패널 ★ 기본
+$padding-card: $spacing-20;
+
+/// 12/16px(모바일/데스크톱, 대칭) — 컴팩트 카드·카드 내부 타일·콜아웃·리스트 행
+$padding-card-compact: $spacing-16;
 
 // ══════════════════════════════════════════
 // SPACING: Content Gap — 요소 간 간격

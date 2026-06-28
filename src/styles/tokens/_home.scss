@@ -1,6 +1,7 @@
 // ════════════════════════════════════════════
 // HOME (warm mockup tone) — 홈 + 공용 레이아웃 톤 토큰
 // claude.ai/design 디자인 레퍼런스 목업의 따뜻한 골드/크림 톤.
+// 배경은 "한빛교회 - 교회 소개" 레퍼런스 톤(#f4f0e6 + glow #fcf9f2)에 맞춤.
 // globals 시스템(cool navy + 노란기 적은 중성 beige)과 별개.
 // 사용처: 홈 콘텐츠 모듈 + 공용 레이아웃 BottomNav·Header(D9 — 콘텐츠 전반에 크림 톤 적용).
 // 그 외 콘텐츠 페이지 본문에서는 쓰지 않는다.
@@ -8,8 +9,8 @@
 // ════════════════════════════════════════════
 
 // ── Surface ──
-$home-bg: #efebe2; // 홈 페이지 배경 (웜 크림)
-$home-bg-glow: #e9e1d2; // 배경 radial 하이라이트
+$home-bg: #f4f0e6; // 홈 페이지 배경 (웜 크림 — 교회 소개 톤)
+$home-bg-glow: #fcf9f2; // 배경 radial 하이라이트 (교회 소개 톤)
 $home-surface: #f6f3ec; // 큰 면
 $home-card: #fff; // 카드
 $home-card-soft: #faf8f2; // 옅은 정보 타일

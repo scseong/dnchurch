@@ -3,12 +3,6 @@
 .footer {
   background-color: $home-bg;
   border-top: 0.1rem solid $border-warm;
-  // 모바일 고정 BottomNav에 가리지 않도록 그만큼 아래로 띄운다
-  padding-bottom: $tab-bar-height;
-
-  @include respond-up($header-breakpoint) {
-    padding-bottom: 0;
-  }
 }
 
 .top {
@@ -64,8 +58,8 @@
   margin: 0;
   padding-top: 0.2rem;
   font-size: $font-size-12;
-  font-weight: $font-weight-bold;
-  color: $home-text-muted;
+  font-weight: $font-weight-semibold;
+  color: $home-gold-strong;
 }
 
 .value {

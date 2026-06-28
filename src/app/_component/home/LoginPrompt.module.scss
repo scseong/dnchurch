@@ -1,5 +1,5 @@
 .section {
-  padding: $content-gap-l 0 $section-gap-40;
+  padding: $spacing-20 0 $section-gap-40;
 }
 
 .card {
@@ -9,9 +9,14 @@
   max-width: 64rem;
   margin: 0 auto;
   padding: $padding-card;
-  border-radius: $radius-m;
-  background: linear-gradient(135deg, $home-card-soft, $home-tint);
+  border-radius: $radius-l;
+  background: $home-tint-card;
   border: 1px solid $home-border-gold;
+
+  // 좁은 폰에서 텍스트가 버튼을 압박해 깨지는 것 방지 — 버튼을 아래 줄 전체폭으로 내린다
+  @include respond($breakpoint-mobile) {
+    flex-wrap: wrap;
+  }
 }
 
 .icon_box {
@@ -58,8 +63,14 @@
   background-color: $home-gold;
   color: $home-cream-text;
   font-size: $font-size-13;
-  font-weight: $font-weight-bold;
+  font-weight: $font-weight-semibold;
   white-space: nowrap;
 
   @include hover-bg-shift($home-gold-hover);
+
+  // 좁은 폰에서 줄바꿈 시 버튼을 전체폭으로 — 텍스트 압박/깨짐 방지
+  @include respond($breakpoint-mobile) {
+    flex-basis: 100%;
+    text-align: center;
+  }
 }

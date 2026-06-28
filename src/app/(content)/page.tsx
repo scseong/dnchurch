@@ -8,7 +8,7 @@ import {
   RecentSermons,
   NewHere,
   PhotoGallery,
-  FeedSection,
+  // FeedSection, // 교회 소식 — 목업에 없어 임시 숨김
   LoginPrompt,
   ChurchJsonLd
 } from '../_component/home';
@@ -36,7 +36,7 @@ export default async function Home() {
       <NewHere />
       <PhotoGallery />
       <RecentSermons />
-      <FeedSection />
+      {/* <FeedSection /> 교회 소식 — 목업에 없어 임시 숨김 */}
       <LoginPrompt />
     </div>
   );

@@ -171,13 +171,16 @@ admin은 정보 밀도가 높은 cool 표면이라 콘텐츠 warm 톤과 다른 
 |---|---|---|---|
 | input, button | `$padding-control` | `$radius-xs` | |
 | 큰 CTA 버튼 | `$padding-control-wide` | `$radius-xs` | |
-| card, 패널 | `$padding-card` | `$radius-s` | `$shadow-sm` |
-| 소형 카드, 리스트 아이템 | `$padding-card-compact` | `$radius-s` | `$content-gap-s` |
+| 대형·피처 카드 (히어로 등) | `$padding-card-lg` | `$radius-l` | `$shadow-sm` |
+| 표준 카드·패널 | `$padding-card` | `$radius-s` | `$shadow-sm` |
+| 컴팩트 카드·타일·콜아웃·리스트 행 | `$padding-card-compact` | `$radius-s` | `$content-gap-s` |
 | 모달, 바텀시트 | `$padding-card` | `$radius-m` | `$overlay-scrim` |
 | 태그, 뱃지 | `$padding-inline-xs` | `$radius-circle` | |
 | 섹션 컨테이너 | `$container-padding` / `$section-gap-*` | — | `$container-max` |
 | 이미지 오버레이 | — | — | `$overlay-scrim`, `$txt-image-subtle` |
 | `:focus-visible` outline | `$focus-ring-width` / `$focus-ring-offset` | — | `$focus-ring-color` |
+
+**카드 padding은 대칭만 쓴다** — 대형 `$padding-card-lg`(20/24px), 표준 `$padding-card`(16/20px), 컴팩트 `$padding-card-compact`(12/16px). 모두 가로=세로다. 면 종류마다 토큰 하나로 고정한다. 컨트롤·배지는 가로형이라 예외다. 근거: ADR 0018.
 
 **Content Gap** (XL→XS): `$content-gap-xl`(32px) > `$content-gap-l`(24px) > `$content-gap-m`(16px) > `$content-gap-s`(12px) > `$content-gap-xs`(8px)
 

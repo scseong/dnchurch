@@ -8,6 +8,8 @@
 }
 
 .title {
+  // 아래 카드의 border-radius만큼 타이틀을 안쪽으로 — 카드 콘텐츠와 좌측 시각 정렬
+  padding-left: $spacing-4;
   font-size: $font-size-18;
   font-weight: $font-weight-bold;
   letter-spacing: $letter-spacing-body;

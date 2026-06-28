@@ -6,7 +6,7 @@ $slide-visit: linear-gradient(180deg, #3a4a2c 0%, #6e5a32 100%);
 $slide-scrim: linear-gradient(180deg, rgba(20, 30, 18, 0.05) 0%, rgba(16, 26, 15, 0.86) 100%);
 
 .section {
-  padding: $content-gap-l $container-padding 0;
+  padding: $spacing-8 $content-gap-l 0;
 }
 
 .viewport {
@@ -18,7 +18,7 @@ $slide-scrim: linear-gradient(180deg, rgba(20, 30, 18, 0.05) 0%, rgba(16, 26, 15
 // Embla viewport — overflow hidden + 카드 외형(라운드·그림자). embla가 container transform을 제어.
 .embla {
   overflow: hidden;
-  border-radius: $radius-l;
+  border-radius: $radius-xl;
   box-shadow: $shadow-lg;
 }
 
@@ -31,7 +31,7 @@ $slide-scrim: linear-gradient(180deg, rgba(20, 30, 18, 0.05) 0%, rgba(16, 26, 15
   position: relative;
   flex: 0 0 100%;
   min-width: 0;
-  min-height: 32rem;
+  min-height: 30rem;
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
@@ -57,13 +57,13 @@ $slide-scrim: linear-gradient(180deg, rgba(20, 30, 18, 0.05) 0%, rgba(16, 26, 15
 
 .content {
   position: relative;
-  padding: $spacing-24;
+  padding: $padding-card-lg;
   color: $home-cream-text;
 }
 
 .eyebrow {
   font-size: $font-size-12;
-  font-weight: $font-weight-bold;
+  font-weight: $font-weight-semibold;
   letter-spacing: $letter-spacing-wider;
   color: $home-eyebrow;
 }
@@ -74,7 +74,7 @@ $slide-scrim: linear-gradient(180deg, rgba(20, 30, 18, 0.05) 0%, rgba(16, 26, 15
   font-size: $font-size-32;
   font-weight: $font-weight-bold;
   letter-spacing: $letter-spacing-heading;
-  color: $home-cream-text;
+  color: $txt-inverse;
 }
 
 .subtitle {
@@ -90,7 +90,7 @@ $slide-scrim: linear-gradient(180deg, rgba(20, 30, 18, 0.05) 0%, rgba(16, 26, 15
 .ctas {
   display: flex;
   width: 100%;
-  gap: $spacing-8;
+  gap: $spacing-12;
   margin-top: $content-gap-m;
 }
 
@@ -100,10 +100,10 @@ $slide-scrim: linear-gradient(180deg, rgba(20, 30, 18, 0.05) 0%, rgba(16, 26, 15
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  height: 4.6rem;
+  height: 4.4rem;
   border-radius: $radius-s;
   font-size: $font-size-14;
-  font-weight: $font-weight-bold;
+  font-weight: $font-weight-semibold;
 }
 
 .primary {
@@ -149,7 +149,7 @@ $slide-scrim: linear-gradient(180deg, rgba(20, 30, 18, 0.05) 0%, rgba(16, 26, 15
 .skeleton {
   max-width: 64rem;
   margin: 0 auto;
-  min-height: 32rem;
-  border-radius: $radius-l;
+  min-height: 30rem;
+  border-radius: $radius-xl;
   background: $home-surface;
 }

@@ -1,37 +1,33 @@
 .section {
-  padding: $content-gap-l 0 0;
+  padding: $spacing-20 0 0;
 }
 
 .grid {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(2, 1fr);
+  gap: $spacing-10;
   max-width: 64rem;
   margin: 0 auto;
-  background: $home-card;
-  border: 1px solid $home-border;
-  border-radius: $radius-m;
-  overflow: hidden;
-  box-shadow: $shadow-sm;
-}
-
-.grid li:not(:first-child) .item {
-  border-left: 1px solid $home-border-divider;
 }
 
 .item {
   display: flex;
-  flex-direction: column;
   align-items: center;
-  gap: $spacing-10;
-  padding: $spacing-16 $spacing-4;
-  text-align: center;
+  justify-content: center;
+  gap: $spacing-8;
+  padding: $padding-card-compact;
+  background: $home-card;
+  border: 1px solid $home-border;
+  border-radius: $radius-m;
+  box-shadow: $shadow-sm;
 
-  @include hover-bg-shift($home-card-soft);
+  @include hover-lift;
 }
 
 .icon_box {
-  width: 4.6rem;
-  height: 4.6rem;
+  flex-shrink: 0;
+  width: 3.4rem;
+  height: 3.4rem;
   display: grid;
   place-items: center;
   border-radius: $radius-circle;
@@ -39,8 +35,8 @@
   color: $home-gold-strong;
 
   svg {
-    width: 2.2rem;
-    height: 2.2rem;
+    width: 1.8rem;
+    height: 1.8rem;
   }
 }
 

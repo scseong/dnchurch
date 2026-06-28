@@ -1,5 +1,5 @@
 .section {
-  padding: $content-gap-l 0 0;
+  padding: $spacing-24 0 0;
 }
 
 .scroller {
@@ -23,7 +23,7 @@
   display: block;
   position: relative;
   width: 15.2rem;
-  border-radius: $radius-m;
+  border-radius: $radius-l;
   overflow: hidden;
   border: 1px solid $home-border;
   box-shadow: $shadow-sm;
@@ -56,7 +56,7 @@
   bottom: 0;
   padding: $spacing-20 $spacing-12 $spacing-10;
   font-size: $font-size-13;
-  font-weight: $font-weight-bold;
+  font-weight: $font-weight-semibold;
   color: $home-cream-text;
   background: linear-gradient(transparent, rgba(0, 0, 0, 0.62));
 }
