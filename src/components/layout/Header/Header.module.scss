@@ -102,7 +102,7 @@ $indicator-height: 0.2rem;
 .mobile_menu {
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-end;
   width: 4rem;
   height: 4rem;
   color: $txt-primary;
@@ -132,7 +132,7 @@ $indicator-height: 0.2rem;
 .mobile_back {
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-start;
   min-width: 4.2rem;
   min-height: 4.2rem;
   flex-shrink: 0;
