@@ -51,7 +51,7 @@ About 나머지 4개 페이지(worship 예배 안내·location 오시는 길·vi
 - [x] 3. worship 구현 → 커밋 `014f3af` — 세부 디자인은 사용자 라이브 수정으로 plan과 상이(카드 무그림자·연령 알약 배지·다음세대 풀폭 CTA·브라운 시간 등)
 - [x] 4. location 구현(목업 재스킨) → 검증(아래 Claude 2차 표) → 커밋 `e896fca`
 - [x] 5. vision 구현(목업 재스킨) → 검증(아래 Claude 2차 표)·Chrome 육안 → 커밋 대기
-- [ ] 6. welcome 구현 → Chrome 검증 → 커밋
+- [x] 6. welcome 구현(본문 톤 정렬 + 새가족 등록 백엔드·BottomSheet 폼) → 검증(아래 Claude 2차 표) → 커밋 대기
 
 > 진행 중 함께 나온 부수 작업(별도 커밋): 워옴 팔레트 브라운 전환 `49caed9`, 모바일 헤더 정리 `4971400`, LayoutContainer 본문 패딩 일원화 `c6298d0`, 인사말 페이지 톤 정렬 `e6d9627`, 교회 소개 탭 내비 active 라벨 진하게 `c095d11`. 팔레트 최종값은 브라운 `#7a6654`·카드 흰색.
 
@@ -81,11 +81,20 @@ About 나머지 4개 페이지(worship 예배 안내·location 오시는 길·vi
   - 문제: 목업 vision 패널은 비전 선언 히어로 + 세 가지 비전 카드뿐인데, 기존 page엔 5단락 VISION_STATEMENT·전경 이미지·HISTORY 타임라인까지 있었다.
   - 해결: 히어로(슬로건을 브라운 그라디언트 + serif 선언으로)와 비전 기둥 3개(번호 배지 + 제목 + serif 본문, 아이콘·영문 라벨 제거)만 남겼다. 5단락 선언문·이미지는 목업에 없는 일반 산문이라 뺐고, HISTORY는 인사말(pastor) 탭의 '교회 이력'과 같은 `church_history`라 중복이라 뺐다. 그 결과 `getVisionPageData`(history만 반환)가 안 쓰여 page는 fetch 없는 정적 페이지가 됐고 해당 service 함수도 지웠다.
   - 결과: vision이 목업과 같은 짧고 또렷한 구조가 됐고, 인사말과 겹치던 연혁 중복이 사라졌다.
+- **D6 — welcome은 본문을 유지하고 톤만 정렬하되 새가족 등록 폼은 목업대로 만든다**
+  - 문제: 사용자가 본문(환영 카드·4 STEPS·FAQ)은 그대로 두고 색·폰트·헤더·탭만 다른 페이지와 맞추되, '새가족 등록하기' CTA와 BottomSheet 폼은 목업대로 만들길 원했다.
+  - 해결: 본문 cool 토큰을 warm `$home-*`로 바꾸고, surface 스코프와 AboutTabNav, 라우트 가드를 입혔다. 하단 CTA(오시는 길 링크)는 목업의 풀폭 브라운 '새가족 등록하기' 버튼과 `NewFamilyRegister`(BottomSheet 폼)로 교체했다. 폼 톤은 사용자 선택대로 warm 브라운이라 공용 TextField/Button 대신 커스텀 입력으로 했다 — portal 토큰과 raw input 컨벤션을 이 폼에 한해 의식적으로 우회했다(트레이드오프 사전 합의).
+  - 결과: welcome이 나머지 About와 같은 톤이 됐고, 목업의 등록 폼을 갖췄다.
+- **D7 — 새가족 등록 제출을 익명 공개 insert 백엔드로 실제 저장한다**
+  - 문제: 제출을 실제로 저장해야 하는데, 기존 액션은 전부 admin 인증 뮤테이션이라 공개(익명) write 패턴이 없었다.
+  - 해결: `new_family_registrations` 테이블과 `submitNewFamilyRegistration` 액션, `newFamilyService`를 만들었다. RLS는 anon insert만 허용하고(동의 true with check) 읽기는 막아 PII를 보호한다. 액션도 이름·연락처·동의를 서버에서 다시 검증한다.
+  - 결과: 새가족 등록이 폼 제출에서 액션과 anon insert를 거쳐 DB 저장까지 실제로 동작한다(dev 실측). 익명 공개 write는 이 저장소 첫 패턴이라 정식 ADR 작성을 후속으로 권장한다(아래 ADR 판단).
 
 ## ADR 판단
 
 - `src/services/about/index.ts` `getLocationPageData`에서 worship fetch 제거 — 소비처(location page)가 더 이상 안 쓰는 일회성 정리다. 레이어·캐시·인증 정책 변화 없음. ADR 불필요.
 - `src/services/about/index.ts` `getVisionPageData` 함수 제거 — vision page가 정적이 되며 유일 소비처가 사라진 dead export 정리(knip 신규 경고 방지). 레이어·캐시·인증 정책 변화 없음. ADR 불필요.
+- `new_family_registrations` 테이블 + `new-family.action.ts` + `new-family-service.ts` — **ADR 권장(후속)**. 이 저장소 첫 익명 공개 write 패턴(기존 액션은 전부 admin 인증)이고, RLS를 anon insert만 허용·읽기 차단으로 잡은 보안 결정이라 앞으로 다른 공개 폼(기도 요청·문의 등)이 따를 재사용 패턴이다. 결정 맥락은 D7·마이그레이션 주석에 기록했고, 정식 ADR(`public-anonymous-write-rls`)은 사용자 승인 시 작성한다.
 
 ## 후속 작업
 
@@ -105,6 +114,22 @@ About 나머지 4개 페이지(worship 예배 안내·location 오시는 길·vi
   - 이유: site_settings에 해당 키가 없어 사용자 확인 값을 page 상수로 둠. 주차는 settings 입력 시 대체되는 fallback
   - 다음 기준: 운영자가 admin/site_settings로 옮길지 결정 시
   - 기록 위치: 없음
+- 새가족 등록 prod 마이그레이션 미적용 — dev(mficogrxekuahjqborxw)에만 `new_family_registrations` 생성·검증함
+  - 이유: prod는 사용자 승인 후 적용 (프로젝트 규칙: dev 우선)
+  - 다음 기준: 사용자 승인 시 prod(xrfyevrnmvbuwsbktuja)에 같은 마이그레이션 적용
+  - 기록 위치: `supabase/migrations/20260629000000_create_new_family_registrations.sql`
+- 새가족 등록 스팸 방지 없음 — 익명 공개 insert라 captcha·rate-limit 미적용
+  - 이유: 1차 범위는 폼 동작. 봇 스팸 대응은 별도 작업
+  - 다음 기준: 스팸 유입 확인 시 (captcha 또는 액션 rate-limit)
+  - 기록 위치: 없음
+- 새가족 등록 admin 조회 UI 없음 — 현재 RLS로 읽기 차단이라 service_role/SQL로만 조회
+  - 이유: 1차 범위는 수집까지. admin 열람 화면은 별도 작업
+  - 다음 기준: admin 페이지에 등록 목록 추가 시 (service_role 또는 admin select 정책)
+  - 기록 위치: 없음
+- 정식 ADR `public-anonymous-write-rls` 작성 — 첫 익명 공개 write + RLS 패턴 문서화
+  - 이유: 앞으로 다른 공개 폼이 따를 재사용 패턴 (D7·ADR 판단)
+  - 다음 기준: 사용자 승인 시 `node scripts/start-adr.mjs public-anonymous-write-rls`
+  - 기록 위치: D7 + 마이그레이션 주석
 
 ---
 
@@ -135,6 +160,9 @@ About 나머지 4개 페이지(worship 예배 안내·location 오시는 길·vi
 | 2차 | dev `/about/location` curl | ✅ HTTP 200<br>길찾기·대중교통·주차·통화·층별 안내(본관·교육관) 마커 렌더<br>WORSHIP SCHEDULE 제거 확인 |
 | 2차 | vision `tsc·eslint·stylelint` | ✅ exit 0 (page·service·navigation·hero.config) |
 | 2차 | dev `/about/vision` curl + Chrome | ✅ - HTTP 200<br>- OUR VISION·세 가지 비전·번호 카드 3개 렌더<br>- HISTORY·VISION STATEMENT 제거 확인<br>- 브라운 그라디언트 히어로·serif 본문 Chrome 육안 확인 |
+| 2차 | welcome `tsc·eslint·stylelint` | ✅ exit 0 (page·NewFamilyRegister·action·service·navigation·hero.config) |
+| 2차 | new_family RLS (dev SQL, `set role anon`) | ✅ - 동의 true insert 성공<br>- 동의 false insert 거부(`violates row-level security`)<br>- anon select 0행(읽기 차단) |
+| 2차 | dev `/about/welcome` Chrome E2E | ✅ - HTTP 200, CTA 브라운(#7a6654)<br>- BottomSheet 폼(이름·연락처·생년월일·체크2·등록 신청하기) 렌더<br>- 제출 시 시트 닫힘·접수 토스트·DB 행 저장(referral·관심영역·초신자 매핑 확인)<br>- 검증 후 테스트 행 삭제 |
 
 ## 검증 이력
 
