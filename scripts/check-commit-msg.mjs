@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * commit-msg hook — deterministic 4 룰 강제.
+ * commit-msg hook — deterministic 5 룰 강제.
  * SSOT: .claude/skills/harness-workflow/SKILL.md "## 커밋 메시지"
  * ADR: docs/decisions/0009-commit-msg-hook-enforcement.md
  *
@@ -14,6 +14,7 @@ const ALLOWED_PREFIXES = ['Feat', 'Fix', 'Style', 'Refactor', 'Docs', 'Chore'];
 const SUBJECT_REGEX = /^(Feat|Fix|Style|Refactor|Docs|Chore): [^ ].+$/;
 const SUBJECT_MAX_LENGTH = 80;
 const COAUTHOR_REGEX = /^Co-Authored-By:\s/im;
+const EMAIL_REGEX = /[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}/;
 const PLUS_COUNT_LIMIT = 2;
 const SKIP_PREFIXES = ['Merge ', 'Revert ', 'fixup!', 'squash!'];
 
@@ -81,7 +82,7 @@ const hasCoAuthorTrailer = lastParagraph.some((line) => COAUTHOR_REGEX.test(line
 if (!hasCoAuthorTrailer) {
   errors.push(
     `[R3] Co-Authored-By: trailer 누락 — message 마지막 paragraph(빈 줄 위)에 footer 필요\n` +
-      `     예: Co-Authored-By: Claude Opus 4.7 (1M context) <noreply@anthropic.com>`
+      `     예: Co-Authored-By: Claude Opus 4.8 (1M context)`
   );
 }
 
@@ -93,6 +94,16 @@ if (plusCount >= PLUS_COUNT_LIMIT) {
       `     선택: (a) commit 분리 또는 (b) 단일 상위 의도로 통일+본문 풀어쓰기\n` +
       `     SSOT: .claude/skills/harness-workflow/SKILL.md "## 커밋 메시지" §Subject 규칙\n` +
       `     현재: "${subject}"`
+  );
+}
+
+// R5: 커밋 메시지에 이메일 주소 금지 (Co-Authored-By trailer 포함)
+const emailMatch = content.match(EMAIL_REGEX);
+if (emailMatch) {
+  errors.push(
+    `[R5] 커밋 메시지에 이메일 주소 금지 — "${emailMatch[0]}" 발견\n` +
+      `     Co-Authored-By trailer도 이메일 없이 이름만 적습니다\n` +
+      `     예: Co-Authored-By: Claude Opus 4.8 (1M context)`
   );
 }
 

@@ -284,17 +284,18 @@ $tmp  = [System.IO.Path]::GetTempFileName()
 
 ## 커밋 메시지
 
-commit subject·body 작성 규칙·PR 제목·산출 문서 가독성 체크리스트는 작성용 단일 SSOT인 `.claude/skills/writing-style/SKILL.md`를 참조한다. 본 SKILL은 검증 정책(R1~R4 hook 강제)만 워크플로우 메타로 보존.
+commit subject·body 작성 규칙·PR 제목·산출 문서 가독성 체크리스트는 작성용 단일 SSOT인 `.claude/skills/writing-style/SKILL.md`를 참조한다. 본 SKILL은 검증 정책(R1~R5 hook 강제)만 워크플로우 메타로 보존.
 
 ### 검증
 
-**Local `commit-msg` hook이 R1~R4 4개 deterministic 룰을 자동 강제** (2026-05-13~) — `scripts/check-commit-msg.mjs` + `.husky/commit-msg`. 위반 시 commit 차단(exit 1), `--no-verify` 명시 우회 허용. 관련 ADR: `docs/decisions/0009-commit-msg-hook-enforcement.md` (Accepted).
+**Local `commit-msg` hook이 R1~R5 5개 deterministic 룰을 자동 강제** (2026-05-13~) — `scripts/check-commit-msg.mjs` + `.husky/commit-msg`. 위반 시 commit 차단(exit 1), `--no-verify` 명시 우회 허용. 관련 ADR: `docs/decisions/0009-commit-msg-hook-enforcement.md` (Accepted).
 
 강제되는 룰:
 - (R1) subject 정규식 `^(Feat|Fix|Style|Refactor|Docs|Chore): [^ ].+$`
 - (R2) subject 길이 80자 한도 (`.trimEnd()` 후)
 - (R3) `Co-Authored-By:` trailer가 메시지 마지막 paragraph에 위치 (case-insensitive)
 - (R4) subject `+` 2회 이상 차단 (다중 concern 분리 신호)
+- (R5) 커밋 메시지에 이메일 주소 포함 차단 (Co-Authored-By trailer도 이름만 적고 이메일은 빼기)
 
 PR 리뷰에서 수동 확인하는 영역 (hook 검증 X):
 - WHY/IMPACT 우선·추상명사 회피·외부 가독성 — heuristic 룰, 사람 리뷰 영역 (writing-style SKILL이 SSOT)

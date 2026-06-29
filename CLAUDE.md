@@ -87,6 +87,7 @@
 | 2026-05-29 | PR 생성 시점 commit-pr-author 호출 의무화 + PreToolUse hook 신설 | .claude/hooks/check-pr-before-create.mjs, .claude/settings.json PreToolUse 블록, claude-code.md, harness-workflow SKILL | gh pr create 시점은 PostToolUse hook 사각지대 — 결정적 reminder + 워크플로우 의무 + COMMIT 단계 명시 3 계층 방어 |
 | 2026-06-15 | PR 리뷰 대응을 표준 절차로 명문화 (`### 8. PR_REVIEW` 조건부 단계) | harness-workflow SKILL (§ 8 + `## PR 리뷰 명령`), CLAUDE.md (Workflow 포인터 + 본 표) | PR #118·#119 수동 대응에서 봇 오탐 2건을 코드 미확인 중계로 놓칠 뻔함 — 코드 확인 근거·중계 금지 hard rule로 검증 규율 고정 (hook·스크립트·ADR 없이 문서만) |
 | 2026-06-18 | 레이어 설명을 import 서열 + `services` 읽기·쓰기 공존으로 정정, `revalidateTag`→`updateTag` 드리프트 정정, 스킬 표에 `complete-task` 반영, audit 마커 갱신 | CLAUDE.md, docs/ARCHITECTURE.md, .claude/skills/supabase/SKILL.md, README.md | 포트폴리오 점검 중 `services`를 읽기 전용처럼 읽히게 한 표현·코드와 안 맞는 API 이름·표 누락 발견 (Codex 계획 검증 PASS_WITH_DECISION_LOG) |
+| 2026-06-29 | commit-msg hook에 R5(이메일 주소 금지) 추가, Co-Authored-By trailer에서 이메일을 빼고 이름만 남김 | scripts/check-commit-msg.mjs, docs/decisions/0009, harness-workflow SKILL | Co-Authored-By trailer에 사용자 이메일이 들어가던 것을 차단 — 사용자 지시 |
 
 ## HOW (검증 루프)
 
