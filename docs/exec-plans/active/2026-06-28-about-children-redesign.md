@@ -94,7 +94,7 @@ About 나머지 4개 페이지(worship 예배 안내·location 오시는 길·vi
 
 - `src/services/about/index.ts` `getLocationPageData`에서 worship fetch 제거 — 소비처(location page)가 더 이상 안 쓰는 일회성 정리다. 레이어·캐시·인증 정책 변화 없음. ADR 불필요.
 - `src/services/about/index.ts` `getVisionPageData` 함수 제거 — vision page가 정적이 되며 유일 소비처가 사라진 dead export 정리(knip 신규 경고 방지). 레이어·캐시·인증 정책 변화 없음. ADR 불필요.
-- `new_family_registrations` 테이블 + `new-family.action.ts` + `new-family-service.ts` — **ADR 권장(후속)**. 이 저장소 첫 익명 공개 write 패턴(기존 액션은 전부 admin 인증)이고, RLS를 anon insert만 허용·읽기 차단으로 잡은 보안 결정이라 앞으로 다른 공개 폼(기도 요청·문의 등)이 따를 재사용 패턴이다. 결정 맥락은 D7·마이그레이션 주석에 기록했고, 정식 ADR(`public-anonymous-write-rls`)은 사용자 승인 시 작성한다.
+- `new_family_registrations` 테이블 + `new-family.action.ts` + `new-family-service.ts` — **ADR 작성 완료(0019)**. 이 저장소 첫 익명 공개 write 패턴(기존 액션은 전부 admin 인증)이고, RLS를 anon insert만 허용·읽기 차단으로 잡은 보안 결정이라 앞으로 다른 공개 폼(기도 요청·문의 등)이 따를 재사용 패턴이다. 정식 ADR로 작성함: `docs/decisions/0019-public-anonymous-write-rls.md` (Accepted).
 
 ## 후속 작업
 
@@ -126,10 +126,6 @@ About 나머지 4개 페이지(worship 예배 안내·location 오시는 길·vi
   - 이유: 1차 범위는 수집까지. admin 열람 화면은 별도 작업
   - 다음 기준: admin 페이지에 등록 목록 추가 시 (service_role 또는 admin select 정책)
   - 기록 위치: 없음
-- 정식 ADR `public-anonymous-write-rls` 작성 — 첫 익명 공개 write + RLS 패턴 문서화
-  - 이유: 앞으로 다른 공개 폼이 따를 재사용 패턴 (D7·ADR 판단)
-  - 다음 기준: 사용자 승인 시 `node scripts/start-adr.mjs public-anonymous-write-rls`
-  - 기록 위치: D7 + 마이그레이션 주석
 
 ---
 
