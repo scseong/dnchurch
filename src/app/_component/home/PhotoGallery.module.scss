@@ -38,15 +38,15 @@
 }
 
 .worship {
-  background: linear-gradient(160deg, $home-gold-deep, $home-gold);
+  background: linear-gradient(160deg, $home-accent-hover, $home-accent);
 }
 
 .fellowship {
-  background: linear-gradient(160deg, $home-gold, $home-gold-strong);
+  background: linear-gradient(160deg, $home-accent, $home-accent-hover);
 }
 
 .nextgen {
-  background: linear-gradient(160deg, $home-gold-strong, $home-gold-deep);
+  background: linear-gradient(160deg, $home-accent-hover, $home-accent);
 }
 
 .label {

@@ -1,41 +1,42 @@
 // ════════════════════════════════════════════
-// HOME (warm mockup tone) — 홈 + 공용 레이아웃 + About(교회 소개) 톤 토큰
-// claude.ai/design 디자인 레퍼런스 목업의 따뜻한 골드/크림 톤.
-// 배경은 "한빛교회 - 교회 소개" 레퍼런스 톤(#f4f0e6 + glow #fcf9f2)에 맞춤.
+// HOME (warm tone) — 홈 + 공용 레이아웃 + About(교회 소개) 톤 토큰
+// 사용자 제공 브라운 팔레트(2026-06-28): 베이지 면 + 브라운 메인 액센트 + 골드 보조 장식.
 // globals 시스템(cool navy + 노란기 적은 중성 beige)과 별개.
-// 사용처: 홈 콘텐츠 모듈 + 공용 레이아웃 BottomNav·Header + About(교회 소개) 섹션 — 콘텐츠 전반에 크림 톤 적용(D9).
+// 사용처: 홈 콘텐츠 모듈 + 공용 레이아웃 BottomNav·Header·Footer + About(교회 소개) 섹션.
 // news·sermons·community 등 그 외 콘텐츠 본문에서는 쓰지 않는다.
 // (admin 전용 토큰과 같은 스코프 컨벤션: 네이밍 + 사용처로 스코프)
 // ════════════════════════════════════════════
 
 // ── Surface ──
-$home-bg: #f4f0e6; // 홈 페이지 배경 (웜 크림 — 교회 소개 톤)
-$home-bg-glow: #fcf9f2; // 배경 radial 하이라이트 (교회 소개 톤)
-$home-surface: #f6f3ec; // 큰 면
-$home-card: #fff; // 카드
-$home-card-soft: #faf8f2; // 옅은 정보 타일
-$home-tint: #efe6cf; // 골드 연한 면 (아이콘 원, notice 박스)
-$home-tint-card: #f2e8cf; // 골드 카드 면 (주보)
+$home-bg: #fafaf8; // 전체 배경 (Beige 50)
+$home-bg-glow: #ffffff; // 배경 radial 하이라이트
+$home-surface: #fafaf8; // 큰 면 = 페이지 배경
+$home-card: #ffffff; // 카드 (흰색 — 베이지 면 위 대비)
+$home-card-soft: #f7f2ea; // 옅은 정보 타일 (Ivory 100)
+$home-tint: #efe4d6; // 연한 강조 배경·배지 (Sand 200)
+$home-tint-card: #f1e7d0; // 골드 카드 면 (Gold 100)
 
-// ── Gold ──
-$home-gold: #93702e; // 기본 골드 (버튼·아이콘·로고·강조)
-$home-gold-hover: #7d5f26; // 골드 버튼 hover (한 단계 진하게)
-$home-gold-strong: #6e5016; // 진한 골드 (텍스트·배지·아이콘)
-$home-gold-deep: #5a4318; // 가장 진한 골드 (그라디언트 끝)
-$home-gold-on-tint: #5e4413; // 골드 면 위 제목 텍스트
+// ── Accent (brown — 메인: 버튼·링크·활성 메뉴) ──
+$home-accent: #7a6654; // 메인 액센트 (Brown 700)
+$home-accent-hover: #655343; // hover·active·브라운 그라디언트 끝 (Brown 800)
+
+// ── Gold (보조 장식: 작은 아이콘·점·강조선·작은 텍스트) ──
+$home-gold: #b89a5e; // 작은 장식·아이콘 (Gold 500)
+$home-gold-deep: #9f8247; // gold hover·강조선 (Gold 600)
+$home-gold-strong: #7a6236; // 작은 텍스트·배지·점·데이터 강조 (Gold 700)
+$home-gold-on-tint: #7a6236; // 골드·틴트 면 위 제목
 
 // ── Border ──
-$home-border: #efe7df; // 중성 카드 테두리
-$home-border-divider: #f1eae2; // 옅은 구분선
-$home-border-gold: #e4d3a6; // 골드 카드 테두리
+$home-border: #e2d8ca; // 카드 테두리 (Stone 300)
+$home-border-divider: #ece4d8; // 옅은 구분선
+$home-border-gold: #e4d3a6; // 골드 배지 테두리
 
 // ── Text ──
-$home-text: #23271f; // 제목·본문 (웜 다크)
-$home-text-sub: #62665c; // 보조 텍스트
-$home-text-muted: #94968c; // 라벨·메타
+$home-text: #2a241d; // 본문·제목 (Charcoal 900)
+$home-text-sub: #70665a; // 보조 텍스트 (Taupe 600)
+$home-text-muted: #9a826d; // 라벨·메타 (Brown 300)
 
-// ── On dark / gold ──
-$home-cream-text: #fbf4ea; // 다크·골드 면 위 본문
+// ── On dark / brown / gold ──
+$home-cream-text: #fbf4ea; // 다크·브라운·골드 면 위 본문
 $home-eyebrow: #ecd6ab; // 다크·골드 면 위 eyebrow
 $home-eyebrow-ref: #ecd29a; // 인용 출처
-$home-cream-btn: #f7efe7; // 히어로 크림 버튼 면

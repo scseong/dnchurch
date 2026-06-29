@@ -60,13 +60,13 @@
   flex-shrink: 0;
   padding: $padding-control;
   border-radius: $radius-xs;
-  background-color: $home-gold;
+  background-color: $home-accent;
   color: $home-cream-text;
   font-size: $font-size-13;
   font-weight: $font-weight-semibold;
   white-space: nowrap;
 
-  @include hover-bg-shift($home-gold-hover);
+  @include hover-bg-shift($home-accent-hover);
 
   // 좁은 폰에서 줄바꿈 시 버튼을 전체폭으로 — 텍스트 압박/깨짐 방지
   @include respond($breakpoint-mobile) {

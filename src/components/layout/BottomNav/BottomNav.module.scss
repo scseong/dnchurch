@@ -63,9 +63,9 @@
   line-height: $line-height-reset;
 }
 
-// active = 홈 골드 + bold label + bolder icon (목업 하단탭). 홈 톤과 일치.
+// active = 브라운 메인 액센트 + bold label + bolder icon (목업 하단탭). 홈 톤과 일치.
 .active {
-  color: $home-gold-strong;
+  color: $home-accent;
 
   .tab_label {
     font-weight: $font-weight-bold;
