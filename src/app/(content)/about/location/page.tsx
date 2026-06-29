@@ -101,9 +101,6 @@ export default async function Directions() {
                 <span className={styles.row_body}>
                   <span className={clsx(styles.row_value, styles.row_value_num)}>{phone}</span>
                 </span>
-                <a href={`tel:${phone}`} className={styles.chip}>
-                  통화
-                </a>
               </div>
 
               <div className={styles.row}>
@@ -111,9 +108,6 @@ export default async function Directions() {
                 <span className={styles.row_body}>
                   <span className={clsx(styles.row_value, styles.row_value_break)}>{email}</span>
                 </span>
-                <CopyChip value={email} toast="이메일 주소가 복사되었습니다">
-                  복사
-                </CopyChip>
               </div>
 
               <div className={styles.row}>
