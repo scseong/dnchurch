@@ -1,9 +1,12 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
+import clsx from 'clsx';
+import { LuChevronRight } from 'react-icons/lu';
 import LayoutContainer from '@/components/layout/container/LayoutContainer';
 import { EmptyState } from '@/components/ui';
 import { OPEN_GRAPH_BASE } from '@/config/seo';
 import { getWorshipPageData } from '@/services/about';
+import AboutTabNav from '../_component/AboutTabNav';
 import styles from './page.module.scss';
 
 export const metadata: Metadata = {
@@ -18,34 +21,17 @@ export const metadata: Metadata = {
   }
 };
 
-const WORSHIP_STATEMENT = {
-  title: '우리가 드리는 예배',
-  quote: '하나님은 영이시니 예배하는 자가 영과 진리로 예배할지니라',
-  quoteRef: '요한복음 4:24',
-  desc: '대구동남교회는 말씀과 기도, 찬양을 중심으로 모든 세대가 함께 예배합니다.'
-};
-
-// 그룹별 정적 라벨 (페이지 디자인 — DB에 없음)
+// 그룹별 정적 라벨 (페이지 디자인 — DB에 없음). 목업 카드 제목과 일치.
 const GROUP_META = {
-  sunday: { en: 'SUNDAY', label: '주일에 함께 모이는 예배' },
-  weekday: { en: 'WEEKDAY', label: '주중에 드리는 기도회' },
+  sunday: { label: '주일 예배' },
+  weekday: { label: '주중 예배·기도회' },
   school: {
-    en: 'SCHOOL',
-    label: '자녀와 함께',
-    cta: '자세히 보기',
+    label: '다음세대 예배',
+    cta: '다음세대 페이지 보기',
+    ctaSub: '유치부부터 청년부까지, 자녀 세대 예배 안내',
     ctaHref: '/next-gen'
   }
 } as const;
-
-const WELCOME = {
-  greeting: '처음 오신 분께',
-  guide:
-    '주일낮예배는 오전 11시, 대예배실에서 드립니다. 예배 10분 전까지 오시면 안내를 받으실 수 있습니다.',
-  ctas: [
-    { label: '오시는 길', href: '/about/location' },
-    { label: '새가족 안내', href: '/about/welcome' }
-  ]
-};
 
 export default async function Worship() {
   const { groups } = await getWorshipPageData();
@@ -57,78 +43,49 @@ export default async function Worship() {
   ];
 
   return (
-    <LayoutContainer className={styles.container}>
-      {/* 1. 우리가 드리는 예배 */}
-      <section className={styles.statement}>
-        <div className={styles.statement_head}>
-          <h2 className={styles.statement_title}>{WORSHIP_STATEMENT.title}</h2>
-          <span className={styles.statement_underline} aria-hidden="true" />
-        </div>
-        <div className={styles.statement_body}>
-          <blockquote className={styles.statement_quote}>
-            “{WORSHIP_STATEMENT.quote}”
-          </blockquote>
-          <p className={styles.statement_ref}>{WORSHIP_STATEMENT.quoteRef}</p>
-          <p className={styles.statement_desc}>{WORSHIP_STATEMENT.desc}</p>
-        </div>
-      </section>
-
-      {/* 2. 카드 그리드 */}
-      <section className={styles.cards_grid}>
-        {worshipGroups.map((group) => (
-          <article key={group.id} className={styles.card} data-type={group.id}>
-            <header className={styles.card_head}>
-              <div className={styles.card_head_meta}>
-                <p className={styles.card_eyebrow}>{group.en}</p>
-                <h3 className={styles.card_title}>{group.label}</h3>
+    <div className={styles.surface}>
+      <h1 className={styles.sr_only}>예배 안내</h1>
+      <AboutTabNav />
+      <LayoutContainer body>
+        <div className={styles.page}>
+          {worshipGroups.map((group) => (
+            <section key={group.id} className={styles.section}>
+              <div className={styles.section_head}>
+                <h2 className={styles.section_title}>{group.label}</h2>
               </div>
+              {group.items.length > 0 ? (
+                <div className={styles.card}>
+                  {group.items.map((item) => (
+                    <div key={item.id} className={styles.row}>
+                      <div className={styles.row_main}>
+                        <p className={styles.name_line}>
+                          <span className={clsx(styles.name, item.is_featured && styles.name_featured)}>
+                            {item.name}
+                          </span>
+                          {item.age_group && <span className={styles.age}>{item.age_group}</span>}
+                        </p>
+                        <p className={styles.place}>{item.location}</p>
+                      </div>
+                      <p className={styles.time}>{item.time}</p>
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <EmptyState title="예배 일정 준비 중" size="compact" />
+              )}
               {'cta' in group && (
-                <Link href={group.ctaHref} className={styles.card_cta}>
-                  {group.cta}
-                  <span aria-hidden="true">→</span>
+                <Link href={group.ctaHref} className={styles.cta_button}>
+                  <span className={styles.cta_body}>
+                    <span className={styles.cta_title}>{group.cta}</span>
+                    <span className={styles.cta_sub}>{group.ctaSub}</span>
+                  </span>
+                  <LuChevronRight className={styles.cta_chevron} aria-hidden />
                 </Link>
               )}
-            </header>
-            {group.items.length > 0 ? (
-              <ul className={styles.schedule_list}>
-                {group.items.map((item) => (
-                  <li key={item.id} className={styles.schedule_row}>
-                    <div className={styles.schedule_meta}>
-                      <p className={styles.schedule_name}>
-                        <span>{item.name}</span>
-                        {item.age_group && (
-                          <span className={styles.schedule_age}>{item.age_group}</span>
-                        )}
-                      </p>
-                      <p className={styles.schedule_place}>{item.location}</p>
-                    </div>
-                    <p className={styles.schedule_time}>{item.time}</p>
-                  </li>
-                ))}
-              </ul>
-            ) : (
-              <EmptyState title="예배 일정 준비 중" size="compact" />
-            )}
-          </article>
-        ))}
-      </section>
-
-      {/* 3. 처음 오신 분께 */}
-      <section className={styles.welcome}>
-        <div className={styles.welcome_text}>
-          <h3 className={styles.welcome_title}>{WELCOME.greeting}</h3>
-          <p className={styles.welcome_guide}>{WELCOME.guide}</p>
-        </div>
-        <ul className={styles.welcome_ctas}>
-          {WELCOME.ctas.map((cta) => (
-            <li key={cta.label}>
-              <Link href={cta.href} className={styles.welcome_cta}>
-                {cta.label}
-              </Link>
-            </li>
+            </section>
           ))}
-        </ul>
-      </section>
-    </LayoutContainer>
+        </div>
+      </LayoutContainer>
+    </div>
   );
 }
