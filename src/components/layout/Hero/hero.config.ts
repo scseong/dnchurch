@@ -19,9 +19,9 @@ const HERO_META: Record<string, HeroMeta> = {
 /**
  * 레이아웃 자동 Hero를 끄는 경로.
  * - /about: hub가 자체 다크 hero를 직접 렌더한다(중복 방지).
- * - /about/pastor·/about/worship: 목업 재설계 — Hero 없이 in-page warm 탭 내비 + 카드로 구성한다(about-warm-redesign·about-children-redesign).
+ * - /about/pastor·/about/worship·/about/location: 목업 재설계 — Hero 없이 in-page warm 탭 내비 + 카드로 구성한다(about-warm-redesign·about-children-redesign).
  */
-const SELF_HERO_PATHS = new Set(['/about', '/about/pastor', '/about/worship']);
+const SELF_HERO_PATHS = new Set(['/about', '/about/pastor', '/about/worship', '/about/location']);
 
 /**
  * pathname → HeroMeta 해석

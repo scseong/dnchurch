@@ -132,9 +132,6 @@ export const getChurchIdentityData = async (): Promise<{ settings: SiteSettings 
 };
 
 export const getLocationPageData = async () => {
-  const [settings, worship] = await Promise.all([
-    getSiteSettings([...LOCATION_SETTING_KEYS]),
-    getWorshipGroupsSafe()
-  ]);
-  return { settings, worship };
+  const settings = await getSiteSettings([...LOCATION_SETTING_KEYS]);
+  return { settings };
 };

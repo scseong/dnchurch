@@ -132,7 +132,7 @@ const SPECIAL_PAGES: Record<string, string> = {
 
 // 목업 재설계로 자체 in-page 섹션 탭(AboutTabNav)을 렌더하는 About 페이지.
 // 헤더는 '교회 소개' 타이틀 + 뒤로가기로 두고, 형제 탭은 끈다(AboutTabNav가 대체).
-const ABOUT_REDESIGNED_ROUTES = new Set(['/about/pastor', '/about/worship']);
+const ABOUT_REDESIGNED_ROUTES = new Set(['/about/pastor', '/about/worship', '/about/location']);
 
 /** 모바일 헤더 타이틀 + 뒤로가기 상태 해석 */
 export function resolveMobileHeader(pathname: string): { title: string; showBack: boolean } {
