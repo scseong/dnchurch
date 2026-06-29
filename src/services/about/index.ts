@@ -7,15 +7,6 @@ import { getWorshipScheduleGroups } from '@/services/worship';
 import type { FaqItem, GreetingParagraph, HistoryItem } from '@/types/about';
 import type { StaffType, WorshipScheduleType } from '@/types/common';
 
-// site_settings 키 모음 — 페이지별 fetch 범위
-const HUB_SETTING_KEYS = [
-  'church_address',
-  'church_phone',
-  'church_zipcode',
-  'opening_hours_sunday',
-  'directions_subway'
-] as const;
-
 // 홈 JSON-LD 구조화 데이터용 — 식별·위치에 필요한 최소 키만. location 페이지의 worship-groups fetch를 안 딸려오게 분리.
 const CHURCH_IDENTITY_SETTING_KEYS = [
   'church_phone',
@@ -86,17 +77,6 @@ const toPastorData = (row: StaffType | null): PastorData | null => {
 };
 
 // ─── 페이지별 fetch ────────────────────────────────────────────────────────
-
-export const getHubPageData = async (): Promise<{
-  history: HistoryItem[];
-  settings: SiteSettings;
-}> => {
-  const [history, settings] = await Promise.all([
-    getSiteCollection<HistoryItem>('church_history'),
-    getSiteSettings([...HUB_SETTING_KEYS])
-  ]);
-  return { history, settings };
-};
 
 export const getPastorPageData = async (): Promise<{
   pastor: PastorData | null;
