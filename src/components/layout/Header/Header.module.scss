@@ -31,7 +31,7 @@ $indicator-height: 0.2rem;
   align-items: center;
   justify-content: space-between;
   gap: $spacing-10;
-  height: 5.4rem;
+  height: $app-header-height;
   padding: 0 $container-padding;
 }
 
@@ -102,9 +102,11 @@ $indicator-height: 0.2rem;
 .mobile_menu {
   display: flex;
   align-items: center;
-  justify-content: flex-end;
-  width: 4rem;
-  height: 4rem;
+  justify-content: center;
+  width: $icon-button-size;
+  height: $icon-button-size;
+  // 아이콘은 콘텐츠 우측 가장자리에 맞추되, focus·클릭 영역은 아이콘 중심 정사각형으로 둔다.
+  margin-right: calc(-1 * $spacing-10);
   color: $txt-primary;
   flex-shrink: 0;
 
@@ -132,9 +134,11 @@ $indicator-height: 0.2rem;
 .mobile_back {
   display: flex;
   align-items: center;
-  justify-content: flex-start;
-  min-width: 4.2rem;
-  min-height: 4.2rem;
+  justify-content: center;
+  width: $icon-button-size;
+  height: $icon-button-size;
+  // 아이콘은 콘텐츠 좌측 가장자리에 맞추되, focus·클릭 영역은 아이콘 중심 정사각형으로 둔다.
+  margin-left: calc(-1 * $spacing-10);
   flex-shrink: 0;
 
   svg {
@@ -147,11 +151,11 @@ $indicator-height: 0.2rem;
 .mobile_title {
   flex: 1;
   min-width: 0;
-  font-size: $font-size-16;
+  font-size: $font-size-18;
   font-weight: $font-weight-bold;
   color: $txt-primary;
   letter-spacing: $letter-spacing-body;
-  text-align: left;
+  text-align: center;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -166,7 +170,7 @@ $indicator-height: 0.2rem;
 
 .mobile_tabs {
   position: sticky;
-  top: 5.4rem;
+  top: $app-header-height;
   z-index: calc($z-header - 1);
   overflow-x: auto;
   scrollbar-width: none;
