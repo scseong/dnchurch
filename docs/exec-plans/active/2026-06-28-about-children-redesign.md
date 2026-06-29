@@ -50,7 +50,7 @@ About 나머지 4개 페이지(worship 예배 안내·location 오시는 길·vi
 - [x] 2. Codex 계획 검증 (PASS_WITH_DECISION_LOG)
 - [x] 3. worship 구현 → 커밋 `014f3af` — 세부 디자인은 사용자 라이브 수정으로 plan과 상이(카드 무그림자·연령 알약 배지·다음세대 풀폭 CTA·브라운 시간 등)
 - [x] 4. location 구현(목업 재스킨) → 검증(아래 Claude 2차 표) → 커밋 `e896fca`
-- [ ] 5. vision 구현 → Chrome 검증 → 커밋
+- [x] 5. vision 구현(목업 재스킨) → 검증(아래 Claude 2차 표)·Chrome 육안 → 커밋 대기
 - [ ] 6. welcome 구현 → Chrome 검증 → 커밋
 
 > 진행 중 함께 나온 부수 작업(별도 커밋): 워옴 팔레트 브라운 전환 `49caed9`, 모바일 헤더 정리 `4971400`, LayoutContainer 본문 패딩 일원화 `c6298d0`, 인사말 페이지 톤 정렬 `e6d9627`, 교회 소개 탭 내비 active 라벨 진하게 `c095d11`. 팔레트 최종값은 브라운 `#7a6654`·카드 흰색.
@@ -77,10 +77,15 @@ About 나머지 4개 페이지(worship 예배 안내·location 오시는 길·vi
   - 문제: 목업 location은 예배시간표 대신 연락처·대중교통·주차·층별 안내로 재구성됐다. 기존 page엔 WORSHIP SCHEDULE 블록이 있었고, 층별 안내는 site_settings에 데이터가 없다.
   - 해결: 예배시간표 블록을 뺐다 — 예배 시간은 전용 '예배 안내' 탭에 이미 있어 중복이고, `getLocationPageData`의 worship fetch도 함께 지워 안 쓰는 쿼리를 없앴다. 층별 안내는 처음엔 보류했으나 사용자 요청으로 넣고 사용자가 준 실데이터로 채웠다 — 본관은 `MAIN_BUILDING_FLOORS`(3 유아실·2 대예배실·1 소예배실·카페·사무실·B1 식당), 교육관은 층 구분 없는 공간이라 `EDUCATION_ROOMS`(유초등부실·청년부실·안나실)에 'G'(Ground) 배지로. 주차는 `DEFAULT_PARKING`(약 10대) 상수를 site_settings 미입력 시 fallback으로 뒀다. 연락처·대중교통은 기존 실데이터·'준비 중' fallback을 그대로 배선했다.
   - 결과: 목업 시각 언어(지도+길찾기 브라운 버튼·연락처 칩 행·warm 카드·층별 배지 목록)를 실데이터로 재현하고, 예배 시간 중복과 쓸데없는 데이터 조회를 제거했다. 지도 마커는 기본 Kakao 핀 대신 `CustomOverlayMap`으로 교회 이름 라벨 + 교회 심볼(LuChurch) 브라운 핀을 직접 그려 교회 위치임을 분명히 했다.
+- **D5 — vision을 목업대로 히어로 + 비전 카드 3개로 줄이고 5단락 선언문·이미지·연혁은 뺀다**
+  - 문제: 목업 vision 패널은 비전 선언 히어로 + 세 가지 비전 카드뿐인데, 기존 page엔 5단락 VISION_STATEMENT·전경 이미지·HISTORY 타임라인까지 있었다.
+  - 해결: 히어로(슬로건을 브라운 그라디언트 + serif 선언으로)와 비전 기둥 3개(번호 배지 + 제목 + serif 본문, 아이콘·영문 라벨 제거)만 남겼다. 5단락 선언문·이미지는 목업에 없는 일반 산문이라 뺐고, HISTORY는 인사말(pastor) 탭의 '교회 이력'과 같은 `church_history`라 중복이라 뺐다. 그 결과 `getVisionPageData`(history만 반환)가 안 쓰여 page는 fetch 없는 정적 페이지가 됐고 해당 service 함수도 지웠다.
+  - 결과: vision이 목업과 같은 짧고 또렷한 구조가 됐고, 인사말과 겹치던 연혁 중복이 사라졌다.
 
 ## ADR 판단
 
 - `src/services/about/index.ts` `getLocationPageData`에서 worship fetch 제거 — 소비처(location page)가 더 이상 안 쓰는 일회성 정리다. 레이어·캐시·인증 정책 변화 없음. ADR 불필요.
+- `src/services/about/index.ts` `getVisionPageData` 함수 제거 — vision page가 정적이 되며 유일 소비처가 사라진 dead export 정리(knip 신규 경고 방지). 레이어·캐시·인증 정책 변화 없음. ADR 불필요.
 
 ## 후속 작업
 
@@ -88,9 +93,9 @@ About 나머지 4개 페이지(worship 예배 안내·location 오시는 길·vi
   - 이유: dead code 정리는 스타일 재디자인과 별개 관심사 (D3)
   - 다음 기준: worship 재디자인 커밋 후 별도 Chore 커밋
   - 기록 위치: `docs/research/FEATURE_SPEC.md`에 이미 tech-debt 후보로 기록됨
-- vision 설립연도 불일치 정리 — 메타 '2025 목표' / church_history '1952' / 본문 VISION_STATEMENT '1958' 3곳 상충
-  - 이유: 실제 설립연도를 모름. 스타일 작업 중 임의로 한 값으로 통일하면 사실을 지어내는 셈 (지어내지 않음 원칙)
-  - 다음 기준: 교회에 실제 연도 확인 후
+- vision 메타 description 불일치 — `metadata.description`이 '2025년 교회목표 - 주님의 기도를 배우는 교회'인데 페이지엔 슬로건 '복음 위에 서서, 이웃과 함께 자라는 교회'가 뜬다 (재디자인 때 VISION_STATEMENT '1958' 단락은 제거돼 그 충돌은 해소)
+  - 이유: 실제 교회목표·연도를 모름. SEO 문자열이라 임의 변경하면 사실을 지어내는 셈 (지어내지 않음 원칙)
+  - 다음 기준: 교회에 실제 비전 문구·연도 확인 후 메타 갱신
   - 기록 위치: 없음 — 사용자에게 보고
 - location 전화·이메일·우편번호 = admin 입력 전까지 '준비 중'
   - 이유: site_settings TODO placeholder, 실데이터 없음
@@ -128,6 +133,8 @@ About 나머지 4개 페이지(worship 예배 안내·location 오시는 길·vi
 | 2차 | `npx eslint` (page·CopyChip·service·navigation·hero.config) | ✅ exit 0 |
 | 2차 | `npx stylelint` (location page.module.scss) | ✅ exit 0 |
 | 2차 | dev `/about/location` curl | ✅ HTTP 200<br>길찾기·대중교통·주차·통화·층별 안내(본관·교육관) 마커 렌더<br>WORSHIP SCHEDULE 제거 확인 |
+| 2차 | vision `tsc·eslint·stylelint` | ✅ exit 0 (page·service·navigation·hero.config) |
+| 2차 | dev `/about/vision` curl + Chrome | ✅ - HTTP 200<br>- OUR VISION·세 가지 비전·번호 카드 3개 렌더<br>- HISTORY·VISION STATEMENT 제거 확인<br>- 브라운 그라디언트 히어로·serif 본문 Chrome 육안 확인 |
 
 ## 검증 이력
 
