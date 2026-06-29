@@ -3,3 +3,14 @@
   margin: 0 auto;
   max-width: $container-max;
 }
+
+// 페이지 본문 상하 패딩 — worship 기준 SSOT. `body` 플래그를 준 페이지에 일률 적용한다.
+.body {
+  padding-top: $spacing-24;
+  padding-bottom: $spacing-24;
+
+  @include respond-up($breakpoint-pc-sm) {
+    padding-top: $spacing-64;
+    padding-bottom: $spacing-64;
+  }
+}
