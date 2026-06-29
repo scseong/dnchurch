@@ -54,7 +54,7 @@
   border: 0.1rem solid $home-border;
   border-radius: $radius-circle;
   font-size: $font-size-12;
-  font-weight: $font-weight-bold;
+  font-weight: $font-weight-semibold;
   color: $home-text;
   white-space: nowrap;
   box-shadow: $shadow-sm;
@@ -152,7 +152,6 @@
   min-width: 0;
   display: flex;
   flex-direction: column;
-  gap: $spacing-2;
 }
 
 .row_value {
@@ -180,7 +179,6 @@
   display: block;
   font-size: $font-size-13;
   font-weight: $font-weight-medium;
-  color: $home-text-sub;
   line-height: $line-height-relaxed;
   word-break: keep-all;
 }
@@ -213,7 +211,6 @@
 .parking_text {
   font-size: $font-size-13;
   font-weight: $font-weight-regular;
-  color: $home-text-sub;
   line-height: $line-height-relaxed;
   word-break: keep-all;
 
@@ -270,7 +267,7 @@
 }
 
 .floor_label {
-  font-size: $font-size-14;
+  font-size: $font-size-13;
   font-weight: $font-weight-semibold;
   color: $home-text;
   word-break: keep-all;
