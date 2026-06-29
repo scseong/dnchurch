@@ -116,11 +116,6 @@ export const getWelcomePageData = async (): Promise<{ faq: FaqItem[] }> => {
   return { faq };
 };
 
-export const getVisionPageData = async (): Promise<{ history: HistoryItem[] }> => {
-  const history = await getSiteCollection<HistoryItem>('church_history');
-  return { history };
-};
-
 export const getWorshipPageData = async () => {
   const groups = await getWorshipGroupsSafe();
   return { groups };
