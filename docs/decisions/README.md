@@ -47,5 +47,7 @@
 | [0015](0015-page-state-seo-policy.md) | 페이지 상태·SEO 정책: 유형별 상태 파일 최소 요구 + news 디테일 JSON-LD 확대 | Accepted | 2026-06-02 |
 | [0016](0016-server-action-conventions.md) | Server Action 공통 패턴 (위치·검증·반환·revalidate) | Accepted | 2026-06-12 |
 | [0017](0017-figma-sot-design-to-code.md) | 디자인 SoT를 Figma로 옮기고 디자인투코드 채택, 무료 경로부터 검증 | Accepted | 2026-06-13 |
+| [0018](0018-padding-token-standardization.md) | 카드·면 padding을 대칭 시맨틱 토큰 3단계로 고정 | Accepted | 2026-06-27 |
+| [0019](0019-public-anonymous-write-rls.md) | 익명 공개 write를 서버 액션 + anon-only RLS로 처리한다 | Accepted | 2026-06-29 |
 
 <!-- last-audit: 2026-05-01 -->

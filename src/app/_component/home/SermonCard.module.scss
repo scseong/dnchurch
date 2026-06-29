@@ -16,7 +16,7 @@
   aspect-ratio: 16 / 9;
   display: grid;
   place-items: center;
-  background: linear-gradient(150deg, $home-gold-deep, $home-gold-strong);
+  background: linear-gradient(150deg, $home-accent, $home-accent-hover);
 
   img {
     position: absolute;

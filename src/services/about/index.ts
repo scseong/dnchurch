@@ -7,15 +7,6 @@ import { getWorshipScheduleGroups } from '@/services/worship';
 import type { FaqItem, GreetingParagraph, HistoryItem } from '@/types/about';
 import type { StaffType, WorshipScheduleType } from '@/types/common';
 
-// site_settings 키 모음 — 페이지별 fetch 범위
-const HUB_SETTING_KEYS = [
-  'church_address',
-  'church_phone',
-  'church_zipcode',
-  'opening_hours_sunday',
-  'directions_subway'
-] as const;
-
 // 홈 JSON-LD 구조화 데이터용 — 식별·위치에 필요한 최소 키만. location 페이지의 worship-groups fetch를 안 딸려오게 분리.
 const CHURCH_IDENTITY_SETTING_KEYS = [
   'church_phone',
@@ -87,32 +78,22 @@ const toPastorData = (row: StaffType | null): PastorData | null => {
 
 // ─── 페이지별 fetch ────────────────────────────────────────────────────────
 
-export const getHubPageData = async (): Promise<{
+export const getPastorPageData = async (): Promise<{
+  pastor: PastorData | null;
   history: HistoryItem[];
-  settings: SiteSettings;
 }> => {
-  const [history, settings] = await Promise.all([
-    getSiteCollection<HistoryItem>('church_history'),
-    getSiteSettings([...HUB_SETTING_KEYS])
+  const [staffResult, history] = await Promise.all([
+    getActiveStaff(),
+    getSiteCollection<HistoryItem>('church_history')
   ]);
-  return { history, settings };
-};
-
-export const getPastorPageData = async (): Promise<{ pastor: PastorData | null }> => {
-  const result = await getActiveStaff();
-  if (result.error) console.error('[about] getActiveStaff 조회 실패', result.error);
-  const rows = (result.data ?? []) as StaffType[];
-  return { pastor: toPastorData(findSeniorPastor(rows)) };
+  if (staffResult.error) console.error('[about] getActiveStaff 조회 실패', staffResult.error);
+  const rows = (staffResult.data ?? []) as StaffType[];
+  return { pastor: toPastorData(findSeniorPastor(rows)), history };
 };
 
 export const getWelcomePageData = async (): Promise<{ faq: FaqItem[] }> => {
   const faq = await getSiteCollection<FaqItem>('welcome_faq');
   return { faq };
-};
-
-export const getVisionPageData = async (): Promise<{ history: HistoryItem[] }> => {
-  const history = await getSiteCollection<HistoryItem>('church_history');
-  return { history };
 };
 
 export const getWorshipPageData = async () => {
@@ -126,9 +107,6 @@ export const getChurchIdentityData = async (): Promise<{ settings: SiteSettings 
 };
 
 export const getLocationPageData = async () => {
-  const [settings, worship] = await Promise.all([
-    getSiteSettings([...LOCATION_SETTING_KEYS]),
-    getWorshipGroupsSafe()
-  ]);
-  return { settings, worship };
+  const settings = await getSiteSettings([...LOCATION_SETTING_KEYS]);
+  return { settings };
 };

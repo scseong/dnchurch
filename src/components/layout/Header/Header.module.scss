@@ -31,7 +31,7 @@ $indicator-height: 0.2rem;
   align-items: center;
   justify-content: space-between;
   gap: $spacing-10;
-  height: 5.4rem;
+  height: $app-header-height;
   padding: 0 $container-padding;
 }
 
@@ -90,7 +90,7 @@ $indicator-height: 0.2rem;
   background-color: $accent;
   color: $txt-inverse;
   font-size: $font-size-13;
-  font-weight: $font-weight-bold;
+  font-weight: $font-weight-semibold;
   white-space: nowrap;
   transition: background-color $transition-duration-normal $transition-easing-default;
 
@@ -103,8 +103,10 @@ $indicator-height: 0.2rem;
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 4rem;
-  height: 4rem;
+  width: $icon-button-size;
+  height: $icon-button-size;
+  // 아이콘은 콘텐츠 우측 가장자리에 맞추되, focus·클릭 영역은 아이콘 중심 정사각형으로 둔다.
+  margin-right: calc(-1 * $spacing-10);
   color: $txt-primary;
   flex-shrink: 0;
 
@@ -133,8 +135,10 @@ $indicator-height: 0.2rem;
   display: flex;
   align-items: center;
   justify-content: center;
-  min-width: 4.2rem;
-  min-height: 4.2rem;
+  width: $icon-button-size;
+  height: $icon-button-size;
+  // 아이콘은 콘텐츠 좌측 가장자리에 맞추되, focus·클릭 영역은 아이콘 중심 정사각형으로 둔다.
+  margin-left: calc(-1 * $spacing-10);
   flex-shrink: 0;
 
   svg {
@@ -147,21 +151,26 @@ $indicator-height: 0.2rem;
 .mobile_title {
   flex: 1;
   min-width: 0;
-  font-size: $font-size-16;
+  font-size: $font-size-18;
   font-weight: $font-weight-bold;
   color: $txt-primary;
   letter-spacing: $letter-spacing-body;
-  text-align: left;
+  text-align: center;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+}
+
+// 목업 재설계 About 헤더 — 뒤로가기·메뉴 사이에서 타이틀 가운데 정렬
+.mobile_title_centered {
+  text-align: center;
 }
 
 // ── 하단 행: 형제 페이지 탭 (references/Greeting.jsx MSubTabs 일치) ──
 
 .mobile_tabs {
   position: sticky;
-  top: 5.4rem;
+  top: $app-header-height;
   z-index: calc($z-header - 1);
   overflow-x: auto;
   scrollbar-width: none;

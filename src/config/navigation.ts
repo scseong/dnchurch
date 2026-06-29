@@ -130,9 +130,22 @@ const SPECIAL_PAGES: Record<string, string> = {
   '/privacy-policy': '개인정보처리방침',
 };
 
+// 목업 재설계로 자체 in-page 섹션 탭(AboutTabNav)을 렌더하는 About 페이지.
+// 헤더는 '교회 소개' 타이틀 + 뒤로가기로 두고, 형제 탭은 끈다(AboutTabNav가 대체).
+export const ABOUT_REDESIGNED_ROUTES = new Set([
+  '/about/pastor',
+  '/about/worship',
+  '/about/location',
+  '/about/vision',
+  '/about/welcome'
+]);
+
 /** 모바일 헤더 타이틀 + 뒤로가기 상태 해석 */
 export function resolveMobileHeader(pathname: string): { title: string; showBack: boolean } {
   if (pathname === '/') return { title: '대구동남교회', showBack: false };
+
+  // 목업 재설계: About 교회 소개 화면은 헤더에 '교회 소개' 타이틀 + 뒤로가기로 둔다(목업 일치).
+  if (ABOUT_REDESIGNED_ROUTES.has(pathname)) return { title: '교회 소개', showBack: true };
 
   const special = SPECIAL_PAGES[pathname];
   if (special) return { title: special, showBack: false };
@@ -162,6 +175,9 @@ export function resolveMobileHeader(pathname: string): { title: string; showBack
 
 /** 현재 카테고리의 형제 탭 (children이 없으면 null) */
 export function resolveSiblingTabs(pathname: string): NavItem[] | null {
+  // 목업 재설계로 자체 in-page 섹션 탭(AboutTabNav)을 렌더하는 페이지는 헤더 형제 탭을 끈다(중복 방지).
+  if (ABOUT_REDESIGNED_ROUTES.has(pathname)) return null;
+
   for (const item of GNB_ITEMS) {
     if (!item.children?.length) continue;
     if (item.children.some((c) => isRouteMatch(pathname, c.href))) {

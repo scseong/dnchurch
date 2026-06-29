@@ -23,7 +23,7 @@
   flex-shrink: 0;
   font-size: $font-size-13;
   font-weight: $font-weight-semibold;
-  color: $home-gold-strong;
+  color: $home-accent;
   white-space: nowrap;
   transition: color $transition-duration-normal $transition-easing-default;
 
@@ -32,7 +32,7 @@
   }
 
   &:hover {
-    color: $home-gold;
+    color: $home-accent-hover;
 
     svg {
       transform: translateX(0.3rem);

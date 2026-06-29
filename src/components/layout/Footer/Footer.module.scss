@@ -22,7 +22,7 @@
   place-items: center;
   width: 2.8rem;
   height: 2.8rem;
-  background-color: $home-gold;
+  background-color: $home-accent;
   border-radius: $radius-s;
   color: $home-cream-text;
 
@@ -90,10 +90,10 @@
 .policy {
   font-size: $font-size-11;
   font-weight: $font-weight-semibold;
-  color: $home-gold-strong;
+  color: $home-accent;
   transition: color 0.2s;
 
   &:hover {
-    color: $home-gold;
+    color: $home-accent-hover;
   }
 }

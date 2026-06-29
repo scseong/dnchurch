@@ -4,9 +4,9 @@ $sidebar-width: 36rem;
 $tab-panel-min-height: 10rem;
 // 공유 시트 항목 최소 터치 영역 — 모바일 a11y 권장 타깃(≈48px) (토큰 없음·로컬)
 $share-item-min-height: 4.8rem;
-// 모바일 sticky 탭바 오프셋 = 모바일 헤더(.mobile_top) 높이. Header.module.scss의
-// 하위 sticky top:5.4rem 관례와 일치 — top:0이면 sticky 헤더(z-header) 뒤로 가려짐 (토큰 없음·로컬)
-$mobile-header-offset: 5.4rem;
+// 모바일 sticky 탭바 오프셋 = 모바일 헤더(.mobile_top) 높이 = $app-header-height SSOT.
+// top:0이면 sticky 헤더(z-header) 뒤로 가려짐
+$mobile-header-offset: $app-header-height;
 
 // ══════════════════════════════════════════
 // Layout

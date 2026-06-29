@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import LayoutContainer from '@/components/layout/container/LayoutContainer';
 import CloudinaryImage from '@/components/common/CloudinaryImage';
 import { getPastorPageData } from '@/services/about';
-import { OPEN_GRAPH_BASE } from '@/config/seo';
+import { CHURCH_INFO, OPEN_GRAPH_BASE } from '@/config/seo';
 import styles from './page.module.scss';
 
 export const metadata: Metadata = {
@@ -17,79 +17,126 @@ export const metadata: Metadata = {
 
 const GREETING_PLACEHOLDER = '담임목사 인사말이 곧 게시될 예정입니다. 잠시만 기다려 주세요.';
 
-export default async function PastorPage() {
-  const { pastor } = await getPastorPageData();
+// 합신 교단 이념 — 교단 공식 표어. CHURCH_INFO.legalName으로 소속 확인.
+const DENOMINATION_PRINCIPLES = [
+  { label: '바른 신학', ref: '딤전 6:3, 딤후 1:13' },
+  { label: '바른 교회', ref: '딤전 3:15' },
+  { label: '바른 생활', ref: '약 1:27' }
+];
 
-  const name = pastor?.name ?? 'OOO';
+export default async function PastorPage() {
+  const { pastor, history } = await getPastorPageData();
+
+  const name = pastor?.name ?? '준비 중';
   const title = pastor?.title ?? '담임목사';
-  const careerSource = pastor ? [...pastor.education, ...pastor.experience] : [];
-  const career = careerSource.length > 0 ? careerSource : ['준비 중'];
+  const career = pastor ? [...pastor.education, ...pastor.experience] : [];
   const greetingParagraphs =
     pastor && pastor.greetingParagraphs.length > 0
       ? pastor.greetingParagraphs
       : [GREETING_PLACEHOLDER];
+  const visibleHistory = history.filter((item): item is NonNullable<typeof item> => Boolean(item) && item.year !== 'TODO');
+  const signatureText = pastor ? `${title} ${name} 드림` : '대구동남교회 드림';
 
   return (
-    <LayoutContainer className={styles.container}>
-      <div className={styles.grid}>
-        {/* 좌측 (PC) / 상단 (Mobile): 사진 + 이름 + career 카드 */}
-        <aside className={styles.profile_block}>
-          <div className={styles.photo}>
-            {pastor?.imageUrl ? (
-              <CloudinaryImage
-                src={pastor.imageUrl}
-                alt={`${name} 담임목사`}
-                fill
-                sizes="(max-width: 768px) 100vw, 20rem"
-                style={{ objectFit: 'cover' }}
-              />
-            ) : (
-              <span aria-hidden="true">PASTOR PHOTO</span>
-            )}
-          </div>
-          <div>
-            <p className={styles.eyebrow}>SENIOR PASTOR</p>
-            <p className={styles.name_line}>
-              <span className={styles.name}>{name}</span>
-              <span className={styles.role}>{title}</span>
-            </p>
-          </div>
-          <section className={styles.career_card}>
-            <p className={styles.career_label}>CAREER</p>
-            <ul className={styles.career_list}>
-              {career.map((line, index) => (
-                <li key={index} className={styles.career_item}>
-                  <span className={styles.career_dot} aria-hidden="true" />
-                  {line}
-                </li>
+    <>
+      <h1 className={styles.sr_only}>인사말</h1>
+      <LayoutContainer body>
+        <div className={styles.page}>
+          {/* 담임목사 카드 + 인사말 */}
+          <article className={styles.pastor_card}>
+            <div className={styles.pastor_head}>
+              <div className={styles.photo_frame}>
+                <div className={styles.photo}>
+                  {pastor?.imageUrl ? (
+                    <CloudinaryImage
+                      src={pastor.imageUrl}
+                      alt={`${name} ${title}`}
+                      fill
+                      sizes="16rem"
+                      style={{ objectFit: 'cover' }}
+                    />
+                  ) : (
+                    <span aria-hidden="true">목사님 사진</span>
+                  )}
+                </div>
+              </div>
+              <p className={styles.role_label}>{title}</p>
+              <p className={styles.pastor_name}>{pastor ? `${name} 목사` : name}</p>
+            </div>
+
+            <div className={styles.divider} />
+
+            <div className={styles.greeting}>
+              {greetingParagraphs.map((paragraph, index) => (
+                <p key={index} className={styles.greeting_p}>
+                  {paragraph}
+                </p>
               ))}
-            </ul>
+            </div>
+
+            <p className={styles.signature}>{signatureText}</p>
+          </article>
+
+          {/* 목사님 약력 */}
+          {career.length > 0 && (
+            <section className={styles.section}>
+              <h2 className={styles.section_title}>목사님 약력</h2>
+              <div className={styles.list_card}>
+                {career.map((line, index) => (
+                  <div key={index} className={styles.list_row}>
+                    <span className={styles.dot} aria-hidden="true" />
+                    <span className={styles.list_text}>{line}</span>
+                  </div>
+                ))}
+              </div>
+            </section>
+          )}
+
+          {/* 교회 이력 */}
+          {visibleHistory.length > 0 && (
+            <section className={styles.section}>
+              <h2 className={styles.section_title}>교회 이력</h2>
+              <div className={styles.history_card}>
+                {visibleHistory.map((item, index) => (
+                  <div key={index} className={styles.history_row}>
+                    <span className={styles.history_year}>{item.year}</span>
+                    <div className={styles.history_main}>
+                      <span className={styles.history_dot} aria-hidden="true" />
+                      <p className={styles.history_text}>{item.text}</p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </section>
+          )}
+
+          {/* 교단 소개 */}
+          <section className={styles.section}>
+            <h2 className={styles.section_title}>교단 소개</h2>
+            <div className={styles.denom_card}>
+              <p className={styles.denom_text}>
+                {CHURCH_INFO.name}는 ‘
+                {DENOMINATION_PRINCIPLES.map((principle, index) => (
+                  <span key={principle.label}>
+                    <b className={styles.denom_strong}>{principle.label}</b>
+                    <span className={styles.denom_ref}> ({principle.ref})</span>
+                    {index < DENOMINATION_PRINCIPLES.length - 1 ? ', ' : ''}
+                  </span>
+                ))}
+                ’을 이념으로 성경적 개혁주의 신학을 따르는 교단에 속해 있습니다.
+              </p>
+              <div className={styles.denom_meta}>
+                <div className={styles.denom_meta_text}>
+                  <p className={styles.denom_label}>정식 명칭</p>
+                  <b className={styles.denom_name}>{CHURCH_INFO.legalName}</b>
+                </div>
+                {/* eslint-disable-next-line @next/next/no-img-element -- 정적 /public 브랜드 SVG(변환 불필요) */}
+                <img className={styles.denom_logo} src="/images/logo.svg" alt="대한예수교장로회(합신)" />
+              </div>
+            </div>
           </section>
-        </aside>
-
-        {/* 우측 (PC) / 본문 (Mobile): 인사말 + signature */}
-        <article className={styles.content}>
-          <h2 className={styles.lead}>
-            “복음 위에 서서,
-            <br />
-            이웃의 자리에서 함께 걷겠습니다”
-          </h2>
-
-          {greetingParagraphs.map((paragraph, index) => (
-            <p key={index} className={styles.paragraph}>
-              {paragraph}
-            </p>
-          ))}
-
-          <footer className={styles.signature}>
-            <p className={styles.sig_role}>대구동남교회 담임목사</p>
-            <p className={styles.sig_name}>
-              <span>{name}</span>
-              <span className={styles.sig_drim}>드림</span>
-            </p>
-          </footer>
-        </article>
-      </div>
-    </LayoutContainer>
+        </div>
+      </LayoutContainer>
+    </>
   );
 }

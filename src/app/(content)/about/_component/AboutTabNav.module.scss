@@ -1,0 +1,56 @@
+// ══════════════════════════════════════════
+// About 섹션 탭 내비 — 목업 탭 바를 라우트 이동 링크로.
+// 활성 = 현재 경로(usePathname). warm 톤(_home.scss) 적용 — About 스코프.
+// ══════════════════════════════════════════
+
+.nav {
+  position: sticky;
+  top: $app-header-height; // 모바일 헤더(.mobile_top) 높이 — 헤더 바로 아래에 고정
+  z-index: calc($z-header - 1);
+  background-color: $home-surface;
+  border-bottom: 0.1rem solid $home-border;
+
+  @include respond-up($header-breakpoint) {
+    top: $header-height-compact;
+  }
+
+  @include respond-up($breakpoint-pc-sm) {
+    top: $header-height;
+  }
+}
+
+.list {
+  display: flex;
+  list-style: none;
+  overflow-x: auto;
+  scrollbar-width: none;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+.item {
+  flex: 1;
+}
+
+.link {
+  display: block;
+  padding: $spacing-16 0 $spacing-10;
+  font-size: $font-size-13;
+  font-weight: $font-weight-semibold;
+  color: $home-text-sub;
+  text-align: center;
+  text-decoration: none;
+  border-bottom: 0.25rem solid transparent;
+
+  @include hover-color-shift($home-accent);
+  // 탭 바가 overflow:auto라 바깥 focus outline이 위·아래로 잘린다 → 안쪽 링으로 둔다.
+  @include focus-ring($offset: calc(-1 * $focus-ring-offset));
+}
+
+.active {
+  color: $home-accent-hover;
+  font-weight: $font-weight-bold;
+  border-bottom-color: $home-accent;
+}

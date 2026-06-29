@@ -1,277 +1,270 @@
 // ══════════════════════════════════════════
-// LOCATION — 오시는 길 페이지
-// references/Location.jsx 디자인 적용
-// 지도 (LocationMapClient 보존) + ADDRESS·CONTACT (2col) + HOURS·TRANSPORTATION
-// CONTACT/HOURS는 site_settings에 없는 필드라 placeholder + TODO
+// LOCATION — 오시는 길 (Claude Design 시안 warm 톤)
+//   지도 + 길찾기 → 연락처 → 대중교통 → 주차.
+//   warm 톤(_home.scss) — About 스코프, 예배 안내·인사말과 같은 시스템.
 // ══════════════════════════════════════════
 
-.container {
-  padding-top: $spacing-32;
-  padding-bottom: $spacing-32;
-
-  @include respond-up($breakpoint-pc-sm) {
-    padding-top: $spacing-64;
-    padding-bottom: $spacing-64;
-  }
+.sr_only {
+  @include blind;
 }
 
-// ── 지도 ──
+.page {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-24;
+  max-width: 52rem;
+  margin-inline: auto;
+}
+
+// ── 지도 + 길찾기 + 연락처 (제목 없이 묶음) ──
+
+.intro {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-12;
+}
 
 .map_wrap {
   width: 100%;
   height: 22rem;
-  margin-bottom: $spacing-12;
-  border: 0.1rem solid $border-card;
+  border: 0.1rem solid $home-border;
   border-radius: $radius-l;
   overflow: hidden;
 
   @include respond-up($breakpoint-pc-sm) {
-    height: 36rem;
-    margin-bottom: $spacing-24;
+    height: 32rem;
   }
+}
+
+// 지도 마커 (Kakao CustomOverlayMap) — 교회 이름 라벨 + 교회 심볼 핀.
+.map_marker {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.map_marker_label {
+  margin-bottom: $spacing-6;
+  padding: $spacing-4 $spacing-10;
+  background-color: $home-card;
+  border: 0.1rem solid $home-border;
+  border-radius: $radius-circle;
+  font-size: $font-size-12;
+  font-weight: $font-weight-semibold;
+  color: $home-text;
+  white-space: nowrap;
+  box-shadow: $shadow-sm;
+}
+
+.map_marker_pin {
+  display: grid;
+  place-items: center;
+  width: 3.4rem;
+  height: 3.4rem;
+  background-color: $home-accent;
+  border: 0.2rem solid $home-card;
+  border-radius: 50% 50% 50% 0;
+  box-shadow: $shadow-md;
+  transform: rotate(-45deg);
+
+  svg {
+    width: 1.9rem;
+    height: 1.9rem;
+    color: $home-cream-text;
+    transform: rotate(45deg);
+  }
+}
+
+// 길찾기 — 지도 앱으로 여는 풀폭 브라운 버튼 (목업 일치).
+.directions_button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: $spacing-8;
+  width: 100%;
+  padding: $spacing-16;
+  background-color: $home-accent;
+  border-radius: $radius-m;
+  text-decoration: none;
+
+  @include hover-bg-shift($home-accent-hover);
+}
+
+.directions_label {
+  font-size: $font-size-15;
+  font-weight: $font-weight-bold;
+  color: $home-cream-text;
+}
+
+.directions_icon {
+  flex-shrink: 0;
+  width: 1.8rem;
+  height: 1.8rem;
+  color: $home-cream-text;
+}
+
+// ── 섹션 헤더 ──
+
+.section_head {
+  margin-bottom: $spacing-12;
+}
+
+.section_title {
+  font-size: $font-size-16;
+  font-weight: $font-weight-bold;
+  color: $home-text;
+  letter-spacing: $letter-spacing-body;
 }
 
 // ── 공용 카드 ──
 
 .card {
-  padding: $spacing-20;
-  background: $bg-beige-subtle;
-  border: 0.1rem solid $border-card;
-  border-radius: $radius-m;
-
-  @include respond-up($breakpoint-pc-sm) {
-    padding: $spacing-32;
-  }
+  background-color: $home-card;
+  border: 0.1rem solid $home-border;
+  border-radius: $radius-l;
 }
 
-.card_eyebrow {
-  margin-bottom: $spacing-10;
-  font-size: $font-size-11;
-  font-weight: $font-weight-semibold;
-  color: $accent;
-  letter-spacing: $letter-spacing-wide;
-}
-
-.section_label {
-  margin-bottom: $spacing-16;
-  font-size: $font-size-11;
-  font-weight: $font-weight-semibold;
-  color: $primary;
-  letter-spacing: $letter-spacing-wide;
-}
-
-// ── 상단 2 cards (Address + Contact) ──
-
-.cards_top {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: $spacing-12;
-  margin-bottom: $spacing-12;
-
-  @include respond-up($breakpoint-pc-sm) {
-    grid-template-columns: 1fr 1fr;
-    gap: $spacing-16;
-    margin-bottom: $spacing-32;
-  }
-}
-
-.address_main {
-  margin-bottom: $spacing-4;
-  font-size: $font-size-15;
-  font-weight: $font-weight-bold;
-  color: $txt-primary;
-
-  @include respond-up($breakpoint-pc-sm) {
-    font-size: $font-size-18;
-  }
-}
-
-.address_sub {
-  margin-bottom: $spacing-16;
-  font-size: $font-size-13;
-  color: $txt-tertiary;
-
-  @include respond-up($breakpoint-pc-sm) {
-    margin-bottom: $spacing-20;
-  }
-}
-
-.address_actions {
+// 정보 행 (라벨 · 본문 · 액션)
+.row {
   display: flex;
-  gap: $spacing-8;
-}
-
-.btn_secondary {
-  flex: 1;
-  padding: $spacing-10 $spacing-12;
-  background: $bg-card;
-  border: 0.1rem solid $border-card;
-  border-radius: $radius-s;
-  color: $txt-primary;
-  font-size: $font-size-12;
-  font-weight: $font-weight-semibold;
-  cursor: pointer;
-  @include hover-bg-shift($bg-hover);
-
-  &:disabled {
-    cursor: not-allowed;
-    opacity: 0.6;
-  }
-}
-
-.btn_primary {
-  flex: 1;
-  padding: $spacing-10 $spacing-12;
-  background: $primary;
-  border-radius: $radius-s;
-  color: $txt-inverse;
-  font-size: $font-size-12;
-  font-weight: $font-weight-semibold;
-  display: inline-flex;
   align-items: center;
-  justify-content: center;
-  gap: $spacing-6;
-  text-decoration: none;
-  @include hover-bg-shift($primary-hover);
-}
+  gap: $spacing-12;
+  padding: $spacing-12 $spacing-20;
 
-.contact_row {
   & + & {
-    margin-top: $spacing-12;
-
-    @include respond-up($breakpoint-pc-sm) {
-      margin-top: $spacing-16;
-    }
+    border-top: 0.1rem solid $home-border-divider;
   }
 }
 
-.contact_label {
-  margin-bottom: $spacing-4;
-  font-size: $font-size-11;
-  color: $txt-tertiary;
+.row_label {
+  flex: 0 0 4.4rem;
+  font-size: $font-size-12;
+  font-weight: $font-weight-bold;
+  color: $home-gold-strong;
 }
 
-.contact_value {
-  font-size: $font-size-15;
-  font-weight: $font-weight-bold;
-  color: $txt-primary;
+.row_body {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.row_value {
+  font-size: $font-size-13;
+  font-weight: $font-weight-semibold;
+  color: $home-text;
+  word-break: keep-all;
+}
+
+.row_value_num {
   font-variant-numeric: tabular-nums;
   letter-spacing: $letter-spacing-tight;
-
-  @include respond-up($breakpoint-pc-sm) {
-    font-size: $font-size-18;
-  }
 }
 
-.contact_value_sm {
+.row_value_break {
+  word-break: break-all;
+}
+
+.row_sub {
+  font-size: $font-size-12;
+  color: $home-text-muted;
+}
+
+.row_line {
+  display: block;
   font-size: $font-size-13;
-  font-weight: $font-weight-semibold;
-  color: $txt-primary;
-
-  @include respond-up($breakpoint-pc-sm) {
-    font-size: $font-size-14;
-  }
+  font-weight: $font-weight-medium;
+  line-height: $line-height-relaxed;
+  word-break: keep-all;
 }
 
-// ── 하단 2 cards (Hours + Transportation) ──
+// 액션 칩 (통화·복사)
+.chip {
+  flex-shrink: 0;
+  padding: $spacing-6 $spacing-12;
+  background-color: $home-tint;
+  border: none;
+  border-radius: $radius-s;
+  font-size: $font-size-12;
+  font-weight: $font-weight-bold;
+  color: $home-accent;
+  text-decoration: none;
+  cursor: pointer;
 
-.cards_bottom {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: $spacing-12;
-
-  @include respond-up($breakpoint-pc-sm) {
-    grid-template-columns: 1fr 2fr;
-    gap: $spacing-16;
-  }
+  @include hover-bg-shift($home-tint-card);
 }
 
-.hours_list {
-  list-style: none;
+// ── 주차 안내 (텍스트 카드) ──
+
+.parking_card {
+  padding: $spacing-16 $spacing-20;
+  background-color: $home-card;
+  border: 0.1rem solid $home-border;
+  border-radius: $radius-l;
 }
 
-.empty_hint {
+.parking_text {
   font-size: $font-size-13;
-  color: $txt-tertiary;
+  font-weight: $font-weight-regular;
+  line-height: $line-height-relaxed;
+  word-break: keep-all;
+
+  & + & {
+    margin-top: $spacing-6;
+  }
 }
 
-.hours_row {
+// ── 층별 안내 ──
+
+.floor_list {
   display: flex;
-  justify-content: space-between;
-  padding: $spacing-10 0;
-
-  & + & {
-    border-top: 0.1rem solid $border-card;
-  }
+  flex-direction: column;
+  gap: $spacing-12;
 }
 
-.hours_label {
-  font-size: $font-size-13;
-  font-weight: $font-weight-semibold;
-  color: $txt-secondary;
+.floor_card {
+  background-color: $home-card;
+  border: 0.1rem solid $home-border;
+  border-radius: $radius-l;
+  overflow: hidden;
 }
 
-.hours_value {
-  font-size: $font-size-13;
-  font-weight: $font-weight-semibold;
-  color: $txt-primary;
-  font-variant-numeric: tabular-nums;
+.floor_head {
+  padding: $spacing-12 $spacing-16;
+  border-bottom: 0.1rem solid $home-border-divider;
+  font-size: $font-size-14;
+  font-weight: $font-weight-bold;
+  color: $home-text;
 }
 
-.transit_grid {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: $spacing-16;
-
-  @include respond-up($breakpoint-pc-sm) {
-    grid-template-columns: repeat(3, 1fr);
-    gap: $spacing-24;
-  }
-}
-
-.transit_item {
-  & + & {
-    padding-top: $spacing-16;
-    border-top: 0.1rem solid $border-card;
-
-    @include respond-up($breakpoint-pc-sm) {
-      padding-top: 0;
-      padding-left: $spacing-24;
-      border-top: 0;
-      border-left: 0.1rem solid $border-card;
-    }
-  }
-}
-
-.transit_type {
+.floor_row {
   display: flex;
   align-items: center;
-  gap: $spacing-6;
-  margin-bottom: $spacing-10;
-  font-size: $font-size-13;
-  font-weight: $font-weight-bold;
-  color: $txt-primary;
-}
+  gap: $spacing-12;
+  padding: $spacing-12 $spacing-16;
 
-.transit_dot {
-  width: 0.4rem;
-  height: 0.4rem;
-  border-radius: $radius-circle;
-  background: $accent;
-}
-
-.transit_lines {
-  list-style: none;
-
-  li {
-    padding: $spacing-2 0;
-    font-size: $font-size-12;
-    color: $txt-secondary;
-    line-height: $line-height-relaxed;
-    word-break: keep-all;
-
-    @include respond-up($breakpoint-pc-sm) {
-      font-size: $font-size-13;
-    }
+  & + & {
+    border-top: 0.1rem solid $home-border-divider;
   }
+}
+
+.floor_badge {
+  flex: 0 0 auto;
+  display: grid;
+  place-items: center;
+  width: 3rem;
+  height: 3rem;
+  border-radius: $radius-s;
+  background-color: $home-tint;
+  font-size: $font-size-12;
+  font-weight: $font-weight-bold;
+  color: $home-accent;
+}
+
+.floor_label {
+  font-size: $font-size-13;
+  font-weight: $font-weight-semibold;
+  color: $home-text;
+  word-break: keep-all;
 }

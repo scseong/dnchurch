@@ -1,8 +1,8 @@
 import type { Metadata } from 'next';
-import Link from 'next/link';
 import LayoutContainer from '@/components/layout/container/LayoutContainer';
 import { getWelcomePageData } from '@/services/about';
 import { OPEN_GRAPH_BASE } from '@/config/seo';
+import NewFamilyRegister from './_component/NewFamilyRegister';
 import styles from './page.module.scss';
 
 export const metadata: Metadata = {
@@ -43,6 +43,7 @@ export default async function WelcomePage() {
 
   return (
     <>
+      <h1 className={styles.sr_only}>환영합니다</h1>
       <LayoutContainer className={styles.container}>
         {/* 환영 카드 */}
         <section className={styles.welcome_card}>
@@ -105,16 +106,7 @@ export default async function WelcomePage() {
             ))}
           </ul>
 
-          <div className={styles.cta_card}>
-            <div>
-              <p className={styles.cta_eyebrow}>NEXT STEP</p>
-              <p className={styles.cta_title}>먼저 인사 나누고 싶으신가요?</p>
-            </div>
-            <Link href="/about/location" className={styles.cta_button}>
-              오시는 길 보기
-              <span aria-hidden="true">→</span>
-            </Link>
-          </div>
+          <NewFamilyRegister />
         </div>
       </section>
     </>

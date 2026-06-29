@@ -1,228 +1,264 @@
 // ══════════════════════════════════════════
-// PASTOR — 인사말 페이지
-//   PC: 좌측 profile (사진 + 이름 + career 카드) / 우측 content (verse + 인사말 + signature)
-//   Mobile: content / profile (사진 + 이름 + career 카드)
+// PASTOR — 인사말 (Claude Design 시안 warm 톤)
+//   목사 카드(사진 + 인사말) → 약력 → 교회 이력 타임라인 → 교단 소개
+//   warm 톤(_home.scss) + 명조(Gowun Batang) — About 스코프
 // ══════════════════════════════════════════
 
-.container {
-  padding-top: $spacing-24;
-  padding-bottom: $spacing-32;
-
-  @include respond-up($breakpoint-pc-sm) {
-    padding-top: $spacing-56;
-    padding-bottom: $spacing-24;
-  }
+@mixin warm-card($radius: $radius-m) {
+  background-color: $home-card;
+  border: 0.1rem solid $home-border;
+  border-radius: $radius;
 }
 
-.grid {
-  display: grid;
-  grid-template-columns: 1fr;
-  grid-template-areas:
-    'content'
-    'profile';
-  gap: $spacing-32;
-
-  @include respond-up($breakpoint-tablet) {
-    grid-template-columns: 1fr 30%;
-    grid-template-areas: 'content profile';
-    column-gap: $spacing-56;
-    row-gap: 0;
-    align-items: start;
-  }
+.sr_only {
+  @include blind;
 }
 
-// ── profile block ──
+.page {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-20;
+  max-width: 52rem;
+  margin-inline: auto;
+}
 
-.profile_block {
-  grid-area: profile;
+// ── 담임목사 카드 + 인사말 ──
 
-  @include respond-up($breakpoint-pc-sm) {
-    margin-bottom: 0;
-  }
+.pastor_card {
+  @include warm-card($radius-l);
+
+  padding: $spacing-20;
+}
+
+.pastor_head {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.photo_frame {
+  padding: $spacing-6;
+  margin-bottom: $spacing-12;
+  background-color: $home-tint;
+  border-radius: $radius-l;
 }
 
 .photo {
   position: relative;
-  width: 100%;
-  aspect-ratio: 4 / 5;
-  margin-bottom: $spacing-12;
+  display: grid;
+  place-items: center;
+  width: 15.2rem;
+  aspect-ratio: 152 / 164;
   overflow: hidden;
-  background: linear-gradient(135deg, $bg-beige-subtle, $bg-secondary);
-  border: 0.1rem solid $border-card;
+  background-color: $home-card-soft;
   border-radius: $radius-m;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: $txt-tertiary;
-  font-size: $font-size-11;
+  color: $home-text-muted;
+  font-size: $font-size-12;
   font-weight: $font-weight-medium;
   letter-spacing: $letter-spacing-wide;
-
-  @include respond-up($breakpoint-tablet) {
-    max-width: 32rem;
-    margin-right: auto;
-    background: transparent;
-  }
-
-  @include respond-up($breakpoint-pc-sm) {
-    aspect-ratio: 3 / 4;
-    max-width: none;
-    margin-right: 0;
-    margin-bottom: $spacing-16;
-    font-size: $font-size-13;
-  }
 }
 
-.eyebrow {
-  margin-bottom: $spacing-4;
+.role_label {
+  margin-bottom: $spacing-2;
   font-size: $font-size-11;
-  font-weight: $font-weight-semibold;
-  color: $accent;
-  letter-spacing: $letter-spacing-wider;
-
-  @include respond-up($breakpoint-pc-sm) {
-    margin-bottom: $spacing-6;
-  }
+  font-weight: $font-weight-bold;
+  color: $home-accent;
+  letter-spacing: $letter-spacing-wide;
 }
 
-.name_line {
+.pastor_name {
   font-size: $font-size-18;
   font-weight: $font-weight-bold;
-  color: $txt-primary;
-
-  @include respond-up($breakpoint-pc-sm) {
-    font-size: $font-size-22;
-    margin-bottom: $spacing-4;
-  }
+  color: $home-text;
+  letter-spacing: $letter-spacing-body;
 }
 
-.role {
-  margin-left: $spacing-6;
+.divider {
+  height: 0.1rem;
+  margin: $spacing-16 0;
+  background-color: $home-border-divider;
+}
+
+.greeting {
+  font-family: $font-family-home-serif;
+}
+
+.greeting_p {
   font-size: $font-size-13;
-  font-weight: $font-weight-medium;
-  color: $txt-secondary;
-
-  @include respond-up($breakpoint-pc-sm) {
-    font-size: $font-size-14;
-  }
-}
-
-// ── 우측 (PC) / Mobile 본문: content ──
-
-.content {
-  grid-area: content;
-}
-
-.lead {
-  margin-bottom: $spacing-16;
-  font-size: $font-size-20;
-  font-weight: $font-weight-bold;
-  color: $txt-primary;
-  line-height: $line-height-snug;
-  letter-spacing: $letter-spacing-tight;
-  word-break: keep-all;
-
-  @include respond-up($breakpoint-pc-sm) {
-    margin-bottom: $spacing-28;
-    font-size: $font-size-28;
-  }
-}
-
-.paragraph {
-  margin-bottom: $spacing-12;
-  font-size: $font-size-13;
-  color: $txt-secondary;
   line-height: $line-height-loose;
+  color: $home-text;
   word-break: keep-all;
 
-  @include respond-up($breakpoint-pc-sm) {
-    margin-bottom: $spacing-16;
-    font-size: $font-size-15;
+  & + & {
+    margin-top: $spacing-12;
   }
 }
 
 .signature {
-  margin-top: $spacing-20;
-  padding-top: $spacing-16;
-  border-top: 0.1rem solid $border-card;
-  text-align: right;
-
-  @include respond-up($breakpoint-tablet) {
-    margin-top: $spacing-32;
-    padding-top: $spacing-24;
-    text-align: left;
-  }
-}
-
-.sig_role {
-  margin-bottom: $spacing-2;
-  font-size: $font-size-11;
-  color: $txt-tertiary;
-
-  @include respond-up($breakpoint-pc-sm) {
-    margin-bottom: $spacing-4;
-    font-size: $font-size-13;
-  }
-}
-
-.sig_name {
-  font-size: $font-size-15;
-  font-weight: $font-weight-bold;
-  color: $txt-primary;
-
-  @include respond-up($breakpoint-pc-sm) {
-    font-size: $font-size-18;
-    letter-spacing: $letter-spacing-wide;
-  }
-}
-
-.sig_drim {
-  margin-left: $spacing-6;
-  color: $txt-tertiary;
-  font-weight: $font-weight-regular;
-}
-
-// ── profile_block 하단 career 카드 ──
-
-.career_card {
   margin-top: $spacing-16;
-  padding: $spacing-16;
-  background-color: $bg-beige-subtle;
-  border: 0.1rem solid $border-card;
-  border-radius: $radius-s;
+  font-family: $font-family-home-serif;
+  font-size: $font-size-13;
+  color: $home-text-sub;
+  text-align: right;
 }
 
-.career_label {
-  margin-bottom: $spacing-10;
-  font-size: $font-size-11;
+// ── 섹션 공통 ──
+
+.section_title {
+  margin-bottom: $spacing-12;
+  font-size: $font-size-16;
   font-weight: $font-weight-bold;
-  color: $accent;
-  letter-spacing: $letter-spacing-wider;
+  color: $home-text;
+  letter-spacing: $letter-spacing-body;
 }
 
-.career_list {
-  list-style: none;
+// ── 목사님 약력 ──
+
+.list_card {
+  @include warm-card;
+
+  padding: $spacing-4 $spacing-16;
 }
 
-.career_item {
+.list_row {
   display: flex;
   align-items: flex-start;
-  gap: $spacing-8;
-  padding: $spacing-8 0;
-  font-size: $font-size-12;
-  color: $txt-secondary;
-  word-break: keep-all;
+  gap: $spacing-10;
+  padding: $spacing-10 0;
 
   & + & {
-    border-top: 0.1rem solid $border-card;
+    border-top: 0.1rem solid $home-border-divider;
   }
 }
 
-.career_dot {
+.dot {
   flex-shrink: 0;
-  width: 0.3rem;
-  height: 0.3rem;
+  width: 0.5rem;
+  height: 0.5rem;
   margin-top: 0.7rem;
   border-radius: $radius-circle;
-  background: $accent;
+  background-color: $home-accent;
+}
+
+.list_text {
+  font-size: $font-size-13;
+  line-height: $line-height-relaxed;
+  color: $home-text;
+  word-break: keep-all;
+}
+
+// ── 교회 이력 타임라인 ──
+
+.history_card {
+  @include warm-card;
+
+  padding: $spacing-16 $spacing-16 $spacing-4;
+}
+
+.history_row {
+  display: flex;
+
+  &:last-child .history_main {
+    border-color: transparent;
+  }
+}
+
+.history_year {
+  flex: 0 0 4.2rem;
+  padding-right: $spacing-12;
+  font-size: $font-size-13;
+  font-weight: $font-weight-semibold;
+  color: $home-accent;
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+.history_main {
+  position: relative;
+  flex: 1;
+  min-width: 0;
+  padding: 0 0 $spacing-16 $spacing-16;
+  border-left: 0.2rem solid $home-border;
+}
+
+.history_dot {
+  position: absolute;
+  top: 0.2rem;
+  left: -0.6rem;
+  width: 1rem;
+  height: 1rem;
+  border-radius: $radius-circle;
+  background-color: $home-accent;
+  border: 0.2rem solid $home-card;
+}
+
+.history_text {
+  font-size: $font-size-13;
+  line-height: $line-height-relaxed;
+  color: $home-text;
+  word-break: keep-all;
+}
+
+// ── 교단 소개 ──
+
+.denom_card {
+  @include warm-card;
+
+  padding: $spacing-16;
+}
+
+.denom_text {
+  font-family: $font-family-home-serif;
+  font-size: $font-size-13;
+  line-height: $line-height-loose;
+  color: $home-text;
+  word-break: keep-all;
+}
+
+.denom_strong {
+  font-weight: $font-weight-bold;
+  color: $home-text;
+}
+
+.denom_ref {
+  font-family: $font-family-base;
+  font-size: $font-size-12;
+  font-weight: $font-weight-medium;
+  color: $home-text-muted;
+}
+
+.denom_meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: $spacing-16;
+  margin-top: $spacing-16;
+  padding-top: $spacing-16;
+  border-top: 0.1rem solid $home-border-divider;
+}
+
+.denom_meta_text {
+  min-width: 0;
+}
+
+.denom_logo {
+  flex-shrink: 0;
+  height: 4rem;
+  width: auto;
+}
+
+.denom_label {
+  margin-bottom: $spacing-2;
+  font-size: $font-size-11;
+  font-weight: $font-weight-bold;
+  color: $home-text-muted;
+  letter-spacing: $letter-spacing-wide;
+}
+
+.denom_name {
+  font-size: $font-size-13;
+  font-weight: $font-weight-semibold;
+  color: $home-text;
+  letter-spacing: $letter-spacing-body;
 }
