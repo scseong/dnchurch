@@ -82,6 +82,42 @@ export type Database = {
         }
         Relationships: []
       }
+      new_family_registrations: {
+        Row: {
+          birth_date: string | null
+          created_at: string
+          id: string
+          interests: string[]
+          is_new_believer: boolean
+          name: string
+          phone: string
+          privacy_agreed: boolean
+          referral_source: string | null
+        }
+        Insert: {
+          birth_date?: string | null
+          created_at?: string
+          id?: string
+          interests?: string[]
+          is_new_believer?: boolean
+          name: string
+          phone: string
+          privacy_agreed: boolean
+          referral_source?: string | null
+        }
+        Update: {
+          birth_date?: string | null
+          created_at?: string
+          id?: string
+          interests?: string[]
+          is_new_believer?: boolean
+          name?: string
+          phone?: string
+          privacy_agreed?: boolean
+          referral_source?: string | null
+        }
+        Relationships: []
+      }
       notices: {
         Row: {
           attachment_url: string | null
@@ -813,10 +849,7 @@ export const Constants = {
         "새벽예배",
         "특별예배",
       ],
-      worship_category: [
-        "main",
-        "church_school",
-      ],
+      worship_category: ["main", "church_school"],
     },
   },
 } as const
