@@ -91,13 +91,13 @@
 
 ## Codex 1차 검증
 
-- **결론**: 2차 재검증 CHANGE_REQUEST (신뢰도 88%) → 해소한다. (1차는 초기 diff를, 2차는 헤더·sticky·전역 변경을 포함한 전체 diff를 본다.)
+- **결론**: FIX_APPLIED (신뢰도 88%) — null 항목을 통과시키던 `church_history` 필터 버그를 Codex가 `page.tsx:38`에서 직접 막았다.
 - **현재 판단**: Codex가 버그 1건을 직접 고친다 — `church_history` 필터가 null 항목을 통과시켜 `item.year`에서 런타임 에러가 날 여지를, `page.tsx:38`에서 `Boolean(item) && item.year !== 'TODO'`(타입 좁힘 포함)로 막는다. ESLint를 통과한다. 결정 3건: ① 전역 헤더 아이콘 정렬(`Header.module.scss:105·135`)은 별도 커밋 B로 나눈다(D10, 사용자 승인). ② `HeroCarousel.module.scss`·`Button.module.scss`(home-bg WIP)는 스테이징에서 뺀다. ③ page.module.scss의 geometry 매직값은 raw로 둔다(D9). sticky offset(5.4rem·`$header-height-compact`·`$header-height`)·z-index·색 토큰 규율은 PASS다. 1차 지적(task 밖 파일 분리)도 같게 처리한다.
 - **다음 행동**: doc-editor를 반영하고, dev를 멈춘 뒤 `verify-task`를 돌리고, 커밋 A(인사말 재디자인)·B(헤더 아이콘 정렬)로 나눠 스테이징한다.
 
 ## Claude 2차 검증
 
-- **최종 판단**: 통과 — 필수 3단계(lint·styles·build) PASS, Knip은 기존 부채라 커밋을 막지 않는다(아래 표).
+- **최종 판단**: PASS — 필수 3단계(lint·styles·build) 모두 통과, Knip은 기존 부채라 커밋을 막지 않는다(아래 표).
 
 | 시점 | run-id | lint | styles | build | knip신규 | 수동 확인 필요 |
 | --- | --- | --- | --- | --- | --- | --- |

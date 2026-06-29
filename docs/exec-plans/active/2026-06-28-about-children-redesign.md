@@ -139,13 +139,17 @@
 
 ## Codex 1차 검증
 
-- **결론**: 미요청
-- **현재 판단**: location은 인사말·worship과 같은 warm 재스킨이고 고위험 파일 없음(레이어·캐시·인증 무변). 큰 신규 로직이 없어 Claude 직접 검증으로 대체.
-- **다음 행동**: vision·welcome에서 데이터 흐름·타입 변경이 생기면 Codex 1차 요청.
+- **결론**: CHANGE_REQUEST (신뢰도 high) — codex:rescue로 #134를 리뷰해 welcome 새가족 폼에서 P1·P2 지적이 나왔다. 사용자 결정으로 폼 보안 보강은 후속 PR로 분리한다.
+- **현재 판단**: location·vision·worship 재스킨과 welcome 레이아웃 구조에는 지적이 없다(같은 warm 재스킨이고 레이어·캐시·인증은 안 바뀐다). 지적은 모두 welcome 새가족 폼 한정이다.
+- **다음 행동**: 후속 PR에서 처리한다.
+  - 민감정보 별도 동의 (P1)
+  - 서버 입력 검증·화이트리스트 (P2)
+  - 제출 예외 try/catch/finally (P2)
+  - DB CHECK 제약
 
 ## Claude 2차 검증
 
-- **최종 판단**: 통과 (커밋 대기)
+- **최종 판단**: PASS (아래 표).
 - **현재 판단**: 아래 표. verify-task는 사용자 dev 구동 중이라 미실행(.next 공유 손상 방지) — tsc·eslint·stylelint + dev 라우트 실측으로 대체. 지도 마커는 Kakao 클라이언트 렌더라 curl에 안 잡혀 Chrome 육안 검증 — 첫 구현은 teardrop이 `rotate(45deg)`라 핀이 옆을 가리켰고, `rotate(-45deg)`(svg는 반대로)로 고쳐 핀이 아래로 향하며 교회 심볼·라벨이 좌표(Kakao POI '동남교회')에 맞는 것 확인.
 
 | 시점 | 명령 | 결과 |
