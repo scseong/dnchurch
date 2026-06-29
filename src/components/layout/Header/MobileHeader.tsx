@@ -16,7 +16,7 @@ export default function MobileHeader() {
   const router = useRouter();
   const { title, showBack } = resolveMobileHeader(pathname);
   const tabs = resolveSiblingTabs(pathname);
-  const centeredTitle = pathname === '/about/pastor'; // 목업 재설계 About 헤더 — 타이틀 가운데 정렬
+  const centeredTitle = title === '교회 소개'; // 목업 재설계 About 헤더 — '교회 소개' 탭 전체 타이틀 가운데 정렬
   const { drawerOpen, openDrawer, closeDrawer } = useDrawerHistory();
   const overlayRef = useRef<HTMLDivElement>(null);
 
