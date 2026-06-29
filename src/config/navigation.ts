@@ -136,7 +136,8 @@ const ABOUT_REDESIGNED_ROUTES = new Set([
   '/about/pastor',
   '/about/worship',
   '/about/location',
-  '/about/vision'
+  '/about/vision',
+  '/about/welcome'
 ]);
 
 /** 모바일 헤더 타이틀 + 뒤로가기 상태 해석 */

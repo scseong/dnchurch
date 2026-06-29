@@ -1,8 +1,17 @@
 // ══════════════════════════════════════════
-// WELCOME — 환영합니다 페이지
-// references/Welcome.jsx 디자인 적용
-// 환영 카드 + 4 STEPS + FAQ(별도 섹션 + CTA)
+// WELCOME — 환영합니다 (목업 한빛골드 톤)
+//   본문(환영 카드·4 STEPS·FAQ)은 기존 구현 유지, 색·폰트만 warm으로 정렬.
+//   새가족 등록 CTA + BottomSheet 폼은 목업 기준(warm) — NewFamilyRegister.
+//   warm 톤(_home.scss) — About 스코프.
 // ══════════════════════════════════════════
+
+.surface {
+  background-color: $home-surface;
+}
+
+.sr_only {
+  @include blind;
+}
 
 .container {
   padding-top: $spacing-32;
@@ -20,8 +29,8 @@
   position: relative;
   margin-bottom: $spacing-32;
   padding: $spacing-32 $spacing-24;
-  background: $bg-card;
-  border: 0.1rem solid $border-card;
+  background: $home-card;
+  border: 0.1rem solid $home-border;
   border-radius: $radius-l;
   overflow: hidden;
 
@@ -38,7 +47,7 @@
   width: 14rem;
   height: 14rem;
   border-radius: $radius-circle;
-  background: $accent-subtle;
+  background: $home-tint;
   opacity: 0.5;
 
   @include respond-up($breakpoint-pc-sm) {
@@ -58,7 +67,7 @@
   margin-bottom: $spacing-12;
   font-size: $font-size-11;
   font-weight: $font-weight-semibold;
-  color: $accent;
+  color: $home-gold-strong;
   letter-spacing: $letter-spacing-wide;
 
   @include respond-up($breakpoint-pc-sm) {
@@ -71,7 +80,7 @@
   margin-bottom: $spacing-16;
   font-size: $font-size-22;
   font-weight: $font-weight-bold;
-  color: $txt-primary;
+  color: $home-text;
   line-height: $line-height-snug;
   letter-spacing: $letter-spacing-tight;
   word-break: keep-all;
@@ -84,7 +93,7 @@
 
 .welcome_desc {
   font-size: $font-size-13;
-  color: $txt-secondary;
+  color: $home-text-sub;
   line-height: $line-height-loose;
   word-break: keep-all;
 
@@ -115,7 +124,7 @@
   margin-bottom: $spacing-16;
   font-size: $font-size-11;
   font-weight: $font-weight-semibold;
-  color: $primary;
+  color: $home-accent;
   letter-spacing: $letter-spacing-wide;
   text-align: center;
 
@@ -143,8 +152,8 @@
   align-items: flex-start;
   gap: $spacing-12;
   padding: $spacing-16;
-  background: $bg-card;
-  border: 0.1rem solid $border-card;
+  background: $home-card;
+  border: 0.1rem solid $home-border;
   border-radius: $radius-m;
 
   @include respond-up($breakpoint-pc-sm) {
@@ -161,7 +170,7 @@
       z-index: 1;
       font-size: $font-size-14;
       font-weight: $font-weight-bold;
-      color: $txt-tertiary;
+      color: $home-text-muted;
     }
   }
 }
@@ -174,9 +183,8 @@
   width: 4.4rem;
   height: 4.4rem;
   border-radius: $radius-m;
-  // semantic 미정: beige-200 면 — 값 같은 $bg 토큰 없음(D2)
-  background: $beige-200;
-  color: $primary;
+  background: $home-tint;
+  color: $home-accent;
   font-size: $font-size-13;
   font-weight: $font-weight-bold;
   font-variant-numeric: tabular-nums;
@@ -203,7 +211,7 @@
     margin-bottom: $spacing-12;
     font-size: $font-size-11;
     font-weight: $font-weight-bold;
-    color: $accent;
+    color: $home-gold-strong;
     letter-spacing: $letter-spacing-wide;
   }
 }
@@ -212,7 +220,7 @@
   margin-bottom: $spacing-4;
   font-size: $font-size-14;
   font-weight: $font-weight-bold;
-  color: $txt-primary;
+  color: $home-text;
 
   @include respond-up($breakpoint-pc-sm) {
     margin-bottom: $spacing-8;
@@ -223,7 +231,7 @@
 
 .step_desc {
   font-size: $font-size-12;
-  color: $txt-secondary;
+  color: $home-text-sub;
   line-height: $line-height-relaxed;
   word-break: keep-all;
 
@@ -236,8 +244,8 @@
 
 .faq_section {
   padding: $spacing-32 $container-padding;
-  background: $bg-beige-subtle;
-  border-top: 0.1rem solid $border-card;
+  background: $home-card-soft;
+  border-top: 0.1rem solid $home-border;
 
   @include respond-up($breakpoint-pc-sm) {
     padding: $spacing-80 $container-padding;
@@ -262,7 +270,7 @@
   margin-bottom: $spacing-6;
   font-size: $font-size-11;
   font-weight: $font-weight-semibold;
-  color: $accent;
+  color: $home-gold-strong;
   letter-spacing: $letter-spacing-wide;
 
   @include respond-up($breakpoint-pc-sm) {
@@ -274,7 +282,7 @@
 .faq_title {
   font-size: $font-size-18;
   font-weight: $font-weight-bold;
-  color: $txt-primary;
+  color: $home-text;
 
   @include respond-up($breakpoint-pc-sm) {
     font-size: $font-size-26;
@@ -294,8 +302,8 @@
 
 .faq_item {
   padding: $spacing-16;
-  background: $bg-card;
-  border: 0.1rem solid $border-card;
+  background: $home-card;
+  border: 0.1rem solid $home-border;
   border-radius: $radius-m;
 
   @include respond-up($breakpoint-pc-sm) {
@@ -322,7 +330,7 @@
   padding-top: 0.2rem;
   font-size: $font-size-12;
   font-weight: $font-weight-bold;
-  color: $accent;
+  color: $home-gold-strong;
   letter-spacing: $letter-spacing-wide;
 
   @include respond-up($breakpoint-pc-sm) {
@@ -333,7 +341,7 @@
 .faq_q_text {
   font-size: $font-size-13;
   font-weight: $font-weight-bold;
-  color: $txt-primary;
+  color: $home-text;
   line-height: $line-height-snug;
 
   @include respond-up($breakpoint-pc-sm) {
@@ -347,7 +355,7 @@
   padding-top: 0.2rem;
   font-size: $font-size-12;
   font-weight: $font-weight-bold;
-  color: $txt-tertiary;
+  color: $home-text-muted;
   letter-spacing: $letter-spacing-wide;
 
   @include respond-up($breakpoint-pc-sm) {
@@ -357,7 +365,7 @@
 
 .faq_a_text {
   font-size: $font-size-12;
-  color: $txt-secondary;
+  color: $home-text-sub;
   line-height: $line-height-loose;
   word-break: keep-all;
 
@@ -366,61 +374,147 @@
   }
 }
 
-// ── CTA ──
+// ── 새가족 등록 CTA (트리거 버튼, 본문 warm) ──
 
-.cta_card {
-  margin-top: $spacing-20;
-  padding: $spacing-20;
-  background: $bg-dark-nav;
-  border-radius: $radius-m;
-
-  @include respond-up($breakpoint-pc-sm) {
-    margin-top: $spacing-40;
-    padding: $spacing-32;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: $spacing-24;
-  }
-}
-
-.cta_eyebrow {
-  margin-bottom: $spacing-6;
-  font-size: $font-size-11;
-  font-weight: $font-weight-medium;
-  color: $accent;
-  letter-spacing: $letter-spacing-wide;
-}
-
-.cta_title {
-  margin-bottom: $spacing-12;
-  font-size: $font-size-15;
-  font-weight: $font-weight-bold;
-  color: $txt-inverse;
-
-  @include respond-up($breakpoint-pc-sm) {
-    margin-bottom: 0;
-    font-size: $font-size-18;
-  }
-}
-
-.cta_button {
-  display: inline-flex;
+.register_cta {
+  display: flex;
   align-items: center;
   justify-content: center;
   gap: $spacing-8;
   width: 100%;
-  padding: $spacing-12 $spacing-16;
-  background: $accent;
-  color: $txt-inverse;
-  font-size: $font-size-13;
-  font-weight: $font-weight-bold;
+  height: 5.4rem;
+  margin-top: $spacing-20;
+  background-color: $home-accent;
+  border: none;
   border-radius: $radius-m;
-  @include hover-bg-shift($accent-hover);
+  color: $home-cream-text;
+  font-size: $font-size-15;
+  font-weight: $font-weight-bold;
+  cursor: pointer;
+
+  @include hover-bg-shift($home-accent-hover);
 
   @include respond-up($breakpoint-pc-sm) {
-    width: auto;
-    flex-shrink: 0;
-    padding: $spacing-12 $spacing-24;
+    margin-top: $spacing-40;
+  }
+}
+
+.register_cta_icon {
+  flex-shrink: 0;
+  width: 1.9rem;
+  height: 1.9rem;
+}
+
+// ── BottomSheet 등록 폼 (목업 warm 톤) ──
+
+.form_subtitle {
+  margin-bottom: $spacing-16;
+  font-size: $font-size-13;
+  color: $home-text-sub;
+}
+
+.reg_form {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-16;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-8;
+}
+
+.field_label {
+  font-size: $font-size-12;
+  font-weight: $font-weight-bold;
+  color: $home-gold-strong;
+}
+
+.field_input {
+  width: 100%;
+  height: 4.8rem;
+  padding: 0 $spacing-16;
+  background-color: $home-card;
+  border: 0.1rem solid $home-border;
+  border-radius: $radius-s;
+  font-size: $font-size-14;
+  color: $home-text;
+  transition: border-color $transition-duration-normal $transition-easing-default;
+
+  &::placeholder {
+    color: $home-text-muted;
+  }
+
+  &:focus {
+    outline: none;
+    border-color: $home-accent;
+  }
+}
+
+.choice_group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: $spacing-8;
+}
+
+.choice {
+  padding: $spacing-8 $spacing-16;
+  background-color: $home-card;
+  border: 0.1rem solid $home-border;
+  border-radius: $radius-circle;
+  font-size: $font-size-13;
+  font-weight: $font-weight-medium;
+  color: $home-text-sub;
+  cursor: pointer;
+  transition:
+    color $transition-duration-normal $transition-easing-default,
+    background-color $transition-duration-normal $transition-easing-default,
+    border-color $transition-duration-normal $transition-easing-default;
+}
+
+.choice_on {
+  background-color: $home-accent;
+  border-color: $home-accent;
+  color: $home-cream-text;
+}
+
+.check_row {
+  display: flex;
+  align-items: center;
+  gap: $spacing-10;
+  cursor: pointer;
+}
+
+.check_input {
+  flex-shrink: 0;
+  width: 2rem;
+  height: 2rem;
+  accent-color: $home-accent;
+  cursor: pointer;
+}
+
+.check_label {
+  font-size: $font-size-13;
+  color: $home-text-sub;
+}
+
+.submit_btn {
+  width: 100%;
+  height: 5.2rem;
+  margin-top: $spacing-8;
+  background-color: $home-accent;
+  border: none;
+  border-radius: $radius-m;
+  color: $home-cream-text;
+  font-size: $font-size-15;
+  font-weight: $font-weight-bold;
+  cursor: pointer;
+
+  @include hover-bg-shift($home-accent-hover);
+
+  &:disabled {
+    cursor: not-allowed;
+    opacity: 0.6;
   }
 }
