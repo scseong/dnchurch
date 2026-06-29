@@ -42,7 +42,7 @@ export default async function PastorPage() {
     <div className={styles.surface}>
       <h1 className={styles.sr_only}>인사말</h1>
       <AboutTabNav />
-      <LayoutContainer className={styles.container}>
+      <LayoutContainer body>
         <div className={styles.page}>
           {/* 담임목사 카드 + 인사말 */}
           <article className={styles.pastor_card}>
