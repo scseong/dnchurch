@@ -23,7 +23,5 @@ export default function LocationMap({ lat, lng, name }: LocationMapProps) {
 type LocationMapProps = {
   lat: number;
   lng: number;
-  width: string;
-  height: string;
   name: string;
 };

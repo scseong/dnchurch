@@ -9,7 +9,7 @@ type Props = { lat: number; lng: number; width: string; height: string; name: st
 export default function LocationMapClient({ lat, lng, width, height, name }: Props) {
   return (
     <div style={{ width, height }}>
-      <LocationMap lat={lat} lng={lng} width={width} height={height} name={name} />
+      <LocationMap lat={lat} lng={lng} name={name} />
     </div>
   );
 }
