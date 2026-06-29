@@ -2,7 +2,6 @@ import type { Metadata } from 'next';
 import LayoutContainer from '@/components/layout/container/LayoutContainer';
 import { getWelcomePageData } from '@/services/about';
 import { OPEN_GRAPH_BASE } from '@/config/seo';
-import AboutTabNav from '../_component/AboutTabNav';
 import NewFamilyRegister from './_component/NewFamilyRegister';
 import styles from './page.module.scss';
 
@@ -43,9 +42,8 @@ export default async function WelcomePage() {
   const { faq } = await getWelcomePageData();
 
   return (
-    <div className={styles.surface}>
+    <>
       <h1 className={styles.sr_only}>환영합니다</h1>
-      <AboutTabNav />
       <LayoutContainer className={styles.container}>
         {/* 환영 카드 */}
         <section className={styles.welcome_card}>
@@ -111,6 +109,6 @@ export default async function WelcomePage() {
           <NewFamilyRegister />
         </div>
       </section>
-    </div>
+    </>
   );
 }

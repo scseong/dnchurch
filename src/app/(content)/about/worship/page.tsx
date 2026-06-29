@@ -6,7 +6,6 @@ import LayoutContainer from '@/components/layout/container/LayoutContainer';
 import { EmptyState } from '@/components/ui';
 import { OPEN_GRAPH_BASE } from '@/config/seo';
 import { getWorshipPageData } from '@/services/about';
-import AboutTabNav from '../_component/AboutTabNav';
 import styles from './page.module.scss';
 
 export const metadata: Metadata = {
@@ -43,9 +42,8 @@ export default async function Worship() {
   ];
 
   return (
-    <div className={styles.surface}>
+    <>
       <h1 className={styles.sr_only}>예배 안내</h1>
-      <AboutTabNav />
       <LayoutContainer body>
         <div className={styles.page}>
           {worshipGroups.map((group) => (
@@ -86,6 +84,6 @@ export default async function Worship() {
           ))}
         </div>
       </LayoutContainer>
-    </div>
+    </>
   );
 }

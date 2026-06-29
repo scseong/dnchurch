@@ -5,10 +5,6 @@
 //   warm 톤(_home.scss) — About 스코프.
 // ══════════════════════════════════════════
 
-.surface {
-  background-color: $home-surface;
-}
-
 .sr_only {
   @include blind;
 }

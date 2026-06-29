@@ -3,7 +3,6 @@ import LayoutContainer from '@/components/layout/container/LayoutContainer';
 import CloudinaryImage from '@/components/common/CloudinaryImage';
 import { getPastorPageData } from '@/services/about';
 import { CHURCH_INFO, OPEN_GRAPH_BASE } from '@/config/seo';
-import AboutTabNav from '../_component/AboutTabNav';
 import styles from './page.module.scss';
 
 export const metadata: Metadata = {
@@ -39,9 +38,8 @@ export default async function PastorPage() {
   const signatureText = pastor ? `${title} ${name} 드림` : '대구동남교회 드림';
 
   return (
-    <div className={styles.surface}>
+    <>
       <h1 className={styles.sr_only}>인사말</h1>
-      <AboutTabNav />
       <LayoutContainer body>
         <div className={styles.page}>
           {/* 담임목사 카드 + 인사말 */}
@@ -139,6 +137,6 @@ export default async function PastorPage() {
           </section>
         </div>
       </LayoutContainer>
-    </div>
+    </>
   );
 }

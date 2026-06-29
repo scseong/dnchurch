@@ -1,7 +1,6 @@
 import type { Metadata } from 'next';
 import { OPEN_GRAPH_BASE } from '@/config/seo';
 import LayoutContainer from '@/components/layout/container/LayoutContainer';
-import AboutTabNav from '../_component/AboutTabNav';
 import styles from './page.module.scss';
 
 export const metadata: Metadata = {
@@ -33,9 +32,8 @@ const VISION_PILLARS = [
 
 export default function Vision() {
   return (
-    <div className={styles.surface}>
+    <>
       <h1 className={styles.sr_only}>교회의 비전</h1>
-      <AboutTabNav />
       <LayoutContainer body>
         <div className={styles.page}>
           <section className={styles.vision_hero}>
@@ -61,6 +59,6 @@ export default function Vision() {
           </section>
         </div>
       </LayoutContainer>
-    </div>
+    </>
   );
 }

@@ -10,10 +10,6 @@
   border-radius: $radius;
 }
 
-.surface {
-  background-color: $home-surface;
-}
-
 .sr_only {
   @include blind;
 }

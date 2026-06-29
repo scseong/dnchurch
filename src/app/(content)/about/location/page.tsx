@@ -5,7 +5,6 @@ import LayoutContainer from '@/components/layout/container/LayoutContainer';
 import { getLocationPageData } from '@/services/about';
 import { displaySettingValue, parseFiniteFloat } from '@/utils/site-settings';
 import { CHURCH_INFO, OPEN_GRAPH_BASE } from '@/config/seo';
-import AboutTabNav from '../_component/AboutTabNav';
 import LocationMapClient from './_component/LocationMapClient';
 import CopyChip from './_component/CopyChip';
 import styles from './page.module.scss';
@@ -69,9 +68,8 @@ export default async function Directions() {
   const directionsUrl = `https://map.naver.com/p/search/${encodeURIComponent(`대구동남교회 ${address}`)}`;
 
   return (
-    <div className={styles.surface}>
+    <>
       <h1 className={styles.sr_only}>오시는 길</h1>
-      <AboutTabNav />
       <LayoutContainer body>
         <div className={styles.page}>
           <section className={styles.intro}>
@@ -191,6 +189,6 @@ export default async function Directions() {
           </section>
         </div>
       </LayoutContainer>
-    </div>
+    </>
   );
 }

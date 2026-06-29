@@ -4,10 +4,6 @@
 //   warm 톤(_home.scss) — About 스코프, 인사말·예배·오시는 길과 같은 시스템.
 // ══════════════════════════════════════════
 
-.surface {
-  background-color: $home-surface;
-}
-
 .sr_only {
   @include blind;
 }
