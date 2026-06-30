@@ -165,6 +165,15 @@ PR #135 — gemini·GitHub Codex·codex:rescue 리뷰.
 | onSubmit `data` 네이밍 모호 | gemini(med) | 타당 | `formValues`로 변경 |
 | FormField name·phone `required` prop 누락 | gemini(med) | 타당 | `required` 추가(필수 표시) |
 
+재리뷰(11d97d1, GitHub Codex):
+
+| 지적 | 등급 | 판정 | 조치 |
+| --- | --- | --- | --- |
+| 동의 label 안 처리방침 Link → 클릭 시 체크박스 토글 우려 | P3 | 타당 | Link를 label 밖 형제로 분리 |
+| name/phone 공백(탭·개행)만 있는 값이 CHECK 통과 | P2 | 타당 | 새 마이그레이션으로 `btrim` 공백 문자 강화 |
+| interests 배열 DB 중복 미차단 | P2 | 기각 | DB CHECK로 불가(서브쿼리), 서버 dedupe로 충분 — 답글 |
+| 마이그레이션 기존 민감 행 (재지적) | P1 | 기해소 | 빈 테이블(dev count=0·prod fresh) — 답글 |
+
 ## 후속 작업
 
 - 스팸 방지(captcha/rate-limit)
