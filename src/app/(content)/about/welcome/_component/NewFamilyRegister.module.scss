@@ -76,6 +76,8 @@
 }
 
 .policy_link {
+  align-self: flex-start;
+  font-size: $font-size-13;
   color: $txt-link;
   text-decoration: underline;
 

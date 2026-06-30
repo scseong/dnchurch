@@ -192,12 +192,12 @@ export default function NewFamilyRegister() {
             />
             <span className={styles.check_label}>
               신앙 상태·관심 영역(민감정보) 수집·이용에 동의합니다. 관심 영역이나 초신자를 선택하면
-              필수이며, 거부 시 해당 항목만 비워 두시면 됩니다.{' '}
-              <Link href="/privacy-policy" target="_blank" className={styles.policy_link}>
-                처리방침
-              </Link>
+              필수이며, 거부 시 해당 항목만 비워 두시면 됩니다.
             </span>
           </label>
+          <Link href="/privacy-policy" target="_blank" className={styles.policy_link}>
+            민감정보 처리방침 보기
+          </Link>
           {errors.sensitiveAgreed && (
             <FormAlertMessage type="error" message={errors.sensitiveAgreed.message} />
           )}
