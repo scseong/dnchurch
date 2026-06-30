@@ -73,7 +73,7 @@ PR #134 리뷰에서 분리한 폼 항목(gemini·GitHub Codex·codex:rescue 공
   - 문제: `is_new_believer`·`interests`는 종교적 신념 민감정보(개인정보보호법 제23조)인데 폼이 일반 동의 하나만 받아 `/privacy-policy` §9 고지와 어긋난다.
   - 해결: 별도 동의 체크박스를 두고, 동의 사실을 `sensitive_agreed` 컬럼에 남기며, 서버와 DB 양쪽에서 게이트를 건다. 동의 없이는 민감 필드를 저장하지 못한다. 컬럼 없이 UI 게이팅만 두는 대안은 동의 사실을 증적으로 못 남겨 분쟁 시 입증이 안 되므로 택하지 않는다.
   - 결과: 앱이 방침과 일치하고, 민감정보 동의 사실이 행 단위로 남는다.
-  - ⚠️ 정정(D7): 별도 체크박스는 사용자 요청으로 동의 1개(consentAll)로 통합했다 — 컬럼·CHECK 게이트는 유지.
+  - ⚠️ 정정(PR #135): 동의 UI는 D7(통합)·D8(조건부 분리)로 재설계 → D8 참조. 컬럼·CHECK 게이트는 유지.
 - **D2 — 허용값을 서버와 DB 양쪽에서 검증한다 (Codex CR-D 반영)**
   - 문제: anon key는 클라이언트 번들에 노출돼 PostgREST 직접 INSERT로 서버 whitelist를 우회할 수 있다. 서버 검증만으로는 목록 밖 referral·interest가 직접 insert로 들어온다.
   - 해결: 서버 액션이 `src/constants/new-family.ts`로 허용값을 대조하고, DB CHECK에도 같은 허용 배열을 둔다(interests `<@` 허용배열, referral_source `= ANY`). 옵션 변경 시 마이그레이션이 한 번 더 필요한 결합은 받아들인다 — 옵션은 거의 안 바뀌고, 직접 insert 방어가 이 작업의 목적이다.
@@ -98,6 +98,11 @@ PR #134 리뷰에서 분리한 폼 항목(gemini·GitHub Codex·codex:rescue 공
   - 문제: privacy·sensitive 동의를 따로 받아 새가족 등록 흐름이 번거로웠다.
   - 해결: 체크박스 1개(consentAll)로 합치고, 제출 시 privacyAgreed·sensitiveAgreed를 모두 그 값으로 보낸다. 문구에 수집 항목·민감정보·목적·거부권을 담는다. "별도 동의"가 "포괄 동의"로 바뀌는 점은 편의 우선 결정이며, DB·서버 게이트는 그대로 강제한다.
   - 결과: 동의가 한 번으로 단순해지고, 민감 데이터 보호는 DB·서버가 유지한다.
+  - ⚠️ 정정(PR #135): D7 폐기 → D8 참조. 통합 동의가 §23 위반 위험이라 조건부 필수 분리로 되돌림.
+- **D8 — 민감정보 동의를 조건부 필수로 분리한다 (PR #135 리뷰 반영)**
+  - 문제: 동의 1개(D7)는 개인정보보호법 §23의 "별도 동의"와 어긋난다. Codex·GitHub봇·`/privacy-policy §9`가 공통으로 지적했다.
+  - 해결: 개인정보 동의(항상 필수)와 민감정보 동의(별도 체크박스)로 나눈다. 민감정보 동의는 초신자·관심 영역을 선택했을 때만 필수다(RHF validate + 민감 항목 변경 시 `trigger`). 안 쓰면 동의 없이도 제출된다.
+  - 결과: §23 별도 동의를 지키면서 민감 항목을 안 쓰는 사용자는 체크 하나만 한다. 사용자가 통합으로 택했던 편의는 "민감 항목 사용 시에만 추가 체크"로 절충했다.
 
 ## ADR 판단
 
@@ -146,6 +151,19 @@ PR #134 리뷰에서 분리한 폼 항목(gemini·GitHub Codex·codex:rescue 공
 - 조치: 새가족 파일만 스테이징해 범위 분리
 
 </details>
+
+## PR 리뷰 대응
+
+PR #135 — gemini·GitHub Codex·codex:rescue 리뷰.
+
+| 지적 | 출처 | 판정 | 조치 |
+| --- | --- | --- | --- |
+| 통합 동의가 §23 별도 동의와 어긋남 | Codex(HIGH)·GitHub봇(P1)·방침 §9 | 타당 | 개인정보 동의 + 민감정보 동의(조건부 필수)로 분리 — D8 |
+| 마이그레이션이 기존 민감 행을 정리 안 하고 CHECK 추가 | Codex(HIGH)·GitHub봇(P1) | 대체로 해소 | - dev는 count=0 확인 후 적용 성공<br>- prod는 create→harden으로 빈 테이블에 적용<br>- 이미 적용된 파일은 드리프트 회피로 미수정(답글로 설명) |
+| 액션이 파싱·검증·입출력을 한 함수에 담음(단일 책임 원칙 위반) | gemini(high) | 타당 | `validateAndParseNewFamily`로 분리 |
+| interests 크기를 dedupe 전 미검증 | Codex(low) | 타당 | `rawInterests.length > max` 조기 거부 |
+| onSubmit `data` 네이밍 모호 | gemini(med) | 타당 | `formValues`로 변경 |
+| FormField name·phone `required` prop 누락 | gemini(med) | 타당 | `required` 추가(필수 표시) |
 
 ## 후속 작업
 
