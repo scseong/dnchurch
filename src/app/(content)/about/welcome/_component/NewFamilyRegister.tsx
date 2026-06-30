@@ -20,7 +20,8 @@ type FormValues = {
   referralSource: string;
   isNewBeliever: boolean;
   interests: string[];
-  consentAll: boolean;
+  privacyAgreed: boolean;
+  sensitiveAgreed: boolean;
 };
 
 const DEFAULT_VALUES: FormValues = {
@@ -30,7 +31,8 @@ const DEFAULT_VALUES: FormValues = {
   referralSource: '',
   isNewBeliever: false,
   interests: [],
-  consentAll: false
+  privacyAgreed: false,
+  sensitiveAgreed: false
 };
 
 export default function NewFamilyRegister() {
@@ -42,6 +44,7 @@ export default function NewFamilyRegister() {
     handleSubmit,
     watch,
     setValue,
+    trigger,
     setError,
     clearErrors,
     reset,
@@ -50,6 +53,7 @@ export default function NewFamilyRegister() {
 
   const referralSource = watch('referralSource');
   const interests = watch('interests');
+  const isNewBeliever = watch('isNewBeliever');
 
   const closeSheet = () => {
     setIsOpen(false);
@@ -60,26 +64,24 @@ export default function NewFamilyRegister() {
     setValue('referralSource', referralSource === option ? '' : option);
   };
 
+  // 민감 항목 변경 시 민감정보 동의의 조건부 필수 검증을 다시 돌린다.
   const toggleInterest = (option: string) => {
     const next = interests.includes(option)
       ? interests.filter((item) => item !== option)
       : [...interests, option];
     setValue('interests', next);
+    trigger('sensitiveAgreed');
   };
 
-  const onSubmit = async (data: FormValues) => {
+  const toggleNewBeliever = (checked: boolean) => {
+    setValue('isNewBeliever', checked);
+    trigger('sensitiveAgreed');
+  };
+
+  const onSubmit = async (formValues: FormValues) => {
     clearErrors('root');
     try {
-      const result = await submitNewFamilyRegistration({
-        name: data.name,
-        phone: data.phone,
-        birthDate: data.birthDate,
-        referralSource: data.referralSource,
-        isNewBeliever: data.isNewBeliever,
-        interests: data.interests,
-        privacyAgreed: data.consentAll,
-        sensitiveAgreed: data.consentAll
-      });
+      const result = await submitNewFamilyRegistration(formValues);
       if (!result.success) {
         setError('root', { message: result.message });
         return;
@@ -108,6 +110,7 @@ export default function NewFamilyRegister() {
             id="name"
             label="이름"
             placeholder="성함을 입력해 주세요"
+            required
             register={register('name', {
               required: '이름을 입력해 주세요.',
               maxLength: {
@@ -122,6 +125,7 @@ export default function NewFamilyRegister() {
             label="연락처"
             type="tel"
             placeholder="010-0000-0000"
+            required
             register={register('phone', {
               required: '연락처를 입력해 주세요.',
               minLength: { value: NEW_FAMILY_LIMITS.phoneMin, message: '연락처를 정확히 입력해 주세요.' },
@@ -166,7 +170,12 @@ export default function NewFamilyRegister() {
           </div>
 
           <label className={styles.check_row}>
-            <input type="checkbox" className={styles.check_input} {...register('isNewBeliever')} />
+            <input
+              type="checkbox"
+              className={styles.check_input}
+              checked={isNewBeliever}
+              onChange={(event) => toggleNewBeliever(event.target.checked)}
+            />
             <span className={styles.check_label}>신앙생활이 처음이에요 (초신자)</span>
           </label>
 
@@ -174,15 +183,32 @@ export default function NewFamilyRegister() {
             <input
               type="checkbox"
               className={styles.check_input}
-              {...register('consentAll', { required: '개인정보 수집·이용에 동의해 주세요.' })}
+              {...register('sensitiveAgreed', {
+                validate: (value, formValues) =>
+                  (!formValues.isNewBeliever && formValues.interests.length === 0) ||
+                  value ||
+                  '신앙 상태·관심 영역(민감정보) 수집에 동의해 주세요.'
+              })}
             />
             <span className={styles.check_label}>
-              이름·연락처와 관심 영역·신앙 상태(민감정보)를 새가족 안내 목적으로 수집·이용하는 데
-              동의합니다. (필수){' '}
+              신앙 상태·관심 영역(민감정보) 수집·이용에 동의합니다. 관심 영역이나 초신자를 선택하면
+              필수이며, 거부 시 해당 항목만 비워 두시면 됩니다.{' '}
               <Link href="/privacy-policy" target="_blank" className={styles.policy_link}>
                 처리방침
               </Link>
             </span>
+          </label>
+          {errors.sensitiveAgreed && (
+            <FormAlertMessage type="error" message={errors.sensitiveAgreed.message} />
+          )}
+
+          <label className={styles.check_row}>
+            <input
+              type="checkbox"
+              className={styles.check_input}
+              {...register('privacyAgreed', { required: '개인정보 수집·이용에 동의해 주세요.' })}
+            />
+            <span className={styles.check_label}>개인정보 수집·이용에 동의합니다. (필수)</span>
           </label>
 
           {errors.root && <FormAlertMessage type="error" message={errors.root.message} />}
