@@ -23,6 +23,21 @@ export type NewFamilyInput = {
 
 type SubmitResult = { success: boolean; message: string };
 
+type ParsedNewFamily = {
+  name: string;
+  phone: string;
+  birthDate: string;
+  referralSource: string;
+  isNewBeliever: boolean;
+  interests: InterestOption[];
+  privacyAgreed: boolean;
+  sensitiveAgreed: boolean;
+};
+
+type ValidationResult =
+  | { success: true; data: ParsedNewFamily }
+  | { success: false; message: string };
+
 const BIRTH_DATE_REGEX = /^\d{4}-\d{2}-\d{2}$/;
 
 // YYYY-MM-DD 형식이면서 실제 달력상 유효한 날짜인지 — '2026-02-31' 같은 값을 막는다.
@@ -32,8 +47,8 @@ function isValidBirthDate(value: string): boolean {
   return !Number.isNaN(date.getTime()) && date.toISOString().slice(0, 10) === value;
 }
 
-// 공개 anon 경로라 클라이언트 값을 신뢰하지 않는다 — input을 unknown으로 받아 서버에서 다시 검증한다.
-export async function submitNewFamilyRegistration(input: unknown): Promise<SubmitResult> {
+// 공개 anon 경로라 클라이언트 값을 신뢰하지 않는다 — 파싱·검증을 I/O와 분리해 서버에서 다시 본다.
+function validateAndParseNewFamily(input: unknown): ValidationResult {
   if (!input || typeof input !== 'object') {
     return { success: false, message: '입력값을 확인해 주세요.' };
   }
@@ -64,12 +79,16 @@ export async function submitNewFamilyRegistration(input: unknown): Promise<Submi
     return { success: false, message: '유입 경로를 확인해 주세요.' };
   }
 
-  // 중복 제거 후 허용값만 남긴다 — 목록 밖 값이 섞였거나 개수를 넘으면 거부한다.
+  // 원본 배열 크기를 먼저 거부해 대형 입력에서 Set 생성 비용을 막는다.
+  if (rawInterests.length > NEW_FAMILY_LIMITS.interestsMax) {
+    return { success: false, message: '관심 영역을 확인해 주세요.' };
+  }
+  // 중복 제거 후 허용값만 남긴다 — 목록 밖 값이 섞였으면 길이가 줄어 거부된다.
   const uniqueInterests = [...new Set(rawInterests)];
   const interests = uniqueInterests.filter((item): item is InterestOption =>
     INTEREST_OPTIONS.includes(item as InterestOption)
   );
-  if (interests.length !== uniqueInterests.length || interests.length > NEW_FAMILY_LIMITS.interestsMax) {
+  if (interests.length !== uniqueInterests.length) {
     return { success: false, message: '관심 영역을 확인해 주세요.' };
   }
 
@@ -77,6 +96,30 @@ export async function submitNewFamilyRegistration(input: unknown): Promise<Submi
   if ((isNewBeliever || interests.length > 0) && !sensitiveAgreed) {
     return { success: false, message: '민감정보 수집·이용에 동의해 주세요.' };
   }
+
+  return {
+    success: true,
+    data: {
+      name,
+      phone,
+      birthDate,
+      referralSource,
+      isNewBeliever,
+      interests,
+      privacyAgreed,
+      sensitiveAgreed
+    }
+  };
+}
+
+export async function submitNewFamilyRegistration(input: unknown): Promise<SubmitResult> {
+  const validation = validateAndParseNewFamily(input);
+  if (!validation.success) {
+    return { success: false, message: validation.message };
+  }
+
+  const { name, phone, birthDate, referralSource, isNewBeliever, interests, privacyAgreed, sensitiveAgreed } =
+    validation.data;
 
   try {
     const supabase = await createServerSideClient();
