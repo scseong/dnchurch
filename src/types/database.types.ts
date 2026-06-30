@@ -93,6 +93,8 @@ export type Database = {
           phone: string
           privacy_agreed: boolean
           referral_source: string | null
+          sensitive_agreed: boolean
+          status: Database["public"]["Enums"]["new_family_status_enum"]
         }
         Insert: {
           birth_date?: string | null
@@ -104,6 +106,8 @@ export type Database = {
           phone: string
           privacy_agreed: boolean
           referral_source?: string | null
+          sensitive_agreed?: boolean
+          status?: Database["public"]["Enums"]["new_family_status_enum"]
         }
         Update: {
           birth_date?: string | null
@@ -115,6 +119,8 @@ export type Database = {
           phone?: string
           privacy_agreed?: boolean
           referral_source?: string | null
+          sensitive_agreed?: boolean
+          status?: Database["public"]["Enums"]["new_family_status_enum"]
         }
         Relationships: []
       }
@@ -679,6 +685,7 @@ export type Database = {
       }
     }
     Enums: {
+      new_family_status_enum: "pending" | "contacted" | "completed"
       notice_category_enum:
         | "예배"
         | "행사"
@@ -827,6 +834,7 @@ export type CompositeTypes<
 export const Constants = {
   public: {
     Enums: {
+      new_family_status_enum: ["pending", "contacted", "completed"],
       notice_category_enum: [
         "예배",
         "행사",

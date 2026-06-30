@@ -1,120 +1,139 @@
 'use client';
 
 import { useState } from 'react';
+import { useForm } from 'react-hook-form';
+import Link from 'next/link';
 import clsx from 'clsx';
 import { LuUserPlus } from 'react-icons/lu';
 import { BottomSheet } from '@/components/ui';
+import { FormAlertMessage, FormField, FormSubmitButton } from '@/components/form';
 import { useToastStore } from '@/store/toast.store';
 import { submitNewFamilyRegistration } from '@/actions/new-family.action';
-import styles from '../page.module.scss';
+import { INTEREST_OPTIONS, NEW_FAMILY_LIMITS, REFERRAL_OPTIONS } from '@/constants/new-family';
+import pageStyles from '../page.module.scss';
+import styles from './NewFamilyRegister.module.scss';
 
-const REFERRAL_OPTIONS = ['지인 소개', '인터넷 검색', '우연히 방문', '기타'] as const;
-const INTEREST_OPTIONS = ['자녀 교육', '교제', '봉사', '양육', '예배'] as const;
+type FormValues = {
+  name: string;
+  phone: string;
+  birthDate: string;
+  referralSource: string;
+  isNewBeliever: boolean;
+  interests: string[];
+  privacyAgreed: boolean;
+  sensitiveAgreed: boolean;
+};
+
+const DEFAULT_VALUES: FormValues = {
+  name: '',
+  phone: '',
+  birthDate: '',
+  referralSource: '',
+  isNewBeliever: false,
+  interests: [],
+  privacyAgreed: false,
+  sensitiveAgreed: false
+};
 
 export default function NewFamilyRegister() {
-  const { success, error } = useToastStore();
-  const [open, setOpen] = useState(false);
-  const [submitting, setSubmitting] = useState(false);
-  const [name, setName] = useState('');
-  const [phone, setPhone] = useState('');
-  const [birthDate, setBirthDate] = useState('');
-  const [referral, setReferral] = useState('');
-  const [isNewBeliever, setIsNewBeliever] = useState(false);
-  const [interests, setInterests] = useState<string[]>([]);
-  const [agreed, setAgreed] = useState(false);
+  const { success } = useToastStore();
+  const [isOpen, setIsOpen] = useState(false);
 
-  const reset = () => {
-    setName('');
-    setPhone('');
-    setBirthDate('');
-    setReferral('');
-    setIsNewBeliever(false);
-    setInterests([]);
-    setAgreed(false);
+  const {
+    register,
+    handleSubmit,
+    watch,
+    setValue,
+    trigger,
+    setError,
+    clearErrors,
+    reset,
+    formState: { errors, isValid, isSubmitting }
+  } = useForm<FormValues>({ defaultValues: DEFAULT_VALUES, mode: 'onChange' });
+
+  const referralSource = watch('referralSource');
+  const interests = watch('interests');
+  const isNewBeliever = watch('isNewBeliever');
+
+  const closeSheet = () => {
+    setIsOpen(false);
+    reset(DEFAULT_VALUES);
   };
 
-  const toggleInterest = (value: string) => {
-    setInterests((prev) =>
-      prev.includes(value) ? prev.filter((item) => item !== value) : [...prev, value]
-    );
+  const toggleReferral = (option: string) => {
+    setValue('referralSource', referralSource === option ? '' : option);
   };
 
-  const handleSubmit = async (event: React.FormEvent) => {
-    event.preventDefault();
-    if (submitting) return;
+  // 민감 항목 변경 시 민감정보 동의의 조건부 필수 검증을 다시 돌린다.
+  const toggleInterest = (option: string) => {
+    const next = interests.includes(option)
+      ? interests.filter((item) => item !== option)
+      : [...interests, option];
+    setValue('interests', next);
+    trigger('sensitiveAgreed');
+  };
 
-    if (!name.trim() || !phone.trim()) {
-      error('이름과 연락처를 입력해 주세요.');
-      return;
-    }
-    if (!agreed) {
-      error('개인정보 수집·이용에 동의해 주세요.');
-      return;
-    }
+  const toggleNewBeliever = (checked: boolean) => {
+    setValue('isNewBeliever', checked);
+    trigger('sensitiveAgreed');
+  };
 
-    setSubmitting(true);
-    const result = await submitNewFamilyRegistration({
-      name,
-      phone,
-      birthDate,
-      referralSource: referral,
-      isNewBeliever,
-      interests,
-      privacyAgreed: agreed
-    });
-    setSubmitting(false);
-
-    if (result.ok) {
+  const onSubmit = async (formValues: FormValues) => {
+    clearErrors('root');
+    try {
+      const result = await submitNewFamilyRegistration(formValues);
+      if (!result.success) {
+        setError('root', { message: result.message });
+        return;
+      }
       success('새가족 등록 신청이 접수되었습니다. 따뜻하게 연락드릴게요.');
-      setOpen(false);
-      reset();
-    } else {
-      error(result.error ?? '등록에 실패했습니다.');
+      closeSheet();
+    } catch {
+      setError('root', { message: '등록에 실패했습니다. 잠시 후 다시 시도해 주세요.' });
     }
   };
 
   return (
     <>
-      <button type="button" className={styles.register_cta} onClick={() => setOpen(true)}>
-        <LuUserPlus className={styles.register_cta_icon} aria-hidden />
+      <button type="button" className={pageStyles.register_cta} onClick={() => setIsOpen(true)}>
+        <LuUserPlus className={pageStyles.register_cta_icon} aria-hidden />
         새가족 등록하기
       </button>
 
-      <BottomSheet open={open} onClose={() => setOpen(false)} title="새가족 등록">
-        <p className={styles.form_subtitle}>남겨 주시면 따뜻하게 연락드릴게요.</p>
-        <form className={styles.reg_form} onSubmit={handleSubmit}>
-          <label className={styles.field}>
-            <span className={styles.field_label}>이름</span>
-            <input
-              className={styles.field_input}
-              type="text"
-              value={name}
-              onChange={(event) => setName(event.target.value)}
-              placeholder="성함을 입력해 주세요"
-            />
-          </label>
-
-          <label className={styles.field}>
-            <span className={styles.field_label}>연락처</span>
-            <input
-              className={styles.field_input}
-              type="tel"
-              inputMode="tel"
-              value={phone}
-              onChange={(event) => setPhone(event.target.value)}
-              placeholder="010-0000-0000"
-            />
-          </label>
-
-          <label className={styles.field}>
-            <span className={styles.field_label}>생년월일</span>
-            <input
-              className={styles.field_input}
-              type="date"
-              value={birthDate}
-              onChange={(event) => setBirthDate(event.target.value)}
-            />
-          </label>
+      <BottomSheet open={isOpen} onClose={closeSheet} title="새가족 등록">
+        <p className={styles.subtitle}>
+          교회에 처음 오신 여러분을 진심으로 환영합니다. 아래 정보를 남겨 주시면 새가족 담당자가
+          따뜻하게 연락드리고, 첫걸음을 함께하겠습니다.
+        </p>
+        <form className={styles.form} onSubmit={handleSubmit(onSubmit)}>
+          <FormField
+            id="name"
+            label="이름"
+            placeholder="성함을 입력해 주세요"
+            required
+            register={register('name', {
+              required: '이름을 입력해 주세요.',
+              maxLength: {
+                value: NEW_FAMILY_LIMITS.nameMax,
+                message: `${NEW_FAMILY_LIMITS.nameMax}자 이내로 입력해 주세요.`
+              }
+            })}
+            error={errors.name?.message}
+          />
+          <FormField
+            id="phone"
+            label="연락처"
+            type="tel"
+            placeholder="010-0000-0000"
+            required
+            register={register('phone', {
+              required: '연락처를 입력해 주세요.',
+              minLength: { value: NEW_FAMILY_LIMITS.phoneMin, message: '연락처를 정확히 입력해 주세요.' },
+              maxLength: { value: NEW_FAMILY_LIMITS.phoneMax, message: '연락처를 정확히 입력해 주세요.' }
+            })}
+            error={errors.phone?.message}
+          />
+          <FormField id="birthDate" label="생년월일" type="date" register={register('birthDate')} />
 
           <div className={styles.field}>
             <span className={styles.field_label}>어떻게 오셨나요?</span>
@@ -123,9 +142,9 @@ export default function NewFamilyRegister() {
                 <button
                   key={option}
                   type="button"
-                  className={clsx(styles.choice, referral === option && styles.choice_on)}
-                  aria-pressed={referral === option}
-                  onClick={() => setReferral((prev) => (prev === option ? '' : option))}
+                  className={clsx(styles.choice, referralSource === option && styles.choice_on)}
+                  aria-pressed={referralSource === option}
+                  onClick={() => toggleReferral(option)}
                 >
                   {option}
                 </button>
@@ -152,27 +171,49 @@ export default function NewFamilyRegister() {
 
           <label className={styles.check_row}>
             <input
-              className={styles.check_input}
               type="checkbox"
+              className={styles.check_input}
               checked={isNewBeliever}
-              onChange={(event) => setIsNewBeliever(event.target.checked)}
+              onChange={(event) => toggleNewBeliever(event.target.checked)}
             />
             <span className={styles.check_label}>신앙생활이 처음이에요 (초신자)</span>
           </label>
 
+          <label className={clsx(styles.check_row, styles.check_row_consent)}>
+            <input
+              type="checkbox"
+              className={styles.check_input}
+              {...register('sensitiveAgreed', {
+                validate: (value, formValues) =>
+                  (!formValues.isNewBeliever && formValues.interests.length === 0) ||
+                  value ||
+                  '신앙 상태·관심 영역(민감정보) 수집에 동의해 주세요.'
+              })}
+            />
+            <span className={styles.check_label}>
+              신앙 상태·관심 영역(민감정보) 수집·이용에 동의합니다. 관심 영역이나 초신자를 선택하면
+              필수이며, 거부 시 해당 항목만 비워 두시면 됩니다.
+            </span>
+          </label>
+          <Link href="/privacy-policy" target="_blank" className={styles.policy_link}>
+            민감정보 처리방침 보기
+          </Link>
+          {errors.sensitiveAgreed && (
+            <FormAlertMessage type="error" message={errors.sensitiveAgreed.message} />
+          )}
+
           <label className={styles.check_row}>
             <input
-              className={styles.check_input}
               type="checkbox"
-              checked={agreed}
-              onChange={(event) => setAgreed(event.target.checked)}
+              className={styles.check_input}
+              {...register('privacyAgreed', { required: '개인정보 수집·이용에 동의해 주세요.' })}
             />
-            <span className={styles.check_label}>개인정보 수집·이용에 동의합니다.</span>
+            <span className={styles.check_label}>개인정보 수집·이용에 동의합니다. (필수)</span>
           </label>
 
-          <button type="submit" className={styles.submit_btn} disabled={submitting}>
-            {submitting ? '신청 중…' : '등록 신청하기'}
-          </button>
+          {errors.root && <FormAlertMessage type="error" message={errors.root.message} />}
+
+          <FormSubmitButton isDisabled={!isValid} isSubmitting={isSubmitting} label="등록 신청하기" />
         </form>
       </BottomSheet>
     </>
