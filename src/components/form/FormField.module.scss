@@ -1,10 +1,9 @@
 .input_group {
-  margin-bottom: $spacing-12;
-
   .label {
     margin-bottom: $spacing-8;
     display: block;
     position: relative;
+    font-size: $font-size-13;
   }
 
   .label_blind {
@@ -26,13 +25,19 @@
   }
 
   input {
-    padding: $spacing-12;
     display: block;
     width: 100%;
+    height: 4.2rem;
+    padding: 0 $spacing-12;
     border: 1px solid $border-primary;
     border-radius: $radius-s;
     outline: none;
+    font-size: $font-size-13;
     transition: border 0.1s ease-in-out;
+
+    &::placeholder {
+      font-size: $font-size-13;
+    }
 
     &:focus {
       border-color: $border-focus;
