@@ -15,6 +15,23 @@
 - **확인**: 가입 폼에 민감정보·국외이전 별도 동의 체크박스 존재 여부
 - **발견일**: 2026-06-19 (privacy-policy PR #130 Codex 리뷰 — 처리방침 문구와 동의 UI 정합성 지적)
 
+### 🟢 새가족 공개 폼 — interests 배열 DB 중복 미차단 (new-family-form-hardening PR #135)
+
+- **무엇**: `new_family_registrations.interests`의 DB CHECK는 허용값(`<@`)과 개수(`<= 5`)만 본다. 서버 액션은 `[...new Set(...)]`로 중복을 제거하지만, anon이 PostgREST로 직접 insert하면 `['예배','예배']` 같은 중복 배열이 그대로 저장된다. 이후 관리자 화면·관심 영역 집계가 같은 신청자를 여러 번 셀 수 있다.
+- **왜 지금 안 하나**: 배열 원소 중복 금지는 단순 CHECK로 표현할 수 없고(CHECK에 서브쿼리 불가) immutable 함수나 트리거가 필요하다. interests는 5개 고정 선택지의 부분집합이라 직접 insert 중복은 저위험이라, 함수 추가 대신 서버 dedupe로 두었다.
+- **마이그레이션 경로**: `array_has_no_dups(text[])` immutable 함수를 만들고 `check (array_has_no_dups(interests))`를 추가한다. 또는 관리자 집계 단에서 distinct로 정규화한다.
+- **영향 범위**: `supabase/migrations/`(new_family_registrations), 관리자 집계
+- **발견일**: 2026-06-30 (PR #135 GitHub Codex 리뷰 P2)
+
+### 🟢 새가족 공개 폼 — 스팸 방지(captcha/rate-limit) 없음 (new-family-form-hardening)
+
+- **무엇**: `/about/welcome` 공개 폼이 anon insert를 허용하는데 captcha·rate-limit이 없어, 봇·반복 제출로 등록 큐가 오염될 수 있다. 입력 무결성·동의는 이 task에서 강화했으나 남용 방지는 별개 축이다.
+- **왜 지금 안 하나**: 이번 범위는 데이터 무결성·민감정보 동의였다. 남용 방지는 외부 captcha 서비스나 rate-limit 인프라 결정이 필요해 분리했다.
+- **다음 기준**: 공개 폼 악용 징후 또는 운영 요청 시.
+- **마이그레이션 경로**: Turnstile·hCaptcha 같은 captcha를 폼·Server Action에 붙이거나, IP·세션 기준 rate-limit을 둔다.
+- **영향 범위**: `src/app/(content)/about/welcome/_component/NewFamilyRegister.tsx`, `src/actions/new-family.action.ts`
+- **발견일**: 2026-06-30 (new-family-form-hardening 후속)
+
 ### 🟡 홈 Hero 캐러셀에 자동재생 정지 수단이 없음 (WCAG 2.2.2)
 
 - **상태**: 등록만 (home-gold-redesign PR #132에서 분리)

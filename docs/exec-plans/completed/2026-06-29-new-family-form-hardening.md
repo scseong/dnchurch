@@ -1,6 +1,6 @@
 # new-family-form-hardening
 
-- **상태**: 🟡 진행 중
+- **상태**: ✅ 완료 (2026-06-30)
 - **시작일**: 2026-06-29
 - **브랜치**: feat/new-family-form-hardening
 - **Open questions**: none
@@ -184,3 +184,17 @@ PR #135 — gemini·GitHub Codex·codex:rescue 리뷰.
   - 이유: 수집 측 강화가 먼저. 조회는 service_role 읽기 별도 작업.
   - 다음 기준: 등록 데이터가 쌓이기 시작할 때.
   - 기록 위치: 없음
+
+## 회고
+
+### 잘된 것
+- 검증을 컴포넌트·서버 액션·DB CHECK 3겹으로 두고, dev에 직접 insert해 위반 3건 거부와 정상 통과를 실측했다. 방어선을 추측이 아니라 눈으로 확인했다.
+- Codex 계획 검증이 잡은 D3(정책을 `to anon`으로 좁히면 로그인 성도 제출이 막힘)을 구현 전에 반영했다. 안 잡았으면 운영 버그였다.
+
+### 다음에 할 것
+- 민감정보 동의를 D1(분리)→D7(통합)→D8(조건부 분리)로 세 번 뒤집었다. §23 같은 법적 제약이 걸린 결정은 처음에 제약을 사용자와 분명히 정하고 시작한다.
+- 공통 폼 UI를 같은 PR에서 손대 영향이 주보·auth까지 번졌다. 공통 컴포넌트 변경은 영향 폼을 먼저 나열하고 시작한다.
+
+### 부채
+- interests 배열 DB 중복 미차단 — 서버는 dedupe하나 PostgREST 직접 insert는 중복 가능. immutable 함수+CHECK 필요(저위험). `docs/tech-debt/active.md` 등록.
+- prod 마이그레이션 3개 미적용 — develop→main 릴리스 때 적용.
