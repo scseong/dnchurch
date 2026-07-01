@@ -21,6 +21,7 @@ const HERO_META: Record<string, HeroMeta> = {
  * - /about: hub가 자체 다크 hero를 직접 렌더한다(중복 방지).
  * - /about/pastor·/about/worship·/about/location·/about/vision·/about/welcome: 목업 재설계 — Hero 없이 in-page warm 탭 내비 + 카드로 구성한다(about-warm-redesign·about-children-redesign).
  * - /sermons: 목업 재설계 — Hero 밴드 대신 헤더 '설교' 타이틀 + 검색 인풋으로 구성한다(sermon-home-redesign). HERO_META['/sermons']는 자식(/sermons/all·/series)의 subtitle 소스로 남긴다.
+ * - /sermons/all·/sermons/series: 목업 재설계 — Hero 없이 헤더 타이틀 + 콘텐츠로 구성한다(sermon-views-redesign).
  */
 const SELF_HERO_PATHS = new Set([
   '/about',
@@ -29,7 +30,9 @@ const SELF_HERO_PATHS = new Set([
   '/about/location',
   '/about/vision',
   '/about/welcome',
-  '/sermons'
+  '/sermons',
+  '/sermons/all',
+  '/sermons/series'
 ]);
 
 /**

@@ -1,3 +1,14 @@
+// 모바일은 헤더가 '전체 설교' h1을 제공하므로 페이지 h1을 숨긴다. 데스크톱은 헤더 h1이
+// display:none이라 페이지 h1만 접근성 h1으로 노출한다(Hero 제거로 사라진 h1 보전, 뷰별 1개 유지).
+.blind_title {
+  display: none;
+
+  @include respond-up($header-breakpoint) {
+    @include blind;
+    display: block;
+  }
+}
+
 // ══════════════════════════════════════════
 // Body Layout
 // ══════════════════════════════════════════
@@ -184,6 +195,16 @@ $radio-dot-size: 0.4rem;
 
 .search_form {
   flex: 1;
+
+  // 설교 검색 입력·placeholder는 13px (사용자 지정). placeholder는 globals의
+  // `input::placeholder{font-size:14}`가 상속을 덮으므로 pseudo도 명시 오버라이드.
+  input {
+    font-size: $font-size-13;
+
+    &::placeholder {
+      font-size: $font-size-13;
+    }
+  }
 }
 
 .filter_btn {
@@ -197,7 +218,6 @@ $radio-dot-size: 0.4rem;
   font-size: $font-size-13;
   font-weight: $font-weight-medium;
   color: $txt-secondary;
-  background: $primary-subtle;
   border: 1px solid $border-primary;
   border-radius: $radius-s;
   cursor: pointer;
@@ -237,6 +257,36 @@ $radio-dot-size: 0.4rem;
   }
 }
 
+// ── Filter/Search Chip (적용된 검색·필터를 표시 — 클릭하면 해당 조건 해제) ──
+
+.chip_row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: $spacing-8;
+  margin-bottom: $content-gap-m;
+}
+
+// 목업: warm sand pill(#efe4d6 = $home-tint) + brown 텍스트($primary), 우측 닫기 아이콘.
+.filter_chip {
+  display: inline-flex;
+  align-items: center;
+  gap: $spacing-6;
+  padding: $spacing-6 $spacing-8 $spacing-6 $spacing-12;
+  font-size: $font-size-12;
+  font-weight: $font-weight-semibold;
+  color: $primary;
+  background-color: $home-tint;
+  border: none;
+  border-radius: $radius-circle;
+  cursor: pointer;
+
+  @include hover-bg-shift($home-border);
+
+  svg {
+    font-size: $font-size-14;
+  }
+}
+
 // ── Result Header (필터 모드 결과 헤더 + 정렬) ──
 
 .result_header {
@@ -244,27 +294,16 @@ $radio-dot-size: 0.4rem;
   align-items: center;
   justify-content: space-between;
   gap: $spacing-12;
-  margin-bottom: $content-gap-m;
-  padding-bottom: $spacing-12;
-  border-bottom: 1px solid $border-subtle;
+  margin-bottom: $content-gap-s;
 }
 
+// 카운트는 warm tan(#9a826d) semibold, 숫자(strong)만 black(#2a241d)로 강조.
 .result_count {
   margin: 0;
   font-size: $font-size-13;
-  color: $txt-secondary;
+  font-weight: $font-weight-semibold;
+  color: $home-text-muted;
   word-break: keep-all;
-
-  strong {
-    color: $txt-primary;
-    font-weight: $font-weight-bold;
-    font-variant-numeric: tabular-nums;
-  }
-}
-
-.result_query {
-  color: $primary;
-  font-weight: $font-weight-bold;
 }
 
 .result_page_info {
@@ -419,7 +458,7 @@ $radio-dot-size: 0.4rem;
 .grid {
   display: grid;
   grid-template-columns: 1fr;
-  gap: $content-gap-m;
+  gap: $content-gap-xs;
   list-style: none;
   padding: 0;
   margin: 0;

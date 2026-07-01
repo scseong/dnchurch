@@ -147,8 +147,10 @@ export function resolveMobileHeader(pathname: string): { title: string; showBack
   // 목업 재설계: About 교회 소개 화면은 헤더에 '교회 소개' 타이틀 + 뒤로가기로 둔다(목업 일치).
   if (ABOUT_REDESIGNED_ROUTES.has(pathname)) return { title: '교회 소개', showBack: true };
 
-  // 목업 재설계: 설교 홈은 Hero 밴드 대신 헤더 '설교' 타이틀 + 뒤로가기로 둔다(sermon-home-redesign).
+  // 목업 재설계: 설교 홈·하위 뷰는 Hero 밴드 대신 헤더에 페이지별 타이틀 + 뒤로가기로 둔다(sermon-home·views-redesign).
   if (pathname === '/sermons') return { title: '설교', showBack: true };
+  if (pathname === '/sermons/all') return { title: '전체 설교', showBack: true };
+  if (pathname === '/sermons/series') return { title: '시리즈', showBack: true };
 
   const special = SPECIAL_PAGES[pathname];
   if (special) return { title: special, showBack: false };
@@ -180,6 +182,9 @@ export function resolveMobileHeader(pathname: string): { title: string; showBack
 export function resolveSiblingTabs(pathname: string): NavItem[] | null {
   // 목업 재설계로 자체 in-page 섹션 탭(AboutTabNav)을 렌더하는 페이지는 헤더 형제 탭을 끈다(중복 방지).
   if (ABOUT_REDESIGNED_ROUTES.has(pathname)) return null;
+
+  // 목업 재설계: 설교 하위 뷰(전체 설교·시리즈·상세)는 형제 탭 없이 단일 헤더로 둔다(목업 일치).
+  if (pathname.startsWith('/sermons/')) return null;
 
   for (const item of GNB_ITEMS) {
     if (!item.children?.length) continue;

@@ -16,9 +16,8 @@ export default function MobileHeader() {
   const router = useRouter();
   const { title, showBack } = resolveMobileHeader(pathname);
   const tabs = resolveSiblingTabs(pathname);
-  // 목업 재설계 — '교회 소개'(About 탭 전체)와 설교 홈만 헤더 타이틀 가운데 정렬.
-  // 설교는 path로 좁힌다 — /sermons/all·/series·상세도 title이 '설교'라 문자열 비교면 sub-page까지 적용된다.
-  const centeredTitle = title === '교회 소개' || pathname === '/sermons';
+  // 목업 재설계 — '교회 소개'(About 탭 전체)와 설교 전체 화면(홈·전체 설교·시리즈·상세)의 헤더 타이틀 가운데 정렬.
+  const centeredTitle = title === '교회 소개' || pathname.startsWith('/sermons');
   const { drawerOpen, openDrawer, closeDrawer } = useDrawerHistory();
   const overlayRef = useRef<HTMLDivElement>(null);
 

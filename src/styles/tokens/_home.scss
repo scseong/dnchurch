@@ -2,8 +2,9 @@
 // HOME (warm tone) — 홈 + 공용 레이아웃 + About(교회 소개) 톤 토큰
 // Claude Design 디자인 시안 기준 브라운 팔레트: 베이지 면 + 브라운 메인 액센트 + 골드 보조 장식.
 // globals 시스템(cool navy + 노란기 적은 중성 beige)과 별개.
-// 사용처: 홈 콘텐츠 모듈 + 공용 레이아웃 BottomNav·Header·Footer + About(교회 소개) 섹션.
-// news·sermons·community 등 그 외 콘텐츠 본문에서는 쓰지 않는다.
+// 사용처: 홈 콘텐츠 모듈 + 공용 레이아웃 BottomNav·Header·Footer + About(교회 소개) 섹션
+//   + 설교(sermons) 뷰 — 목업이 홈과 같은 warm 디자인 언어라 warm 팔레트를 그대로 확장.
+// news·community 등 아직 cool globals를 쓰는 콘텐츠 본문에서는 쓰지 않는다.
 // (admin 전용 토큰과 같은 스코프 컨벤션: 네이밍 + 사용처로 스코프)
 // ════════════════════════════════════════════
 

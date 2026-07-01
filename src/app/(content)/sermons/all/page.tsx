@@ -5,7 +5,9 @@ import { EmptyState, Pagination } from '@/components/ui';
 import SermonSidebar from '../_component/SermonListPage/SermonSidebar';
 import SermonToolbar from '../_component/SermonListPage/SermonToolbar';
 import SermonFilteredList from '../_component/SermonListPage/SermonFilteredList';
-import SermonResultHeader from '../_component/SermonListPage/SermonResultHeader';
+import SermonResultHeader, {
+  type ActiveFilterChip
+} from '../_component/SermonListPage/SermonResultHeader';
 import {
   FILTER_PAGE_SIZE,
   getAllPreachers,
@@ -16,6 +18,7 @@ import {
 import {
   buildSermonHref,
   computeStandaloneCount,
+  formatPreacherLabel,
   parseSermonParams,
   resolvePreacherName,
   resolveSeriesSlug
@@ -87,6 +90,7 @@ export default async function AllSermonsPage({ searchParams }: PageProps) {
 
     return (
       <LayoutContainer>
+        <h1 className={styles.blind_title}>전체 설교</h1>
         <div className={styles.body}>
           <SermonSidebar
             allSeries={filterableSeries}
@@ -127,8 +131,30 @@ export default async function AllSermonsPage({ searchParams }: PageProps) {
     redirect(buildSermonHref(params, { page: String(totalPages) }));
   }
 
+  // 적용된 필터를 표시 라벨로 해석 — 결과 헤더의 필터 칩(클릭 시 해당 조건 해제)에 넘긴다.
+  const activeSeriesTitle =
+    activeSeries === 'none'
+      ? '단독 설교'
+      : (allSeries.find((item) => item.slug === activeSeries)?.title ?? null);
+  const activePreacherObj = activePreacher
+    ? allPreachers.find((item) => item.name === activePreacher)
+    : null;
+
+  const filterChips: ActiveFilterChip[] = [];
+  if (activeSeries && activeSeriesTitle) {
+    filterChips.push({ type: 'series', label: activeSeriesTitle });
+  }
+  if (activePreacherObj) {
+    filterChips.push({
+      type: 'preacher',
+      label: formatPreacherLabel(activePreacherObj)
+    });
+  }
+
   return (
     <LayoutContainer>
+      {/* Hero 밴드 제거로 사라진 페이지 h1 보전 (헤더 '전체 설교'와 별개, 데스크톱 접근성용) */}
+      <h1 className={styles.blind_title}>전체 설교</h1>
       <div className={styles.body}>
         <SermonSidebar
           allSeries={filterableSeries}
@@ -146,6 +172,7 @@ export default async function AllSermonsPage({ searchParams }: PageProps) {
             resultCount={filteredTotal}
             currentPage={page}
             totalPages={totalPages}
+            filterChips={filterChips}
           />
           <SermonFilteredList sermons={listResult.sermons} />
           <Pagination
