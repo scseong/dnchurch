@@ -91,8 +91,7 @@ $mobile-header-offset: $app-header-height;
   flex-wrap: wrap;
   align-items: center;
   gap: $spacing-4;
-  font-size: $font-size-12;
-  color: $home-text-sub;
+  font-size: $font-size-13;
 
   @include respond-up($breakpoint-tablet) {
     gap: $spacing-8;
@@ -114,27 +113,18 @@ $mobile-header-offset: $app-header-height;
 .sections {
   display: flex;
   flex-direction: column;
-
-  // 모바일: sticky 탭바의 containing block(=.sections)이 짧은 활성 패널
-  // 때문에 일찍 끝나 탭바가 곧 풀리는 문제 → 뷰포트 높이만큼 최소 확보.
-  // 실제 패널 콘텐츠가 더 길면 콘텐츠 높이가 우선.
-  min-height: calc(100svh - #{$mobile-header-offset});
-
-  @include respond-up($breakpoint-tablet) {
-    min-height: 0;
-  }
 }
 
 // 모바일: sticky 탭 바. PC(≥768)에서는 숨김 — 전 패널 스택 노출.
-// 모바일: 컨테이너 패딩을 음수 마진으로 상쇄해 화면 풀폭 탭 바(여백 0).
 .tab_bar {
   position: sticky;
   top: $mobile-header-offset;
+  gap: $spacing-24;
+  margin-bottom: $spacing-20;
   z-index: 10;
   display: flex;
-  margin: 0 calc(-1 * $container-padding) $content-gap-l;
-  background: $bg-card;
   border-bottom: 1px solid $border-subtle;
+  background: $home-surface;
 
   @include respond-up($breakpoint-tablet) {
     display: none;
@@ -144,7 +134,6 @@ $mobile-header-offset: $app-header-height;
 .tab {
   display: flex;
   justify-content: center;
-  flex: 1;
   padding: $spacing-16 0;
   font-size: $font-size-14;
   font-weight: $font-weight-semibold;
@@ -205,7 +194,7 @@ $mobile-header-offset: $app-header-height;
 }
 
 .empty {
-  font-size: $font-size-14;
+  font-size: $font-size-13;
   color: $home-text-muted;
   font-style: italic;
 }
@@ -213,6 +202,14 @@ $mobile-header-offset: $app-header-height;
 // ══════════════════════════════════════════
 // Summary
 // ══════════════════════════════════════════
+
+// 설교 요약·빈 상태를 말씀 구절(ScriptureBlock)과 같은 흰 카드로 감싼다.
+.content_card {
+  padding: $spacing-20;
+  background: $home-card;
+  border: 1px solid $home-border;
+  border-radius: $radius-s;
+}
 
 .summary_text {
   font-size: $font-size-14;

@@ -17,11 +17,14 @@ export default function ScriptureBlock({ scriptureRef, scriptureText }: Props) {
     <div className={styles.block}>
       <h4 className={styles.ref}>{scriptureRef}</h4>
       {hasText ? (
-        <div className={styles.text_wrap}>
-          <p className={clsx(styles.text, !expanded && styles.text_collapsed)}>
-            {scriptureText}
-          </p>
-          {!expanded && <span className={styles.fade} aria-hidden="true" />}
+        <>
+          <div className={styles.text_wrap}>
+            <p className={clsx(styles.text, !expanded && styles.text_collapsed)}>
+              {scriptureText}
+            </p>
+            {!expanded && <span className={styles.fade} aria-hidden="true" />}
+          </div>
+          {/* fade 밖(아래)에 둬야 '자세히 보기'가 그라디언트에 가려지지 않는다. */}
           <button
             type="button"
             className={styles.toggle}
@@ -29,7 +32,7 @@ export default function ScriptureBlock({ scriptureRef, scriptureText }: Props) {
           >
             {expanded ? '접기' : '자세히 보기'}
           </button>
-        </div>
+        </>
       ) : (
         <p className={styles.empty}>본문 텍스트가 등록되지 않았습니다</p>
       )}

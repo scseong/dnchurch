@@ -94,7 +94,9 @@ export default function SermonDetailSections({ sermon }: Props) {
             scriptureText={sermon.scripture_text}
           />
         ) : (
-          <p className={styles.empty}>말씀 구절이 등록되지 않았습니다</p>
+          <div className={styles.content_card}>
+            <p className={styles.empty}>말씀 구절이 등록되지 않았습니다</p>
+          </div>
         )}
       </section>
 
@@ -103,11 +105,13 @@ export default function SermonDetailSections({ sermon }: Props) {
         className={panelClassName('summary')}
       >
         <SectionHeader>설교 요약</SectionHeader>
-        {sermon.summary ? (
-          <p className={styles.summary_text}>{sermon.summary}</p>
-        ) : (
-          <p className={styles.empty}>설교 요약이 등록되지 않았습니다</p>
-        )}
+        <div className={styles.content_card}>
+          {sermon.summary ? (
+            <p className={styles.summary_text}>{sermon.summary}</p>
+          ) : (
+            <p className={styles.empty}>설교 요약이 등록되지 않았습니다</p>
+          )}
+        </div>
       </section>
 
       <section
@@ -118,7 +122,9 @@ export default function SermonDetailSections({ sermon }: Props) {
         {activeResources.length > 0 ? (
           <ResourceCardList resources={activeResources} />
         ) : (
-          <p className={styles.empty}>등록된 자료가 없습니다</p>
+          <div className={styles.content_card}>
+            <p className={styles.empty}>등록된 자료가 없습니다</p>
+          </div>
         )}
       </section>
     </div>
