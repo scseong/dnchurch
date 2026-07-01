@@ -78,13 +78,7 @@ function EpisodeRow({ episode, order, isCurrent }: EpisodeRowProps) {
           )}
         </span>
       </span>
-      {isCurrent && (
-        <span className={styles.play_indicator} aria-hidden="true">
-          <svg width="9" height="9" viewBox="0 0 24 24" fill="currentColor">
-            <path d="M8 5v14l11-7z" />
-          </svg>
-        </span>
-      )}
+      {isCurrent && <span className={styles.play_indicator}>재생 중</span>}
     </>
   );
 

@@ -27,7 +27,7 @@ export default function ScriptureBlock({ scriptureRef, scriptureText }: Props) {
             className={styles.toggle}
             onClick={() => setExpanded((v) => !v)}
           >
-            {expanded ? '접기' : '더 보기'}
+            {expanded ? '접기' : '자세히 보기'}
           </button>
         </div>
       ) : (

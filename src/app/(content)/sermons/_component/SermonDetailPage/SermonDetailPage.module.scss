@@ -90,7 +90,7 @@ $mobile-header-offset: $app-header-height;
 .series_tag_plain {
   font-size: $font-size-13;
   font-weight: $font-weight-semibold;
-  color: $txt-tertiary;
+  color: $home-text-muted;
 }
 
 .sermon_title {
@@ -98,7 +98,7 @@ $mobile-header-offset: $app-header-height;
   font-size: $font-size-22;
   font-weight: $font-weight-bold;
   line-height: $line-height-snug;
-  color: $txt-primary;
+  color: $home-text;
 
   @include respond-up($breakpoint-pc-sm) {
     font-size: $font-size-26;
@@ -111,7 +111,7 @@ $mobile-header-offset: $app-header-height;
   align-items: center;
   gap: $spacing-4;
   font-size: $font-size-12;
-  color: $txt-tertiary;
+  color: $home-text-sub;
 
   @include respond-up($breakpoint-tablet) {
     gap: $spacing-8;
@@ -122,7 +122,7 @@ $mobile-header-offset: $app-header-height;
 .dot {
   width: 0.2rem;
   height: 0.2rem;
-  background: $txt-tertiary;
+  background: $home-text-muted;
   border-radius: $radius-circle;
 }
 
@@ -251,22 +251,24 @@ $mobile-header-offset: $app-header-height;
   display: flex;
   justify-content: center;
   flex: 1;
-  padding: $spacing-20 0;
-  font-size: $font-size-13;
-  font-weight: $font-weight-medium;
-  color: $txt-tertiary;
+  padding: $spacing-16 0;
+  font-size: $font-size-14;
+  font-weight: $font-weight-semibold;
+  color: $home-text-sub;
   background: transparent;
   border: none;
+  border-bottom: 2px solid transparent;
+  margin-bottom: -1px; // .tab_bar 하단 보더 위로 밑줄을 겹친다
   cursor: pointer;
   transition:
     color 0.15s ease,
-    font-weight 0.15s ease;
+    border-color 0.15s ease;
 }
 
-// 활성 표시는 밑줄 없이 색·굵기만.
+// 목업: 활성 탭은 brown 텍스트 + brown 밑줄.
 .tab_active {
-  color: $txt-primary;
-  font-weight: $font-weight-bold;
+  color: $primary;
+  border-bottom-color: $primary;
 }
 
 // 모바일: 활성 패널만 표시. PC: 전 패널 표시 + 패널 간 구분선.
@@ -301,16 +303,16 @@ $mobile-header-offset: $app-header-height;
     display: block;
     margin-bottom: $content-gap-s;
     font-size: $font-size-13;
-    font-weight: $font-weight-bold;
+    font-weight: $font-weight-semibold;
     letter-spacing: 0.08em;
     text-transform: uppercase;
-    color: $txt-primary;
+    color: $home-text-muted;
   }
 }
 
 .empty {
   font-size: $font-size-14;
-  color: $txt-tertiary;
+  color: $home-text-muted;
   font-style: italic;
 }
 
@@ -321,7 +323,7 @@ $mobile-header-offset: $app-header-height;
 .summary_text {
   font-size: $font-size-14;
   line-height: $line-height-loose;
-  color: $txt-secondary;
+  color: $home-text;
   white-space: pre-wrap; // admin UI 입력값의 줄바꿈 보존 (의사결정 로그 D4)
 }
 
@@ -340,8 +342,8 @@ $mobile-header-offset: $app-header-height;
   align-items: center;
   gap: $content-gap-s;
   padding: $spacing-12 $spacing-16;
-  background: $bg-card;
-  border: 1px solid $border-card;
+  background: $home-card;
+  border: 1px solid $home-border;
   border-radius: $radius-s;
   text-decoration: none;
   transition: background-color 0.15s ease;
@@ -361,8 +363,8 @@ $mobile-header-offset: $app-header-height;
   font-size: $font-size-11;
   font-weight: $font-weight-bold;
   letter-spacing: 0.05em;
-  color: $accent;
-  background: $bg-accent-subtle;
+  color: $primary;
+  background: $home-tint;
   border-radius: $radius-xs;
 }
 
@@ -377,7 +379,7 @@ $mobile-header-offset: $app-header-height;
 .resource_title {
   font-size: $font-size-14;
   font-weight: $font-weight-semibold;
-  color: $txt-primary;
+  color: $home-text;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -385,11 +387,11 @@ $mobile-header-offset: $app-header-height;
 
 .resource_size {
   font-size: $font-size-11;
-  color: $txt-tertiary;
+  color: $home-text-muted;
 }
 
 .resource_download {
   flex-shrink: 0;
   font-size: $font-size-16;
-  color: $txt-tertiary;
+  color: $home-text-muted;
 }

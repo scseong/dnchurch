@@ -14,8 +14,8 @@ $episode-list-max-height: 48rem;
 .summary_card {
   display: flex;
   flex-direction: column;
-  background-color: $bg-card;
-  border: 1px solid $border-card;
+  background-color: $home-card;
+  border: 1px solid $home-border;
   border-radius: $radius-s;
   padding: $padding-card;
 }
@@ -25,14 +25,14 @@ $episode-list-max-height: 48rem;
   font-size: $font-size-11;
   font-weight: $font-weight-semibold;
   letter-spacing: $letter-spacing-wide;
-  color: $accent;
+  color: $home-text-muted;
 }
 
 .series_title {
   margin: 0 0 $spacing-8;
   font-size: $font-size-15;
   font-weight: $font-weight-bold;
-  color: $txt-primary;
+  color: $home-text;
   letter-spacing: $letter-spacing-body;
   word-break: keep-all;
 }
@@ -40,7 +40,7 @@ $episode-list-max-height: 48rem;
 .series_description {
   margin: 0 0 $spacing-12;
   font-size: $font-size-12;
-  color: $txt-secondary;
+  color: $home-text-sub;
   line-height: $line-height-body-reading;
   word-break: keep-all;
 }
@@ -51,9 +51,9 @@ $episode-list-max-height: 48rem;
   align-items: center;
   gap: $spacing-4;
   padding-top: $spacing-12;
-  border-top: 1px solid $border-subtle;
+  border-top: 1px solid $home-border-divider;
   font-size: $font-size-11;
-  color: $txt-secondary;
+  color: $home-text-sub;
   font-variant-numeric: tabular-nums;
 }
 
@@ -63,16 +63,16 @@ $episode-list-max-height: 48rem;
 
 .meta_ongoing {
   color: $primary;
-  font-weight: $font-weight-bold;
+  font-weight: $font-weight-semibold;
 }
 
 .meta_completed {
-  color: $txt-secondary;
+  color: $home-text-sub;
 }
 
 .count {
-  color: $txt-primary;
-  font-weight: $font-weight-bold;
+  color: $home-text;
+  font-weight: $font-weight-semibold;
 }
 
 // ══════════════════════════════════════════
@@ -82,18 +82,18 @@ $episode-list-max-height: 48rem;
 .list_card {
   display: flex;
   flex-direction: column;
-  background-color: $bg-card;
-  border: 1px solid $border-card;
+  background-color: $home-card;
+  border: 1px solid $home-border;
   border-radius: $radius-s;
   overflow: hidden;
 }
 
 .list_header {
   padding: $spacing-12 $spacing-16;
-  border-bottom: 1px solid $border-subtle;
+  border-bottom: 1px solid $home-border-divider;
   font-size: $font-size-12;
   font-weight: $font-weight-semibold;
-  color: $txt-primary;
+  color: $home-text;
 }
 
 .episode_list {
@@ -109,7 +109,7 @@ $episode-list-max-height: 48rem;
   gap: $spacing-10;
   align-items: center;
   padding: $spacing-12 $spacing-16;
-  border-bottom: 1px solid $border-subtle;
+  border-bottom: 1px solid $home-border-divider;
   text-decoration: none;
   color: inherit;
   // PC drag-ghost 차단 (Phase 1-2 D5 패턴)
@@ -124,20 +124,21 @@ $episode-list-max-height: 48rem;
   @include hover-bg-shift($bg-hover);
 }
 
+// 목업: 현재 재생 회차는 warm cream 하이라이트.
 .episode_row_current {
-  background-color: $primary-subtle;
+  background-color: $home-card-soft;
   cursor: default;
 }
 
 .order_num {
   font-size: $font-size-11;
   font-weight: $font-weight-bold;
-  color: $txt-tertiary;
+  color: $home-text-muted;
   font-variant-numeric: tabular-nums;
   text-align: center;
 
   .episode_row_current & {
-    color: $accent;
+    color: $primary;
   }
 }
 
@@ -151,14 +152,14 @@ $episode-list-max-height: 48rem;
 .title {
   font-size: $font-size-12;
   font-weight: $font-weight-medium;
-  color: $txt-secondary;
+  color: $home-text-sub;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
 
   .episode_row_current & {
-    color: $txt-primary;
-    font-weight: $font-weight-bold;
+    color: $home-text;
+    font-weight: $font-weight-semibold;
   }
 }
 
@@ -167,7 +168,7 @@ $episode-list-max-height: 48rem;
   align-items: center;
   gap: $spacing-4;
   font-size: $font-size-11;
-  color: $txt-tertiary;
+  color: $home-text-muted;
   font-variant-numeric: tabular-nums;
 }
 
@@ -175,13 +176,10 @@ $episode-list-max-height: 48rem;
   opacity: 0.4;
 }
 
+// 목업: 현재 회차는 'play 원' 대신 brown '재생 중' 텍스트 배지.
 .play_indicator {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: $spacing-20;
-  height: $spacing-20;
-  border-radius: $radius-circle;
-  background-color: $primary;
-  color: $txt-inverse;
+  font-size: $font-size-11;
+  font-weight: $font-weight-semibold;
+  color: $primary;
+  white-space: nowrap;
 }

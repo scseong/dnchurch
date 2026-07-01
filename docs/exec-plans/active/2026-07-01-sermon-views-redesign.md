@@ -34,7 +34,7 @@
 - [x] C1g. 필터 적용 칩 (사용자 지적: 목업이 적용 필터를 칩으로 표시). 검색 칩과 동일 스타일(`.filter_chip`)로 일반화. `all/page`가 시리즈 title·설교자 라벨을 해석해 `SermonResultHeader`에 넘기고, 칩 클릭 시 `setFilter({series|preacher: null})`로 해당 조건만 해제. 카운트는 검색·필터 걸리면 "검색 결과 N편". 브라우저 검증: 시리즈+설교자 동시 → 칩 2개(산상수훈·김성규 목사, warm pill), badge "2"(q 제외).
 - [x] C1h. 설교 카드 컴포넌트 통합 (사용자 지적: /sermons와 /sermons/all 카드 색·크기 불일치). `/sermons/all`의 `GridCard`를 기준으로 통합 — `SermonRecentList`가 `SermonListCard` 대신 `GridCard` 사용, `SermonListCard` 삭제, `SermonRecentList.module.scss`는 카드 스타일 제거(레이아웃만). 타입: `SermonWithRelations`는 `SermonCardItem`에 구조적 할당 가능. 브라우저 검증: 홈 카드가 /sermons/all과 동일(scripture #9a826d·title #2a241d semibold·meta #70665a).
 - [x] C2. 모든 시리즈 — 목업 정합: Hero 제거+헤더 '시리즈'(hero.config·navigation), 검색·필터 제거(사용자: 시리즈엔 불필요), 페이지는 헤더+전체 시리즈 그리드만. SeriesCard 유지. 정리: orphan된 필터 클러스터 7파일 삭제(SeriesFilterSidebar·Toolbar·ResultHeader·SearchForm·FilterButton·FilterBottomSheet + useSeriesFilter 훅) + `utils/sermon.ts`의 series-filter 블록(filterSeries·parseSeriesParams·buildSeriesHref·SERIES_* 등) 제거. knip: series orphan 0. 브라우저: 헤더 '시리즈'·Hero 없음·카드 유지 확인.
-- [ ] C3. 설교 상세 — 3탭 축소 + serif 성경 카드 + 시리즈/에피소드 warm + 헤더
+- [x] C3. 설교 상세 — 목업 정합 + 헤더 공유 액션(사용자 추가 지적). 헤더: 우측 아이콘을 경로별 액션으로 유동화(`resolveHeaderAction`) — 설교 상세는 메뉴 대신 공유(네이티브 share + 링크복사 폴백), 타이틀 '설교 상세'. 탭: 4탭 → 목업 3탭(말씀 구절 먼저·설교 요약·설교 자료), 설교 노트 탭 제거 + `SermonNoteEditor` 삭제(localStorage 전용, 연쇄 orphan 없음). 성경: `ScriptureBlock`을 흰 카드 + serif(Noto Serif KR) 본문 + '자세히 보기'로. warm: 상세 탭바(active brown+밑줄)·제목·메타·요약·설교 자료 카드, 에피소드 사이드바(현재편 `#f7f2ea` cream·'재생 중' brown 뱃지)를 `_home` 팔레트로. 브라우저: 공유버튼·3탭·serif·에피소드 하이라이트 확인, lint 0·knip clean.
 
 ## 공통 (C1~C3 진입 시)
 
@@ -69,4 +69,5 @@
 
 ## 후속 작업
 
-- 설교 노트 기능 제거 판단 — 탭만 빼면 SermonNoteEditor·useSermonBookmark 등 미사용. 컴포넌트 삭제 여부는 C3에서 결정(dead code 보고 후).
+- 설교 노트 제거 결정(C3): 탭 제거 후 `SermonNoteEditor`는 미사용이라 삭제. `useSermonBookmark`는 `SermonMetaActions`(저장 버튼)가 계속 쓰므로 유지.
+- 설교 상세 메타의 '공유' pill과 헤더 공유 버튼이 함께 있다(메타는 카카오·페북·이메일 시트, 헤더는 빠른 네이티브 공유). 중복이 거슬리면 후속에서 메타 pill 정리 검토.
