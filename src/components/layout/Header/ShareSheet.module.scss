@@ -1,0 +1,36 @@
+// 공유 시트 항목 최소 터치 영역 — 모바일 a11y 권장 타깃(≈48px) (토큰 없음·로컬)
+$share-item-min-height: 4.8rem;
+
+.share_list {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-4;
+}
+
+.share_item {
+  display: flex;
+  align-items: center;
+  gap: $spacing-8;
+  width: 100%;
+  min-height: $share-item-min-height;
+  padding: $spacing-12 $spacing-16;
+  font-size: $font-size-13;
+  color: $txt-secondary;
+  text-align: left;
+  background: transparent;
+  border: none;
+  border-radius: $radius-xs;
+  cursor: pointer;
+  transition:
+    color 0.15s ease,
+    background-color 0.15s ease;
+
+  svg {
+    font-size: $font-size-16;
+  }
+
+  &:hover {
+    color: $txt-primary;
+    background-color: $bg-hover;
+  }
+}
