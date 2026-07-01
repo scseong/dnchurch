@@ -49,8 +49,9 @@ type PageProps = {
 
 export default async function AllSermonsPage({ searchParams }: PageProps) {
   const params = await searchParams;
-  const { series, preacher, search, year, sort, page } = parseSermonParams(params);
-  const hasFilter = !!(series || preacher || search || year);
+  // year는 UI에서 제거됨 — 레거시 ?year= 링크가 숨은 필터로 남지 않게 서버 적용도 하지 않는다.
+  const { series, preacher, search, sort, page } = parseSermonParams(params);
+  const hasFilter = !!(series || preacher || search);
 
   const [allSeries, allPreachers, totalCount] = await Promise.all([
     getAllSeries(),
@@ -118,7 +119,6 @@ export default async function AllSermonsPage({ searchParams }: PageProps) {
     seriesId: resolvedSeriesId,
     preacherId: resolvedPreacherId,
     search,
-    year,
     sort,
     page
   });

@@ -26,7 +26,7 @@ export default function SermonHomeSearch({ className }: Props) {
         onChange={setQuery}
         onSubmit={handleSubmit}
         aria-label="설교 검색"
-        placeholder="제목·본문·설교자 검색"
+        placeholder="제목·본문 검색"
       />
     </search>
   );
