@@ -75,6 +75,46 @@ $mobile-header-offset: $app-header-height;
   gap: $content-gap-s;
 }
 
+// 제목 + 데스크톱 공유 버튼 한 줄. 모바일은 공유 버튼이 숨어 제목만 남는다.
+.meta_head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: $content-gap-s;
+}
+
+// 모바일은 헤더 공유 버튼이 담당 — 헤더가 데스크톱으로 바뀌는 지점부터 본문 공유를 노출.
+.share_button {
+  display: none;
+
+  @include respond-up($header-breakpoint) {
+    flex-shrink: 0;
+    display: inline-flex;
+    align-items: center;
+    gap: $spacing-4;
+    padding: $spacing-8 $spacing-12;
+    font-size: $font-size-13;
+    font-weight: $font-weight-semibold;
+    color: $home-text-sub;
+    background: $home-card;
+    border: 1px solid $home-border;
+    border-radius: $radius-s;
+    cursor: pointer;
+    transition:
+      color 0.15s ease,
+      background-color 0.15s ease;
+
+    svg {
+      font-size: $font-size-16;
+    }
+
+    &:hover {
+      color: $primary;
+      background-color: $bg-hover;
+    }
+  }
+}
+
 .sermon_title {
   font-size: $font-size-22;
   font-weight: $font-weight-bold;

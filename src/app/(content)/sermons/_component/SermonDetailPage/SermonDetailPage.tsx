@@ -4,6 +4,7 @@ import SermonVideoPlayer from '../SermonVideoPlayer/SermonVideoPlayer';
 import SermonSeriesSidebar from '../SermonSeriesSidebar/SermonSeriesSidebar';
 import SermonOtherByPreacher from '../SermonOtherByPreacher/SermonOtherByPreacher';
 import SermonDetailSections from './SermonDetailSections';
+import DetailShareButton from './DetailShareButton';
 import { formattedDate } from '@/utils/date';
 import { cloudinaryFetchUrl } from '@/utils/cloudinary';
 import {
@@ -92,7 +93,10 @@ type SermonMetaProps = {
 function SermonMeta({ sermon, preacherLabel }: SermonMetaProps) {
   return (
     <div className={styles.meta_block}>
-      <h1 className={styles.sermon_title}>{sermon.title}</h1>
+      <div className={styles.meta_head}>
+        <h1 className={styles.sermon_title}>{sermon.title}</h1>
+        <DetailShareButton />
+      </div>
       <div className={styles.meta_row}>
         <span>{preacherLabel}</span>
         {sermon.scripture && (
