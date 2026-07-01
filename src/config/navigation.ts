@@ -147,6 +147,9 @@ export function resolveMobileHeader(pathname: string): { title: string; showBack
   // 목업 재설계: About 교회 소개 화면은 헤더에 '교회 소개' 타이틀 + 뒤로가기로 둔다(목업 일치).
   if (ABOUT_REDESIGNED_ROUTES.has(pathname)) return { title: '교회 소개', showBack: true };
 
+  // 목업 재설계: 설교 홈은 Hero 밴드 대신 헤더 '설교' 타이틀 + 뒤로가기로 둔다(sermon-home-redesign).
+  if (pathname === '/sermons') return { title: '설교', showBack: true };
+
   const special = SPECIAL_PAGES[pathname];
   if (special) return { title: special, showBack: false };
 
