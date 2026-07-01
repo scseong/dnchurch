@@ -18,7 +18,7 @@ styles SKILL은 그동안 "Warm vs Cool 역할 분리" doctrine을 따랐다 —
 사이트 전역 `$primary` 계열을 navy에서 warm brown으로 이행한다. 동시에 기존 "interactive = cool" doctrine을 폐기하고 새 doctrine으로 대체한다.
 
 - **새 doctrine**: 공개 영역의 brand action·interactive feedback(`$primary`·`$primary-hover`·`$primary-active`·`$primary-subtle`·`$bg-hover`·`$txt-link`·`$border-focus`)은 **warm brown**으로 표현한다. accent는 gold, 정적 면은 beige를 유지한다.
-- **admin은 cool 예외 유지**: ADR 0012가 정한 admin cool 표면(`$bg-admin*`·`$primary-soft*`·`$bg-dark-nav*`·`$txt-on-dark-nav-*`)은 바꾸지 않는다. admin은 정보 밀도가 높아 cool 톤을 유지한다.
+- **admin cool 표면은 유지, 단 공유 `$primary` 버튼은 brown을 따른다**: ADR 0012가 정한 admin 전용 cool 토큰(`$bg-admin*`·`$primary-soft*`·`$bg-dark-nav*`·`$txt-on-dark-nav-*`)은 바꾸지 않는다. admin은 정보 밀도가 높아 cool 톤을 유지한다. 다만 admin 일부 기본 버튼이 전용 토큰이 아닌 공유 `$primary`를 직접 쓴다(`SermonForm` 제출:577, `PageHeader` CTA:115, `SermonListPage` 액션:92, `table` 선택:398). 이들은 전역 토큰 전파로 brown이 된다 — 개별 repoint 대신 공개 primary와 같은 brown을 쓰기로 한다. admin의 정체성 색(sidebar·badge·focus 링)은 `$primary-soft` cool로 그대로다.
 - **brown primitive 5단계 신설**: `$brown-600`(hover) `$brown-800`(기본) `$brown-900`(active·dark 카드) `$brown-950`(ink·공개 헤더) `$brown-975`(가장 깊은 dark).
 - **공개 dark 표면도 warm 이행**: `$bg-dark`·`$bg-dark-card`·`$overlay-image`·Hero 그라디언트를 dark-brown으로. 공개 헤더(`.top_bar`)는 새 `$bg-header`(brown-950)로 repoint.
 - **공유 토큰 분리**: `$bg-dark-nav`는 공개 헤더와 admin sidebar가 공유했다. 이를 warm으로 바꾸면 admin도 brown이 되므로, `$bg-dark-nav` cool 패밀리는 그대로 두고 공개 헤더만 `$bg-header`로 옮겼다. AdminSidebar는 무수정이다.
@@ -33,13 +33,13 @@ styles SKILL은 그동안 "Warm vs Cool 역할 분리" doctrine을 따랐다 —
 
 ### 부정적 / 트레이드오프
 - 헤더 top bar·Hero·다크 섹션 색이 눈에 띄게 바뀐다(navy→brown).
-- admin과 공개 영역의 인터랙션 색이 달라진다(admin cool, 공개 warm) — ADR 0012가 정한 의도된 차이지만 코드 리뷰 때 혼동 가능.
+- admin의 정체성 색(sidebar·badge·focus)은 cool로 남지만, 공유 `$primary`를 쓰던 admin 기본 버튼 4곳은 brown으로 바뀐다 — admin 안에서 cool과 brown이 섞여 코드 리뷰 때 혼동 가능.
 - not-found 페이지는 `$bg-dark-nav*` cool 패밀리를 admin과 공유해 이번에 못 바꿨다 — cool로 남아 후속 정리 대상.
 
 ### 영향 범위
 - 코드: `src/styles/tokens/_color.scss`(primitive·semantic), `_semantic.scss`(overlay), `Hero.module.scss`, `Header.module.scss`, `.stylelintrc.json`.
 - 문서: `.claude/skills/styles/SKILL.md`(Warm vs Cool 절·치트시트), `CLAUDE.md`.
-- 운영: admin은 무변경. 공개 전 페이지의 링크·버튼·focus 색 변경.
+- 운영: admin 전용 cool 토큰은 무변경이나, 공유 `$primary`를 쓰던 admin 기본 버튼 4곳(`SermonForm`·`PageHeader`·`SermonListPage`·`table`)은 brown으로 바뀐다. 공개 전 페이지의 링크·버튼·focus 색 변경.
 
 ## Alternatives Considered
 
