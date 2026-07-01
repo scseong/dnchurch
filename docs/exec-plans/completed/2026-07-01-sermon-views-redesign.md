@@ -1,6 +1,6 @@
 # sermon-views-redesign
 
-- **상태**: 🟡 진행 중
+- **상태**: ✅ 완료 (2026-07-01)
 - **시작일**: 2026-07-01
 - **브랜치**: style/brown-primary-migration
 - **Open questions**: none (3개 스코프 결정 확정)
@@ -72,3 +72,25 @@
 
 - 설교 노트 제거 결정(C3): 탭 제거 후 `SermonNoteEditor`는 미사용이라 삭제. `useSermonBookmark`는 `SermonMetaActions`(저장 버튼)가 계속 쓰므로 유지.
 - 설교 상세 메타의 '공유' pill과 헤더 공유 버튼이 함께 있다(메타는 카카오·페북·이메일 시트, 헤더는 빠른 네이티브 공유). 중복이 거슬리면 후속에서 메타 pill 정리 검토.
+
+## 회고
+
+### 잘된 것
+
+- warm 팔레트를 새 토큰 없이 `_home.scss` 재사용으로 설교 뷰까지 넓혔다. 브라우저 computed style로 카드 제목 `#2a241d`·성경 eyebrow `#9a826d`·메타 `#70665a`가 목업과 hex 일치함을 확인했다(C1b PASS). 전역 `$txt-primary` 재지정을 피해 admin과 아직 리디자인하지 않은 페이지까지 색이 번지는 것을 막았다.
+- 검색 무한 루프를 디바운스 제거로 근본에서 없앴다. push-on-type effect를 지우고 외부 `q`→input 미러만 남겨, PR #95에서 되돌렸던 재발을 막았다. 타이핑 중 URL 고정·Enter 시 `?q=산상`을 실측했다.
+- 자동 리뷰 지적 11건(1차 Gemini·Codex 9건, 2차 Codex 2건)을 코드로 직접 확인하고 처리했다 — 반영 8·기각 3. 기각한 방어 코드 3건은 타입이 non-nullable 배열(`SermonResource[]` 등)임을 `src/types/sermon.ts`로 확인해 근거를 남겼다.
+- 데스크톱 상세에서 공유가 사라진 회귀를 Codex 1차 검증에서 발견했다. `DetailShareButton`으로 복구하고 데스크톱 1280px에서 버튼 노출·시트 오픈을 실측했다.
+- 커밋을 의도별로 나눴다. 한 파일에 Fix·Feat·Style이 섞였을 때 `git apply --cached`로 hunk를 분리해 Feat/Fix/Docs/Style/Chore 커밋을 유지했다.
+
+### 다음에 할 것
+
+- 목업 제목·헤더 weight 800(extrabold)은 토큰 상한 700 밖이라 700으로 뒀다. `$font-weight-extrabold` 토큰 추가를 검토한다.
+- news·community는 아직 cool globals다. warm 전환은 후속 작업으로 남긴다.
+- admin 기본 버튼 4곳(`SermonForm`·`PageHeader`·`SermonListPage`·`table`)이 공유 `$primary`를 써 brown이 됐다(ADR 0020 반영). admin cool 정체성을 되살리려면 이 소비처를 `$primary-soft`로 옮기는 별도 작업이 필요하다.
+- 홈·전체 검색은 `title`·`scripture`만 조회한다. 설교자 이름 검색이 필요하면 쿼리에 `preacher.name`을 넣는 작업을 검토한다(지금은 placeholder를 실제 범위로 줄였다).
+
+### 발견된 부채 (→ tech-debt/active.md 후보)
+
+- `ShareSheet`의 카카오 아이콘이 `<img>`라 `@next/next/no-img-element` warning 1건이 남는다. 카카오 아이콘을 `<Image>` + 커스텀 로더로 바꾸면 warning이 사라진다.
+- `_home.scss` stylelint warning 22건은 기존 primitive hex 정의로, 이번 작업 이전부터 있던 부채다(신규 아님).
