@@ -4,7 +4,7 @@ import { LayoutContainer } from '@/components/layout';
 import { OPEN_GRAPH_BASE } from '@/config/seo';
 import { getAllSeries, getFeaturedSermon, getSermons } from '@/services/sermon';
 import SermonFeatured from './_component/SermonFeatured/SermonFeatured';
-import SermonRecentCarousel from './_component/SermonRecentCarousel/SermonRecentCarousel';
+import SermonRecentList from './_component/SermonRecentList/SermonRecentList';
 import SermonSeriesCarousel from './_component/SermonSeriesCarousel/SermonSeriesCarousel';
 import styles from './page.module.scss';
 
@@ -59,7 +59,7 @@ export default async function SermonsPage({ searchParams }: SermonsPageProps) {
   return (
     <LayoutContainer className={styles.sections}>
       <SermonFeatured sermon={featured} />
-      <SermonRecentCarousel sermons={recentList} />
+      <SermonRecentList sermons={recentList} />
       <SermonSeriesCarousel series={ongoingSeries} />
     </LayoutContainer>
   );

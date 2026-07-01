@@ -6,13 +6,13 @@ import type { SermonWithRelations } from '@/types/sermon';
 import { cloudinaryFetchUrl } from '@/utils/cloudinary';
 import { getSermonThumbnail, formatPreacherLabel, formatSermonDuration } from '@/utils/sermon';
 import { formattedDate } from '@/utils/date';
-import styles from './SermonRecentCarousel.module.scss';
+import styles from './SermonRecentList.module.scss';
 
 type Props = {
   sermon: SermonWithRelations;
 };
 
-export default function SermonCarouselCard({ sermon }: Props) {
+export default function SermonListCard({ sermon }: Props) {
   const thumb = cloudinaryFetchUrl(getSermonThumbnail(sermon));
   const duration = formatSermonDuration(sermon.duration);
   const preacherLabel = formatPreacherLabel(sermon.preacher);
@@ -20,14 +20,14 @@ export default function SermonCarouselCard({ sermon }: Props) {
   const labelText = sermon.sermon_series?.title ?? sermon.service_type;
 
   return (
-    <Link href={`/sermons/${sermon.id}`} className={styles.card} draggable={false}>
+    <Link href={`/sermons/${sermon.id}`} className={styles.card}>
       <div className={styles.thumb_box}>
         {thumb && (
           <CloudinaryImage
             src={thumb}
             alt={sermon.title}
             fill
-            sizes="(min-width: 768px) 240px, 210px"
+            sizes="(min-width: 768px) 200px, 140px"
             className={styles.thumb}
           />
         )}
@@ -41,9 +41,14 @@ export default function SermonCarouselCard({ sermon }: Props) {
           {labelText}
         </span>
         <h3 className={styles.title}>{sermon.title}</h3>
-        {sermon.scripture && <p className={styles.scripture}>{sermon.scripture}</p>}
         <div className={styles.meta_bar}>
           <span>{preacherLabel}</span>
+          {sermon.scripture && (
+            <>
+              <span className={styles.dot} aria-hidden>·</span>
+              <span>{sermon.scripture}</span>
+            </>
+          )}
           <span className={styles.dot} aria-hidden>·</span>
           <span>{formattedDate(sermon.sermon_date, 'YYYY.MM.DD')}</span>
         </div>
