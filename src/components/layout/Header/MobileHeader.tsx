@@ -3,11 +3,16 @@
 import { useRef } from 'react';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
-import { IoChevronBack } from 'react-icons/io5';
+import { IoChevronBack, IoShareOutline } from 'react-icons/io5';
 import { LuMenu } from 'react-icons/lu';
 import clsx from 'clsx';
-import { resolveMobileHeader, resolveSiblingTabs } from '@/config/navigation';
+import {
+  resolveHeaderAction,
+  resolveMobileHeader,
+  resolveSiblingTabs
+} from '@/config/navigation';
 import useDrawerHistory from '@/hooks/useDrawerHistory';
+import { useToastStore } from '@/store/toast.store';
 import Drawer from './Drawer';
 import styles from './Header.module.scss';
 
@@ -16,10 +21,31 @@ export default function MobileHeader() {
   const router = useRouter();
   const { title, showBack } = resolveMobileHeader(pathname);
   const tabs = resolveSiblingTabs(pathname);
+  const headerAction = resolveHeaderAction(pathname);
   // 목업 재설계 — '교회 소개'(About 탭 전체)와 설교 전체 화면(홈·전체 설교·시리즈·상세)의 헤더 타이틀 가운데 정렬.
   const centeredTitle = title === '교회 소개' || pathname.startsWith('/sermons');
   const { drawerOpen, openDrawer, closeDrawer } = useDrawerHistory();
+  const { info, error } = useToastStore();
   const overlayRef = useRef<HTMLDivElement>(null);
+
+  // 헤더 공유 — 네이티브 공유 시트(모바일)를 우선, 미지원 시 링크 복사로 폴백.
+  const handleShare = async () => {
+    const url = window.location.href;
+    if (typeof navigator !== 'undefined' && navigator.share) {
+      try {
+        await navigator.share({ title: document.title, url });
+      } catch {
+        // 사용자가 공유를 취소한 경우 — 무시
+      }
+      return;
+    }
+    try {
+      await navigator.clipboard.writeText(url);
+      info('링크가 복사되었습니다');
+    } catch {
+      error('링크 복사에 실패했습니다');
+    }
+  };
 
   return (
     <>
@@ -51,16 +77,27 @@ export default function MobileHeader() {
           </div>
 
           <div className={styles.mobile_actions}>
-            <button
-              type="button"
-              className={styles.mobile_menu}
-              onClick={openDrawer}
-              aria-label="전체 메뉴 열기"
-              aria-expanded={drawerOpen}
-              aria-haspopup="dialog"
-            >
-              <LuMenu />
-            </button>
+            {headerAction === 'share' ? (
+              <button
+                type="button"
+                className={styles.mobile_menu}
+                onClick={handleShare}
+                aria-label="공유하기"
+              >
+                <IoShareOutline />
+              </button>
+            ) : (
+              <button
+                type="button"
+                className={styles.mobile_menu}
+                onClick={openDrawer}
+                aria-label="전체 메뉴 열기"
+                aria-expanded={drawerOpen}
+                aria-haspopup="dialog"
+              >
+                <LuMenu />
+              </button>
+            )}
           </div>
         </div>
 

@@ -140,6 +140,12 @@ export const ABOUT_REDESIGNED_ROUTES = new Set([
   '/about/welcome'
 ]);
 
+/** 설교 상세(/sermons/[id]) 경로 판별 — /sermons/all·/series·/series/[id]는 제외. */
+function isSermonDetailPath(pathname: string): boolean {
+  const match = pathname.match(/^\/sermons\/([^/]+)$/);
+  return !!match && match[1] !== 'all' && match[1] !== 'series';
+}
+
 /** 모바일 헤더 타이틀 + 뒤로가기 상태 해석 */
 export function resolveMobileHeader(pathname: string): { title: string; showBack: boolean } {
   if (pathname === '/') return { title: '대구동남교회', showBack: false };
@@ -151,6 +157,7 @@ export function resolveMobileHeader(pathname: string): { title: string; showBack
   if (pathname === '/sermons') return { title: '설교', showBack: true };
   if (pathname === '/sermons/all') return { title: '전체 설교', showBack: true };
   if (pathname === '/sermons/series') return { title: '시리즈', showBack: true };
+  if (isSermonDetailPath(pathname)) return { title: '설교 상세', showBack: true };
 
   const special = SPECIAL_PAGES[pathname];
   if (special) return { title: special, showBack: false };
@@ -193,6 +200,17 @@ export function resolveSiblingTabs(pathname: string): NavItem[] | null {
     }
   }
   return null;
+}
+
+// ── MobileHeader action (우측 아이콘 슬롯) ──
+
+/** 헤더 우측 액션 종류. 기본은 전체 메뉴(drawer), 특정 화면은 다른 액션으로 교체 가능. */
+export type HeaderAction = 'menu' | 'share';
+
+/** pathname → 헤더 우측 액션. 설교 상세는 공유, 그 외는 전체 메뉴. */
+export function resolveHeaderAction(pathname: string): HeaderAction {
+  if (isSermonDetailPath(pathname)) return 'share';
+  return 'menu';
 }
 
 // ── Breadcrumb 세그먼트 해석 ──
