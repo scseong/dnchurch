@@ -72,7 +72,7 @@ $mobile-header-offset: $app-header-height;
 .meta_block {
   display: flex;
   flex-direction: column;
-  gap: $content-gap-s;
+  gap: $spacing-10;
 }
 
 // 제목 + 데스크톱 공유 버튼 한 줄. 모바일은 공유 버튼이 숨어 제목만 남는다.
