@@ -26,10 +26,6 @@ export default function ShareSheet({ open, onClose }: Props) {
   const { info, error } = useToastStore();
   const { share: shareToKakao } = useKakaoShare();
 
-  const title = typeof document !== 'undefined' ? document.title : '';
-  const description = readMeta('meta[name="description"]');
-  const imageUrl = readMeta('meta[property="og:image"]');
-
   const handleCopyLink = async () => {
     try {
       await navigator.clipboard.writeText(window.location.href);
@@ -41,7 +37,11 @@ export default function ShareSheet({ open, onClose }: Props) {
   };
 
   const handleKakaoShare = () => {
-    shareToKakao({ title, description, imageUrl });
+    shareToKakao({
+      title: typeof document !== 'undefined' ? document.title : '',
+      description: readMeta('meta[name="description"]'),
+      imageUrl: readMeta('meta[property="og:image"]')
+    });
     onClose();
   };
 
@@ -54,6 +54,7 @@ export default function ShareSheet({ open, onClose }: Props) {
   };
 
   const handleEmailShare = () => {
+    const title = typeof document !== 'undefined' ? document.title : '';
     const subject = encodeURIComponent(title);
     const body = encodeURIComponent(window.location.href);
     window.location.href = `mailto:?subject=${subject}&body=${body}`;

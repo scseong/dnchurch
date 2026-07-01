@@ -2,7 +2,7 @@
 
 import { FormEvent, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { SearchField } from '@/components/ui/SearchField/SearchField';
+import { SearchField } from '@/components/ui';
 
 type Props = {
   className?: string;

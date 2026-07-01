@@ -30,8 +30,11 @@ export default function SermonDetailPage({
   const hasSeriesSidebar = Boolean(series) && seriesEpisodes.length > 0;
 
   // 목업: 시리즈는 영상 좌상단 pill "제목 00"으로, 재생시간은 우하단으로.
+  // series_order가 null이면 회차 번호를 붙이지 않는다 (sidebar와 동일 — 없는 회차를 00으로 오기하지 않음).
   const seriesLabel = series
-    ? `${series.title} ${String(sermon.series_order ?? 0).padStart(2, '0')}`
+    ? sermon.series_order != null
+      ? `${series.title} ${String(sermon.series_order).padStart(2, '0')}`
+      : series.title
     : undefined;
   const duration = formatSermonDuration(sermon.duration) || undefined;
 
