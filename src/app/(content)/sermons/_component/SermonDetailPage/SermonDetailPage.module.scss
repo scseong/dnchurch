@@ -2,8 +2,6 @@
 $sidebar-width: 36rem;
 // 모바일 탭 패널 최소 높이 — 콘텐츠 없는 탭에서 영역 붕괴·탭 전환 점프 방지 (토큰 없음·로컬)
 $tab-panel-min-height: 10rem;
-// 공유 시트 항목 최소 터치 영역 — 모바일 a11y 권장 타깃(≈48px) (토큰 없음·로컬)
-$share-item-min-height: 4.8rem;
 // 모바일 sticky 탭바 오프셋 = 모바일 헤더(.mobile_top) 높이 = $app-header-height SSOT.
 // top:0이면 sticky 헤더(z-header) 뒤로 가려짐
 $mobile-header-offset: $app-header-height;
@@ -15,8 +13,8 @@ $mobile-header-offset: $app-header-height;
 .layout {
   display: flex;
   flex-direction: column;
-  gap: $content-gap-m;
-  padding: 0 0 $section-gap-80;
+  gap: $spacing-24;
+  padding: 0 0 $section-gap-40;
 
   @include respond-up($breakpoint-tablet) {
     padding-top: $section-gap-40;
@@ -47,7 +45,7 @@ $mobile-header-offset: $app-header-height;
 .main_column {
   display: flex;
   flex-direction: column;
-  gap: $content-gap-m;
+  gap: $spacing-20;
   min-width: 0;
 
   @include respond-up($breakpoint-pc-sm) {
@@ -64,7 +62,7 @@ $mobile-header-offset: $app-header-height;
 .info_section {
   display: flex;
   flex-direction: column;
-  gap: $content-gap-m;
+  gap: $content-gap-l;
 }
 
 // ══════════════════════════════════════════
@@ -74,31 +72,54 @@ $mobile-header-offset: $app-header-height;
 .meta_block {
   display: flex;
   flex-direction: column;
+  gap: $spacing-10;
+}
+
+// 제목 + 데스크톱 공유 버튼 한 줄. 모바일은 공유 버튼이 숨어 제목만 남는다.
+.meta_head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
   gap: $content-gap-s;
 }
 
-.series_tag {
-  align-self: flex-start;
-  font-size: $font-size-13;
-  font-weight: $font-weight-semibold;
-  color: $primary;
-  text-decoration: none;
+// 모바일은 헤더 공유 버튼이 담당 — 헤더가 데스크톱으로 바뀌는 지점부터 본문 공유를 노출.
+.share_button {
+  display: none;
 
-  @include hover-color-shift($primary-hover);
-}
+  @include respond-up($header-breakpoint) {
+    flex-shrink: 0;
+    display: inline-flex;
+    align-items: center;
+    gap: $spacing-4;
+    padding: $spacing-8 $spacing-12;
+    font-size: $font-size-13;
+    font-weight: $font-weight-semibold;
+    color: $home-text-sub;
+    background: $home-card;
+    border: 1px solid $home-border;
+    border-radius: $radius-s;
+    cursor: pointer;
+    transition:
+      color 0.15s ease,
+      background-color 0.15s ease;
 
-.series_tag_plain {
-  font-size: $font-size-13;
-  font-weight: $font-weight-semibold;
-  color: $txt-tertiary;
+    svg {
+      font-size: $font-size-16;
+    }
+
+    &:hover {
+      color: $primary;
+      background-color: $bg-hover;
+    }
+  }
 }
 
 .sermon_title {
-  font-family: $font-family-secondary;
-  font-size: $font-size-22;
+  font-size: $font-size-20;
   font-weight: $font-weight-bold;
   line-height: $line-height-snug;
-  color: $txt-primary;
+  color: $home-text;
 
   @include respond-up($breakpoint-pc-sm) {
     font-size: $font-size-26;
@@ -110,8 +131,9 @@ $mobile-header-offset: $app-header-height;
   flex-wrap: wrap;
   align-items: center;
   gap: $spacing-4;
-  font-size: $font-size-12;
-  color: $txt-tertiary;
+  font-size: $font-size-13;
+  font-weight: $font-weight-semibold;
+  color: $home-text-sub;
 
   @include respond-up($breakpoint-tablet) {
     gap: $spacing-8;
@@ -122,95 +144,8 @@ $mobile-header-offset: $app-header-height;
 .dot {
   width: 0.2rem;
   height: 0.2rem;
-  background: $txt-tertiary;
+  background: $home-text-muted;
   border-radius: $radius-circle;
-}
-
-.meta_scripture {
-  color: $primary;
-  font-weight: $font-weight-bold;
-}
-
-.meta_bar {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  justify-content: space-between;
-  gap: $spacing-12;
-}
-
-.meta_actions {
-  display: flex;
-  gap: $spacing-6;
-}
-
-.pill {
-  display: inline-flex;
-  align-items: center;
-  gap: $spacing-4;
-  padding: $spacing-6 $spacing-12;
-  font-size: $font-size-12;
-  font-weight: $font-weight-semibold;
-  color: $txt-secondary;
-  background: $bg-primary;
-  border: 1px solid $border-primary;
-  border-radius: $radius-xs;
-  cursor: pointer;
-  transition:
-    color 0.15s ease,
-    background-color 0.15s ease;
-
-  svg {
-    font-size: $font-size-16;
-  }
-
-  &:hover {
-    color: $txt-primary;
-    background-color: $bg-hover;
-  }
-}
-
-.pill_active {
-  color: $primary;
-
-  &:hover {
-    color: $primary-hover;
-  }
-}
-
-// 공유는 BottomSheet(모바일) / 중앙 모달(PC) 내부 리스트로 렌더 — 드롭다운 폐기(디바이스 이탈 해결).
-.share_list {
-  display: flex;
-  flex-direction: column;
-  gap: $spacing-4;
-}
-
-.share_item {
-  display: flex;
-  align-items: center;
-  gap: $spacing-8;
-  width: 100%;
-  min-height: $share-item-min-height;
-  padding: $spacing-12 $spacing-16;
-  font-size: $font-size-13;
-  color: $txt-secondary;
-  text-align: left;
-  background: transparent;
-  border: none;
-  border-radius: $radius-xs;
-  cursor: pointer;
-  transition:
-    color 0.15s ease,
-    background-color 0.15s ease;
-
-  svg {
-    font-size: $font-size-16;
-  }
-
-  &:hover {
-    color: $txt-primary;
-    background-color: $bg-hover;
-  }
 }
 
 // ══════════════════════════════════════════
@@ -220,27 +155,18 @@ $mobile-header-offset: $app-header-height;
 .sections {
   display: flex;
   flex-direction: column;
-
-  // 모바일: sticky 탭바의 containing block(=.sections)이 짧은 활성 패널
-  // 때문에 일찍 끝나 탭바가 곧 풀리는 문제 → 뷰포트 높이만큼 최소 확보.
-  // 실제 패널 콘텐츠가 더 길면 콘텐츠 높이가 우선.
-  min-height: calc(100svh - #{$mobile-header-offset});
-
-  @include respond-up($breakpoint-tablet) {
-    min-height: 0;
-  }
 }
 
 // 모바일: sticky 탭 바. PC(≥768)에서는 숨김 — 전 패널 스택 노출.
-// 모바일: 컨테이너 패딩을 음수 마진으로 상쇄해 화면 풀폭 탭 바(여백 0).
 .tab_bar {
   position: sticky;
   top: $mobile-header-offset;
+  gap: $spacing-24;
+  margin-bottom: $spacing-20;
   z-index: 10;
   display: flex;
-  margin: 0 calc(-1 * $container-padding) $content-gap-l;
-  background: $bg-card;
-  border-bottom: 1px solid $border-subtle;
+  border-bottom: 1px solid $home-border-divider;
+  background: $home-surface;
 
   @include respond-up($breakpoint-tablet) {
     display: none;
@@ -250,23 +176,24 @@ $mobile-header-offset: $app-header-height;
 .tab {
   display: flex;
   justify-content: center;
-  flex: 1;
-  padding: $spacing-20 0;
+  padding: $spacing-12 0;
   font-size: $font-size-13;
-  font-weight: $font-weight-medium;
-  color: $txt-tertiary;
+  font-weight: $font-weight-semibold;
+  color: $home-text-sub;
   background: transparent;
   border: none;
+  border-bottom: 2px solid transparent;
+  margin-bottom: -1px; // .tab_bar 하단 보더 위로 밑줄을 겹친다
   cursor: pointer;
   transition:
     color 0.15s ease,
-    font-weight 0.15s ease;
+    border-color 0.15s ease;
 }
 
-// 활성 표시는 밑줄 없이 색·굵기만.
+// 목업: 활성 탭은 brown 텍스트 + brown 밑줄.
 .tab_active {
-  color: $txt-primary;
-  font-weight: $font-weight-bold;
+  color: $primary;
+  border-bottom-color: $primary;
 }
 
 // 모바일: 활성 패널만 표시. PC: 전 패널 표시 + 패널 간 구분선.
@@ -301,16 +228,16 @@ $mobile-header-offset: $app-header-height;
     display: block;
     margin-bottom: $content-gap-s;
     font-size: $font-size-13;
-    font-weight: $font-weight-bold;
+    font-weight: $font-weight-semibold;
     letter-spacing: 0.08em;
     text-transform: uppercase;
-    color: $txt-primary;
+    color: $home-text-muted;
   }
 }
 
 .empty {
-  font-size: $font-size-14;
-  color: $txt-tertiary;
+  font-size: $font-size-13;
+  color: $home-text-muted;
   font-style: italic;
 }
 
@@ -318,10 +245,18 @@ $mobile-header-offset: $app-header-height;
 // Summary
 // ══════════════════════════════════════════
 
+// 설교 요약·빈 상태를 말씀 구절(ScriptureBlock)과 같은 흰 카드로 감싼다.
+.content_card {
+  padding: $spacing-20;
+  background: $home-card;
+  border: 1px solid $home-border;
+  border-radius: $radius-s;
+}
+
 .summary_text {
-  font-size: $font-size-14;
+  font-size: $font-size-13;
   line-height: $line-height-loose;
-  color: $txt-secondary;
+  color: $home-text;
   white-space: pre-wrap; // admin UI 입력값의 줄바꿈 보존 (의사결정 로그 D4)
 }
 
@@ -340,8 +275,8 @@ $mobile-header-offset: $app-header-height;
   align-items: center;
   gap: $content-gap-s;
   padding: $spacing-12 $spacing-16;
-  background: $bg-card;
-  border: 1px solid $border-card;
+  background: $home-card;
+  border: 1px solid $home-border;
   border-radius: $radius-s;
   text-decoration: none;
   transition: background-color 0.15s ease;
@@ -361,8 +296,8 @@ $mobile-header-offset: $app-header-height;
   font-size: $font-size-11;
   font-weight: $font-weight-bold;
   letter-spacing: 0.05em;
-  color: $accent;
-  background: $bg-accent-subtle;
+  color: $primary;
+  background: $home-tint;
   border-radius: $radius-xs;
 }
 
@@ -377,7 +312,7 @@ $mobile-header-offset: $app-header-height;
 .resource_title {
   font-size: $font-size-14;
   font-weight: $font-weight-semibold;
-  color: $txt-primary;
+  color: $home-text;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -385,11 +320,11 @@ $mobile-header-offset: $app-header-height;
 
 .resource_size {
   font-size: $font-size-11;
-  color: $txt-tertiary;
+  color: $home-text-muted;
 }
 
 .resource_download {
   flex-shrink: 0;
   font-size: $font-size-16;
-  color: $txt-tertiary;
+  color: $home-text-muted;
 }

@@ -1,0 +1,47 @@
+// 최근 설교 섹션 레이아웃. 카드는 전체 설교와 동일한 GridCard 컴포넌트를 재사용한다.
+
+.section {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-16;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: $spacing-12;
+}
+
+.section_title {
+  margin: 0;
+  font-size: $font-size-18;
+  font-weight: $font-weight-bold;
+  color: $txt-primary;
+  letter-spacing: $letter-spacing-body;
+}
+
+.more_link {
+  flex: 0 0 auto;
+  font-size: $font-size-13;
+  font-weight: $font-weight-semibold;
+  color: $primary;
+  text-decoration: none;
+
+  @include hover-color-shift($primary-hover);
+}
+
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-8;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+
+  @include respond-up($breakpoint-tablet) {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: $spacing-12 $spacing-20;
+  }
+}

@@ -11,8 +11,8 @@ export default function SeriesGrid({ series }: Props) {
   if (series.length === 0) {
     return (
       <EmptyState
-        title="조건에 맞는 시리즈가 없습니다"
-        description="다른 상태·연도나 검색어를 사용해 보세요"
+        title="아직 등록된 시리즈가 없습니다"
+        description="새로운 강해 설교 시리즈를 준비하고 있습니다"
         announce
       />
     );

@@ -140,12 +140,24 @@ export const ABOUT_REDESIGNED_ROUTES = new Set([
   '/about/welcome'
 ]);
 
+/** 설교 상세(/sermons/[id]) 경로 판별 — /sermons/all·/series·/series/[id]는 제외. */
+function isSermonDetailPath(pathname: string): boolean {
+  const match = pathname.match(/^\/sermons\/([^/]+)$/);
+  return !!match && match[1] !== 'all' && match[1] !== 'series';
+}
+
 /** 모바일 헤더 타이틀 + 뒤로가기 상태 해석 */
 export function resolveMobileHeader(pathname: string): { title: string; showBack: boolean } {
   if (pathname === '/') return { title: '대구동남교회', showBack: false };
 
   // 목업 재설계: About 교회 소개 화면은 헤더에 '교회 소개' 타이틀 + 뒤로가기로 둔다(목업 일치).
   if (ABOUT_REDESIGNED_ROUTES.has(pathname)) return { title: '교회 소개', showBack: true };
+
+  // 목업 재설계: 설교 홈·하위 뷰는 Hero 밴드 대신 헤더에 페이지별 타이틀 + 뒤로가기로 둔다(sermon-home·views-redesign).
+  if (pathname === '/sermons') return { title: '설교', showBack: true };
+  if (pathname === '/sermons/all') return { title: '전체 설교', showBack: true };
+  if (pathname === '/sermons/series') return { title: '시리즈', showBack: true };
+  if (isSermonDetailPath(pathname)) return { title: '설교 상세', showBack: true };
 
   const special = SPECIAL_PAGES[pathname];
   if (special) return { title: special, showBack: false };
@@ -178,6 +190,9 @@ export function resolveSiblingTabs(pathname: string): NavItem[] | null {
   // 목업 재설계로 자체 in-page 섹션 탭(AboutTabNav)을 렌더하는 페이지는 헤더 형제 탭을 끈다(중복 방지).
   if (ABOUT_REDESIGNED_ROUTES.has(pathname)) return null;
 
+  // 목업 재설계: 설교 하위 뷰(전체 설교·시리즈·상세)는 형제 탭 없이 단일 헤더로 둔다(목업 일치).
+  if (pathname.startsWith('/sermons/')) return null;
+
   for (const item of GNB_ITEMS) {
     if (!item.children?.length) continue;
     if (item.children.some((c) => isRouteMatch(pathname, c.href))) {
@@ -185,6 +200,17 @@ export function resolveSiblingTabs(pathname: string): NavItem[] | null {
     }
   }
   return null;
+}
+
+// ── MobileHeader action (우측 아이콘 슬롯) ──
+
+/** 헤더 우측 액션 종류. 기본은 전체 메뉴(drawer), 특정 화면은 다른 액션으로 교체 가능. */
+export type HeaderAction = 'menu' | 'share';
+
+/** pathname → 헤더 우측 액션. 설교 상세는 공유, 그 외는 전체 메뉴. */
+export function resolveHeaderAction(pathname: string): HeaderAction {
+  if (isSermonDetailPath(pathname)) return 'share';
+  return 'menu';
 }
 
 // ── Breadcrumb 세그먼트 해석 ──

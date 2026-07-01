@@ -1,14 +1,15 @@
 'use client';
 
-import { useRef } from 'react';
+import { useRef, useState } from 'react';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
-import { IoChevronBack } from 'react-icons/io5';
+import { IoChevronBack, IoShareSocialOutline } from 'react-icons/io5';
 import { LuMenu } from 'react-icons/lu';
 import clsx from 'clsx';
-import { resolveMobileHeader, resolveSiblingTabs } from '@/config/navigation';
+import { resolveHeaderAction, resolveMobileHeader, resolveSiblingTabs } from '@/config/navigation';
 import useDrawerHistory from '@/hooks/useDrawerHistory';
 import Drawer from './Drawer';
+import ShareSheet from './ShareSheet';
 import styles from './Header.module.scss';
 
 export default function MobileHeader() {
@@ -16,8 +17,11 @@ export default function MobileHeader() {
   const router = useRouter();
   const { title, showBack } = resolveMobileHeader(pathname);
   const tabs = resolveSiblingTabs(pathname);
-  const centeredTitle = title === '교회 소개'; // 목업 재설계 About 헤더 — '교회 소개' 탭 전체 타이틀 가운데 정렬
+  const headerAction = resolveHeaderAction(pathname);
+  // 목업 재설계 — '교회 소개'(About 탭 전체)와 설교 전체 화면(홈·전체 설교·시리즈·상세)의 헤더 타이틀 가운데 정렬.
+  const centeredTitle = title === '교회 소개' || pathname.startsWith('/sermons');
   const { drawerOpen, openDrawer, closeDrawer } = useDrawerHistory();
+  const [shareOpen, setShareOpen] = useState(false);
   const overlayRef = useRef<HTMLDivElement>(null);
 
   return (
@@ -35,7 +39,12 @@ export default function MobileHeader() {
                 >
                   <IoChevronBack />
                 </button>
-                <h1 className={clsx(styles.mobile_title, centeredTitle && styles.mobile_title_centered)}>
+                <h1
+                  className={clsx(
+                    styles.mobile_title,
+                    centeredTitle && styles.mobile_title_centered
+                  )}
+                >
                   {title}
                 </h1>
               </>
@@ -50,16 +59,29 @@ export default function MobileHeader() {
           </div>
 
           <div className={styles.mobile_actions}>
-            <button
-              type="button"
-              className={styles.mobile_menu}
-              onClick={openDrawer}
-              aria-label="전체 메뉴 열기"
-              aria-expanded={drawerOpen}
-              aria-haspopup="dialog"
-            >
-              <LuMenu />
-            </button>
+            {headerAction === 'share' ? (
+              <button
+                type="button"
+                className={styles.mobile_menu}
+                onClick={() => setShareOpen(true)}
+                aria-label="공유하기"
+                aria-haspopup="dialog"
+                aria-expanded={shareOpen}
+              >
+                <IoShareSocialOutline />
+              </button>
+            ) : (
+              <button
+                type="button"
+                className={styles.mobile_menu}
+                onClick={openDrawer}
+                aria-label="전체 메뉴 열기"
+                aria-expanded={drawerOpen}
+                aria-haspopup="dialog"
+              >
+                <LuMenu />
+              </button>
+            )}
           </div>
         </div>
 
@@ -94,6 +116,8 @@ export default function MobileHeader() {
       >
         <Drawer isOpen={drawerOpen} onClose={closeDrawer} />
       </div>
+
+      <ShareSheet open={shareOpen} onClose={() => setShareOpen(false)} />
     </>
   );
 }

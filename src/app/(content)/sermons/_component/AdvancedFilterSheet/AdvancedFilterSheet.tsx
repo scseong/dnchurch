@@ -2,7 +2,6 @@
 
 import { useEffect, useState } from 'react';
 import clsx from 'clsx';
-import { IoCheckmark } from 'react-icons/io5';
 import { BottomSheet, Button } from '@/components/ui';
 import useSermonFilter from '@/hooks/useSermonFilter';
 import { formatPreacherLabel } from '@/utils/sermon';
@@ -64,16 +63,17 @@ export default function AdvancedFilterSheet({
       onClose={onClose}
       title="필터"
       footer={
-        <>
-          <Button variant="secondary" fullWidth onClick={handleReset}>
-            초기화
-          </Button>
-          <Button fullWidth onClick={handleApply}>
-            적용
-          </Button>
-        </>
+        <Button fullWidth onClick={handleApply}>
+          적용하기
+        </Button>
       }
     >
+      <div className={styles.reset_row}>
+        <button type="button" className={styles.reset} onClick={handleReset}>
+          초기화
+        </button>
+      </div>
+
       <section className={styles.section}>
         <h3 className={styles.section_title}>시리즈</h3>
         <ul role="list" className={styles.option_list}>
@@ -165,8 +165,7 @@ function FilterOption({
       onClick={onClick}
       aria-pressed={selected}
     >
-      <span>{label}</span>
-      {selected && <IoCheckmark aria-hidden="true" />}
+      {label}
     </button>
   );
 }

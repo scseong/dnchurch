@@ -1,28 +1,22 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { useDebounce } from '@/hooks/useDebounce';
 import useSermonFilter from '@/hooks/useSermonFilter';
 import { SearchField } from '@/components/ui';
 import styles from './SermonListPage.module.scss';
 
 export default function SermonSearchForm() {
   const { q, setFilter } = useSermonFilter();
-  // 초기값만 URL q에서. q→input 미러링 effect는 제거 — 디바운스 navigation이
-  // 늦게 끝날 때 그 사이 입력을 되돌리던 버그(PR #95 #4)의 원인이었고,
-  // 입력은 사용자 소유다. (외부 q 변경은 라우트 전환 시 재마운트로 반영)
   const [input, setInput] = useState(q);
-  const debounced = useDebounce(input, 300);
 
-  // 타이핑 멈춤 300ms 후 URL 반영.
-  // - debounced가 현재 input과 같을 때만(디바운스 정착) push — Enter/clear 등 즉시 액션으로
-  //   q·setFilter가 바뀌어 effect가 재실행돼도 stale debounced 재-push 차단(Codex 1차 BUG fix)
-  // - trim 정규화 동일값이면 skip(trailing whitespace·feedback loop 차단, DL-1/2)
+  // 외부 q 변경(검색 칩 제거·필터 초기화·라우트 전환)을 입력에 반영한다.
+  // 디바운스 자동 검색을 없애 검색은 Enter(submit)·clear로만 일어나므로,
+  // in-flight navigation이 입력을 되돌리던 버그(PR #95 #4)는 재발하지 않는다.
+  // 또한 all/page가 사이드바·툴바 두 곳에 이 폼을 마운트해도(한쪽 display:none)
+  // 미러는 setState일 뿐 navigation이 아니라 두 인스턴스 핑퐁 루프도 생기지 않는다.
   useEffect(() => {
-    if (debounced !== input) return;
-    if (debounced.trim() === q.trim()) return;
-    setFilter({ q: debounced.trim() || null });
-  }, [debounced, input, q, setFilter]);
+    setInput(q);
+  }, [q]);
 
   const handleSubmit = (event: React.FormEvent) => {
     event.preventDefault();

@@ -60,8 +60,8 @@ $indicator-height: 0.2rem;
   flex-shrink: 0;
 
   svg {
-    width: 1.7rem;
-    height: 1.7rem;
+    width: 2rem;
+    height: 2rem;
   }
 }
 
@@ -111,8 +111,8 @@ $indicator-height: 0.2rem;
   flex-shrink: 0;
 
   svg {
-    width: 2.2rem;
-    height: 2.2rem;
+    width: 1.7rem;
+    height: 1.7rem;
   }
 }
 
@@ -151,7 +151,7 @@ $indicator-height: 0.2rem;
 .mobile_title {
   flex: 1;
   min-width: 0;
-  font-size: $font-size-18;
+  font-size: $font-size-16;
   font-weight: $font-weight-bold;
   color: $txt-primary;
   letter-spacing: $letter-spacing-body;
@@ -222,7 +222,7 @@ $indicator-height: 0.2rem;
 // ── Top Bar ──
 
 .top_bar {
-  background-color: $bg-dark-nav;
+  background-color: $bg-header;
   color: $txt-inverse;
 }
 

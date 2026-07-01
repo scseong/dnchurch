@@ -1,10 +1,16 @@
-// PC 분기에서 Featured 좌측 미디어 영역 폭 — mockup `ListPCFeatured` 580px 고정
-$featured-image-col: 58rem;
 // play 버튼은 sermon-play-hint-lg 믹스인 (단일 소스)
-// 영상 우하단 duration overlay — 토큰 미존재 (mockup `rgba(0,0,0,.55)`)
-$duration-overlay-bg: rgba(0, 0, 0, 0.55);
+// 이미지 위 오버레이 — 토큰 미존재 (참조 시안 warm dark scrim / glass pill / duration)
+$scrim-bg: linear-gradient(
+  to top,
+  rgba(28, 18, 10, 0.92) 0%,
+  rgba(28, 18, 10, 0.5) 42%,
+  transparent 100%
+);
+$pill-glass-bg: rgba(0, 0, 0, 0.32);
+$duration-overlay-bg: rgba(0, 0, 0, 0.5);
+// 데스크톱 히어로 높이 상한 — 넓은 화면에서 이미지 과대 확대 방지
+$featured-max-height-pc: 46rem;
 
-// 섹션 헤더 — 최근 설교/진행 중인 시리즈 캐러셀과 동일 패턴
 .section {
   display: flex;
   flex-direction: column;
@@ -20,36 +26,56 @@ $duration-overlay-bg: rgba(0, 0, 0, 0.55);
 }
 
 .card {
-  display: flex;
-  flex-direction: column;
-  background-color: $bg-card;
-  border: 1px solid $border-card;
-  border-radius: $radius-m;
+  position: relative;
+  display: block;
+  aspect-ratio: 4 / 3;
+  border-radius: $radius-l;
   overflow: hidden;
+  background: $overlay-image;
   text-decoration: none;
-  color: inherit;
+  color: $txt-inverse;
 
   @include hover-lift;
 
-  // 768~1024는 stacked 유지 — 58rem 고정 컬럼이 이 구간에서 본문을 과도하게 압축(80/20)
-  @include respond-up($breakpoint-pc-sm) {
-    display: grid;
-    grid-template-columns: $featured-image-col 1fr;
+  @include respond-up($breakpoint-tablet) {
+    aspect-ratio: 16 / 9;
+    max-height: $featured-max-height-pc;
   }
-}
-
-.media {
-  position: relative;
-  aspect-ratio: 16 / 9;
-  background: $overlay-image;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  overflow: hidden;
 }
 
 .thumb {
   object-fit: cover;
+}
+
+.pills {
+  position: absolute;
+  top: $spacing-12;
+  left: $spacing-12;
+  z-index: 1;
+  display: flex;
+  flex-wrap: wrap;
+  gap: $spacing-6;
+}
+
+.pill_latest {
+  padding: $spacing-4 $spacing-10;
+  border-radius: $radius-circle;
+  background-color: $accent-subtle;
+  color: $primary-active;
+  font-size: $font-size-11;
+  font-weight: $font-weight-bold;
+  letter-spacing: $letter-spacing-wide;
+}
+
+.pill_series {
+  padding: $spacing-4 $spacing-10;
+  border-radius: $radius-circle;
+  background-color: $pill-glass-bg;
+  color: $txt-inverse;
+  font-size: $font-size-11;
+  font-weight: $font-weight-semibold;
+  letter-spacing: $letter-spacing-wide;
+  backdrop-filter: blur(4px);
 }
 
 .play_circle {
@@ -66,25 +92,55 @@ $duration-overlay-bg: rgba(0, 0, 0, 0.55);
 
 .duration {
   position: absolute;
-  bottom: $spacing-10;
-  right: $spacing-10;
+  top: $spacing-12;
+  right: $spacing-12;
+  z-index: 1;
   padding: $spacing-2 $spacing-8;
   border-radius: $radius-xxs;
   background-color: $duration-overlay-bg;
   color: $txt-inverse;
   font-size: $font-size-11;
   font-weight: $font-weight-semibold;
+  font-variant-numeric: tabular-nums;
 }
 
-.body {
-  display: flex;
-  flex-direction: column;
-  padding: $spacing-16 $spacing-20 $spacing-20;
-  min-width: 0;
+.scrim {
+  position: absolute;
+  inset-inline: 0;
+  bottom: 0;
+  padding: $spacing-32 $spacing-20 $spacing-20;
+  background: $scrim-bg;
 
   @include respond-up($breakpoint-tablet) {
-    padding: $spacing-28 $spacing-32;
-    justify-content: center;
+    padding: $spacing-40 $spacing-28 $spacing-28;
+  }
+}
+
+.scripture {
+  // 다크 scrim 위 gold eyebrow — 밝은 gold($accent-subtle)로 대비 확보
+  margin: 0 0 $spacing-6;
+  color: $accent-subtle;
+  font-size: $font-size-12;
+  font-weight: $font-weight-bold;
+  letter-spacing: $letter-spacing-wide;
+}
+
+.title {
+  margin: 0 0 $spacing-8;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  font-size: $font-size-18;
+  font-weight: $font-weight-bold;
+  color: $txt-inverse;
+  line-height: $line-height-snug;
+  letter-spacing: $letter-spacing-body;
+  word-break: keep-all;
+
+  @include respond-up($breakpoint-tablet) {
+    font-size: $font-size-24;
+    line-height: $line-height-tight;
   }
 }
 
@@ -93,79 +149,16 @@ $duration-overlay-bg: rgba(0, 0, 0, 0.55);
   flex-wrap: wrap;
   align-items: center;
   gap: $spacing-6;
-  margin-bottom: $spacing-10;
-  font-size: $font-size-11;
-  color: $txt-tertiary;
-  font-variant-numeric: tabular-nums;
-
-  @include respond-up($breakpoint-tablet) {
-    gap: $spacing-8;
-    margin-bottom: $spacing-12;
-    font-size: $font-size-12;
-  }
-}
-
-.series {
-  color: $accent;
-  font-weight: $font-weight-bold;
-  letter-spacing: $letter-spacing-wide;
-}
-
-.date {
-  font-weight: $font-weight-semibold;
-}
-
-.dot {
-  opacity: 0.4;
-}
-
-.title {
-  margin: 0 0 $spacing-8;
-  font-size: $font-size-18;
-  font-weight: $font-weight-bold;
-  color: $txt-primary;
-  line-height: $line-height-snug;
-  letter-spacing: $letter-spacing-body;
-  word-break: keep-all;
-
-  @include respond-up($breakpoint-tablet) {
-    margin-bottom: $spacing-12;
-    font-size: $font-size-24;
-    line-height: $line-height-tight;
-  }
-}
-
-.scripture {
-  margin: 0 0 $spacing-8;
   font-size: $font-size-12;
-  font-weight: $font-weight-bold;
-  color: $primary;
-
-  @include respond-up($breakpoint-tablet) {
-    margin-bottom: $spacing-16;
-    font-size: $font-size-13;
-  }
-}
-
-.summary {
-  display: -webkit-box;
-  -webkit-line-clamp: 3;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-  margin: 0 0 $spacing-12;
-  font-size: $font-size-13;
-  color: $txt-secondary;
-  line-height: $line-height-body-reading;
-  word-break: keep-all;
-
-  @include respond-up($breakpoint-tablet) {
-    margin-bottom: $spacing-16;
-  }
+  color: $txt-image-subtle;
+  font-variant-numeric: tabular-nums;
 }
 
 .preacher {
-  margin: 0;
-  font-size: $font-size-12;
   font-weight: $font-weight-semibold;
-  color: $txt-secondary;
+  color: $txt-inverse;
+}
+
+.dot {
+  opacity: 0.5;
 }

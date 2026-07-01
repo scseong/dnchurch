@@ -4,7 +4,8 @@ import { LayoutContainer } from '@/components/layout';
 import { OPEN_GRAPH_BASE } from '@/config/seo';
 import { getAllSeries, getFeaturedSermon, getSermons } from '@/services/sermon';
 import SermonFeatured from './_component/SermonFeatured/SermonFeatured';
-import SermonRecentCarousel from './_component/SermonRecentCarousel/SermonRecentCarousel';
+import SermonHomeSearch from './_component/SermonHomeSearch';
+import SermonRecentList from './_component/SermonRecentList/SermonRecentList';
 import SermonSeriesCarousel from './_component/SermonSeriesCarousel/SermonSeriesCarousel';
 import styles from './page.module.scss';
 
@@ -57,10 +58,15 @@ export default async function SermonsPage({ searchParams }: SermonsPageProps) {
   const ongoingSeries = allSeries.filter((series) => series.ended_at === null);
 
   return (
-    <LayoutContainer className={styles.sections}>
-      <SermonFeatured sermon={featured} />
-      <SermonRecentCarousel sermons={recentList} />
-      <SermonSeriesCarousel series={ongoingSeries} />
+    <LayoutContainer>
+      {/* Hero 밴드 제거로 사라진 페이지 h1 보전 — 헤더 '설교' 타이틀과 별개로 문서 구조상 h1 유지 */}
+      <h1 className={styles.blind_title}>설교</h1>
+      <SermonHomeSearch className={styles.search} />
+      <div className={styles.sections}>
+        <SermonFeatured sermon={featured} />
+        <SermonRecentList sermons={recentList} />
+        <SermonSeriesCarousel series={ongoingSeries} />
+      </div>
     </LayoutContainer>
   );
 }
