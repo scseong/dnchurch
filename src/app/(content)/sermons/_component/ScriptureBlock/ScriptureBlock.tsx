@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import clsx from 'clsx';
+import { IoCaretDown, IoCaretUp } from 'react-icons/io5';
 import styles from './ScriptureBlock.module.scss';
 
 type Props = {
@@ -31,6 +32,11 @@ export default function ScriptureBlock({ scriptureRef, scriptureText }: Props) {
             onClick={() => setExpanded((v) => !v)}
           >
             {expanded ? '접기' : '자세히 보기'}
+            {expanded ? (
+              <IoCaretUp aria-hidden="true" />
+            ) : (
+              <IoCaretDown aria-hidden="true" />
+            )}
           </button>
         </>
       ) : (

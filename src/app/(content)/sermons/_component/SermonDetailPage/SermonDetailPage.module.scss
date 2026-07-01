@@ -13,8 +13,8 @@ $mobile-header-offset: $app-header-height;
 .layout {
   display: flex;
   flex-direction: column;
-  gap: $content-gap-m;
-  padding: 0 0 $section-gap-80;
+  gap: $spacing-24;
+  padding: 0 0 $section-gap-40;
 
   @include respond-up($breakpoint-tablet) {
     padding-top: $section-gap-40;
@@ -45,7 +45,7 @@ $mobile-header-offset: $app-header-height;
 .main_column {
   display: flex;
   flex-direction: column;
-  gap: $content-gap-l;
+  gap: $spacing-20;
   min-width: 0;
 
   @include respond-up($breakpoint-pc-sm) {
@@ -62,7 +62,7 @@ $mobile-header-offset: $app-header-height;
 .info_section {
   display: flex;
   flex-direction: column;
-  gap: $content-gap-m;
+  gap: $content-gap-l;
 }
 
 // ══════════════════════════════════════════
@@ -116,7 +116,7 @@ $mobile-header-offset: $app-header-height;
 }
 
 .sermon_title {
-  font-size: $font-size-22;
+  font-size: $font-size-20;
   font-weight: $font-weight-bold;
   line-height: $line-height-snug;
   color: $home-text;
@@ -132,6 +132,8 @@ $mobile-header-offset: $app-header-height;
   align-items: center;
   gap: $spacing-4;
   font-size: $font-size-13;
+  font-weight: $font-weight-semibold;
+  color: $home-text-sub;
 
   @include respond-up($breakpoint-tablet) {
     gap: $spacing-8;
@@ -163,7 +165,7 @@ $mobile-header-offset: $app-header-height;
   margin-bottom: $spacing-20;
   z-index: 10;
   display: flex;
-  border-bottom: 1px solid $border-subtle;
+  border-bottom: 1px solid $home-border-divider;
   background: $home-surface;
 
   @include respond-up($breakpoint-tablet) {
@@ -174,8 +176,8 @@ $mobile-header-offset: $app-header-height;
 .tab {
   display: flex;
   justify-content: center;
-  padding: $spacing-16 0;
-  font-size: $font-size-14;
+  padding: $spacing-12 0;
+  font-size: $font-size-13;
   font-weight: $font-weight-semibold;
   color: $home-text-sub;
   background: transparent;
@@ -252,7 +254,7 @@ $mobile-header-offset: $app-header-height;
 }
 
 .summary_text {
-  font-size: $font-size-14;
+  font-size: $font-size-13;
   line-height: $line-height-loose;
   color: $home-text;
   white-space: pre-wrap; // admin UI 입력값의 줄바꿈 보존 (의사결정 로그 D4)
