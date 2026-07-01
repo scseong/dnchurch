@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import type { SermonWithRelations } from '@/types/sermon';
-import SermonListCard from './SermonListCard';
+import GridCard from '../GridCard/GridCard';
 import styles from './SermonRecentList.module.scss';
 
 type Props = {
@@ -19,9 +19,9 @@ export default function SermonRecentList({ sermons }: Props) {
         </Link>
       </header>
       <ul className={styles.list}>
-        {sermons.map((sermon) => (
+        {sermons.map((sermon, index) => (
           <li key={sermon.id}>
-            <SermonListCard sermon={sermon} />
+            <GridCard sermon={sermon} index={index} />
           </li>
         ))}
       </ul>
