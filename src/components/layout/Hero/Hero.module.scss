@@ -19,12 +19,12 @@
   }
 }
 
-// ── 배경: 그라디언트 (references/Greeting.jsx PCHero — darkDeep $navy-900 → dark $navy-950) ──
+// ── 배경: 그라디언트 — v5 warm 이행 (darkDeep $brown-975 → dark $brown-950) ──
 
 .hero_bg {
   position: absolute;
   inset: 0;
-  background: linear-gradient(180deg, $navy-900, $navy-950);
+  background: linear-gradient(180deg, $brown-975, $brown-950);
 }
 
 // ── 오버레이 ──
