@@ -130,11 +130,11 @@ export const sermonService = (supabase: SupabaseClient<Database>) => ({
     return (handled.data as unknown as SermonWithRelations | null) ?? null;
   },
 
-  /** 활성 시리즈 전체를 published + 미삭제 설교 개수와 함께 조회 */
+  /** 활성 시리즈 전체를 published + 미삭제 설교 개수와 함께 조회 — 소비처 union 컬럼만 (P5) */
   allSeries: async (): Promise<SeriesWithSermonCount[]> => {
     const res = await supabase
       .from('sermon_series')
-      .select('*, sermons!inner(count)')
+      .select('id, slug, title, description, cover_image_url, started_at, ended_at, sermons!inner(count)')
       .eq('is_active', true)
       .eq('sermons.is_published', true)
       .is('sermons.deleted_at', null)
@@ -213,7 +213,7 @@ export const sermonService = (supabase: SupabaseClient<Database>) => ({
   allPreachers: async (): Promise<PreacherWithSermonCount[]> => {
     const res = await supabase
       .from('preachers')
-      .select('*, sermons!inner(count)')
+      .select('id, name, title, sermons!inner(count)')
       .eq('is_active', true)
       .eq('sermons.is_published', true)
       .is('sermons.deleted_at', null)

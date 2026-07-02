@@ -14,7 +14,7 @@ import { getTotalPages } from '@/utils/pagination';
 import type {
   AdminSermon,
   AdminSermonListParams,
-  Preacher,
+  PreacherWithSermonCount,
   SeriesWithSermonCount,
   SermonStatusTab
 } from '@/types/sermon';
@@ -35,7 +35,7 @@ interface SermonListPageProps {
   total: number;
   statusCounts: Record<SermonStatusTab, number>;
   initialParams: AdminSermonListParams;
-  preachers: Preacher[];
+  preachers: PreacherWithSermonCount[];
   series: SeriesWithSermonCount[];
 }
 
