@@ -6,7 +6,6 @@ export type BulletinWithImages = Pick<
   'id' | 'title' | 'sunday_date' | 'created_at' | 'author_id'
 > & {
   bulletin_images: Pick<BulletinImageType, 'id' | 'cloudinary_id' | 'order_index'>[];
-  profiles?: { display_name: string | null } | null;
 };
 
 export type BulletinParams = { year?: number; page?: number; limit?: number };
