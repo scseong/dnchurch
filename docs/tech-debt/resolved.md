@@ -4,6 +4,18 @@
 
 ---
 
+### ✅ FeedContent `.badge_category` mixin 미적용 (2026-06-29 해소 — 대상 소멸)
+
+- **부채**: `src/app/_component/home/FeedContent.module.scss`의 카테고리 뱃지가 caption mixin 없이 직접 토큰을 조합했다. 뱃지의 `line-height: 1` 의도와 `text-caption-strong`의 1.45가 충돌해 mixin을 얹지 못했다 (2026-05-04 design-system-v3 Step 3 발견)
+- **해소**: 별도 수정 없이 대상이 사라졌다. 커밋 `a2e0ee3`(2026-06-29, 새가족 등록 공개 폼과 교회 소개·홈 리디자인)이 FeedContent 컴포넌트를 삭제했다
+- **확인**: `rg "badge_category" src` → 0 hit, `src/app/_component/home/FeedContent.*` → 파일 없음 (2026-07-02 재확인)
+
+### ✅ `complete-task.mjs` 패턴 매칭 부정확 (2026-06-21 해소, PR #131)
+
+- **부채**: `find -name "*${PATTERN}*.md"` substring 매치라 `phase1` 입력이 `phase1-5`에도 걸려 다중 매칭으로 차단됐고, `phase1.md` 입력은 `*phase1.md*.md`로 깨졌다 (2026-05-01 발견, 수동 mv로 우회)
+- **해소**: 파일명에서 날짜 접두사와 `.md`를 뗀 slug를 입력과 정확히 비교하는 방식(`slugFromFilename(name) === pattern`)으로 바꿨다. 매칭이 없으면 현재 active slug 목록을 보여준다 (PR #131 작은 기술 부채 묶음)
+- **확인**: `scripts/complete-task.mjs:84-99` — 정확 일치 비교 + 미매칭 시 slug 목록 출력 (2026-07-02 재확인)
+
 ### ✅ queueMicrotask 4건 — effect 안 setState 우회 (2026-06-21 해소, PR #131)
 
 - **부채**: `useMediaQuery.ts`·`useListFilters.ts`·`DesktopHeader.tsx`·`NoticeControlBar.tsx`가 effect 안 setState를 `queueMicrotask`로 감싸 `react-hooks/set-state-in-effect` 경고만 껐다. 정작 연쇄 재렌더는 그대로 두었다. 프로젝트 금지 규칙(memory `feedback_no_queue_microtask`) 위반이었다. active.md에 "사용 4건"과 "set-state-in-effect 우회 4건" 두 항목으로 적혀 있었으나 가리키는 대상은 같은 4개 파일이다.
@@ -40,11 +52,26 @@
 - **해소**: `src/config/seo.ts`에 `OG_FALLBACK_IMAGE` 상수를 두고 `OPEN_GRAPH_BASE`·`CHURCH_INFO.image`가 참조하게 모았다. 정적 목록 4개(`sermons`·`sermons/all`·`sermons/series`·`news/bulletins`)는 `...OPEN_GRAPH_BASE`를 펼쳐 배너를 상속하고, 동적 상세 3개(`sermons/[id]`·`sermons/series/[id]`·`news/bulletins/[id]`)는 콘텐츠 이미지가 없을 때 `[{ url: x || OG_FALLBACK_IMAGE }]`로 배너를 채운다. `openGraph` 미선언 페이지는 root를 상속해 원래 정상이었다
 - **확인**: prod 서버(빌드 산출물)에서 목록 4개가 `og:image = .../images/aboutBanner.jpg` 출력, 상세 `/sermons/3`은 Cloudinary 콘텐츠 썸네일 유지. verify-task(`20260619-145827`)·harness-gate 통과. PR 봇은 Gemini 3건 반영·Codex 👍
 
+### ✅ 라우트·영역별 not-found가 모두 루트 404로 떨어짐 (2026-06-17 해소)
+
+- **부채**: 설교·admin의 `notFound()`가 모두 루트 다크 404로 떨어졌고, `news/notices/[id]/page.tsx`는 미구현 스텁(`<div>page</div>`)이라 없는 공지 id에 HTTP 200 "page"가 떴다 (2026-06-10 not-found-page 작업 중 발견)
+- **해소**: 세 갈래 모두 후속 커밋으로 처리됐다.
+  - 설교·admin: `src/app/(content)/sermons/not-found.tsx`·`src/app/(admin)/not-found.tsx` 추가 — 커밋 `b368478`(2026-06-11)
+  - 공지 상세: 커밋 `ce52879`(2026-06-17)가 죽은 스텁을 삭제해, 없는 공지 경로는 라우트가 없어 404로 떨어진다
+- **확인**: `src/app/**/not-found.tsx` 5개(root·sermons·admin·bulletins·notices), `src/app/(content)/news/notices/[id]/` 디렉토리 없음 (2026-07-02 재확인). 공지 상세를 다시 구현할 때 조회 실패 시 `notFound()` 호출을 넣어야 한다
+
 ### ✅ portal 컴포넌트 하이드레이션 불일치 (2026-06-15 해소, PR #122)
 
 - **부채**: `BottomSheet.tsx`·`Modal.tsx`이 `typeof window` 가드 뒤 `createPortal`을 호출하면서 항상 렌더된다. 서버는 null, 첫 클라는 portal이라 hydration mismatch가 났다. `/sermons/[id]` 공유 BottomSheet에서 React 콘솔 에러로 확인했다(dev 출력, prod도 동일)
 - **해소**: 공통 `src/components/ui/ClientPortal`(mounted two-pass)로 서버·첫 클라 렌더를 둘 다 null로 맞춘 뒤 `useEffect` 이후 portal을 만들고, `getElementById('modal-root') ?? document.body` 타깃 해석도 모았다. Modal·BottomSheet를 래핑하고, NoticeDrawer는 `!isOpen`이라 SSR에서 mismatch가 없어 redundant `typeof window`만 제거했다
 - **확인**: `/sermons/2` 하드 리로드 시 콘솔 hydration 경고 0(Chrome 실측). 공유 BottomSheet가 정상으로 열린다. verify-task·Codex 계획·1차 모두 PASS
+
+### ✅ 마이그레이션이 DB를 재현하지 못함 (2026-06-12 해소, migration-ssot-recovery)
+
+- **부채**: `supabase/migrations/`만으로 빈 DB를 만들면 실패했다. `profiles`·`bulletins`·`bulletin_images`·`notices`의 `CREATE TABLE`이 어느 마이그레이션에도 없었고(대시보드에서 손으로 생성), `001_sermon_schema.sql`은 실제 스키마와 어긋났다 — `sermons.id`가 파일은 `UUID`인데 실제는 `bigint`, 컬럼명 `date` vs `sermon_date`. `seed.sql`도 `date` 컬럼명을 썼다 (2026-06-11 PR #115에서 Gemini·Codex 리뷰가 동시 지적)
+- **해소**: baseline 마이그레이션 추가 + `001` 재작성 + `get_adjacent_bulletins` 추가로 Preview 빈 DB가 dev와 일치한다(테이블·컬럼·enum·RLS·트리거)
+- **남은 어긋남**: dev에 `custom_access_token_hook` 함수가 없어 `config.toml:178` 선언·마이그레이션 `20260425000000`과 어긋난다(fresh 빌드는 함수를 만들므로 미래 prod는 정상). 2026-07-02 dev `pg_proc` 실측으로 재확인 — 이후 추적은 active.md "DB 위생 남은 분" 항목의 뿌리 원인 절이 잇는다
+- **확인**: Supabase Preview replay 성공. PR #139 `20260702000001_db_hygiene.sql`도 fresh replay 가드를 넣어 통과 (2026-07-02)
 
 ### ✅ `supabase` named export deprecated 제거 (2026-06-02 해소, PR #108)
 
