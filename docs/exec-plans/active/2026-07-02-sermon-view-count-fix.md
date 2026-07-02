@@ -120,6 +120,12 @@
 
 ## 검증 이력
 
+## PR 리뷰 대응
+
+| 지적 | 출처 | 대조 | 판정 | 조치 |
+| --- | --- | --- | --- | --- |
+| 실패 로그에 sermonId 컨텍스트 누락 | PR #137 Gemini 인라인 (id 3510728337, `sermon-views.action.ts:13`) | 코드 확인 — console.error 메시지에 sermonId 없음 | 타당 | 템플릿 리터럴로 sermonId 포함, 커밋 8e2d800, verify run 20260702-145247, 답글 r3510784851 |
+
 ## 후속 작업
 
 - P2 DB 위생 마이그레이션 (RLS initplan 래핑·중복 permissive 정책 분리·sermon RPC search_path·중복 인덱스·FK 인덱스)
