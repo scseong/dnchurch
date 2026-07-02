@@ -1,6 +1,4 @@
-'use client';
-
-import PhotoSwipe from '@/components/common/PhotoSwipe';
+import PhotoSwipe from '@/components/common/PhotoSwipeLazy';
 
 export default function LatestBulletinImages({ images }: { images: string[] }) {
   if (images.length === 0) {
