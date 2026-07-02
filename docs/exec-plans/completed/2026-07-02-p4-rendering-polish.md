@@ -1,6 +1,6 @@
 # p4-rendering-polish
 
-- **상태**: 🟡 진행 중
+- **상태**: ✅ 완료 (PR #140 머지, 2026-07-02)
 - **시작일**: 2026-07-02
 - **브랜치**: refactor/p3-dead-code-cleanup (P3와 같은 PR로 묶음 — 사용자 결정)
 - **Open questions**: none
@@ -195,3 +195,21 @@ PR #140 — Gemini 인라인 2건 (모두 medium 성능 제안). 코드 직접 �
 - 의사결정 로그·검증 기록은 위 형식 고정. 압축·기호잇기·약어·한 항목 다결정 금지.
 -->
 
+
+## 회고
+
+**잘된 것**
+
+- Codex 계획 검증 CHANGE_REQUEST가 효과 없는 구현을 사전에 막았다 — 서버 컴포넌트에서 직접 `dynamic()`을 쓰는 첫 설계는 Next.js 공식 문서상 코드 스플리팅이 안 되는 방식이었고, 구현 전에 D4('use client' wrapper)로 정정했다. 계획 검증 단계가 실제로 값을 낸 사례.
+- 성능을 두 축으로 교차 실측했다 — 로컬 빌드 미압축(-81.4KB, -8.6%)과 Vercel Preview gzip 전송(-26.7KB, -9.2%)이 서로 확인해 준다. Turbopack이 First Load JS 표를 안 찍는 제약도 프리렌더 HTML `<script>` 합산으로 우회했다.
+- audit 3-2(loading.tsx 재추가)가 5일 전 커밋 `d9a84e5`의 의도적 삭제와 충돌하는 것을 EXPLORE에서 발견해, 조용한 번복 대신 사용자 확인으로 제외했다(D2).
+- PR 리뷰(Gemini 2건)를 중계 없이 데이터 흐름 추적으로 판정했다 — 두 제안 모두 props 변경 시 데이터·children이 함께 교체되는 구조라 실익 0임을 확인하고 근거와 함께 기각.
+
+**다음에 할 것**
+
+- serving-people legacy `public/` 프로필 이미지의 Cloudinary 데이터 이관 — 이관이 끝나야 raw `<img>` 분기와 eslint-disable을 지울 수 있다 (tech-debt 등록됨).
+- PhotoSwipe 클릭 시점 로드(라이브러리 교체급 재작성)는 효과 대비 위험이 커서 보류 — 지금 wrapper 방식으로 초기 실행 세트 분리는 달성됨.
+
+**발견된 부채 (→ tech-debt/active.md 옮길 것)**
+
+- 이관 완료 — "섬기는 사람들 legacy public/ 프로필 이미지" 항목 등록 (PR #140에 포함). photoswipe CSS 즉시 로드(5.4KB)는 Next 동작이라 부채로 등록하지 않고 exec-plan 각주로만 남긴다.

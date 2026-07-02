@@ -1,6 +1,6 @@
 # p3-dead-code-cleanup
 
-- **상태**: 🟡 진행 중
+- **상태**: ✅ 완료 (PR #140 머지, 2026-07-02)
 - **시작일**: 2026-07-02
 - **브랜치**: refactor/p3-dead-code-cleanup
 - **Open questions**: none
@@ -167,3 +167,19 @@ refactor-audit P3의 dead code를 삭제한다. 설교 `yearCounts` JS 집계(�
 - 의사결정 로그·검증 기록은 위 형식 고정. 압축·기호잇기·약어·한 항목 다결정 금지.
 -->
 
+
+## 회고
+
+**잘된 것**
+
+- audit의 "교체·통일" 지시를 그대로 따르지 않고 EXPLORE `rg`로 호출처 0건을 확인해 삭제로 재해석했다(D1). RPC 교체였다면 커밋 `266e693`으로 지운 year 필터 인프라를 되살릴 뻔했다 — 감사 문서보다 코드가 SSOT라는 원칙이 실제로 작동했다.
+- Codex 계획 검증이 식별자 grep을 넘어 dynamic import·module-path·generated types까지 훑어 삭제 안전성을 독립 확인했다(PASS_WITH_DECISION_LOG, high). 삭제 작업의 유일한 위험(놓친 참조)을 이중으로 막았다.
+- 7-1(`router.refresh()` 중복)은 정적 판단으로 단정하지 않고 dev 실측으로 결정했다 — `updateTag('sermon')`만으로 목록 8→7 갱신을 확인한 뒤 제거했고, 테스트로 지운 초안은 SQL로 복구했다(`sermon_resources` 0건, 손실 없음).
+
+**다음에 할 것**
+
+- 죽은 RPC 마이그레이션 파일 `20260430000000_add_sermon_year_counts_rpc.sql` 정리 — dev `pg_proc`·적용 목록에 없음이 실측돼(사용자 확인) drop 마이그레이션 없이 파일만 지우면 된다. tech-debt에 경로 기록됨.
+
+**발견된 부채 (→ tech-debt/active.md 옮길 것)**
+
+- 이관 완료 — "죽은 RPC 마이그레이션 `get_sermon_year_counts`" 항목 등록 (PR #140에 포함).
