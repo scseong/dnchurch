@@ -10,7 +10,6 @@ import type {
   SeriesWithSermonCount,
   SeriesDetail,
   PreacherWithSermonCount,
-  YearCount,
   AdminSermon,
   AdminSermonListParams,
   SermonStatusTab
@@ -250,23 +249,6 @@ export const sermonService = (supabase: SupabaseClient<Database>) => ({
 
     const handled = handleResponse(res);
     return ((handled.data ?? []) as Array<{ id: number }>).map((row) => row.id);
-  },
-
-  /** 연도별 설교 편수 집계 (sermon_date projection + JS 집계) */
-  yearCounts: async (): Promise<YearCount[]> => {
-    const res = await supabase
-      .from('sermons')
-      .select('sermon_date')
-      .eq('is_published', true)
-      .is('deleted_at', null);
-    const handled = handleResponse(res);
-    const rows = (handled.data ?? []) as Array<{ sermon_date: string }>;
-    const map = new Map<number, number>();
-    for (const { sermon_date } of rows) {
-      const y = new Date(sermon_date).getFullYear();
-      map.set(y, (map.get(y) ?? 0) + 1);
-    }
-    return Array.from(map, ([year, count]) => ({ year, count })).sort((a, b) => b.year - a.year);
   },
 
   /** 활성 설교 전체 수 (count-only, rows 없이 head로 조회) */

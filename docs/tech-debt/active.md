@@ -16,6 +16,14 @@
 - **확인**: `mcp__claude_ai_Supabase__get_advisors` (performance·security) 재실행
 - **발견일**: 2026-07-02 (리팩토링 감사 — advisor 실 DB 점검), 2026-07-02 4카테고리 해소(PR #139)
 
+### 🟢 미사용 DB 함수 `get_sermon_year_counts()` — src 참조 0 (2026-07-02 감사 P3)
+
+- **무엇**: 마이그레이션 `20260430000000_add_sermon_year_counts_rpc.sql`이 만든 RPC. 이를 호출하려던 `sermonService.yearCounts`는 커밋 `266e693 숨은 year 필터 제거`로 소비 UI가 사라져 죽었고, P3(refactor/p3-dead-code-cleanup)에서 JS 쪽 `yearCounts`·`YearCount`를 삭제했다. 이제 DB 함수만 고아로 남았다.
+- **왜 지금 안 하나**: DROP은 별도 마이그레이션이라 코드만 바꾸는 P3에 안 섞었다(사용자 결정). advisor INFO 수준이라 급하지 않다.
+- **마이그레이션 경로**: 다음 DB 위생 마이그레이션에 `drop function if exists public.get_sermon_year_counts()` 묶기. dev·prod가 어긋날(drift) 위험 주의 — 존재 여부를 실 DB로 확인한 뒤.
+- **확인**: `rg "get_sermon_year_counts" src` 0건 + `mcp__claude_ai_Supabase__execute_sql`로 `pg_proc` 존재 확인
+- **발견일**: 2026-07-02 (리팩토링 감사 P3)
+
 ### 🟡 가입 폼에 민감정보(종교)·국외이전 별도 동의 UI가 없음 (privacy-policy PR #130 — 런칭 게이트)
 
 - **상태**: 등록만 (오픈 전 단계라 실수집 없음 — 런칭 전 필수)

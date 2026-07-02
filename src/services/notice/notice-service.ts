@@ -44,19 +44,6 @@ export const noticeService = (supabase: SupabaseClient<Database>) => ({
     return handleResponse(res);
   },
 
-  categoryCounts: async () => {
-    const res = await supabase.from(NOTICE_BUCKET).select('category').is('deleted_at', null);
-
-    const handled = handleResponse(res);
-    const counts: Record<string, number> = {};
-
-    handled.data?.forEach(({ category }) => {
-      counts[category] = (counts[category] || 0) + 1;
-    });
-
-    return { data: counts, error: handled.error };
-  },
-
   allIds: async () => {
     const res = await supabase.from(NOTICE_BUCKET).select('id').order('id', { ascending: false });
     return handleResponse(res);

@@ -55,11 +55,6 @@ export interface SermonListParams {
   sort?: SermonSortKey;
 }
 
-export type YearCount = {
-  year: number;
-  count: number;
-};
-
 // ─── Admin: 발행 상태 + 목록 응답 타입 ───────────────────────────────────────
 
 export type SermonStatus = 'published' | 'draft';
