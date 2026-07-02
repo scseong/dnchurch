@@ -12,9 +12,26 @@
   - `multiple_permissive_policies`: "only admins can modify X" FOR ALL 정책이 공개 read SELECT와 중복 평가(staff·worship_schedules·site_settings·site_collections), sermons SELECT 2정책(admin·published) 중복. FOR ALL을 insert/update/delete로 나누거나 sermons SELECT를 `is_published OR admin`로 병합해야 하는데, RLS 명령 커버리지 재구조화라 고위험이고 ≤39행 테이블에서 효과가 없어 미룸.
   - `unused_index`: `idx_sermons_deleted_at`·`idx_sermons_service_type` 미사용(INFO). 미래 필터에서 쓸지 확인 후 판단. (PR #139로 만든 FK 인덱스 2개도 방금 생성돼 unused로 뜨나 이건 워크로드 쌓이면 쓰임)
 - **왜 지금 안 하나**: 고위험(RLS 재구조화)·저효과(소테이블). advisor WARN/INFO 레벨.
-- **뿌리 원인**: 마이그레이션 drift — baseline이 실 DB를 재현 못 해 고아 함수(`handle_updated_at`)·누락 인덱스가 생긴다. PR #139 CI에서 실현됨(가드로 우회). 근본 해소는 아래 "마이그레이션이 DB를 재현하지 못함" 항목과 함께.
+- **뿌리 원인**: 마이그레이션 파일과 실 DB의 어긋남 — dev가 마이그레이션 추적 시작(2026-06-11) 전에 손으로 만들어져 파일이 실 DB를 재현하지 못한다. 고아 함수(`handle_updated_at`)·누락 인덱스가 그 예이고, PR #139 CI에서 실제 fresh replay가 실패했다(가드로 우회). baseline 복구는 [`resolved.md`](resolved.md) "마이그레이션이 DB를 재현하지 못함"(2026-06-12 해소)이 다뤘고, dev에 `custom_access_token_hook`이 없는 드리프트가 남아 있다(`config.toml:178` 선언과 불일치 — 2026-07-02 dev `pg_proc` 실측).
 - **확인**: `mcp__claude_ai_Supabase__get_advisors` (performance·security) 재실행
 - **발견일**: 2026-07-02 (리팩토링 감사 — advisor 실 DB 점검), 2026-07-02 4카테고리 해소(PR #139)
+
+### 🟢 죽은 RPC 마이그레이션 `get_sermon_year_counts` — src 참조 0·dev 미적용 (2026-07-02 감사 P3)
+
+- **무엇**: 마이그레이션 `20260430000000_add_sermon_year_counts_rpc.sql`이 만드는 RPC. 이를 호출하려던 `sermonService.yearCounts`는 커밋 `266e693 숨은 year 필터 제거`로 소비 UI가 사라져 죽었고, P3(refactor/p3-dead-code-cleanup)에서 JS 쪽 `yearCounts`·`YearCount`를 삭제했다. 남은 것은 마이그레이션 파일이다 — fresh replay(Preview·미래 prod 구축)가 아무도 안 부르는 함수를 만든다.
+- **2026-07-02 실측**: dev `pg_proc`에 이 함수가 없고, dev 적용 목록(`supabase_migrations.schema_migrations`)에도 이 파일이 없다. dev는 마이그레이션 추적 시작 전에 손으로 만들어져 이 RPC가 적용된 적이 없다 — 실 DB에서 DROP할 대상이 없다.
+- **왜 지금 안 하나**: 마이그레이션 정리는 코드만 바꾸는 P3에 안 섞었다(사용자 결정). advisor INFO 수준이라 급하지 않다.
+- **마이그레이션 경로**: 파일 `20260430000000_add_sermon_year_counts_rpc.sql`을 삭제한다. 적용된 실 DB가 없어(위 실측) 삭제 마이그레이션 없이 파일만 지워도 dev·prod와 어긋나지 않는다.
+- **확인**: `rg "get_sermon_year_counts" src` 0건 + dev `pg_proc` 조회 0건
+- **발견일**: 2026-07-02 (리팩토링 감사 P3)
+
+### 🟢 섬기는 사람들 — legacy public/ 프로필 이미지를 Cloudinary로 아직 안 옮김 (감사 P4)
+
+- **무엇**: `serving-people/page.tsx:57`이 `staff.image_url`이 `/`로 시작하는 legacy `public/` 자산이면 raw `<img>` 분기를 탄다(eslint-disable로 의도 표시). Cloudinary 자산은 이미 `<CloudinaryImage>`를 쓰므로, 남은 것은 코드가 아니라 데이터다.
+- **왜 지금 안 하나**: DB `staff.image_url`의 legacy 행을 Cloudinary로 옮기는 데이터 이관이 먼저라 코드만 바꾸는 P4 범위 밖.
+- **마이그레이션 경로**: legacy 행 확인(`select id, image_url from staff where image_url like '/%'`) → Cloudinary 업로드 → `image_url` 교체 → raw `<img>` 분기와 eslint-disable 제거.
+- **확인**: 위 SQL 0건 + `rg "no-img-element" src/app/(content)/about/serving-people` 0건
+- **발견일**: 2026-07-02 (리팩토링 감사 P4 — explorer 재조사에서 분기 구조 확인)
 
 ### 🟡 가입 폼에 민감정보(종교)·국외이전 별도 동의 UI가 없음 (privacy-policy PR #130 — 런칭 게이트)
 
@@ -73,22 +90,6 @@
 - **영향 범위**: `src/utils/reveal.ts`, `src/constants/notice.ts`, `src/app/_component/home/`, `src/components/layout/BottomNav/`
 - **발견일**: 2026-06-26 (PR #132 knip + 리뷰)
 
-### ✅ 마이그레이션이 DB를 재현하지 못함 — 해소 (migration-ssot-recovery, PR #115)
-
-- **상태**: 해소 (2026-06-12). baseline 마이그레이션 + `001` 재작성 + `get_adjacent_bulletins` 추가로 Preview 빈 DB가 dev와 일치(테이블·컬럼·enum·RLS·트리거). 남은 문제: dev 자체에 `custom_access_token_hook` 함수가 없어 마이그레이션과 어긋난다(fresh 빌드는 함수를 만들므로 미래 prod는 정상). 아래는 작업 전 기록.
-- **무엇**: `supabase/migrations/`만으로 빈 DB를 만들면 실패한다. `profiles`·`bulletins`·`bulletin_images`·`notices`의 `CREATE TABLE`이 어느 마이그레이션에도 없다(대시보드에서 손으로 생성). `20260314000000_create_bulletin_rpc.sql`이 `bulletins`에 INSERT하지만 그 테이블을 만드는 마이그레이션이 앞에 없어 `supabase db reset`·Preview replay가 깨진다. 더해 `001_sermon_schema.sql`이 실제 스키마와 어긋난다 — `sermons.id`가 파일은 `UUID`인데 실제는 `bigint`, 컬럼명 `date` vs `sermon_date`. `seed.sql`도 `date` 컬럼명을 쓴다.
-- **왜 지금 안 하나**: prod가 비어 있고 사용 안 함. dev에는 실제 스키마가 이미 있어 동작에 지장 없다. PR #115는 보안 구멍 차단이 범위라 baseline 복구(sermon 스키마까지)를 섞으면 비대해진다.
-- **왜 미루면 안 되나(데드라인)**: 계획이 "MVP 완성 후 마이그레이션으로 prod 구축"인데, 지금 세트로는 그 prod 구축이 실패한다. **prod 마이그레이션 직전에 반드시 해소해야 한다.**
-- **함께 있는 드리프트**: `custom_access_token_hook`이 `config.toml:174`엔 선언됐으나 dev에는 함수가 없다.
-- **마이그레이션 경로**:
-  1. dev DB에서 `supabase db dump`(또는 `db diff`)로 `profiles`·`bulletins`·`bulletin_images`·`notices` 정의(컬럼 + enum `role_enum`/`profile_status_enum` + 인덱스 + RLS + 트리거 `handle_new_user`)를 baseline 마이그레이션으로 추출한다.
-  2. `001_sermon_schema.sql`을 실제 스키마와 맞추고 `seed.sql`의 `date` 컬럼명을 `sermon_date`로 고친다.
-  3. 빈 DB에 `supabase db reset`을 돌려 dev와 같은지 확인한다. prod가 비어 있어 prod 대조는 불필요하고 위험이 낮다.
-  4. `custom_access_token_hook` 함수를 dev에 적용해 config 선언과 맞춘다.
-- **영향 범위**: `supabase/migrations/*`, `supabase/seed.sql`
-- **확인**: `supabase db reset` 또는 Supabase Preview replay 성공 여부
-- **발견일**: 2026-06-11 (PR #115에서 마이그레이션 추적 시작 시 Gemini·Codex 리뷰가 동시 지적)
-
 ### 🟢 주보 수정 시 Cloudinary 삭제를 RPC 반환값으로 검증 (profiles-rls-rpc-guard PR #115)
 
 - **상태**: 등록만 (PR #115에서 1차 보강 완료, 더 견고한 방식은 후속)
@@ -105,95 +106,86 @@
 - **영향 범위**: `src/actions/auth.action.ts`, supabase 프로필 생성 트리거, 가입 폼 안내 문구
 - **발견일**: 2026-06-12 (PR #116 Gemini 리뷰 — Codex 교차 검증으로 기존 결함 확인)
 
-### 🟡 `app/ → apis/` 직접 호출 (레이어 위반, 8건)
+### 🟡 `app/ → apis/` 직접 호출 (레이어 위반, 5건)
 
 - **무엇**: 페이지·홈 컴포넌트가 `services/` 경유 없이 `apis/`를 직접 import
 - **왜**: 초기 단순 구조에서 services 레이어 도입 전에 작성된 코드
 - **현재 상태**: ESLint 룰 `error`로 올림 — 새 위반은 즉시 차단. 기존 항목은 line-level `eslint-disable-next-line no-restricted-imports` + tech-debt 주석으로 마킹
 - **마이그레이션 경로**: 각 호출 사이트를 `services/` 또는 Server Component data fetcher 경유로 교체. 모두 해결되면 disable 주석 일괄 제거
-- **영향 범위** (8건):
+- **영향 범위** (5건):
   - `src/app/(content)/about/serving-people/page.tsx` — `getActiveStaff`
-  - `src/app/_component/home/{Banner,AboutOurChurch}.tsx` — `getSiteSettings`
-  - `src/app/_component/user/UserProfileModal.tsx` — `signOut`
-  - `src/app/_component/auth/{SignUpForm,SignInForm,KakaoLoginBtn,EmailVerificationRequestForm}.tsx`
-  - (auth 4건은 클라이언트 직접 호출이 정당할 수 있어 정책 결정 필요)
-- **확인**: `rg "from ['\"]@/apis/" src/app` → 8 hits
+  - `src/app/_component/home/AboutOurChurch.tsx` — `getSiteSettings` (knip 미사용 export — "홈 리디자인으로 생긴 미사용 코드 정리" 항목에서 컴포넌트째 지우면 함께 소멸)
+  - `src/app/_component/user/UserProfileModal.tsx` — `signOut` (knip 미사용 파일 — 같은 사정)
+  - `src/app/_component/auth/{SignInForm,KakaoLoginBtn}.tsx`
+  - (auth 2건은 클라이언트 직접 호출이 정당할 수 있어 정책 결정 필요)
+- **확인**: `rg "from ['\"]@/apis/" src/app` → 5 hits
 - **발견일**: 2026-05-01 (ESLint 레이어 룰 도입 시)
 - **2026-05-02**: `worship/page.tsx` 해소 (`services/worship/` 도입) — 10건 → 9건
 - **2026-05-21**: `about/location/page.tsx` 해소 (`services/about/getLocationPageData` 경유) — 9건 → 8건
+- **2026-07-02 재측정**: 8건 → 5건. `Banner`는 홈 리디자인으로 `getSiteSettings` 호출이 빠졌고, `SignUpForm`·`EmailVerificationRequestForm`은 Server Action 전환으로 `apis/` 직접 import가 사라졌다.
 
-### 🟡 SCSS primitive 토큰 직접 사용 (143건)
+### 🟡 SCSS primitive 토큰 직접 사용 (20건)
 
 - **무엇**: `.module.scss`에서 primitive 토큰(`$gray-*`/`$navy-*`/`$gold-*`/`$beige-*`/`$cream-*`/`$black`/`$white`)을 color/border/background 등에 직접 사용. semantic 토큰(`$txt-*`/`$bg-*`/`$border-*`/`$primary`/`$accent`)을 거치지 않음
 - **왜**: ADR 0003(design-system-v3)이 primitive↔semantic 분리를 결정했지만 도구 가시화가 부재했음. 2026-05-10 stylelint guardrail PR에서 `declaration-property-value-disallowed-list` warning 룰 도입으로 가시화됨
 - **마이그레이션 경로**: 영역별 분리 PR(home / about / sermons / news / admin)로 점진 치환. `.claude/skills/styles/SKILL.md`의 "Primitive → Semantic 치트시트" 표 참조. 모두 정리한 뒤 별도 PR에서 룰 severity를 `warning` → `error`로 올림
 - **영향 범위**: `src/app/**/*.module.scss`, `src/components/**/*.module.scss` 다수
-- **확인**: `yarn lint:styles | grep "primitive 토큰 직접 사용"` (현재 143건)
+- **확인**: `yarn lint:styles | grep "primitive 토큰 직접 사용"` (현재 20건)
 - **발견일**: 2026-05-10 (stylelint-primitive-guardrail PR 도입 시 정확 카운트)
 - **2026-06-15 갱신(영역별 토큰 정리 — PR #123)**: primitive→semantic 영역별 점진 치환을 home·about·news·공유 컴포넌트 4영역에 적용해 값 동일 별칭 104곳을 semantic으로 바꿨다. 값이 같은 별칭이 있는 곳만 바꿔 화면을 그대로 뒀다. 값이 같은 별칭이 없는 곳은 예외로 두고 아래에 분류했다. 영역별 결과:
   - home: 45 → 3 (값 동일 별칭 42 치환, 예외 3). exec-plan `2026-06-15-home-tokens`.
   - about: 36 → 4 (값 동일 별칭 32 치환, 예외 4). exec-plan `2026-06-15-about-tokens`.
   - news: 11 → 0. `$gray-200` divider를 `$border-subtle`로, hover를 `$bg-hover`로, `$white`를 `$txt-inverse`로 바꿔 디자인 시스템 방향에 맞췄다(시각 미세 변경, 결정 B). exec-plan `2026-06-15-news-tokens`.
   - 공유 컴포넌트: 37 → 18 (값 동일 별칭 19 치환, 예외 18). exec-plan `2026-06-15-components-tokens`.
-- **디자인 시스템(DS) 공백 25건(값 동일 별칭 없음 — 결정 필요. home 3·about 4·공유 컴포넌트 18)**: 값이 같은 semantic이 없어 그대로 둔다. 시각을 바꾸거나(결정 B 방식) 신규 토큰을 추가하는 결정이 필요하다. 토큰 추가보다 단순화를 선호하므로 사용자 결정 전까지 둔다. 같은 25건을 종류별로 보면:
-  - `$black` 굵은 검정 하이라인 9건 (MobileNavigation 5·board 4)
-  - `$beige-200` 배경 5건 (about page·welcome·vision 4·Header 활성 메뉴 1)
-  - `$beige-150` 헤더·하단탭 테두리 3건 (Header 2·BottomNav 1)
-  - gold 위 navy 텍스트 `$navy-950` 2건 (home SermonCard)
-  - 스켈레톤 `$gray-100`·`$gray-200` 2건 (PhotoSwipe)
-  - 로고 브랜드 색 `$navy-950` 1건 (Header)
-  - 비활성 버튼 배경 `$gray-200` 1건 (FormSubmitButton)
-  - `$gray-200` divider 1건 (home FeedContent)
-  - Hero 그라데이션 `$navy-900`·`$navy-950` 1건
+- **2026-07-02 재측정**: 25건 → 20건 (10파일). 홈·교회 소개 리디자인으로 옛 예외 자리(SermonCard·FormSubmitButton·FeedContent·beige 배경)가 컴포넌트째 사라졌고, 새 화면(SermonVideoPlayer·login 등)에서 새 직접 사용이 생겼다. 옛 잔여분은 값이 같은 semantic 토큰이 없는 디자인 시스템 공백이라, 사용자 결정(시각 변경 또는 신규 토큰) 전까지 둔다. 신규분(SermonVideoPlayer·login·admin dropdown)은 값 동일 별칭 존재 여부를 아직 대조하지 않았다. 파일별:
+  - `MobileNavigation` 5 · `SermonVideoPlayer` 3 · `Header` 2 · `PhotoSwipe` 2 · `BoardFooter` 2 · admin `SermonListPage/dropdown` 2
+  - `Hero` 1 · `BoardHeader` 1 · `BoardBody` 1 · `login/page` 1
 
-### 🟡 SCSS 하드코딩 색상 (23건)
+### 🟡 SCSS 하드코딩 색상 (33건)
 
 - **무엇**: `.module.scss` 파일 곳곳에서 hex 색상(`#xxxxxx`) 직접 사용. 토큰 변수가 아님
 - **왜**: stylelint 도입 전에 작성된 코드. 신규 작성은 stylelint warn으로 차단됨 (CLAUDE.md "하드코딩 절대 금지" 규칙)
 - **마이그레이션 경로**: 각 hex 값을 `src/styles/tokens/_color.scss`의 의미 단위 변수로 매핑 → 모두 해결 시 `.stylelintrc.json`의 `color-no-hex` 룰을 `warning` → 기본(error)로 올림
-- **영향 범위**: 23건 (14 파일), 주요 발생 위치는 `sermons/_component/`, `news/bulletins/_component/` 하위
-- **확인**: `rg "#[0-9a-fA-F]{3,8}" -g "*.module.scss" src` → 23 hits
+- **영향 범위**: 33건 (17 파일), 주요 발생 위치는 `sermons/_component/`·`admin/`·홈·회원 컴포넌트
+- **확인**: `rg "#[0-9a-fA-F]{3,8}" -g "*.module.scss" src` → 33 hits
 - **발견일**: 2026-05-01 (stylelint 도입 시)
 - **2026-06-01 재확인**: #102 admin 토큰 통합 작업으로 admin hex가 토큰에 흡수돼 49건에서 23건(14 파일)으로 줄었다. tech-debt-pre-release plan의 5월 26일 재측정값과 일치한다.
+- **2026-07-02 재측정**: 23건 → 33건 (17파일). 홈·설교·회원 새 컴포넌트에서 hex가 늘었다 (`HeroCarousel` 3·`GridCard` 3·`AdvancedFilterSheet` 3·`UserProfileModal` 3 등). `color-no-hex`가 warning 수준이라 신규 유입을 커밋에서 막지 못한다.
 
-### 🟢 ESLint `react-hooks/set-state-in-effect` (2건, 9건 정리됨)
+### 🟢 ESLint `react-hooks/set-state-in-effect` (3건, 9건 정리됨)
 
 - **무엇**: useEffect 내 setState 직접 호출 (cascading rerender 가능성)
-- **왜**: React Compiler 신규 룰. 9건은 후속 컴포넌트 리팩터(useDialog 통합·SermonListPage 재구조 등) 과정에서 자연스럽게 사라짐. 남은 2건은 외부 동기화가 정당한 패턴(Modal portal snapshot, pathname 변경 동기화)으로 line-disable + 사유 주석 유지
+- **왜**: React Compiler 신규 룰. 9건은 후속 컴포넌트 리팩터(useDialog 통합·SermonListPage 재구조 등) 과정에서 자연스럽게 사라짐. 남은 건은 외부 동기화가 정당한 패턴(Modal portal snapshot, pathname 변경 동기화)으로 line-disable + 사유 주석 유지
 - **마이그레이션 경로**:
-  - `ConfirmModal/index.tsx:48` — portal transition 중 prop 동기화. `useDialog` 통합 작업 시 재검토
+  - `ConfirmModal/index.tsx:47` — portal transition 중 prop 동기화. `useDialog` 통합 작업 시 재검토
   - `useDrawerHistory.ts:52` — pathname 변경에 따른 외부 상태 동기화. 외부 router 이벤트로 옮길 수 있는지 검토
-- **영향 범위** (2건):
-  - `src/components/admin/common/ConfirmModal/index.tsx:48`
+  - `ClientPortal.tsx:23` — disable 주석에 사유가 없다. 정당한 패턴인지 확인해 사유를 적거나 고친다
+- **영향 범위** (3건):
+  - `src/components/admin/common/ConfirmModal/index.tsx:47`
   - `src/hooks/useDrawerHistory.ts:52`
-- **확인**: `rg "react-hooks/set-state-in-effect" src` → 2 hits
+  - `src/components/ui/ClientPortal/ClientPortal.tsx:23`
+- **확인**: `rg "react-hooks/set-state-in-effect" src` → 3 hits
 - **발견일**: 2026-05-01
 - **재확인일**: 2026-05-21 (1건 → 2건, useDrawerHistory 추가됨)
+- **2026-07-02 재확인**: 2건 → 3건 (ClientPortal 추가 — 셋 중 유일하게 disable 사유 주석이 없음)
 
-### 🟡 ESLint warnings (40건)
+### 🟡 ESLint warnings (18건)
 
-- **무엇**: `@next/next/no-img-element` 11, `@typescript-eslint/no-unused-vars` 10, `no-restricted-imports` 10 (이건 별 항목 "app/ → apis/"와 동일), `react-hooks/incompatible-library` 5, `react-hooks/exhaustive-deps` 4
+- **무엇**: `@next/next/no-img-element` 9, `react-hooks/incompatible-library` 5, `react-hooks/exhaustive-deps` 3, `@typescript-eslint/no-unused-vars` 1
 - **왜**: 룰 낮춤 또는 케이스별 정당한 사용 가능. 빌드 차단은 안 됨
 - **마이그레이션 경로**: `tech-debt-cleanup-phase2` EXEC_PLAN에서 처리 — 카테고리별 일괄 처리 또는 케이스별 검토
 - **확인**: `yarn lint`
 - **발견일**: 2026-05-01
+- **2026-07-02 재측정**: 40건 → 18건. `no-unused-vars` 10 → 1, `no-restricted-imports`는 line-disable 주석 처리로 경고 목록에서 빠졌다(남은 5건은 별 항목 "app/ → apis/ 직접 호출"이 추적).
 
-### 🟡 Knip 미사용 코드 (~50건)
+### 🟡 Knip 미사용 코드 (86건)
 
-- **무엇**: Unused files 15, Unused exports 20, Unused exported types 14, Unused devDependencies 1
+- **무엇**: Unused files 12, Unused exports 28, Unused exported types 44, Unused devDependencies 1, Unresolved import 1(`kakao.maps.d.ts`)
 - **왜**: 리팩토링 후 정리 안 됨, 또는 false positive (예: prettier는 eslint-config-prettier에서 사용)
 - **마이그레이션 경로**: `tech-debt-cleanup-knip` EXEC_PLAN — 항목별 false positive 검증 후 삭제
 - **확인**: `yarn knip`
 - **발견일**: 2026-05-01
-
-### 🟢 `complete-task.mjs` 패턴 매칭 부정확
-
-- **무엇**: `phase1` 입력 시 `phase1-5`도 매치되어 다중 매칭 차단됨. `phase1.md` 입력은 `*phase1.md*.md`로 깨짐
-- **왜**: `find -name "*${PATTERN}*.md"` 단순 substring 매치
-- **마이그레이션 경로**: 정확 매치 모드(끝 anchor) 추가, `.md` suffix 자동 제거, 또는 prefix 매치로 변경
-- **확인**: 2026-05-01 phase1 → completed/ 이동 시연 중 발견 (수동 mv로 우회)
-- **영향 범위**: `scripts/complete-task.mjs`
-- **발견일**: 2026-05-01
+- **2026-07-02 재측정**: ~50건 → 86건. 미사용 타입 14 → 44 — `src/components/ui/index.ts` barrel이 타입까지 재export해 원본·barrel 양쪽이 같이 잡힌다. 미사용 파일 12에는 회원(`UserProfile`·`UserProfileModal`)·`about/worship` 옛 컴포넌트가 남아 있다.
 
 ### 🟢 exec-plan 형식 grep 가드 2종 (ADR 0011 D2 후속)
 
@@ -209,13 +201,6 @@
 - **왜**: design-system-v3 task에서 사용자 결정으로 본 작업 제외 (Wanted DS의 `[data-theme="dark"]` 패턴 차용 보류)
 - **마이그레이션 경로**: 도입 결정 시 별도 ADR로 처리 — `_color.scss`에 dark 토큰 추가, `[data-theme="dark"]` 또는 `prefers-color-scheme` 셀렉터로 시맨틱 레이어 오버라이드
 - **발견일**: 2026-05-04 (design-system-v3, Tier 2 보류)
-
-### 🟢 FeedContent `.badge_category` mixin 미적용
-
-- **무엇**: `src/app/_component/home/FeedContent.module.scss`의 카테고리 뱃지가 신규 caption mixin을 적용받지 않은 채 직접 토큰 조합
-- **왜**: 뱃지의 `line-height: 1` (reset) 의도와 신규 `text-caption-strong`의 `$line-height-body-ui` (1.45)가 충돌
-- **마이그레이션 경로**: (a) 뱃지 전용 `text-badge` mixin 신규 도입 또는 (b) `text-caption-strong($line-height: 1)`로 파라미터 확장 — Codex 검토 권장
-- **발견일**: 2026-05-04 (design-system-v3 Step 3)
 
 ### 🟢 신규 mixin 타 페이지 도입 (점진)
 
@@ -233,14 +218,15 @@
 - **마이그레이션 경로**: `eslint-plugin-import`의 `no-relative-parent-imports` 또는 `eslint-plugin-boundaries` 도입 검토 (별도 EXEC_PLAN)
 - **발견일**: 2026-05-01 (Codex 리뷰)
 
-### 🟢 Hover Border 위반 — admin 영역 남은 분 (5건)
+### 🟢 Hover Border 위반 — admin 영역 남은 분 (5파일·13곳)
 
-- **무엇**: hover 시 `border-color`/`border` 변경 — `.claude/skills/styles/SKILL.md` Hover 3원칙 #3 위반. admin 5건만 남음
+- **무엇**: hover 시 `border-color`/`border` 변경 — `.claude/skills/styles/SKILL.md` Hover 3원칙 #3 위반. admin 5파일만 남음
 - **왜**: v4 마이그레이션이 sermons/news 영역에 한정됐다. home은 2026-05-07 home cleanup에서 해소(resolved.md), admin은 admin 토큰 ADR 결정 후로 분리
 - **마이그레이션 경로**: admin 5건은 admin 토큰 통합(ADR 0012)이 끝났으니 hover border를 제거하고 `hover-lift`/shadow로 대체
 - **영향 범위** (admin 5건):
   - `src/components/admin/sermons/SermonListPage/{dropdown,table}.module.scss`, `src/components/admin/sermons/SermonForm/index.module.scss`, `src/components/admin/layout/{PageHeader,AdminHeader}/index.module.scss`
 - **2026-06-02 갱신**: home 5건은 2026-05-07 home cleanup에서 이미 해소 확인(FeedContent transition은 탭 상태 전환이라 위반 아님). 10건 → admin 5건으로 축소
+- **2026-07-02 재측정**: 같은 5파일에서 13곳 (`SermonForm/index` 5·`table` 4·`dropdown` 2·`AdminHeader` 1·`PageHeader` 1) — admin 화면 개편으로 hover border가 늘었다.
 - **발견일**: 2026-05-07 (Codex 디자인 시스템 audit)
 
 ### 🟢 토큰 부채 — 디자인 시스템 v4 미완 남은 부분 (hex/rgba 직접 사용)
@@ -250,9 +236,9 @@
 - **마이그레이션 경로**:
   - hex: 비-admin 우선 시맨틱 토큰 치환
   - rgba: overlay/scrim은 `$overlay-*`, hover/active는 `$bg-hover`/`$primary-subtle`로 정리
-- **영향 범위 (대표)**:
-  - hex: `src/app/(content)/about/page.module.scss:12,54,247`, `about/serving-people/page.module.scss:72`, `news/bulletins/_component/BulletinForm.module.scss:15,17`, home/admin 다수
-  - rgba: `news/notices/_component/NoticeDrawer.module.scss:27`, `sermons/_component/{SortBottomSheet:4, GridCard:59,77,93, SermonCard:69,87,109}`
+- **영향 범위 (대표 — 2026-07-02 재측정)**:
+  - hex: 위 "SCSS 하드코딩 색상" 항목과 같은 대상(33건·17파일)이라 이 항목은 rgba 축만 추적한다. about 페이지 hex는 리디자인으로 사라졌다
+  - rgba: `(content)` 18곳/8파일 — `SermonFeatured` 4·`SermonVideoPlayer` 4·`AboutWorship` 3·`NoticeTable` 2·`SermonSeriesCarousel` 2·`NoticeDrawer` 1·`SeriesDetailPage` 1·`GridCard` 1
 - **발견일**: 2026-05-07 (Codex 디자인 시스템 audit)
 
 ### 🟢 ui/Button disabled가 전용 색 없이 `opacity: 0.5`로만 처리됨 (auth-form-ui-migration)
@@ -283,7 +269,7 @@
 
 ### 🟢 `getAllSeries`/`getAllPreachers` `select('*')` payload 미최적화 (PR #91 Gemini 리뷰)
 
-- **무엇**: `src/services/sermon/sermon-service.ts:124,171` `allSeries`/`allPreachers`가 `select('*, sermons!inner(count)')`로 전체 컬럼 조회. 사이드바·필터 시트는 일부 필드만 사용
+- **무엇**: `src/services/sermon/sermon-service.ts:137,216` `allSeries`/`allPreachers`가 `select('*, sermons!inner(count)')`로 전체 컬럼 조회. 사이드바·필터 시트는 일부 필드만 사용
 - **왜 보류**: 단순 컬럼 축소는 회귀 — `getAllSeries`/`getAllPreachers`는 `/sermons` 캐러셀(`SeriesCard.tsx:13` `cover_image_url`)·admin 설교 폼 3곳(`admin/sermons{,/new,/[id]/edit}`)·`/sermons/all` 공유. PR #91 fix 시도 시 cover_image_url 누락으로 캐러셀 회귀 발견(Codex 1차 CHANGE_REQUEST) → 전면 revert
 - **마이그레이션 경로**: 별도 task에서 (a) 사이드바 전용 narrow 쿼리 함수 신설(공유 함수 그대로 유지), 또는 (b) 5개 소비처 전수 확인 후 union 컬럼셋으로 축소 + 타입 narrow
 - **영향 범위**: `src/services/sermon/sermon-service.ts` (2 쿼리), 소비처 5곳
@@ -341,22 +327,6 @@
 - **영향 범위**: 본 저장소 `codex:rescue` 모든 백그라운드 호출. Windows 환경 직접 영향. Linux/macOS는 미확인
 - **확인**: `node "<plugin-path>/codex-companion.mjs" status --all --json` 후 `running` 배열의 `elapsed` 비정상치(30분+) 검출
 - **발견일**: 2026-05-30 (PR #104 후속 fix 진행 중 stall 2건 동시 관측, 인계 노트와 동일 패턴)
-
-### 🟢 라우트·영역별 not-found 미세분화 부족 (not-found-page 후속)
-
-- **상태**: 등록만 (not-found-page 범위 밖)
-- **무엇**: 루트 다크 404가 모든 `notFound()`를 받지만 일부는 맥락에 안 맞거나 아예 안 걸린다.
-  - 설교: `sermons/[id]`·`sermons/series/[id]`의 `notFound()`가 루트의 일반 "페이지를 찾을 수 없습니다"로 떨어진다. "설교를 찾을 수 없습니다 + 전체 설교 보기" 같은 전용 안내가 없다.
-  - admin: `admin/sermons/[id]/edit`의 `notFound()`도 루트의 교회 다크 화면으로 떨어진다. admin 셸과 톤이 안 맞는다.
-  - 공지 상세: `news/notices/[id]/page.tsx`가 미구현 스텁(`<div>page</div>`)이라 없는 공지 id로 가도 `notFound()`를 안 불러 HTTP 200 "page"가 뜬다. notices not-found는 리스트의 잘못된 쿼리(`/news/notices?page=abc`)로는 404가 뜨지만, 없는 공지 id 경로에선 `notFound()`가 안 불린다.
-- **왜**: not-found-page는 루트 404와 notices 스텁 정리까지만 범위. 라우트별 맞춤 404와 미구현 상세 라우트는 별도 작업이다.
-- **마이그레이션 경로**:
-  - 설교: `src/app/(content)/sermons/not-found.tsx` 추가 — 설교 맥락 메시지 + 전체 설교 링크.
-  - admin: `src/app/(admin)/not-found.tsx` 추가 — admin 셸 톤의 미니멀 404.
-  - 공지 상세: `news/notices/[id]/page.tsx`를 구현할 때 조회 결과가 없으면 `notFound()` 호출.
-- **영향 범위**: `src/app/(content)/sermons/`, `src/app/(admin)/`, `src/app/(content)/news/notices/[id]/`
-- **확인**: `grep -rln "notFound()" src/app` (호출처 7곳, not-found 파일은 bulletins·notices·root 3개)
-- **발견일**: 2026-06-10 (not-found-page 작업 중 `notFound()` 호출처 스캔)
 
 ### 🟢 figma-console DTCG export — 숫자 scale 이름↔값 불일치 + alias 미해결 (figma-sync PR #118)
 

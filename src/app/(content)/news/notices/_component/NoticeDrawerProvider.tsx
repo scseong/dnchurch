@@ -1,6 +1,13 @@
 'use client';
 
-import { createContext, useCallback, useContext, useState, type PropsWithChildren } from 'react';
+import {
+  createContext,
+  useCallback,
+  useContext,
+  useMemo,
+  useState,
+  type PropsWithChildren
+} from 'react';
 import NoticeDrawer from './NoticeDrawer';
 import type { NoticeDrawerItem } from '@/types/notice';
 
@@ -53,8 +60,11 @@ export default function NoticeDrawerProvider({ notices, children }: Props) {
     ? notices.findIndex((notice) => notice.id === drawerNotice.id)
     : -1;
 
+  // drawer 상태가 바뀔 때마다 새 객체가 만들어져 소비자(행 트리거) 전부가 리렌더되는 것을 막는다
+  const contextValue = useMemo(() => ({ openNotice }), [openNotice]);
+
   return (
-    <NoticeDrawerContext.Provider value={{ openNotice }}>
+    <NoticeDrawerContext.Provider value={contextValue}>
       {children}
       <NoticeDrawer
         notice={drawerNotice}

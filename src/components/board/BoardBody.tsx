@@ -1,4 +1,4 @@
-import PhotoSwipe from '@/components/common/PhotoSwipe';
+import PhotoSwipe from '@/components/common/PhotoSwipeLazy';
 import styles from './BoardBody.module.scss';
 
 export default function BoardBody({ images }: { images: string[] }) {

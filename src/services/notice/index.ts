@@ -10,11 +10,6 @@ export const getNotices = (params: NoticeListParams = {}) => {
   return noticeService(supabase).list(params);
 };
 
-export const getNoticeCategoryCounts = () => {
-  const supabase = createStaticClient(noticeCache.list());
-  return noticeService(supabase).categoryCounts();
-};
-
 export const getAllNoticeIds = () => {
   const supabase = createStaticClient();
   return noticeService(supabase).allIds();

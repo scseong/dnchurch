@@ -1,4 +1,6 @@
 import Link from 'next/link';
+import CloudinaryImage from '@/components/common/CloudinaryImage';
+import { cloudinaryFetchUrl } from '@/utils/cloudinary';
 import { formattedDate } from '@/utils/date';
 import { formatPreacherLabel, getSermonThumbnail } from '@/utils/sermon';
 import type { SermonListItem } from '@/types/sermon';
@@ -9,7 +11,7 @@ type SermonCardProps = {
 };
 
 export default function SermonCard({ sermon }: SermonCardProps) {
-  const thumbnail = getSermonThumbnail(sermon);
+  const thumbnail = cloudinaryFetchUrl(getSermonThumbnail(sermon));
   const preacherLabel = formatPreacherLabel(sermon.preacher);
   const dateLabel = formattedDate(sermon.sermon_date, 'YYYY.MM.DD');
 
@@ -20,7 +22,14 @@ export default function SermonCard({ sermon }: SermonCardProps) {
       aria-label={`${sermon.title} - ${preacherLabel}`}
     >
       <div className={styles.thumb}>
-        {thumbnail && <img src={thumbnail} alt={`${sermon.title} 설교 영상`} loading="lazy" />}
+        {thumbnail && (
+          <CloudinaryImage
+            src={thumbnail}
+            alt={`${sermon.title} 설교 영상`}
+            fill
+            sizes="(min-width: 640px) 64rem, 100vw"
+          />
+        )}
         <span className={styles.badge}>▶ 온라인 예배</span>
         <span className={styles.play} aria-hidden="true">
           <svg viewBox="0 0 24 24" fill="currentColor">
