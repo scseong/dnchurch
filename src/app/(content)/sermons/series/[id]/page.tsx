@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { LayoutContainer } from '@/components/layout';
-import { getSeriesDetail } from '@/services/sermon';
+import { getAllSeries, getSeriesDetail } from '@/services/sermon';
 import { getOgImageUrl } from '@/utils/cloudinary';
 import { OG_FALLBACK_IMAGE } from '@/config/seo';
 import SeriesDetailHero from '../../_component/SeriesDetailPage/SeriesDetailHero';
@@ -15,6 +15,13 @@ const UUID_RE =
 
 // 형제 상세(sermons/[id]·bulletins/[id])와 같은 주기로 ISR 통일
 export const revalidate = 86400;
+
+// 활성 시리즈 전체(수십 개 이하)를 빌드 시점에 프리렌더.
+// 새 시리즈는 dynamicParams(기본 true)로 첫 방문 시 렌더 후 ISR 캐시.
+export async function generateStaticParams() {
+  const allSeries = await getAllSeries();
+  return allSeries.map((series) => ({ id: series.id }));
+}
 
 type PageProps = {
   params: Promise<{ id: string }>;

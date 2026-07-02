@@ -1,6 +1,12 @@
 import { notFound } from 'next/navigation';
 import type { Metadata } from 'next';
-import { getSermonById, getSermons, getSermonsBySeries } from '@/services/sermon';
+import {
+  getPublishedSermonIds,
+  getSermonById,
+  getSermons,
+  getSermonsBySeries
+} from '@/services/sermon';
+import { isNumeric } from '@/utils/validator';
 import { formatPreacherLabel, getSermonThumbnail } from '@/utils/sermon';
 import { getOgImageUrl } from '@/utils/cloudinary';
 import { OG_FALLBACK_IMAGE } from '@/config/seo';
@@ -14,6 +20,8 @@ type PageProps = {
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { id } = await params;
+  if (!isNumeric(id)) return {};
+
   const sermon = await getSermonById(Number(id));
   if (!sermon) return {};
 
@@ -46,6 +54,15 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
 export const revalidate = 86400;
 
+// 최근 발행 설교를 빌드 시점에 프리렌더 (주보 상세 10건 선례와 동일 규모).
+// 나머지 id는 dynamicParams(기본 true)로 첫 방문 시 렌더 후 ISR 캐시.
+const PRERENDER_COUNT = 10;
+
+export async function generateStaticParams() {
+  const ids = await getPublishedSermonIds(PRERENDER_COUNT);
+  return ids.map((id) => ({ id: id.toString() }));
+}
+
 function buildJsonLd(sermon: SermonWithRelations) {
   const base: Record<string, unknown> = {
     '@context': 'https://schema.org',
@@ -70,6 +87,9 @@ function buildJsonLd(sermon: SermonWithRelations) {
 
 export default async function SermonDetail({ params }: PageProps) {
   const { id } = await params;
+  // 비숫자 id가 bigint 쿼리에 닿으면 Postgres throw → 500. 주보 상세와 같은 가드로 404 처리.
+  if (!isNumeric(id)) notFound();
+
   const sermon = await getSermonById(Number(id));
 
   if (!sermon) notFound();
