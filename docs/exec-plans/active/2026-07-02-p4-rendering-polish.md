@@ -142,6 +142,15 @@ refactor-audit P4의 렌더링 폴리시를 적용한다. 홈 설교 썸네일�
 </details>
 -->
 
+## PR 리뷰 대응
+
+PR #140 — Gemini 인라인 2건 (모두 medium 성능 제안). 코드 직접 확인 후 판정, 답글 게시(사용자 승인).
+
+| 지적 | 출처 | 대조 | 판정 |
+| --- | --- | --- | --- |
+| BulletinTable columns를 `meta` 옵션으로 완전 정적화 | gemini r3513137319 | `total`·`currentPage`는 페이지네이션으로 `bulletins` 데이터와 함께만 바뀜 — columns 참조 유지의 실익 0, 타입 단언·간접 참조만 추가 (2컬럼·10행) | 기각 — 답글 r3513213785 |
+| NoticeDrawerProvider를 `noticesRef`로 완전 정적화 | gemini r3513137325 | `notices` prop 변경 경로는 서버 재렌더뿐(`notices/page.tsx:59`) — 그때 children(행)이 통째로 교체되어 막을 리렌더 없음. 렌더 중 ref 쓰기는 React 공식 문서가 피하라는 패턴 | 기각 — 답글 r3513214015 |
+
 ## 후속 작업
 
 <!-- 이번 범위 밖 일. Non-goals·체크리스트에 중복 기술 금지 — 여기에만.
