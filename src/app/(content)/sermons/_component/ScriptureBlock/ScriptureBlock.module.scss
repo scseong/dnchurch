@@ -23,11 +23,17 @@
   line-height: $line-height-loose;
   color: $home-text;
   white-space: pre-line;
+  overflow: hidden;
+  // 아코디언 슬라이드 — max-height를 JS가 실제 높이(px)로 바꾸며 애니메이션한다.
+  transition: max-height $transition-duration-normal $transition-easing-default;
+
+  @media (prefers-reduced-motion: reduce) {
+    transition: none;
+  }
 }
 
 .text_collapsed {
   max-height: 12rem;
-  overflow: hidden;
 }
 
 .fade {
@@ -38,6 +44,16 @@
   height: 4.8rem;
   background: linear-gradient(to bottom, transparent, $home-card);
   pointer-events: none;
+  // 펼칠 때 미리보기 그라디언트를 함께 사라지게 한다.
+  transition: opacity $transition-duration-normal $transition-easing-default;
+
+  @media (prefers-reduced-motion: reduce) {
+    transition: none;
+  }
+}
+
+.fade_hidden {
+  opacity: 0;
 }
 
 .toggle {
@@ -64,7 +80,7 @@
 }
 
 .empty {
-  font-size: $font-size-14;
+  font-size: $font-size-13;
   color: $home-text-muted;
   font-style: italic;
 }

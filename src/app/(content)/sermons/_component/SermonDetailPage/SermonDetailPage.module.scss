@@ -62,7 +62,7 @@ $mobile-header-offset: $app-header-height;
 .info_section {
   display: flex;
   flex-direction: column;
-  gap: $content-gap-l;
+  gap: $content-gap-xl;
 }
 
 // ══════════════════════════════════════════
@@ -162,7 +162,7 @@ $mobile-header-offset: $app-header-height;
   position: sticky;
   top: $mobile-header-offset;
   gap: $spacing-24;
-  margin-bottom: $spacing-20;
+  margin-bottom: $spacing-24;
   z-index: 10;
   display: flex;
   border-bottom: 1px solid $home-border-divider;

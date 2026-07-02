@@ -63,20 +63,22 @@ type EpisodeRowProps = {
 
 function EpisodeRow({ episode, order, isCurrent }: EpisodeRowProps) {
   const duration = formatSermonDuration(episode.duration);
+  // 목업 변경: 회차 메타에 날짜 대신 말씀 구절을 보인다. 구절이 없으면 재생시간만.
+  const scripture = episode.scripture;
   const content = (
     <>
       <span className={styles.order_num}>{String(order).padStart(2, '0')}</span>
       <span className={styles.info}>
         <span className={styles.title}>{episode.title}</span>
-        <span className={styles.meta}>
-          {formattedDate(episode.sermon_date, 'YYYY.MM.DD')}
-          {duration && (
-            <>
+        {(scripture || duration) && (
+          <span className={styles.meta}>
+            {scripture}
+            {scripture && duration && (
               <span className={styles.meta_dot} aria-hidden="true">·</span>
-              {duration}
-            </>
-          )}
-        </span>
+            )}
+            {duration}
+          </span>
+        )}
       </span>
       {isCurrent && <span className={styles.play_indicator}>재생 중</span>}
     </>
