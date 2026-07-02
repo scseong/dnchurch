@@ -7,6 +7,7 @@ import type {
   SermonListParams,
   SermonWithRelations,
   SermonListItem,
+  SermonCardItem,
   SeriesWithSermonCount,
   SeriesDetail,
   PreacherWithSermonCount,
@@ -35,6 +36,14 @@ const SERMON_LIST_ITEM_SELECT = `
   id, slug, sermon_date, video_id, video_provider, thumbnail_url,
   title, scripture, service_type,
   preacher:preachers(name, title)
+`;
+
+/** 목록 카드 전용 셀렉트 — SermonCardItem과 1:1 (slug·summary는 의도적 superset, P5) */
+const SERMON_CARD_SELECT = `
+  id, slug, sermon_date, video_id, video_provider, thumbnail_url,
+  title, scripture, service_type, summary, duration,
+  preacher:preachers(name, title),
+  sermon_series(id, slug, title)
 `;
 
 const ADMIN_SERMON_SELECT = `
@@ -79,7 +88,7 @@ export const sermonService = (supabase: SupabaseClient<Database>) => ({
   }: SermonListParams = {}) => {
     let query = supabase
       .from('sermons')
-      .select(SERMON_WITH_RELATIONS_SELECT, { count: 'exact' })
+      .select(SERMON_CARD_SELECT, { count: 'exact' })
       .eq('is_published', true)
       .is('deleted_at', null)
       .order('sermon_date', { ascending: sort === 'oldest' });
@@ -106,7 +115,7 @@ export const sermonService = (supabase: SupabaseClient<Database>) => ({
     const res = await query.range(from, to);
     const handled = handleResponse(res);
 
-    const sermons = (handled.data ?? []) as unknown as SermonWithRelations[];
+    const sermons = (handled.data ?? []) as unknown as SermonCardItem[];
     const total = handled.count ?? 0;
 
     return {
@@ -114,20 +123,6 @@ export const sermonService = (supabase: SupabaseClient<Database>) => ({
       total,
       hasMore: from + sermons.length < total
     };
-  },
-
-  /** slug로 설교 상세(설교자·시리즈·리소스 포함) 조회 */
-  detailBySlug: async (slug: string) => {
-    const res = await supabase
-      .from('sermons')
-      .select(SERMON_WITH_RELATIONS_SELECT)
-      .eq('slug', slug)
-      .eq('is_published', true)
-      .is('deleted_at', null)
-      .maybeSingle();
-
-    const handled = handleResponse(res);
-    return (handled.data as unknown as SermonWithRelations | null) ?? null;
   },
 
   /** 활성 시리즈 전체를 published + 미삭제 설교 개수와 함께 조회 — 소비처 union 컬럼만 (P5) */

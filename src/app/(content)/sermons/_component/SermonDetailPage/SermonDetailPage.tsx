@@ -12,13 +12,13 @@ import {
   formatSermonDuration,
   getSermonThumbnail
 } from '@/utils/sermon';
-import type { SermonWithRelations } from '@/types/sermon';
+import type { SermonCardItem, SermonWithRelations } from '@/types/sermon';
 import styles from './SermonDetailPage.module.scss';
 
 type Props = {
   sermon: SermonWithRelations;
   seriesEpisodes: SermonWithRelations[];
-  otherSermonsByPreacher: SermonWithRelations[];
+  otherSermonsByPreacher: SermonCardItem[];
 };
 
 export default function SermonDetailPage({

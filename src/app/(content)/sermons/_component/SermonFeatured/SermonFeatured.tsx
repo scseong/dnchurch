@@ -1,14 +1,14 @@
 import Link from 'next/link';
 import { IoPlay } from 'react-icons/io5';
 import CloudinaryImage from '@/components/common/CloudinaryImage';
-import type { SermonWithRelations } from '@/types/sermon';
+import type { SermonCardItem } from '@/types/sermon';
 import { cloudinaryFetchUrl } from '@/utils/cloudinary';
 import { getSermonThumbnail, formatPreacherLabel, formatSermonDuration } from '@/utils/sermon';
 import { formattedDate } from '@/utils/date';
 import styles from './SermonFeatured.module.scss';
 
 type Props = {
-  sermon: SermonWithRelations | null;
+  sermon: SermonCardItem | null;
 };
 
 export default function SermonFeatured({ sermon }: Props) {

@@ -10,7 +10,7 @@ import { isNumeric } from '@/utils/validator';
 import { formatPreacherLabel, getSermonThumbnail } from '@/utils/sermon';
 import { getOgImageUrl } from '@/utils/cloudinary';
 import { OG_FALLBACK_IMAGE } from '@/config/seo';
-import type { SermonWithRelations } from '@/types/sermon';
+import type { SermonCardItem, SermonWithRelations } from '@/types/sermon';
 import SermonDetailPage from '../_component/SermonDetailPage/SermonDetailPage';
 import SermonViewTracker from '../_component/SermonDetailPage/SermonViewTracker';
 
@@ -104,7 +104,7 @@ export default async function SermonDetail({ params }: PageProps) {
       ? getSermons({ preacherId: sermon.preacher.id, pageSize: 4 }).then((res) =>
           res.sermons.filter((s) => s.id !== sermon.id).slice(0, 3)
         )
-      : Promise.resolve([] as SermonWithRelations[])
+      : Promise.resolve([] as SermonCardItem[])
   ]);
 
   const otherSermonsByPreacher = otherByPreacher.length === 3 ? otherByPreacher : [];
