@@ -238,6 +238,20 @@ export const sermonService = (supabase: SupabaseClient<Database>) => ({
     return (handled.data ?? []) as unknown as SermonListItem[];
   },
 
+  /** 발행 설교 id만 최신순으로 조회 (generateStaticParams용) */
+  publishedIds: async (limit: number): Promise<number[]> => {
+    const res = await supabase
+      .from('sermons')
+      .select('id')
+      .eq('is_published', true)
+      .is('deleted_at', null)
+      .order('sermon_date', { ascending: false })
+      .limit(limit);
+
+    const handled = handleResponse(res);
+    return ((handled.data ?? []) as Array<{ id: number }>).map((row) => row.id);
+  },
+
   /** 연도별 설교 편수 집계 (sermon_date projection + JS 집계) */
   yearCounts: async (): Promise<YearCount[]> => {
     const res = await supabase

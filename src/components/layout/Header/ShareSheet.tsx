@@ -1,10 +1,6 @@
 'use client';
 
-import {
-  IoLinkOutline,
-  IoLogoFacebook,
-  IoMailOutline
-} from 'react-icons/io5';
+import { IoLinkOutline, IoLogoFacebook, IoMailOutline } from 'react-icons/io5';
 import { BottomSheet } from '@/components/ui';
 import useKakaoShare from '@/hooks/useKakaoShare';
 import { useToastStore } from '@/store/toast.store';
@@ -79,7 +75,7 @@ export default function ShareSheet({ open, onClose }: Props) {
           onClick={handleKakaoShare}
           aria-label="카카오톡으로 공유"
         >
-          <img src="/images/icon-kakaotalk.png" alt="" width={18} height={18} />
+          <img src="/images/icon-kakaotalk.png" alt="" width={20} height={20} />
           <span>카카오톡</span>
         </button>
         <button

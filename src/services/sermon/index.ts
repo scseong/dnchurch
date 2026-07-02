@@ -51,6 +51,12 @@ export const getFeaturedSermon = async () => {
   return sermons[0] ?? null;
 };
 
+/** 발행 설교 id 목록 (`/sermons/[id]` generateStaticParams용) */
+export const getPublishedSermonIds = (limit: number) => {
+  const supabase = createStaticClient(sermonCache.list());
+  return sermonService(supabase).publishedIds(limit);
+};
+
 export const incrementSermonViewCount = async (sermonId: number) => {
   const supabase = await createServerSideClient();
   return sermonService(supabase).incrementViewCount(sermonId);
