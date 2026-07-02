@@ -4,6 +4,19 @@
 
 ---
 
+### 🟡 DB 위생 — sermon RPC search_path 미고정·RLS initplan·중복 정책/인덱스 (2026-07-02 감사 P2)
+
+- **상태**: 등록만 (sermon-view-count-fix PR #137에서 increment_sermon_views 1종만 처리, 나머지 분리)
+- **무엇**: Supabase advisor(dev)가 확인한 위생 항목 묶음.
+  - SECURITY DEFINER 함수 `create_sermon`·`update_sermon`·`delete_sermon`·`handle_new_user`·`handle_updated_at`·`set_updated_at` 등이 `SET search_path` 미고정 (bulletin RPC 3종은 20260611000001에서 이미 고정)
+  - RLS 정책 14개가 `auth.uid()`를 `(select auth.uid())` 래핑 없이 사용 (auth_rls_initplan WARN — bulletins·sermons·sermon_resources·staff·worship_schedules·site_settings·site_collections·profiles)
+  - "only admins can modify X" FOR ALL 정책이 공개 read SELECT와 중복 평가 (multiple_permissive_policies — staff·worship_schedules·site_settings·site_collections·sermons)
+  - 중복 인덱스 `idx_sermons_date` = `idx_sermons_date_desc`, FK 인덱스 누락 `sermon_resources.sermon_id`(마이그레이션엔 있는데 실 DB에 없음 — drift)·`site_collections.updated_by`
+- **왜 지금 안 하나**: PR #137은 조회수 결함 수정만 범위. 전 테이블 최대 39행이라 실측 영향이 아직 작다.
+- **마이그레이션 경로**: 마이그레이션 1건으로 일괄 처리 — search_path 고정 재생성, 정책 식 `(select auth.uid())` 래핑, FOR ALL 정책을 insert/update/delete로 분리, 중복 인덱스 DROP, FK 인덱스 추가. dev 우선 적용.
+- **확인**: `mcp__claude_ai_Supabase__get_advisors` (performance·security) 재실행
+- **발견일**: 2026-07-02 (리팩토링 감사 — advisor 실 DB 점검)
+
 ### 🟡 가입 폼에 민감정보(종교)·국외이전 별도 동의 UI가 없음 (privacy-policy PR #130 — 런칭 게이트)
 
 - **상태**: 등록만 (오픈 전 단계라 실수집 없음 — 런칭 전 필수)

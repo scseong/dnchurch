@@ -1,6 +1,6 @@
 # sermon-view-count-fix
 
-- **상태**: 🟡 진행 중
+- **상태**: ✅ 완료 (2026-07-02)
 - **시작일**: 2026-07-02
 - **브랜치**: develop (작업 브랜치 분리 예정: fix/sermon-view-count)
 - **Open questions**: none
@@ -131,4 +131,10 @@
 - P2 DB 위생 마이그레이션 (RLS initplan 래핑·중복 permissive 정책 분리·sermon RPC search_path·중복 인덱스·FK 인덱스)
   - 이유: 이번 범위는 조회수 결함만 — 위생 항목을 섞으면 diff가 비대해진다
   - 다음 기준: 본 task 머지 후 우선순위 합의대로
-  - 기록 위치: `docs/research/2026-07-02-refactor-audit.md` P2 항목
+  - 기록 위치: `docs/tech-debt/active.md` (완료 이관 시 등록 — 감사 문서는 로컬 보관이라 부채 파일로 옮김)
+
+## 회고
+
+- **잘된 것**: 증상 하나(view_count 0)에 원인이 세 겹(RPC 오버로드 모호성·SECURITY INVOKER+RLS 무음 UPDATE·ISR 렌더 내 호출)으로 겹친 걸 층별 증거(생성 타입의 에러 문자열, `pg_proc` 조회, RLS 정책 목록, 빌드 마커 대조군)로 분리 진단했다. Codex 1차 검증이 tracker의 boolean guard 결함(상세 간 이동 시 두 번째 설교 누락)을 실측 전에 잡았다. 수정 후 브라우저 방문 실측 0→1로 닫았다 (StrictMode 이중 집계 없음).
+- **다음에 할 것**: ① `sermons-static-rendering` — `/sermons/[id]`·`/sermons/series/[id]`에 generateStaticParams, `/sermons`의 레거시 redirect를 next.config로 이전해 정적화, `getFilteredSermons` 캐시 전환. ② DB 위생 마이그레이션 — 아래 부채 등록 참조.
+- **발견된 부채 (→ tech-debt/active.md 옮길 것)**: 신규 코드 부채 없음 (knip 경고는 기존 부채, 이번 신규 파일 관련 0건). 2026-07-02 리팩토링 감사에서 확인한 DB 위생 항목(sermon RPC search_path 미고정 5종, RLS `auth.uid()` 미래핑 14정책, 중복 permissive 정책, 중복 인덱스, FK 인덱스 누락)을 tech-debt로 등록.
