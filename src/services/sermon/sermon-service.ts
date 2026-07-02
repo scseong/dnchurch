@@ -8,6 +8,7 @@ import type {
   SermonWithRelations,
   SermonListItem,
   SermonCardItem,
+  SeriesEpisodeItem,
   SeriesWithSermonCount,
   SeriesDetail,
   PreacherWithSermonCount,
@@ -44,6 +45,12 @@ const SERMON_CARD_SELECT = `
   title, scripture, service_type, summary, duration,
   preacher:preachers(name, title),
   sermon_series(id, slug, title)
+`;
+
+/** 시리즈 회차 전용 셀렉트 — SeriesEpisodeItem과 1:1, 관계 join 없음 (P5) */
+const SERIES_EPISODE_SELECT = `
+  id, series_order, sermon_date, video_id, video_provider, thumbnail_url,
+  title, scripture, duration
 `;
 
 const ADMIN_SERMON_SELECT = `
@@ -153,7 +160,7 @@ export const sermonService = (supabase: SupabaseClient<Database>) => ({
 
     const res = await supabase
       .from('sermons')
-      .select(SERMON_WITH_RELATIONS_SELECT)
+      .select(SERIES_EPISODE_SELECT)
       .eq('series_id', seriesHandled.data.id)
       .eq('is_published', true)
       .is('deleted_at', null)
@@ -161,7 +168,7 @@ export const sermonService = (supabase: SupabaseClient<Database>) => ({
       .order('sermon_date', { ascending: true });
 
     const handled = handleResponse(res);
-    return (handled.data ?? []) as unknown as SermonWithRelations[];
+    return (handled.data ?? []) as unknown as SeriesEpisodeItem[];
   },
 
   /**
@@ -182,7 +189,7 @@ export const sermonService = (supabase: SupabaseClient<Database>) => ({
 
     const res = await supabase
       .from('sermons')
-      .select(SERMON_WITH_RELATIONS_SELECT)
+      .select(SERIES_EPISODE_SELECT)
       .eq('series_id', id)
       .eq('is_published', true)
       .is('deleted_at', null)
@@ -190,7 +197,7 @@ export const sermonService = (supabase: SupabaseClient<Database>) => ({
       .order('sermon_date', { ascending: true });
 
     const handled = handleResponse(res);
-    const episodes = (handled.data ?? []) as unknown as SermonWithRelations[];
+    const episodes = (handled.data ?? []) as unknown as SeriesEpisodeItem[];
     const seriesRow = seriesHandled.data as unknown as SeriesWithSermonCount;
 
     return {
