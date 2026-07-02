@@ -4,18 +4,17 @@
 
 ---
 
-### 🟡 DB 위생 — sermon RPC search_path 미고정·RLS initplan·중복 정책/인덱스 (2026-07-02 감사 P2)
+### 🟡 DB 위생 남은 분 — multiple_permissive·unused_index (2026-07-02 감사 P2)
 
-- **상태**: 등록만 (sermon-view-count-fix PR #137에서 increment_sermon_views 1종만 처리, 나머지 분리)
-- **무엇**: Supabase advisor(dev)가 확인한 위생 항목 묶음.
-  - SECURITY DEFINER 함수 `create_sermon`·`update_sermon`·`delete_sermon`·`handle_new_user`·`handle_updated_at`·`set_updated_at` 등이 `SET search_path` 미고정 (bulletin RPC 3종은 20260611000001에서 이미 고정)
-  - RLS 정책 14개가 `auth.uid()`를 `(select auth.uid())` 래핑 없이 사용 (auth_rls_initplan WARN — bulletins·sermons·sermon_resources·staff·worship_schedules·site_settings·site_collections·profiles)
-  - "only admins can modify X" FOR ALL 정책이 공개 read SELECT와 중복 평가 (multiple_permissive_policies — staff·worship_schedules·site_settings·site_collections·sermons)
-  - 중복 인덱스 `idx_sermons_date` = `idx_sermons_date_desc`, FK 인덱스 누락 `sermon_resources.sermon_id`(마이그레이션엔 있는데 실 DB에 없음 — drift)·`site_collections.updated_by`
-- **왜 지금 안 하나**: PR #137은 조회수 결함 수정만 범위. 전 테이블 최대 39행이라 실측 영향이 아직 작다.
-- **마이그레이션 경로**: 마이그레이션 1건으로 일괄 처리 — search_path 고정 재생성, 정책 식 `(select auth.uid())` 래핑, FOR ALL 정책을 insert/update/delete로 분리, 중복 인덱스 DROP, FK 인덱스 추가. dev 우선 적용.
+- **상태**: 등록만 (db-hygiene-migration PR #139에서 4카테고리 해소, 이 2개는 분리)
+- **해소분 (PR #139, `20260702000001_db_hygiene.sql`)**: RLS 정책 14개 `auth.uid()` 래핑(auth_rls_initplan 14→0), SECURITY DEFINER·트리거 함수 7개 search_path 고정(function_search_path_mutable →0), 중복 인덱스 `idx_sermons_date` 제거(duplicate_index 1→0), FK 인덱스 2개 추가(unindexed_foreign_keys 2→0). dev advisor 실측 0 확인.
+- **남은 것**:
+  - `multiple_permissive_policies`: "only admins can modify X" FOR ALL 정책이 공개 read SELECT와 중복 평가(staff·worship_schedules·site_settings·site_collections), sermons SELECT 2정책(admin·published) 중복. FOR ALL을 insert/update/delete로 나누거나 sermons SELECT를 `is_published OR admin`로 병합해야 하는데, RLS 명령 커버리지 재구조화라 고위험이고 ≤39행 테이블에서 효과가 없어 미룸.
+  - `unused_index`: `idx_sermons_deleted_at`·`idx_sermons_service_type` 미사용(INFO). 미래 필터에서 쓸지 확인 후 판단. (PR #139로 만든 FK 인덱스 2개도 방금 생성돼 unused로 뜨나 이건 워크로드 쌓이면 쓰임)
+- **왜 지금 안 하나**: 고위험(RLS 재구조화)·저효과(소테이블). advisor WARN/INFO 레벨.
+- **뿌리 원인**: 마이그레이션 drift — baseline이 실 DB를 재현 못 해 고아 함수(`handle_updated_at`)·누락 인덱스가 생긴다. PR #139 CI에서 실현됨(가드로 우회). 근본 해소는 아래 "마이그레이션이 DB를 재현하지 못함" 항목과 함께.
 - **확인**: `mcp__claude_ai_Supabase__get_advisors` (performance·security) 재실행
-- **발견일**: 2026-07-02 (리팩토링 감사 — advisor 실 DB 점검)
+- **발견일**: 2026-07-02 (리팩토링 감사 — advisor 실 DB 점검), 2026-07-02 4카테고리 해소(PR #139)
 
 ### 🟡 가입 폼에 민감정보(종교)·국외이전 별도 동의 UI가 없음 (privacy-policy PR #130 — 런칭 게이트)
 

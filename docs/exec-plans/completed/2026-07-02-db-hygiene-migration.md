@@ -1,6 +1,6 @@
 # db-hygiene-migration
 
-- **상태**: 🟡 진행 중
+- **상태**: ✅ 완료 (2026-07-02)
 - **시작일**: 2026-07-02
 - **브랜치**: develop (작업 브랜치 분리 예정: chore/db-hygiene-migration)
 - **Open questions**: none
@@ -107,6 +107,16 @@ Supabase advisor(dev) 경고 중 안전하고 값이 분명한 4가지를 마이
 | RLS 정책에 `public.` 스키마 명시 권장 (5건) | Gemini | 봇 근거("런타임 search_path로 엉뚱한 스키마 참조")를 검증 — **저장된 RLS 정책은 정의 시점 OID 바인딩이라 세션 search_path에 영향 없음**(적용 후 `pg_policies` deparse로 확인). 근거는 부정확하나 명시는 좋은 관례 | 근거는 오탐, 개선은 채택 | 정책 table·enum에 `public.` 추가(런타임 의미 동일, DDL 견고성 개선). Codex 교차검증 PASS(high) |
 
 Codex 교차검증: 5개 항목(RLS OID 바인딩·명시 영향·가드 정확성·replay 안전성·dev 정합성) 모두 CORRECT, 결론 PASS(high). 사실 보정 1건 반영(고아는 `handle_updated_at` 하나).
+
+## 회고
+
+- **잘된 것**: advisor 경고를 파일이 아니라 실 DB(`pg_policies`·`pg_proc`·`pg_indexes`)로 진단해, "파일엔 있는데 DB엔 없는" drift 2건(`idx_sermon_resources_sermon`·`get_adjacent_bulletins` search_path)을 먼저 잡았다. `ALTER POLICY`·`ALTER FUNCTION`로 값·본문을 안 건드리는 연산만 골라 RLS를 깨지 않고 고쳤고, 적용 후 실측으로 advisor 4카테고리 0을 확인했다. Codex 계획 검증(실제 SQL까지)·교차검증 2회 모두 PASS.
+- **다음에 할 것**: `multiple_permissive_policies`·`unused_index` 정리(tech-debt). 근본적으로는 마이그레이션 drift(baseline이 실 DB를 재현 못 함) 해소가 이런 고아 함수·인덱스 문제의 뿌리다.
+- **발견된 부채**: 마이그레이션 drift가 PR CI에서 실현됐다 — 고아 함수 `handle_updated_at`을 fresh replay가 `ALTER`하려다 실패. 이번엔 `to_regprocedure` 가드로 우회했으나, drift 자체는 별도 tech-debt(마이그레이션이 DB를 재현 못 함)로 남아 있다.
+
+## PR 리뷰 대응 후속
+
+- 리뷰에서 나온 CI 실패(고아 함수)를 `fb881f1` 가드로 해결, Gemini 스키마 명시 반영(근거는 OID 바인딩으로 오탐 확인). 상세는 위 `## PR 리뷰 대응` 표.
 
 ## 후속 작업
 
