@@ -20,7 +20,7 @@ type PageProps = {
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { id } = await params;
-  if (!isNumeric(id)) return {};
+  if (!isNumeric(id)) notFound();
 
   const sermon = await getSermonById(Number(id));
   if (!sermon) return {};
