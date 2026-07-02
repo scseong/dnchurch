@@ -1,5 +1,6 @@
 'use client';
 
+import { useMemo } from 'react';
 import Link from 'next/link';
 import {
   createColumnHelper,
@@ -21,22 +22,26 @@ type BulletinTableProps = {
 const columnHelper = createColumnHelper<BulletinType>();
 
 export default function BulletinTable({ bulletins, total, currentPage }: BulletinTableProps) {
-  const columns = [
-    columnHelper.accessor('id', {
-      id: '번호',
-      header: (info) => info.column.id,
-      cell: (info) => total - (currentPage - 1) * ITEM_PER_PAGE - info.row.index
-    }),
-    columnHelper.accessor('title', {
-      id: '제목',
-      header: (info) => info.column.id,
-      cell: (info) => (
-        <Link href={`/news/bulletins/${info.row.original.id}`} prefetch={false}>
-          {info.getValue()}
-        </Link>
-      )
-    })
-  ];
+  // cell 콜백이 total·currentPage를 닫으므로 두 값이 바뀔 때만 재생성 (TanStack Table 안정 참조 권장)
+  const columns = useMemo(
+    () => [
+      columnHelper.accessor('id', {
+        id: '번호',
+        header: (info) => info.column.id,
+        cell: (info) => total - (currentPage - 1) * ITEM_PER_PAGE - info.row.index
+      }),
+      columnHelper.accessor('title', {
+        id: '제목',
+        header: (info) => info.column.id,
+        cell: (info) => (
+          <Link href={`/news/bulletins/${info.row.original.id}`} prefetch={false}>
+            {info.getValue()}
+          </Link>
+        )
+      })
+    ],
+    [total, currentPage]
+  );
 
   const table = useReactTable({
     data: bulletins || [],
