@@ -10,14 +10,18 @@ import type {
   BulletinWithImages
 } from '@/types/bulletin';
 
-/** list·summary가 공유하는 목록 쿼리 — 연도 필터 + 최신순 + 페이지 range */
+/** 목록·상세 공용 셀렉트 — BulletinWithImages와 1:1 대조 유지 (P5, content 등 미사용 컬럼 제외) */
+const BULLETIN_WITH_IMAGES_SELECT =
+  'id, title, sunday_date, created_at, author_id, bulletin_images(id, cloudinary_id, order_index)';
+
+/** summary가 쓰는 목록 쿼리 — 연도 필터 + 최신순 + 페이지 range */
 const listQuery = (
   supabase: SupabaseClient<Database>,
   { year, page = 1, limit = 10 }: BulletinParams = {}
 ) => {
   let query = supabase
     .from(BULLETIN_BUCKET)
-    .select('*, bulletin_images(*)', { count: 'exact' })
+    .select(BULLETIN_WITH_IMAGES_SELECT, { count: 'exact' })
     .is('deleted_at', null)
     .order('sunday_date', { ascending: false });
 
@@ -33,19 +37,13 @@ const listQuery = (
 const latestQuery = (supabase: SupabaseClient<Database>) =>
   supabase
     .from(BULLETIN_BUCKET)
-    .select('*, bulletin_images(*)')
+    .select(BULLETIN_WITH_IMAGES_SELECT)
     .is('deleted_at', null)
     .order('sunday_date', { ascending: false })
     .limit(1)
     .maybeSingle();
 
 export const bulletinService = (supabase: SupabaseClient<Database>) => ({
-  list: async (params: BulletinParams = {}) => {
-    const res = await listQuery(supabase, params);
-
-    return handleResponse(res);
-  },
-
   allIds: async () => {
     const res = await supabase
       .from(BULLETIN_BUCKET)
@@ -59,7 +57,7 @@ export const bulletinService = (supabase: SupabaseClient<Database>) => ({
   detailById: async (id: string) => {
     const res = await supabase
       .from(BULLETIN_BUCKET)
-      .select('*, bulletin_images(*)')
+      .select(BULLETIN_WITH_IMAGES_SELECT)
       .eq('id', Number(id))
       .is('deleted_at', null)
       .single();
