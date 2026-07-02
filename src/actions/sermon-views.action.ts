@@ -10,6 +10,6 @@ export async function incrementSermonViewsAction(sermonId: number): Promise<void
     await incrementSermonViewCount(sermonId);
   } catch (error) {
     // 방문자 UX에 영향 없는 실패지만 숨기지 않는다 — 서버 로그로 남긴다.
-    console.error('[sermon-views] 조회수 증가 실패', error);
+    console.error(`[sermon-views] 조회수 증가 실패 (sermonId: ${sermonId})`, error);
   }
 }
