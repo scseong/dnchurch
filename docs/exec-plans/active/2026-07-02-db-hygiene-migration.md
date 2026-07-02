@@ -99,6 +99,15 @@ Supabase advisor(dev) 경고 중 안전하고 값이 분명한 4가지를 마이
 
 ## 검증 이력
 
+## PR 리뷰 대응 (#139)
+
+| 지적 | 출처 | 대조 | 판정 | 조치 |
+| --- | --- | --- | --- | --- |
+| Supabase Preview CI 실패 — `handle_updated_at()` 없음 | Supabase 봇 (Migrations task) | 실패 로그 직접 확인 — fresh replay가 고아 함수에서 `ALTER FUNCTION` 실패. dev에만 있고 마이그레이션 체인엔 없음(`set_updated_at`은 `20260509…:10`에 있어 고아 아님, `handle_updated_at` 하나만 고아) | 타당 (내 drift 주의가 실현됨) | 함수 `ALTER`를 `to_regprocedure` 존재 가드(DO 루프)로 감쌈 — fresh DB는 고아 함수 skip. dev에서 전체 idempotent 재실행 `syntax ok` |
+| RLS 정책에 `public.` 스키마 명시 권장 (5건) | Gemini | 봇 근거("런타임 search_path로 엉뚱한 스키마 참조")를 검증 — **저장된 RLS 정책은 정의 시점 OID 바인딩이라 세션 search_path에 영향 없음**(적용 후 `pg_policies` deparse로 확인). 근거는 부정확하나 명시는 좋은 관례 | 근거는 오탐, 개선은 채택 | 정책 table·enum에 `public.` 추가(런타임 의미 동일, DDL 견고성 개선). Codex 교차검증 PASS(high) |
+
+Codex 교차검증: 5개 항목(RLS OID 바인딩·명시 영향·가드 정확성·replay 안전성·dev 정합성) 모두 CORRECT, 결론 PASS(high). 사실 보정 1건 반영(고아는 `handle_updated_at` 하나).
+
 ## 후속 작업
 
 - `multiple_permissive_policies` 정리 (tech-debt 유지)
