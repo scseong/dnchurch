@@ -1,16 +1,12 @@
 import { notFound } from 'next/navigation';
 import type { Metadata } from 'next';
-import {
-  getSermonById,
-  getSermons,
-  getSermonsBySeries,
-  incrementSermonViewCount
-} from '@/services/sermon';
+import { getSermonById, getSermons, getSermonsBySeries } from '@/services/sermon';
 import { formatPreacherLabel, getSermonThumbnail } from '@/utils/sermon';
 import { getOgImageUrl } from '@/utils/cloudinary';
 import { OG_FALLBACK_IMAGE } from '@/config/seo';
 import type { SermonWithRelations } from '@/types/sermon';
 import SermonDetailPage from '../_component/SermonDetailPage/SermonDetailPage';
+import SermonViewTracker from '../_component/SermonDetailPage/SermonViewTracker';
 
 type PageProps = {
   params: Promise<{ id: string }>;
@@ -93,12 +89,11 @@ export default async function SermonDetail({ params }: PageProps) {
 
   const otherSermonsByPreacher = otherByPreacher.length === 3 ? otherByPreacher : [];
 
-  incrementSermonViewCount(sermon.id).catch(() => {});
-
   const jsonLd = buildJsonLd(sermon);
 
   return (
     <>
+      <SermonViewTracker sermonId={sermon.id} />
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd).replace(/</g, '\\u003c') }}

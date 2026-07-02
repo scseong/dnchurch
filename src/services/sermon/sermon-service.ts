@@ -268,9 +268,10 @@ export const sermonService = (supabase: SupabaseClient<Database>) => ({
 
   /** 설교 조회수 +1 (RPC `increment_sermon_views` 호출) */
   incrementViewCount: async (sermonId: number) => {
-    await supabase.rpc('increment_sermon_views', {
+    const { error } = await supabase.rpc('increment_sermon_views', {
       sermon_id: sermonId
     });
+    if (error) throw error;
   },
 
   /** [어드민] 설교 생성 — RPC create_sermon으로 sermon + resources 원자 INSERT */

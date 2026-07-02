@@ -635,19 +635,10 @@ export type Database = {
           prev_title: string
         }[]
       }
-      increment_sermon_views:
-        | {
-            Args: { sermon_id: number }
-            Returns: {
-              error: true
-            } & "Could not choose the best candidate function between: public.increment_sermon_views(sermon_id => int8), public.increment_sermon_views(sermon_id => uuid). Try renaming the parameters or the function itself in the database so function overloading can be resolved"
-          }
-        | {
-            Args: { sermon_id: string }
-            Returns: {
-              error: true
-            } & "Could not choose the best candidate function between: public.increment_sermon_views(sermon_id => int8), public.increment_sermon_views(sermon_id => uuid). Try renaming the parameters or the function itself in the database so function overloading can be resolved"
-          }
+      increment_sermon_views: {
+        Args: { sermon_id: number }
+        Returns: undefined
+      }
       update_bulletin: {
         Args: {
           p_bulletin_id: number
