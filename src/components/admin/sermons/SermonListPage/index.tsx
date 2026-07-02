@@ -79,7 +79,6 @@ export default function SermonListPage({
         if (result.success) {
           toast.success(result.message);
           setDeleteTarget(null);
-          router.refresh();
         } else {
           toast.error(result.message);
         }
