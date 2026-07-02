@@ -93,7 +93,7 @@ refactor-audit P3의 dead code를 삭제한다. 설교 `yearCounts` JS 집계(�
 
 ## Codex 1차 검증
 
-- **결론**: 생략 (순수 삭제)
+- **결론**: PASS (별도 호출 생략 — 계획 검증이 실 코드 삭제 안전성까지 확인)
 - **현재 판단**: 신규 로직 0 — 죽은 심볼 삭제뿐이다. 계획 검증(PASS_WITH_DECISION_LOG, high)이 이미 실 코드로 삭제 안전성(dynamic import·module-path·generated types)을 확인했고, verify-task build가 끊긴 참조·타입 오류를 잡는다. 1차 검증은 중복이라 생략.
 - **다음 행동**: 없음
 
