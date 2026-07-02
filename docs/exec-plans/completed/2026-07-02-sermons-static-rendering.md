@@ -1,6 +1,6 @@
 # sermons-static-rendering
 
-- **상태**: 🟡 진행 중
+- **상태**: ✅ 완료 (2026-07-02)
 - **시작일**: 2026-07-02
 - **브랜치**: develop (작업 브랜치 분리 예정: refactor/sermons-static-rendering)
 - **Open questions**: none
@@ -136,6 +136,12 @@ CHANGE_REQUEST confidence: high
 - material ② + 표현 3건: 동작 보존 SC를 curl 3종으로 교체, 필터 키 근거 표기 정정(4+1+1), redirect 조합 케이스 추가, ADR 판단에 services 문장 보강. 질의 5건은 이상 없음 — generateMetadata가 두 번 불려도 memoize와 data cache가 중복 조회를 막는다 등
 
 </details>
+
+## 회고
+
+- **잘된 것**: 렌더링 모드를 "이 페이지의 HTML이 무엇에 의존하는가"라는 한 기준으로 세 갈래(정적·SSG+ISR·dynamic)로 갈랐다. `/sermons`는 유일한 dynamic 유발 원인이 레거시 필터 redirect의 searchParams 읽기였음을 코드로 짚고 그것만 next.config로 옮겨 정적화했다(Perf 86→90 사용자 실측). Codex 계획 검증이 `/sermons/series` 목록 모드 누락을 잡아 SC에 유지 확인을 넣었고, 1차 검증이 빈 값 쿼리 redirect 누락을 잡았다(D1 수용). 빌드 마커·redirect·404·동작 보존을 yarn start 실측 curl로 확인했다.
+- **다음에 할 것**: `/sermons/all` loading.tsx/Suspense(감사 P4), 공개 `<img>`→`<Image>` 3건, PhotoSwipe dynamic. `getFilteredSermons`가 이미 static client 경유임을 확인해 캐시 전환 항목은 불필요로 정리했다(explorer 초기 오독 정정).
+- **발견된 부채**: 신규 없음. knip 98줄이 직전 run과 동일해 이번 변경으로 생긴 미사용 코드 0건.
 
 ## 후속 작업
 
