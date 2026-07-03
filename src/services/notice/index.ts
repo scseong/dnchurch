@@ -19,3 +19,8 @@ export const getNoticeById = (id: string) => {
   const supabase = createStaticClient(noticeCache.detail(id));
   return noticeService(supabase).detailById(id);
 };
+
+export const getAdjacentNotices = (noticeId: number, createdAt: string) => {
+  const supabase = createStaticClient(noticeCache.nav(noticeId));
+  return noticeService(supabase).adjacent(noticeId, createdAt);
+};

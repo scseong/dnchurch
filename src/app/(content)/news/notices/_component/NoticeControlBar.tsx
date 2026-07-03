@@ -4,24 +4,30 @@ import { useState, useCallback } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import clsx from 'clsx';
 import { IoClose } from 'react-icons/io5';
-import { RiArrowDownSLine } from 'react-icons/ri';
-import { SearchField, Select } from '@/components/ui';
-import CategoryBottomSheet from '@/app/(content)/news/notices/_component/CategoryBottomSheet';
-import { NOTICE_CATEGORIES } from '@/constants/notice';
+import { SearchField } from '@/components/ui';
+import { NOTICE_CATEGORIES, NOTICE_SORT_OPTIONS, type NoticeSortOption } from '@/constants/notice';
 import type { NoticeCategory } from '@/types/notice';
 import styles from './NoticeControlBar.module.scss';
 
 type Props = {
-  total: number;
+  count: number;
   currentCategory?: NoticeCategory;
   currentSearch?: string;
+  currentSort: NoticeSortOption;
 };
 
-export default function NoticeControlBar({ total, currentCategory, currentSearch }: Props) {
+const CATEGORY_ENTRIES = Object.entries(NOTICE_CATEGORIES) as [NoticeCategory, string][];
+const SORT_ENTRIES = Object.entries(NOTICE_SORT_OPTIONS) as [NoticeSortOption, string][];
+
+export default function NoticeControlBar({
+  count,
+  currentCategory,
+  currentSearch,
+  currentSort
+}: Props) {
   const router = useRouter();
   const searchParams = useSearchParams();
   const [query, setQuery] = useState(currentSearch ?? '');
-  const [showCategorySheet, setShowCategorySheet] = useState(false);
 
   // currentSearch(URL search) 변경 → query 동기화 (렌더 중 prev-state 보정)
   const [prevSearch, setPrevSearch] = useState(currentSearch);
@@ -47,20 +53,9 @@ export default function NoticeControlBar({ total, currentCategory, currentSearch
     [searchParams, router]
   );
 
-  const handleCategoryChange = useCallback(
-    (value: string) => {
-      updateParams({ category: value || null });
-    },
-    [updateParams]
-  );
-
-  const handleCategoryTagRemove = useCallback(() => {
-    updateParams({ category: null });
-  }, [updateParams]);
-
   const handleSearch = useCallback(
-    (e: React.FormEvent) => {
-      e.preventDefault();
+    (event: React.FormEvent) => {
+      event.preventDefault();
       updateParams({ search: query || null });
     },
     [query, updateParams]
@@ -71,78 +66,76 @@ export default function NoticeControlBar({ total, currentCategory, currentSearch
     updateParams({ search: null });
   }, [updateParams]);
 
+  const categoryLabel = currentCategory ? NOTICE_CATEGORIES[currentCategory] : '전체';
+
   return (
     <div className={styles.bar}>
-      {/* 좌측: 건수 + 활성 태그 */}
-      <div className={styles.bar_left}>
-        <span className={styles.total}>총 {total.toLocaleString()}건</span>
-        {currentCategory && (
-          <span className={styles.active_tag}>
-            {NOTICE_CATEGORIES[currentCategory]}
-            <button
-              type="button"
-              className={styles.tag_remove}
-              onClick={handleCategoryTagRemove}
-              aria-label={`${NOTICE_CATEGORIES[currentCategory]} 필터 해제`}
-            >
-              <IoClose aria-hidden="true" />
-            </button>
-          </span>
-        )}
-      </div>
-
-      {/* 우측: 분류 + 검색 */}
-      <div className={styles.bar_right}>
-        {/* PC: select */}
-        <Select
-          className={styles.pc_only}
-          value={currentCategory ?? ''}
-          onChange={handleCategoryChange}
-          options={[
-            { value: '', label: '전체 분류' },
-            ...Object.entries(NOTICE_CATEGORIES).map(([key, label]) => ({ value: key, label }))
-          ]}
-          emphasized={Boolean(currentCategory)}
-          aria-label="분류 선택"
+      <search className={styles.search}>
+        <SearchField
+          value={query}
+          onChange={setQuery}
+          onClear={handleSearchClear}
+          onSubmit={handleSearch}
+          placeholder="공지 제목·내용 검색"
+          aria-label="공지사항 검색"
         />
+      </search>
 
-        {/* Mobile: text button */}
+      <div className={styles.chips}>
         <button
           type="button"
-          className={clsx(
-            styles.category_btn,
-            styles.mobile_only,
-            currentCategory && styles.selected
-          )}
-          onClick={() => setShowCategorySheet(true)}
-          aria-label="분류 선택"
+          className={clsx(styles.chip, !currentCategory && styles.chip_active)}
+          onClick={() => updateParams({ category: null })}
+          aria-pressed={!currentCategory}
         >
-          {currentCategory ? NOTICE_CATEGORIES[currentCategory] : '전체 분류'}
-          <RiArrowDownSLine aria-hidden="true" />
+          전체
         </button>
-
-        {/* 검색창 */}
-        <search className={styles.search_form}>
-          <SearchField
-            value={query}
-            onChange={setQuery}
-            onClear={handleSearchClear}
-            onSubmit={handleSearch}
-            placeholder="검색…"
-            aria-label="공지사항 검색"
-          />
-        </search>
+        {CATEGORY_ENTRIES.map(([value, label]) => (
+          <button
+            key={value}
+            type="button"
+            className={clsx(styles.chip, currentCategory === value && styles.chip_active)}
+            onClick={() => updateParams({ category: value })}
+            aria-pressed={currentCategory === value}
+          >
+            {label}
+          </button>
+        ))}
       </div>
 
-      <CategoryBottomSheet
-        isOpen={showCategorySheet}
-        currentCategory={currentCategory}
-        onSelect={(value) => {
-          handleCategoryChange(value ?? '');
-          setShowCategorySheet(false);
-        }}
-        onClose={() => setShowCategorySheet(false)}
-      />
+      <div className={styles.header}>
+        <div className={styles.header_left}>
+          <p className={styles.count}>
+            {categoryLabel} 공지 <span className={styles.count_num}>{count.toLocaleString()}개</span>
+          </p>
+          {currentSearch && (
+            <span className={styles.search_tag}>
+              ‘{currentSearch}’ 검색
+              <button
+                type="button"
+                className={styles.tag_remove}
+                onClick={handleSearchClear}
+                aria-label="검색어 지우기"
+              >
+                <IoClose aria-hidden="true" />
+              </button>
+            </span>
+          )}
+        </div>
+        <div className={styles.sort}>
+          {SORT_ENTRIES.map(([value, label]) => (
+            <button
+              key={value}
+              type="button"
+              className={clsx(styles.sort_btn, currentSort === value && styles.sort_active)}
+              onClick={() => updateParams({ sort: value === 'latest' ? null : value })}
+              aria-pressed={currentSort === value}
+            >
+              {label}
+            </button>
+          ))}
+        </div>
+      </div>
     </div>
   );
 }
