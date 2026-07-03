@@ -218,8 +218,10 @@ export function resolveSiblingTabs(pathname: string): NavItem[] | null {
 /** 헤더 우측 액션 종류. 기본은 전체 메뉴(drawer), 특정 화면은 다른 액션으로 교체 가능. */
 export type HeaderAction = 'menu' | 'share';
 
-/** pathname → 헤더 우측 액션. 설교 상세는 공유, 그 외는 전체 메뉴. */
+/** pathname → 헤더 우측 액션. 설교 상세·공지 상세는 공유, 그 외는 전체 메뉴. */
 export function resolveHeaderAction(pathname: string): HeaderAction {
   if (isSermonDetailPath(pathname)) return 'share';
+  // 공지 상세(/news/notices/[id])만 공유 — 목록(/news/notices)은 전체 메뉴 유지.
+  if (/^\/news\/notices\/[^/]+$/.test(pathname)) return 'share';
   return 'menu';
 }
