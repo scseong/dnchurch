@@ -8,7 +8,10 @@ export type BulletinWithImages = Pick<
   bulletin_images: Pick<BulletinImageType, 'id' | 'cloudinary_id' | 'order_index'>[];
 };
 
-export type BulletinParams = { year?: number; page?: number; limit?: number };
+export type BulletinParams = { year?: number; month?: number; page?: number; limit?: number };
+
+/** 연도 → 월 → 주보 개수. 월별 보기 피커가 월마다 개수를 그리는 데 쓴다. */
+export type MonthBuckets = Record<number, Record<number, number>>;
 
 export type BulletinImageInput = {
   cloudinaryId: string;
@@ -33,6 +36,7 @@ export type BulletinEditFormParams = {
 export type BulletinSummaryResponse = {
   latest: BulletinWithImages | null;
   years: number[];
+  monthBuckets: MonthBuckets;
   items: BulletinWithImages[];
   total: number;
 };

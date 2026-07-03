@@ -19,7 +19,6 @@
   "dependencies": {
     "@supabase/ssr": "^0.8.0",
     "@supabase/supabase-js": "^2.86.0",
-    "@tanstack/react-table": "^8.20.6",
     "cloudinary": "^2.8.0",
     "clsx": "^2.1.1",
     "dayjs": "^1.11.13",

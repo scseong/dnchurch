@@ -61,9 +61,6 @@ const buildTransformedUrl = (input: string, transform: string): string | null =>
 export const getOgImageUrl = (input: string | null | undefined): string | null =>
   input ? buildTransformedUrl(input, 'c_fill,w_1200,h_630,g_auto,f_auto,q_auto') : null;
 
-export const getKakaoShareUrl = (input: string | null | undefined): string | null =>
-  input ? buildTransformedUrl(input, 'c_fill,w_800,h_400,g_auto,f_auto,q_auto') : null;
-
 // 외부 호스트(YouTube 썸네일 등)를 Cloudinary fetch URL로 감싸 next/image의 res.cloudinary.com remotePattern을 통과시키는 helper.
 // public ID(http(s):// 미접두) 입력은 fetch가 아니라 image/upload 변환 대상이므로 그대로 반환 — 호출부에서 <CloudinaryImage> loader가 처리.
 export const cloudinaryFetchUrl = (remoteUrl: string | null): string | null => {

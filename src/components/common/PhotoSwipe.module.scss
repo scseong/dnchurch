@@ -46,3 +46,36 @@
     opacity: 1;
   }
 }
+
+// pageBadge=true일 때만 렌더되는 오버레이 배지 — 클릭은 컨테이너(확대)로 통과시킨다.
+.page_badge {
+  position: absolute;
+  left: $spacing-10;
+  top: $spacing-10;
+  padding: $spacing-2 $spacing-8;
+  border-radius: $radius-circle;
+  // 이미지 위 어두운 오버레이 pill — semantic 미정의, rgba 예외.
+  background-color: rgba($home-text, 0.62);
+  color: $txt-inverse;
+  font-size: $font-size-11;
+  font-weight: $font-weight-semibold;
+  font-variant-numeric: tabular-nums;
+  pointer-events: none;
+}
+
+.zoom_hint {
+  position: absolute;
+  right: $spacing-10;
+  bottom: $spacing-10;
+  display: inline-flex;
+  align-items: center;
+  gap: $spacing-4;
+  padding: $spacing-4 $spacing-8;
+  border-radius: $radius-circle;
+  // 이미지 위 밝은 오버레이 pill — semantic 미정의, rgba 예외.
+  background-color: rgba($txt-inverse, 0.92);
+  color: $home-text;
+  font-size: $font-size-11;
+  font-weight: $font-weight-semibold;
+  pointer-events: none;
+}

@@ -151,6 +151,16 @@ function isNoticePath(pathname: string): boolean {
   return pathname === '/news/notices' || /^\/news\/notices\/[^/]+$/.test(pathname);
 }
 
+/** 주보 하위 전체(/news/bulletins·상세·create·update) 경로 판별 — 헤더 타이틀·형제 탭용. */
+function isBulletinPath(pathname: string): boolean {
+  return pathname === '/news/bulletins' || pathname.startsWith('/news/bulletins/');
+}
+
+/** 주보 상세(/news/bulletins/[숫자id])만 판별 — 공유 액션용. create·[id]/update 제외. */
+function isBulletinDetailPath(pathname: string): boolean {
+  return /^\/news\/bulletins\/\d+$/.test(pathname);
+}
+
 /** 모바일 헤더 타이틀 + 뒤로가기 상태 해석 */
 export function resolveMobileHeader(pathname: string): { title: string; showBack: boolean } {
   if (pathname === '/') return { title: '대구동남교회', showBack: false };
@@ -166,6 +176,9 @@ export function resolveMobileHeader(pathname: string): { title: string; showBack
 
   // 목업 재설계: 공지사항 목록·상세는 Hero 없이 헤더에 '공지사항' 타이틀 + 뒤로가기로 둔다(notices-redesign).
   if (isNoticePath(pathname)) return { title: '공지사항', showBack: true };
+
+  // 목업 재설계: 주보 목록·상세·폼은 Hero 없이 헤더에 '주보' 타이틀 + 뒤로가기로 둔다(bulletins-redesign).
+  if (isBulletinPath(pathname)) return { title: '주보', showBack: true };
 
   const special = SPECIAL_PAGES[pathname];
   if (special) return { title: special, showBack: false };
@@ -204,6 +217,9 @@ export function resolveSiblingTabs(pathname: string): NavItem[] | null {
   // 목업 재설계: 공지사항(목록·상세)은 형제 탭 없이 단일 헤더로 둔다(notices-redesign).
   if (isNoticePath(pathname)) return null;
 
+  // 목업 재설계: 주보(목록·상세·폼)는 형제 탭 없이 단일 헤더로 둔다(bulletins-redesign).
+  if (isBulletinPath(pathname)) return null;
+
   for (const item of GNB_ITEMS) {
     if (!item.children?.length) continue;
     if (item.children.some((c) => isRouteMatch(pathname, c.href))) {
@@ -218,10 +234,12 @@ export function resolveSiblingTabs(pathname: string): NavItem[] | null {
 /** 헤더 우측 액션 종류. 기본은 전체 메뉴(drawer), 특정 화면은 다른 액션으로 교체 가능. */
 export type HeaderAction = 'menu' | 'share';
 
-/** pathname → 헤더 우측 액션. 설교 상세·공지 상세는 공유, 그 외는 전체 메뉴. */
+/** pathname → 헤더 우측 액션. 설교 상세·공지 상세·주보 상세는 공유, 그 외는 전체 메뉴. */
 export function resolveHeaderAction(pathname: string): HeaderAction {
   if (isSermonDetailPath(pathname)) return 'share';
   // 공지 상세(/news/notices/[id])만 공유 — 목록(/news/notices)은 전체 메뉴 유지.
   if (/^\/news\/notices\/[^/]+$/.test(pathname)) return 'share';
+  // 주보 상세(/news/bulletins/[숫자id])만 공유 — 목록·create·update는 전체 메뉴 유지.
+  if (isBulletinDetailPath(pathname)) return 'share';
   return 'menu';
 }
