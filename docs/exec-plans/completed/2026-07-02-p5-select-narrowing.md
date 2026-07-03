@@ -1,6 +1,6 @@
 # p5-select-narrowing
 
-- **상태**: 🟡 진행 중
+- **상태**: ✅ 완료 (PR #141 머지, 2026-07-03)
 - **시작일**: 2026-07-02
 - **브랜치**: refactor/p5-select-narrowing
 - **Open questions**: none
@@ -158,6 +158,15 @@ explorer 전수 맵(도구 호출 68회)으로 훑고, 무게가 실리는 단�
 </details>
 -->
 
+## PR 리뷰 대응
+
+PR #141 — Gemini 인라인 2건 (둘 다 HIGH). 코드+dev REST 실측으로 검증 후 기각, 답글 게시(사용자 승인).
+
+| 지적 | 출처 | 대조 | 판정 |
+| --- | --- | --- | --- |
+| `allSeries`의 `sermons!inner(count)`가 발행 0편 시리즈를 제외 → 어드민 폼 시리즈 드롭다운 깨짐 | gemini r3516017675 | dev REST 판별 테스트(불가능 필터 `sermons.id=eq.999999`)에서 `!inner`·일반 조인이 0편 부모를 동일하게 count:0 반환 — `!inner`+count 집계는 부모 제외 안 함. 어드민은 `getAdminSeries`(admin.ts, `!inner` 없음) 별도 사용. `!inner`는 P5 이전 코드(41a5973은 컬럼만 좁힘) | 기각 — 답글 r3517988676 |
+| `allPreachers`의 `sermons!inner(count)`가 발행 0편 설교자를 제외 → 어드민 폼 깨짐 | gemini r3516017687 | 위와 동일. 박지권(발행 0편, 초안만) count:0 반환 확인. 어드민 `getAdminPreachers`(별도 쿼리) + dev 새 설교 폼에 박지권 노출 실측. 공개 `/sermons/all`은 0편을 page.tsx:69 `sermon_count > 0`으로 숨김 | 기각 — 답글 r3517988419 |
+
 ## 후속 작업
 
 <!-- 이번 범위 밖 일. Non-goals·체크리스트에 중복 기술 금지 — 여기에만.
@@ -202,3 +211,20 @@ explorer 전수 맵(도구 호출 68회)으로 훑고, 무게가 실리는 단�
 - 의사결정 로그·검증 기록은 위 형식 고정. 압축·기호잇기·약어·한 항목 다결정 금지.
 -->
 
+
+## 회고
+
+**잘된 것**
+
+- PR #91에서 전면 revert됐던 작업을 회귀 0으로 완주했다. 실패의 뿌리(사람 감사가 유일한 방어선)를 진단하고, 타입을 먼저 좁혀 빌드가 누락을 잡게 하는 순서로 바꾼 것이 실제로 작동했다 — Preacher 전체 행 요구 8곳·bulletin prop 3곳이 컴파일 에러로 드러나 교체됐다.
+- 검증을 5겹으로 쌓았다: 필드 union 삼중 확인(explorer→Claude→Codex) → 빌드 그물 → 셀렉트↔Pick 1:1 대조표(Codex CR로 강제, 실전에서 죽은 profiles 필드 1건 적발) → dev 실측 8라우트 → verify-task·gate. 각 층이 다른 종류의 실수를 잡았다.
+- Gemini 리뷰 HIGH 2건(`!inner` 0편 제외 주장)을 중계하지 않고 dev REST 판별 테스트로 뒤집었다. `!inner`+count 집계가 부모를 제외하지 않음을 실측하고, 어드민이 별도 쿼리를 쓰는 것까지 확인해 오탐으로 기각했다.
+
+**다음에 할 것**
+
+- `as unknown as` 타입 단언이 남아 있어 "셀렉트가 타입보다 좁은" 변경은 빌드가 못 잡는다. 이 셀렉트들을 손댈 때 1:1 대조표를 함께 갱신해야 한다 (PR 본문 Notes에도 명시).
+- Non-goals로 미룬 축소 후보: 상세·폼 셀렉트, admin 쿼리, `sermons!inner(count)` 문법(동작은 일반 조인과 동일함이 이번에 실측됨 — 정리 시 함께), `summary()` 이미지 join 분리.
+
+**발견된 부채 (→ tech-debt/active.md 옮길 것)**
+
+- 없음. 죽은 코드 3건은 이번에 제거했고, 남은 축소 후보는 위 "다음에 할 것"의 Non-goals로 관리한다.
