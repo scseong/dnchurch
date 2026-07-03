@@ -243,6 +243,20 @@ Codex 1차 검증 결과 (verbatim, 핵심 지적):
 
 </details>
 
+## PR 리뷰 대응 (PR #142)
+
+봇 리뷰 6건 — 각 지적을 코드로 직접 검증한 뒤 판정.
+
+| 지적 | 출처 | 대조 (코드 확인) | 판정 |
+| --- | --- | --- | --- |
+| `.pinned` 스타일 누락으로 핀 행 cream 배경 미표시 | Gemini `NoticeList.module.scss:25` | `.row`에 `&.pinned` 없음 확인(동시 편집 중 유실). 복원 후 실측 핀 행 bg `rgb(247,242,234)`=`$home-card-soft` | 수정 |
+| 공개 상세가 `is_public=false` 초안도 노출 | Codex `notice-service.ts:64` | `is_public` 컬럼 존재·RLS SELECT public. 읽기 4개(list·detailById·allIds·adjacent)가 `deleted_at`만 필터 → `eq('is_public', true)` 추가 | 수정 |
+| Hero 제거 후 `/about/serving-people` h1 상실 | Codex `layout.tsx:27` | SELF_HERO_PATHS에 없어 공유 Hero를 썼는데 sr-only h1 보강 누락 확인. 추가 후 실측 h1 "섬기는 사람들"(sr-only) | 수정 |
+| 상세 캐시가 시간 revalidate 없어 낡을 수 있음 | Codex `[id]/page.tsx:36` | `noticeCache.detail`은 tag만·force-cache, 공지 뮤테이션 앱에 없음 → 무효화 경로 없음. `detail`·`nav`에 `revalidate: 300` 추가(목록과 동일) | 수정 |
+| `generateStaticParams`의 `error` 처리 무의미·빌드 실패 위험 | Gemini `[id]/page.tsx:28` | `handleResponse`가 real error에 throw → `error`는 사실상 dead, 빌드 시 throw면 실패. try-catch로 감싸 빈 배열 반환 | 수정 |
+| `detailById`의 `.single()`이 500 유발 | Gemini `notice-service.ts:66` | `handle-response.ts:7`이 `PGRST116`을 throw 없이 반환 → 0행이면 `data:null` → `notFound()` 정상. 브라우저 실측에서도 500 없음. bulletins도 같은 `.single()` 사용 | 오탐 기각 |
+
 ## 후속 작업
 
 <!-- 이번 범위 밖 일. Non-goals·체크리스트에 중복 기술 금지 — 여기에만. -->
+- `bulletins/[id]/page.tsx`의 `generateStaticParams`도 notices와 같은 error-destructure 패턴 — 동일하게 try-catch로 강화할지 검토(이번 PR 범위 밖).

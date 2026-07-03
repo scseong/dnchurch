@@ -17,7 +17,12 @@ export const noticeService = (supabase: SupabaseClient<Database>) => ({
     search,
     sort = 'latest'
   }: NoticeListParams = {}) => {
-    let query = supabase.from(NOTICE_BUCKET).select('*', { count: 'exact' }).is('deleted_at', null);
+    // 공개 경로 — soft-delete 제외 + is_public 초안 제외 (RLS SELECT가 public이라 앱에서 걸러야 한다).
+    let query = supabase
+      .from(NOTICE_BUCKET)
+      .select('*', { count: 'exact' })
+      .is('deleted_at', null)
+      .eq('is_public', true);
 
     if (category) {
       query = query.eq('category', category);
@@ -52,6 +57,7 @@ export const noticeService = (supabase: SupabaseClient<Database>) => ({
       .from(NOTICE_BUCKET)
       .select('id')
       .is('deleted_at', null)
+      .eq('is_public', true)
       .order('id', { ascending: false });
     return handleResponse(res);
   },
@@ -62,6 +68,7 @@ export const noticeService = (supabase: SupabaseClient<Database>) => ({
       .select('*')
       .eq('id', Number(id))
       .is('deleted_at', null)
+      .eq('is_public', true)
       .single();
     return handleResponse(res);
   },
@@ -70,7 +77,7 @@ export const noticeService = (supabase: SupabaseClient<Database>) => ({
   // 같은 created_at(초 단위 동시 등록)에서 형제 글을 건너뛰지 않도록 (created_at, id) 복합 keyset을 쓴다.
   adjacent: async (noticeId: number, createdAt: string) => {
     const select = () =>
-      supabase.from(NOTICE_BUCKET).select('id, title').is('deleted_at', null);
+      supabase.from(NOTICE_BUCKET).select('id, title').is('deleted_at', null).eq('is_public', true);
 
     const [prev, next] = await Promise.all([
       // 이전(더 오래된) 글: created_at가 더 이르거나, 같으면 id가 더 작은 것

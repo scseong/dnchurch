@@ -21,10 +21,15 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 }
 
 export async function generateStaticParams() {
-  const { data, error } = await getAllNoticeIds();
-  if (error || !data) return [];
+  // getAllNoticeIds는 오류 시 handleResponse가 throw한다 — 빌드가 통째로 실패하지 않게 감싼다.
+  try {
+    const { data } = await getAllNoticeIds();
+    if (!data) return [];
 
-  return data.slice(0, 10).map((notice) => ({ id: notice.id.toString() }));
+    return data.slice(0, 10).map((notice) => ({ id: notice.id.toString() }));
+  } catch {
+    return [];
+  }
 }
 
 export const revalidate = 86400; // 24h — 목록과 같은 정적 캐시 주기

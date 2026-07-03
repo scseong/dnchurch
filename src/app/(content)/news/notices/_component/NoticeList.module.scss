@@ -22,6 +22,10 @@
 
   @include hover-bg-shift($bg-hover);
   @include focus-ring('strong', calc(-1 * #{$focus-ring-offset}));
+
+  &.pinned {
+    background-color: $home-card-soft;
+  }
 }
 
 .body {

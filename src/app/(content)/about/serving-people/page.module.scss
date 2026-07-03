@@ -1,3 +1,7 @@
+.blind_title {
+  @include blind;
+}
+
 .wrap {
   padding: 0 8rem;
 
