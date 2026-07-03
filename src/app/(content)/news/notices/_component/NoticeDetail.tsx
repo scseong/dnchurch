@@ -32,10 +32,16 @@ export default function NoticeDetail({ notice, prev, next }: Props) {
   return (
     <article className={styles.detail}>
       <header className={styles.head}>
-        <Label size="xs" variant={isUrgent ? 'danger' : 'neutral'}>
-          {NOTICE_CATEGORIES[notice.category]}
-        </Label>
-        <h1 className={clsx(styles.title, isUrgent && styles.urgent)}>{notice.title}</h1>
+        <h1 className={styles.title}>
+          <Label
+            size="xs"
+            variant={isUrgent ? 'danger' : 'neutral'}
+            className={styles.title_badge}
+          >
+            {NOTICE_CATEGORIES[notice.category]}
+          </Label>
+          {notice.title}
+        </h1>
         <div className={styles.meta}>
           <time className={styles.date} dateTime={notice.created_at}>
             {formattedDate(notice.created_at, 'YYYY. M. D')}

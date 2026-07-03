@@ -35,9 +35,7 @@ export default function NoticeList({ data }: Props) {
                     {NOTICE_CATEGORIES[notice.category]}
                   </Label>
                   <span className={styles.title_wrap}>
-                    <span className={clsx(styles.title, isUrgent && styles.urgent)}>
-                      {notice.title}
-                    </span>
+                    <span className={styles.title}>{notice.title}</span>
                     {notice.attachment_url && (
                       <BsPaperclip className={styles.clip} aria-hidden="true" />
                     )}

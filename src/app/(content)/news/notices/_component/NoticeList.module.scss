@@ -13,7 +13,7 @@
   align-items: center;
   gap: $spacing-12;
   width: 100%;
-  padding: $spacing-16 $spacing-8;
+  padding: $spacing-20 $spacing-8;
   text-align: left;
   background: transparent;
   border: none;
@@ -22,10 +22,6 @@
 
   @include hover-bg-shift($bg-hover);
   @include focus-ring('strong', calc(-1 * #{$focus-ring-offset}));
-
-  &.pinned {
-    background-color: $home-card-soft;
-  }
 }
 
 .body {
@@ -33,7 +29,7 @@
   min-width: 0;
   display: flex;
   flex-direction: column;
-  gap: $spacing-6;
+  gap: $spacing-8;
 }
 
 .head {
@@ -63,10 +59,6 @@
   font-weight: $font-weight-bold;
   color: $home-text;
   @include ellipsis-multi(1);
-
-  &.urgent {
-    color: $status-negative;
-  }
 }
 
 .clip {
@@ -77,7 +69,7 @@
 
 .preview {
   font-size: $font-size-13;
-  color: $home-text;
+  color: $home-text-sub;
   @include ellipsis-multi(1);
 }
 
@@ -96,7 +88,7 @@
 .views {
   display: inline-flex;
   align-items: center;
-  gap: $spacing-2;
+  gap: $spacing-4;
 }
 
 .chevron {

@@ -19,10 +19,12 @@
   line-height: $line-height-tight;
   color: $home-text;
   word-break: keep-all;
+}
 
-  &.urgent {
-    color: $status-negative;
-  }
+// 제목 앞 인라인 분류 badge — 제목 텍스트 첫 줄 앞에 프리픽스로 붙는다.
+.title_badge {
+  margin-right: $spacing-6;
+  vertical-align: middle;
 }
 
 .meta {
@@ -37,7 +39,7 @@
 .views {
   display: inline-flex;
   align-items: center;
-  gap: $spacing-2;
+  gap: $spacing-8;
   margin-left: auto;
 }
 
