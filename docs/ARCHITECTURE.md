@@ -6,13 +6,15 @@
 
 ```
 src/app/
-├── (content)/   ← 일반 사용자 영역 (HeroSection + Breadcrumb)
+├── (content)/   ← 일반 사용자 영역
 │   ├── about, news, fellowship, sermons, community,
 │   ├── next-gen, notifications, search
-│   └── layout.tsx — HeroSection 자동 적용
+│   └── layout.tsx — Header(모바일은 뒤로가기+제목) + Footer + BottomNav
 └── (admin)/     ← 관리자 영역 (.shell scope, admin 토큰)
     └── layout.tsx — admin 셸 적용
 ```
+
+> 공유 `<Hero/>` 배너와 브레드크럼은 제거됐다(ADR 0021). 페이지 제목은 모바일 `MobileHeader`(뒤로가기 + 가운데 제목)와 각 페이지의 `h1`(대개 sr-only)이 맡는다.
 
 **왜 분리됐는가**: 두 그룹이 서로 다른 레이아웃·디자인 토큰·인증 모델을 가짐. URL 네임스페이스는 공유하지만 렌더 경계는 격리.
 

@@ -48,7 +48,8 @@
 | [0016](0016-server-action-conventions.md) | Server Action 공통 패턴 (위치·검증·반환·revalidate) | Accepted | 2026-06-12 |
 | [0017](0017-figma-sot-design-to-code.md) | 디자인 SoT를 Figma로 옮기고 디자인투코드 채택, 무료 경로부터 검증 | Accepted | 2026-06-13 |
 | [0018](0018-padding-token-standardization.md) | 카드·면 padding을 대칭 시맨틱 토큰 3단계로 고정 | Accepted | 2026-06-27 |
-| [0019](0019-public-anonymous-write-rls.md) | 익명 공개 write를 서버 액션 + anon-only RLS로 처리한다 | Accepted | 2026-06-29 |
+| [0019](0019-public-anonymous-write-rls.md) | 익명 공개 쓰기를 서버 액션과 anon 전용 RLS로 처리한다 | Accepted | 2026-06-29 |
 | [0020](0020-brown-primary-migration.md) | 공개 primary 색을 navy에서 warm brown으로 이행 | Accepted | 2026-06-30 |
+| [0021](0021-hero-breadcrumb-removal.md) | 공유 Hero·Breadcrumb 제거, 콘텐츠 페이지 헤더를 MobileHeader + sr-only h1로 통일 | Accepted | 2026-07-03 |
 
 <!-- last-audit: 2026-05-01 -->
