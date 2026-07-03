@@ -10,7 +10,7 @@ import ResourcesCard from './sections/ResourcesCard';
 import PublishCard from './sections/PublishCard';
 import PreviewCard from './Preview/PreviewCard';
 import Checklist from './Preview/Checklist';
-import type { Preacher, SeriesWithSermonCount } from '@/types/sermon';
+import type { PreacherWithSermonCount, SeriesWithSermonCount } from '@/types/sermon';
 import {
   type SermonFormData,
   type SermonFormPatch,
@@ -27,7 +27,7 @@ interface SermonFormProps {
   onCancel: () => void;
   isPending: boolean;
   publishLabel: string;
-  preachers: Preacher[];
+  preachers: PreacherWithSermonCount[];
   series: SeriesWithSermonCount[];
 }
 

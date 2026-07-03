@@ -6,7 +6,7 @@ import styles from './LastBulletin.module.scss';
 
 type Props = {
   title: string;
-  images: BulletinImageType[];
+  images: Pick<BulletinImageType, 'cloudinary_id'>[];
 };
 
 export default function LatestBulletin({ title, images }: Props) {

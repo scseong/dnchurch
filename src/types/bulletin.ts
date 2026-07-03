@@ -1,8 +1,11 @@
 import { BulletinImageType, BulletinType } from '@/types/common';
 
-export type BulletinWithImages = BulletinType & {
-  bulletin_images: BulletinImageType[];
-  profiles?: { display_name: string | null } | null;
+/** 목록·상세 소비처가 실제 읽는 필드 union — BULLETIN_WITH_IMAGES_SELECT와 1:1 대조 유지 (P5) */
+export type BulletinWithImages = Pick<
+  BulletinType,
+  'id' | 'title' | 'sunday_date' | 'created_at' | 'author_id'
+> & {
+  bulletin_images: Pick<BulletinImageType, 'id' | 'cloudinary_id' | 'order_index'>[];
 };
 
 export type BulletinParams = { year?: number; page?: number; limit?: number };

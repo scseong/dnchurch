@@ -1,10 +1,10 @@
 import GridCard from '../GridCard/GridCard';
 import { EmptyState } from '@/components/ui';
-import type { SermonWithRelations } from '@/types/sermon';
+import type { SermonCardItem } from '@/types/sermon';
 import styles from './SermonListPage.module.scss';
 
 type Props = {
-  sermons: SermonWithRelations[];
+  sermons: SermonCardItem[];
 };
 
 export default function SermonFilteredList({ sermons }: Props) {

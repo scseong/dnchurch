@@ -1,10 +1,10 @@
 import Link from 'next/link';
-import type { SermonWithRelations } from '@/types/sermon';
+import type { SermonCardItem } from '@/types/sermon';
 import GridCard from '../GridCard/GridCard';
 import styles from './SermonRecentList.module.scss';
 
 type Props = {
-  sermons: SermonWithRelations[];
+  sermons: SermonCardItem[];
 };
 
 export default function SermonRecentList({ sermons }: Props) {

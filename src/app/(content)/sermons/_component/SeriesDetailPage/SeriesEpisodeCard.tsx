@@ -4,11 +4,11 @@ import CloudinaryImage from '@/components/common/CloudinaryImage';
 import { cloudinaryFetchUrl } from '@/utils/cloudinary';
 import { formattedDate } from '@/utils/date';
 import { formatSermonDuration, getSermonThumbnail } from '@/utils/sermon';
-import type { SermonWithRelations } from '@/types/sermon';
+import type { SeriesEpisodeItem } from '@/types/sermon';
 import styles from './SeriesDetailPage.module.scss';
 
 type Props = {
-  sermon: SermonWithRelations;
+  sermon: SeriesEpisodeItem;
   order: number;
 };
 

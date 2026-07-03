@@ -2,7 +2,7 @@
 
 import { HiX } from 'react-icons/hi';
 import { NONE_SERIES_ID } from '@/lib/utils/sermon-filter';
-import type { Preacher, SeriesWithSermonCount } from '@/types/sermon';
+import type { PreacherWithSermonCount, SeriesWithSermonCount } from '@/types/sermon';
 import styles from '../index.module.scss';
 
 interface ActiveFiltersProps {
@@ -11,7 +11,7 @@ interface ActiveFiltersProps {
   series: string[];
   dateFrom: string;
   dateTo: string;
-  preachersData: Preacher[];
+  preachersData: PreacherWithSermonCount[];
   seriesData: SeriesWithSermonCount[];
   onRemovePreacher: (id: string) => void;
   onRemoveSeries: (id: string) => void;

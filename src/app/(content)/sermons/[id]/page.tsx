@@ -10,7 +10,7 @@ import { isNumeric } from '@/utils/validator';
 import { formatPreacherLabel, getSermonThumbnail } from '@/utils/sermon';
 import { getOgImageUrl } from '@/utils/cloudinary';
 import { OG_FALLBACK_IMAGE } from '@/config/seo';
-import type { SermonWithRelations } from '@/types/sermon';
+import type { SeriesEpisodeItem, SermonCardItem, SermonWithRelations } from '@/types/sermon';
 import SermonDetailPage from '../_component/SermonDetailPage/SermonDetailPage';
 import SermonViewTracker from '../_component/SermonDetailPage/SermonViewTracker';
 
@@ -99,12 +99,12 @@ export default async function SermonDetail({ params }: PageProps) {
   const [seriesEpisodes, otherByPreacher] = await Promise.all([
     sermon.sermon_series?.slug
       ? getSermonsBySeries(sermon.sermon_series.slug)
-      : Promise.resolve([] as SermonWithRelations[]),
+      : Promise.resolve([] as SeriesEpisodeItem[]),
     sermon.preacher?.id
       ? getSermons({ preacherId: sermon.preacher.id, pageSize: 4 }).then((res) =>
           res.sermons.filter((s) => s.id !== sermon.id).slice(0, 3)
         )
-      : Promise.resolve([] as SermonWithRelations[])
+      : Promise.resolve([] as SermonCardItem[])
   ]);
 
   const otherSermonsByPreacher = otherByPreacher.length === 3 ? otherByPreacher : [];

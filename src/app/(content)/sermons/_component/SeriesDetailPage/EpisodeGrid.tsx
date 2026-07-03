@@ -1,10 +1,10 @@
 import { EmptyState } from '@/components/ui';
 import SeriesEpisodeCard from './SeriesEpisodeCard';
-import type { SermonWithRelations } from '@/types/sermon';
+import type { SeriesEpisodeItem } from '@/types/sermon';
 import styles from './SeriesDetailPage.module.scss';
 
 type Props = {
-  episodes: SermonWithRelations[];
+  episodes: SeriesEpisodeItem[];
 };
 
 export default function EpisodeGrid({ episodes }: Props) {

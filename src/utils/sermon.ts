@@ -57,7 +57,7 @@ export function resolveSeriesSlug(
  */
 export function resolvePreacherName(
   name: string | undefined,
-  allPreachers: Preacher[],
+  allPreachers: Pick<Preacher, 'id' | 'name'>[],
 ): string | undefined {
   if (!name) return undefined;
   const found = allPreachers.find((preacher) => preacher.name === name);

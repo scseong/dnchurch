@@ -2,12 +2,12 @@ import Link from 'next/link';
 import clsx from 'clsx';
 import { formattedDate } from '@/utils/date';
 import { formatSermonDuration } from '@/utils/sermon';
-import type { SermonSeries, SermonWithRelations } from '@/types/sermon';
+import type { SermonSeries, SeriesEpisodeItem } from '@/types/sermon';
 import styles from './SermonSeriesSidebar.module.scss';
 
 type Props = {
   series: SermonSeries;
-  episodes: SermonWithRelations[];
+  episodes: SeriesEpisodeItem[];
   currentSermonId: number;
 };
 
@@ -56,7 +56,7 @@ export default function SermonSeriesSidebar({ series, episodes, currentSermonId 
 }
 
 type EpisodeRowProps = {
-  episode: SermonWithRelations;
+  episode: SeriesEpisodeItem;
   order: number;
   isCurrent: boolean;
 };

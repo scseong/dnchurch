@@ -32,15 +32,36 @@ export type SermonCardItem = SermonListItem &
     sermon_series: Pick<SermonSeries, 'id' | 'slug' | 'title'> | null;
   };
 
-export type SeriesWithSermonCount = SermonSeries & { sermon_count: number };
+/** 시리즈 회차 전용 — 회차 카드·사이드바가 읽는 스칼라만, 관계 join 없음 (P5) */
+export type SeriesEpisodeItem = Pick<
+  Sermon,
+  | 'id'
+  | 'series_order'
+  | 'sermon_date'
+  | 'video_id'
+  | 'video_provider'
+  | 'thumbnail_url'
+  | 'title'
+  | 'scripture'
+  | 'duration'
+>;
+
+/** 공개·admin 소비처가 실제 읽는 필드 union — allSeries 셀렉트와 1:1 대조 유지 (P5) */
+export type SeriesWithSermonCount = Pick<
+  SermonSeries,
+  'id' | 'slug' | 'title' | 'description' | 'cover_image_url' | 'started_at' | 'ended_at'
+> & { sermon_count: number };
 
 /** 시리즈 상세 페이지: 시리즈 단건 + 회차(설교) */
 export type SeriesDetail = {
   series: SeriesWithSermonCount;
-  episodes: SermonWithRelations[];
+  episodes: SeriesEpisodeItem[];
 };
 
-export type PreacherWithSermonCount = Preacher & { sermon_count: number };
+/** 소비처가 실제 읽는 필드 union — allPreachers 셀렉트와 1:1 대조 유지 (P5) */
+export type PreacherWithSermonCount = Pick<Preacher, 'id' | 'name' | 'title'> & {
+  sermon_count: number;
+};
 
 export type SermonSortKey = 'recent' | 'oldest';
 

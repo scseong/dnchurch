@@ -10,16 +10,16 @@ import {
 } from '@tanstack/react-table';
 import { Pagination } from '@/components/ui';
 import { ITEM_PER_PAGE } from '@/constants/bulletin';
-import type { BulletinType } from '@/types/common';
+import type { BulletinWithImages } from '@/types/bulletin';
 import styles from './BulletinTable.module.scss';
 
 type BulletinTableProps = {
-  bulletins: BulletinType[] | null;
+  bulletins: BulletinWithImages[] | null;
   total: number;
   currentPage: number;
 };
 
-const columnHelper = createColumnHelper<BulletinType>();
+const columnHelper = createColumnHelper<BulletinWithImages>();
 
 export default function BulletinTable({ bulletins, total, currentPage }: BulletinTableProps) {
   // cell 콜백이 total·currentPage를 닫으므로 두 값이 바뀔 때만 재생성 (TanStack Table 안정 참조 권장)
