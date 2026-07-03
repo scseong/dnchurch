@@ -1,7 +1,13 @@
 .container {
-  padding: $spacing-64 $spacing-20;
+  // 상하 패딩을 전체 설교(/sermons/all) `.body`와 동일하게 — 모바일 top 20·bottom 80, 데스크톱 top·bottom 40.
+  padding: $spacing-20 $spacing-20 $section-gap-80;
   margin: 0 auto;
   max-width: $container-max;
+
+  @include respond-up($breakpoint-pc-sm) {
+    padding-top: $section-gap-40;
+    padding-bottom: $section-gap-40;
+  }
 
   .title {
     margin-bottom: $spacing-80;

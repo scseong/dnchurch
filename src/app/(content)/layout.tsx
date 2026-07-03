@@ -1,6 +1,6 @@
 import Script from 'next/script';
 import { PropsWithChildren } from 'react';
-import { Header, Hero, Footer, BottomNav } from '@/components/layout';
+import { Header, Footer, BottomNav } from '@/components/layout';
 import KakaoScript from '@/components/lib/KakaoScript';
 import { getWorshipScheduleGroups } from '@/services/worship';
 import { SCROLL_THRESHOLD } from '@/constants';
@@ -24,10 +24,7 @@ export default async function ContentLayout({ children }: PropsWithChildren) {
       />
       <div className={styles.content_shell}>
         <Header />
-        <main id="main">
-          <Hero />
-          {children}
-        </main>
+        <main id="main">{children}</main>
         <Footer worshipLine={worshipLine} />
       </div>
       <BottomNav />

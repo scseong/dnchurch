@@ -7,6 +7,10 @@
   padding: $section-gap-64 $container-padding;
 }
 
+.blind_title {
+  @include blind;
+}
+
 .badge {
   @include text-caption-strong($color: $accent);
 }

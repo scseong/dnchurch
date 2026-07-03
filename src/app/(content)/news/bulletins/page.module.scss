@@ -1,3 +1,7 @@
+.blind_title {
+  @include blind;
+}
+
 .wrap {
   display: flex;
   gap: $spacing-20;
