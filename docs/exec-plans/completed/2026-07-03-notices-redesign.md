@@ -1,6 +1,6 @@
 # notices-redesign
 
-- **상태**: 🟡 진행 중
+- **상태**: ✅ 완료 (2026-07-03)
 - **시작일**: 2026-07-03
 - **브랜치**: feat/notices-redesign
 - **Open questions**: none
@@ -231,6 +231,25 @@ Codex 1차 검증 결과 (verbatim, 핵심 지적):
 
 - `src/app/(content)/news/notices/_component/table/PinIcon.tsx` — 이번 변경 전부터 어느 곳도 import하지 않는 죽은 파일. NoticeTable 삭제와 무관하게 이미 죽어 있었다(knip 기존 부채). `table/` 폴더째 남는다.
 - `NOTICE_CATEGORY_VARIANT` (`src/constants/notice.ts:24`) — 정의만 있고 사용처 0. 목업이 분류 라벨을 중립 회색으로 통일해 이번에도 살리지 않았다.
+
+## 회고
+
+### 잘된 것
+
+- Codex 3라운드(계획·B5 확장·구현 1차) 지적을 전부 코드로 직접 확인하고 반영했다. soft-delete·is_public 초안 노출, MobileHeader 가운데 정렬 조건, adjacent 동일 created_at 형제 누락처럼 커밋 뒤 실제로 깨지는 지점을 사전에 막았다.
+- 목업 재설계를 sermon-views-redesign이 세운 패턴(공유 Hero 제거 → MobileHeader + sr-only h1)에 맞춰, 콘텐츠 헤더 전략을 하나로 모았다(ADR 0021). 새 컴포넌트를 만들지 않고 기존 규약을 재사용했다.
+- PR 리뷰 6건을 중계 없이 코드로 검증했다. is_public 초안 노출·serving-people h1 상실 등 실제 버그 4건을 반영하고, `.single()` 500 오탐 1건은 `handle-response.ts`의 PGRST116 처리를 근거로 기각했다.
+
+### 다음에 할 것
+
+- 핀 행 cream 배경을 "유실 버그"로 오판해 복원했다가 되돌렸다. 동시 편집된 파일은 커밋·수정 전에 사용자 의도를 먼저 확인한다.
+- 이 환경의 브라우저 창이 366px 밑으로 안 줄어 모바일 시각 실측이 제한됐다. 다음엔 CDP device metrics override 같은 대안을 검토한다.
+
+### 발견된 부채 (→ tech-debt/active.md)
+
+- `bulletins/[id]/page.tsx`의 `generateStaticParams`도 notices와 같은 error-destructure 패턴 — try-catch 강화 검토.
+- 공지 in-app CRUD가 생기면 `noticeCache` 태그(`notice`·`notice-detail-<id>` 등)를 `updateTag`로 무효화하는 배선 필요(현재 외부 관리·하루 revalidate).
+- 기존 dead code: `_component/table/PinIcon.tsx`(미사용 파일·`table/` 폴더째), `NOTICE_CATEGORY_VARIANT`(`constants/notice.ts`).
 
 ## 검증 이력
 
