@@ -42,6 +42,8 @@ export default async function BulletinPage({ searchParams }: Props) {
 
   return (
     <MainContainer title="주보">
+      {/* Hero 제거로 사라진 페이지 제목 — 시각은 MobileHeader가 대신하고, 데스크톱·스크린리더용 h1을 둔다 */}
+      <h1 className={styles.blind_title}>주보</h1>
       <div className={styles.wrap}>
         <LatestBulletin
           title={latestBulletin?.title ?? ''}

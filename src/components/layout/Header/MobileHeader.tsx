@@ -18,8 +18,11 @@ export default function MobileHeader() {
   const { title, showBack } = resolveMobileHeader(pathname);
   const tabs = resolveSiblingTabs(pathname);
   const headerAction = resolveHeaderAction(pathname);
-  // 목업 재설계 — '교회 소개'(About 탭 전체)와 설교 전체 화면(홈·전체 설교·시리즈·상세)의 헤더 타이틀 가운데 정렬.
-  const centeredTitle = title === '교회 소개' || pathname.startsWith('/sermons');
+  // 목업 재설계 — '교회 소개'(About 탭 전체)·설교 전체 화면·공지사항(목록·상세)의 헤더 타이틀 가운데 정렬.
+  const centeredTitle =
+    title === '교회 소개' ||
+    pathname.startsWith('/sermons') ||
+    pathname.startsWith('/news/notices');
   const { drawerOpen, openDrawer, closeDrawer } = useDrawerHistory();
   const [shareOpen, setShareOpen] = useState(false);
   const overlayRef = useRef<HTMLDivElement>(null);

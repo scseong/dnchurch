@@ -6,5 +6,5 @@ export const metadata: Metadata = {
 };
 
 export default function CommunityPage() {
-  return <ComingSoon />;
+  return <ComingSoon title="교제" />;
 }

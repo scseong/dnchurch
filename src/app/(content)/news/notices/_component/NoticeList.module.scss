@@ -1,0 +1,105 @@
+.list {
+  display: flex;
+  flex-direction: column;
+
+  li {
+    list-style: none;
+  }
+}
+
+// 목업: 흰 카드 없이 warm 페이지 면 위에 옅은 구분선으로 행을 나눈다.
+.row {
+  display: flex;
+  align-items: center;
+  gap: $spacing-12;
+  width: 100%;
+  padding: $spacing-20 $spacing-8;
+  text-align: left;
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid $home-border-divider;
+  cursor: pointer;
+
+  @include hover-bg-shift($bg-hover);
+  @include focus-ring('strong', calc(-1 * #{$focus-ring-offset}));
+}
+
+.body {
+  flex: 1 1 auto;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-8;
+}
+
+.head {
+  display: flex;
+  align-items: center;
+  gap: $spacing-6;
+}
+
+.pin {
+  flex-shrink: 0;
+  font-size: $font-size-13;
+  color: $home-gold-strong;
+}
+
+// 제목 + 첨부 클립을 한 묶음으로 — 클립이 제목 텍스트 바로 뒤에 붙는다(오른쪽 정렬 X).
+.title_wrap {
+  display: flex;
+  align-items: center;
+  gap: $spacing-2;
+  min-width: 0;
+  flex: 0 1 auto;
+}
+
+.title {
+  min-width: 0;
+  font-size: $font-size-15;
+  font-weight: $font-weight-bold;
+  color: $home-text;
+  @include ellipsis-multi(1);
+}
+
+.clip {
+  flex-shrink: 0;
+  font-size: $font-size-12;
+  color: $home-text-muted;
+}
+
+.preview {
+  font-size: $font-size-13;
+  color: $home-text-sub;
+  @include ellipsis-multi(1);
+}
+
+.foot {
+  display: flex;
+  align-items: center;
+  gap: $spacing-6;
+  font-size: $font-size-12;
+  color: $home-text-sub;
+}
+
+.dot {
+  color: $home-border;
+}
+
+.views {
+  display: inline-flex;
+  align-items: center;
+  gap: $spacing-4;
+}
+
+.chevron {
+  flex-shrink: 0;
+  font-size: $font-size-16;
+  color: $home-text-muted;
+}
+
+.empty {
+  padding: $spacing-64 0;
+  text-align: center;
+  font-size: $font-size-14;
+  color: $home-text-muted;
+}

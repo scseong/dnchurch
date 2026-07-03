@@ -6,5 +6,5 @@ export const metadata: Metadata = {
 };
 
 export default function NextGenPage() {
-  return <ComingSoon />;
+  return <ComingSoon title="다음세대" />;
 }

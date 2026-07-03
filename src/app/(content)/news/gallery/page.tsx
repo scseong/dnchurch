@@ -6,5 +6,5 @@ export const metadata: Metadata = {
 };
 
 export default function Gallery() {
-  return <ComingSoon />;
+  return <ComingSoon title="갤러리" />;
 }

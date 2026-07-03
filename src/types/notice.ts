@@ -4,12 +4,6 @@ import type { NoticeSortOption } from '@/constants/notice';
 export type NoticeType = Tables<'notices'>;
 export type NoticeCategory = Database['public']['Enums']['notice_category_enum'];
 
-// drawer가 실제로 읽는 필드만 — RSC payload에 전체 row 중복 직렬화 방지 (Codex 설계 검증 후속)
-export type NoticeDrawerItem = Pick<
-  NoticeType,
-  'id' | 'title' | 'category' | 'content' | 'created_at' | 'view_count' | 'attachment_url'
->;
-
 export interface TipTapContent {
   type: 'doc';
   content: TipTapNode[];

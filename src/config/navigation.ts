@@ -146,6 +146,11 @@ function isSermonDetailPath(pathname: string): boolean {
   return !!match && match[1] !== 'all' && match[1] !== 'series';
 }
 
+/** 공지사항 목록(/news/notices)·상세(/news/notices/[id]) 경로 판별. */
+function isNoticePath(pathname: string): boolean {
+  return pathname === '/news/notices' || /^\/news\/notices\/[^/]+$/.test(pathname);
+}
+
 /** 모바일 헤더 타이틀 + 뒤로가기 상태 해석 */
 export function resolveMobileHeader(pathname: string): { title: string; showBack: boolean } {
   if (pathname === '/') return { title: '대구동남교회', showBack: false };
@@ -158,6 +163,9 @@ export function resolveMobileHeader(pathname: string): { title: string; showBack
   if (pathname === '/sermons/all') return { title: '전체 설교', showBack: true };
   if (pathname === '/sermons/series') return { title: '시리즈', showBack: true };
   if (isSermonDetailPath(pathname)) return { title: '설교 상세', showBack: true };
+
+  // 목업 재설계: 공지사항 목록·상세는 Hero 없이 헤더에 '공지사항' 타이틀 + 뒤로가기로 둔다(notices-redesign).
+  if (isNoticePath(pathname)) return { title: '공지사항', showBack: true };
 
   const special = SPECIAL_PAGES[pathname];
   if (special) return { title: special, showBack: false };
@@ -193,6 +201,9 @@ export function resolveSiblingTabs(pathname: string): NavItem[] | null {
   // 목업 재설계: 설교 하위 뷰(전체 설교·시리즈·상세)는 형제 탭 없이 단일 헤더로 둔다(목업 일치).
   if (pathname.startsWith('/sermons/')) return null;
 
+  // 목업 재설계: 공지사항(목록·상세)은 형제 탭 없이 단일 헤더로 둔다(notices-redesign).
+  if (isNoticePath(pathname)) return null;
+
   for (const item of GNB_ITEMS) {
     if (!item.children?.length) continue;
     if (item.children.some((c) => isRouteMatch(pathname, c.href))) {
@@ -207,39 +218,10 @@ export function resolveSiblingTabs(pathname: string): NavItem[] | null {
 /** 헤더 우측 액션 종류. 기본은 전체 메뉴(drawer), 특정 화면은 다른 액션으로 교체 가능. */
 export type HeaderAction = 'menu' | 'share';
 
-/** pathname → 헤더 우측 액션. 설교 상세는 공유, 그 외는 전체 메뉴. */
+/** pathname → 헤더 우측 액션. 설교 상세·공지 상세는 공유, 그 외는 전체 메뉴. */
 export function resolveHeaderAction(pathname: string): HeaderAction {
   if (isSermonDetailPath(pathname)) return 'share';
+  // 공지 상세(/news/notices/[id])만 공유 — 목록(/news/notices)은 전체 메뉴 유지.
+  if (/^\/news\/notices\/[^/]+$/.test(pathname)) return 'share';
   return 'menu';
-}
-
-// ── Breadcrumb 세그먼트 해석 ──
-
-/** pathname을 GNB 기반으로 분해하여 [카테고리, 하위페이지] 세그먼트 반환 */
-export function resolveBreadcrumbSegments(
-  pathname: string
-): { label: string; href: string }[] {
-  const segments: { label: string; href: string }[] = [];
-
-  for (const item of GNB_ITEMS) {
-    if (!isActiveGnb(pathname, item)) continue;
-
-    segments.push({ label: item.label, href: item.href });
-
-    if (item.children) {
-      const matched = item.children.find((c) => isRouteMatch(pathname, c.href));
-      if (matched) {
-        segments.push({ label: matched.label, href: matched.href });
-      }
-    }
-    break;
-  }
-
-  // GNB에 없는 특수 페이지(검색·알림 등)는 단일 세그먼트로 표시
-  if (segments.length === 0) {
-    const special = SPECIAL_PAGES[pathname];
-    if (special) segments.push({ label: special, href: pathname });
-  }
-
-  return segments;
 }
