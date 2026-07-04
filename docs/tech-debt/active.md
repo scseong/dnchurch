@@ -4,6 +4,17 @@
 
 ---
 
+### 🟢 package-lock.json에 @tanstack/react-table 항목이 남음 — lockfile 이중 관리 (bulletins-redesign PR #143)
+
+- **무엇**: bulletins-redesign에서 유일 소비처(`BulletinTable`)를 지우고 `yarn remove @tanstack/react-table`로 `package.json`·`yarn.lock`에서 뺐으나 `package-lock.json`에는 항목이 남았다. 이 저장소는 yarn을 쓰는데 `package-lock.json`과 `yarn.lock`이 둘 다 커밋돼 있다(기존 상태).
+- **왜 지금 안 하나**: `yarn remove`는 `yarn.lock`만 갱신하고 `package-lock.json`은 안 건드린다. `npm`으로 맞추면 의존성 해석 차이로 diff가 크게 번져 이번 변경과 섞인다.
+- **다음 기준**: 두 lockfile 공존을 하나로 통일할 때 함께 정리한다. 이번 작업 범위 밖.
+- **마이그레이션 경로**: lockfile 전략을 yarn 단일로 정하면 `package-lock.json`을 지우고, npm 단일이면 `yarn.lock`을 지운 뒤 `npm install`로 재생성한다.
+- **확인**: `grep -c "@tanstack/react-table" package-lock.json` → 0
+- **발견일**: 2026-07-04 (bulletins-redesign PR #143 완료 — TanStack 표 제거)
+
+---
+
 ### 🟡 DB 위생 남은 분 — multiple_permissive·unused_index (2026-07-02 감사 P2)
 
 - **상태**: 등록만 (db-hygiene-migration PR #139에서 4카테고리 해소, 이 2개는 분리)

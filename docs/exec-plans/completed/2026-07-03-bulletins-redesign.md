@@ -1,6 +1,6 @@
 # bulletins-redesign
 
-- **상태**: 🟡 진행 중
+- **상태**: ✅ 완료 (2026-07-04)
 - **시작일**: 2026-07-03
 - **브랜치**: feat/bulletins-redesign
 - **Open questions**: none
@@ -236,4 +236,21 @@ Codex 확인(PASS): D1/D2/D3 해결됨.
 - `package-lock.json`에 남은 `@tanstack/react-table` 항목 정리
   - 이유: 이 저장소는 yarn을 쓰는데 `package-lock.json`과 `yarn.lock`이 둘 다 커밋돼 있다(기존 상태). `yarn remove`는 `yarn.lock`만 갱신하고 `package-lock.json`은 손대지 않는다. `npm`으로 맞추면 해석 차이로 diff가 크게 번져 이번 변경과 섞인다.
   - 다음 기준: 두 lockfile 공존을 하나로 통일할 때. 이번 작업 범위 밖.
-  - 기록 위치: 없음 (이 항목으로 남김)
+  - 기록 위치: `docs/tech-debt/active.md`에 등록(완료 이관과 같은 커밋).
+
+## 회고
+
+### 잘된 것
+
+- Codex 계획 검증의 지적 3건(이미지 다운로드 보존·동작하지 않는 삭제 아이콘·페이지 개수 어긋남)을 D1·D2·D3로 반영했다. featured 중복을 클라이언트 필터가 아니라 쿼리 `.neq('id', latestId)` + `count:'exact'`로 막아 페이지 수·offset이 어긋나지 않게 했다.
+- notices-redesign 패턴을 그대로 따라 헤더 분기(`isBulletinPath` + resolver 3개)·전용 상세·월별 보기 바텀시트를 일관되게 구성했다. 새 쿼리·RPC 없이 기존 `sunday_date`에서 `monthBuckets`를 파생했다.
+- 실기기 QA 피드백을 D8·D9로 반영했고, PR #143 봇 리뷰의 실제 버그(필터 없는 2페이지 첫 행이 '지난 주'로 잘못 표시되던 것)를 D10으로 잡았다.
+
+### 다음에 할 것
+
+- `/news` 별칭 헤더 불일치(PR #143 Codex 리뷰): `news/page.tsx`가 `bulletins/page`를 재export하는데 `isBulletinPath`가 `/news/bulletins`만 매칭해, `/news`로 들어오면 헤더가 다르다. 곧 진행할 네비게이션 QA task에서 canonical 처리와 함께 다룬다.
+- dev DB에 주보가 1건뿐이라 '첫 행 강조'·다중 페이지네이션은 로직만 확인했다. prod 데이터에서 눈으로 재확인한다.
+
+### 발견된 부채 (→ tech-debt/active.md)
+
+- `package-lock.json`에 `@tanstack/react-table`이 남았다. `yarn remove`가 `yarn.lock`만 갱신하고 `package-lock.json`은 안 건드려서다. 두 lockfile 공존을 하나로 통일할 때 정리한다. tech-debt/active.md에 등록했다.
