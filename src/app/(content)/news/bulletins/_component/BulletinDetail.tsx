@@ -54,7 +54,7 @@ export default function BulletinDetail({ bulletin, prevNext }: Props) {
 
       {imageIds.length > 0 ? (
         <div className={styles.images}>
-          <PhotoSwipe images={imageIds} width={2105} height={1488} pageBadge className={styles.gallery} />
+          <PhotoSwipe images={imageIds} width={2105} height={1488} pageBadge />
         </div>
       ) : (
         <div className={styles.no_image}>등록된 주보 이미지가 없습니다.</div>

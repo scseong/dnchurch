@@ -34,13 +34,16 @@ export default function BulletinShareCard({ title, imageUrl, files }: Props) {
 
   const handleSave = useCallback(() => {
     if (files.length === 0) return;
-    files.forEach((file) => {
-      const anchor = document.createElement('a');
-      anchor.href = file.downloadUrl;
-      anchor.download = file.filename;
-      document.body.appendChild(anchor);
-      anchor.click();
-      anchor.remove();
+    files.forEach((file, index) => {
+      // 연속 다운로드를 브라우저가 하나로 합치지 않게 간격을 둔다(간격 없이 동기 클릭하면 1장만 저장됨).
+      setTimeout(() => {
+        const anchor = document.createElement('a');
+        anchor.href = file.downloadUrl;
+        anchor.download = file.filename;
+        document.body.appendChild(anchor);
+        anchor.click();
+        anchor.remove();
+      }, index * 300);
     });
     info(`주보 이미지 ${files.length}장을 저장했어요`);
   }, [files, info]);
