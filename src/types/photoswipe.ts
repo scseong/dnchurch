@@ -15,4 +15,6 @@ export type PhotoSwipeProps = {
   height: number;
   sizes?: string;
   className?: string;
+  /** 각 이미지에 'i / N' 페이지 배지 + '확대' 힌트 오버레이를 켠다. 기본 false(기존 사용처 영향 없음). */
+  pageBadge?: boolean;
 };

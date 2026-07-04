@@ -1,0 +1,55 @@
+$action-icon-size: 2rem;
+
+.card {
+  padding: $padding-card;
+  border-radius: $radius-m;
+  background-color: $home-card;
+  border: 1px solid $home-border;
+}
+
+.title {
+  font-size: $font-size-15;
+  font-weight: $font-weight-bold;
+  color: $home-text;
+}
+
+.subtitle {
+  margin-top: $spacing-2;
+  font-size: $font-size-12;
+  color: $home-text-muted;
+}
+
+.actions {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: $spacing-8;
+  margin-top: $spacing-12;
+}
+
+.action {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: $spacing-6;
+  padding: $spacing-12 $spacing-6;
+  border-radius: $radius-s;
+  border: 1px solid $home-border;
+  background-color: $home-card-soft;
+  font-size: $font-size-12;
+  font-weight: $font-weight-semibold;
+  color: $home-gold-on-tint;
+  cursor: pointer;
+
+  @include hover-bg-shift($home-tint);
+  @include focus-ring('strong');
+
+  svg {
+    width: $action-icon-size;
+    height: $action-icon-size;
+  }
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: default;
+  }
+}

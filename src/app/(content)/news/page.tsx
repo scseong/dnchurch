@@ -10,7 +10,7 @@ export const metadata: Metadata = {
 export default function News({
   searchParams
 }: {
-  searchParams: Promise<{ page: string; year: string }>;
+  searchParams: Promise<{ page: string; year: string; month: string }>;
 }) {
   return <Bulletin searchParams={searchParams} />;
 }

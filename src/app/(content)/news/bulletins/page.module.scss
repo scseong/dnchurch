@@ -1,12 +1,14 @@
+// featured 카드 이미지가 데스크톱에서 과도하게 커지지 않게 읽기 폭을 제한한다(모바일은 전체 폭).
+$reading-max: 64rem;
+
 .blind_title {
   @include blind;
 }
 
 .wrap {
   display: flex;
-  gap: $spacing-20;
-
-  @include respond($breakpoint-tablet) {
-    flex-direction: column;
-  }
+  flex-direction: column;
+  gap: $content-gap-l;
+  max-width: $reading-max;
+  margin: 0 auto;
 }
