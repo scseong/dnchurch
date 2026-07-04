@@ -176,6 +176,14 @@
     - 확대 힌트 svg와 공유 카드 아이콘을 `font-size` 대신 `width`·`height`로 잡았다 — CSS가 react-icons의 `1em`과 raw svg의 고정 속성을 함께 덮어써 모든 아이콘이 같은 크기로 그려진다. 값은 rem(`$zoom-icon-size: 1.4rem`, `$action-icon-size: 2rem`)이라 주변 텍스트와 함께 커진다. 토큰에 없는 크기라 각 파일 위쪽 로컬 변수로 뒀다.
   - 결과: 이미지에 테두리가 생겼고, 카카오·링크·저장 아이콘이 같은 크기로 맞았다.
 
+- **D10 — PR #143 봇 리뷰 대응: '지난 주' 배지를 1페이지로 한정, 나머지는 이관·거절(사용자 확인)**
+  - 문제: Codex가 `BulletinArchive.tsx:100`에서 필터 없는 2페이지 이후에도 첫 행이 '지난 주'로 강조되는 버그를 짚었다 — 첫 행이 최신 직전이 아니라 더 오래된 주보다. Gemini는 `bulletin_images` null 방어와 `summary`의 날짜 파싱 분리(SRP)를, Codex는 `/news` 별칭의 헤더 불일치를 함께 지적했다.
+  - 해결:
+    - '지난 주' 배지: `highlight` 조건에 `currentPage === 1`을 더해 1페이지 맨 위만 강조한다.
+    - `/news` 헤더 불일치: 곧 진행할 네비게이션 QA task에서 `/news`·news 형제 탭을 다시 짜므로, 거기서 canonical 처리와 함께 다룬다.
+    - `bulletin_images` null 방어·날짜 파싱 분리: 넣지 않는다. `bulletin_images`는 non-null 배열 타입(Supabase가 `[]`를 반환)이라 크래시 경로가 없고, 3줄 파싱에 헬퍼를 더하는 건 단순함 우선과 맞지 않는다.
+  - 결과: 실제 버그 1건을 고쳤고, 나머지는 근거를 달아 이관·거절했다.
+
 ---
 
 ## Codex 계획 검증

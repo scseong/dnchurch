@@ -96,8 +96,9 @@ export default function BulletinArchive({
         <ul className={styles.list}>
           {items.map((bulletin, index) => {
             const [, listMonth, listDay] = bulletin.sunday_date.split('-');
-            // 필터 없을 때 맨 위(가장 최근) 지난 주보만 골드로 강조 + '지난 주' 배지.
-            const highlight = !hasFilter && index === 0;
+            // 필터 없고 1페이지일 때만 맨 위(가장 최근) 지난 주보를 골드로 강조 + '지난 주' 배지.
+            // 2페이지 이후 첫 행은 최신 직전이 아니라 더 오래된 주보라 강조하지 않는다.
+            const highlight = !hasFilter && currentPage === 1 && index === 0;
             return (
               <li key={bulletin.id}>
                 <Link
