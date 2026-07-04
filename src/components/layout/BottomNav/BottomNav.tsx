@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import clsx from 'clsx';
-import { LuHouse, LuChurch, LuUsers, LuBook, LuUser } from 'react-icons/lu';
+import { LuHouse, LuChurch, LuBook, LuNewspaper, LuUser } from 'react-icons/lu';
 import type { IconType } from 'react-icons';
 import { BOTTOM_NAV_ITEMS, isActiveBottomNav, type IconName } from '@/config/navigation';
 import styles from './BottomNav.module.scss';
@@ -11,8 +11,8 @@ import styles from './BottomNav.module.scss';
 const ICON_MAP: Record<IconName, IconType> = {
   home: LuHouse,
   about: LuChurch,
-  nextgen: LuUsers,
   sermon: LuBook,
+  news: LuNewspaper,
   mypage: LuUser
 };
 

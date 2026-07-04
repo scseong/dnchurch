@@ -22,7 +22,11 @@ export default function AboutTabNav() {
     <nav className={styles.nav} aria-label="교회 소개 섹션">
       <ul className={styles.list}>
         {TABS.map((tab) => {
-          const active = pathname === tab.href || pathname.startsWith(`${tab.href}/`);
+          // /about은 인사말을 직접 렌더하므로 '인사말' 탭을 활성으로 본다(/about/pastor와 같은 화면).
+          const active =
+            pathname === tab.href ||
+            pathname.startsWith(`${tab.href}/`) ||
+            (tab.href === '/about/pastor' && pathname === '/about');
 
           return (
             <li key={tab.href} className={styles.item}>

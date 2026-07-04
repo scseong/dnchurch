@@ -1,16 +1,7 @@
-import type { Metadata } from 'next';
-import Bulletin from './bulletins/page';
+import { redirect } from 'next/navigation';
 
-export const metadata: Metadata = {
-  title: '교회 소식',
-  // /news는 bulletins 페이지 재export라 같은 콘텐츠에 URL이 2개 — 검색엔진에는 원본만 알린다
-  alternates: { canonical: '/news/bulletins' }
-};
-
-export default function News({
-  searchParams
-}: {
-  searchParams: Promise<{ page: string; year: string; month: string }>;
-}) {
-  return <Bulletin searchParams={searchParams} />;
+// /news는 교회 소식 진입점 — 주보 목록(/news/bulletins)으로 보낸다.
+// 재export 대신 redirect로 둬야 헤더 '교회 소식'·형제 탭·활성 상태가 /news/bulletins에 정확히 붙는다.
+export default function NewsPage() {
+  redirect('/news/bulletins');
 }
