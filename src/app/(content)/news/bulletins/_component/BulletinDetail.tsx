@@ -4,7 +4,6 @@ import { IoChevronUp, IoChevronDown, IoCreateOutline } from 'react-icons/io5';
 import PhotoSwipe from '@/components/common/PhotoSwipeLazy';
 import UserIdMatcher from '@/app/_component/auth/UserIdMatcher';
 import BulletinShareCard from '@/app/(content)/news/bulletins/_component/BulletinShareCard';
-import { bulletinDateLabel } from '@/utils/date';
 import { generateFileDownloadList } from '@/utils/file';
 import { getOgImageUrl } from '@/utils/cloudinary';
 import type { BulletinWithImages } from '@/types/bulletin';
@@ -24,7 +23,7 @@ type Props = {
   prevNext: PrevNext;
 };
 
-/** 주보 상세 — 날짜·제목·이미지 갤러리(PhotoSwipe 확대)·공유 카드·이전/다음. 헤더 공유 버튼과 별개로 본문 공유 카드도 둔다(목업 일치). */
+/** 주보 상세 — 제목·이미지 갤러리(PhotoSwipe 확대)·공유 카드·이전/다음. 헤더 공유 버튼과 별개로 본문 공유 카드도 둔다(목업 일치). */
 export default function BulletinDetail({ bulletin, prevNext }: Props) {
   const imageIds = [...bulletin.bulletin_images]
     .sort((a, b) => a.order_index - b.order_index)
@@ -42,7 +41,6 @@ export default function BulletinDetail({ bulletin, prevNext }: Props) {
   return (
     <article className={styles.detail}>
       <header className={styles.head}>
-        <p className={styles.date}>{bulletinDateLabel(bulletin.sunday_date)}</p>
         <div className={styles.title_row}>
           <h1 className={styles.title}>{bulletin.title}</h1>
           <UserIdMatcher userId={bulletin.author_id ?? ''}>
@@ -56,7 +54,7 @@ export default function BulletinDetail({ bulletin, prevNext }: Props) {
 
       {imageIds.length > 0 ? (
         <div className={styles.images}>
-          <PhotoSwipe images={imageIds} width={2105} height={1488} pageBadge />
+          <PhotoSwipe images={imageIds} width={2105} height={1488} pageBadge className={styles.gallery} />
         </div>
       ) : (
         <div className={styles.no_image}>등록된 주보 이미지가 없습니다.</div>

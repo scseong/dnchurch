@@ -39,7 +39,7 @@
   display: inline-flex;
   align-items: center;
   gap: $spacing-6;
-  padding: $spacing-6 $spacing-12;
+  padding: $spacing-4 $spacing-12;
   border-radius: $radius-circle;
   background-color: $home-tint-card;
   border: 1px solid $home-border-gold;
@@ -47,13 +47,6 @@
   font-weight: $font-weight-semibold;
   color: $home-gold-strong;
   white-space: nowrap;
-}
-
-.badge_dot {
-  width: $spacing-6;
-  height: $spacing-6;
-  border-radius: $radius-circle;
-  background-color: $home-gold-strong;
 }
 
 .body {

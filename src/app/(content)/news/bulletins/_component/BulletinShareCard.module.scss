@@ -1,3 +1,5 @@
+$action-icon-size: 2rem;
+
 .card {
   padding: $padding-card;
   border-radius: $radius-m;
@@ -42,7 +44,8 @@
   @include focus-ring('strong');
 
   svg {
-    font-size: $font-size-20;
+    width: $action-icon-size;
+    height: $action-icon-size;
   }
 
   &:disabled {

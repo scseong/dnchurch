@@ -31,10 +31,7 @@ export default function FeaturedBulletin({ bulletin }: Props) {
         ) : (
           <div className={styles.cover_placeholder} aria-hidden="true" />
         )}
-        <span className={styles.badge}>
-          <span className={styles.badge_dot} aria-hidden="true" />
-          이번 주 주보
-        </span>
+        <span className={styles.badge}>이번 주 주보</span>
       </div>
       <div className={styles.body}>
         <p className={styles.date}>{bulletinDateLabel(bulletin.sunday_date)}</p>

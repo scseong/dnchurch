@@ -8,19 +8,10 @@ $reading-max: 64rem;
   margin: 0 auto;
 }
 
-// ── 헤더: 날짜 + 제목 + 관리자 수정 ──
+// ── 헤더: 제목 + 관리자 수정 ──
 .head {
-  display: flex;
-  flex-direction: column;
-  gap: $spacing-8;
   padding-bottom: $spacing-16;
   border-bottom: 1px solid $home-border-divider;
-}
-
-.date {
-  font-size: $font-size-13;
-  font-weight: $font-weight-semibold;
-  color: $home-gold-strong;
 }
 
 .title_row {
@@ -31,7 +22,7 @@ $reading-max: 64rem;
 }
 
 .title {
-  font-size: $font-size-20;
+  font-size: $font-size-18;
   font-weight: $font-weight-bold;
   line-height: $line-height-tight;
   color: $home-text;
@@ -73,6 +64,14 @@ $reading-max: 64rem;
       overflow: hidden;
     }
   }
+}
+
+// PhotoSwipe에 className으로 주입 — 각 이미지(.image_box)에 테두리. 컨테이너와 같은 radius로 모서리를 맞춘다.
+.gallery {
+  border: 1px solid $home-border;
+  border-radius: $radius-m;
+  box-sizing: border-box;
+  overflow: hidden;
 }
 
 .no_image {
