@@ -215,7 +215,7 @@ Codex 확인(PASS): D1/D2/D3 해결됨.
 
 ## Claude 2차 검증
 
-- **최종 판단**: 통과. ESLint·stylelint·build 통과, knip 신규 미사용 0(잔여는 기존 부채).
+- **최종 판단**: PASS. ESLint·stylelint·build 통과, knip 신규 미사용 0(잔여는 기존 부채).
 - **현재 판단**: Codex 1차 수정(month 단독 URL guard)을 diff로 다시 읽어 의도·범위를 확인했다. 삭제로 새로 생긴 미사용 2건(`KakaoShareButton.tsx`·`getKakaoShareUrl`)을 마저 지워 knip 신규를 0으로 맞췄다 — 둘 다 삭제한 `BoardHeader`·`LatestBulletin`·구 상세 page가 유일 소비처였다. `KakaoShareProps`는 `useKakaoShare.tsx`가 계속 쓰므로 미사용이 아니다.
 - **다음 행동**: `git add` 후 최종 verify-task, 사용자 승인 후 커밋.
 
