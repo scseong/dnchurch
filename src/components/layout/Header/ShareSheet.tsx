@@ -58,7 +58,7 @@ export default function ShareSheet({ open, onClose }: Props) {
   };
 
   return (
-    <BottomSheet open={open} onClose={onClose} title="공유">
+    <BottomSheet open={open} onClose={onClose} title="공유" enableHistory>
       <div className={styles.share_list}>
         <button
           type="button"

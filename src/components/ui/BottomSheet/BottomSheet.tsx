@@ -18,6 +18,8 @@ type Props = PropsWithChildren<{
   showClose?: boolean;
   /** 하단 액션 영역. 적용/저장 등 명시적 확정이 필요한 워크플로우에서만 사용. */
   footer?: ReactNode;
+  /** 열릴 때 history 엔트리를 쌓아 기기 뒤로가기로 시트를 닫는다(모바일 콘텐츠 시트용). @default false */
+  enableHistory?: boolean;
 }>;
 
 /**
@@ -40,6 +42,7 @@ export function BottomSheet({
   ariaLabel,
   showClose = true,
   footer,
+  enableHistory = false,
   children
 }: Props) {
   const overlayRef = useRef<HTMLDivElement>(null);
@@ -48,7 +51,8 @@ export function BottomSheet({
     onClose,
     title,
     ariaLabel,
-    componentName: 'BottomSheet'
+    componentName: 'BottomSheet',
+    enableHistory
   });
 
   const showHeader = Boolean(trimmedTitle) || showClose;

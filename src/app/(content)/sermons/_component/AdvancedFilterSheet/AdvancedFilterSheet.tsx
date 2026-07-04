@@ -62,6 +62,7 @@ export default function AdvancedFilterSheet({
       open={open}
       onClose={onClose}
       title="필터"
+      enableHistory
       footer={
         <Button fullWidth onClick={handleApply}>
           적용하기

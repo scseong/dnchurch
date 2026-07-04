@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useId, useRef } from 'react';
+import { usePathname } from 'next/navigation';
 import useScrollLock from './useScrollLock';
 
 const FOCUSABLE_SELECTOR =
@@ -18,6 +19,11 @@ type UseDialogOptions = {
    * @default false
    */
   disableEscape?: boolean;
+  /**
+   * 열릴 때 history 엔트리를 쌓아 기기 뒤로가기로 닫히게 한다(모바일 시트용).
+   * @default false
+   */
+  enableHistory?: boolean;
 };
 
 /**
@@ -32,7 +38,8 @@ export function useDialog({
   title,
   ariaLabel,
   componentName,
-  disableEscape = false
+  disableEscape = false,
+  enableHistory = false
 }: UseDialogOptions) {
   const panelRef = useRef<HTMLDivElement | null>(null);
   const previousActiveRef = useRef<HTMLElement | null>(null);
@@ -44,6 +51,52 @@ export function useDialog({
   });
 
   useScrollLock(open);
+
+  // ── 뒤로가기로 닫기(enableHistory) — 모바일 시트. controlled open을 history와 동기화한다. ──
+  const pushedRef = useRef(false);
+  const closingFromPopRef = useRef(false);
+  const pathname = usePathname();
+
+  useEffect(() => {
+    if (!enableHistory) return;
+
+    if (open && !pushedRef.current) {
+      // 열림 → 더미 엔트리를 쌓아 기기 back이 페이지 이동 대신 시트만 닫게 한다.
+      window.history.pushState({ __sheet: true }, '', window.location.href);
+      pushedRef.current = true;
+      return;
+    }
+    if (!open && pushedRef.current && !closingFromPopRef.current) {
+      // 버튼·backdrop으로 닫음(popstate 아님) → 쌓은 엔트리를 back으로 되돌린다.
+      // 단, 시트 안에서 router.replace/push로 URL을 바꿨다면 우리 엔트리가 사라졌으므로 back하지 않는다
+      // (back하면 방금 적용한 필터·쿼리가 되돌려진다 — 월별 보기·설교 필터).
+      pushedRef.current = false;
+      const historyState = window.history.state as { __sheet?: boolean } | null;
+      if (historyState?.__sheet) window.history.back();
+    }
+    closingFromPopRef.current = false;
+  }, [open, enableHistory]);
+
+  useEffect(() => {
+    if (!enableHistory) return;
+    const handlePopState = () => {
+      if (!pushedRef.current) return;
+      pushedRef.current = false;
+      // 뒤이은 open 동기화 effect가 back()을 다시 부르지 않게 표시.
+      closingFromPopRef.current = true;
+      onCloseRef.current();
+    };
+    window.addEventListener('popstate', handlePopState);
+    return () => window.removeEventListener('popstate', handlePopState);
+  }, [enableHistory]);
+
+  // 라우트 이동·unmount 시 쌓은 엔트리 추적을 정리한다.
+  useEffect(() => {
+    return () => {
+      pushedRef.current = false;
+      closingFromPopRef.current = false;
+    };
+  }, [pathname]);
 
   useEffect(() => {
     if (!open) return;
