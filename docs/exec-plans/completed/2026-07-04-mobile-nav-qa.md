@@ -1,6 +1,6 @@
 # mobile-nav-qa
 
-- **상태**: 🟡 진행 중
+- **상태**: ✅ 완료 (2026-07-05)
 - **시작일**: 2026-07-04
 - **브랜치**: feat/mobile-nav-qa
 - **Open questions**: none
@@ -147,11 +147,32 @@ D1 `SectionTabNav` refactor 1차 검증 (2026-07-05):
 
 ## 후속 작업
 
-<!-- 이번 범위 밖 일. Non-goals·체크리스트에 중복 기술 금지 — 여기에만.
-- <후속 항목>
-  - 이유: <왜 이번에 안 하나>
-  - 다음 기준: <언제 다시 하나>
-  - 기록 위치: `docs/tech-debt/active.md` 또는 없음 -->
+- 이 PR에 합쳐진 `fix/bulletins-detail-qa` 브랜치를 삭제한다 (커밋 `593ad5a`를 `c989b5d`로 cherry-pick해 PR #144에 넣었다).
+  - 이유: 별도 PR 없이 이 PR에 합쳤다.
+  - 다음 기준: 완료 처리 시 바로.
+  - 기록 위치: 없음.
+
+## 회고
+
+### 잘된 것
+
+- Codex 계획 검증(CHANGE_REQUEST 5건)·1차 검증(back이 필터를 되돌리던 버그·`/news` 활성 탭 없음 2건)을 구현 전·중에 잡아 반영했다.
+- 교회 소식·소개 탭을 공용 `SectionTabNav`로 합쳐 중복을 없앴다(Codex 1차 PASS high, 6개 체크포인트 모두 통과). 앞으로 탭 UI는 한 곳만 고치면 두 섹션에 함께 반영된다.
+- PR 봇 리뷰 4건을 코드로 직접 확인했다.
+  - codex 2건(`/news` 쿼리 누락·시트 synthetic 엔트리): 고쳤다.
+  - gemini 2건: 오탐(`PastorGreeting`은 서비스가 `?? []`로 정규화)·잠재(조건부 unmount는 현재 안 생김)로 근거를 회신했다.
+- 이미지 저장이 실기기에서 1장만 되던 것을 Web Share로 풀었다 — 모바일의 제스처당 다운로드 1개 제한을 공유 시트로 우회했고, 실기기에서 전체 저장을 확인했다.
+
+### 다음에 할 것
+
+- Web Share 제스처 활성이 만료되거나 이미지 fetch가 CORS로 막히면 이미지를 미리 fetch해둔다 — 지금은 실기기에서 정상이라 아직 안 손댔다.
+- `enableHistory`를 조건부 렌더 소비처에 붙일 일이 생기면 그때 useDialog unmount 정리를 함께 손본다.
+
+### 발견된 부채 (→ tech-debt 후보)
+
+- `enableHistory` 시트를 조건부 렌더(`{open && <Sheet/>}`)로 붙이는 소비처가 생기면, 열린 채 unmount될 때 synthetic 히스토리 엔트리가 남는다. 현재 소비처 5곳(ShareSheet 2·MonthPicker·AdvancedFilter·NewFamilyRegister)은 모두 항상 마운트돼 있어 지금은 안 생긴다. 조건부 렌더 소비처가 생기면 그때 터진다.
+- 시트가 URL을 바꾼 뒤 남는 synthetic 엔트리는 forward-stack에 그대로 쌓여 public History API로 지울 수 없다. Back 동작은 정확하고 forward 쪽만 안 보이게 남는다(구조적 한계).
+- knip 경고는 전부 기존 부채(useDebounce·useModal 등)로 이번 신규 0.
 
 ---
 
