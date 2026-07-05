@@ -1,0 +1,288 @@
+// ══════════════════════════════════════════
+// 갤러리 피드 — 목업(docs/references/gallery) 기반, warm 톤($home-*).
+// 읽기 전용: 카테고리 필터·사진 라이트박스만 인터랙티브, 반응·댓글은 정적 표시.
+// ══════════════════════════════════════════
+
+// ── 작성 입력 바 (컴포저 — 목업 상단, 읽기 전용 표시) ──
+.composer {
+  display: flex;
+  align-items: center;
+  gap: $spacing-10;
+  padding: $spacing-10 $spacing-12;
+  background-color: $bg-card;
+  border: 1px solid $home-border-divider;
+  border-radius: $radius-m;
+}
+
+.composer_avatar {
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  width: 3.8rem;
+  height: 3.8rem;
+  border-radius: $radius-circle;
+  background-color: $home-accent;
+  color: $txt-inverse;
+  font-size: $font-size-15;
+  font-weight: $font-weight-bold;
+}
+
+.composer_placeholder {
+  flex: 1;
+  min-width: 0;
+  font-size: $font-size-14;
+  font-weight: $font-weight-medium;
+  color: $home-text-muted;
+}
+
+.composer_camera {
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  width: 4rem;
+  height: 4rem;
+  border-radius: $radius-s;
+  background-color: $home-tint-card;
+  color: $home-accent;
+
+  svg {
+    width: 1.9rem;
+    height: 1.9rem;
+  }
+}
+
+// ── 피드 ──
+.feed {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-16;
+}
+
+.empty {
+  padding: $spacing-48 $spacing-24;
+  text-align: center;
+  font-size: $font-size-13;
+  font-weight: $font-weight-semibold;
+  color: $home-text-muted;
+}
+
+// ── 게시글 카드 ──
+.card {
+  overflow: hidden;
+  background-color: $bg-card;
+  border: 1px solid $home-border-divider;
+  border-radius: $radius-l;
+}
+
+.head {
+  display: flex;
+  align-items: center;
+  gap: $spacing-10;
+  padding: $spacing-12 $spacing-12 $spacing-10;
+}
+
+.head_text {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-2;
+  min-width: 0;
+}
+
+.author {
+  font-size: $font-size-14;
+  font-weight: $font-weight-bold;
+  color: $home-text;
+}
+
+.meta {
+  font-size: $font-size-12;
+  font-weight: $font-weight-semibold;
+  color: $home-text-muted;
+}
+
+.caption {
+  padding: $spacing-12 $spacing-16 $spacing-4;
+  font-size: $font-size-14;
+  line-height: $line-height-body-reading;
+  color: $home-text;
+}
+
+// ── 사진 그리드 ──
+.media {
+  position: relative;
+}
+
+.media_tile {
+  position: relative;
+  display: block;
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  padding: 0;
+  border: none;
+  overflow: hidden;
+  background-color: $home-tint;
+  cursor: pointer;
+
+  // 타일이 카드 가장자리에 붙고 `.card`가 overflow:hidden이라 바깥 링은 잘린다 → 안쪽 링으로 둔다.
+  @include focus-ring('strong', $offset: calc(-1 * $focus-ring-offset));
+}
+
+.media_single .media_tile {
+  aspect-ratio: 4 / 3;
+}
+
+.media_two,
+.media_four {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: $spacing-2;
+}
+
+.media_three,
+.media_many {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: $spacing-2;
+}
+
+.count_badge {
+  position: absolute;
+  top: $spacing-8;
+  right: $spacing-8;
+  display: inline-flex;
+  align-items: center;
+  gap: $spacing-4;
+  padding: $spacing-4 $spacing-8;
+  border-radius: $radius-circle;
+  background-color: $overlay-scrim;
+  font-size: $font-size-11;
+  font-weight: $font-weight-bold;
+  color: $txt-inverse;
+  pointer-events: none;
+}
+
+// ── 반응 (읽기 전용) ──
+.reactions {
+  display: flex;
+  gap: $spacing-4;
+  padding: $spacing-10 $spacing-12 $spacing-4;
+  overflow-x: auto;
+  scrollbar-width: none;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+.reaction {
+  display: inline-flex;
+  align-items: center;
+  gap: $spacing-4;
+  flex-shrink: 0;
+  padding: $spacing-6 $spacing-10;
+  border: 1px solid $home-border;
+  border-radius: $radius-circle;
+  background-color: $home-surface;
+  font-size: $font-size-12;
+  font-weight: $font-weight-bold;
+  color: $home-text-sub;
+  white-space: nowrap;
+}
+
+.reaction_on {
+  border-color: transparent;
+  background-color: $home-tint-card;
+  color: $home-accent;
+}
+
+.reaction_icon {
+  width: 1.4rem;
+  height: 1.4rem;
+  color: $home-text-muted;
+
+  .reaction_on & {
+    color: $home-accent;
+  }
+}
+
+.reaction_count {
+  color: inherit;
+}
+
+// ── 댓글 요약 + 미리보기 ──
+.foot {
+  display: flex;
+  align-items: center;
+  padding: $spacing-10 $spacing-16 $spacing-12;
+}
+
+.comment_stat {
+  display: inline-flex;
+  align-items: center;
+  gap: $spacing-6;
+  font-size: $font-size-13;
+  font-weight: $font-weight-semibold;
+  color: $home-text-sub;
+
+  svg {
+    width: 1.5rem;
+    height: 1.5rem;
+  }
+}
+
+.preview {
+  display: flex;
+  gap: $spacing-8;
+  padding: $spacing-12 $spacing-16;
+  border-top: 1px solid $home-border-divider;
+  background-color: $home-surface;
+}
+
+.preview_body {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-2;
+  min-width: 0;
+}
+
+.preview_author {
+  font-size: $font-size-12;
+  font-weight: $font-weight-bold;
+  color: $home-text;
+}
+
+.preview_text {
+  font-size: $font-size-13;
+  line-height: $line-height-body-default;
+  color: $home-text-sub;
+}
+
+.preview_more {
+  margin-top: $spacing-2;
+  font-size: $font-size-12;
+  font-weight: $font-weight-bold;
+  color: $home-accent;
+}
+
+// ── 아바타 ──
+.avatar_lg,
+.avatar_sm {
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  border-radius: $radius-circle;
+  color: $txt-inverse;
+  font-weight: $font-weight-bold;
+}
+
+.avatar_lg {
+  width: 4.2rem;
+  height: 4.2rem;
+  font-size: $font-size-16;
+}
+
+.avatar_sm {
+  width: 2.8rem;
+  height: 2.8rem;
+  font-size: $font-size-11;
+}
