@@ -8,7 +8,7 @@ export type NavItem = {
   children?: NavItem[];
 };
 
-export type IconName = 'home' | 'about' | 'nextgen' | 'sermon' | 'mypage';
+export type IconName = 'home' | 'about' | 'sermon' | 'news' | 'mypage';
 
 export type BottomNavItem = {
   label: string;
@@ -59,8 +59,8 @@ export const GNB_ITEMS: NavItem[] = [
 export const BOTTOM_NAV_ITEMS: BottomNavItem[] = [
   { label: '홈', href: '/', icon: 'home' },
   { label: '소개', href: '/about', icon: 'about' },
-  { label: '다음세대', href: '/next-gen', icon: 'nextgen' },
   { label: '설교', href: '/sermons', icon: 'sermon' },
+  { label: '소식', href: '/news/bulletins', icon: 'news' },
   { label: '마이페이지', href: '/mypage', icon: 'mypage' },
 ];
 
@@ -133,6 +133,7 @@ const SPECIAL_PAGES: Record<string, string> = {
 // 목업 재설계로 자체 in-page 섹션 탭(AboutTabNav)을 렌더하는 About 페이지.
 // 헤더는 '교회 소개' 타이틀 + 뒤로가기로 두고, 형제 탭은 끈다(AboutTabNav가 대체).
 export const ABOUT_REDESIGNED_ROUTES = new Set([
+  '/about',
   '/about/pastor',
   '/about/worship',
   '/about/location',
@@ -161,6 +162,22 @@ function isBulletinDetailPath(pathname: string): boolean {
   return /^\/news\/bulletins\/\d+$/.test(pathname);
 }
 
+/** 교회 소식 형제 탭 — 사용자 요청 순서(주보>공지사항>갤러리). GNB children 순서와 별개로 둔다(드로어·데스크톱 드롭다운 파급 방지). */
+const NEWS_TABS: NavItem[] = [
+  { label: '주보', href: '/news/bulletins' },
+  { label: '공지사항', href: '/news/notices' },
+  { label: '갤러리', href: '/news/gallery' }
+];
+
+/** 교회 소식 섹션 목록 경로(정확 매칭). 상세·create·update는 제외해 '교회 소식' 헤더·형제 탭을 안 받게 한다. (/news 자체는 /news/bulletins로 redirect) */
+function isNewsListPath(pathname: string): boolean {
+  return (
+    pathname === '/news/notices' ||
+    pathname === '/news/bulletins' ||
+    pathname === '/news/gallery'
+  );
+}
+
 /** 모바일 헤더 타이틀 + 뒤로가기 상태 해석 */
 export function resolveMobileHeader(pathname: string): { title: string; showBack: boolean } {
   if (pathname === '/') return { title: '대구동남교회', showBack: false };
@@ -174,10 +191,13 @@ export function resolveMobileHeader(pathname: string): { title: string; showBack
   if (pathname === '/sermons/series') return { title: '시리즈', showBack: true };
   if (isSermonDetailPath(pathname)) return { title: '설교 상세', showBack: true };
 
-  // 목업 재설계: 공지사항 목록·상세는 Hero 없이 헤더에 '공지사항' 타이틀 + 뒤로가기로 둔다(notices-redesign).
+  // 교회 소식 목록(주보·공지·갤러리 + /news)은 '교회 소식' 헤더 + 형제 탭. 상세는 아래 섹션 헤더를 유지한다.
+  if (isNewsListPath(pathname)) return { title: '교회 소식', showBack: true };
+
+  // 공지사항 상세(/news/notices/[id])는 '공지사항' 타이틀 + 뒤로가기(목록은 위 '교회 소식'이 처리).
   if (isNoticePath(pathname)) return { title: '공지사항', showBack: true };
 
-  // 목업 재설계: 주보 목록·상세·폼은 Hero 없이 헤더에 '주보' 타이틀 + 뒤로가기로 둔다(bulletins-redesign).
+  // 주보 상세·create·update(/news/bulletins/...)는 '주보' 타이틀 + 뒤로가기(목록은 위 '교회 소식'이 처리).
   if (isBulletinPath(pathname)) return { title: '주보', showBack: true };
 
   const special = SPECIAL_PAGES[pathname];
@@ -214,10 +234,13 @@ export function resolveSiblingTabs(pathname: string): NavItem[] | null {
   // 목업 재설계: 설교 하위 뷰(전체 설교·시리즈·상세)는 형제 탭 없이 단일 헤더로 둔다(목업 일치).
   if (pathname.startsWith('/sermons/')) return null;
 
-  // 목업 재설계: 공지사항(목록·상세)은 형제 탭 없이 단일 헤더로 둔다(notices-redesign).
+  // 교회 소식 목록에만 형제 탭(주보>공지사항>갤러리). 상세·폼은 아래에서 null.
+  if (isNewsListPath(pathname)) return NEWS_TABS;
+
+  // 공지사항 상세는 형제 탭 없이 단일 헤더로 둔다(목록은 위 isNewsListPath가 처리).
   if (isNoticePath(pathname)) return null;
 
-  // 목업 재설계: 주보(목록·상세·폼)는 형제 탭 없이 단일 헤더로 둔다(bulletins-redesign).
+  // 주보 상세·폼은 형제 탭 없이 단일 헤더로 둔다(목록은 위 isNewsListPath가 처리).
   if (isBulletinPath(pathname)) return null;
 
   for (const item of GNB_ITEMS) {

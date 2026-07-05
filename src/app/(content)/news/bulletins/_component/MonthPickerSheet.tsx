@@ -42,7 +42,7 @@ export default function MonthPickerSheet({
   const counts = pickYear != null ? monthBuckets[pickYear] ?? {} : {};
 
   return (
-    <BottomSheet open={open} onClose={onClose} title="월별 주보 찾기">
+    <BottomSheet open={open} onClose={onClose} title="월별 주보 찾기" enableHistory>
       <p className={styles.desc}>지난 주보를 월 단위로 찾아보세요.</p>
 
       {years.length > 0 && (

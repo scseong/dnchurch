@@ -100,7 +100,7 @@ export default function NewFamilyRegister() {
         새가족 등록하기
       </button>
 
-      <BottomSheet open={isOpen} onClose={closeSheet} title="새가족 등록">
+      <BottomSheet open={isOpen} onClose={closeSheet} title="새가족 등록" enableHistory>
         <p className={styles.subtitle}>
           교회에 처음 오신 여러분을 진심으로 환영합니다. 아래 정보를 남겨 주시면 새가족 담당자가
           따뜻하게 연락드리고, 첫걸음을 함께하겠습니다.

@@ -1,7 +1,19 @@
-import { redirect } from 'next/navigation';
+import type { Metadata } from 'next';
+import PastorGreeting from '@/app/(content)/about/_component/PastorGreeting';
+import { OPEN_GRAPH_BASE } from '@/config/seo';
 
-// /about 허브는 탭 기반 About 섹션으로 통합 — 첫 탭(인사말)으로 보낸다.
-// BottomNav·GNB·홈 카드 등 기존 /about 링크는 모두 이 redirect를 거쳐 /about/pastor로 도착한다.
+// /about은 교회 소개 진입점 — redirect 없이 인사말을 직접 렌더한다. canonical은 /about/pastor로 통일.
+export const metadata: Metadata = {
+  title: '인사말',
+  description: '대구동남교회 담임목사 인사말',
+  alternates: { canonical: '/about/pastor' },
+  openGraph: {
+    ...OPEN_GRAPH_BASE,
+    title: '인사말',
+    description: '대구동남교회 담임목사 인사말'
+  }
+};
+
 export default function AboutPage() {
-  redirect('/about/pastor');
+  return <PastorGreeting />;
 }

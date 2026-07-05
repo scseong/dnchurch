@@ -32,18 +32,44 @@ export default function BulletinShareCard({ title, imageUrl, files }: Props) {
     }
   }, [info, error]);
 
-  const handleSave = useCallback(() => {
+  const handleSave = useCallback(async () => {
     if (files.length === 0) return;
-    files.forEach((file) => {
-      const anchor = document.createElement('a');
-      anchor.href = file.downloadUrl;
-      anchor.download = file.filename;
-      document.body.appendChild(anchor);
-      anchor.click();
-      anchor.remove();
+
+    // 모바일은 한 제스처당 다운로드 1개만 허용해 여러 장이 안 내려간다.
+    // 터치 기기에서 Web Share가 되면 이미지를 파일로 모아 공유 시트로 넘겨 '사진에 저장'으로 한 번에 저장한다.
+    const canUseShare = navigator.maxTouchPoints > 0 && typeof navigator.canShare === 'function';
+
+    if (canUseShare) {
+      try {
+        const shareFiles = await Promise.all(
+          files.map(async ({ downloadUrl, filename }) => {
+            const blob = await (await fetch(downloadUrl)).blob();
+            return new File([blob], filename, { type: blob.type || 'image/jpeg' });
+          })
+        );
+        if (navigator.canShare({ files: shareFiles })) {
+          await navigator.share({ files: shareFiles, title });
+          return;
+        }
+      } catch (shareError) {
+        // 사용자가 공유 시트를 닫으면 AbortError — 조용히 끝낸다. 그 외 오류는 아래 다운로드로 폴백.
+        if (shareError instanceof DOMException && shareError.name === 'AbortError') return;
+      }
+    }
+
+    // 데스크톱·미지원: 파일마다 간격을 둬 다중 다운로드(연속 동기 클릭은 하나로 합쳐진다).
+    files.forEach(({ downloadUrl, filename }, index) => {
+      setTimeout(() => {
+        const anchor = document.createElement('a');
+        anchor.href = downloadUrl;
+        anchor.download = filename;
+        document.body.appendChild(anchor);
+        anchor.click();
+        anchor.remove();
+      }, index * 300);
     });
     info(`주보 이미지 ${files.length}장을 저장했어요`);
-  }, [files, info]);
+  }, [files, title, info]);
 
   return (
     <section className={styles.card}>

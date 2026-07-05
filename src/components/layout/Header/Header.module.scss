@@ -166,46 +166,7 @@ $indicator-height: 0.2rem;
   text-align: center;
 }
 
-// ── 하단 행: 형제 페이지 탭 (references/Greeting.jsx MSubTabs 일치) ──
-
-.mobile_tabs {
-  position: sticky;
-  top: $app-header-height;
-  z-index: calc($z-header - 1);
-  overflow-x: auto;
-  scrollbar-width: none;
-  background-color: $bg-card;
-  border-bottom: 0.1rem solid $border-card;
-
-  &::-webkit-scrollbar {
-    display: none;
-  }
-}
-
-.mobile_tab_list {
-  display: flex;
-  gap: $spacing-2;
-  padding: 0 $spacing-4;
-}
-
-.mobile_tab {
-  position: relative;
-  display: flex;
-  align-items: center;
-  padding: $spacing-12 $spacing-12;
-  font-size: $font-size-13;
-  font-weight: $font-weight-regular;
-  color: $txt-tertiary;
-  white-space: nowrap;
-  border-bottom: 0.2rem solid transparent;
-  transition: color $transition-duration-normal $transition-easing-default;
-}
-
-.mobile_tab_active {
-  color: $primary;
-  font-weight: $font-weight-semibold;
-  border-bottom-color: $primary;
-}
+// 하단 행 형제 페이지 탭은 공용 SectionTabNav로 렌더 — 스타일은 SectionTabNav.module.scss.
 
 // ══════════════════════════════════════════
 // DESKTOP HEADER

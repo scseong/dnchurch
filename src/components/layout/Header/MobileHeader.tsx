@@ -8,6 +8,7 @@ import { LuMenu } from 'react-icons/lu';
 import clsx from 'clsx';
 import { resolveHeaderAction, resolveMobileHeader, resolveSiblingTabs } from '@/config/navigation';
 import useDrawerHistory from '@/hooks/useDrawerHistory';
+import SectionTabNav from '@/components/layout/SectionTabNav/SectionTabNav';
 import Drawer from './Drawer';
 import ShareSheet from './ShareSheet';
 import styles from './Header.module.scss';
@@ -89,25 +90,7 @@ export default function MobileHeader() {
           </div>
         </div>
 
-        {tabs && (
-          <nav className={styles.mobile_tabs} aria-label="하위 페이지 탭">
-            <ul className={styles.mobile_tab_list}>
-              {tabs.map((tab) => (
-                <li key={tab.href}>
-                  <Link
-                    href={tab.href}
-                    className={clsx(
-                      styles.mobile_tab,
-                      pathname.startsWith(tab.href) && styles.mobile_tab_active
-                    )}
-                  >
-                    {tab.label}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </nav>
-        )}
+        {tabs && <SectionTabNav tabs={tabs} ariaLabel="하위 페이지 탭" />}
       </header>
 
       <div

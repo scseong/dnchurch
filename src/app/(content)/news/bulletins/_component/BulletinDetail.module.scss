@@ -58,20 +58,14 @@ $reading-max: 64rem;
     flex-direction: column;
     gap: $spacing-12;
 
-    // 각 이미지(PhotoSwipe .container) 모서리를 둥글게 클립한다(목업 일치).
+    // 각 이미지(PhotoSwipe .container)를 둥글게 클립하고 테두리를 두른다.
+    // border·radius·overflow를 같은 요소(클립하는 컨테이너)에 둬야 테두리가 안 잘린다.
     > div {
+      border: 1px solid $home-border;
       border-radius: $radius-m;
       overflow: hidden;
     }
   }
-}
-
-// PhotoSwipe에 className으로 주입 — 각 이미지(.image_box)에 테두리. 컨테이너와 같은 radius로 모서리를 맞춘다.
-.gallery {
-  border: 1px solid $home-border;
-  border-radius: $radius-m;
-  box-sizing: border-box;
-  overflow: hidden;
 }
 
 .no_image {
