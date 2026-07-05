@@ -1,6 +1,6 @@
 'use client';
 
-import { useRef } from 'react';
+import { useEffect, useRef } from 'react';
 import { Gallery, Item } from 'react-photoswipe-gallery';
 import clsx from 'clsx';
 import { LuImages } from 'react-icons/lu';
@@ -44,6 +44,20 @@ type Props = {
 
 export default function GalleryPhotos({ photos, onOpen }: Props) {
   const pswpRef = useRef<PhotoSwipeType | null>(null);
+  const lightboxOpenRef = useRef(false);
+
+  // 라이트박스가 열려 있는 동안 Escape는 라이트박스만 닫는다. 부모 시트(useDialog)의
+  // Escape 닫힘 리스너가 함께 실행돼 시트까지 닫히는 걸, 캡처 단계에서 가로채 막는다.
+  useEffect(() => {
+    const handleEscapeCapture = (e: KeyboardEvent) => {
+      if (e.key === 'Escape' && lightboxOpenRef.current) {
+        e.stopPropagation();
+        pswpRef.current?.close();
+      }
+    };
+    document.addEventListener('keydown', handleEscapeCapture, true);
+    return () => document.removeEventListener('keydown', handleEscapeCapture, true);
+  }, []);
 
   // 피드: 사진 그리드 전체가 상세 모달을 여는 버튼. 개별 라이트박스는 상세 안에서.
   if (onOpen) {
@@ -77,8 +91,16 @@ export default function GalleryPhotos({ photos, onOpen }: Props) {
     }
   };
 
+  const handleBeforeOpen = (pswp: PhotoSwipeType) => {
+    pswpRef.current = pswp;
+    lightboxOpenRef.current = true;
+    pswp.on('destroy', () => {
+      lightboxOpenRef.current = false;
+    });
+  };
+
   return (
-    <Gallery options={options} onBeforeOpen={(pswp) => (pswpRef.current = pswp)}>
+    <Gallery options={options} onBeforeOpen={handleBeforeOpen}>
       <div className={clsx(styles.media, layoutClass(photos.length))}>
         {photos.map((photo, index) => {
           const src = fetchSrc(photo);

@@ -38,6 +38,12 @@ export default function GalleryPostSheet({ post, onClose }: Props) {
   const { info } = useToastStore();
   const [comment, setComment] = useState('');
 
+  // 닫힘 애니메이션 동안 콘텐츠가 즉시 사라지지 않게 마지막 post를 유지한다(open은 post로, 렌더는 activePost로).
+  const [activePost, setActivePost] = useState<GalleryPost | null>(post);
+  if (post && post !== activePost) {
+    setActivePost(post);
+  }
+
   const handleSend = () => {
     info('댓글은 준비 중이에요. 곧 남길 수 있어요.');
     setComment('');
@@ -60,7 +66,7 @@ export default function GalleryPostSheet({ post, onClose }: Props) {
     </div>
   );
 
-  const footer = post ? (
+  const footer = activePost ? (
     <div className={styles.comment_form}>
       <span className={styles.self_avatar_sm} aria-hidden="true">
         나
@@ -90,50 +96,50 @@ export default function GalleryPostSheet({ post, onClose }: Props) {
       header={header}
       footer={footer}
     >
-      {post && (
+      {activePost && (
         <div className={styles.detail_body}>
           <div className={styles.detail_head}>
-            <Avatar initial={post.avatarInitial} color={post.avatarColor} size="lg" />
+            <Avatar initial={activePost.avatarInitial} color={activePost.avatarColor} size="lg" />
             <div className={styles.head_text}>
-              <b className={styles.author}>{post.authorName}</b>
+              <b className={styles.author}>{activePost.authorName}</b>
               <span className={styles.meta}>
-                {post.department} · {post.createdLabel}
+                {activePost.department} · {activePost.createdLabel}
               </span>
             </div>
-            <span className={styles.detail_cat}>{post.category}</span>
+            <span className={styles.detail_cat}>{activePost.category}</span>
           </div>
 
-          {post.photos.length > 0 && <GalleryPhotos photos={post.photos} />}
+          {activePost.photos.length > 0 && <GalleryPhotos photos={activePost.photos} />}
 
-          {post.text && <p className={styles.detail_caption}>{post.text}</p>}
+          {activePost.text && <p className={styles.detail_caption}>{activePost.text}</p>}
 
           <div className={styles.reactions}>
             {REACTION_TYPES.map((type) => {
               const Icon = REACTION_ICON[type];
-              const active = post.viewerReaction === type;
+              const active = activePost.viewerReaction === type;
 
               return (
                 <span key={type} className={clsx(styles.reaction, active && styles.reaction_on)}>
                   <Icon className={styles.reaction_icon} aria-hidden="true" />
                   <span className={styles.reaction_label}>{type}</span>
-                  <span className={styles.reaction_count}>{post.reactions[type]}</span>
+                  <span className={styles.reaction_count}>{activePost.reactions[type]}</span>
                 </span>
               );
             })}
           </div>
 
           <h3 className={styles.comment_title}>
-            댓글 <span className={styles.comment_num}>{post.commentCount}</span>
+            댓글 <span className={styles.comment_num}>{activePost.commentCount}</span>
           </h3>
 
-          {post.comments.length === 0 ? (
+          {activePost.comments.length === 0 ? (
             <p className={styles.comment_empty}>
               <LuMessageCircle aria-hidden="true" />
               아직 댓글이 없어요. 첫 마음을 남겨보세요.
             </p>
           ) : (
             <ul className={styles.comment_list}>
-              {post.comments.map((item) => (
+              {activePost.comments.map((item) => (
                 <li key={item.id} className={styles.comment_item}>
                   <Avatar initial={item.avatarInitial} color={item.avatarColor} size="sm" />
                   <div className={styles.comment_body}>
