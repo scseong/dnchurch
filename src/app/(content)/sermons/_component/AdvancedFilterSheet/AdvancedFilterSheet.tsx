@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react';
 import clsx from 'clsx';
 import { BottomSheet, Button } from '@/components/ui';
+import { closeDialogWithNavigation } from '@/hooks/useDialog';
 import useSermonFilter from '@/hooks/useSermonFilter';
 import { formatPreacherLabel } from '@/utils/sermon';
 import type {
@@ -47,14 +48,17 @@ export default function AdvancedFilterSheet({
     setDraft({ series: null, preacher: null, sort: 'recent' });
 
   const handleApply = () => {
-    setFilter({
-      series: draft.series,
-      preacher: draft.preacher,
-      sort: draft.sort === 'recent' ? null : draft.sort,
-      // 시트에 연도 컨트롤이 없으므로 적용 시 legacy ?year= 를 해제 — 모바일 탈출 경로
-      year: null
-    });
-    onClose();
+    closeDialogWithNavigation(
+      () =>
+        setFilter({
+          series: draft.series,
+          preacher: draft.preacher,
+          sort: draft.sort === 'recent' ? null : draft.sort,
+          // 시트에 연도 컨트롤이 없으므로 적용 시 legacy ?year= 를 해제 — 모바일 탈출 경로
+          year: null
+        }),
+      onClose
+    );
   };
 
   return (

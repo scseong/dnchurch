@@ -14,6 +14,7 @@ import { Pagination } from '@/components/ui';
 import CreateBulletinButton from '@/app/(content)/news/bulletins/_component/CreateBulletinButton';
 import MonthPickerSheet from '@/app/(content)/news/bulletins/_component/MonthPickerSheet';
 import { ITEM_PER_PAGE } from '@/constants/bulletin';
+import { closeDialogWithNavigation } from '@/hooks/useDialog';
 import type { BulletinWithImages, MonthBuckets } from '@/types/bulletin';
 import styles from './BulletinArchive.module.scss';
 
@@ -50,8 +51,10 @@ export default function BulletinArchive({
       params.set('year', String(nextYear));
       params.set('month', String(nextMonth));
       params.delete('page');
-      router.replace(`?${params.toString()}`, { scroll: false });
-      setSheetOpen(false);
+      closeDialogWithNavigation(
+        () => router.replace(`?${params.toString()}`, { scroll: false }),
+        () => setSheetOpen(false)
+      );
     },
     [searchParams, router]
   );
@@ -62,8 +65,10 @@ export default function BulletinArchive({
     params.delete('month');
     params.delete('page');
     const qs = params.toString();
-    router.replace(qs ? `?${qs}` : '?', { scroll: false });
-    setSheetOpen(false);
+    closeDialogWithNavigation(
+      () => router.replace(qs ? `?${qs}` : '?', { scroll: false }),
+      () => setSheetOpen(false)
+    );
   }, [searchParams, router]);
 
   return (

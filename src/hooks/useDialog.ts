@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useId, useRef } from 'react';
+import { useCallback, useEffect, useId, useRef } from 'react';
 import { usePathname } from 'next/navigation';
 import useScrollLock from './useScrollLock';
 
@@ -25,6 +25,24 @@ type UseDialogOptions = {
    */
   enableHistory?: boolean;
 };
+
+type DialogNavigate = () => void;
+type DialogClose = () => void;
+
+type HistoryNavigationController = {
+  closeWithNavigation: (navigate: DialogNavigate, close: DialogClose) => void;
+};
+
+let activeHistoryNavigationController: HistoryNavigationController | null = null;
+
+export function closeDialogWithNavigation(navigate: DialogNavigate, close: DialogClose) {
+  if (!activeHistoryNavigationController) {
+    navigate();
+    close();
+    return;
+  }
+  activeHistoryNavigationController.closeWithNavigation(navigate, close);
+}
 
 /**
  * Dialog 공통 동작: scroll lock, ESC, focus trap, open 시 첫 focusable로 포커스,
@@ -56,6 +74,46 @@ export function useDialog({
   const pushedRef = useRef(false);
   const closingFromPopRef = useRef(false);
   const pathname = usePathname();
+
+  const closeWithNavigation = useCallback((navigate: DialogNavigate, close: DialogClose) => {
+    if (!enableHistory || !pushedRef.current) {
+      navigate();
+      close();
+      return;
+    }
+
+    const historyState = window.history.state as { __sheet?: boolean } | null;
+    if (!historyState?.__sheet) {
+      navigate();
+      close();
+      return;
+    }
+
+    pushedRef.current = false;
+
+    const handleConsumedPopState = () => {
+      navigate();
+      close();
+    };
+
+    window.addEventListener('popstate', handleConsumedPopState, { once: true });
+    window.history.back();
+  }, [enableHistory]);
+
+  useEffect(() => {
+    if (!enableHistory || !open) return;
+
+    const controller: HistoryNavigationController = {
+      closeWithNavigation
+    };
+    activeHistoryNavigationController = controller;
+
+    return () => {
+      if (activeHistoryNavigationController === controller) {
+        activeHistoryNavigationController = null;
+      }
+    };
+  }, [open, enableHistory, closeWithNavigation]);
 
   useEffect(() => {
     if (!enableHistory) return;

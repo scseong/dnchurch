@@ -75,6 +75,11 @@ BottomNav·BottomSheet·교회 소식 탭·/about 라우팅을 실기기 QA에 �
   - 해결: `src/components/layout/SectionTabNav`(tsx+scss)를 만들어 마크업·스타일을 한 곳에 두고 `MobileHeader`(교회 소식)와 `AboutSectionShell`(교회 소개)이 함께 쓴다. 경로별 active 판별만 달라 `isActive` prop 하나로 받아 처리한다 — 교회 소식은 기본 매처(정확 매칭 + 하위 세그먼트), 교회 소개는 `/about`에서 인사말(`/about/pastor`) 탭을 활성으로 보는 특례를 넘긴다. active 언더라인은 Link 전체 폭이 아니라 라벨 텍스트 폭만 덮도록 inline-block span에 border를 뒀다(사용자 요청). `AboutTabNav`(tsx+scss)는 삭제하고 `Header.module.scss`의 탭 블록도 뺐다.
   - 결과: 탭 스타일을 한 곳에서 관리한다. 교회 소식 탭이 콘텐츠와 같은 warm 팔레트를 쓰고, 두 섹션 탭이 항상 같은 UI로 유지된다. 교회 소식 탭에도 `aria-current`가 붙어 접근성이 좋아졌다.
 
+- **D2 — PR #144 봇 리뷰 반영: `/news` 쿼리 보존 + 시트 히스토리 잔여 엔트리 정리**
+  - 문제: (③) `/news`를 단순 `redirect('/news/bulletins')`로 바꾸며 옛 재export가 넘기던 `searchParams`가 사라져 `/news?page=2`·`?year=&month=` 링크가 무필터로 떨어졌다. (④) `enableHistory` 시트가 `router.replace/push`로 URL을 바꾼 뒤 닫으면 synthetic 엔트리가 남아 back 한 스텝이 잉여로 생겼다.
+  - 해결: (③) redirect 대상에 원래 query string을 붙였다. (④) `useDialog`에 `closeDialogWithNavigation(navigate, close)`를 두어 URL 변경 전에 `history.back()`으로 synthetic 엔트리를 먼저 소비하고 그 popstate에서 navigation·close를 실행한다(`BulletinArchive`·`AdvancedFilterSheet`가 사용). 소비 대상과 엔트리가 같은 URL이라 재fetch·flash가 없다. 설계는 Codex, diff는 코드로 교차 확인했다.
+  - 결과: 기존 `/news?...` 링크 호환을 되살렸고, replace(월별)·push(설교 필터) 모두 Back이 이전 페이지로 정확히 돌아간다. gemini 지적 2건은 오탐(PastorGreeting은 서비스가 `?? []`로 정규화)·잠재(조건부 unmount는 현재 소비처에서 미발생)로 회신했다.
+
 ---
 
 <!-- 검증 섹션 — Codex/Claude 호출 후 verdict 1줄 갱신. harness-gate가 verdict token + placeholder denylist + 최소 30자 본문 강제. -->
