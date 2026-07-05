@@ -123,7 +123,8 @@
   background-color: $home-tint;
   cursor: pointer;
 
-  @include focus-ring('strong');
+  // 타일이 카드 가장자리에 붙고 `.card`가 overflow:hidden이라 바깥 링은 잘린다 → 안쪽 링으로 둔다.
+  @include focus-ring('strong', $offset: calc(-1 * $focus-ring-offset));
 }
 
 .media_single .media_tile {
