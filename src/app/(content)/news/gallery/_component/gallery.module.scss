@@ -3,15 +3,21 @@
 // 읽기 전용: 카테고리 필터·사진 라이트박스만 인터랙티브, 반응·댓글은 정적 표시.
 // ══════════════════════════════════════════
 
-// ── 작성 입력 바 (컴포저 — 목업 상단, 읽기 전용 표시) ──
+// ── 작성 입력 바 (컴포저 — 탭 시 작성 모달) ──
 .composer {
   display: flex;
   align-items: center;
   gap: $spacing-10;
+  width: 100%;
   padding: $spacing-10 $spacing-12;
   background-color: $bg-card;
   border: 1px solid $home-border-divider;
   border-radius: $radius-m;
+  text-align: left;
+  cursor: pointer;
+
+  @include hover-bg-shift($bg-hover);
+  @include focus-ring('strong');
 }
 
 .composer_avatar {
@@ -112,22 +118,42 @@
   position: relative;
 }
 
-.media_tile {
+// 피드: 사진 그리드 전체가 상세 열기 버튼
+.media_open {
+  position: relative;
+  display: block;
+  width: 100%;
+  padding: 0;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+
+  // 카드 overflow:hidden에 바깥 링이 잘려 안쪽 offset으로 둔다.
+  @include focus-ring('strong', $offset: calc(-1 * $focus-ring-offset));
+}
+
+// 타일 공통 면 — 라이트박스 버튼(.media_tile)·정적 span(.media_tile_static) 공용
+.media_tile,
+.media_tile_static {
   position: relative;
   display: block;
   width: 100%;
   aspect-ratio: 1 / 1;
-  padding: 0;
-  border: none;
   overflow: hidden;
   background-color: $home-tint;
-  cursor: pointer;
-
-  // 타일이 카드 가장자리에 붙고 `.card`가 overflow:hidden이라 바깥 링은 잘린다 → 안쪽 링으로 둔다.
-  @include focus-ring('strong', $offset: calc(-1 * $focus-ring-offset));
 }
 
-.media_single .media_tile {
+// 상세 모달 라이트박스 타일 — 버튼. 모달 body엔 clip이 없어 바깥 링 OK.
+.media_tile {
+  padding: 0;
+  border: none;
+  cursor: pointer;
+
+  @include focus-ring('strong');
+}
+
+.media_single .media_tile,
+.media_single .media_tile_static {
   aspect-ratio: 4 / 3;
 }
 
@@ -220,9 +246,16 @@
   display: inline-flex;
   align-items: center;
   gap: $spacing-6;
+  padding: 0;
+  border: none;
+  background: transparent;
   font-size: $font-size-13;
   font-weight: $font-weight-semibold;
   color: $home-text-sub;
+  cursor: pointer;
+
+  @include hover-color-shift($home-accent);
+  @include focus-ring('strong');
 
   svg {
     width: 1.5rem;
@@ -258,10 +291,18 @@
 }
 
 .preview_more {
+  align-self: flex-start;
   margin-top: $spacing-2;
+  padding: 0;
+  border: none;
+  background: transparent;
   font-size: $font-size-12;
   font-weight: $font-weight-bold;
   color: $home-accent;
+  text-align: left;
+  cursor: pointer;
+
+  @include focus-ring('strong');
 }
 
 // ── 아바타 ──
@@ -285,4 +326,381 @@
   width: 2.8rem;
   height: 2.8rem;
   font-size: $font-size-11;
+}
+
+// 내 아바타(작성자=본인 표시) — 데이터 hex 대신 warm 토큰.
+.self_avatar_sm {
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  width: 2.8rem;
+  height: 2.8rem;
+  border-radius: $radius-circle;
+  background-color: $home-accent;
+  color: $txt-inverse;
+  font-size: $font-size-11;
+  font-weight: $font-weight-bold;
+}
+
+// ══════════════════════════════════════════
+// 모달 공통 (작성·상세) — BottomSheet size="full"의 커스텀 헤더/바디
+// ══════════════════════════════════════════
+
+.sheet_head {
+  display: flex;
+  align-items: center;
+  gap: $spacing-6;
+  padding: $spacing-8 $spacing-12;
+}
+
+.sheet_head_btn {
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  width: 4rem;
+  height: 4rem;
+  padding: 0;
+  border: none;
+  border-radius: $radius-s;
+  background: transparent;
+  color: $home-text;
+  font-size: $font-size-22;
+  cursor: pointer;
+
+  @include hover-bg-shift($bg-hover);
+  @include focus-ring('strong');
+}
+
+.sheet_head_spacer {
+  flex-shrink: 0;
+  width: 4rem;
+}
+
+.sheet_title {
+  flex: 1;
+  font-size: $font-size-16;
+  font-weight: $font-weight-bold;
+  color: $home-text;
+  text-align: center;
+}
+
+// ── 작성 위저드 진행 세그먼트 ──
+.segments {
+  display: flex;
+  gap: $spacing-6;
+  padding: 0 $spacing-16 $spacing-12;
+}
+
+.segment {
+  flex: 1;
+  height: 0.4rem;
+  border-radius: $radius-circle;
+  background-color: $home-border;
+}
+
+.segment_on {
+  background-color: $home-accent;
+}
+
+// ── 작성 위저드 본문 ──
+.compose_body {
+  padding: $spacing-16 $spacing-20 $spacing-24;
+}
+
+.compose_title {
+  font-size: $font-size-20;
+  font-weight: $font-weight-bold;
+  color: $home-text;
+}
+
+.compose_sub {
+  margin-top: $spacing-4;
+  margin-bottom: $spacing-12;
+  font-size: $font-size-13;
+  font-weight: $font-weight-medium;
+  color: $home-text-sub;
+}
+
+.compose_hint {
+  margin-top: $spacing-8;
+  font-size: $font-size-12;
+  color: $home-text-muted;
+}
+
+.compose_label {
+  margin-top: $spacing-20;
+  margin-bottom: $spacing-8;
+  font-size: $font-size-13;
+  font-weight: $font-weight-bold;
+  color: $home-text-sub;
+}
+
+// 사진 선택 (mock 플레이스홀더 — 실제 업로드는 후속)
+.compose_photo_main,
+.compose_photo_add {
+  display: grid;
+  place-items: center;
+  gap: $spacing-4;
+  width: 100%;
+  border: 0.15rem dashed $home-border;
+  border-radius: $radius-m;
+  background-color: $home-surface;
+  color: $home-text-muted;
+  font-size: $font-size-13;
+  font-weight: $font-weight-semibold;
+  cursor: pointer;
+
+  @include hover-bg-shift($bg-hover);
+  @include focus-ring('strong');
+
+  svg {
+    width: 2.4rem;
+    height: 2.4rem;
+  }
+}
+
+.compose_photo_main {
+  margin-top: $spacing-16;
+  aspect-ratio: 4 / 3;
+}
+
+.compose_photo_row {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: $spacing-8;
+  margin-top: $spacing-8;
+}
+
+.compose_photo_add {
+  aspect-ratio: 1 / 1;
+  font-size: $font-size-12;
+
+  svg {
+    width: 1.8rem;
+    height: 1.8rem;
+  }
+}
+
+.compose_cats {
+  display: flex;
+  flex-wrap: wrap;
+  gap: $spacing-8;
+}
+
+// ── 공개 범위 라디오 카드 ──
+.scope_cards {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-8;
+}
+
+.scope_card {
+  display: flex;
+  align-items: center;
+  gap: $spacing-12;
+  padding: $spacing-12 $spacing-16;
+  border: 1px solid $home-border;
+  border-radius: $radius-m;
+  background-color: $bg-card;
+  text-align: left;
+  cursor: pointer;
+
+  @include hover-bg-shift($bg-hover);
+  @include focus-ring('strong');
+}
+
+.scope_card_on {
+  border-color: $home-accent;
+  background-color: $home-tint-card;
+
+  &:hover {
+    background-color: $home-tint-card;
+  }
+}
+
+.scope_check {
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  width: 2.4rem;
+  height: 2.4rem;
+  border: 0.15rem solid $home-border;
+  border-radius: $radius-xs;
+  color: $txt-inverse;
+
+  svg {
+    width: 1.5rem;
+    height: 1.5rem;
+  }
+}
+
+.scope_check_on {
+  border-color: transparent;
+  background-color: $home-accent;
+}
+
+.scope_text {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-2;
+  min-width: 0;
+}
+
+.scope_name {
+  font-size: $font-size-14;
+  font-weight: $font-weight-bold;
+  color: $home-text;
+}
+
+.scope_desc {
+  font-size: $font-size-12;
+  color: $home-text-muted;
+}
+
+// ══════════════════════════════════════════
+// 상세 모달
+// ══════════════════════════════════════════
+
+.detail_head {
+  display: flex;
+  align-items: center;
+  gap: $spacing-10;
+  padding: $spacing-16 $spacing-16 $spacing-12;
+}
+
+.detail_cat {
+  flex-shrink: 0;
+  margin-left: auto;
+  font-size: $font-size-12;
+  font-weight: $font-weight-bold;
+  color: $home-accent;
+}
+
+.detail_caption {
+  padding: $spacing-12 $spacing-16;
+  font-size: $font-size-14;
+  line-height: $line-height-body-reading;
+  color: $home-text;
+}
+
+.comment_title {
+  padding: $spacing-16 $spacing-16 $spacing-4;
+  border-top: 1px solid $home-border-divider;
+  font-size: $font-size-14;
+  font-weight: $font-weight-bold;
+  color: $home-text;
+}
+
+.comment_num {
+  margin-left: $spacing-2;
+  color: $home-accent;
+}
+
+.comment_empty {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: $spacing-6;
+  padding: $spacing-24;
+  font-size: $font-size-13;
+  color: $home-text-muted;
+
+  svg {
+    width: 1.6rem;
+    height: 1.6rem;
+  }
+}
+
+.comment_list {
+  list-style: none;
+}
+
+.comment_item {
+  display: flex;
+  gap: $spacing-10;
+  padding: $spacing-12 $spacing-16;
+  border-top: 1px solid $home-border-divider;
+}
+
+.comment_body {
+  flex: 1;
+  min-width: 0;
+}
+
+.comment_meta {
+  display: flex;
+  align-items: baseline;
+  gap: $spacing-6;
+}
+
+.comment_author {
+  font-size: $font-size-13;
+  font-weight: $font-weight-bold;
+  color: $home-text;
+}
+
+.comment_time {
+  font-size: $font-size-11;
+  color: $home-text-muted;
+}
+
+.comment_text {
+  margin-top: $spacing-2;
+  font-size: $font-size-13;
+  line-height: $line-height-body-default;
+  color: $home-text-sub;
+}
+
+.comment_actions {
+  display: flex;
+  gap: $spacing-16;
+  margin-top: $spacing-6;
+}
+
+.comment_action {
+  font-size: $font-size-11;
+  font-weight: $font-weight-bold;
+  color: $home-text-muted;
+}
+
+// ── 댓글 입력 (상세 모달 푸터) ──
+.comment_form {
+  display: flex;
+  align-items: center;
+  gap: $spacing-8;
+  flex: 1;
+}
+
+.comment_input {
+  flex: 1;
+  min-width: 0;
+
+  // Textarea 기본 min-height(≈78px)·16px는 댓글 한 줄 바엔 과해 낮춘다(autoGrow로 입력 시 늘어남).
+  textarea {
+    min-height: 3.6rem;
+    font-size: $font-size-14;
+  }
+}
+
+// 전송 — 원형 아이콘 버튼(댓글 컴포저 도메인 컨트롤).
+.comment_send {
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  width: 3.6rem;
+  height: 3.6rem;
+  padding: 0;
+  border: none;
+  border-radius: $radius-circle;
+  background-color: $home-accent;
+  color: $txt-inverse;
+  cursor: pointer;
+
+  @include hover-bg-shift($home-accent-hover);
+  @include focus-ring('strong');
+
+  svg {
+    width: 1.7rem;
+    height: 1.7rem;
+  }
 }

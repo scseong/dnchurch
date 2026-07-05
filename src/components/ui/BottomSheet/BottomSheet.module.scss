@@ -56,6 +56,30 @@
   }
 }
 
+// 풀스크린 변형 — 모바일은 화면 전체, PC는 좁은 중앙 모달. 콘텐츠가 자체 패딩을 갖는다.
+.sheet.full {
+  height: 100dvh;
+  max-height: none;
+  border-radius: 0;
+
+  .body {
+    padding: 0;
+  }
+
+  @include respond-up($breakpoint-pc-sm) {
+    height: auto;
+    max-height: 90dvh;
+    min-width: 0;
+    width: min(46rem, 100%);
+    border-radius: $radius-l;
+  }
+}
+
+// 커스텀 헤더 슬롯 — 콘텐츠가 스타일을 소유한다(뒤로가기·진행바·우측 액션).
+.custom_header {
+  flex-shrink: 0;
+}
+
 .handle {
   flex-shrink: 0;
   width: 3.6rem;

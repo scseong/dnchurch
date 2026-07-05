@@ -1,3 +1,5 @@
+'use client';
+
 import clsx from 'clsx';
 import type { IconType } from 'react-icons';
 import { LuSun, LuHeart, LuFlame, LuSparkles, LuMessageCircle } from 'react-icons/lu';
@@ -14,7 +16,14 @@ const REACTION_ICON: Record<ReactionType, IconType> = {
   축복: LuSparkles
 };
 
-export default function GalleryPostCard({ post }: { post: GalleryPost }) {
+type Props = {
+  post: GalleryPost;
+  onOpenDetail: () => void;
+};
+
+export default function GalleryPostCard({ post, onOpenDetail }: Props) {
+  const topComment = post.comments[0] ?? null;
+
   return (
     <article className={styles.card}>
       <header className={styles.head}>
@@ -27,7 +36,7 @@ export default function GalleryPostCard({ post }: { post: GalleryPost }) {
         </div>
       </header>
 
-      {post.photos.length > 0 && <GalleryPhotos photos={post.photos} />}
+      {post.photos.length > 0 && <GalleryPhotos photos={post.photos} onOpen={onOpenDetail} />}
 
       {post.text && <p className={styles.caption}>{post.text}</p>}
 
@@ -48,24 +57,22 @@ export default function GalleryPostCard({ post }: { post: GalleryPost }) {
       </div>
 
       <div className={styles.foot}>
-        <span className={styles.comment_stat}>
+        <button type="button" className={styles.comment_stat} onClick={onOpenDetail}>
           <LuMessageCircle aria-hidden="true" />
           댓글 {post.commentCount}
-        </span>
+        </button>
       </div>
 
-      {post.topComment && (
+      {topComment && (
         <div className={styles.preview}>
-          <Avatar
-            initial={post.topComment.avatarInitial}
-            color={post.topComment.avatarColor}
-            size="sm"
-          />
+          <Avatar initial={topComment.avatarInitial} color={topComment.avatarColor} size="sm" />
           <div className={styles.preview_body}>
-            <b className={styles.preview_author}>{post.topComment.authorName}</b>
-            <span className={styles.preview_text}>{post.topComment.text}</span>
+            <b className={styles.preview_author}>{topComment.authorName}</b>
+            <span className={styles.preview_text}>{topComment.text}</span>
             {post.commentCount > 1 && (
-              <span className={styles.preview_more}>댓글 {post.commentCount}개 모두 보기</span>
+              <button type="button" className={styles.preview_more} onClick={onOpenDetail}>
+                댓글 {post.commentCount}개 모두 보기
+              </button>
             )}
           </div>
         </div>

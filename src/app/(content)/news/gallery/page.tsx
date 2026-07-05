@@ -1,7 +1,6 @@
 import type { Metadata } from 'next';
 import MainContainer from '@/components/layout/container/MainContainer';
-import GalleryComposer from './_component/GalleryComposer';
-import GalleryFeed from './_component/GalleryFeed';
+import GalleryBoard from './_component/GalleryBoard';
 import { GALLERY_POSTS } from './_data/posts';
 import styles from './page.module.scss';
 
@@ -16,8 +15,7 @@ export default function GalleryPage() {
       {/* Hero 제거로 사라진 페이지 제목 — 시각은 MobileHeader가 대신하고, 데스크톱·스크린리더용 h1을 둔다 */}
       <h1 className={styles.blind_title}>갤러리</h1>
       <div className={styles.wrap}>
-        <GalleryComposer />
-        <GalleryFeed posts={GALLERY_POSTS} />
+        <GalleryBoard posts={GALLERY_POSTS} />
       </div>
     </MainContainer>
   );
