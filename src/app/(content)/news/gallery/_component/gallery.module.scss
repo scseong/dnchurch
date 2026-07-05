@@ -675,10 +675,9 @@
   flex: 1;
   min-width: 0;
 
-  // Textarea 기본 min-height(≈78px)·16px는 댓글 한 줄 바엔 과해 낮춘다(autoGrow로 입력 시 늘어남).
+  // Textarea 기본 min-height(8rem)는 댓글 한 줄 바엔 과해 낮춘다(font-size는 전역 13px 상속, autoGrow로 늘어남).
   textarea {
     min-height: 3.6rem;
-    font-size: $font-size-14;
   }
 }
 

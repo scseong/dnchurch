@@ -20,7 +20,7 @@
   width: 100%;
   min-height: 8rem;
   padding: $spacing-12;
-  font-size: $font-size-16; // iOS auto-zoom 방지
+  font-size: $font-size-13;
   font-family: inherit;
   line-height: $line-height-base;
   color: $txt-primary;
@@ -32,6 +32,7 @@
 
   &::placeholder {
     color: $txt-tertiary;
+    font-size: inherit;
   }
 
   &:hover:not(:disabled):not([readonly]) {
