@@ -68,6 +68,13 @@ BottomNav·BottomSheet·교회 소식 탭·/about 라우팅을 실기기 QA에 �
 
 - `node scripts/verify-task.mjs mobile-nav-qa`
 
+## 의사결정 로그
+
+- **D1 — 교회 소식·소개 섹션 탭을 공용 `SectionTabNav` 한 컴포넌트로 합침 (PR #144 QA 후속)**
+  - 문제: 형제 탭이 두 곳에 따로 구현돼 있었다 — 교회 소식은 `MobileHeader`의 인라인 `.mobile_tab*`, 교회 소개는 전용 `AboutTabNav` 컴포넌트. QA에서 두 탭 UI를 같게 맞추려니 같은 스타일을 두 파일에 두 번씩 고쳐야 했고, 앞으로도 어긋날 위험이 있었다.
+  - 해결: `src/components/layout/SectionTabNav`(tsx+scss)를 만들어 마크업·스타일을 한 곳에 두고 `MobileHeader`(교회 소식)와 `AboutSectionShell`(교회 소개)이 함께 쓴다. 경로별 active 판별만 달라 `isActive` prop 하나로 받아 처리한다 — 교회 소식은 기본 매처(정확 매칭 + 하위 세그먼트), 교회 소개는 `/about`에서 인사말(`/about/pastor`) 탭을 활성으로 보는 특례를 넘긴다. active 언더라인은 Link 전체 폭이 아니라 라벨 텍스트 폭만 덮도록 inline-block span에 border를 뒀다(사용자 요청). `AboutTabNav`(tsx+scss)는 삭제하고 `Header.module.scss`의 탭 블록도 뺐다.
+  - 결과: 탭 스타일을 한 곳에서 관리한다. 교회 소식 탭이 콘텐츠와 같은 warm 팔레트를 쓰고, 두 섹션 탭이 항상 같은 UI로 유지된다. 교회 소식 탭에도 `aria-current`가 붙어 접근성이 좋아졌다.
+
 ---
 
 <!-- 검증 섹션 — Codex/Claude 호출 후 verdict 1줄 갱신. harness-gate가 verdict token + placeholder denylist + 최소 30자 본문 강제. -->
@@ -97,16 +104,25 @@ Codex 핵심 지적(요약):
 - [material] `/news`는 bulletins 콘텐츠를 보이지만 `MobileHeader`의 `pathname.startsWith(tab.href)` 활성 계산에서 어느 탭과도 안 맞는다. → `/news`→`/news/bulletins` redirect로 수정.
 - 정상 확인: popstate 루프·double back 없음, pathname cleanup, Modal/Drawer/admin FilterDropdown early-return, 뉴스 상세는 섹션 헤더+null tabs, `/about` 파급(AboutSectionShell·AboutTabNav), BottomNav `/news/*` 활성, `nextgen` 제거 안전, canonical `/about/pastor`.
 
+D1 `SectionTabNav` refactor 1차 검증 (2026-07-05):
+
+- **결론**: PASS (confidence high) — material·expression 지적 0건.
+- Codex가 6개 체크포인트를 확인했다. (1) 공용 컴포넌트의 sticky `top`이 모바일 전용 뉴스 탭·전 뷰포트 About 탭 양쪽에 맞다(뉴스는 `respond-up($header-breakpoint)`에서 `display:none`). (2) 뉴스 active 기본 매처(`===` + 하위 세그먼트)가 목록 경로 정확 매칭이라 회귀·sibling-prefix 오탐 없다. (3) `/about`·`/about/pastor` 둘 다 `PastorGreeting`을 렌더하고 pastor 특례가 이 경우만 처리한다. (4) `aria-current`는 유지되고 뉴스 탭에도 붙으며 `.surface` warm 배경도 셸에 남는다. (5) `NavItem[]`→`SectionTab[]` 대입이 타입 안전하다. (6) transparent border 예약으로 레이아웃 시프트 없다.
+
 ## Claude 2차 검증
 
 - **최종 판단**: PASS
-- **현재 판단**: verify-task(run-id 20260704-220229) 필수 3단계 통과 — ESLint ✅·stylelint ✅·Build(next) ✅. knip 경고 10개 미사용 파일·27개 미사용 export는 전부 기존 부채(useDebounce·useModal·about/worship 컴포넌트 등)로 이번 변경과 무관하다 → **신규 0**. `'nextgen'` 제거로 생긴 orphan 없음(ESLint no-unused 통과). Codex 1차 수정 2건을 코드로 교차 확인했다. (1) `useDialog.ts:69-76` — 버튼·backdrop close 시 `window.history.state.__sheet`가 그대로일 때만 `history.back()`을 호출한다. 시트 안에서 `router.replace/push`로 URL을 바꾸면 우리 `__sheet` 엔트리가 사라져 back을 건너뛰므로, 방금 적용한 월별 보기·설교 필터가 되돌려지지 않는다. (2) `news/page.tsx` — `redirect('/news/bulletins')`로 바뀌었고 `isNewsListPath`(navigation.ts:173-179)에서 bare `/news`를 뺐다. 헤더 '교회 소식'·형제 탭·활성이 `/news/bulletins`에 붙는다.
-- **다음 행동**: 커밋 → push → `feat/mobile-nav-qa → develop` PR(Preview 빌드).
+- **현재 판단**: verify-task 통과(lint/styles/build/knip은 아래 표). knip 미사용 파일 10·export 27은 useDebounce·useModal 등 기존 부채라 이번 변경과 무관하다. Codex 수정·검증 항목을 코드로 교차 확인했다:
+  - `useDialog.ts:69-76` — 버튼·backdrop close 시 `window.history.state.__sheet`가 그대로일 때만 `history.back()`을 부른다. 시트 안에서 `router.replace/push`로 URL이 바뀌면 그 엔트리가 사라져 back을 건너뛰므로, 방금 적용한 월별 보기·설교 필터가 되돌려지지 않는다.
+  - `news/page.tsx` — `redirect('/news/bulletins')`로 바꾸고 `isNewsListPath`(navigation.ts)에서 bare `/news`를 뺐다. 헤더 '교회 소식'·형제 탭·활성이 `/news/bulletins`에 붙는다.
+  - `SectionTabNav`(D1) — 교회 소식·소개 탭이 이 공용 컴포넌트 하나를 쓴다. 뉴스 active는 기본 매처라 목록 경로 정확 매칭으로 회귀가 없고, 교회 소개는 `/about`→인사말 특례를 `isActive`로 넘긴다. `SectionTab` export를 지워 knip 신규 0을 지킨다.
+- **다음 행동**: 커밋한 뒤 push해 PR #144(`feat/mobile-nav-qa` → `develop`)를 갱신한다(Preview 빌드).
 
 | 시점 | run-id | lint | styles | build | knip신규 | 수동 확인 필요 |
 | --- | --- | --- | --- | --- | --- | --- |
-| Codex 1차 | 20260704-220229 | ✅ | ✅ | ✅ | 0 | 실기기 back·시트 닫기(item 1) |
-| Claude 2차 | 20260704-220229 | ✅ | ✅ | ✅ | 0 | Preview에서 5개 항목 실측 |
+| Codex 1차 (nav-QA) | 20260704-220229 | ✅ | ✅ | ✅ | 0 | 실기기 back·시트 닫기 |
+| Codex 1차 (SectionTabNav) | 20260705-131639 | ✅ | ✅ | ✅ | 0 | Preview 탭 UI 실측 |
+| Claude 2차 | 20260705-132327 | ✅ | ✅ | ✅ | 0 | Preview에서 전체 항목 실측 |
 
 ## 검증 이력
 
