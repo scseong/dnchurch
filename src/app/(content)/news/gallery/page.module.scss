@@ -6,9 +6,4 @@
   display: flex;
   flex-direction: column;
   gap: $spacing-16;
-
-  // 피드는 소셜 단일 컬럼 — 데스크톱에서 과하게 넓어지지 않게 읽기 폭으로 가둔다.
-  width: 100%;
-  max-width: 62rem;
-  margin: 0 auto;
 }

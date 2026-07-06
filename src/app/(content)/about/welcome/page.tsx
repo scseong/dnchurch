@@ -1,5 +1,5 @@
 import type { Metadata } from 'next';
-import LayoutContainer from '@/components/layout/container/LayoutContainer';
+import MainContainer from '@/components/layout/container/MainContainer';
 import { getWelcomePageData } from '@/services/about';
 import { OPEN_GRAPH_BASE } from '@/config/seo';
 import NewFamilyRegister from './_component/NewFamilyRegister';
@@ -44,7 +44,7 @@ export default async function WelcomePage() {
   return (
     <>
       <h1 className={styles.sr_only}>환영합니다</h1>
-      <LayoutContainer className={styles.container}>
+      <MainContainer title="환영합니다">
         {/* 환영 카드 */}
         <section className={styles.welcome_card}>
           <div className={styles.welcome_orb} aria-hidden="true" />
@@ -81,9 +81,9 @@ export default async function WelcomePage() {
             ))}
           </ol>
         </section>
-      </LayoutContainer>
+      </MainContainer>
 
-      {/* FAQ + CTA (full-width 배경) */}
+      {/* FAQ + CTA (프레임 폭 배경 밴드) */}
       <section className={styles.faq_section}>
         <div className={styles.faq_inner}>
           <header className={styles.faq_head}>

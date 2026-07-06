@@ -1,11 +1,6 @@
-// 상세도 목록과 같은 읽기 폭으로 맞춘다(데스크톱에서 이미지가 과도하게 커지지 않게).
-$reading-max: 64rem;
-
 .detail {
   display: flex;
   flex-direction: column;
-  max-width: $reading-max;
-  margin: 0 auto;
 }
 
 // ── 헤더: 제목 + 관리자 수정 ──

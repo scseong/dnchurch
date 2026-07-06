@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import clsx from 'clsx';
 import { LuNavigation } from 'react-icons/lu';
-import LayoutContainer from '@/components/layout/container/LayoutContainer';
+import MainContainer from '@/components/layout/container/MainContainer';
 import { getLocationPageData } from '@/services/about';
 import { displaySettingValue, parseFiniteFloat } from '@/utils/site-settings';
 import { CHURCH_INFO, OPEN_GRAPH_BASE } from '@/config/seo';
@@ -70,7 +70,7 @@ export default async function Directions() {
   return (
     <>
       <h1 className={styles.sr_only}>오시는 길</h1>
-      <LayoutContainer body>
+      <MainContainer title="오시는 길">
         <div className={styles.page}>
           <section className={styles.intro}>
             <div className={styles.map_wrap}>
@@ -188,7 +188,7 @@ export default async function Directions() {
             </div>
           </section>
         </div>
-      </LayoutContainer>
+      </MainContainer>
     </>
   );
 }

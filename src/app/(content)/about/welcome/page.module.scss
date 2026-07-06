@@ -9,16 +9,6 @@
   @include blind;
 }
 
-.container {
-  padding-top: $spacing-32;
-  padding-bottom: $spacing-32;
-
-  @include respond-up($breakpoint-pc-sm) {
-    padding-top: $spacing-64;
-    padding-bottom: $spacing-48;
-  }
-}
-
 // ── 환영 카드 ──
 
 .welcome_card {
@@ -56,7 +46,6 @@
 
 .welcome_inner {
   position: relative;
-  max-width: 72rem;
 }
 
 .eyebrow {
@@ -239,6 +228,9 @@
 // ── FAQ + CTA (full-width 섹션) ──
 
 .faq_section {
+  // 전체폭 밴드를 프레임 폭으로 가둔다. 콘텐츠는 좌우 padding으로 본문과 정렬.
+  max-width: $container-max;
+  margin: 0 auto;
   padding: $spacing-32 $container-padding;
   background: $home-card-soft;
   border-top: 0.1rem solid $home-border;
@@ -249,7 +241,6 @@
 }
 
 .faq_inner {
-  max-width: 88rem;
   margin: 0 auto;
 }
 
