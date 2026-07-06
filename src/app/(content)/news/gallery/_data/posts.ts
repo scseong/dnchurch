@@ -22,12 +22,32 @@ export const GALLERY_POSTS: GalleryPost[] = [
     reactions: { 은혜: 42, 아멘: 18, 기도해요: 7, 축복: 4 },
     viewerReaction: '은혜',
     commentCount: 3,
-    topComment: {
-      authorName: '박믿음',
-      avatarInitial: '박',
-      avatarColor: '#A9713B',
-      text: '저도 그 자리에 있었는데 정말 은혜로웠어요'
-    }
+    comments: [
+      {
+        id: 'c1-1',
+        authorName: '박믿음',
+        avatarInitial: '박',
+        avatarColor: '#A9713B',
+        createdLabel: '1시간 전',
+        text: '저도 그 자리에 있었는데 정말 은혜로웠어요'
+      },
+      {
+        id: 'c1-2',
+        authorName: '이한결',
+        avatarInitial: '이',
+        avatarColor: '#6B8E5A',
+        createdLabel: '52분 전',
+        text: '사진만 봐도 그날 감동이 다시 떠오르네요 🙏'
+      },
+      {
+        id: 'c1-3',
+        authorName: '최소망',
+        avatarInitial: '최',
+        avatarColor: '#B0975F',
+        createdLabel: '30분 전',
+        text: '다음 주에도 같이 찬양해요!'
+      }
+    ]
   },
   {
     id: 'p2',
@@ -42,12 +62,24 @@ export const GALLERY_POSTS: GalleryPost[] = [
     reactions: { 은혜: 51, 아멘: 12, 기도해요: 6, 축복: 23 },
     viewerReaction: '축복',
     commentCount: 5,
-    topComment: {
-      authorName: '정소망',
-      avatarInitial: '정',
-      avatarColor: '#9C6B4E',
-      text: '수고 많으셨어요! 다음엔 저도 함께할게요'
-    }
+    comments: [
+      {
+        id: 'c2-1',
+        authorName: '정소망',
+        avatarInitial: '정',
+        avatarColor: '#9C6B4E',
+        createdLabel: '20시간 전',
+        text: '수고 많으셨어요! 다음엔 저도 함께할게요'
+      },
+      {
+        id: 'c2-2',
+        authorName: '한사랑',
+        avatarInitial: '한',
+        avatarColor: '#7C8B54',
+        createdLabel: '18시간 전',
+        text: '깨끗해진 예배당 보니 마음이 다 개운하네요'
+      }
+    ]
   },
   {
     id: 'p3',
@@ -62,12 +94,24 @@ export const GALLERY_POSTS: GalleryPost[] = [
     reactions: { 은혜: 19, 아멘: 6, 기도해요: 14, 축복: 3 },
     viewerReaction: '기도해요',
     commentCount: 2,
-    topComment: {
-      authorName: '한사랑',
-      avatarInitial: '한',
-      avatarColor: '#7C8B54',
-      text: '아이들 표정이 너무 밝아요 🙂'
-    }
+    comments: [
+      {
+        id: 'c3-1',
+        authorName: '한사랑',
+        avatarInitial: '한',
+        avatarColor: '#7C8B54',
+        createdLabel: '2일 전',
+        text: '아이들 표정이 너무 밝아요 🙂'
+      },
+      {
+        id: 'c3-2',
+        authorName: '오평강',
+        avatarInitial: '오',
+        avatarColor: '#7A6654',
+        createdLabel: '1일 전',
+        text: '다음세대를 위해 기도합니다'
+      }
+    ]
   },
   {
     id: 'p4',
@@ -86,12 +130,32 @@ export const GALLERY_POSTS: GalleryPost[] = [
     reactions: { 은혜: 33, 아멘: 27, 기도해요: 9, 축복: 11 },
     viewerReaction: '아멘',
     commentCount: 8,
-    topComment: {
-      authorName: '김찬양',
-      avatarInitial: '김',
-      avatarColor: '#B67C4B',
-      text: '연습 소리만 들어도 벌써 은혜받아요'
-    }
+    comments: [
+      {
+        id: 'c4-1',
+        authorName: '김찬양',
+        avatarInitial: '김',
+        avatarColor: '#B67C4B',
+        createdLabel: '3일 전',
+        text: '연습 소리만 들어도 벌써 은혜받아요'
+      },
+      {
+        id: 'c4-2',
+        authorName: '이든',
+        avatarInitial: '이',
+        avatarColor: '#6B8E5A',
+        createdLabel: '2일 전',
+        text: '이번 주 찬양 기대할게요 🙌'
+      },
+      {
+        id: 'c4-3',
+        authorName: '한지혜',
+        avatarInitial: '한',
+        avatarColor: '#A57C55',
+        createdLabel: '2일 전',
+        text: '섬겨주셔서 감사합니다'
+      }
+    ]
   },
   {
     id: 'p5',
@@ -111,12 +175,16 @@ export const GALLERY_POSTS: GalleryPost[] = [
     reactions: { 은혜: 24, 아멘: 8, 기도해요: 5, 축복: 16 },
     viewerReaction: null,
     commentCount: 1,
-    topComment: {
-      authorName: '오은총',
-      avatarInitial: '오',
-      avatarColor: '#96693F',
-      text: '다음 모임이 벌써 기다려집니다'
-    }
+    comments: [
+      {
+        id: 'c5-1',
+        authorName: '오은총',
+        avatarInitial: '오',
+        avatarColor: '#96693F',
+        createdLabel: '4일 전',
+        text: '다음 모임이 벌써 기다려집니다'
+      }
+    ]
   },
   {
     id: 'p6',
@@ -131,6 +199,6 @@ export const GALLERY_POSTS: GalleryPost[] = [
     reactions: { 은혜: 15, 아멘: 21, 기도해요: 30, 축복: 6 },
     viewerReaction: '기도해요',
     commentCount: 0,
-    topComment: null
+    comments: []
   }
 ];

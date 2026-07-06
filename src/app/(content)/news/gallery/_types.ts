@@ -1,11 +1,17 @@
 // 갤러리 피드 읽기용 타입 — 참여형 스키마(docs/references/gallery)의 표시 필요분만 추린 축약본.
 // 쓰기(작성·반응 토글·댓글)·모더레이션·업로드는 후속 단계라 여기 없다.
 
-// 카테고리는 게시글 데이터에 남겨 스키마 충실도를 유지한다. 카테고리 필터 UI는 후속 단계라
-// 지금은 export하지 않는다(GalleryCategory 타입 파생에만 쓰인다).
-const GALLERY_CATEGORIES = ['주일예배', '청년부', '다음세대', '봉사', '나눔', '기도'] as const;
+export const GALLERY_CATEGORIES = ['주일예배', '청년부', '다음세대', '봉사', '나눔', '기도'] as const;
 
 export type GalleryCategory = (typeof GALLERY_CATEGORIES)[number];
+
+// 공개 범위 — 작성 모달 마지막 단계.
+export const GALLERY_SCOPES = [
+  { value: 'public', label: '전체 공개', desc: '모든 사람이 볼 수 있어요' },
+  { value: 'members', label: '교인만 보기', desc: '로그인한 교인에게만 보여요' }
+] as const;
+
+export type GalleryScope = (typeof GALLERY_SCOPES)[number]['value'];
 
 export const REACTION_TYPES = ['은혜', '아멘', '기도해요', '축복'] as const;
 
@@ -19,9 +25,11 @@ export type GalleryPhoto = {
 };
 
 export type GalleryComment = {
+  id: string;
   authorName: string;
   avatarInitial: string;
   avatarColor: string;
+  createdLabel: string; // mock 상대 시각 (예: '1시간 전')
   text: string;
 };
 
@@ -37,6 +45,6 @@ export type GalleryPost = {
   photos: GalleryPhoto[];
   reactions: Record<ReactionType, number>;
   viewerReaction: ReactionType | null; // 강조할 반응 (mock)
-  commentCount: number;
-  topComment: GalleryComment | null;
+  commentCount: number; // 총 댓글 수(표시용). 아래 comments는 화면에 노출하는 목록.
+  comments: GalleryComment[];
 };
