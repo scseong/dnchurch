@@ -153,13 +153,13 @@
 
 ## Claude 2차 검증
 
-- **최종 판단**: 브라우저 실측(전 페이지) + 정적 검사 통과. `yarn build`만 dev 중지 후 verify-task로 확정.
+- **최종 판단**: PASS (신뢰도 높음) — 브라우저 실측(전 페이지)·정적 검사·verify-task(build 포함)를 모두 통과했다. PR #147 리뷰 반영 커밋 71ccbcd까지 회귀가 없다.
 - **현재 판단**:
   - 넓은 뷰포트에서 데스크톱 전역 내비게이션(GNB)은 숨고(`offsetParent` null) 모바일 헤더가 뜬다. `data-layout='pc'` 강제 시 기존 PC UI(120rem+GNB)가 복원된다.
   - D4~D6 반영 뒤 전 `(content)` 페이지(홈·about 6·sermons·news 3·공지 상세·placeholder·로그인 리다이렉트)를 브라우저로 훑어 프레임 정렬·하단바 전체폭·본문 프레임 채움을 확인했다.
   - 본문 컨테이너 좌우가 전 페이지 `455/1307`(1784px 기준)로 같음을 `getBoundingClientRect`로 재측정했다.
   - 창 리사이즈가 이 환경에서 실뷰포트를 안 바꿔 넓은 화면 일부는 스크린샷을 못 떴다. 그 부분은 컨테이너 공통 CSS 패턴(`max-width: $container-max`, 앞서 실측한 것과 같음)으로 대신 확인했다.
-- **다음 행동**: dev 중지 → `verify-task.mjs mobile-frame-launch`(build 포함) → 커밋 승인 요청.
+- **다음 행동**: develop 브랜치로 머지를 기다린다. (커밋 a4f4ab9·3e64df7, PR #147 생성, 리뷰 반영 71ccbcd는 완료.)
 
 | 시점 | 도구 | 결과 |
 | --- | --- | --- |
@@ -167,7 +167,7 @@
 | 2차 | stylelint (`yarn lint:styles` 전체) | 0 error / 경고만 (기존 `$beige`·hex 부채) |
 | 2차 | knip | 신규 0 (`PC_LAYOUT_ROUTES` export 제거로 해소) |
 | 2차 | 브라우저 실측 (전 페이지·1784px·444px) | 확인:<br>- 헤더 전환<br>- 프레임 정렬<br>- 하단바 전체폭<br>- 본문 여백 같음 |
-| 2차 | `yarn build` | 미실행 (dev 구동 중) — dev 중지 후 verify-task |
+| 2차 | `verify-task` (build 포함) | PASS<br>- RUN_ID=20260706-221518<br>- Build(next) ~103s<br>- failed=0 / warned=Knip |
 
 ## 검증 이력
 
