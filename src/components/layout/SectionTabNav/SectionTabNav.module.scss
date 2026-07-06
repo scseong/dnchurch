@@ -23,11 +23,24 @@
   @include respond-up($breakpoint-pc-sm) {
     top: $header-height;
   }
+
+  // app 모드(출시): 모바일 헤더만 쓰므로 sticky offset을 모바일 헤더 높이로 되돌리고,
+  // 탭 바를 본문과 같은 프레임 폭으로 가운데 정렬한다(좁은 폭에선 무효).
+  [data-layout='app'] & {
+    top: $app-header-height;
+    max-width: $app-frame-max;
+    margin: 0 auto;
+  }
 }
 
 .list {
   display: flex;
   list-style: none;
+
+  // app 모드: 탭을 본문과 같은 gutter로 들여써서 헤더·본문과 좌우를 맞춘다(바 밑줄은 전체 폭 유지).
+  [data-layout='app'] & {
+    padding: 0 $container-padding;
+  }
 }
 
 .item {

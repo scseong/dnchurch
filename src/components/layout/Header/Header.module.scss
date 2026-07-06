@@ -21,6 +21,11 @@ $indicator-height: 0.2rem;
   @include respond-up($header-breakpoint) {
     display: none;
   }
+
+  // app 모드(출시): 모든 폭에서 모바일 헤더를 보여준다.
+  [data-layout='app'] & {
+    display: block;
+  }
 }
 
 // ── 상단 행: 타이틀 + 액션 ──
@@ -33,6 +38,9 @@ $indicator-height: 0.2rem;
   gap: $spacing-10;
   height: $app-header-height;
   padding: 0 $container-padding;
+  // 넓은 화면(app 프레임)에서 헤더 내용을 본문과 같은 폭으로 가운데 정렬(좁은 폭에선 무효).
+  max-width: $app-frame-max;
+  margin: 0 auto;
 }
 
 .mobile_left {
@@ -177,6 +185,11 @@ $indicator-height: 0.2rem;
 
   @include respond-up($header-breakpoint) {
     display: block;
+  }
+
+  // app 모드(출시): 모든 폭에서 PC 헤더를 숨긴다(PC 유지 라우트만 노출).
+  [data-layout='app'] & {
+    display: none;
   }
 }
 

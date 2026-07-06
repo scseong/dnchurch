@@ -89,6 +89,20 @@ export function isActiveBottomNav(pathname: string, href: string): boolean {
   return isRouteMatch(pathname, category);
 }
 
+// ── 레이아웃 모드 (출시: 태블릿 이하 모바일 프레임) ──
+
+/**
+ * PC UI(DesktopHeader + 120rem 콘텐츠)를 그대로 보여줄 라우트.
+ * 비어 있으면 모든 (content) 페이지가 모바일 프레임으로 나온다.
+ * PC 대응이 끝난 페이지를 여기에 넣으면 그 라우트(와 하위 세그먼트)만 기존 PC UI로 전환된다.
+ */
+const PC_LAYOUT_ROUTES: string[] = [];
+
+/** pathname이 PC UI 유지 대상인지 판별. 화이트리스트가 비면 항상 false(=모바일 프레임). */
+export function isPcLayoutRoute(pathname: string): boolean {
+  return PC_LAYOUT_ROUTES.some((route) => isRouteMatch(pathname, route));
+}
+
 // ── Label 해석 (Hero · MobileHeader) ──
 
 function buildLabelMap(): Map<string, string> {

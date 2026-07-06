@@ -11,4 +11,9 @@
   @include respond-up($header-breakpoint) {
     padding-bottom: 0;
   }
+
+  // app 모드(출시): 하단바가 모든 폭에서 보이므로 가림 방지 여백을 다시 유지한다.
+  [data-layout='app'] & {
+    padding-bottom: calc(#{$tab-bar-height} + env(safe-area-inset-bottom, 0rem));
+  }
 }

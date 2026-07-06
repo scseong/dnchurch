@@ -1,6 +1,6 @@
 import Script from 'next/script';
 import { PropsWithChildren } from 'react';
-import { Header, BottomNav } from '@/components/layout';
+import { Header, BottomNav, LayoutMode } from '@/components/layout';
 import KakaoScript from '@/components/lib/KakaoScript';
 // import { getWorshipScheduleGroups } from '@/services/worship'; // 임시: Footer 주석처리로 미사용
 import { SCROLL_THRESHOLD } from '@/constants';
@@ -14,7 +14,7 @@ export default function ContentLayout({ children }: PropsWithChildren) {
   // const worshipLine = sunday.map((service) => `${service.name} ${service.time}`).join(' · ');
 
   return (
-    <>
+    <LayoutMode>
       <Script src={API_KEY} strategy="afterInteractive" />
       <KakaoScript />
       <script
@@ -34,6 +34,6 @@ export default function ContentLayout({ children }: PropsWithChildren) {
         src="/scripts/scroll-reveal-observer.js"
         strategy="afterInteractive"
       />
-    </>
+    </LayoutMode>
   );
 }
