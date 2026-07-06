@@ -9,7 +9,7 @@ import { createSermonAction, updateSermonAction } from '@/actions/sermon.action'
 import { applyPatch } from '@/lib/sermon-form';
 import { useToastStore } from '@/store/toast.store';
 import { useAdminBreadcrumbStore } from '@/store/admin-breadcrumb.store';
-import type { Preacher, SeriesWithSermonCount } from '@/types/sermon';
+import type { PreacherWithSermonCount, SeriesWithSermonCount } from '@/types/sermon';
 import {
   INITIAL_SERMON_FORM_DATA,
   type SermonFormData,
@@ -22,7 +22,7 @@ interface SermonFormShellProps {
   sermonId?: number;
   initialTitle?: string;
   initialData?: SermonFormData;
-  preachers: Preacher[];
+  preachers: PreacherWithSermonCount[];
   series: SeriesWithSermonCount[];
 }
 

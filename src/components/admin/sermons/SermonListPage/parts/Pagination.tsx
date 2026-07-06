@@ -2,6 +2,7 @@
 
 import clsx from 'clsx';
 import { HiChevronLeft, HiChevronRight } from 'react-icons/hi';
+import { Select } from '@/components/ui';
 import { getTotalPages } from '@/utils/pagination';
 import styles from '../table.module.scss';
 
@@ -92,16 +93,12 @@ export default function Pagination({
       </div>
       <label className={styles.page_size}>
         페이지당
-        <select
-          value={pageSize}
-          onChange={(event) => onPageSizeChange(Number(event.target.value))}
-        >
-          {PAGE_SIZE_OPTIONS.map((size) => (
-            <option key={size} value={size}>
-              {size}개
-            </option>
-          ))}
-        </select>
+        <Select
+          value={String(pageSize)}
+          onChange={(value) => onPageSizeChange(Number(value))}
+          options={PAGE_SIZE_OPTIONS.map((size) => ({ value: String(size), label: `${size}개` }))}
+          aria-label="페이지당 항목 수"
+        />
       </label>
     </div>
   );

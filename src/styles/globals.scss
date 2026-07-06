@@ -50,6 +50,7 @@
   --container-padding: 2rem;
   --container-min: 37.5rem;
   --container-max: 76.8rem;
+  --app-frame-max: 76.8rem; // 모바일 프레임 최대 폭(태블릿 폭 기준 ≈768px) — app 모드 헤더·탭·본문 정렬 기준. 다른 컨테이너처럼 rem이라 넓은 뷰포트에선 밴드별로 커진다.
   --screensize-h-min: 81.2rem;
 }
 
@@ -184,7 +185,6 @@ button {
 
 #main {
   flex: 1;
-  padding-bottom: $tab-bar-height;
 
   @include respond-up($header-breakpoint) {
     padding-bottom: 0;
@@ -201,7 +201,7 @@ button {
   z-index: 9999;
 }
 
-.hidden-on-mobile {
+.hidden_on_mobile {
   display: none;
 
   @include respond-up($breakpoint-mobile-lg) {

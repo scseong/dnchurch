@@ -3,11 +3,13 @@
 import { useState } from 'react';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import useTimer from '@/hooks/useTimer';
-import { FormField, FormAlertMessage, FormSubmitButton } from '@/components/form';
+import { FormAlertMessage } from '@/components/form';
+import { Button, TextField } from '@/components/ui';
 import { requestPasswordResetEmailAction } from '@/actions/auth.action';
 import { EMAIL_RESEND_DELAY_SECONDS } from '@/constants/auth';
 import { FORM_VALIDATIONS } from '@/constants/validation';
 import { generateErrorMessage } from '@/utils/error';
+import styles from './authForm.module.scss';
 
 type Inputs = {
   email: string;
@@ -57,20 +59,24 @@ export default function EmailVerificationRequestForm() {
   };
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)}>
-      <FormField
+    <form onSubmit={handleSubmit(onSubmit)} className={styles.form} noValidate>
+      <TextField
         id="email"
         label="이메일"
+        hideLabel
         placeholder="example@service.com"
-        register={register('email', FORM_VALIDATIONS.email)}
         error={errors.email?.message}
-        blindLabel
+        {...register('email', FORM_VALIDATIONS.email)}
       />
-      <FormSubmitButton
-        isDisabled={!isValid || isRunning}
-        isSubmitting={isSubmitting}
-        label={getButtonContent()}
-      />
+      <Button
+        type="submit"
+        fullWidth
+        size="lg"
+        loading={isSubmitting}
+        disabled={!isValid || isRunning}
+      >
+        {getButtonContent()}
+      </Button>
       {alertMessage && (
         <FormAlertMessage
           type={alertType === 'success' ? 'success' : 'error'}

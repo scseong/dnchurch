@@ -1,8 +1,9 @@
+.blind_title {
+  @include blind;
+}
+
 .wrap {
   display: flex;
-  gap: $spacing-20;
-
-  @include respond($breakpoint-tablet) {
-    flex-direction: column;
-  }
+  flex-direction: column;
+  gap: $content-gap-l;
 }

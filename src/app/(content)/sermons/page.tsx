@@ -1,9 +1,10 @@
 import type { Metadata } from 'next';
-import { redirect } from 'next/navigation';
 import { LayoutContainer } from '@/components/layout';
+import { OPEN_GRAPH_BASE } from '@/config/seo';
 import { getAllSeries, getFeaturedSermon, getSermons } from '@/services/sermon';
 import SermonFeatured from './_component/SermonFeatured/SermonFeatured';
-import SermonRecentCarousel from './_component/SermonRecentCarousel/SermonRecentCarousel';
+import SermonHomeSearch from './_component/SermonHomeSearch';
+import SermonRecentList from './_component/SermonRecentList/SermonRecentList';
 import SermonSeriesCarousel from './_component/SermonSeriesCarousel/SermonSeriesCarousel';
 import styles from './page.module.scss';
 
@@ -17,32 +18,18 @@ export const metadata: Metadata = {
   description: PAGE_DESCRIPTION,
   alternates: { canonical: PAGE_CANONICAL },
   openGraph: {
+    ...OPEN_GRAPH_BASE,
     title: '설교',
     description: PAGE_DESCRIPTION,
-    url: PAGE_CANONICAL,
-    type: 'website'
+    url: PAGE_CANONICAL
   },
   twitter: { card: 'summary', title: '설교', description: PAGE_DESCRIPTION }
 };
 
-type SermonsPageProps = {
-  searchParams: Promise<Record<string, string | string[] | undefined>>;
-};
-
 // archive 뷰는 `/sermons/all`로 이관됨 (2026-05-14, exec-plan sermons-featured).
-// 기존 공유·인덱싱된 필터 URL(`/sermons?series=...&year=...&q=...`)이 Featured 카드만 보여주는 회귀를 막기 위해
-// 쿼리가 존재하면 `/sermons/all`로 query를 보존해 redirect한다.
-export default async function SermonsPage({ searchParams }: SermonsPageProps) {
-  const params = await searchParams;
-  const qs = new URLSearchParams();
-  for (const [key, value] of Object.entries(params)) {
-    if (value === undefined) continue;
-    if (Array.isArray(value)) value.forEach((v) => qs.append(key, v));
-    else qs.append(key, value);
-  }
-  const query = qs.toString();
-  if (query) redirect(`/sermons/all?${query}`);
-
+// 레거시 필터 URL(`/sermons?series=...&q=...`)의 `/sermons/all` redirect는 next.config.ts
+// redirects()가 담당 — 페이지에서 searchParams를 읽지 않아 이 라우트는 완전 정적으로 렌더된다.
+export default async function SermonsPage() {
   // Featured 1건이 캐러셀 첫 카드와 중복되지 않도록 pageSize +1 후 Featured ID 필터링 (sermons-recent-carousel D4).
   // 시리즈는 ended_at이 null인 진행 중만 메인 노출 (sermons-series-carousel D5).
   const [featured, recent, allSeries] = await Promise.all([
@@ -56,10 +43,15 @@ export default async function SermonsPage({ searchParams }: SermonsPageProps) {
   const ongoingSeries = allSeries.filter((series) => series.ended_at === null);
 
   return (
-    <LayoutContainer className={styles.sections}>
-      <SermonFeatured sermon={featured} />
-      <SermonRecentCarousel sermons={recentList} />
-      <SermonSeriesCarousel series={ongoingSeries} />
+    <LayoutContainer>
+      {/* Hero 밴드 제거로 사라진 페이지 h1 보전 — 헤더 '설교' 타이틀과 별개로 문서 구조상 h1 유지 */}
+      <h1 className={styles.blind_title}>설교</h1>
+      <SermonHomeSearch className={styles.search} />
+      <div className={styles.sections}>
+        <SermonFeatured sermon={featured} />
+        <SermonRecentList sermons={recentList} />
+        <SermonSeriesCarousel series={ongoingSeries} />
+      </div>
     </LayoutContainer>
   );
 }

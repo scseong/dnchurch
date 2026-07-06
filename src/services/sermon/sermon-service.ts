@@ -7,10 +7,11 @@ import type {
   SermonListParams,
   SermonWithRelations,
   SermonListItem,
+  SermonCardItem,
+  SeriesEpisodeItem,
   SeriesWithSermonCount,
   SeriesDetail,
   PreacherWithSermonCount,
-  YearCount,
   AdminSermon,
   AdminSermonListParams,
   SermonStatusTab
@@ -36,6 +37,20 @@ const SERMON_LIST_ITEM_SELECT = `
   id, slug, sermon_date, video_id, video_provider, thumbnail_url,
   title, scripture, service_type,
   preacher:preachers(name, title)
+`;
+
+/** 목록 카드 전용 셀렉트 — SermonCardItem과 1:1 (slug·summary는 의도적 superset, P5) */
+const SERMON_CARD_SELECT = `
+  id, slug, sermon_date, video_id, video_provider, thumbnail_url,
+  title, scripture, service_type, summary, duration,
+  preacher:preachers(name, title),
+  sermon_series(id, slug, title)
+`;
+
+/** 시리즈 회차 전용 셀렉트 — SeriesEpisodeItem과 1:1, 관계 join 없음 (P5) */
+const SERIES_EPISODE_SELECT = `
+  id, series_order, sermon_date, video_id, video_provider, thumbnail_url,
+  title, scripture, duration
 `;
 
 const ADMIN_SERMON_SELECT = `
@@ -80,7 +95,7 @@ export const sermonService = (supabase: SupabaseClient<Database>) => ({
   }: SermonListParams = {}) => {
     let query = supabase
       .from('sermons')
-      .select(SERMON_WITH_RELATIONS_SELECT, { count: 'exact' })
+      .select(SERMON_CARD_SELECT, { count: 'exact' })
       .eq('is_published', true)
       .is('deleted_at', null)
       .order('sermon_date', { ascending: sort === 'oldest' });
@@ -107,7 +122,7 @@ export const sermonService = (supabase: SupabaseClient<Database>) => ({
     const res = await query.range(from, to);
     const handled = handleResponse(res);
 
-    const sermons = (handled.data ?? []) as unknown as SermonWithRelations[];
+    const sermons = (handled.data ?? []) as unknown as SermonCardItem[];
     const total = handled.count ?? 0;
 
     return {
@@ -117,25 +132,11 @@ export const sermonService = (supabase: SupabaseClient<Database>) => ({
     };
   },
 
-  /** slug로 설교 상세(설교자·시리즈·리소스 포함) 조회 */
-  detailBySlug: async (slug: string) => {
-    const res = await supabase
-      .from('sermons')
-      .select(SERMON_WITH_RELATIONS_SELECT)
-      .eq('slug', slug)
-      .eq('is_published', true)
-      .is('deleted_at', null)
-      .maybeSingle();
-
-    const handled = handleResponse(res);
-    return (handled.data as unknown as SermonWithRelations | null) ?? null;
-  },
-
-  /** 활성 시리즈 전체를 published + 미삭제 설교 개수와 함께 조회 */
+  /** 활성 시리즈 전체를 published + 미삭제 설교 개수와 함께 조회 — 소비처 union 컬럼만 (P5) */
   allSeries: async (): Promise<SeriesWithSermonCount[]> => {
     const res = await supabase
       .from('sermon_series')
-      .select('*, sermons!inner(count)')
+      .select('id, slug, title, description, cover_image_url, started_at, ended_at, sermons!inner(count)')
       .eq('is_active', true)
       .eq('sermons.is_published', true)
       .is('sermons.deleted_at', null)
@@ -159,7 +160,7 @@ export const sermonService = (supabase: SupabaseClient<Database>) => ({
 
     const res = await supabase
       .from('sermons')
-      .select(SERMON_WITH_RELATIONS_SELECT)
+      .select(SERIES_EPISODE_SELECT)
       .eq('series_id', seriesHandled.data.id)
       .eq('is_published', true)
       .is('deleted_at', null)
@@ -167,7 +168,7 @@ export const sermonService = (supabase: SupabaseClient<Database>) => ({
       .order('sermon_date', { ascending: true });
 
     const handled = handleResponse(res);
-    return (handled.data ?? []) as unknown as SermonWithRelations[];
+    return (handled.data ?? []) as unknown as SeriesEpisodeItem[];
   },
 
   /**
@@ -188,7 +189,7 @@ export const sermonService = (supabase: SupabaseClient<Database>) => ({
 
     const res = await supabase
       .from('sermons')
-      .select(SERMON_WITH_RELATIONS_SELECT)
+      .select(SERIES_EPISODE_SELECT)
       .eq('series_id', id)
       .eq('is_published', true)
       .is('deleted_at', null)
@@ -196,7 +197,7 @@ export const sermonService = (supabase: SupabaseClient<Database>) => ({
       .order('sermon_date', { ascending: true });
 
     const handled = handleResponse(res);
-    const episodes = (handled.data ?? []) as unknown as SermonWithRelations[];
+    const episodes = (handled.data ?? []) as unknown as SeriesEpisodeItem[];
     const seriesRow = seriesHandled.data as unknown as SeriesWithSermonCount;
 
     return {
@@ -214,7 +215,7 @@ export const sermonService = (supabase: SupabaseClient<Database>) => ({
   allPreachers: async (): Promise<PreacherWithSermonCount[]> => {
     const res = await supabase
       .from('preachers')
-      .select('*, sermons!inner(count)')
+      .select('id, name, title, sermons!inner(count)')
       .eq('is_active', true)
       .eq('sermons.is_published', true)
       .is('sermons.deleted_at', null)
@@ -238,21 +239,18 @@ export const sermonService = (supabase: SupabaseClient<Database>) => ({
     return (handled.data ?? []) as unknown as SermonListItem[];
   },
 
-  /** 연도별 설교 편수 집계 (sermon_date projection + JS 집계) */
-  yearCounts: async (): Promise<YearCount[]> => {
+  /** 발행 설교 id만 최신순으로 조회 (generateStaticParams용) */
+  publishedIds: async (limit: number): Promise<number[]> => {
     const res = await supabase
       .from('sermons')
-      .select('sermon_date')
+      .select('id')
       .eq('is_published', true)
-      .is('deleted_at', null);
+      .is('deleted_at', null)
+      .order('sermon_date', { ascending: false })
+      .limit(limit);
+
     const handled = handleResponse(res);
-    const rows = (handled.data ?? []) as Array<{ sermon_date: string }>;
-    const map = new Map<number, number>();
-    for (const { sermon_date } of rows) {
-      const y = new Date(sermon_date).getFullYear();
-      map.set(y, (map.get(y) ?? 0) + 1);
-    }
-    return Array.from(map, ([year, count]) => ({ year, count })).sort((a, b) => b.year - a.year);
+    return ((handled.data ?? []) as Array<{ id: number }>).map((row) => row.id);
   },
 
   /** 활성 설교 전체 수 (count-only, rows 없이 head로 조회) */
@@ -268,9 +266,10 @@ export const sermonService = (supabase: SupabaseClient<Database>) => ({
 
   /** 설교 조회수 +1 (RPC `increment_sermon_views` 호출) */
   incrementViewCount: async (sermonId: number) => {
-    await supabase.rpc('increment_sermon_views', {
+    const { error } = await supabase.rpc('increment_sermon_views', {
       sermon_id: sermonId
     });
+    if (error) throw error;
   },
 
   /** [어드민] 설교 생성 — RPC create_sermon으로 sermon + resources 원자 INSERT */

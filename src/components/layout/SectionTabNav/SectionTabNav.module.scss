@@ -1,0 +1,78 @@
+// ══════════════════════════════════════════
+// 섹션 탭 바 — 교회 소식(헤더 형제 탭)·교회 소개 섹션 탭 공용.
+// warm 톤(_home.scss). active 언더라인은 라벨 텍스트 폭만 덮는다.
+// ══════════════════════════════════════════
+
+.nav {
+  position: sticky;
+  top: $app-header-height; // 모바일 헤더 높이 — 헤더 바로 아래에 고정
+  z-index: calc($z-header - 1);
+  overflow-x: auto;
+  scrollbar-width: none;
+  background-color: $home-surface;
+  border-bottom: 0.1rem solid $home-border;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+
+  @include respond-up($header-breakpoint) {
+    top: $header-height-compact;
+  }
+
+  @include respond-up($breakpoint-pc-sm) {
+    top: $header-height;
+  }
+
+  // app 모드(출시): 모바일 헤더만 쓰므로 sticky offset을 모바일 헤더 높이로 되돌리고,
+  // 탭 바를 본문과 같은 프레임 폭으로 가운데 정렬한다(좁은 폭에선 무효).
+  [data-layout='app'] & {
+    top: $app-header-height;
+    max-width: $app-frame-max;
+    margin: 0 auto;
+  }
+}
+
+.list {
+  display: flex;
+  list-style: none;
+
+  // app 모드: 탭을 본문과 같은 gutter로 들여써서 헤더·본문과 좌우를 맞춘다(바 밑줄은 전체 폭 유지).
+  [data-layout='app'] & {
+    padding: 0 $container-padding;
+  }
+}
+
+.item {
+  flex: 1;
+}
+
+.link {
+  display: block;
+  padding: $spacing-16 0 0;
+  color: $home-text-sub;
+  text-align: center;
+  text-decoration: none;
+
+  @include hover-color-shift($home-accent);
+  // 탭 바가 overflow:auto라 바깥 focus outline이 위·아래로 잘린다 → 안쪽 링으로 둔다.
+  @include focus-ring($offset: calc(-1 * $focus-ring-offset));
+}
+
+// active 언더라인이 Link 전체 폭이 아니라 텍스트 폭만 덮도록 inline-block 라벨에 border를 둔다.
+.label {
+  display: inline-block;
+  padding-bottom: $spacing-10;
+  font-size: $font-size-13;
+  font-weight: $font-weight-semibold;
+  border-bottom: 0.25rem solid transparent;
+}
+
+.active {
+  color: $home-accent-hover;
+}
+
+.active .label {
+  font-weight: $font-weight-bold;
+  border-bottom-color: $home-accent;
+}

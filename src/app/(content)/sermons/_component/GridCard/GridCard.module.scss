@@ -5,21 +5,20 @@ $thumb-width: 13rem;
 // 썸네일 우하단 duration — semantic 토큰 미정의(이미지 위 dim). play 힌트는 sermon-play-hint-sm 믹스인.
 $duration-overlay-bg: rgba(0, 0, 0, 0.7);
 
+// 목업 SermonListCard — 보더리스 가로 카드(썸네일 좌 + 텍스트 우), hover는 warm tint.
 .card {
   display: grid;
   grid-template-columns: $thumb-width 1fr;
   gap: $content-gap-s;
   align-items: center;
-  padding: $spacing-12 $spacing-16;
-  background-color: $bg-card;
-  border: 1px solid $border-card;
+  padding: $spacing-8 0;
   border-radius: $radius-s;
   text-decoration: none;
   color: inherit;
   opacity: 0;
   animation: fadeUp $animation-duration-reveal $transition-easing-default forwards;
 
-  @include hover-lift;
+  @include hover-bg-shift($bg-hover);
 }
 
 .thumb {
@@ -76,29 +75,33 @@ $duration-overlay-bg: rgba(0, 0, 0, 0.7);
   min-width: 0;
 }
 
+// 성경구절을 제목 위 eyebrow로 (목업 카드 구조 — 마크업에서 title보다 앞에 렌더).
+// 성경 eyebrow: 11px·semibold·warm tan(#9a826d = $home-text-muted).
+.scripture {
+  font-size: $font-size-11;
+  font-weight: $font-weight-semibold;
+  color: $home-text-muted;
+}
+
+// 제목: warm ink(#2a241d = $home-text). weight는 semibold(제목도 bold 미사용).
 .title {
   margin: 0;
   font-size: $font-size-14;
   font-weight: $font-weight-semibold;
-  color: $txt-primary;
+  color: $home-text;
   line-height: $line-height-snug;
 
   @include ellipsis-multi(2);
   word-break: keep-all;
 }
 
-.scripture {
-  font-size: $font-size-12;
-  font-weight: $font-weight-semibold;
-  color: $primary;
-}
-
+// 메타(설교자·날짜): 11px·warm taupe(#70665a = $home-text-sub).
 .meta {
   display: flex;
   align-items: center;
   gap: $spacing-4;
   font-size: $font-size-11;
-  color: $txt-tertiary;
+  color: $home-text-sub;
   font-variant-numeric: tabular-nums;
 }
 

@@ -1,10 +1,10 @@
 import { notFound } from 'next/navigation';
 import MainContainer from '@/components/layout/container/MainContainer';
-import { BoardHeader, BoardBody, BoardFooter, BoardListLink } from '@/components/board';
-import { getOgImageUrl, getKakaoShareUrl } from '@/utils/cloudinary';
-import { generateFileDownloadList } from '@/utils/file';
+import BulletinDetail from '@/app/(content)/news/bulletins/_component/BulletinDetail';
+import { getOgImageUrl } from '@/utils/cloudinary';
 import { isNumeric } from '@/utils/validator';
 import { getAllBulletinIds, getBulletinById, getAdjacentBulletins } from '@/services/bulletin';
+import { OG_FALLBACK_IMAGE } from '@/config/seo';
 
 export async function generateMetadata({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
@@ -25,7 +25,7 @@ export async function generateMetadata({ params }: { params: Promise<{ id: strin
     openGraph: {
       title,
       description,
-      images: ogImage ? [{ url: ogImage }] : []
+      images: [{ url: ogImage || OG_FALLBACK_IMAGE }]
     }
   };
 }
@@ -45,7 +45,7 @@ export async function generateStaticParams() {
 
 export const revalidate = 86400; // 24 hours
 
-export default async function BulletinDetail({ params }: { params: Promise<{ id: string }> }) {
+export default async function BulletinDetailPage({ params }: { params: Promise<{ id: string }> }) {
   const { id: bulletinId } = await params;
 
   if (!isNumeric(bulletinId)) notFound();
@@ -60,26 +60,9 @@ export default async function BulletinDetail({ params }: { params: Promise<{ id:
 
   if (!bulletin || error) notFound();
 
-  const { id, created_at, bulletin_images, title, author_id } = bulletin;
-  const imageIds = (bulletin_images ?? [])
-    .sort((a, b) => a.order_index - b.order_index)
-    .map((img) => img.cloudinary_id);
-  const files = generateFileDownloadList({ urls: imageIds });
-
   return (
-    <MainContainer title="주보">
-      <BoardHeader
-        title={title}
-        userName="관리자"
-        createdAt={created_at}
-        userId={author_id ?? ''}
-        thumbnail={getKakaoShareUrl(imageIds[0]) ?? ''}
-        id={id.toString()}
-        updateLink={`/news/bulletins/${id}/update`}
-      />
-      <BoardBody images={imageIds} />
-      <BoardFooter files={files} prevNext={prevNextBulletin} />
-      <BoardListLink link="/news/bulletins" />
+    <MainContainer title={bulletin.title}>
+      <BulletinDetail bulletin={bulletin} prevNext={prevNextBulletin} />
     </MainContainer>
   );
 }

@@ -1,125 +1,49 @@
-$icon_box_size: 4.2rem;
-
-.quick_wrap {
-  background: $bg-secondary-deep;
+.section {
+  padding: $spacing-20 0 0;
 }
 
-.quick_container {
-  padding: 0;
-
-  @include respond-up($breakpoint-tablet) {
-    padding: 0 calc($container-padding / 4);
-  }
-}
-
-.quick_access {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-  border-bottom: $spacing-1 solid $border-primary;
+.grid {
   display: grid;
-  grid-template-columns: 1fr;
-
-  li:last-child .item {
-    border-bottom: none;
-  }
-
-  @include respond-up($breakpoint-tablet) {
-    grid-template-columns: repeat(3, 1fr);
-
-    li:last-child .item {
-      border-right: none;
-    }
-  }
+  grid-template-columns: repeat(2, 1fr);
+  gap: $spacing-10;
+  max-width: 64rem;
+  margin: 0 auto;
 }
 
 .item {
   display: flex;
   align-items: center;
-  padding: $spacing-24;
-  border-bottom: $spacing-1 solid $border-warm;
-  transition: background-color $transition-duration-normal $transition-easing-default;
+  justify-content: center;
+  gap: $spacing-8;
+  padding: $padding-card-compact;
+  background: $home-card;
+  border: 1px solid $home-border;
+  border-radius: $radius-m;
+  box-shadow: $shadow-sm;
 
-  @include respond-up($breakpoint-mobile) {
-    padding: $spacing-20 $spacing-24;
-  }
-
-  @include respond-up($breakpoint-tablet) {
-    padding: $spacing-20 $spacing-24;
-    border-bottom: none;
-    border-right: $spacing-1 solid $border-primary;
-  }
-
-  @include respond-up($breakpoint-pc) {
-    padding: $spacing-24 $spacing-32;
-  }
-
-  &:hover {
-    background-color: $bg-hover;
-
-    .arrow {
-      opacity: 1;
-      transform: translateX($spacing-8);
-    }
-  }
+  @include hover-lift;
 }
 
 .icon_box {
-  margin-right: $spacing-20;
-  display: flex;
-  align-items: center;
-  justify-content: center;
   flex-shrink: 0;
-  width: $icon_box_size;
-  height: $icon_box_size;
-  background: $navy-950;
-  border-radius: $radius-xs;
-  font-size: calc($icon_box_size / 1.8);
-  color: $gold-600;
-
-  @include respond-up($breakpoint-tablet) {
-    margin-right: $spacing-16;
-    width: $icon_box_size;
-    height: $icon_box_size;
-    font-size: calc($icon_box_size / 1.8);
-  }
+  width: 3.4rem;
+  height: 3.4rem;
+  display: grid;
+  place-items: center;
+  border-radius: $radius-circle;
+  background: $home-tint;
+  color: $home-gold-strong;
 
   svg {
-    display: block;
-    transform: translateX(0.05rem);
+    width: 1.8rem;
+    height: 1.8rem;
   }
-}
-
-.text {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
 }
 
 .label {
-  font-family: $font-family-secondary;
-  font-size: $font-size-15;
-  // 세리프 weight를 400·700로 줄이며 semibold(600)→bold(700)로 명시 매핑 (기존에도 600 미요청이라 700로 스냅됨)
-  font-weight: $font-weight-bold;
-  color: $txt-primary;
-}
-
-.desc {
-  display: block;
-  @include text-caption-small;
-}
-
-.arrow {
-  flex-shrink: 0;
-  font-size: $font-size-14;
-  color: $gold-600;
-  opacity: 0;
-  transition:
-    opacity 0.2s ease,
-    transform 0.2s ease;
-
-  @include respond-up($breakpoint-tablet) {
-    opacity: 0;
-    transform: translateX(-$spacing-8);
-  }
+  font-size: $font-size-13;
+  font-weight: $font-weight-semibold;
+  letter-spacing: $letter-spacing-body;
+  color: $home-text;
+  white-space: nowrap;
 }

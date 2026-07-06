@@ -1,0 +1,167 @@
+.archive {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-16;
+}
+
+.head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: $spacing-8;
+}
+
+.title {
+  font-size: $font-size-18;
+  font-weight: $font-weight-bold;
+  color: $home-text;
+}
+
+// ── 월별 보기 pill ──
+.pill,
+.pill_active {
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: $spacing-4;
+  padding: $spacing-6 $spacing-12;
+  border-radius: $radius-circle;
+  font-size: $font-size-13;
+  font-weight: $font-weight-semibold;
+  white-space: nowrap;
+  cursor: pointer;
+
+  @include focus-ring('strong');
+}
+
+.pill {
+  border: 1px solid $home-border;
+  background-color: $home-card;
+  color: $home-gold-strong;
+
+  @include hover-bg-shift($bg-hover);
+}
+
+.pill_active {
+  border: none;
+  background-color: $accent;
+  color: $txt-inverse;
+
+  &:hover {
+    background-color: $accent;
+  }
+}
+
+.pill_clear {
+  display: grid;
+  place-items: center;
+  width: 1.6rem;
+  height: 1.6rem;
+  border-radius: $radius-circle;
+  // 액센트 pill 위 반투명 흰 원 — semantic 미정의(on-accent overlay), rgba 예외.
+  background-color: rgba($txt-inverse, 0.24);
+}
+
+// ── 날짜칩 리스트 ──
+.list {
+  display: flex;
+  flex-direction: column;
+  border-radius: $radius-m;
+  overflow: hidden;
+  background-color: $home-card;
+  border: 1px solid $home-border;
+
+  li {
+    list-style: none;
+  }
+}
+
+.row {
+  display: flex;
+  align-items: center;
+  gap: $spacing-12;
+  padding: $spacing-12 $spacing-16;
+  text-decoration: none;
+  color: inherit;
+  border-bottom: 1px solid $home-border-divider;
+
+  @include hover-bg-shift($bg-hover);
+  @include focus-ring('strong', calc(-1 * #{$focus-ring-offset}));
+
+  li:last-child & {
+    border-bottom: none;
+  }
+}
+
+.chip {
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 4.6rem;
+  height: 4.6rem;
+  border-radius: $radius-s;
+  background-color: $home-card-soft;
+  line-height: 1;
+}
+
+.chip_day {
+  font-size: $font-size-18;
+  font-weight: $font-weight-semibold;
+  color: $home-text;
+  font-variant-numeric: tabular-nums;
+}
+
+.chip_month {
+  margin-top: $spacing-2;
+  font-size: $font-size-11;
+  font-weight: $font-weight-semibold;
+  color: $home-text-muted;
+}
+
+.chip_hi {
+  background-color: $home-tint-card;
+
+  .chip_day,
+  .chip_month {
+    color: $home-gold-strong;
+  }
+}
+
+.row_title {
+  flex: 1;
+  min-width: 0;
+  font-size: $font-size-15;
+  font-weight: $font-weight-semibold;
+  color: $home-text;
+
+  @include ellipsis-multi(1);
+}
+
+.recent_badge {
+  flex-shrink: 0;
+  padding: $spacing-2 $spacing-8;
+  border-radius: $radius-circle;
+  background-color: $home-tint-card;
+  font-size: $font-size-11;
+  font-weight: $font-weight-semibold;
+  color: $home-gold-strong;
+  white-space: nowrap;
+}
+
+.chevron {
+  flex-shrink: 0;
+  font-size: $font-size-18;
+  color: $home-text-muted;
+}
+
+.empty {
+  padding: $spacing-40 0;
+  text-align: center;
+  font-size: $font-size-13;
+  color: $home-text-muted;
+  border-radius: $radius-m;
+  background-color: $home-card;
+  border: 1px solid $home-border;
+}

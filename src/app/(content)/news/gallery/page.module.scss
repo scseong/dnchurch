@@ -1,0 +1,9 @@
+.blind_title {
+  @include blind;
+}
+
+.wrap {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-16;
+}

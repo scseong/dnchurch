@@ -82,6 +82,48 @@ export type Database = {
         }
         Relationships: []
       }
+      new_family_registrations: {
+        Row: {
+          birth_date: string | null
+          created_at: string
+          id: string
+          interests: string[]
+          is_new_believer: boolean
+          name: string
+          phone: string
+          privacy_agreed: boolean
+          referral_source: string | null
+          sensitive_agreed: boolean
+          status: Database["public"]["Enums"]["new_family_status_enum"]
+        }
+        Insert: {
+          birth_date?: string | null
+          created_at?: string
+          id?: string
+          interests?: string[]
+          is_new_believer?: boolean
+          name: string
+          phone: string
+          privacy_agreed: boolean
+          referral_source?: string | null
+          sensitive_agreed?: boolean
+          status?: Database["public"]["Enums"]["new_family_status_enum"]
+        }
+        Update: {
+          birth_date?: string | null
+          created_at?: string
+          id?: string
+          interests?: string[]
+          is_new_believer?: boolean
+          name?: string
+          phone?: string
+          privacy_agreed?: boolean
+          referral_source?: string | null
+          sensitive_agreed?: boolean
+          status?: Database["public"]["Enums"]["new_family_status_enum"]
+        }
+        Relationships: []
+      }
       notices: {
         Row: {
           attachment_url: string | null
@@ -593,19 +635,10 @@ export type Database = {
           prev_title: string
         }[]
       }
-      increment_sermon_views:
-        | {
-            Args: { sermon_id: number }
-            Returns: {
-              error: true
-            } & "Could not choose the best candidate function between: public.increment_sermon_views(sermon_id => int8), public.increment_sermon_views(sermon_id => uuid). Try renaming the parameters or the function itself in the database so function overloading can be resolved"
-          }
-        | {
-            Args: { sermon_id: string }
-            Returns: {
-              error: true
-            } & "Could not choose the best candidate function between: public.increment_sermon_views(sermon_id => int8), public.increment_sermon_views(sermon_id => uuid). Try renaming the parameters or the function itself in the database so function overloading can be resolved"
-          }
+      increment_sermon_views: {
+        Args: { sermon_id: number }
+        Returns: undefined
+      }
       update_bulletin: {
         Args: {
           p_bulletin_id: number
@@ -643,6 +676,7 @@ export type Database = {
       }
     }
     Enums: {
+      new_family_status_enum: "pending" | "contacted" | "completed"
       notice_category_enum:
         | "예배"
         | "행사"
@@ -791,6 +825,7 @@ export type CompositeTypes<
 export const Constants = {
   public: {
     Enums: {
+      new_family_status_enum: ["pending", "contacted", "completed"],
       notice_category_enum: [
         "예배",
         "행사",
@@ -813,10 +848,7 @@ export const Constants = {
         "새벽예배",
         "특별예배",
       ],
-      worship_category: [
-        "main",
-        "church_school",
-      ],
+      worship_category: ["main", "church_school"],
     },
   },
 } as const

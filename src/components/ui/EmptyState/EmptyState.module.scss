@@ -7,7 +7,7 @@
 }
 
 .size_default {
-  gap: $spacing-8;
+  gap: $spacing-4;
   padding: $section-gap-40 $spacing-20;
 }
 
@@ -30,13 +30,13 @@
 }
 
 .title {
-  font-size: $font-size-16;
-  font-weight: $font-weight-medium;
+  font-size: $font-size-14;
+  font-weight: $font-weight-semibold;
   color: $txt-secondary;
 }
 
 .description {
-  font-size: $font-size-14;
+  font-size: $font-size-13;
   color: $txt-tertiary;
 }
 

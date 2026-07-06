@@ -1,10 +1,10 @@
 import FilterDropdown from './FilterDropdown';
 import DropdownItem from './DropdownItem';
-import type { Preacher } from '@/types/sermon';
+import type { PreacherWithSermonCount } from '@/types/sermon';
 import dropdownStyles from '../dropdown.module.scss';
 
 interface PreacherFilterProps {
-  preachers: Preacher[];
+  preachers: PreacherWithSermonCount[];
   selected: string[];
   onToggle: (id: string) => void;
   isOpen: boolean;

@@ -4,6 +4,7 @@
 - **Date**: 2026-05-13
 - **Deciders**: scseong
 - **Tags**: infra, harness, git-hooks
+- **개정**: 2026-06-29 — R5(커밋 메시지 이메일 주소 금지) 추가
 
 ## Context
 
@@ -13,12 +14,13 @@
 
 ## Decision
 
-husky `commit-msg` hook을 도입해 deterministic 룰 4개를 강제한다.
+husky `commit-msg` hook을 도입해 deterministic 룰을 강제한다 (R1~R4는 2026-05-13, R5는 2026-06-29 추가).
 
 - (R1) subject 정규식 `^(Feat|Fix|Style|Refactor|Docs|Chore): [^ ].+$` 위반 차단
 - (R2) subject 길이 81자 이상 차단 (`.trimEnd()` 후)
 - (R3) `Co-Authored-By:` trailer 누락 차단 (case-insensitive)
 - (R4) subject에 `+` 2회 이상 출현 시 차단 (다중 concern 분리 신호 강제)
+- (R5) 커밋 메시지에 이메일 주소(`x@y.z`) 출현 시 차단 — Co-Authored-By trailer도 이름만 적고 이메일은 뺀다 (사용자 지시, Co-Authored-By에 사용자 이메일이 들어가던 것을 막음)
 
 위반 시 commit 차단(exit 1). `--no-verify`로 사용자 명시 우회 허용. merge/revert/fixup!/squash! 자동 우회.
 
@@ -27,8 +29,8 @@ husky `commit-msg` hook을 도입해 deterministic 룰 4개를 강제한다.
 ## Consequences
 
 ### 긍정적
-- commit subject prefix·길이·footer·다중 concern 4 룰이 모든 commit에 자동 적용
-- PR 리뷰어가 4 룰 수동 검증 부담 해소
+- commit subject prefix·길이·footer·다중 concern·이메일 5 룰이 모든 commit에 자동 적용
+- PR 리뷰어가 5 룰 수동 검증 부담 해소
 - 신규 contributor도 컨벤션 위반 시 즉시 피드백
 - release note·changelog 자동 생성 시 prefix 분류 신뢰
 
@@ -40,7 +42,7 @@ husky `commit-msg` hook을 도입해 deterministic 룰 4개를 강제한다.
 ### 영향 범위
 - 코드: `scripts/check-commit-msg.mjs` 신규, `.husky/commit-msg` 신규
 - 정책: develop의 `SKILL.md:196`이 이미 `+`만 명시(원본). 별도 브랜치(feat/sermons)의 SKILL 강화 commit(`eeb3625`)이 `+`·`/`·`,`로 확장했으나 develop 미머지 — 그 PR 머지 전 사용자가 `+`만으로 정정 필요(follow-up commit). 본 task는 develop 기준 SSOT와 일치.
-- 운영: 모든 contributor의 다음 commit부터 4 룰 강제. `--no-verify` 사용 시 PR 리뷰에서 수동 확인
+- 운영: 모든 contributor의 다음 commit부터 5 룰(R1~R5) 강제. `--no-verify` 사용 시 PR 리뷰에서 수동 확인
 
 ## Alternatives Considered
 

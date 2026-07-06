@@ -8,7 +8,7 @@ export type NavItem = {
   children?: NavItem[];
 };
 
-export type IconName = 'home' | 'book' | 'file' | 'users' | 'menu';
+export type IconName = 'home' | 'about' | 'sermon' | 'news' | 'mypage';
 
 export type BottomNavItem = {
   label: string;
@@ -32,12 +32,6 @@ export const GNB_ITEMS: NavItem[] = [
   {
     label: '다음세대',
     href: '/next-gen',
-    children: [
-      { label: '유치부', href: '/next-gen/kindergarten' },
-      { label: '유초등부', href: '/next-gen/elementary' },
-      { label: '중고등부', href: '/next-gen/youth' },
-      { label: '청년부', href: '/next-gen/young-adult' },
-    ],
   },
   {
     label: '설교',
@@ -50,11 +44,6 @@ export const GNB_ITEMS: NavItem[] = [
   {
     label: '교제',
     href: '/community',
-    children: [
-      { label: '기도제목', href: '/community/prayer' },
-      { label: '은혜 나눔', href: '/community/sharing' },
-      { label: '소모임', href: '/community/groups' },
-    ],
   },
   {
     label: '교회 소식',
@@ -69,10 +58,10 @@ export const GNB_ITEMS: NavItem[] = [
 
 export const BOTTOM_NAV_ITEMS: BottomNavItem[] = [
   { label: '홈', href: '/', icon: 'home' },
-  { label: '설교', href: '/sermons', icon: 'book' },
-  { label: '교회 소식', href: '/news/notices', icon: 'file' },
-  { label: '교제', href: '/community/prayer', icon: 'users' },
-  { label: '전체', href: '/menu', icon: 'menu' },
+  { label: '소개', href: '/about', icon: 'about' },
+  { label: '설교', href: '/sermons', icon: 'sermon' },
+  { label: '소식', href: '/news/bulletins', icon: 'news' },
+  { label: '마이페이지', href: '/mypage', icon: 'mypage' },
 ];
 
 // ── Active 판별 ──
@@ -98,6 +87,20 @@ export function isActiveBottomNav(pathname: string, href: string): boolean {
 
   const category = '/' + href.split('/').filter(Boolean)[0];
   return isRouteMatch(pathname, category);
+}
+
+// ── 레이아웃 모드 (출시: 태블릿 이하 모바일 프레임) ──
+
+/**
+ * PC UI(DesktopHeader + 120rem 콘텐츠)를 그대로 보여줄 라우트.
+ * 비어 있으면 모든 (content) 페이지가 모바일 프레임으로 나온다.
+ * PC 대응이 끝난 페이지를 여기에 넣으면 그 라우트(와 하위 세그먼트)만 기존 PC UI로 전환된다.
+ */
+const PC_LAYOUT_ROUTES: string[] = [];
+
+/** pathname이 PC UI 유지 대상인지 판별. 화이트리스트가 비면 항상 false(=모바일 프레임). */
+export function isPcLayoutRoute(pathname: string): boolean {
+  return PC_LAYOUT_ROUTES.some((route) => isRouteMatch(pathname, route));
 }
 
 // ── Label 해석 (Hero · MobileHeader) ──
@@ -134,17 +137,82 @@ export function resolveNavLabel(pathname: string): string {
 
 // ── MobileHeader ──
 
-export const SPECIAL_PAGES: Record<string, string> = {
+const SPECIAL_PAGES: Record<string, string> = {
   '/mypage': '마이페이지',
-  '/search': '검색',
-  '/notifications': '알림',
   '/login': '로그인',
   '/sign-up': '회원가입',
+  '/privacy-policy': '개인정보처리방침',
 };
+
+// 목업 재설계로 자체 in-page 섹션 탭(AboutTabNav)을 렌더하는 About 페이지.
+// 헤더는 '교회 소개' 타이틀 + 뒤로가기로 두고, 형제 탭은 끈다(AboutTabNav가 대체).
+export const ABOUT_REDESIGNED_ROUTES = new Set([
+  '/about',
+  '/about/pastor',
+  '/about/worship',
+  '/about/location',
+  '/about/vision',
+  '/about/welcome'
+]);
+
+/** 설교 상세(/sermons/[id]) 경로 판별 — /sermons/all·/series·/series/[id]는 제외. */
+function isSermonDetailPath(pathname: string): boolean {
+  const match = pathname.match(/^\/sermons\/([^/]+)$/);
+  return !!match && match[1] !== 'all' && match[1] !== 'series';
+}
+
+/** 공지사항 목록(/news/notices)·상세(/news/notices/[id]) 경로 판별. */
+function isNoticePath(pathname: string): boolean {
+  return pathname === '/news/notices' || /^\/news\/notices\/[^/]+$/.test(pathname);
+}
+
+/** 주보 하위 전체(/news/bulletins·상세·create·update) 경로 판별 — 헤더 타이틀·형제 탭용. */
+function isBulletinPath(pathname: string): boolean {
+  return pathname === '/news/bulletins' || pathname.startsWith('/news/bulletins/');
+}
+
+/** 주보 상세(/news/bulletins/[숫자id])만 판별 — 공유 액션용. create·[id]/update 제외. */
+function isBulletinDetailPath(pathname: string): boolean {
+  return /^\/news\/bulletins\/\d+$/.test(pathname);
+}
+
+/** 교회 소식 형제 탭 — 사용자 요청 순서(주보>공지사항>갤러리). GNB children 순서와 별개로 둔다(드로어·데스크톱 드롭다운 파급 방지). */
+const NEWS_TABS: NavItem[] = [
+  { label: '주보', href: '/news/bulletins' },
+  { label: '공지사항', href: '/news/notices' },
+  { label: '갤러리', href: '/news/gallery' }
+];
+
+/** 교회 소식 섹션 목록 경로(정확 매칭). 상세·create·update는 제외해 '교회 소식' 헤더·형제 탭을 안 받게 한다. (/news 자체는 /news/bulletins로 redirect) */
+function isNewsListPath(pathname: string): boolean {
+  return (
+    pathname === '/news/notices' ||
+    pathname === '/news/bulletins' ||
+    pathname === '/news/gallery'
+  );
+}
 
 /** 모바일 헤더 타이틀 + 뒤로가기 상태 해석 */
 export function resolveMobileHeader(pathname: string): { title: string; showBack: boolean } {
   if (pathname === '/') return { title: '대구동남교회', showBack: false };
+
+  // 목업 재설계: About 교회 소개 화면은 헤더에 '교회 소개' 타이틀 + 뒤로가기로 둔다(목업 일치).
+  if (ABOUT_REDESIGNED_ROUTES.has(pathname)) return { title: '교회 소개', showBack: true };
+
+  // 목업 재설계: 설교 홈·하위 뷰는 Hero 밴드 대신 헤더에 페이지별 타이틀 + 뒤로가기로 둔다(sermon-home·views-redesign).
+  if (pathname === '/sermons') return { title: '설교', showBack: true };
+  if (pathname === '/sermons/all') return { title: '전체 설교', showBack: true };
+  if (pathname === '/sermons/series') return { title: '시리즈', showBack: true };
+  if (isSermonDetailPath(pathname)) return { title: '설교 상세', showBack: true };
+
+  // 교회 소식 목록(주보·공지·갤러리 + /news)은 '교회 소식' 헤더 + 형제 탭. 상세는 아래 섹션 헤더를 유지한다.
+  if (isNewsListPath(pathname)) return { title: '교회 소식', showBack: true };
+
+  // 공지사항 상세(/news/notices/[id])는 '공지사항' 타이틀 + 뒤로가기(목록은 위 '교회 소식'이 처리).
+  if (isNoticePath(pathname)) return { title: '공지사항', showBack: true };
+
+  // 주보 상세·create·update(/news/bulletins/...)는 '주보' 타이틀 + 뒤로가기(목록은 위 '교회 소식'이 처리).
+  if (isBulletinPath(pathname)) return { title: '주보', showBack: true };
 
   const special = SPECIAL_PAGES[pathname];
   if (special) return { title: special, showBack: false };
@@ -174,6 +242,21 @@ export function resolveMobileHeader(pathname: string): { title: string; showBack
 
 /** 현재 카테고리의 형제 탭 (children이 없으면 null) */
 export function resolveSiblingTabs(pathname: string): NavItem[] | null {
+  // 목업 재설계로 자체 in-page 섹션 탭(AboutTabNav)을 렌더하는 페이지는 헤더 형제 탭을 끈다(중복 방지).
+  if (ABOUT_REDESIGNED_ROUTES.has(pathname)) return null;
+
+  // 목업 재설계: 설교 하위 뷰(전체 설교·시리즈·상세)는 형제 탭 없이 단일 헤더로 둔다(목업 일치).
+  if (pathname.startsWith('/sermons/')) return null;
+
+  // 교회 소식 목록에만 형제 탭(주보>공지사항>갤러리). 상세·폼은 아래에서 null.
+  if (isNewsListPath(pathname)) return NEWS_TABS;
+
+  // 공지사항 상세는 형제 탭 없이 단일 헤더로 둔다(목록은 위 isNewsListPath가 처리).
+  if (isNoticePath(pathname)) return null;
+
+  // 주보 상세·폼은 형제 탭 없이 단일 헤더로 둔다(목록은 위 isNewsListPath가 처리).
+  if (isBulletinPath(pathname)) return null;
+
   for (const item of GNB_ITEMS) {
     if (!item.children?.length) continue;
     if (item.children.some((c) => isRouteMatch(pathname, c.href))) {
@@ -183,33 +266,17 @@ export function resolveSiblingTabs(pathname: string): NavItem[] | null {
   return null;
 }
 
-// ── Breadcrumb 세그먼트 해석 ──
+// ── MobileHeader action (우측 아이콘 슬롯) ──
 
-/** pathname을 GNB 기반으로 분해하여 [카테고리, 하위페이지] 세그먼트 반환 */
-export function resolveBreadcrumbSegments(
-  pathname: string
-): { label: string; href: string }[] {
-  const segments: { label: string; href: string }[] = [];
+/** 헤더 우측 액션 종류. 기본은 전체 메뉴(drawer), 특정 화면은 다른 액션으로 교체 가능. */
+export type HeaderAction = 'menu' | 'share';
 
-  for (const item of GNB_ITEMS) {
-    if (!isActiveGnb(pathname, item)) continue;
-
-    segments.push({ label: item.label, href: item.href });
-
-    if (item.children) {
-      const matched = item.children.find((c) => isRouteMatch(pathname, c.href));
-      if (matched) {
-        segments.push({ label: matched.label, href: matched.href });
-      }
-    }
-    break;
-  }
-
-  // GNB에 없는 특수 페이지(검색·알림 등)는 단일 세그먼트로 표시
-  if (segments.length === 0) {
-    const special = SPECIAL_PAGES[pathname];
-    if (special) segments.push({ label: special, href: pathname });
-  }
-
-  return segments;
+/** pathname → 헤더 우측 액션. 설교 상세·공지 상세·주보 상세는 공유, 그 외는 전체 메뉴. */
+export function resolveHeaderAction(pathname: string): HeaderAction {
+  if (isSermonDetailPath(pathname)) return 'share';
+  // 공지 상세(/news/notices/[id])만 공유 — 목록(/news/notices)은 전체 메뉴 유지.
+  if (/^\/news\/notices\/[^/]+$/.test(pathname)) return 'share';
+  // 주보 상세(/news/bulletins/[숫자id])만 공유 — 목록·create·update는 전체 메뉴 유지.
+  if (isBulletinDetailPath(pathname)) return 'share';
+  return 'menu';
 }

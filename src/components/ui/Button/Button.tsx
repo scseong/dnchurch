@@ -27,6 +27,8 @@ export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   leadingIcon?: ReactNode;
   /** 레이블 뒤 아이콘 */
   trailingIcon?: ReactNode;
+  /** 비동기 진행 중. 스피너 표시 + 비활성. children은 스크린 리더용으로 유지해 accessible name을 보존한다. */
+  loading?: boolean;
 }
 
 /**
@@ -44,13 +46,15 @@ export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
  * ```
  */
 export const Button = forwardRef<HTMLButtonElement, ButtonProps>(function Button(
-  { variant = 'primary', size = 'md', fullWidth = false, type = 'button', className, children, leadingIcon, trailingIcon, ...rest },
+  { variant = 'primary', size = 'md', fullWidth = false, loading = false, type = 'button', disabled, className, children, leadingIcon, trailingIcon, ...rest },
   ref
 ) {
   return (
     <button
       ref={ref}
       type={type}
+      disabled={disabled || loading}
+      aria-busy={loading || undefined}
       className={clsx(
         styles.button,
         styles[variant],
@@ -60,9 +64,18 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(function Button
       )}
       {...rest}
     >
-      {leadingIcon}
-      {children}
-      {trailingIcon}
+      {loading ? (
+        <>
+          <span className={styles.spinner} aria-hidden="true" />
+          <span className={styles.blind_label}>{children}</span>
+        </>
+      ) : (
+        <>
+          {leadingIcon}
+          {children}
+          {trailingIcon}
+        </>
+      )}
     </button>
   );
 });

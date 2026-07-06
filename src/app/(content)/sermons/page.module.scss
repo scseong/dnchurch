@@ -1,6 +1,23 @@
+.blind_title {
+  // 모바일은 헤더가 '설교' h1을 제공하므로 페이지 h1을 숨긴다(display:none → 접근성 트리에서 제외).
+  // 데스크톱은 헤더 h1이 display:none이라 페이지 h1만 접근성 h1으로 노출해, 어느 뷰에서도 h1이 하나뿐이게 한다.
+  display: none;
+
+  @include respond-up($header-breakpoint) {
+    @include blind;
+    display: block;
+  }
+}
+
+// 헤더 아래 검색 — 목업처럼 상단에 여백을 두고 첫 섹션과 붙지 않게 한다
+.search {
+  display: block;
+  padding-block: $spacing-16 $spacing-4;
+}
+
 .sections {
   display: flex;
   flex-direction: column;
   gap: $section-gap-40;
-  padding-block: $spacing-24 $spacing-40;
+  padding-block: $spacing-16 $spacing-40;
 }

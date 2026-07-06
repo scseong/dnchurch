@@ -1,391 +1,111 @@
 // ══════════════════════════════════════════
-// VISION — 교회의 비전 페이지
-// references/Vision.jsx 디자인 적용 + 우리 5단락 + Cloudinary 이미지 보존
+// VISION — 교회의 비전 (Claude Design 시안 warm 톤)
+//   OUR VISION 히어로(브라운 그라디언트) + 세 가지 비전 번호 카드.
+//   warm 톤(_home.scss) — About 스코프, 인사말·예배·오시는 길과 같은 시스템.
 // ══════════════════════════════════════════
 
-.container {
-  padding-top: $spacing-32;
-  padding-bottom: $spacing-32;
-
-  @include respond-up($breakpoint-pc-sm) {
-    padding-top: $spacing-64;
-    padding-bottom: $spacing-48;
-  }
+.sr_only {
+  @include blind;
 }
 
-// ── 슬로건 다크 카드 ──
+.page {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-24;
+}
 
-.slogan_card {
-  margin-bottom: $spacing-32;
+// ── OUR VISION 히어로 ──
+
+.vision_hero {
   padding: $spacing-32 $spacing-24;
-  background: $bg-secondary;
-  border: 0.1rem solid $border-card;
+  background: linear-gradient(135deg, $home-accent, $home-accent-hover);
   border-radius: $radius-l;
+  box-shadow: $shadow-md;
   text-align: center;
-  overflow: hidden;
 
   @include respond-up($breakpoint-pc-sm) {
-    margin-bottom: $spacing-64;
-    padding: $spacing-64 $spacing-48;
+    padding: $spacing-48 $spacing-40;
   }
 }
 
-.slogan_eyebrow {
+.vision_eyebrow {
   margin-bottom: $spacing-12;
   font-size: $font-size-11;
-  font-weight: $font-weight-medium;
-  color: $accent;
-  letter-spacing: $letter-spacing-wide;
-
-  @include respond-up($breakpoint-pc-sm) {
-    font-size: $font-size-12;
-    margin-bottom: $spacing-16;
-  }
-}
-
-.slogan_title {
-  font-size: $font-size-22;
   font-weight: $font-weight-bold;
-  color: $txt-primary;
-  line-height: $line-height-snug;
-  letter-spacing: $letter-spacing-tight;
-  word-break: keep-all;
-
-  @include respond-up($breakpoint-pc-sm) {
-    font-size: $font-size-34;
-  }
-}
-
-.slogan_underline {
-  display: block;
-  margin: $spacing-16 auto 0;
-  width: 4rem;
-  height: 0.2rem;
-  background: $accent;
-  opacity: 0.6;
-
-  @include respond-up($breakpoint-pc-sm) {
-    margin-top: $spacing-24;
-  }
-}
-
-// ── VISION STATEMENT — 본문 5단락 + 이미지 ──
-.statement_section {
-  margin-bottom: $spacing-32;
-
-  @include respond-up($breakpoint-pc-sm) {
-    margin-bottom: $spacing-64;
-  }
-}
-
-.statement_lead {
-  font-size: $font-size-20;
-  font-weight: $font-weight-semibold;
-  color: $primary;
-  line-height: $line-height-snug;
-  letter-spacing: $letter-spacing-tight;
-  word-break: keep-all;
-}
-
-.statement_grid {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: $spacing-20;
-
-  @include respond-up($breakpoint-pc-sm) {
-    grid-template-columns: 1.4fr 1fr;
-    gap: $spacing-48;
-    align-items: start;
-  }
-}
-
-.statement_text {
-  display: flex;
-  flex-direction: column;
-  gap: $spacing-16;
-}
-
-.statement_paragraph {
-  font-size: $font-size-14;
-  color: $txt-secondary;
-  line-height: $line-height-loose;
-  word-break: keep-all;
-
-  @include respond-up($breakpoint-pc-sm) {
-    font-size: $font-size-15;
-  }
-}
-
-.statement_image {
-  width: 100%;
-  border-radius: $radius-l;
-  overflow: hidden;
-  border: 0.1rem solid $border-card;
-
-  img {
-    width: 100%;
-    height: auto;
-    display: block;
-  }
-}
-
-// ── 3 PILLARS ──
-
-.pillars_section {
-  margin-bottom: $spacing-32;
-
-  @include respond-up($breakpoint-pc-sm) {
-    margin-bottom: $spacing-64;
-  }
-}
-
-.pillars_title {
-  margin-bottom: $spacing-20;
-  font-size: $font-size-20;
-  font-weight: $font-weight-bold;
-  color: $txt-primary;
-
-  @include respond-up($breakpoint-pc-sm) {
-    font-size: $font-size-22;
-    margin-bottom: $spacing-24;
-  }
-}
-
-.pillars_list {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: $spacing-10;
-  list-style: none;
-
-  @include respond-up($breakpoint-pc-sm) {
-    grid-template-columns: repeat(3, 1fr);
-    gap: $spacing-16;
-  }
-}
-
-.pillar_card {
-  display: flex;
-  flex-direction: row;
-  align-items: flex-start;
-  gap: $spacing-12;
-  padding: $spacing-16;
-  background: $white;
-  border: 0.1rem solid $border-card;
-  border-radius: $radius-m;
-
-  @include respond-up($breakpoint-pc-sm) {
-    flex-direction: column;
-    align-items: stretch;
-    gap: 0;
-    padding: $spacing-32 $spacing-24;
-  }
-}
-
-// 모바일: icon 좌측, body(meta·title·desc)는 우측 vertical stack
-.pillar_body {
-  flex: 1;
-  min-width: 0;
-  display: flex;
-  flex-direction: column;
-}
-
-.pillar_icon {
-  flex-shrink: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 4.4rem;
-  height: 4.4rem;
-  border-radius: $radius-m;
-
-  background: $beige-200;
-
-  svg {
-    width: 2rem;
-    height: 2rem;
-    color: $txt-primary;
-  }
-
-  @include respond-up($breakpoint-pc-sm) {
-    width: 5.6rem;
-    height: 5.6rem;
-    margin-bottom: $spacing-20;
-
-    svg {
-      width: 2.6rem;
-      height: 2.6rem;
-    }
-  }
-}
-
-.pillar_meta {
-  display: flex;
-  align-items: center;
-  gap: $spacing-6;
-  margin-bottom: $spacing-4;
-
-  @include respond-up($breakpoint-pc-sm) {
-    margin-bottom: $spacing-8;
-  }
-}
-
-.pillar_num {
-  font-size: $font-size-11;
-  font-weight: $font-weight-bold;
-  color: $accent;
-}
-
-.pillar_label {
-  font-size: $font-size-11;
-  font-weight: $font-weight-semibold;
-  color: $txt-tertiary;
+  color: $home-eyebrow;
   letter-spacing: $letter-spacing-wide;
 }
 
-.pillar_card_title {
-  margin-bottom: $spacing-6;
-  font-size: $font-size-14;
-  font-weight: $font-weight-bold;
-  color: $txt-primary;
-
-  @include respond-up($breakpoint-pc-sm) {
-    font-size: $font-size-18;
-    margin-bottom: $spacing-12;
-  }
-}
-
-.pillar_desc {
-  font-size: $font-size-12;
-  color: $txt-secondary;
+.vision_declaration {
+  font-family: $font-family-secondary;
+  font-size: $font-size-18;
   line-height: $line-height-relaxed;
+  color: $home-cream-text;
   word-break: keep-all;
 
   @include respond-up($breakpoint-pc-sm) {
-    font-size: $font-size-13;
-    line-height: $line-height-loose;
+    font-size: $font-size-20;
   }
 }
 
-// ── HISTORY (full-width 섹션) ──
+// ── 섹션 헤더 ──
 
-.history_section {
-  padding: $spacing-32 $container-padding;
-  background: $beige-100;
-  border-top: 0.1rem solid $border-card;
-
-  @include respond-up($breakpoint-pc-sm) {
-    padding: $spacing-80 $container-padding;
-  }
+.section_head {
+  margin-bottom: $spacing-12;
 }
 
-.history_inner {
-  max-width: 76rem;
-  margin: 0 auto;
-}
-
-.history_head {
-  margin-bottom: $spacing-24;
-  text-align: center;
-
-  @include respond-up($breakpoint-pc-sm) {
-    margin-bottom: $spacing-48;
-  }
-}
-
-.history_eyebrow {
-  margin-bottom: $spacing-6;
-  font-size: $font-size-11;
-  font-weight: $font-weight-semibold;
-  color: $accent;
-  letter-spacing: $letter-spacing-wide;
-
-  @include respond-up($breakpoint-pc-sm) {
-    font-size: $font-size-12;
-    margin-bottom: $spacing-8;
-  }
-}
-
-.history_title {
-  font-size: $font-size-20;
+.section_title {
+  font-size: $font-size-16;
   font-weight: $font-weight-bold;
-  color: $txt-primary;
-  letter-spacing: $letter-spacing-tight;
-
-  @include respond-up($breakpoint-pc-sm) {
-    font-size: $font-size-28;
-  }
+  color: $home-text;
+  letter-spacing: $letter-spacing-body;
 }
 
-.history_list {
-  position: relative;
+// ── 세 가지 비전 카드 ──
+
+.vision_list {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-12;
   list-style: none;
-
-  &::before {
-    content: '';
-    position: absolute;
-    top: 0.6rem;
-    bottom: 0.6rem;
-    left: 5.6rem;
-    width: 0.1rem;
-    background: $beige-200;
-
-    @include respond-up($breakpoint-pc-sm) {
-      left: 9.2rem;
-    }
-  }
 }
 
-.history_item {
+.vision_card {
+  padding: $spacing-20;
+  background-color: $home-card;
+  border: 0.1rem solid $home-border;
+  border-radius: $radius-l;
+}
+
+.vision_card_head {
+  display: flex;
+  align-items: center;
+  gap: $spacing-10;
+  margin-bottom: $spacing-12;
+}
+
+.vision_num {
+  flex: 0 0 auto;
   display: grid;
-  grid-template-columns: 5rem 1.8rem 1fr;
-  align-items: flex-start;
-  padding: $spacing-12 0;
-
-  @include respond-up($breakpoint-pc-sm) {
-    grid-template-columns: 8rem 2.4rem 1fr;
-    padding: $spacing-16 0;
-  }
-}
-
-.history_year {
+  place-items: center;
+  width: 3rem;
+  height: 3rem;
+  border-radius: $radius-s;
+  background-color: $home-accent;
+  color: $home-cream-text;
   font-size: $font-size-13;
   font-weight: $font-weight-bold;
-  color: $txt-primary;
-  font-variant-numeric: tabular-nums;
-  letter-spacing: $letter-spacing-tight;
-
-  @include respond-up($breakpoint-pc-sm) {
-    font-size: $font-size-18;
-  }
 }
 
-.history_dot {
-  position: relative;
-  width: 1rem;
-  height: 1rem;
-  margin-top: 0.4rem;
-  border-radius: $radius-circle;
-  background: $white;
-  border: 0.2rem solid $accent;
-  justify-self: center;
-
-  @include respond-up($breakpoint-pc-sm) {
-    width: 1.2rem;
-    height: 1.2rem;
-    margin-top: $spacing-8;
-  }
+.vision_card_title {
+  font-size: $font-size-15;
+  font-weight: $font-weight-semibold;
+  color: $home-text;
+  letter-spacing: $letter-spacing-body;
 }
 
-.history_text {
-  padding-left: $spacing-10;
-  font-size: $font-size-12;
-  color: $txt-secondary;
+.vision_card_desc {
+  font-size: $font-size-13;
   line-height: $line-height-relaxed;
   word-break: keep-all;
-
-  @include respond-up($breakpoint-pc-sm) {
-    padding-left: $spacing-16;
-    font-size: $font-size-14;
-    line-height: $line-height-loose;
-  }
 }

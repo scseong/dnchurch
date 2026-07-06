@@ -1,3 +1,14 @@
+// 모바일은 헤더가 '전체 설교' h1을 제공하므로 페이지 h1을 숨긴다. 데스크톱은 헤더 h1이
+// display:none이라 페이지 h1만 접근성 h1으로 노출한다(Hero 제거로 사라진 h1 보전, 뷰별 1개 유지).
+.blind_title {
+  display: none;
+
+  @include respond-up($header-breakpoint) {
+    @include blind;
+    display: block;
+  }
+}
+
 // ══════════════════════════════════════════
 // Body Layout
 // ══════════════════════════════════════════
@@ -183,67 +194,16 @@ $radio-dot-size: 0.4rem;
 }
 
 .search_form {
-  position: relative;
   flex: 1;
-}
 
-.search_icon {
-  position: absolute;
-  top: 50%;
-  left: $spacing-12;
-  transform: translateY(-50%);
-  font-size: $font-size-16;
-  color: $txt-tertiary;
-  pointer-events: none;
-}
+  // 설교 검색 입력·placeholder는 13px (사용자 지정). placeholder는 globals의
+  // `input::placeholder{font-size:14}`가 상속을 덮으므로 pseudo도 명시 오버라이드.
+  input {
+    font-size: $font-size-13;
 
-.search_input {
-  width: 100%;
-  padding: $spacing-10 $spacing-40;
-  font-size: $font-size-14;
-  color: $txt-primary;
-  border: 1px solid $border-primary;
-  border-radius: $radius-s;
-  transition:
-    border-color 0.15s ease,
-    background-color 0.15s ease;
-
-  &::placeholder {
-    color: $txt-tertiary;
-  }
-
-  &:focus {
-    background: $bg-primary;
-    border-color: $primary;
-  }
-}
-
-.search_clear {
-  position: absolute;
-  top: 50%;
-  right: $spacing-12;
-  transform: translateY(-50%);
-  display: inline-flex;
-  padding: $spacing-4;
-  font-size: $font-size-16;
-  color: $txt-tertiary;
-  background: transparent;
-  border: none;
-  cursor: pointer;
-
-  // 아이콘 위치를 바꾸지 않고 탭 타깃만 ≥44px로 확장한다.
-  &::before {
-    content: '';
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    width: $spacing-48;
-    height: $spacing-48;
-    transform: translate(-50%, -50%);
-  }
-
-  &:hover {
-    color: $txt-primary;
+    &::placeholder {
+      font-size: $font-size-13;
+    }
   }
 }
 
@@ -258,7 +218,6 @@ $radio-dot-size: 0.4rem;
   font-size: $font-size-13;
   font-weight: $font-weight-medium;
   color: $txt-secondary;
-  background: $primary-subtle;
   border: 1px solid $border-primary;
   border-radius: $radius-s;
   cursor: pointer;
@@ -298,6 +257,36 @@ $radio-dot-size: 0.4rem;
   }
 }
 
+// ── Filter/Search Chip (적용된 검색·필터를 표시 — 클릭하면 해당 조건 해제) ──
+
+.chip_row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: $spacing-8;
+  margin-bottom: $content-gap-m;
+}
+
+// 목업: warm sand pill(#efe4d6 = $home-tint) + brown 텍스트($primary), 우측 닫기 아이콘.
+.filter_chip {
+  display: inline-flex;
+  align-items: center;
+  gap: $spacing-6;
+  padding: $spacing-6 $spacing-8 $spacing-6 $spacing-12;
+  font-size: $font-size-12;
+  font-weight: $font-weight-semibold;
+  color: $primary;
+  background-color: $home-tint;
+  border: none;
+  border-radius: $radius-circle;
+  cursor: pointer;
+
+  @include hover-bg-shift($home-border);
+
+  svg {
+    font-size: $font-size-14;
+  }
+}
+
 // ── Result Header (필터 모드 결과 헤더 + 정렬) ──
 
 .result_header {
@@ -305,27 +294,16 @@ $radio-dot-size: 0.4rem;
   align-items: center;
   justify-content: space-between;
   gap: $spacing-12;
-  margin-bottom: $content-gap-m;
-  padding-bottom: $spacing-12;
-  border-bottom: 1px solid $border-subtle;
+  margin-bottom: $content-gap-s;
 }
 
+// 카운트는 warm tan(#9a826d) semibold, 숫자(strong)만 black(#2a241d)로 강조.
 .result_count {
   margin: 0;
   font-size: $font-size-13;
-  color: $txt-secondary;
+  font-weight: $font-weight-semibold;
+  color: $home-text-muted;
   word-break: keep-all;
-
-  strong {
-    color: $txt-primary;
-    font-weight: $font-weight-bold;
-    font-variant-numeric: tabular-nums;
-  }
-}
-
-.result_query {
-  color: $primary;
-  font-weight: $font-weight-bold;
 }
 
 .result_page_info {
@@ -354,31 +332,12 @@ $radio-dot-size: 0.4rem;
 }
 
 .sort_select {
-  // mobile은 BottomSheet의 정렬 섹션이 단일 진입점 — sort_select 비표시
+  // 스타일은 ui/Select가 소유. 여기선 PC 전용 노출만(모바일은 BottomSheet 정렬 섹션).
   display: none;
-  padding: $spacing-8 $spacing-32 $spacing-8 $spacing-12;
-  font-size: $font-size-12;
-  font-weight: $font-weight-semibold;
-  font-family: inherit;
-  color: $txt-primary;
-  background-color: $bg-card;
-  border: 1px solid $border-primary;
-  border-radius: $radius-xs;
-  cursor: pointer;
-  appearance: none;
-  background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='10' viewBox='0 0 24 24' fill='none' stroke='%23737373' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
-  background-repeat: no-repeat;
-  background-position: right $spacing-10 center;
 
   @include respond-up($breakpoint-pc-sm) {
     display: inline-block;
   }
-}
-
-.sort_select_active {
-  color: $primary;
-  background-color: $primary-subtle;
-  border-color: $primary;
 }
 
 // ── Series Meta Card (시리즈 필터 활성 시) ──
@@ -499,7 +458,7 @@ $radio-dot-size: 0.4rem;
 .grid {
   display: grid;
   grid-template-columns: 1fr;
-  gap: $content-gap-m;
+  gap: $content-gap-xs;
   list-style: none;
   padding: 0;
   margin: 0;

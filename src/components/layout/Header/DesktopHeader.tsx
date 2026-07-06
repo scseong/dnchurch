@@ -2,8 +2,8 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { useEffect, useLayoutEffect, useState, useCallback } from 'react';
-import { IoSearchOutline, IoNotificationsOutline, IoHeartOutline } from 'react-icons/io5';
+import { useLayoutEffect, useState, useCallback } from 'react';
+import { IoHeartOutline } from 'react-icons/io5';
 import clsx from 'clsx';
 import LayoutContainer from '@/components/layout/container/LayoutContainer';
 import { GNB_ITEMS, isActiveGnb, type NavItem } from '@/config/navigation';
@@ -16,13 +16,13 @@ export default function DesktopHeader() {
   const [keyboardOpen, setKeyboardOpen] = useState<string | null>(null);
   const [hoverSuppressed, setHoverSuppressed] = useState(false);
 
-  // pathname 변경 시 mega menu 닫기 + hover 억제
-  useEffect(() => {
-    queueMicrotask(() => {
-      setKeyboardOpen(null);
-      setHoverSuppressed(true);
-    });
-  }, [pathname]);
+  // pathname 변경 시 mega menu 닫기 + hover 억제 (렌더 중 prev-state 보정)
+  const [prevPathname, setPrevPathname] = useState(pathname);
+  if (pathname !== prevPathname) {
+    setPrevPathname(pathname);
+    setKeyboardOpen(null);
+    setHoverSuppressed(true);
+  }
 
   useLayoutEffect(() => {
     const handleScroll = () => setIsScrolled(window.scrollY > SCROLL_THRESHOLD);
@@ -50,7 +50,6 @@ export default function DesktopHeader() {
           <div className={styles.top_bar_links}>
             <Link href="/about/location">오시는 길</Link>
             <Link href="/about">교회 소개</Link>
-            <Link href="/login">로그인</Link>
           </div>
         </LayoutContainer>
       </div>
@@ -121,12 +120,6 @@ export default function DesktopHeader() {
 
           {/* 유틸리티 */}
           <div className={styles.utility}>
-            <Link href="/search" className={styles.utility_btn} aria-label="검색">
-              <IoSearchOutline />
-            </Link>
-            <button type="button" className={styles.utility_btn} aria-label="알림">
-              <IoNotificationsOutline />
-            </button>
             <Link href="/about/welcome" className={styles.cta_btn}>
               <IoHeartOutline className={styles.cta_icon} />
               <span className={styles.cta_text}>처음 오셨나요?</span>

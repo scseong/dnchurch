@@ -22,7 +22,8 @@ export default function PhotoSwipe({
   width: initialWidth,
   height: initialHeight,
   sizes = '100vw',
-  className = ''
+  className = '',
+  pageBadge = false
 }: PhotoSwipeProps) {
   const pswpRef = useRef<PhotoSwipeType | null>(null);
   const fallbackSize = { w: initialWidth, h: initialHeight };
@@ -74,7 +75,7 @@ export default function PhotoSwipe({
                   <div
                     ref={ref}
                     className={clsx(
-                      styles.imageBox,
+                      styles.image_box,
                       className,
                       state?.loaded ? styles.visible : styles.hidden
                     )}
@@ -89,6 +90,31 @@ export default function PhotoSwipe({
                       onLoad={(e) => handleImageLoad(index, e)}
                     />
                   </div>
+
+                  {pageBadge && (
+                    <>
+                      <span className={styles.page_badge}>
+                        {index + 1} / {images.length}
+                      </span>
+                      <span className={styles.zoom_hint}>
+                        <svg
+                          width="12"
+                          height="12"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          strokeWidth="2.2"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          aria-hidden="true"
+                        >
+                          <circle cx="11" cy="11" r="7" />
+                          <path d="m20 20-3.2-3.2M11 8v6M8 11h6" />
+                        </svg>
+                        확대
+                      </span>
+                    </>
+                  )}
                 </div>
               )}
             </Item>

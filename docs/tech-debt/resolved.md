@@ -4,6 +4,75 @@
 
 ---
 
+### ✅ FeedContent `.badge_category` mixin 미적용 (2026-06-29 해소 — 대상 소멸)
+
+- **부채**: `src/app/_component/home/FeedContent.module.scss`의 카테고리 뱃지가 caption mixin 없이 직접 토큰을 조합했다. 뱃지의 `line-height: 1` 의도와 `text-caption-strong`의 1.45가 충돌해 mixin을 얹지 못했다 (2026-05-04 design-system-v3 Step 3 발견)
+- **해소**: 별도 수정 없이 대상이 사라졌다. 커밋 `a2e0ee3`(2026-06-29, 새가족 등록 공개 폼과 교회 소개·홈 리디자인)이 FeedContent 컴포넌트를 삭제했다
+- **확인**: `rg "badge_category" src` → 0 hit, `src/app/_component/home/FeedContent.*` → 파일 없음 (2026-07-02 재확인)
+
+### ✅ `complete-task.mjs` 패턴 매칭 부정확 (2026-06-21 해소, PR #131)
+
+- **부채**: `find -name "*${PATTERN}*.md"` substring 매치라 `phase1` 입력이 `phase1-5`에도 걸려 다중 매칭으로 차단됐고, `phase1.md` 입력은 `*phase1.md*.md`로 깨졌다 (2026-05-01 발견, 수동 mv로 우회)
+- **해소**: 파일명에서 날짜 접두사와 `.md`를 뗀 slug를 입력과 정확히 비교하는 방식(`slugFromFilename(name) === pattern`)으로 바꿨다. 매칭이 없으면 현재 active slug 목록을 보여준다 (PR #131 작은 기술 부채 묶음)
+- **확인**: `scripts/complete-task.mjs:84-99` — 정확 일치 비교 + 미매칭 시 slug 목록 출력 (2026-07-02 재확인)
+
+### ✅ queueMicrotask 4건 — effect 안 setState 우회 (2026-06-21 해소, PR #131)
+
+- **부채**: `useMediaQuery.ts`·`useListFilters.ts`·`DesktopHeader.tsx`·`NoticeControlBar.tsx`가 effect 안 setState를 `queueMicrotask`로 감싸 `react-hooks/set-state-in-effect` 경고만 껐다. 정작 연쇄 재렌더는 그대로 두었다. 프로젝트 금지 규칙(memory `feedback_no_queue_microtask`) 위반이었다. active.md에 "사용 4건"과 "set-state-in-effect 우회 4건" 두 항목으로 적혀 있었으나 가리키는 대상은 같은 4개 파일이다.
+- **해소**: 사이트별로 다른 패턴을 썼다. `useMediaQuery`는 `useSyncExternalStore(subscribe, getSnapshot, getServerSnapshot=()=>false)`로 전환해 effect·setState 자체를 없앴다. 나머지 셋은 렌더 중 prev-state 보정(`if (x !== prevX) { setPrevX(x); ... }`)으로 바꿔 외부 값이 바뀔 때만 한 번 보정한다. `useSearchSync`가 쓰던 검증된 패턴이다 (remove-queue-microtask task)
+- **확인**: `grep -rn "queueMicrotask" src` → 실제 호출 0건(주석 2건만). verify-task(`20260619-221353`) lint·styles·build 통과, ESLint `set-state-in-effect` 신규 0. Codex는 Windows 샌드박스 오류로 막혀 Claude 직접 검증으로 대체(PASS). PR #131 Gemini의 `useMemo` 메모이즈 제안은 범위 밖 성능 지적이라 받지 않기로 하고(Codex 교차 검증 REJECT) 기각
+
+### ✅ 쓰이지 않는 코드 2건 — SeriesEpisodeList·updatePassword (2026-06-21 해소, PR #131)
+
+- **부채**: `SeriesEpisodeList` 디렉토리(`.tsx`+`.module.scss`)는 import 0건이었다. PR #90 이후 `SermonSeriesSidebar`가 같은 회차 목록 기능을 서버 컴포넌트로 따로 구현해 중복이었다. `apis/auth.ts`의 `updatePassword`는 호출자 0건이고, 실제 비밀번호 변경은 reset-password의 `updatePasswordAndSignOut`이 담당했다. active.md에 "쓰이지 않는 코드 2건"과 "SeriesEpisodeList 컴포넌트 미사용" 두 항목으로 적혀 있었다
+- **해소**: 두 코드를 삭제했다 (tech-debt-small-batch task). `apis/auth.ts`의 `getSupabaseBrowserClient`는 남은 함수가 계속 써서 미사용 import가 생기지 않았다
+- **확인**: `rg "SeriesEpisodeList" src` → 0 hit, `rg "\bupdatePassword\b" src` → 0 hit. Knip 미사용 목록에서 두 항목이 빠졌다. verify-task(`20260619-213402`) 통과
+
+### ✅ SCSS 네이밍 패턴 위반 (2026-06-21 해소, PR #131)
+
+- **부채**: className이 snake_case가 아닌 5건(`imageBox`·`buttonGroup`·`primaryButton`·`yearList`·`hidden-on-mobile`), SCSS 변수가 kebab-case가 아닌 3건(`icon_box_size`·`modal_padding`·`image_max_width`). active.md는 12건으로 적었으나 stylelint 실측은 8건이었다
+- **해소**: className 5건을 snake_case로, 변수 3건을 kebab-case로 바꿨다. className은 scss 정의와 `.tsx` 참조(`styles.x`·class 문자열)를 함께 고쳤다 (tech-debt-small-batch task)
+- **확인**: `npx stylelint "src/**/*.scss"`의 selector-class-pattern·dollar-variable-pattern 경고가 8건에서 0건. verify-task(`20260619-213402`) stylelint 통과
+
+### ✅ 알 수 없는 `?preacher=` 값이 전체 설교를 보여줌 (2026-06-21 해소, PR #131)
+
+- **부채**: `/sermons/all?preacher=<없는이름>`은 `resolvePreacherName`이 `undefined`를 반환해 필터가 걸리지 않고 전체 설교가 떴다. 존재하지만 발행 0편인 설교자(빈 결과)와 동작이 어긋났다. 시리즈에는 `isUnknownSeries` 가드가 있었으나 설교자에는 대응 가드가 없었다
+- **해소**: `sermons/all/page.tsx`에 `isUnknownPreacher`(원문 `preacher`가 있는데 `allPreachers`에 없음)를 더하고, 기존 `isUnknownSeries` 반환 블록에 `||`로 합쳐 같은 EmptyState로 떨어뜨렸다. series 가드가 먼저 평가돼 `resolveSeriesSlug` 전에 빠져나가던 기존 throw 방지도 유지된다 (tech-debt-small-batch task)
+- **확인**: Codex 계획·1차 검증 PASS. verify-task(`20260619-213402`) 통과. 사용자 영향 — 미매칭 설교자 URL이 이제 빈 상태를 보인다
+
+### ✅ 설교 상세 JSON-LD가 `<` 이스케이프 없이 삽입됨 (2026-06-21 해소, PR #131)
+
+- **부채**: `sermons/[id]/page.tsx`의 `buildJsonLd`가 `JSON.stringify(jsonLd)`를 이스케이프 없이 `dangerouslySetInnerHTML`에 넣었다. `sermon.title`·`summary`가 admin 편집값이라 `</script>`가 섞이면 스크립트 태그가 일찍 닫혀 코드가 주입될 여지가 있었다(XSS). church-jsonld(PR #128)는 홈 JSON-LD에 같은 패턴을 막았으나 sermons에는 갭이 남아 있었다
+- **해소**: `JSON.stringify(jsonLd).replace(/</g, '\\u003c')`를 적용해 `<` 문자를 이스케이프했다. 홈 `ChurchJsonLd.tsx:62`와 같은 방식이다 (tech-debt-small-batch task)
+- **확인**: `dangerouslySetInnerHTML` 3곳 전수 확인 — `ChurchJsonLd`·sermons 둘 다 이스케이프됨, `layout.tsx`는 숫자 상수만 삽입(갭 아님). Codex 1차 검증 PASS
+
+### ✅ 하위 페이지 og:image 소실 — openGraph 부분 선언 (2026-06-19 해소, PR #129)
+
+- **부채**: 하위 페이지가 `generateMetadata`에서 `openGraph`를 부분 선언하면, Next.js가 `openGraph` 객체를 얕게 병합(shallow merge)하면서 root layout의 og:image(기본 배너)가 사라졌다. 공유·검색 미리보기 이미지가 빈 상태였다. about/*는 그 사이 `OPEN_GRAPH_BASE` 펼침으로 고쳐졌고, sermons·news 계열이 남아 있었다
+- **해소**: `src/config/seo.ts`에 `OG_FALLBACK_IMAGE` 상수를 두고 `OPEN_GRAPH_BASE`·`CHURCH_INFO.image`가 참조하게 모았다. 정적 목록 4개(`sermons`·`sermons/all`·`sermons/series`·`news/bulletins`)는 `...OPEN_GRAPH_BASE`를 펼쳐 배너를 상속하고, 동적 상세 3개(`sermons/[id]`·`sermons/series/[id]`·`news/bulletins/[id]`)는 콘텐츠 이미지가 없을 때 `[{ url: x || OG_FALLBACK_IMAGE }]`로 배너를 채운다. `openGraph` 미선언 페이지는 root를 상속해 원래 정상이었다
+- **확인**: prod 서버(빌드 산출물)에서 목록 4개가 `og:image = .../images/aboutBanner.jpg` 출력, 상세 `/sermons/3`은 Cloudinary 콘텐츠 썸네일 유지. verify-task(`20260619-145827`)·harness-gate 통과. PR 봇은 Gemini 3건 반영·Codex 👍
+
+### ✅ 라우트·영역별 not-found가 모두 루트 404로 떨어짐 (2026-06-17 해소)
+
+- **부채**: 설교·admin의 `notFound()`가 모두 루트 다크 404로 떨어졌고, `news/notices/[id]/page.tsx`는 미구현 스텁(`<div>page</div>`)이라 없는 공지 id에 HTTP 200 "page"가 떴다 (2026-06-10 not-found-page 작업 중 발견)
+- **해소**: 세 갈래 모두 후속 커밋으로 처리됐다.
+  - 설교·admin: `src/app/(content)/sermons/not-found.tsx`·`src/app/(admin)/not-found.tsx` 추가 — 커밋 `b368478`(2026-06-11)
+  - 공지 상세: 커밋 `ce52879`(2026-06-17)가 죽은 스텁을 삭제해, 없는 공지 경로는 라우트가 없어 404로 떨어진다
+- **확인**: `src/app/**/not-found.tsx` 5개(root·sermons·admin·bulletins·notices), `src/app/(content)/news/notices/[id]/` 디렉토리 없음 (2026-07-02 재확인). 공지 상세를 다시 구현할 때 조회 실패 시 `notFound()` 호출을 넣어야 한다
+
+### ✅ portal 컴포넌트 하이드레이션 불일치 (2026-06-15 해소, PR #122)
+
+- **부채**: `BottomSheet.tsx`·`Modal.tsx`이 `typeof window` 가드 뒤 `createPortal`을 호출하면서 항상 렌더된다. 서버는 null, 첫 클라는 portal이라 hydration mismatch가 났다. `/sermons/[id]` 공유 BottomSheet에서 React 콘솔 에러로 확인했다(dev 출력, prod도 동일)
+- **해소**: 공통 `src/components/ui/ClientPortal`(mounted two-pass)로 서버·첫 클라 렌더를 둘 다 null로 맞춘 뒤 `useEffect` 이후 portal을 만들고, `getElementById('modal-root') ?? document.body` 타깃 해석도 모았다. Modal·BottomSheet를 래핑하고, NoticeDrawer는 `!isOpen`이라 SSR에서 mismatch가 없어 redundant `typeof window`만 제거했다
+- **확인**: `/sermons/2` 하드 리로드 시 콘솔 hydration 경고 0(Chrome 실측). 공유 BottomSheet가 정상으로 열린다. verify-task·Codex 계획·1차 모두 PASS
+
+### ✅ 마이그레이션이 DB를 재현하지 못함 (2026-06-12 해소, migration-ssot-recovery)
+
+- **부채**: `supabase/migrations/`만으로 빈 DB를 만들면 실패했다. `profiles`·`bulletins`·`bulletin_images`·`notices`의 `CREATE TABLE`이 어느 마이그레이션에도 없었고(대시보드에서 손으로 생성), `001_sermon_schema.sql`은 실제 스키마와 어긋났다 — `sermons.id`가 파일은 `UUID`인데 실제는 `bigint`, 컬럼명 `date` vs `sermon_date`. `seed.sql`도 `date` 컬럼명을 썼다 (2026-06-11 PR #115에서 Gemini·Codex 리뷰가 동시 지적)
+- **해소**: baseline 마이그레이션 추가 + `001` 재작성 + `get_adjacent_bulletins` 추가로 Preview 빈 DB가 dev와 일치한다(테이블·컬럼·enum·RLS·트리거)
+- **남은 어긋남**: dev에 `custom_access_token_hook` 함수가 없어 `config.toml:178` 선언·마이그레이션 `20260425000000`과 어긋난다(fresh 빌드는 함수를 만들므로 미래 prod는 정상). 2026-07-02 dev `pg_proc` 실측으로 재확인 — 이후 추적은 active.md "DB 위생 남은 분" 항목의 뿌리 원인 절이 잇는다
+- **확인**: Supabase Preview replay 성공. PR #139 `20260702000001_db_hygiene.sql`도 fresh replay 가드를 넣어 통과 (2026-07-02)
+
 ### ✅ `supabase` named export deprecated 제거 (2026-06-02 해소, PR #108)
 
 - **부채**: `client.ts`의 deprecated `supabase` named export가 모듈 로드 시 클라이언트를 즉시 만들어 lazy 싱글톤과 인스턴스가 둘로 갈렸다
@@ -15,6 +84,7 @@
 - **부채**: `:focus-visible` outline 10곳과 `Pagination.module.scss`의 `:focus` outline 1곳이 색·폭·offset을 직접 선언해 SSOT가 없었다
 - **해소**: `focus-ring($variant, $offset)` mixin(`@content`로 추가 속성 수용)과 `$focus-ring-strong-color` 토큰을 도입해 11곳(Notice 8·ListItem·SermonNoteEditor·Pagination)을 교체했다
 - **확인**: `rg -n ":focus|outline" src/components/ui/Pagination/Pagination.module.scss` → transition 선언 1건, focus outline 선언 0건. admin box-shadow 패턴은 범위 밖
+- **후속 (2026-06-15, focus-ring-unify)**: PR #108이 범위 밖으로 둔 마지막 두 곳을 마무리했다. `ui/Select`의 수동 `outline: 2px`를 `focus-ring` mixin으로 바꾸고(고정 px → 공통 토큰 링), admin focus(`dropdown`·`primitives`·`AdminHeader`)를 admin accent `$primary-soft` + glow `$primary-soft-subtle` 한 recipe로 통일했다. 하드코딩 `rgba(91,107,165,0.08)`도 `$primary-soft-subtle` 토큰으로 바꿨다. content/ui 입력 4개는 이미 `border-color: $border-focus`로 일관해 손대지 않았다.
 
 ### ✅ useDrawerHistory 라우트 이동 시 가짜 history 항목 (2026-06-02 해소, PR #108)
 

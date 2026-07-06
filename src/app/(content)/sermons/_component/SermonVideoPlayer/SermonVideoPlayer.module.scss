@@ -1,8 +1,51 @@
+// 영상 위 오버레이 배경 — 이미지·영상 위 dim (semantic 미정, GridCard `$duration-overlay-bg` 관례).
+$overlay-pill-bg: rgba(0, 0, 0, 0.5);
+$overlay-duration-bg: rgba(0, 0, 0, 0.7);
+
 .video_wrap {
+  position: relative;
   margin: 0 calc(-1 * $container-padding);
 
   @include respond-up($breakpoint-tablet) {
     margin: 0;
+  }
+}
+
+// 영상 좌상단 시리즈 pill (목업 "산상수훈 03") — 어두운 글래스 위 밝은 텍스트.
+.series_pill {
+  position: absolute;
+  top: $spacing-12;
+  left: $spacing-16;
+  z-index: 1;
+  padding: $spacing-4 $spacing-10;
+  font-size: $font-size-11;
+  font-weight: $font-weight-semibold;
+  color: $txt-inverse;
+  background-color: $overlay-pill-bg;
+  border-radius: $radius-circle;
+  text-decoration: none;
+
+  @include respond-up($breakpoint-tablet) {
+    left: $spacing-12;
+  }
+}
+
+// 영상 우하단 재생시간.
+.duration {
+  position: absolute;
+  right: $spacing-16;
+  bottom: $spacing-12;
+  z-index: 1;
+  padding: $spacing-2 $spacing-8;
+  font-size: $font-size-11;
+  font-weight: $font-weight-semibold;
+  color: $txt-inverse;
+  background-color: $overlay-duration-bg;
+  border-radius: $radius-xxs;
+  font-variant-numeric: tabular-nums;
+
+  @include respond-up($breakpoint-tablet) {
+    right: $spacing-12;
   }
 }
 
@@ -71,8 +114,8 @@
   gap: $content-gap-s;
   width: 100%;
   aspect-ratio: 16 / 9;
-  background: linear-gradient(135deg, $bg-secondary, $bg-secondary-deep);
-  border: 1px dashed $border-primary;
+  background: linear-gradient(135deg, $home-card-soft, $home-tint);
+  border: 1px dashed $home-border;
 
   @include respond-up($breakpoint-tablet) {
     border-radius: $radius-m;
@@ -81,11 +124,11 @@
 
 .placeholder_icon {
   font-size: 4.8rem;
-  color: $txt-tertiary;
+  color: $home-text-muted;
 }
 
 .placeholder_text {
   font-size: $font-size-14;
   font-weight: $font-weight-medium;
-  color: $txt-secondary;
+  color: $home-text-sub;
 }

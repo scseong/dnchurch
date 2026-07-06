@@ -1,70 +1,51 @@
 import Link from 'next/link';
-import clsx from 'clsx';
+import CloudinaryImage from '@/components/common/CloudinaryImage';
+import { cloudinaryFetchUrl } from '@/utils/cloudinary';
 import { formattedDate } from '@/utils/date';
-import { getRevealStyle } from '@/utils/reveal';
 import { formatPreacherLabel, getSermonThumbnail } from '@/utils/sermon';
 import type { SermonListItem } from '@/types/sermon';
 import styles from './SermonCard.module.scss';
 
 type SermonCardProps = {
   sermon: SermonListItem;
-  isLatest?: boolean;
-  index?: number;
-  isSub?: boolean;
 };
 
-export default function SermonCard({ sermon, isLatest, index, isSub }: SermonCardProps) {
-  const thumbnail = getSermonThumbnail(sermon);
+export default function SermonCard({ sermon }: SermonCardProps) {
+  const thumbnail = cloudinaryFetchUrl(getSermonThumbnail(sermon));
   const preacherLabel = formatPreacherLabel(sermon.preacher);
+  const dateLabel = formattedDate(sermon.sermon_date, 'YYYY.MM.DD');
 
   return (
     <Link
       href={`/sermons/${sermon.id}`}
-      className={clsx(styles.card, isSub && styles.card_sub)}
+      className={styles.card}
       aria-label={`${sermon.title} - ${preacherLabel}`}
-      data-reveal
-      style={getRevealStyle(index)}
     >
-      <div className={styles.card_thumb}>
-        {/* TODO: Cloudinary 최적화 */}
+      <div className={styles.thumb}>
         {thumbnail && (
-          <img src={thumbnail} alt={sermonAlt(sermon, preacherLabel)} loading="lazy" />
+          <CloudinaryImage
+            src={thumbnail}
+            alt={`${sermon.title} 설교 영상`}
+            fill
+            sizes="(min-width: 640px) 64rem, 100vw"
+          />
         )}
-        {isLatest && <span className={styles.latest_badge}>LATEST</span>}
-        <PlayIcon className={styles.thumb_play} />
+        <span className={styles.badge}>▶ 온라인 예배</span>
+        <span className={styles.play} aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="currentColor">
+            <path d="M7 5v14l12-7z" />
+          </svg>
+        </span>
       </div>
-      <div className={styles.meta_bar}>
-        <div className={styles.meta_left}>
-          <span className={styles.title} title={sermon.title}>
-            {sermon.title}
-          </span>
-          <div className={styles.meta_sub}>
-            <span className={styles.scripture}>{sermon.scripture}</span>
-            <span className={styles.dot} aria-hidden="true" />
-            <span className={styles.date}>{formattedDate(sermon.sermon_date, 'YYYY.MM.DD')}</span>
-            <span className={styles.dot} aria-hidden="true" />
-            <span className={styles.preacher}>{preacherLabel}</span>
-          </div>
-        </div>
-        <PlayIcon className={styles.play_btn} />
+      <div className={styles.info}>
+        <span className={styles.eyebrow}>
+          {sermon.service_type ?? '예배'} · {dateLabel}
+        </span>
+        <span className={styles.title}>{sermon.title}</span>
+        <span className={styles.meta}>
+          {preacherLabel} · {sermon.scripture}
+        </span>
       </div>
     </Link>
   );
-}
-
-function PlayIcon({ className }: { className?: string }) {
-  return (
-    <span className={className} aria-hidden="true">
-      <svg viewBox="0 0 12 14" fill="currentColor">
-        <path d="M0 0v14l12-7z" />
-      </svg>
-    </span>
-  );
-}
-
-function sermonAlt(
-  sermon: Pick<SermonListItem, 'title' | 'sermon_date'>,
-  preacherLabel: string
-) {
-  return `${sermon.title} - ${preacherLabel} (${formattedDate(sermon.sermon_date, 'YYYY.MM.DD')})`;
 }

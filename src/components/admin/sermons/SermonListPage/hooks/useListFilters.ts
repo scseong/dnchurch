@@ -21,15 +21,17 @@ export function useListFilters(initial?: AdminSermonListParams) {
       initial ?? parseListFilterParams(new URLSearchParams(searchParams.toString()))
   );
 
-  // URL 변경(뒤로가기/수동 입력) → state
-  useEffect(() => {
-    const fromUrl = parseListFilterParams(new URLSearchParams(searchParams.toString()));
-    queueMicrotask(() =>
-      setState((current) =>
-        buildListFilterQuery(current) === buildListFilterQuery(fromUrl) ? current : fromUrl
-      )
+  // URL 변경(뒤로가기/수동 입력) → state. 렌더 중 prev-state 보정 (effect 안 setState 회피).
+  // searchParams 객체 식별자 대신 문자열로 비교해 불필요한 재동기화를 막는다.
+  const searchString = searchParams.toString();
+  const [prevSearchString, setPrevSearchString] = useState(searchString);
+  if (searchString !== prevSearchString) {
+    setPrevSearchString(searchString);
+    const fromUrl = parseListFilterParams(new URLSearchParams(searchString));
+    setState((current) =>
+      buildListFilterQuery(current) === buildListFilterQuery(fromUrl) ? current : fromUrl
     );
-  }, [searchParams]);
+  }
 
   // state → URL: server segment 재실행 동안 isPending=true
   useEffect(() => {

@@ -1,10 +1,10 @@
 'use client';
 
 import { MouseEvent, PropsWithChildren, ReactNode, useRef } from 'react';
-import { createPortal } from 'react-dom';
 import clsx from 'clsx';
 import { IoClose } from 'react-icons/io5';
 import { useDialog } from '@/hooks/useDialog';
+import { ClientPortal } from '../ClientPortal/ClientPortal';
 import styles from './BottomSheet.module.scss';
 
 type Props = PropsWithChildren<{
@@ -18,6 +18,12 @@ type Props = PropsWithChildren<{
   showClose?: boolean;
   /** 하단 액션 영역. 적용/저장 등 명시적 확정이 필요한 워크플로우에서만 사용. */
   footer?: ReactNode;
+  /** 열릴 때 history 엔트리를 쌓아 기기 뒤로가기로 시트를 닫는다(모바일 콘텐츠 시트용). @default false */
+  enableHistory?: boolean;
+  /** `full`은 모바일 풀스크린(핸들·바디 패딩 제거). PC에서는 좁은 중앙 모달. @default 'default' */
+  size?: 'default' | 'full';
+  /** 커스텀 헤더. 제공하면 기본 title/close 헤더 대신 이 노드를 렌더한다(뒤로가기·진행바·우측 액션 등). 이때 dialog 라벨은 `ariaLabel`을 쓴다. */
+  header?: ReactNode;
 }>;
 
 /**
@@ -40,6 +46,9 @@ export function BottomSheet({
   ariaLabel,
   showClose = true,
   footer,
+  enableHistory = false,
+  size = 'default',
+  header,
   children
 }: Props) {
   const overlayRef = useRef<HTMLDivElement>(null);
@@ -48,10 +57,9 @@ export function BottomSheet({
     onClose,
     title,
     ariaLabel,
-    componentName: 'BottomSheet'
+    componentName: 'BottomSheet',
+    enableHistory
   });
-
-  if (typeof window === 'undefined') return null;
 
   const showHeader = Boolean(trimmedTitle) || showClose;
 
@@ -59,44 +67,49 @@ export function BottomSheet({
     if (e.target === overlayRef.current) onClose();
   };
 
-  return createPortal(
-    <div
-      ref={overlayRef}
-      className={clsx(styles.overlay, open && styles.open)}
-      onClick={handleOverlayClick}
-      aria-hidden={!open}
-      inert={!open}
-    >
+  return (
+    <ClientPortal>
       <div
-        ref={panelRef}
-        className={clsx(styles.sheet, open && styles.open)}
-        role="dialog"
-        aria-modal="true"
-        {...(trimmedTitle
-          ? { 'aria-labelledby': titleId }
-          : { 'aria-label': accessibleLabel })}
-        tabIndex={-1}
+        ref={overlayRef}
+        className={clsx(styles.overlay, open && styles.open)}
+        onClick={handleOverlayClick}
+        aria-hidden={!open}
+        inert={!open}
       >
-        <div className={styles.handle} aria-hidden="true" />
-        {showHeader && (
-          <header className={styles.header}>
-            {trimmedTitle && <h2 id={titleId} className={styles.title}>{title}</h2>}
-            {showClose && (
-              <button
-                type="button"
-                className={styles.close_btn}
-                onClick={onClose}
-                aria-label="닫기"
-              >
-                <IoClose />
-              </button>
-            )}
-          </header>
-        )}
-        <div className={styles.body}>{children}</div>
-        {footer && <footer className={styles.footer}>{footer}</footer>}
+        <div
+          ref={panelRef}
+          className={clsx(styles.sheet, size === 'full' && styles.full, open && styles.open)}
+          role="dialog"
+          aria-modal="true"
+          {...(trimmedTitle && !header
+            ? { 'aria-labelledby': titleId }
+            : { 'aria-label': accessibleLabel })}
+          tabIndex={-1}
+        >
+          {size !== 'full' && <div className={styles.handle} aria-hidden="true" />}
+          {header ? (
+            <div className={styles.custom_header}>{header}</div>
+          ) : (
+            showHeader && (
+              <header className={styles.header}>
+                {trimmedTitle && <h2 id={titleId} className={styles.title}>{title}</h2>}
+                {showClose && (
+                  <button
+                    type="button"
+                    className={styles.close_btn}
+                    onClick={onClose}
+                    aria-label="닫기"
+                  >
+                    <IoClose />
+                  </button>
+                )}
+              </header>
+            )
+          )}
+          <div className={styles.body}>{children}</div>
+          {footer && <footer className={styles.footer}>{footer}</footer>}
+        </div>
       </div>
-    </div>,
-    document.getElementById('modal-root') ?? document.body
+    </ClientPortal>
   );
 }

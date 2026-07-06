@@ -1,0 +1,76 @@
+.section {
+  padding: $spacing-20 0 $section-gap-40;
+}
+
+.card {
+  display: flex;
+  align-items: center;
+  gap: $content-gap-s;
+  max-width: 64rem;
+  margin: 0 auto;
+  padding: $padding-card;
+  border-radius: $radius-l;
+  background: $home-tint-card;
+  border: 1px solid $home-border-gold;
+
+  // 좁은 폰에서 텍스트가 버튼을 압박해 깨지는 것 방지 — 버튼을 아래 줄 전체폭으로 내린다
+  @include respond($breakpoint-mobile) {
+    flex-wrap: wrap;
+  }
+}
+
+.icon_box {
+  flex-shrink: 0;
+  width: 4.2rem;
+  height: 4.2rem;
+  display: grid;
+  place-items: center;
+  border-radius: $radius-xs;
+  background: $home-card;
+  color: $home-gold;
+}
+
+.icon {
+  width: 2.2rem;
+  height: 2.2rem;
+}
+
+.text {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-2;
+}
+
+.title {
+  font-size: $font-size-14;
+  font-weight: $font-weight-bold;
+  letter-spacing: $letter-spacing-body;
+  color: $home-gold-on-tint;
+}
+
+.desc {
+  font-size: $font-size-13;
+  line-height: $line-height-relaxed;
+  color: $home-gold-strong;
+}
+
+.button {
+  flex-shrink: 0;
+  padding: $padding-control;
+  border-radius: $radius-xs;
+  background-color: $home-accent;
+  color: $home-cream-text;
+  font-size: $font-size-13;
+  font-weight: $font-weight-semibold;
+  white-space: nowrap;
+
+  @include hover-bg-shift($home-accent-hover);
+
+  // 좁은 폰에서 줄바꿈 시 버튼을 전체폭으로 — 텍스트 압박/깨짐 방지
+  @include respond($breakpoint-mobile) {
+    flex-basis: 100%;
+    text-align: center;
+  }
+}

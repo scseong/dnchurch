@@ -1,0 +1,14 @@
+{
+  "$schema": "https://figma-console-mcp.southleft.com/schemas/tokens.config.v1.json",
+  "source": {
+    "dir": "docs/design-system",
+    "canonical": "dtcg"
+  },
+  "generated": {
+    "dir": "docs/design-system",
+    "formats": [
+      { "format": "dtcg" }
+    ]
+  },
+  "conflictResolution": "ask"
+}

@@ -2,7 +2,7 @@ import clsx from 'clsx';
 import { HiOutlineEye, HiOutlinePhotograph } from 'react-icons/hi';
 import { formattedDate } from '@/utils/date';
 import { formatPreacherLabel } from '@/utils/sermon';
-import type { Preacher, SeriesWithSermonCount } from '@/types/sermon';
+import type { PreacherWithSermonCount, SeriesWithSermonCount } from '@/types/sermon';
 import type { SermonFormData } from '@/types/sermon-form';
 import parent from '../index.module.scss';
 import styles from './preview.module.scss';
@@ -10,7 +10,7 @@ import styles from './preview.module.scss';
 interface PreviewCardProps {
   formData: SermonFormData;
   series: SeriesWithSermonCount[];
-  preachers: Preacher[];
+  preachers: PreacherWithSermonCount[];
 }
 
 export default function PreviewCard({ formData, series, preachers }: PreviewCardProps) {

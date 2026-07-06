@@ -1,0 +1,85 @@
+// 새가족 등록 폼 — 공통 FormField/FormSubmitButton(중립·4.2rem·1.3rem)을 쓰고,
+// pill·체크박스만 같은 중립 톤·폰트로 맞춘다. BottomSheet(portal) 안이라 globals 토큰.
+
+.subtitle {
+  margin-bottom: $spacing-16;
+  font-size: $font-size-13;
+  line-height: $line-height-relaxed;
+  color: $txt-secondary;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-16;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-8;
+}
+
+.field_label {
+  font-size: $font-size-13;
+  font-weight: $font-weight-bold;
+  color: $txt-secondary;
+}
+
+.choice_group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: $spacing-8;
+}
+
+.choice {
+  padding: $spacing-8 $spacing-16;
+  background-color: $bg-card;
+  border: 0.1rem solid $border-primary;
+  border-radius: $radius-circle;
+  font-size: $font-size-13;
+  font-weight: $font-weight-medium;
+  color: $txt-secondary;
+  cursor: pointer;
+
+  @include hover-bg-shift($bg-hover);
+}
+
+.choice_on {
+  border-color: $primary;
+  background-color: $primary-subtle;
+  color: $primary;
+}
+
+.check_row {
+  display: flex;
+  align-items: center;
+  gap: $spacing-10;
+  cursor: pointer;
+}
+
+.check_row_consent {
+  align-items: flex-start;
+}
+
+.check_input {
+  flex-shrink: 0;
+  width: 1.8rem;
+  height: 1.8rem;
+  accent-color: $primary;
+  cursor: pointer;
+}
+
+.check_label {
+  font-size: $font-size-13;
+  color: $txt-secondary;
+}
+
+.policy_link {
+  align-self: flex-start;
+  font-size: $font-size-13;
+  color: $txt-link;
+  text-decoration: underline;
+
+  @include hover-color-shift($primary);
+}

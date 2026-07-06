@@ -12,6 +12,9 @@ $container-min: var(--container-min);
 /// 컨테이너 최대 너비 (PC·Tablet 120rem / Mobile 76.8rem)
 $container-max: var(--container-max);
 
+/// 모바일 프레임 최대 너비 (≈768px). app 모드에서 콘텐츠·헤더·탭·하단바를 이 폭으로 가운데 정렬.
+$app-frame-max: var(--app-frame-max);
+
 /// 최소 화면 높이 (PC 80rem / Tablet 102.4rem / Mobile 81.2rem), 한 화면에 콘텐츠를 모두 노출해야 하는 경우
 $screensize-h-min: var(--screensize-h-min);
 
@@ -21,8 +24,8 @@ $screensize-h-min: var(--screensize-h-min);
 
 $top-bar-height: 3.6rem;
 $header-height: 7.2rem;
-$app-header-height: 5.2rem;
-$tab-bar-height: 5.4rem;
+$app-header-height: 5rem; // 모바일(앱) 헤더 — .mobile_top 높이 + 하위 sticky offset의 SSOT
+$tab-bar-height: 5.8rem; // BottomNav .tab_list 높이 SSOT — Footer 하단 패딩이 이 값 + safe-area를 참조
 $lnb-min-height: 25rem;
 
 // Header (tablet compact)

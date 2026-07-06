@@ -23,6 +23,8 @@ export default async function ServingPeople() {
 
   return (
     <MainContainer title="섬기는 이">
+      {/* Hero 제거로 사라진 페이지 제목 — 시각은 MobileHeader가 대신하고, 스크린리더·데스크톱용 h1을 둔다 */}
+      <h1 className={styles.blind_title}>섬기는 사람들</h1>
       <div className={styles.wrap}>
         {(staffList ?? []).map((staff, idx) =>
           idx === 0 ? (

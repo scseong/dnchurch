@@ -48,10 +48,10 @@ export default function GridCard({ sermon, index = 0 }: Props) {
       </div>
 
       <div className={styles.info}>
-        <h3 className={styles.title}>{sermon.title}</h3>
         {sermon.scripture && (
           <span className={styles.scripture}>{sermon.scripture}</span>
         )}
+        <h3 className={styles.title}>{sermon.title}</h3>
         <div className={styles.meta}>
           <span>{preacherLabel}</span>
           <span className={styles.meta_dot} aria-hidden="true">

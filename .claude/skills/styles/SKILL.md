@@ -12,7 +12,7 @@ description: SCSS 파일 생성/수정, 스타일 작성, 디자인 토큰 사�
 | 파일 | 주요 토큰 |
 |---|---|
 | `tokens/_breakpoint.scss` | Primitive(`$breakpoint-420` ~ `$breakpoint-1920`), Semantic(`$breakpoint-mobile` ~ `$breakpoint-pc-xl`), `$responsive-font-vw-map` |
-| `tokens/_color.scss` | Gray/Navy/Gold/Beige/Status primitive, 시맨틱(`$txt-*` `$bg-*` `$border-*` `$primary` `$accent` `$status-*`) |
+| `tokens/_color.scss` | Gray/Brown/Navy/Gold/Beige/Status primitive, 시맨틱(`$txt-*` `$bg-*` `$border-*` `$primary` `$accent` `$status-*`) |
 | `tokens/_effect.scss` | `$shadow-*`, `$transition-*`, `@keyframes fadeUp` |
 | `tokens/_layout.scss` | `$container-padding/min/max`, `$header-height`, `$button-height-*`, `$icon-button-size-*` |
 | `tokens/_spacing.scss` | `$spacing-{px값}` (숫자=px): `$spacing-0` ~ `$spacing-200`, 4·8 배수 기반 |
@@ -47,23 +47,25 @@ description: SCSS 파일 생성/수정, 스타일 작성, 디자인 토큰 사�
 
 ## 컬러 토큰 체계
 
-### Warm vs Cool 역할 분리 (v4 — 가장 먼저 읽기)
+### 공개 영역은 all-warm, admin은 cool 예외 (v5 — 가장 먼저 읽기, ADR 0020)
 
-색상은 **온도(warm/cool)** 와 **역할(decorative/interactive)** 두 축으로 나뉜다. 두 축이 어긋나면 navy ↔ beige가 무작위 인접해 시각이 부서진다.
+공개 영역 색은 모두 **warm**이다 — brand action·interactive feedback은 **brown**, accent는 **gold**, 정적 면은 **beige**. (v4까지의 "interactive = cool(navy)" doctrine은 ADR 0020으로 폐기됐다.) admin만 정보 밀도 때문에 cool 톤을 예외로 유지한다(ADR 0012).
 
 | 역할 | 온도 | 용도 | 토큰 |
 |---|---|---|---|
-| **Decorative surface** | warm | 페이지·섹션·카드 정적 면 | `$bg-secondary` (cream), `$bg-accent-subtle` (gold tint) |
-| **Interactive feedback** | cool | hover/active/selected | `$bg-hover` (navy 6% rgba), `$primary-subtle` (navy 8% rgba), `$primary` |
-| **Brand action** | cool | CTA·링크·focus | `$primary`, `$primary-hover`, `$primary-active` |
+| **Brand action** | warm | CTA·링크·focus | `$primary`(brown-800), `$primary-hover`, `$primary-active` |
+| **Interactive feedback** | warm | hover/active/selected | `$bg-hover`(brown 6% rgba), `$primary-subtle`(brown 8% rgba) |
 | **Accent action** | warm | Featured/eyebrow/Gold CTA | `$accent`, `$accent-hover`, `$accent-subtle` |
+| **Decorative surface** | warm | 페이지·섹션·카드 정적 면 | `$bg-secondary`(beige), `$bg-accent-subtle`(gold tint) |
+| **Admin (예외)** | cool | admin 표면·sidebar·hover | `$bg-admin*`, `$primary-soft*`, `$bg-dark-nav*` — 콘텐츠 영역 사용 금지 |
 
-**규칙**: hover/active 안에서 warm primitive(`$beige-*` `$cream-*`)나 warm semantic(`$bg-secondary`)을 직접 면 색으로 쓰지 않는다. 인터랙션 신호는 cool tint로만 표현한다(예외: 정적 warm 카드 위에서 또 다른 warm 카드로 강조하는 디자인 명시 케이스).
+**규칙**: 공개 영역 인터랙션 신호(hover/active)는 `$bg-hover`·`$primary-subtle`(brown tint)로 표현한다. hover/active 안에서 정적 warm 면(`$beige-*`·`$bg-secondary`)을 직접 면 색으로 쓰지 않는다(tint와 정적 면 구분). admin 컴포넌트만 cool 토큰을 쓴다.
 
 ### Primitive (순수 색상값 — 직접 사용 금지, Semantic 토큰을 통해서만 참조)
 
 - **Gray**: `$gray-900` `$gray-700` `$gray-500` `$gray-400` `$gray-300` `$gray-200` `$gray-100` `$gray-50` `$black` `$white`
-- **Navy (Brand · Primary Action · Interactive cool)**: `$navy-950` `$navy-900` `$navy-800` `$navy-600`
+- **Brown (Brand · Primary Action · 공개 interactive)**: `$brown-600`(hover) `$brown-800`(기본) `$brown-900`(active·dark 카드) `$brown-950`(ink·공개 헤더) `$brown-975`(가장 깊은 dark)
+- **Navy (admin cool 표면 전용 — ADR 0012)**: `$navy-950` `$navy-900` `$navy-800` `$navy-600`. 공개 영역 brand는 Brown으로 이행(ADR 0020) — 콘텐츠 영역에서 navy 사용 금지
 - **Gold (Accent)**: `$gold-600` `$gold-400` `$gold-100`
 - **Beige (Warm Decorative Surface)**: `$beige-50` `$beige-100` `$beige-150` `$beige-200` `$beige-300` — 정적 면 전용. (`$beige-50/100/150/200/300` = `$bg-primary`/`$bg-beige-subtle`/`$bg-secondary`/`$border-card`/`$bg-secondary-deep`로 매핑 완료)
 - **Status**: `$green-500` `$green-100` `$red-500` `$red-100` `$orange-600` `$orange-100`
@@ -76,8 +78,8 @@ description: SCSS 파일 생성/수정, 스타일 작성, 디자인 토큰 사�
 
 **Background**
 - 정적 warm: `$bg-primary`(beige-50, 페이지 배경) `$bg-card`(#fff, 카드·패널) `$bg-secondary`(beige-150, 섹션·카드 정적 면) `$bg-secondary-deep`(beige-300, 더 진한 정적 면) `$bg-beige-subtle`(beige-100, 가장 옅은 섹션 면) `$bg-accent-subtle`(gold 12% tint, CTA·배너 면)
-- 인터랙티브 cool: `$bg-hover`(navy 6% rgba) — 면 종류 무관, hover/active 피드백 전용 ★
-- 다크: `$bg-dark` `$bg-dark-card` `$bg-dark-nav`(헤더·푸터)
+- 인터랙티브 warm: `$bg-hover`(brown 6% rgba) — 면 종류 무관, hover/active 피드백 전용 ★ (v5: navy→brown)
+- 다크: `$bg-dark` `$bg-dark-card`(warm dark-brown) `$bg-header`(공개 헤더 warm) / `$bg-dark-nav`(admin sidebar·not-found cool, 콘텐츠 사용 금지)
 
 > v4: `$bg-tertiary` **삭제**. hover 피드백은 `$bg-hover`로, 더 깊은 warm 면이 필요하면 `$bg-secondary-deep`을 쓴다.
 
@@ -85,12 +87,12 @@ description: SCSS 파일 생성/수정, 스타일 작성, 디자인 토큰 사�
 `$border-primary` `$border-subtle` `$border-strong` `$border-focus` `$border-warm`(cream·gold 배경 위)
 `$border-inverse` `$border-dark-subtle` `$border-dark-faint`
 
-**Primary Action (Navy · Cool)**
-`$primary`(navy-800) `$primary-hover`(navy-600 — _lighter_) `$primary-active`(navy-950 — _darker_) `$primary-subtle`(navy 8% rgba — active/selected 면)
+**Primary Action (Brown · Warm — v5)**
+`$primary`(brown-800) `$primary-hover`(brown-600 — _lighter_) `$primary-active`(brown-900 — _darker_) `$primary-subtle`(brown 8% rgba — active/selected 면)
 
-> **Hover 방향 의도**: 다크 navy primary는 hover에서 **밝아진다**(lift affordance). 클릭 시 active로 한 단계 어두워진다.
+> **Hover 방향 의도**: 다크 brown primary는 hover에서 **밝아진다**(lift affordance). 클릭 시 active로 한 단계 어두워진다.
 >
-> **`$primary-subtle` v4**: warm beige가 아닌 **cool navy tint(rgba 8%)**. 칩의 `.active`, 선택 패널 등에서 `$primary` 텍스트/보더와 같은 온도로 짝을 이룬다. warm 면 위·cool 면 위 모두에서 자연스러운 강조를 만든다.
+> **`$primary-subtle` v5**: brown tint(rgba 8%). 칩의 `.active`, 선택 패널 등에서 `$primary` 텍스트/보더와 같은 warm 톤으로 짝을 이룬다.
 
 **Accent (Gold)**
 `$accent` `$accent-hover` `$accent-subtle`
@@ -105,7 +107,7 @@ background: #f5f0e6;
 
 // ❌ 금지 — primitive 직접 사용
 color: $gold-600;              // → $accent
-background: $navy-950;         // → $bg-dark-nav 또는 $primary-active
+background: $brown-800;        // → $primary
 border: 1px solid $beige-200;  // → $border-card
 
 // ✅ 올바른 사용
@@ -113,7 +115,7 @@ color: $txt-primary;
 background: $bg-secondary;
 border-color: $border-card;
 color: $accent;                // eyebrow · Gold CTA
-background-color: $bg-dark-nav; // 헤더 · 푸터 다크 nav
+background-color: $bg-header;   // 공개 헤더 warm dark
 ```
 
 ### Primitive → Semantic 치트시트
@@ -125,10 +127,11 @@ primitive를 쓰려는 순간 이 표를 먼저 확인한다.
 | `$gold-600` | `$accent` | eyebrow 텍스트, Gold CTA 아이콘·텍스트 |
 | `$gold-400` | `$accent-hover` | Gold 요소 hover 상태 |
 | `$gold-100` | `$accent-subtle` | Gold 연한 배경 |
-| `$navy-800` | `$primary` | CTA 배경, 링크, 선택 탭 |
-| `$navy-600` | `$primary-hover` | Primary hover 상태 |
-| `$navy-950` (active) | `$primary-active` | 클릭·활성 상태 |
-| `$navy-950` (배경) | `$bg-dark-nav` | 헤더·푸터·사이드바 다크 배경 |
+| `$brown-800` | `$primary` | CTA 배경, 링크, 선택 탭 |
+| `$brown-600` | `$primary-hover` | Primary hover 상태 |
+| `$brown-900` | `$primary-active` | 클릭·활성 상태 |
+| `$brown-950` (배경) | `$bg-header` | 공개 헤더 warm dark 배경 |
+| `$navy-950` (배경) | `$bg-dark-nav` | admin sidebar·not-found cool nav (콘텐츠 금지) |
 | `$gray-900` | `$txt-primary` | 제목·본문 |
 | `$gray-700` | `$txt-secondary` | 보조 텍스트·부제 |
 | `$gray-500` | `$txt-tertiary` | 캡션·메타·날짜 |
@@ -145,7 +148,7 @@ primitive를 쓰려는 순간 이 표를 먼저 확인한다.
 **hex 하드코딩 금지** — hex 색을 직접 쓰지 않는다. 밝은 구분선·테두리(`#eee`·`#ccc`)는 `$border-primary`, 더 진한 테두리·focus는 위 표의 semantic 또는 `$focus-ring-color`로 바꾼다(`color-no-hex` stylelint warning).
 
 **예외 — semantic 미정 (사용처에 로컬 주석 필수)**
-- 다크 그라디언트: `linear-gradient($navy-900, $navy-950)` 등 Hero·배너 전용
+- 다크 그라디언트: `linear-gradient($brown-975, $brown-950)` 등 Hero·배너 전용
 - rgba 투명도 조합: `rgba($gold-600, 0.18)` 등 기존 semantic으로 표현 불가한 케이스
 
 ### Admin 표면 토큰 (ADR 0012)
@@ -171,13 +174,16 @@ admin은 정보 밀도가 높은 cool 표면이라 콘텐츠 warm 톤과 다른 
 |---|---|---|---|
 | input, button | `$padding-control` | `$radius-xs` | |
 | 큰 CTA 버튼 | `$padding-control-wide` | `$radius-xs` | |
-| card, 패널 | `$padding-card` | `$radius-s` | `$shadow-sm` |
-| 소형 카드, 리스트 아이템 | `$padding-card-compact` | `$radius-s` | `$content-gap-s` |
+| 대형·피처 카드 (히어로 등) | `$padding-card-lg` | `$radius-l` | `$shadow-sm` |
+| 표준 카드·패널 | `$padding-card` | `$radius-s` | `$shadow-sm` |
+| 컴팩트 카드·타일·콜아웃·리스트 행 | `$padding-card-compact` | `$radius-s` | `$content-gap-s` |
 | 모달, 바텀시트 | `$padding-card` | `$radius-m` | `$overlay-scrim` |
 | 태그, 뱃지 | `$padding-inline-xs` | `$radius-circle` | |
 | 섹션 컨테이너 | `$container-padding` / `$section-gap-*` | — | `$container-max` |
 | 이미지 오버레이 | — | — | `$overlay-scrim`, `$txt-image-subtle` |
 | `:focus-visible` outline | `$focus-ring-width` / `$focus-ring-offset` | — | `$focus-ring-color` |
+
+**카드 padding은 대칭만 쓴다** — 대형 `$padding-card-lg`(20/24px), 표준 `$padding-card`(16/20px), 컴팩트 `$padding-card-compact`(12/16px). 모두 가로=세로다. 면 종류마다 토큰 하나로 고정한다. 컨트롤·배지는 가로형이라 예외다. 근거: ADR 0018.
 
 **Content Gap** (XL→XS): `$content-gap-xl`(32px) > `$content-gap-l`(24px) > `$content-gap-m`(16px) > `$content-gap-s`(12px) > `$content-gap-xs`(8px)
 
@@ -201,9 +207,9 @@ Hover 패턴은 **3원칙**을 예외 없이 따른다 — 다른 곳에서 `tra
 
 | 컴포넌트 | hover 의도 | 사용 |
 |---|---|---|
-| Primary 버튼 (light/dark surface 모두) | bg navy-800 → navy-600 (lighter) | `@include hover-bg-shift($primary-hover);` + `&:active { background-color: $primary-active; }` |
-| Secondary 버튼 / 아이콘 버튼 / 드롭다운 항목 | 정적 면 → cool tint | `@include hover-bg-shift($bg-hover);` (border는 절대 건드리지 X) |
-| 칩 / 리스트 항목 (선택 가능) | hover → cool tint, active/selected → cool 강조 | hover: `@include hover-bg-shift($bg-hover);` · active: `background-color: $primary-subtle;` |
+| Primary 버튼 (light/dark surface 모두) | bg brown-800 → brown-600 (lighter) | `@include hover-bg-shift($primary-hover);` + `&:active { background-color: $primary-active; }` |
+| Secondary 버튼 / 아이콘 버튼 / 드롭다운 항목 | 정적 면 → warm tint | `@include hover-bg-shift($bg-hover);` (border는 절대 건드리지 X) |
+| 칩 / 리스트 항목 (선택 가능) | hover → warm tint, active/selected → warm 강조 | hover: `@include hover-bg-shift($bg-hover);` · active: `background-color: $primary-subtle;` |
 | 텍스트 링크 | color $txt-link → $primary | `@include hover-color-shift($primary);` |
 | 다크 위 링크 | color → $accent | `@include hover-color-shift($accent);` |
 | 카드 (clickable) | translateY + box-shadow | `@include hover-lift;` (기본 `$shadow-md`) |

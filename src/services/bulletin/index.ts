@@ -6,18 +6,14 @@ import { createServerSideClient } from '@/lib/supabase/server';
 import { createStaticClient } from '@/lib/supabase/static';
 import type { BulletinEditFormParams, BulletinFormParams, BulletinParams } from '@/types/bulletin';
 
-/**
- *
- * @deprecated
- */
-export const getBulletinList = (params: BulletinParams = {}) => {
-  const supabase = createStaticClient(bulletinCache.list());
-  return bulletinService(supabase).list(params);
-};
-
 export const getBulletinSummary = (params: BulletinParams) => {
   const supabase = createStaticClient(bulletinCache.summary());
   return bulletinService(supabase).summary(params);
+};
+
+export const getLatestBulletin = () => {
+  const supabase = createStaticClient(bulletinCache.summary());
+  return bulletinService(supabase).latest();
 };
 
 export const getAllBulletinIds = () => {

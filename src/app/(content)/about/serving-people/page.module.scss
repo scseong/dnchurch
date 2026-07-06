@@ -1,3 +1,7 @@
+.blind_title {
+  @include blind;
+}
+
 .wrap {
   padding: 0 8rem;
 
@@ -22,7 +26,7 @@
   }
 }
 
-$image_max_width: 20rem;
+$image-max-width: 20rem;
 
 .detail {
   display: flex;
@@ -35,8 +39,8 @@ $image_max_width: 20rem;
   .image_wrap {
     flex-basis: 40%;
     min-width: 10rem;
-    max-width: $image_max_width;
-    max-height: calc($image_max_width * 4 / 3);
+    max-width: $image-max-width;
+    max-height: calc($image-max-width * 4 / 3);
 
     img {
       width: 100%;

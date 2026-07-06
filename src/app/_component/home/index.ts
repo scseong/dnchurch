@@ -1,7 +1,11 @@
 export { default as Banner } from './Banner';
+export { default as TodayVerse } from './TodayVerse';
 export { default as QuickAccess } from './QuickAccess';
+export { default as WeeklyBulletin } from './WeeklyBulletin';
 export { default as RecentSermons } from './RecentSermons';
 export { default as NewHere } from './NewHere';
-export { default as FeedSection } from './FeedSection';
+export { default as PhotoGallery } from './PhotoGallery';
+export { default as LoginPrompt } from './LoginPrompt';
 export { default as AboutOurChurch } from './AboutOurChurch';
 export { default as ChurchVision } from './ChurchVision';
+export { default as ChurchJsonLd } from './ChurchJsonLd';

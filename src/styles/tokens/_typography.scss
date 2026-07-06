@@ -8,6 +8,9 @@ $font-family-base: 'Pretendard Variable', Pretendard, sans-serif;
 /// 강조용 세리프 (Noto Serif KR) — 교회 로고타입·이름, 성경 인용구 전용
 $font-family-secondary: var(--font-notoserifKR);
 
+/// 홈(목업 톤) 전용 명조 (Gowun Batang) — 홈 로고·헤딩·인용구. 홈 모듈에서만 사용.
+$font-family-home-serif: var(--font-gowunBatang);
+
 // ══════════════════════════════════════════
 // LINE HEIGHT — 6단계 체계
 // tight → snug → normal → base → relaxed → loose

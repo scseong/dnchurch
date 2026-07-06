@@ -47,7 +47,7 @@ model: opus
 
 ### Hook 자동 제안
 
-별도 hook 없음. 기존 `.claude/.husky/commit-msg` → `scripts/check-commit-msg.mjs`가 commit-msg 단계에서 R1~R4 형식 강제. WHY/IMPACT·외부 가독성·추상명사 회피는 본 에이전트가 사전 초안에서 해결.
+별도 hook 없음. 기존 `.husky/commit-msg` → `scripts/check-commit-msg.mjs`가 commit-msg 단계에서 R1~R4 형식 강제. WHY/IMPACT·외부 가독성·추상명사 회피는 본 에이전트가 사전 초안에서 해결.
 
 ### 호출 안 함
 

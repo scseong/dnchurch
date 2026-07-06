@@ -3,7 +3,7 @@
 .sunday {
   position: relative;
   padding: $spacing-20;
-  background-color: $white;
+  background-color: $bg-card;
   border: 1px solid $border-warm;
   border-radius: $radius-m;
   overflow: hidden;
@@ -102,7 +102,7 @@
   grid-template-columns: 8.4rem 1fr;
   gap: $spacing-16;
   padding: $spacing-20;
-  background-color: $white;
+  background-color: $bg-card;
   border: 1px solid $border-warm;
   border-radius: $radius-m;
 }

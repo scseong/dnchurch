@@ -15,11 +15,16 @@ $indicator-height: 0.2rem;
   position: sticky;
   top: 0;
   z-index: $z-header;
-  background-color: $white;
-  border-bottom: 0.1rem solid $beige-150;
+  // 홈 크림 배경과 톤 일치 (목업: 헤더가 콘텐츠 크림에 녹아듦). 공용이라 콘텐츠 페이지에도 적용됨.
+  background-color: $home-bg;
 
   @include respond-up($header-breakpoint) {
     display: none;
+  }
+
+  // app 모드(출시): 모든 폭에서 모바일 헤더를 보여준다.
+  [data-layout='app'] & {
+    display: block;
   }
 }
 
@@ -29,24 +34,119 @@ $indicator-height: 0.2rem;
 .mobile_top {
   display: flex;
   align-items: center;
+  justify-content: space-between;
   gap: $spacing-10;
-  height: 5.4rem;
-  padding: 0 $spacing-16;
+  height: $app-header-height;
+  padding: 0 $container-padding;
+  // 넓은 화면(app 프레임)에서 헤더 내용을 본문과 같은 폭으로 가운데 정렬(좁은 폭에선 무효).
+  max-width: $app-frame-max;
+  margin: 0 auto;
 }
 
-.mobile_slot_left {
+.mobile_left {
   display: flex;
   align-items: center;
+  gap: $spacing-8;
+  min-width: 0;
+  flex: 1;
+}
+
+.mobile_logo {
+  display: flex;
+  align-items: center;
+  gap: $spacing-8;
+}
+
+.mobile_logo_icon {
+  display: grid;
+  place-items: center;
+  width: 2.8rem;
+  height: 2.8rem;
+  border-radius: $radius-xs;
+  background-color: $accent;
+  color: $txt-inverse;
   flex-shrink: 0;
-  margin-left: calc(-1 * $spacing-10);
+
+  svg {
+    width: 2rem;
+    height: 2rem;
+  }
+}
+
+.mobile_logo_text {
+  font-family: $font-family-secondary;
+  font-size: $font-size-18;
+  font-weight: $font-weight-bold;
+  color: $txt-primary;
+  letter-spacing: $letter-spacing-tight;
+  white-space: nowrap;
+}
+
+.mobile_actions {
+  display: flex;
+  align-items: center;
+  gap: $spacing-8;
+  flex-shrink: 0;
+}
+
+.mobile_login {
+  display: inline-flex;
+  align-items: center;
+  height: 3.4rem;
+  padding: 0 $spacing-12;
+  border-radius: $radius-circle;
+  background-color: $accent;
+  color: $txt-inverse;
+  font-size: $font-size-13;
+  font-weight: $font-weight-semibold;
+  white-space: nowrap;
+  transition: background-color $transition-duration-normal $transition-easing-default;
+
+  &:hover {
+    background-color: $accent-hover;
+  }
+}
+
+.mobile_menu {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: $icon-button-size;
+  height: $icon-button-size;
+  // 아이콘은 콘텐츠 우측 가장자리에 맞추되, focus·클릭 영역은 아이콘 중심 정사각형으로 둔다.
+  margin-right: calc(-1 * $spacing-10);
+  color: $txt-primary;
+  flex-shrink: 0;
+
+  svg {
+    width: 1.7rem;
+    height: 1.7rem;
+  }
+}
+
+.drawer_overlay {
+  position: fixed;
+  inset: 0;
+  z-index: $z-drawer-backdrop;
+  background-color: $overlay-scrim;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity $transition-duration-normal $transition-easing-default;
+}
+
+.drawer_overlay_open {
+  opacity: 1;
+  pointer-events: auto;
 }
 
 .mobile_back {
   display: flex;
   align-items: center;
   justify-content: center;
-  min-width: 4.2rem;
-  min-height: 4.2rem;
+  width: $icon-button-size;
+  height: $icon-button-size;
+  // 아이콘은 콘텐츠 좌측 가장자리에 맞추되, focus·클릭 영역은 아이콘 중심 정사각형으로 둔다.
+  margin-left: calc(-1 * $spacing-10);
   flex-shrink: 0;
 
   svg {
@@ -63,81 +163,18 @@ $indicator-height: 0.2rem;
   font-weight: $font-weight-bold;
   color: $txt-primary;
   letter-spacing: $letter-spacing-body;
-  text-align: left;
+  text-align: center;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 }
 
-.mobile_actions {
-  display: flex;
-  align-items: center;
-  gap: $spacing-4;
-  margin-right: calc(-1 * $spacing-10);
-  flex-shrink: 0;
+// 목업 재설계 About 헤더 — 뒤로가기·메뉴 사이에서 타이틀 가운데 정렬
+.mobile_title_centered {
+  text-align: center;
 }
 
-.mobile_action_btn {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  min-width: 4.2rem;
-  min-height: 4.2rem;
-  border-radius: $radius-circle;
-  color: $txt-secondary;
-  transition: color $transition-duration-normal $transition-easing-default;
-
-  &:hover {
-    color: $txt-primary;
-    background-color: $overlay-subtle;
-  }
-
-  svg {
-    width: 2.2rem;
-    height: 2.2rem;
-  }
-}
-
-// ── 하단 행: 형제 페이지 탭 (references/Greeting.jsx MSubTabs 일치) ──
-
-.mobile_tabs {
-  position: sticky;
-  top: 5.4rem;
-  z-index: calc($z-header - 1);
-  overflow-x: auto;
-  scrollbar-width: none;
-  background-color: $white;
-  border-bottom: 0.1rem solid $border-card;
-
-  &::-webkit-scrollbar {
-    display: none;
-  }
-}
-
-.mobile_tab_list {
-  display: flex;
-  gap: $spacing-2;
-  padding: 0 $spacing-4;
-}
-
-.mobile_tab {
-  position: relative;
-  display: flex;
-  align-items: center;
-  padding: $spacing-12 $spacing-12;
-  font-size: $font-size-13;
-  font-weight: $font-weight-regular;
-  color: $txt-tertiary;
-  white-space: nowrap;
-  border-bottom: 0.2rem solid transparent;
-  transition: color $transition-duration-normal $transition-easing-default;
-}
-
-.mobile_tab_active {
-  color: $primary;
-  font-weight: $font-weight-semibold;
-  border-bottom-color: $primary;
-}
+// 하단 행 형제 페이지 탭은 공용 SectionTabNav로 렌더 — 스타일은 SectionTabNav.module.scss.
 
 // ══════════════════════════════════════════
 // DESKTOP HEADER
@@ -149,12 +186,17 @@ $indicator-height: 0.2rem;
   @include respond-up($header-breakpoint) {
     display: block;
   }
+
+  // app 모드(출시): 모든 폭에서 PC 헤더를 숨긴다(PC 유지 라우트만 노출).
+  [data-layout='app'] & {
+    display: none;
+  }
 }
 
 // ── Top Bar ──
 
 .top_bar {
-  background-color: $navy-950;
+  background-color: $bg-header;
   color: $txt-inverse;
 }
 
@@ -205,7 +247,7 @@ $indicator-height: 0.2rem;
   position: sticky;
   top: 0;
   z-index: $z-header;
-  background-color: $white;
+  background-color: $bg-card;
   border-bottom: 0.1rem solid $beige-150;
   transition: border-bottom-color $transition-duration-normal $transition-easing-default;
 }
@@ -239,10 +281,11 @@ $indicator-height: 0.2rem;
 .logo_icon {
   width: 2.4rem;
   height: 2.4rem;
-  color: $navy-950;
+  color: $accent;
 }
 
 .logo_text {
+  font-family: $font-family-secondary;
   font-size: $font-size-16;
   font-weight: $font-weight-bold;
   color: $txt-primary;
@@ -319,7 +362,7 @@ $indicator-height: 0.2rem;
   left: 50%;
   transform: translateX(-50%);
   padding: $spacing-8;
-  background-color: $white;
+  background-color: $bg-card;
   border-top: $indicator-height solid $primary;
   border-radius: 0 0 $radius-s $radius-s;
   box-shadow: $shadow-md;
@@ -369,39 +412,6 @@ $indicator-height: 0.2rem;
   flex-shrink: 0;
 }
 
-.utility_btn {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: $icon-button-size-sm;
-  height: $icon-button-size-sm;
-  border-radius: $radius-circle;
-  color: $txt-secondary;
-  transition:
-    color $transition-duration-normal $transition-easing-default,
-    background-color $transition-duration-normal $transition-easing-default;
-
-  &:hover {
-    color: $txt-primary;
-    background-color: $overlay-subtle;
-  }
-
-  svg {
-    width: 2rem;
-    height: 2rem;
-  }
-
-  @include respond-up($breakpoint-pc-sm) {
-    width: $icon-button-size;
-    height: $icon-button-size;
-
-    svg {
-      width: 2.2rem;
-      height: 2.2rem;
-    }
-  }
-}
-
 // ── CTA 버튼 ──
 
 .cta_btn {
@@ -411,12 +421,12 @@ $indicator-height: 0.2rem;
   width: $icon-button-size-sm;
   height: $icon-button-size-sm;
   border-radius: $radius-circle;
-  background-color: $gold-600;
-  color: $white;
+  background-color: $accent;
+  color: $txt-inverse;
   transition: background-color $transition-duration-normal $transition-easing-default;
 
   &:hover {
-    background-color: $gold-400;
+    background-color: $accent-hover;
   }
 
   @include respond-up($breakpoint-pc-sm) {

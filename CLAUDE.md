@@ -8,7 +8,7 @@
 
 - **Stack**: Next.js (App Router), Supabase, SCSS Modules, Cloudinary, TypeScript
 - **Route Groups**: `(content)/` — HeroSection + Breadcrumb 포함 (about, news, fellowship, sermons, community, next-gen, notifications, search)
-- **Data Flow**: `apis/` (DB 쿼리) → `services/` (비즈니스 로직) → `actions/` (뮤테이션) → `app/` (페이지)
+- **레이어 서열** (ESLint 강제): `apis → services → actions → app`. 각 층은 왼쪽(하위)만 import하고 오른쪽(상위)은 참조하지 못한다. 순차 데이터 파이프라인이 아니다 — `services/`가 도메인 읽기·쓰기(RPC 뮤테이션 포함)를 함께 갖고, `actions/`는 검증·인증·캐시 갱신을 입힌 서버 뮤테이션 진입점, `apis/`는 인증·설정 등 횡단 쿼리다.
 
 ## 행동 가드레일 (LLM 공통 실수 방지)
 
@@ -51,6 +51,10 @@
 - 머지 후 `node scripts/complete-task.mjs <slug>`로 exec-plan을 `completed/`로 이동, 회고 작성
 - PR 생성 시 `--assignee "@me"`와 `--label <name>` 은 **항상 필수** — 누락 시 GitHub Actions(`pr-required-fields`) 체크 실패로 머지 차단됨
 
+### PR_REVIEW — 조건부 (COMMIT 이후)
+- PR에 리뷰·CI 실패·인라인 코멘트가 달리고 **사용자가 대응을 요청하면** harness-workflow `### 8. PR_REVIEW`로 처리한다. 항상 도는 단계가 아니라 조건부 진입 — 최상단 워크플로우 문자열에 넣지 않는다.
+- 루프: 수집 → 검증(코드 직접 확인, **relay 금지**) → 처리 → 답글. 답글은 자연 산문(고정 라벨 금지 — 지적 확인→근거→조치를 한 흐름으로), **게시 전 사용자 승인 필수**. 상세·명령 레시피는 `.claude/skills/harness-workflow/SKILL.md` `### 8`·`## PR 리뷰 명령`
+
 ## 에이전트 역할 분담
 
 전략·역할 분담·위임 트리거 SSOT는 [ADR 0001](docs/decisions/0001-codex-orchestration-strategy.md). 이 파일은 요약, `.claude/agents/`는 실행용 정의(에이전트별 입출력 프로토콜·에러 핸들링·협업 매트릭스)로 ADR을 운영화한 파일이다 — 충돌 시 ADR 0001을 우선한다.
@@ -81,6 +85,9 @@
 | 2026-05-28 | 공통 writer 에이전트 2종 + doc-style hook 추가 | .claude/agents/ (doc-editor, commit-pr-author), .claude/hooks/check-doc-style.mjs | 1인 작업 자기 리뷰 사각지대 보완 — memory feedback 11건(커밋·PR 7 + 문서 4) 누적 패턴 사전 차단 |
 | 2026-05-28 | writing-style SKILL 신설 (작성용 단일 SSOT) | .claude/skills/writing-style/, harness-workflow SKILL reference 1줄 | 작성 시점 표현 가이드 부재 해소 — 사후 점검만으로는 같은 위반 반복(본 task dogfood에서 plan 자체에 5건 위반 발견). description 트리거로 작성 시점 자동 로딩 |
 | 2026-05-29 | PR 생성 시점 commit-pr-author 호출 의무화 + PreToolUse hook 신설 | .claude/hooks/check-pr-before-create.mjs, .claude/settings.json PreToolUse 블록, claude-code.md, harness-workflow SKILL | gh pr create 시점은 PostToolUse hook 사각지대 — 결정적 reminder + 워크플로우 의무 + COMMIT 단계 명시 3 계층 방어 |
+| 2026-06-15 | PR 리뷰 대응을 표준 절차로 명문화 (`### 8. PR_REVIEW` 조건부 단계) | harness-workflow SKILL (§ 8 + `## PR 리뷰 명령`), CLAUDE.md (Workflow 포인터 + 본 표) | PR #118·#119 수동 대응에서 봇 오탐 2건을 코드 미확인 중계로 놓칠 뻔함 — 코드 확인 근거·중계 금지 hard rule로 검증 규율 고정 (hook·스크립트·ADR 없이 문서만) |
+| 2026-06-18 | 레이어 설명을 import 서열 + `services` 읽기·쓰기 공존으로 정정, `revalidateTag`→`updateTag` 드리프트 정정, 스킬 표에 `complete-task` 반영, audit 마커 갱신 | CLAUDE.md, docs/ARCHITECTURE.md, .claude/skills/supabase/SKILL.md, README.md | 포트폴리오 점검 중 `services`를 읽기 전용처럼 읽히게 한 표현·코드와 안 맞는 API 이름·표 누락 발견 (Codex 계획 검증 PASS_WITH_DECISION_LOG) |
+| 2026-06-29 | commit-msg hook에 R5(이메일 주소 금지) 추가, Co-Authored-By trailer에서 이메일을 빼고 이름만 남김 | scripts/check-commit-msg.mjs, docs/decisions/0009, harness-workflow SKILL | Co-Authored-By trailer에 사용자 이메일이 들어가던 것을 차단 — 사용자 지시 |
 
 ## HOW (검증 루프)
 
@@ -148,19 +155,20 @@ pre-commit 훅은 lint-staged로 변경 파일만 자동 검사 — error는 차
 | Codex 컨텍스트 로더 | `.codex/skills/context-loader/` | 컨텍스트 라우팅 변경 시 |
 | Claude Hook 자동 제안 | `.claude/hooks/` + `.claude/settings.json` | 협업 타이밍 변경 시 |
 | 워크플로우 자동화 스크립트 | `scripts/` | 스크립트 추가/변경 시 |
-| 작업별 how-to (자동 로딩) | `.claude/skills/{supabase,styles,file-structure,ui-components,writing-style}/` | 트리거 시 자동 |
+| 작업별 how-to (자동 로딩) | `.claude/skills/{supabase,styles,file-structure,ui-components,writing-style,complete-task}/` | 트리거 시 자동 |
 | **작성용 SSOT** (한국어 표현·커밋·PR·exec-plan·ADR·tech-debt 템플릿) | `.claude/skills/writing-style/SKILL.md` | 모든 문서·메시지 작성 시 자동 로딩 |
 
 스킬 트리거:
 
 | 트리거                                         | 스킬                             |
 | ---------------------------------------------- | -------------------------------- |
-| Supabase 클라이언트, 캐싱, revalidateTag, 인증 | `.claude/skills/supabase/`       |
+| Supabase 클라이언트, 캐싱, updateTag, 인증 | `.claude/skills/supabase/`       |
 | SCSS 토큰, 믹스인, 시맨틱 토큰 매핑            | `.claude/skills/styles/`         |
 | 새 파일 위치, 디렉토리 구조, barrel export     | `.claude/skills/file-structure/` |
 | Button·TextField·Modal·BottomSheet·Tabs 등 공용 UI 사용·확장·신규 추가 | `.claude/skills/ui-components/` |
 | 하네스 워크플로우, PLAN Mode, task-id, exec-plan, Codex 검증, harness-gate | `.claude/skills/harness-workflow/` |
 | 문서·메시지 작성 (exec-plan, ADR, tech-debt, 검증 기록, commit, PR, Codex 인용) | `.claude/skills/writing-style/` |
+| 작업 완료, PR 머지 후, exec-plan completed 이관, 회고, tech-debt 등록 | `.claude/skills/complete-task/` |
 
-<!-- last-audit: 2026-05-01 -->
+<!-- last-audit: 2026-06-18 -->
 

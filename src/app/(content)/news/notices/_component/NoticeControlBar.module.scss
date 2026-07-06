@@ -1,178 +1,136 @@
 .bar {
   display: flex;
-  align-items: center;
-  justify-content: space-between;
+  flex-direction: column;
+  gap: $spacing-20;
+  padding-bottom: $spacing-4;
+}
+
+.search {
+  display: block;
+}
+
+// ── 분류 칩 ──
+.chips {
+  display: flex;
   gap: $spacing-8;
-  padding-bottom: $spacing-12;
-  border-bottom: 1.5px solid $border-primary;
-}
+  overflow-x: auto;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
 
-// ── 좌측 ──
-.bar_left {
-  display: flex;
-  align-items: center;
-  gap: $spacing-8;
-  min-width: 0;
-  flex: 1;
-}
-
-.total {
-  font-size: $font-size-12;
-  color: $txt-tertiary;
-  white-space: nowrap;
-  flex-shrink: 0;
-}
-
-.active_tag {
-  display: inline-flex;
-  align-items: center;
-  gap: $spacing-4;
-  padding: 0 $spacing-8;
-  height: 2.2rem;
-  border-radius: $radius-circle;
-  background: $bg-secondary;
-  font-size: $font-size-12;
-  color: $txt-secondary;
-  border: 1px solid $border-primary;
-}
-
-.tag_remove {
-  display: flex;
-  align-items: center;
-  font-size: $font-size-13;
-  color: $txt-tertiary;
-  cursor: pointer;
-
-  &:hover {
-    color: $txt-primary;
-  }
-
-  @include focus-ring('strong') {
-    border-radius: 2px;
-  }
-}
-
-// ── 우측 ──
-.bar_right {
-  display: flex;
-  align-items: center;
-  gap: $spacing-4;
-  flex-shrink: 0;
-}
-
-.category_select {
-  padding: 0 $spacing-8;
-  height: 3.2rem;
-  border: 1px solid $border-primary;
-  border-radius: 0.6rem;
-  background: $bg-secondary;
-  font-size: $font-size-12;
-  color: $txt-secondary;
-  cursor: pointer;
-  outline: none;
-
-  &.selected {
-    font-weight: $font-weight-semibold;
-    color: $txt-primary;
-  }
-
-  @include focus-ring('strong');
-}
-
-.category_btn {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.2rem;
-  padding: 0 $spacing-8;
-  height: 3.2rem;
-  border: 1px solid $border-primary;
-  border-radius: 0.6rem;
-  background: $bg-secondary;
-  font-size: $font-size-12;
-  color: $txt-secondary;
-  white-space: nowrap;
-  cursor: pointer;
-
-  &.selected {
-    font-weight: $font-weight-semibold;
-    color: $txt-primary;
-  }
-
-  @include focus-ring('strong');
-}
-
-.search_form {
-  position: relative;
-  display: flex;
-  align-items: center;
-  height: 3.2rem;
-  border: 1px solid $border-primary;
-  border-radius: 0.6rem;
-  background: $bg-secondary;
-
-  &:focus-within {
-    border-color: $border-primary;
-    box-shadow: 0 0 0 2px $primary-subtle;
-  }
-}
-
-.search_icon {
-  position: absolute;
-  left: $spacing-8;
-  font-size: $font-size-14;
-  color: $txt-tertiary;
-  pointer-events: none;
-}
-
-.search_input {
-  padding: 0 3rem 0 3rem;
-  width: 20rem;
-  height: 100%;
-  border: none;
-  background: transparent;
-  font-size: $font-size-12;
-  color: $txt-primary;
-  outline: none;
-
-  &::placeholder {
-    color: $txt-tertiary;
-    font-size: $font-size-12;
-  }
-
-  @include respond($breakpoint-tablet-sm) {
-    width: 14rem;
-  }
-}
-
-.search_clear {
-  position: absolute;
-  right: $spacing-4;
-  display: flex;
-  align-items: center;
-  font-size: $font-size-14;
-  color: $txt-tertiary;
-  cursor: pointer;
-
-  &:hover {
-    color: $txt-primary;
-  }
-
-  @include focus-ring('strong') {
-    border-radius: 2px;
-  }
-}
-
-// ── 반응형 ──
-.pc_only {
-  @include respond($breakpoint-tablet-sm) {
+  &::-webkit-scrollbar {
     display: none;
   }
 }
 
-.mobile_only {
-  display: none;
+.chip {
+  flex-shrink: 0;
+  padding: $spacing-8 $spacing-16;
+  border: 1px solid $home-border;
+  border-radius: $radius-circle;
+  background-color: $bg-card;
+  font-size: $font-size-13;
+  font-weight: $font-weight-bold;
+  color: $home-text-sub;
+  white-space: nowrap;
+  cursor: pointer;
 
-  @include respond($breakpoint-tablet-sm) {
-    display: inline-flex;
+  @include hover-bg-shift($bg-hover);
+  @include focus-ring('strong');
+
+  &.chip_active {
+    background-color: $accent;
+    border-color: $accent;
+    color: $txt-inverse;
+
+    &:hover {
+      background-color: $accent;
+    }
+  }
+}
+
+// ── 건수 + 정렬 헤더 ──
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: $spacing-8;
+}
+
+.header_left {
+  display: flex;
+  align-items: center;
+  gap: $spacing-8;
+  min-width: 0;
+}
+
+.count {
+  font-size: $font-size-16;
+  font-weight: $font-weight-bold;
+  color: $home-text;
+  white-space: nowrap;
+}
+
+// ── 활성 검색어 label ──
+.search_tag {
+  display: inline-flex;
+  align-items: center;
+  gap: $spacing-2;
+  min-width: 0;
+  padding: $spacing-2 $spacing-4 $spacing-2 $spacing-10;
+  border-radius: $radius-circle;
+  background-color: $primary-subtle;
+  font-size: $font-size-12;
+  font-weight: $font-weight-semibold;
+  color: $primary;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.tag_remove {
+  display: inline-flex;
+  align-items: center;
+  padding: $spacing-2;
+  border: none;
+  background: transparent;
+  color: $primary;
+  cursor: pointer;
+
+  @include focus-ring('strong') {
+    border-radius: $radius-circle;
+  }
+}
+
+.count_num {
+  margin-left: $spacing-4;
+  font-size: $font-size-13;
+  color: $home-text-muted;
+}
+
+.sort {
+  display: flex;
+  gap: $spacing-2;
+  flex-shrink: 0;
+  padding: $spacing-2;
+  border-radius: $radius-xs;
+  background-color: $home-tint;
+}
+
+.sort_btn {
+  padding: $spacing-4 $spacing-10;
+  border: none;
+  border-radius: $radius-xxs;
+  background: transparent;
+  font-size: $font-size-12;
+  font-weight: $font-weight-bold;
+  color: $home-text-sub;
+  white-space: nowrap;
+  cursor: pointer;
+
+  @include focus-ring('strong');
+
+  &.sort_active {
+    background-color: $bg-card;
+    color: $home-text;
   }
 }

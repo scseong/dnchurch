@@ -1,15 +1,18 @@
 import { notFound } from 'next/navigation';
 import type { Metadata } from 'next';
 import {
+  getPublishedSermonIds,
   getSermonById,
   getSermons,
-  getSermonsBySeries,
-  incrementSermonViewCount
+  getSermonsBySeries
 } from '@/services/sermon';
+import { isNumeric } from '@/utils/validator';
 import { formatPreacherLabel, getSermonThumbnail } from '@/utils/sermon';
 import { getOgImageUrl } from '@/utils/cloudinary';
-import type { SermonWithRelations } from '@/types/sermon';
+import { OG_FALLBACK_IMAGE } from '@/config/seo';
+import type { SeriesEpisodeItem, SermonCardItem, SermonWithRelations } from '@/types/sermon';
 import SermonDetailPage from '../_component/SermonDetailPage/SermonDetailPage';
+import SermonViewTracker from '../_component/SermonDetailPage/SermonViewTracker';
 
 type PageProps = {
   params: Promise<{ id: string }>;
@@ -17,6 +20,8 @@ type PageProps = {
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { id } = await params;
+  if (!isNumeric(id)) notFound();
+
   const sermon = await getSermonById(Number(id));
   if (!sermon) return {};
 
@@ -35,19 +40,28 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
       title,
       description,
       url: canonical,
-      images: ogImage ? [{ url: ogImage }] : [],
+      images: [{ url: ogImage || OG_FALLBACK_IMAGE }],
       type: 'article'
     },
     twitter: {
       card: 'summary_large_image',
       title,
       description,
-      images: ogImage ? [ogImage] : []
+      images: [ogImage || OG_FALLBACK_IMAGE]
     }
   };
 }
 
 export const revalidate = 86400;
+
+// 최근 발행 설교를 빌드 시점에 프리렌더 (주보 상세 10건 선례와 동일 규모).
+// 나머지 id는 dynamicParams(기본 true)로 첫 방문 시 렌더 후 ISR 캐시.
+const PRERENDER_COUNT = 10;
+
+export async function generateStaticParams() {
+  const ids = await getPublishedSermonIds(PRERENDER_COUNT);
+  return ids.map((id) => ({ id: id.toString() }));
+}
 
 function buildJsonLd(sermon: SermonWithRelations) {
   const base: Record<string, unknown> = {
@@ -73,6 +87,9 @@ function buildJsonLd(sermon: SermonWithRelations) {
 
 export default async function SermonDetail({ params }: PageProps) {
   const { id } = await params;
+  // 비숫자 id가 bigint 쿼리에 닿으면 Postgres throw → 500. 주보 상세와 같은 가드로 404 처리.
+  if (!isNumeric(id)) notFound();
+
   const sermon = await getSermonById(Number(id));
 
   if (!sermon) notFound();
@@ -82,25 +99,24 @@ export default async function SermonDetail({ params }: PageProps) {
   const [seriesEpisodes, otherByPreacher] = await Promise.all([
     sermon.sermon_series?.slug
       ? getSermonsBySeries(sermon.sermon_series.slug)
-      : Promise.resolve([] as SermonWithRelations[]),
+      : Promise.resolve([] as SeriesEpisodeItem[]),
     sermon.preacher?.id
       ? getSermons({ preacherId: sermon.preacher.id, pageSize: 4 }).then((res) =>
           res.sermons.filter((s) => s.id !== sermon.id).slice(0, 3)
         )
-      : Promise.resolve([] as SermonWithRelations[])
+      : Promise.resolve([] as SermonCardItem[])
   ]);
 
   const otherSermonsByPreacher = otherByPreacher.length === 3 ? otherByPreacher : [];
-
-  incrementSermonViewCount(sermon.id).catch(() => {});
 
   const jsonLd = buildJsonLd(sermon);
 
   return (
     <>
+      <SermonViewTracker sermonId={sermon.id} />
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd).replace(/</g, '\\u003c') }}
       />
       <SermonDetailPage
         sermon={sermon}

@@ -5,7 +5,9 @@ import { EmptyState, Pagination } from '@/components/ui';
 import SermonSidebar from '../_component/SermonListPage/SermonSidebar';
 import SermonToolbar from '../_component/SermonListPage/SermonToolbar';
 import SermonFilteredList from '../_component/SermonListPage/SermonFilteredList';
-import SermonResultHeader from '../_component/SermonListPage/SermonResultHeader';
+import SermonResultHeader, {
+  type ActiveFilterChip
+} from '../_component/SermonListPage/SermonResultHeader';
 import {
   FILTER_PAGE_SIZE,
   getAllPreachers,
@@ -16,11 +18,13 @@ import {
 import {
   buildSermonHref,
   computeStandaloneCount,
+  formatPreacherLabel,
   parseSermonParams,
   resolvePreacherName,
   resolveSeriesSlug
 } from '@/utils/sermon';
 import { getTotalPages } from '@/utils/pagination';
+import { OPEN_GRAPH_BASE } from '@/config/seo';
 import styles from '../_component/SermonListPage/SermonListPage.module.scss';
 
 const PAGE_DESCRIPTION = '대구동남교회의 모든 설교를 검색·필터로 찾아보세요';
@@ -31,10 +35,10 @@ export const metadata: Metadata = {
   description: PAGE_DESCRIPTION,
   alternates: { canonical: PAGE_CANONICAL },
   openGraph: {
+    ...OPEN_GRAPH_BASE,
     title: '전체 설교',
     description: PAGE_DESCRIPTION,
-    url: PAGE_CANONICAL,
-    type: 'website'
+    url: PAGE_CANONICAL
   },
   twitter: { card: 'summary', title: '전체 설교', description: PAGE_DESCRIPTION }
 };
@@ -45,8 +49,9 @@ type PageProps = {
 
 export default async function AllSermonsPage({ searchParams }: PageProps) {
   const params = await searchParams;
-  const { series, preacher, search, year, sort, page } = parseSermonParams(params);
-  const hasFilter = !!(series || preacher || search || year);
+  // year는 UI에서 제거됨 — 레거시 ?year= 링크가 숨은 필터로 남지 않게 서버 적용도 하지 않는다.
+  const { series, preacher, search, sort, page } = parseSermonParams(params);
+  const hasFilter = !!(series || preacher || search);
 
   const [allSeries, allPreachers, totalCount] = await Promise.all([
     getAllSeries(),
@@ -71,9 +76,22 @@ export default async function AllSermonsPage({ searchParams }: PageProps) {
     series !== 'none' &&
     !allSeries.some((item) => item.slug === series);
 
-  if (isUnknownSeries) {
+  // 설교자 미매칭 — 이름이 있지만 allPreachers에 없음. resolvePreacherName이 undefined를
+  // 반환해 필터가 안 걸리면 전체 설교가 떠서, 시리즈 미매칭(빈 상태)과 동작이 어긋난다.
+  const isUnknownPreacher =
+    !!preacher && !allPreachers.some((item) => item.name === preacher);
+
+  if (isUnknownSeries || isUnknownPreacher) {
+    const emptyTitle = isUnknownSeries
+      ? '해당 시리즈를 찾을 수 없습니다'
+      : '해당 설교자를 찾을 수 없습니다';
+    const emptyDescription = isUnknownSeries
+      ? 'URL이 올바른지 확인하거나 사이드바에서 다른 시리즈를 선택해 주세요.'
+      : 'URL이 올바른지 확인하거나 사이드바에서 다른 설교자를 선택해 주세요.';
+
     return (
       <LayoutContainer>
+        <h1 className={styles.blind_title}>전체 설교</h1>
         <div className={styles.body}>
           <SermonSidebar
             allSeries={filterableSeries}
@@ -87,11 +105,7 @@ export default async function AllSermonsPage({ searchParams }: PageProps) {
           />
           <div className={styles.main}>
             <SermonToolbar allSeries={filterableSeries} allPreachers={filterablePreachers} />
-            <EmptyState
-              title="해당 시리즈를 찾을 수 없습니다"
-              description="URL이 올바른지 확인하거나 사이드바에서 다른 시리즈를 선택해 주세요."
-              announce
-            />
+            <EmptyState title={emptyTitle} description={emptyDescription} announce />
           </div>
         </div>
       </LayoutContainer>
@@ -105,7 +119,6 @@ export default async function AllSermonsPage({ searchParams }: PageProps) {
     seriesId: resolvedSeriesId,
     preacherId: resolvedPreacherId,
     search,
-    year,
     sort,
     page
   });
@@ -118,8 +131,30 @@ export default async function AllSermonsPage({ searchParams }: PageProps) {
     redirect(buildSermonHref(params, { page: String(totalPages) }));
   }
 
+  // 적용된 필터를 표시 라벨로 해석 — 결과 헤더의 필터 칩(클릭 시 해당 조건 해제)에 넘긴다.
+  const activeSeriesTitle =
+    activeSeries === 'none'
+      ? '단독 설교'
+      : (allSeries.find((item) => item.slug === activeSeries)?.title ?? null);
+  const activePreacherObj = activePreacher
+    ? allPreachers.find((item) => item.name === activePreacher)
+    : null;
+
+  const filterChips: ActiveFilterChip[] = [];
+  if (activeSeries && activeSeriesTitle) {
+    filterChips.push({ type: 'series', label: activeSeriesTitle });
+  }
+  if (activePreacherObj) {
+    filterChips.push({
+      type: 'preacher',
+      label: formatPreacherLabel(activePreacherObj)
+    });
+  }
+
   return (
     <LayoutContainer>
+      {/* Hero 밴드 제거로 사라진 페이지 h1 보전 (헤더 '전체 설교'와 별개, 데스크톱 접근성용) */}
+      <h1 className={styles.blind_title}>전체 설교</h1>
       <div className={styles.body}>
         <SermonSidebar
           allSeries={filterableSeries}
@@ -137,6 +172,7 @@ export default async function AllSermonsPage({ searchParams }: PageProps) {
             resultCount={filteredTotal}
             currentPage={page}
             totalPages={totalPages}
+            filterChips={filterChips}
           />
           <SermonFilteredList sermons={listResult.sermons} />
           <Pagination

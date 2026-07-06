@@ -1,5 +1,5 @@
 import type { Database } from '@/types/database.types';
-import type { Preacher, SeriesWithSermonCount, ServiceType } from '@/types/sermon';
+import type { PreacherWithSermonCount, SeriesWithSermonCount, ServiceType } from '@/types/sermon';
 
 export type SermonResourceType = Database['public']['Enums']['sermon_resource_type'];
 
@@ -54,7 +54,7 @@ export type BasicInfoCardProps = Pick<
   SermonFormData,
   'title' | 'sermonDate' | 'preacherId' | 'seriesId' | 'serviceType'
 > & {
-  preachers: Preacher[];
+  preachers: PreacherWithSermonCount[];
   series: SeriesWithSermonCount[];
   onChange: (patch: SermonFormPatch) => void;
 };

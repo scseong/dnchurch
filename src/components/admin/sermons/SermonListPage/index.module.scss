@@ -179,75 +179,9 @@
   gap: 8px;
 }
 
+// 검색 입력은 ui/SearchField가 소유한다. 여기선 toolbar flex 사이징만 넘긴다.
 .search_box {
-  display: flex;
-  align-items: center;
-  gap: 8px;
   flex: 1;
   min-width: 240px;
   max-width: 420px;
-  padding: 8px 12px;
-  background: $bg-card;
-  border: 1px solid $border-admin;
-  border-radius: 6px;
-  transition:
-    border-color 0.15s $transition-easing-default,
-    box-shadow 0.15s $transition-easing-default;
-
-  &:focus-within {
-    border-color: $primary-soft;
-    box-shadow: 0 0 0 3px $primary-soft-subtle;
-  }
-}
-
-.search_icon {
-  flex-shrink: 0;
-  color: $txt-admin-tertiary;
-  font-size: 16px;
-}
-
-.search_icon_pending {
-  color: $primary-soft;
-  animation: search_spin 0.8s linear infinite;
-}
-
-@keyframes search_spin {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
-}
-
-.search_input {
-  flex: 1;
-  min-width: 0;
-  border: 0;
-  outline: none;
-  background: none;
-  color: $txt-primary;
-  font-size: 13px;
-
-  &::placeholder {
-    color: $txt-admin-tertiary;
-  }
-}
-
-.search_clear {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 20px;
-  height: 20px;
-  padding: 0;
-  border: 0;
-  border-radius: 4px;
-  background: none;
-  color: $txt-admin-tertiary;
-  cursor: pointer;
-  transition:
-    background 0.15s $transition-easing-default,
-    color 0.15s $transition-easing-default;
-
-  &:hover {
-    background: $bg-admin-subtle;
-    color: $txt-primary;
-  }
 }

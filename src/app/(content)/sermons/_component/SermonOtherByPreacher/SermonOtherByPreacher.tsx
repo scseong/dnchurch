@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import { IoPlay } from 'react-icons/io5';
 import CloudinaryImage from '@/components/common/CloudinaryImage';
-import type { SermonWithRelations } from '@/types/sermon';
+import type { SermonCardItem } from '@/types/sermon';
 import { cloudinaryFetchUrl } from '@/utils/cloudinary';
 import { getSermonThumbnail } from '@/utils/sermon';
 import { formattedDate } from '@/utils/date';
@@ -10,7 +10,7 @@ import styles from './SermonOtherByPreacher.module.scss';
 
 type Props = {
   preacherLabel: string;
-  sermons: SermonWithRelations[];
+  sermons: SermonCardItem[];
 };
 
 export default function SermonOtherByPreacher({ preacherLabel, sermons }: Props) {
@@ -35,7 +35,7 @@ export default function SermonOtherByPreacher({ preacherLabel, sermons }: Props)
   );
 }
 
-function OtherCard({ sermon }: { sermon: SermonWithRelations }) {
+function OtherCard({ sermon }: { sermon: SermonCardItem }) {
   const thumb = cloudinaryFetchUrl(getSermonThumbnail(sermon));
 
   return (

@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import { HiPlus } from 'react-icons/hi';
 import PageHeader from '@/components/admin/layout/PageHeader';
 import ConfirmModal from '@/components/admin/common/ConfirmModal';
+import { SearchField } from '@/components/ui';
 import { useClickOutside } from '@/hooks/useClickOutside';
 import { useMediaQuery } from '@/hooks/useMediaQuery';
 import { useToastStore } from '@/store/toast.store';
@@ -13,12 +14,11 @@ import { getTotalPages } from '@/utils/pagination';
 import type {
   AdminSermon,
   AdminSermonListParams,
-  Preacher,
+  PreacherWithSermonCount,
   SeriesWithSermonCount,
   SermonStatusTab
 } from '@/types/sermon';
 import StatusTabs from './parts/StatusTabs';
-import SearchBox from './parts/SearchBox';
 import PreacherFilter from './parts/PreacherFilter';
 import SeriesFilter from './parts/SeriesFilter';
 import DateRangeFilter from './parts/DateRangeFilter';
@@ -35,7 +35,7 @@ interface SermonListPageProps {
   total: number;
   statusCounts: Record<SermonStatusTab, number>;
   initialParams: AdminSermonListParams;
-  preachers: Preacher[];
+  preachers: PreacherWithSermonCount[];
   series: SeriesWithSermonCount[];
 }
 
@@ -79,7 +79,6 @@ export default function SermonListPage({
         if (result.success) {
           toast.success(result.message);
           setDeleteTarget(null);
-          router.refresh();
         } else {
           toast.error(result.message);
         }
@@ -144,11 +143,14 @@ export default function SermonListPage({
           onChange={filters.setStatusTab}
         />
         <div className={styles.toolbar}>
-          <SearchBox
+          <SearchField
+            className={styles.search_box}
             value={searchInput}
             onChange={setSearchInput}
             onClear={handleSearchClear}
-            isPending={isSearchPending}
+            loading={isSearchPending}
+            placeholder="제목, 성경 구절, 설교자로 검색"
+            aria-label="설교 검색"
           />
           <PreacherFilter
             preachers={preachers}

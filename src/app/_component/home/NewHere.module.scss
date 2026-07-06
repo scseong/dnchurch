@@ -1,250 +1,71 @@
-// Local variables
-$divider-width: 4rem;
-$divider-height: 0.2rem;
-
-// ─── Section ────────────────────────────────────────
 .section {
-  padding: $section-gap-64 0;
-  background: $bg-beige-subtle;
+  padding: $spacing-20 0 0;
 }
 
-// ─── Inner Grid ─────────────────────────────────────
-.inner {
-  @include respond-up($breakpoint-tablet) {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: $spacing-64;
-  }
-}
-
-// ─── 좌측: 이미지 (PC only) ────────────────────────
-.image_area {
-  display: none;
-
-  @include respond-up($breakpoint-tablet) {
-    display: block;
-    position: relative;
-    align-self: start;
-  }
-}
-
-.image_sticky {
-  position: sticky;
-  top: calc($header-height + $spacing-24);
-}
-
-.image_frame {
-  aspect-ratio: 3 / 4;
-  border-radius: $radius-xs;
-  overflow: hidden;
-}
-
-.image {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  @include prevent-img-drag;
-}
-
-.year_badge {
-  position: absolute;
-  bottom: calc(-1 * $spacing-16);
-  right: calc(-1 * $spacing-16);
-  padding: $spacing-20 $spacing-24;
-  background: $navy-950;
-  border-radius: $radius-xs;
-  text-align: center;
-  display: flex;
-  flex-direction: column;
-  gap: $spacing-4;
-}
-
-.year_number {
-  font-family: $font-family-secondary;
-  font-size: $font-size-32;
-  font-weight: $font-weight-regular;
-  color: $gold-600;
-  line-height: $line-height-reset;
-}
-
-.year_label {
-  font-size: $font-size-11;
-  font-weight: $font-weight-regular;
-  color: rgba($white, 0.5);
-  letter-spacing: 0.1rem;
-}
-
-// ─── 우측: 콘텐츠 ──────────────────────────────────
-.content {
-  display: flex;
-  flex-direction: column;
-
-  @include respond-up($breakpoint-tablet) {
-    align-self: flex-start;
-  }
-
-  @include respond-up($breakpoint-tablet-lg) {
-    padding-top: $spacing-20;
-  }
-}
-
-// ─── 헤더 ───────────────────────────────────────────
-.header {
-  margin-bottom: $spacing-12;
-}
-
-.caption {
-  margin-bottom: $spacing-12;
-  display: inline-block;
-  @include text-caption-small($color: $gold-600);
-  text-transform: uppercase;
-  letter-spacing: $letter-spacing-wider;
+.card {
+  max-width: 64rem;
+  margin: 0 auto;
+  padding: $padding-card-lg;
+  border-radius: $radius-xl;
+  background: $home-card;
+  border: 1px solid $home-border;
+  box-shadow: $shadow-sm;
 }
 
 .title {
-  @include text-page-title();
-  font-family: $font-family-secondary;
-  font-weight: $font-weight-regular;
-
-  strong {
-    font-family: inherit;
-    font-weight: $font-weight-bold;
-  }
-}
-
-.divider {
-  width: $divider-width;
-  height: $divider-height;
-  background: $gold-600;
-  margin: $spacing-16 0;
+  font-size: $font-size-16;
+  font-weight: $font-weight-bold;
+  letter-spacing: $letter-spacing-body;
+  color: $home-text;
 }
 
 .desc {
-  @include text-sub();
-  font-size: $font-size-14;
-  line-height: $line-height-loose;
+  margin-top: $spacing-4;
+  margin-bottom: $content-gap-m;
+  font-size: $font-size-13;
+  line-height: $line-height-relaxed;
+  color: $home-text-sub;
 }
 
-// ─── FAQ 아코디언 ───────────────────────────────────
-.faq_list {
-  margin-bottom: $spacing-24;
-}
-
-.faq_item {
-  border-bottom: 1px solid $border-warm;
-}
-
-.faq_question {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: $spacing-12;
-  width: 100%;
-  padding: $spacing-16 0;
-  background: none;
-  border: none;
-  cursor: pointer;
-  text-align: left;
-  font-family: $font-family-base;
-  font-size: $font-size-14;
-  font-weight: $font-weight-medium;
-  color: $txt-primary;
-  line-height: $line-height-base;
-  transition: color $transition-duration-normal $transition-easing-default;
-
-  &:hover {
-    color: $gold-600;
-  }
-
-  @include respond-up($breakpoint-tablet) {
-    font-size: $font-size-15;
-  }
-
-  .faq_open & {
-    font-weight: $font-weight-semibold;
-  }
-}
-
-.faq_toggle {
-  font-size: $font-size-18;
-  color: $gold-600;
-  line-height: $line-height-reset;
-  flex-shrink: 0;
-  transition: transform 0.2s ease;
-
-  .faq_open & {
-    transform: rotate(45deg);
-  }
-}
-
-.faq_answer {
+.grid {
   display: grid;
-  grid-template-rows: 0fr;
-  transition: grid-template-rows 0.35s $transition-easing-default;
-
-  .faq_open & {
-    grid-template-rows: 1fr;
-  }
+  grid-template-columns: 1fr 1fr;
+  gap: $spacing-10;
 }
 
-.faq_answer_inner {
-  overflow: hidden;
+.tile {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-4;
+  padding: $padding-card-compact;
+  border-radius: $radius-s;
+  background: $home-card-soft;
+  border: 1px solid $home-border;
 }
 
-.faq_answer_text {
-  margin: 0;
-  padding-bottom: $spacing-16;
-  font-size: $font-size-14;
-  color: $txt-secondary;
-  line-height: $line-height-loose;
+.tile_label {
+  font-size: $font-size-12;
+  font-weight: $font-weight-semibold;
+  color: $home-gold-strong;
 }
 
-.faq_link {
-  display: inline-block;
-  margin-bottom: $spacing-16;
-  padding-bottom: $spacing-2;
+.tile_value {
   font-size: $font-size-13;
   font-weight: $font-weight-semibold;
-  color: $gold-600;
-  text-decoration: underline;
-  text-decoration-color: transparent;
-  text-underline-offset: 0.3rem;
-  transition:
-    text-decoration-color $transition-duration-normal $transition-easing-default,
-    opacity $transition-duration-normal $transition-easing-default;
-
-  &:hover {
-    text-decoration-color: $gold-600;
-    opacity: 0.8;
-  }
+  letter-spacing: $letter-spacing-body;
+  color: $home-text;
 }
 
-// ─── CTA 링크 ───────────────────────────────────────
-.cta_link {
-  display: inline-flex;
-  align-items: center;
-  gap: $spacing-8;
-  width: fit-content;
+.notice {
+  margin-top: $content-gap-s;
+  padding: $padding-card-compact;
+  border-radius: $radius-s;
+  background: $home-tint;
   font-size: $font-size-13;
-  font-weight: $font-weight-semibold;
-  color: $gold-600;
-  text-decoration: underline;
-  text-decoration-color: rgba($gold-600, 0.3);
-  text-underline-offset: 0.3rem;
-  padding-bottom: $spacing-4;
-  transition:
-    text-decoration-color $transition-duration-normal $transition-easing-default,
-    opacity $transition-duration-normal $transition-easing-default;
+  line-height: $line-height-relaxed;
+  color: $home-gold-strong;
 
-  &:hover {
-    text-decoration-color: $gold-600;
-    opacity: 0.8;
-  }
-}
-
-// ─── 반응형 보정 ────────────────────────────────────
-@include respond($breakpoint-mobile) {
-  .faq_list {
-    margin-bottom: $spacing-20;
+  strong {
+    font-weight: $font-weight-semibold;
   }
 }

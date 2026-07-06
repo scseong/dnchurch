@@ -1,0 +1,125 @@
+.detail {
+  display: flex;
+  flex-direction: column;
+}
+
+// ── 헤더: 제목 + 관리자 수정 ──
+.head {
+  padding-bottom: $spacing-16;
+  border-bottom: 1px solid $home-border-divider;
+}
+
+.title_row {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: $spacing-12;
+}
+
+.title {
+  font-size: $font-size-18;
+  font-weight: $font-weight-bold;
+  line-height: $line-height-tight;
+  color: $home-text;
+  word-break: keep-all;
+}
+
+.edit {
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: $spacing-4;
+  padding: $spacing-6 $spacing-12;
+  border-radius: $radius-circle;
+  border: 1px solid $home-border;
+  background-color: $home-card;
+  font-size: $font-size-13;
+  font-weight: $font-weight-semibold;
+  color: $home-text-sub;
+  text-decoration: none;
+  white-space: nowrap;
+
+  @include hover-bg-shift($bg-hover);
+  @include focus-ring('strong');
+}
+
+// ── 이미지 갤러리 ──
+.images {
+  padding: $spacing-20 0;
+
+  // PhotoSwipe가 이미지들을 감싸는 내부 div — 세로로 쌓고 간격을 준다(BoardBody와 같은 패턴).
+  > div {
+    display: flex;
+    flex-direction: column;
+    gap: $spacing-12;
+
+    // 각 이미지(PhotoSwipe .container)를 둥글게 클립하고 테두리를 두른다.
+    // border·radius·overflow를 같은 요소(클립하는 컨테이너)에 둬야 테두리가 안 잘린다.
+    > div {
+      border: 1px solid $home-border;
+      border-radius: $radius-m;
+      overflow: hidden;
+    }
+  }
+}
+
+.no_image {
+  padding: $spacing-40 0;
+  text-align: center;
+  font-size: $font-size-14;
+  color: $home-text-muted;
+}
+
+// ── 이전·다음 주보 ──
+.adjacent {
+  display: flex;
+  flex-direction: column;
+  margin-top: $spacing-20;
+}
+
+.adjacent_row {
+  display: flex;
+  align-items: center;
+  gap: $spacing-12;
+  padding: $spacing-16 $spacing-4;
+  border-top: 1px solid $home-border-divider;
+  text-decoration: none;
+  color: inherit;
+
+  @include hover-bg-shift($bg-hover);
+  @include focus-ring('strong', calc(-1 * #{$focus-ring-offset}));
+
+  &:last-child {
+    border-bottom: 1px solid $home-border-divider;
+  }
+}
+
+.adjacent_label {
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: $spacing-4;
+  font-size: $font-size-13;
+  font-weight: $font-weight-semibold;
+  color: $home-text-sub;
+}
+
+.adjacent_title {
+  min-width: 0;
+  margin-left: auto;
+  font-size: $font-size-13;
+  color: $home-text;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.adjacent_none {
+  margin-left: auto;
+  font-size: $font-size-13;
+  color: $home-text-muted;
+}
+
+.adjacent_empty {
+  cursor: default;
+}

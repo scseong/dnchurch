@@ -33,9 +33,10 @@ export const NOTICE_CATEGORY_VARIANT: Record<NoticeCategoryEnum, NoticeCategoryV
   기타: 'neutral'
 };
 
+// UI에 노출하는 정렬만 둔다. validate.within(NOTICE_SORT_OPTIONS)이 이 목록으로 URL sort를 검증하므로,
+// 노출하지 않는 값(예: oldest)을 남기면 ?sort=oldest가 숨은 필터로 통과한다 (PR #136 year 사례).
 export const NOTICE_SORT_OPTIONS = {
   latest: '최신순',
-  oldest: '오래된순',
   views: '조회순'
 } as const;
 

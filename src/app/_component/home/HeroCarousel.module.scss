@@ -1,0 +1,155 @@
+// 히어로 슬라이드 풍경 그라디언트 — 목업의 scenic 그라디언트. semantic 토큰 없음(풍경), 로컬 값.
+// (styles SKILL: 그라디언트는 semantic 미정 예외, 로컬 선언)
+$slide-welcome: linear-gradient(180deg, #243a29 0%, #46583a 42%, #c79f52 72%, #e8c277 100%);
+$slide-worship: linear-gradient(180deg, #26384a 0%, #7a5a44 55%, #e0a358 100%);
+$slide-visit: linear-gradient(180deg, #3a4a2c 0%, #6e5a32 100%);
+$slide-scrim: linear-gradient(180deg, rgba(20, 30, 18, 0.05) 0%, rgba(16, 26, 15, 0.86) 100%);
+
+.section {
+  padding: $spacing-8 $content-gap-l 0;
+}
+
+.viewport {
+  position: relative;
+  max-width: 64rem;
+  margin: 0 auto;
+}
+
+// Embla viewport — overflow hidden + 카드 외형(라운드·그림자). embla가 container transform을 제어.
+.embla {
+  overflow: hidden;
+  border-radius: $radius-xl;
+  box-shadow: $shadow-lg;
+}
+
+// Embla container — 슬라이드 flex 트랙
+.container {
+  display: flex;
+}
+
+.slide {
+  position: relative;
+  flex: 0 0 100%;
+  min-width: 0;
+  min-height: 30rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+}
+
+.welcome {
+  background: $slide-welcome;
+}
+
+.worship {
+  background: $slide-worship;
+}
+
+.visit {
+  background: $slide-visit;
+}
+
+.scrim {
+  position: absolute;
+  inset: 0;
+  background: $slide-scrim;
+}
+
+.content {
+  position: relative;
+  padding: $padding-card-lg;
+  color: $home-cream-text;
+}
+
+.eyebrow {
+  font-size: $font-size-12;
+  font-weight: $font-weight-semibold;
+  letter-spacing: $letter-spacing-wider;
+  color: $home-eyebrow;
+}
+
+.title {
+  margin: $spacing-8 0;
+  font-family: $font-family-home-serif;
+  font-size: $font-size-28;
+  font-weight: $font-weight-bold;
+  letter-spacing: $letter-spacing-heading;
+  color: $txt-inverse;
+}
+
+.subtitle {
+  font-size: $font-size-14;
+  line-height: $line-height-relaxed;
+  color: $home-cream-text;
+}
+
+.line {
+  display: block;
+}
+
+.ctas {
+  display: flex;
+  width: 100%;
+  gap: $spacing-12;
+  margin-top: $content-gap-m;
+}
+
+.cta {
+  flex: 1 1 0;
+  min-width: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 4.4rem;
+  border-radius: $radius-s;
+  font-size: $font-size-14;
+  font-weight: $font-weight-semibold;
+}
+
+.primary {
+  background: $home-card;
+  color: $home-text;
+
+  @include hover-bg-shift($home-surface);
+}
+
+.ghost {
+  background: rgba(255, 255, 255, 0.14);
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  color: $home-cream-text;
+
+  @include hover-bg-shift(rgba(255, 255, 255, 0.26));
+}
+
+.dots {
+  position: absolute;
+  top: $spacing-12;
+  right: $spacing-16;
+  z-index: 1;
+  display: flex;
+  gap: $spacing-8;
+}
+
+.dot {
+  width: 0.7rem;
+  height: 0.7rem;
+  padding: 0;
+  border-radius: $radius-circle;
+  background: rgba(255, 255, 255, 0.55);
+  transition:
+    width 0.25s ease,
+    background-color 0.25s ease;
+}
+
+.dot_active {
+  width: 2rem;
+  background: $home-card;
+}
+
+.skeleton {
+  max-width: 64rem;
+  margin: 0 auto;
+  min-height: 30rem;
+  border-radius: $radius-xl;
+  background: $home-surface;
+}

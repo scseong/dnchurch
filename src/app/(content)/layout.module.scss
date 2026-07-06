@@ -1,0 +1,19 @@
+// 모바일 고정 BottomNav에 콘텐츠 최하단이 가리지 않도록, 콘텐츠 셸이 그 높이만큼 바닥 여백을 둔다.
+// 클리어런스를 개별 컴포넌트(Footer 등)가 아니라 레이아웃이 책임진다 — 최하단 컴포넌트가 바뀌거나 추가돼도 안전하다.
+.content_shell {
+  // #root(flex column)의 in-flow 자식으로 높이를 채워, 내부 #main의 flex:1(스티키 푸터)을 유지한다
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  padding-bottom: calc(#{$tab-bar-height} + env(safe-area-inset-bottom, 0rem));
+
+  // BottomNav가 사라지는 뷰포트(태블릿+)에서는 여백이 필요 없다
+  @include respond-up($header-breakpoint) {
+    padding-bottom: 0;
+  }
+
+  // app 모드(출시): 하단바가 모든 폭에서 보이므로 가림 방지 여백을 다시 유지한다.
+  [data-layout='app'] & {
+    padding-bottom: calc(#{$tab-bar-height} + env(safe-area-inset-bottom, 0rem));
+  }
+}
