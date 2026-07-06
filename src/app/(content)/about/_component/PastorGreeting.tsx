@@ -1,4 +1,4 @@
-import LayoutContainer from '@/components/layout/container/LayoutContainer';
+import MainContainer from '@/components/layout/container/MainContainer';
 import CloudinaryImage from '@/components/common/CloudinaryImage';
 import { getPastorPageData } from '@/services/about';
 import { CHURCH_INFO } from '@/config/seo';
@@ -32,7 +32,7 @@ export default async function PastorGreeting() {
   return (
     <>
       <h1 className={styles.sr_only}>인사말</h1>
-      <LayoutContainer body>
+      <MainContainer title="인사말">
         <div className={styles.page}>
           {/* 담임목사 카드 + 인사말 */}
           <article className={styles.pastor_card}>
@@ -128,7 +128,7 @@ export default async function PastorGreeting() {
             </div>
           </section>
         </div>
-      </LayoutContainer>
+      </MainContainer>
     </>
   );
 }

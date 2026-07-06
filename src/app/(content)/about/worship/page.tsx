@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 import clsx from 'clsx';
 import { LuChevronRight } from 'react-icons/lu';
-import LayoutContainer from '@/components/layout/container/LayoutContainer';
+import MainContainer from '@/components/layout/container/MainContainer';
 import { EmptyState } from '@/components/ui';
 import { OPEN_GRAPH_BASE } from '@/config/seo';
 import { getWorshipPageData } from '@/services/about';
@@ -44,7 +44,7 @@ export default async function Worship() {
   return (
     <>
       <h1 className={styles.sr_only}>예배 안내</h1>
-      <LayoutContainer body>
+      <MainContainer title="예배 안내">
         <div className={styles.page}>
           {worshipGroups.map((group) => (
             <section key={group.id} className={styles.section}>
@@ -83,7 +83,7 @@ export default async function Worship() {
             </section>
           ))}
         </div>
-      </LayoutContainer>
+      </MainContainer>
     </>
   );
 }

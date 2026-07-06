@@ -1,0 +1,17 @@
+// ══════════════════════════════════════════
+// LAYOUT MODE — app(모바일 프레임) / pc 분기 래퍼
+// #root(flex column)의 flex 체인을 잇는다(자식 content_shell의 flex:1 유지).
+// ══════════════════════════════════════════
+
+.shell {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+// app 모드: 모든 컨테이너를 모바일 프레임 폭으로 cap.
+// $container-max = var(--container-max)를 여기서 재선언하면 하위
+// LayoutContainer·MainContainer가 900px 값을 상속한다(pc 모드는 재선언 안 해 :root 120rem 유지).
+.shell[data-layout='app'] {
+  --container-max: var(--app-frame-max);
+}

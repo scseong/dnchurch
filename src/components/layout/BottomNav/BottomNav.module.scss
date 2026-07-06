@@ -19,12 +19,23 @@
   @include respond-up($header-breakpoint) {
     display: none;
   }
+
+  // app 모드(출시): 모든 폭에서 하단바를 보여준다. 하단바는 화면 좌우 끝까지 붙는 전체 폭을 유지한다.
+  [data-layout='app'] & {
+    display: block;
+  }
 }
 
 .tab_list {
   display: grid;
   grid-template-columns: repeat(5, 1fr);
   height: $tab-bar-height;
+
+  // app 모드: 바 배경은 화면 전체 폭, 아이콘 그리드는 프레임 폭으로 가운데 정렬(본문·헤더와 열 맞춤).
+  [data-layout='app'] & {
+    max-width: var(--app-frame-max);
+    margin: 0 auto;
+  }
 }
 
 .tab_item {

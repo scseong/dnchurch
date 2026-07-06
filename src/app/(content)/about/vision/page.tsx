@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 import { OPEN_GRAPH_BASE } from '@/config/seo';
-import LayoutContainer from '@/components/layout/container/LayoutContainer';
+import MainContainer from '@/components/layout/container/MainContainer';
 import styles from './page.module.scss';
 
 export const metadata: Metadata = {
@@ -34,7 +34,7 @@ export default function Vision() {
   return (
     <>
       <h1 className={styles.sr_only}>교회의 비전</h1>
-      <LayoutContainer body>
+      <MainContainer title="교회의 비전">
         <div className={styles.page}>
           <section className={styles.vision_hero}>
             <p className={styles.vision_eyebrow}>OUR VISION</p>
@@ -58,7 +58,7 @@ export default function Vision() {
             </ol>
           </section>
         </div>
-      </LayoutContainer>
+      </MainContainer>
     </>
   );
 }
