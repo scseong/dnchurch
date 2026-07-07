@@ -2,14 +2,16 @@ import { ButtonHTMLAttributes, ReactNode, forwardRef } from 'react';
 import clsx from 'clsx';
 import styles from './Button.module.scss';
 
-export type ButtonVariant = 'primary' | 'secondary' | 'ghost' | 'danger';
+export type ButtonVariant = 'primary' | 'secondary' | 'ghost' | 'danger' | 'accent' | 'kakao';
 
 /** 좌우 최소 패딩: `sm` 12px / `md` 16px / `lg` 24px */
 export type ButtonSize = 'sm' | 'md' | 'lg';
 
 export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   /**
-   * - `primary` — navy 채움. 페이지 당 1개, 가장 중요한 CTA에만 사용
+   * - `primary` — brown 채움. 페이지 당 1개, 가장 중요한 CTA에만 사용
+   * - `accent` — gold 채움. Gold CTA(로그인 등 warm 강조 액션). primary(brown)와 구분되는 강조
+   * - `kakao` — 카카오 브랜드 노란 면. 소셜 로그인 버튼
    * - `secondary` — 외곽선. 보조 액션
    * - `ghost` — 투명 배경 + primary 색상. 최소 시각 비중이 필요할 때
    * - `danger` — 빨간 채움. 삭제·되돌릴 수 없는 destructive 액션
