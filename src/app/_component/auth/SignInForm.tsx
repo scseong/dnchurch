@@ -2,6 +2,7 @@
 
 import { useSearchParams } from 'next/navigation';
 import { useState } from 'react';
+import { IoEyeOffOutline, IoEyeOutline } from 'react-icons/io5';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { FormAlertMessage } from '@/components/form';
 import { Button, TextField } from '@/components/ui';
@@ -19,6 +20,7 @@ type Inputs = {
 
 export default function SignInForm() {
   const [logInError, setLogInError] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
   const {
     register,
     handleSubmit,
@@ -43,22 +45,40 @@ export default function SignInForm() {
       <TextField
         id="email"
         label="이메일"
-        hideLabel
-        placeholder="이메일 입력"
+        type="email"
+        placeholder="you@example.com"
         error={errors.email?.message}
         {...register('email', FORM_VALIDATIONS.email)}
       />
       <TextField
         id="password"
         label="비밀번호"
-        hideLabel
-        type="password"
-        placeholder="비밀번호 입력 (영문 숫자 포함 8자 이상)"
+        type={showPassword ? 'text' : 'password'}
+        placeholder="비밀번호 입력"
         error={errors.password?.message}
+        trailingSlot={
+          <button
+            type="button"
+            className={styles.password_toggle}
+            onClick={() => setShowPassword((prev) => !prev)}
+            aria-label={showPassword ? '비밀번호 숨기기' : '비밀번호 표시'}
+            aria-pressed={showPassword}
+          >
+            {showPassword ? <IoEyeOffOutline /> : <IoEyeOutline />}
+          </button>
+        }
         {...register('password', FORM_VALIDATIONS.password)}
       />
-      <Button type="submit" fullWidth size="lg" loading={isSubmitting} disabled={!isValid}>
-        이메일로 로그인
+      <Button
+        type="submit"
+        variant="accent"
+        fullWidth
+        size="md"
+        className={styles.cta}
+        loading={isSubmitting}
+        disabled={!isValid}
+      >
+        로그인
       </Button>
       {logInError && <FormAlertMessage type="error" message={logInError} />}
     </form>
