@@ -1,0 +1,446 @@
+// 회원가입 3단계 마법사 (약관 동의 → 정보 입력 → 가입 완료) 공용 레이아웃.
+// UI만 — 휴대폰 인증은 동작하는 목업(실제 SMS 없음), 최종 제출은 기존 signUpAction 재사용.
+
+.wrap {
+  margin: $spacing-24 auto;
+  max-width: 43rem;
+  display: flex;
+  flex-direction: column;
+}
+
+// ── 상단 헤더 (뒤로가기 + 가운데 제목) ──
+
+.topbar {
+  display: flex;
+  align-items: center;
+  gap: $spacing-8;
+  margin-bottom: $spacing-16;
+}
+
+.back_button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: $spacing-40;
+  height: $spacing-40;
+  border: none;
+  border-radius: $radius-s;
+  background: none;
+  cursor: pointer;
+  font-size: $font-size-24;
+  color: $txt-primary;
+
+  @include hover-bg-shift($bg-hover);
+}
+
+.title {
+  flex: 1;
+  text-align: center;
+  font-size: $font-size-18;
+  font-weight: $font-weight-bold;
+  color: $txt-primary;
+}
+
+.topbar_spacer {
+  width: $spacing-40;
+  flex: 0 0 auto;
+}
+
+// ── 진행 표시줄 ──
+
+.progress {
+  margin-bottom: $spacing-24;
+}
+
+.progress_head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: $spacing-8;
+}
+
+.progress_label {
+  font-size: $font-size-13;
+  font-weight: $font-weight-bold;
+  color: $txt-primary;
+}
+
+.progress_step {
+  font-size: $font-size-12;
+  font-weight: $font-weight-bold;
+  color: $accent;
+}
+
+.progress_track {
+  height: 0.6rem;
+  border-radius: $radius-circle;
+  background-color: $bg-secondary-deep;
+  overflow: hidden;
+}
+
+.progress_fill {
+  height: 100%;
+  border-radius: $radius-circle;
+  // 골드 그라디언트 — 진행바 전용 (semantic 단색 토큰으로 표현 불가)
+  background: linear-gradient(90deg, $accent, $accent-hover);
+  transition: width 0.3s ease;
+}
+
+// ── 스텝 공통 ──
+
+.body {
+  display: flex;
+  flex-direction: column;
+}
+
+.footer {
+  margin-top: $spacing-24;
+}
+
+// ── 약관 동의 (스텝 1) ──
+
+.terms_heading {
+  font-size: $font-size-22;
+  font-weight: $font-weight-bold;
+  color: $txt-primary;
+}
+
+.terms_sub {
+  margin-top: $spacing-8;
+  font-size: $font-size-14;
+  line-height: $line-height-normal;
+  color: $txt-secondary;
+}
+
+.all_agree {
+  display: flex;
+  align-items: center;
+  gap: $spacing-12;
+  margin-top: $spacing-20;
+  padding: $padding-card;
+  border: 1.5px solid $border-card;
+  border-radius: $radius-m;
+  background-color: $bg-card;
+  cursor: pointer;
+  text-align: left;
+  width: 100%;
+
+  @include hover-bg-shift($bg-hover);
+}
+
+.all_title {
+  display: block;
+  font-size: $font-size-15;
+  font-weight: $font-weight-bold;
+  color: $txt-primary;
+}
+
+.all_sub {
+  display: block;
+  margin-top: $spacing-2;
+  font-size: $font-size-12;
+  color: $txt-tertiary;
+}
+
+.terms_list {
+  margin-top: $spacing-8;
+}
+
+.terms_row {
+  border-top: 1px solid $border-card;
+
+  &:last-child {
+    border-bottom: 1px solid $border-card;
+  }
+}
+
+.terms_row_main {
+  display: flex;
+  align-items: center;
+  gap: $spacing-12;
+  padding: $spacing-16 $spacing-4;
+}
+
+.terms_text {
+  flex: 1;
+  min-width: 0;
+  font-size: $font-size-14;
+  font-weight: $font-weight-semibold;
+  color: $txt-primary;
+  text-align: left;
+}
+
+.badge_req {
+  color: $accent;
+  font-weight: $font-weight-bold;
+}
+
+.badge_opt {
+  color: $txt-tertiary;
+  font-weight: $font-weight-bold;
+}
+
+.expand_btn {
+  display: grid;
+  place-items: center;
+  width: 3rem;
+  height: 3rem;
+  border: none;
+  background: transparent;
+  color: $txt-tertiary;
+  cursor: pointer;
+  flex: 0 0 auto;
+  font-size: $font-size-18;
+}
+
+.expand_icon {
+  transition: transform 0.25s ease;
+
+  &.open {
+    transform: rotate(180deg);
+  }
+}
+
+.terms_detail {
+  margin: 0 $spacing-4 $spacing-16;
+  padding: $spacing-16;
+  border-radius: $radius-s;
+  background-color: $bg-beige-subtle;
+  font-size: $font-size-12;
+  line-height: 1.7;
+  color: $txt-secondary;
+}
+
+// ── 체크박스 (전체=사각, 항목=원형) ──
+
+.checkbox {
+  display: grid;
+  place-items: center;
+  flex: 0 0 auto;
+  border: 1.5px solid $border-strong;
+  background-color: $bg-card;
+  color: $txt-inverse;
+  cursor: pointer;
+
+  svg {
+    opacity: 0;
+    transition: opacity 0.15s ease;
+  }
+
+  &.checked {
+    border-color: $accent;
+    background-color: $accent;
+
+    svg {
+      opacity: 1;
+    }
+  }
+}
+
+.checkbox_square {
+  width: 2.6rem;
+  height: 2.6rem;
+  border-radius: $radius-xs;
+  font-size: $font-size-15;
+}
+
+.checkbox_circle {
+  width: 2.3rem;
+  height: 2.3rem;
+  border-radius: $radius-circle;
+  font-size: $font-size-13;
+}
+
+// ── 정보 입력 (스텝 2) 휴대폰 인증 ──
+
+.field_label {
+  display: block;
+  margin-bottom: $spacing-8;
+  font-size: $font-size-12;
+  font-weight: $font-weight-semibold;
+  color: $txt-primary;
+}
+
+.phone_row {
+  display: flex;
+  align-items: stretch;
+  gap: $spacing-8;
+}
+
+.phone_input {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.verify_btn {
+  flex: 0 0 auto;
+  padding: 0 $spacing-16;
+  border: 1.5px solid $accent;
+  border-radius: $radius-s;
+  background-color: $bg-card;
+  color: $accent;
+  font-family: inherit;
+  font-size: $font-size-13;
+  font-weight: $font-weight-bold;
+  white-space: nowrap;
+  cursor: pointer;
+
+  @include hover-bg-shift($bg-hover);
+}
+
+.timer {
+  font-size: $font-size-13;
+  font-weight: $font-weight-bold;
+  color: $status-negative-soft;
+  font-variant-numeric: tabular-nums;
+
+  &.expired {
+    color: $txt-tertiary;
+  }
+}
+
+// ── 가입 완료 (스텝 3) ──
+
+.complete {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: $spacing-24 $spacing-8;
+}
+
+.check_badge {
+  display: grid;
+  place-items: center;
+  width: 10.4rem;
+  height: 10.4rem;
+}
+
+.check_ring {
+  grid-area: 1 / 1;
+  width: 10.4rem;
+  height: 10.4rem;
+  border-radius: $radius-circle;
+  background-color: $accent;
+  opacity: 0.18;
+  animation: ringpulse 1.2s ease-out 0.25s;
+}
+
+.check_circle {
+  grid-area: 1 / 1;
+  display: grid;
+  place-items: center;
+  width: 8.8rem;
+  height: 8.8rem;
+  border-radius: $radius-circle;
+  // 골드 그라디언트 원 — 완료 표시 전용
+  background: linear-gradient(150deg, $accent-hover, $accent);
+  color: $txt-inverse;
+  font-size: $font-size-42;
+  box-shadow: $shadow-lg;
+  animation: popcheck 0.55s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.complete_title {
+  margin-top: $spacing-32;
+  font-size: $font-size-24;
+  font-weight: $font-weight-bold;
+  color: $txt-primary;
+}
+
+.complete_welcome {
+  margin-top: $spacing-12;
+  font-family: $font-family-home-serif;
+  font-size: $font-size-16;
+  line-height: 1.8;
+  color: $txt-secondary;
+}
+
+.summary {
+  width: 100%;
+  margin-top: $spacing-24;
+  padding: $padding-card;
+  border: 1px solid $border-card;
+  border-radius: $radius-m;
+  background-color: $bg-card;
+  text-align: left;
+}
+
+.summary_row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.summary_key {
+  font-size: $font-size-13;
+  font-weight: $font-weight-semibold;
+  color: $txt-tertiary;
+}
+
+.summary_value {
+  font-size: $font-size-14;
+  font-weight: $font-weight-bold;
+  color: $txt-primary;
+}
+
+.summary_divider {
+  height: 1px;
+  margin: $spacing-12 0;
+  background-color: $border-card;
+}
+
+.complete_note {
+  margin-top: $spacing-16;
+  padding: $spacing-12 $spacing-16;
+  border: 1px solid $border-warm;
+  border-radius: $radius-s;
+  background-color: $accent-subtle;
+  font-size: $font-size-13;
+  line-height: $line-height-normal;
+  color: $txt-link;
+}
+
+.complete_actions {
+  width: 100%;
+  margin-top: $spacing-24;
+}
+
+.login_link {
+  display: block;
+  margin-top: $spacing-16;
+  text-align: center;
+  font-size: $font-size-13;
+  font-weight: $font-weight-bold;
+  color: $txt-tertiary;
+
+  @include hover-color-shift($primary-hover);
+}
+
+@keyframes popcheck {
+  0% {
+    transform: scale(0.5);
+    opacity: 0;
+  }
+  60% {
+    transform: scale(1.1);
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes ringpulse {
+  0% {
+    transform: scale(0.9);
+    opacity: 0.55;
+  }
+  70% {
+    transform: scale(1.35);
+    opacity: 0;
+  }
+  100% {
+    opacity: 0;
+  }
+}
