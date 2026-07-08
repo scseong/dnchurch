@@ -1,6 +1,5 @@
 import { Metadata } from 'next';
 import { Suspense } from 'react';
-import { LayoutContainer } from '@/components/layout';
 import SignUpWizard from './_component/SignUpWizard';
 
 export const metadata: Metadata = {
@@ -10,12 +9,8 @@ export const metadata: Metadata = {
 
 export default function SignUpPage() {
   return (
-    <section>
-      <LayoutContainer>
-        <Suspense fallback={null}>
-          <SignUpWizard />
-        </Suspense>
-      </LayoutContainer>
-    </section>
+    <Suspense fallback={null}>
+      <SignUpWizard />
+    </Suspense>
   );
 }

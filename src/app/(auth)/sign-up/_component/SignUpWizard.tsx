@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { IoChevronBack } from 'react-icons/io5';
+import AuthHeader from '@/app/_component/auth/AuthHeader';
 import TermsStep from './TermsStep';
 import InfoStep from './InfoStep';
 import CompleteStep from './CompleteStep';
@@ -36,23 +36,8 @@ export default function SignUpWizard() {
   const current = STEPS[step - 1];
 
   return (
-    <div className={styles.wrap}>
-      <div className={styles.topbar}>
-        {step < 3 ? (
-          <button
-            type="button"
-            className={styles.back_button}
-            onClick={handleBack}
-            aria-label="뒤로 가기"
-          >
-            <IoChevronBack />
-          </button>
-        ) : (
-          <span className={styles.topbar_spacer} />
-        )}
-        <span className={styles.title}>회원가입</span>
-        <span className={styles.topbar_spacer} />
-      </div>
+    <>
+      <AuthHeader title="회원가입" showBack={step < 3} onBack={handleBack} />
 
       <div className={styles.progress}>
         <div className={styles.progress_head}>
@@ -76,6 +61,6 @@ export default function SignUpWizard() {
       {step === 3 && summary && (
         <CompleteStep name={summary.name} email={summary.email} redirect={redirect} />
       )}
-    </div>
+    </>
   );
 }

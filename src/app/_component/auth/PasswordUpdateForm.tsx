@@ -5,7 +5,7 @@ import { useState, useEffect } from 'react';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { FormAlertMessage } from '@/components/form';
 import { Button, TextField } from '@/components/ui';
-import { updatePasswordAndSignOut } from '@/app/reset-password/actions';
+import { updatePasswordAndSignOut } from '@/app/(auth)/reset-password/actions';
 import { generateErrorMessage } from '@/utils/error';
 import { FORM_VALIDATIONS } from '@/constants/validation';
 import styles from './authForm.module.scss';

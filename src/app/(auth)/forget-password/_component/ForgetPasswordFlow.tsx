@@ -3,9 +3,10 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useForm, SubmitHandler } from 'react-hook-form';
-import { IoChevronBack, IoInformationCircleOutline } from 'react-icons/io5';
+import { IoInformationCircleOutline } from 'react-icons/io5';
 import clsx from 'clsx';
 import useTimer from '@/hooks/useTimer';
+import AuthHeader from '@/app/_component/auth/AuthHeader';
 import { FormAlertMessage } from '@/components/form';
 import { Button, TextField } from '@/components/ui';
 import { requestPasswordResetEmailAction } from '@/actions/auth.action';
@@ -75,19 +76,8 @@ export default function ForgetPasswordFlow() {
   };
 
   return (
-    <div className={styles.wrap}>
-      <div className={styles.topbar}>
-        <button
-          type="button"
-          className={styles.back_button}
-          onClick={handleBack}
-          aria-label="뒤로 가기"
-        >
-          <IoChevronBack />
-        </button>
-        <span className={styles.title}>비밀번호 찾기</span>
-        <span className={styles.topbar_spacer} />
-      </div>
+    <>
+      <AuthHeader title="비밀번호 찾기" onBack={handleBack} />
 
       {step === 1 ? (
         <form className={styles.body} onSubmit={handleSubmit(sendCode)} noValidate>
@@ -173,6 +163,6 @@ export default function ForgetPasswordFlow() {
           </div>
         </div>
       )}
-    </div>
+    </>
   );
 }

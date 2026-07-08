@@ -1,0 +1,18 @@
+.header {
+  margin-bottom: $spacing-24;
+
+  h1 {
+    margin-bottom: $spacing-8;
+    font-size: $font-size-26;
+
+    @include respond-up($breakpoint-tablet-sm) {
+      font-size: $font-size-34;
+    }
+  }
+
+  p {
+    font-size: $font-size-14;
+    line-height: $line-height-normal;
+    color: $txt-secondary;
+  }
+}

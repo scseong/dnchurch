@@ -1,50 +1,6 @@
-// 회원가입 3단계 마법사 (약관 동의 → 정보 입력 → 가입 완료) 공용 레이아웃.
+// 회원가입 3단계 마법사 (약관 동의 → 정보 입력 → 가입 완료) 스타일.
 // UI만 — 휴대폰 인증은 동작하는 목업(실제 SMS 없음), 최종 제출은 기존 signUpAction 재사용.
-
-.wrap {
-  margin: $spacing-24 auto;
-  max-width: 43rem;
-  display: flex;
-  flex-direction: column;
-}
-
-// ── 상단 헤더 (뒤로가기 + 가운데 제목) ──
-
-.topbar {
-  display: flex;
-  align-items: center;
-  gap: $spacing-8;
-  margin-bottom: $spacing-16;
-}
-
-.back_button {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: $spacing-40;
-  height: $spacing-40;
-  border: none;
-  border-radius: $radius-s;
-  background: none;
-  cursor: pointer;
-  font-size: $font-size-24;
-  color: $txt-primary;
-
-  @include hover-bg-shift($bg-hover);
-}
-
-.title {
-  flex: 1;
-  text-align: center;
-  font-size: $font-size-18;
-  font-weight: $font-weight-bold;
-  color: $txt-primary;
-}
-
-.topbar_spacer {
-  width: $spacing-40;
-  flex: 0 0 auto;
-}
+// 바깥 래퍼·가운데 정렬은 (auth)/layout이 소유한다.
 
 // ── 진행 표시줄 ──
 
