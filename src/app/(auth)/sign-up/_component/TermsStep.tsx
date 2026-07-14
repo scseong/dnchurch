@@ -78,6 +78,7 @@ export default function TermsStep({ onNext }: { onNext: () => void }) {
                 type="button"
                 role="checkbox"
                 aria-checked={!!checked[term.id]}
+                aria-label={`[${term.required ? '필수' : '선택'}] ${term.label}`}
                 className={clsx(
                   styles.checkbox,
                   styles.checkbox_circle,

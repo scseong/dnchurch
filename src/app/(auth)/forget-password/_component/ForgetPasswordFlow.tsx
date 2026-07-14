@@ -51,7 +51,11 @@ export default function ForgetPasswordFlow() {
   const resend = async () => {
     setAlertMessage('');
     try {
-      await requestPasswordResetEmailAction(sentEmail);
+      const result = await requestPasswordResetEmailAction(sentEmail);
+      if (!result.success) {
+        setAlertMessage(result.message);
+        return;
+      }
       start(CODE_SECONDS);
     } catch (error) {
       setAlertMessage(generateErrorMessage(error));
