@@ -5,7 +5,7 @@
 }
 
 .label {
-  font-size: $font-size-12;
+  font-size: $font-size-13;
   font-weight: $font-weight-semibold;
   color: $txt-primary;
 
@@ -44,7 +44,7 @@
   flex: 1 1 auto;
   min-width: 0;
   padding: $spacing-12;
-  font-size: $font-size-16; // iOS auto-zoom 방지
+  font-size: $font-size-16; // iOS auto-zoom 방지 (16px 미만이면 iOS Safari 포커스 시 화면 자동 확대)
   font-family: inherit;
   color: $txt-primary;
   background: transparent;
@@ -117,7 +117,7 @@
 // ── Helper / error / success messages ──
 
 .message {
-  font-size: $font-size-11;
+  font-size: $font-size-12;
   color: $txt-tertiary;
 }
 

@@ -42,7 +42,7 @@
 
 // ── Variants ──
 
-// Primary — Navy CTA
+// Primary — Brown CTA
 .primary {
   background-color: $primary;
   color: $txt-inverse;
@@ -51,6 +51,33 @@
 
   &:active:not(:disabled) {
     background-color: $primary-active;
+  }
+}
+
+// Accent — Gold CTA (primary brown과 구분되는 warm 강조 액션)
+.accent {
+  background-color: $accent;
+  color: $txt-inverse;
+
+  @include hover-bg-shift($accent-hover);
+}
+
+// Kakao — 소셜 로그인 브랜드 버튼. 카카오 규정색이라 semantic 토큰 대상 아님(로컬 변수).
+// stylelint-disable-next-line color-no-hex -- 카카오 브랜드 규정색(#fee500)
+$kakao-yellow: #fee500;
+$kakao-label: rgba(0, 0, 0, 0.85);
+
+.kakao {
+  background-color: $kakao-yellow;
+  color: $kakao-label;
+  transition: filter 0.18s ease;
+
+  &:hover:not(:disabled) {
+    filter: brightness(0.96);
+  }
+
+  &:active:not(:disabled) {
+    filter: brightness(0.92);
   }
 }
 
