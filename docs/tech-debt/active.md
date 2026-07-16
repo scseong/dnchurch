@@ -372,3 +372,65 @@
 - **영향 범위** (3건): `.claude/agents/claude-code.md`·`.claude/agents/commit-pr-author.md`·`.claude/skills/harness-workflow/SKILL.md` (현재 코드·실행 변경 없음)
 - **발견일**: 2026-06-16 (harness-pr-review-step 정합성 감사 — 감사 에이전트 3 + Codex 교차, Codex가 근본 원인 적발)
 
+### 🟡 `/reset-password`에 흐름 가드·현재 비밀번호 재확인이 없음 (2026-07-16 인증 A-to-Z 감사)
+
+- **상태**: 등록만 (배포 전 손볼 값어치 큼 — high)
+- **무엇**: `/reset-password`는 미들웨어 보호 라우트가 아니고, `ResetPasswordFlow`는 진행 중 재설정 흐름(쿠키·세션)이 있는지 확인하지 않고 항상 폼을 보여준다. `updatePasswordAndSignOut`은 쿠키가 없으면 `supabase.auth.updateUser({ password })` 폴백을 탄다(`reset-password/actions.ts:55`). 그래서 로그인된 사용자가 메일 없이 `/reset-password`에 직접 들어가도 현재 비밀번호 확인 없이 비밀번호를 바꿀 수 있다. 세션을 탈취했거나 공용 PC에 남은 로그인 상태에 접근한 사람이 계정을 영구 장악할 수 있다. 재설정 액션에 서버측 `PASSWORD_REGEX` 재검증도 없다(가입은 하는데 재설정만 빠짐).
+- **왜**: 6자리 OTP 도입(PR #149)은 "찾기" 단계만 실검증으로 바꿨고, 이 페이지 가드는 범위가 아니었다. 다른 기기 세션 폐기는 `signOut()` 기본 scope가 `global`이라 이미 된다(코드로 재확인).
+- **마이그레이션 경로**: (1) `/reset-password`를 진행 중 흐름이 있을 때만 폼 노출, (2) OTP recovery 세션의 `updateUser`로 통일하고 admin·평문 userId 쿠키 경로 제거, (3) 액션 진입부에서 `PASSWORD_REGEX` 재검증, (4) 계정 설정의 "비밀번호 변경"은 재설정과 분리하고 현재 비밀번호 재확인 요구.
+- **영향 범위**: `src/app/(auth)/reset-password/{page.tsx,actions.ts,_component/ResetPasswordFlow.tsx}`, `src/lib/supabase/middleware.ts`
+- **확인**: `rg "PASSWORD_REGEX" "src/app/(auth)/reset-password/actions.ts"` → 0 hits (서버 재검증 없음). 로그인 상태로 `/reset-password`에 직접 접근했을 때 폼이 그대로 뜨는지 확인.
+- **발견일**: 2026-07-16 (인증 A-to-Z 감사 8-1 — `docs/research/2026-07-16-auth-a-to-z.md`)
+
+### 🟡 미들웨어 redirect 시 갱신된 세션 쿠키가 사라짐 (2026-07-16 인증 A-to-Z 감사)
+
+- **상태**: 등록만 (배포 전 손볼 값어치 큼 — high)
+- **무엇**: `getUser()`가 토큰을 리프레시하면 새 쿠키가 `response`에 쌓이는데, 가드 분기가 `NextResponse.redirect(...)`를 새로 만들어 반환할 때(`middleware.ts:26`·`31`) 그 쿠키를 복사하지 않는다. 토큰이 막 리프레시된 요청에서 리다이렉트가 나면 새 토큰이 브라우저로 가지 않아, 만료 직전 사용자가 튕기고 재로그인이 불안정해질 수 있다.
+- **왜**: Supabase SSR 문서도 피하라고 적어 둔 패턴이다. 액세스 토큰이 1시간 유효해 리프레시와 가드 리다이렉트가 겹치는 순간이 드물다. 그래서 지금까지 드러나지 않았다.
+- **마이그레이션 경로**: 두 리다이렉트 분기에서 `response.cookies.getAll()`을 순회해 새 리다이렉트 응답에 복사한다. 두 분기 공통이라 작은 헬퍼로 묶는다.
+- **영향 범위**: `src/lib/supabase/middleware.ts`
+- **확인**: `rg "cookies" src/lib/supabase/middleware.ts` → 두 `NextResponse.redirect` 분기(`:26`·`:31`)에 쿠키 복사가 없음을 확인.
+- **발견일**: 2026-07-16 (인증 A-to-Z 감사 8-2 — `docs/research/2026-07-16-auth-a-to-z.md`)
+
+### 🟡 open redirect — `auth/callback`의 `next`와 로그인 `redirect`가 검증 없이 쓰임 (2026-07-16 인증 A-to-Z 감사)
+
+- **상태**: 등록만 (medium)
+- **무엇**: 세 진입점이 리다이렉트 값을 검증 없이 그대로 쓴다.
+  - `auth/callback/route.ts`가 `next`를 `${origin}${next}`에 문자열로 붙인다. `next=@evil.com`이면 `new URL('https://dnchurch.vercel.app@evil.com')`의 최종 host가 `evil.com`이 된다(userinfo 구문). 코드로 재현해 외부 도메인 이탈이 실제로 됨을 확인했다. `next=//evil.com`은 경로로 붙어 이탈하지 않는다 — 위험한 건 `@` 접두 형태다.
+  - `SignInForm`·`SessionContextProvider`가 `redirect`를 검증 없이 쓴다. `SignUpWizard`에만 상대 경로 가드가 있어 비대칭이다.
+- **왜**: 2026-06-23 감사에서는 콜백 `next`를 "origin 접두로 완전 이탈은 막힌다"며 low로 판정했으나, 이번에 `@` userinfo 우회를 재현해 medium으로 올렸다. 카카오 OAuth를 거치지만 피싱에 쓸 수 있다.
+- **마이그레이션 경로**: `startsWith('/') && !startsWith('//')`인 상대 경로만 허용하는 공용 가드 헬퍼를 만들고, 콜백 `next`·로그인 `redirect` 세 진입점에 함께 적용한다.
+- **영향 범위**: `src/app/auth/callback/route.ts`, `src/app/_component/auth/SignInForm.tsx`, `src/context/SessionContextProvider.tsx`
+- **확인**: `node -e "console.log(new URL('https://dnchurch.vercel.app'+'@evil.com').host)"` → `evil.com` (외부 이탈 재현). `rg "startsWith\('/'\)" src/app/auth/callback/route.ts src/app/_component/auth/SignInForm.tsx` → 0 hits (가드 없음).
+- **발견일**: 2026-07-16 (인증 A-to-Z 감사 8-3·8-6 — `docs/research/2026-07-16-auth-a-to-z.md`)
+
+### 🟡 미들웨어 보호 라우트가 정확 일치라 하위 경로가 가드 밖 (2026-07-16 인증 A-to-Z 감사)
+
+- **상태**: 등록만 (medium — 마이페이지 본 기능 도입 전 처리)
+- **무엇**: 가드가 `exactMatches.includes(path)`라 `/mypage`만 정확히 일치할 때 로그인을 강제한다. `/mypage/[id]` 같은 하위 라우트는 정확 일치에도 동적 패턴에도 안 걸려 통과한다. 지금은 `/mypage`가 placeholder라 노출 피해가 없으나, 마이페이지 본 기능이 붙으면 배열에서 빠진 하위 경로가 비로그인 노출로 이어진다.
+- **왜**: 보호 라우트를 라우트 트리가 아니라 손으로 적은 배열로 관리한다. 마이페이지 미완성 항목(같은 파일의 `/mypage` 인증 흐름 부재)과 함께 본다.
+- **마이그레이션 경로**: 정확 일치 대신 prefix 매칭(`path === '/mypage' || path.startsWith('/mypage/')`)으로 바꾼다.
+- **영향 범위**: `src/lib/supabase/middleware.ts`
+- **확인**: `rg "exactMatches|startsWith" src/lib/supabase/middleware.ts` → `exactMatches`는 있고 `/mypage` prefix 매칭은 없음을 확인.
+- **발견일**: 2026-07-16 (인증 A-to-Z 감사 8-5 — `docs/research/2026-07-16-auth-a-to-z.md`)
+
+### 🟡 관리자 역할을 부여하는 정식 경로가 없음 (2026-07-16 인증 A-to-Z 감사)
+
+- **상태**: 등록만 (배포 전 필요 — high)
+- **무엇**: `checkAdminPermission`은 `profiles.role === 'admin'`을 보지만, 누군가를 admin으로 만드는 마이그레이션·UI·절차가 코드에 없다. 첫 관리자는 Supabase 대시보드에서 손으로 행을 고쳐야만 생긴다.
+- **왜**: 운영 배포 후 관리자가 없는 상태가 되거나, 손수 DB 편집이라는 추적 안 되는 작업에 의존한다. 가입 승인 흐름이 없는 문제와 같은 축이다.
+- **마이그레이션 경로**: 초기 admin을 심는 시드 마이그레이션을 두거나, 관리자만 역할을 부여하는 절차·화면을 만든다.
+- **영향 범위**: `supabase/migrations/`, `src/actions/_auth-helpers.ts`, 관리자 화면
+- **확인**: `rg -i "role.*=.*'admin'|update.*profiles.*set.*role" supabase/migrations` → 역할을 부여·시드하는 마이그레이션 0건 (읽기 가드만 존재).
+- **발견일**: 2026-07-16 (인증 A-to-Z 감사 8-4 — `docs/research/2026-07-16-auth-a-to-z.md`)
+
+### 🟢 인증 서버 모듈에 `server-only` 경계 표기가 없음 (2026-07-16 인증 A-to-Z 감사)
+
+- **상태**: 등록만 (낮은 우선순위 — 미래 회귀 방지용)
+- **무엇**: `src/lib/supabase/admin.ts`(service_role 키)·`src/apis/auth-server.ts`(서버 세션 조회)에 `import 'server-only'` 가드가 없다. 현재 호출처가 서버 코드뿐이라 안전하나, 실수로 클라이언트 번들에 섞여도 빌드 타임에 막지 못한다.
+- **왜**: 초기 작성 시 경계 표기를 안 붙였다. 지금은 결함이 아니라 미래 회귀 방지 장치가 없는 상태다.
+- **마이그레이션 경로**: 두 파일 상단에 `import 'server-only';`를 더한다. 함께 `_auth-helpers.ts:8`의 `app_metadata` 런타임 검증 없는 타입 단언도 검토한다.
+- **영향 범위**: `src/lib/supabase/admin.ts`, `src/apis/auth-server.ts`
+- **확인**: `rg "server-only" src/lib/supabase/admin.ts src/apis/auth-server.ts` → 0 hits.
+- **발견일**: 2026-07-16 (인증 A-to-Z 감사 10절 — `docs/research/2026-07-16-auth-a-to-z.md`)
+
