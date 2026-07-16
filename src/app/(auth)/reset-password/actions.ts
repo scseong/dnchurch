@@ -58,5 +58,6 @@ export async function updatePasswordAndSignOut(newPassword: string) {
     return { error: generateErrorMessage(updateError) };
   }
 
-  return { error: null, redirectTo: '/' };
+  await supabase.auth.signOut();
+  return { error: null, redirectTo: '/login' };
 }
