@@ -44,7 +44,7 @@
   flex: 1 1 auto;
   min-width: 0;
   padding: $spacing-12;
-  font-size: $font-size-16; // iOS auto-zoom 방지 (16px 미만이면 iOS Safari 포커스 시 화면 자동 확대)
+  font-size: $font-size-14;
   font-family: inherit;
   color: $txt-primary;
   background: transparent;
