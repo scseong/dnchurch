@@ -109,8 +109,8 @@
 
 ## 후속 작업
 
-- prod 프로젝트(`xrfyevrnmvbuwsbktuja`)에 dev와 같은 설정 적용 — Reset Password 템플릿 `{{ .Token }}` + Email OTP Length 6
-  - 이유: dev에서만 설정함. prod는 아직 매직링크 8자리 상태라 OTP 흐름이 prod에서 동작 안 함
+- prod 프로젝트(`xrfyevrnmvbuwsbktuja`)에 dev와 같은 설정 적용 — Reset Password 템플릿 `{{ .Token }}` + Email OTP Length 6 + 커스텀 SMTP(Resend, `dongnamchurch.site`)로 발신자 "대구동남교회" 표시
+  - 이유: dev에서만 설정함. prod는 아직 매직링크 8자리 상태·기본 Supabase 발신자라 OTP 흐름이 prod에서 동작 안 함
   - 다음 기준: develop → main 릴리스 직전 (v1.0.0 전환 시)
   - 기록 위치: 없음 (이 후속 항목으로 추적)
 - `createServerSideClient().setAll`이 cookie options를 버리고 예외를 삼킨다 (`src/lib/supabase/server.ts:22-25`) — 쿠키 쓰기 실패가 숨겨질 수 있음 (Codex 지적)
