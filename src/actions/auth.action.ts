@@ -71,6 +71,54 @@ export async function verifyPasswordResetOtpAction(
   return { success: true, message: '인증되었습니다.' };
 }
 
+export async function signOutAction(): Promise<ActionResult> {
+  const supabase = await createServerSideClient();
+  const { error } = await supabase.auth.signOut();
+
+  if (error) {
+    return { success: false, message: '로그아웃에 실패했습니다. 잠시 후 다시 시도해주세요.' };
+  }
+
+  return { success: true, message: '로그아웃되었습니다.' };
+}
+
+export async function changePasswordAction(
+  currentPassword: string,
+  newPassword: string
+): Promise<ActionResult> {
+  if (!currentPassword) {
+    return { success: false, message: '현재 비밀번호를 입력해주세요.' };
+  }
+  // 클라이언트 폼 검증은 UX 보조 — 서버에서 항상 다시 검증한다 (ADR 0016)
+  if (!PASSWORD_REGEX.test(newPassword)) {
+    return { success: false, message: '비밀번호는 영문, 숫자 포함 8자 이상이여야 합니다.' };
+  }
+
+  const supabase = await createServerSideClient();
+  const { data } = await supabase.auth.getUser();
+  const email = data.user?.email;
+  if (!email) {
+    return { success: false, message: '로그인이 필요합니다.' };
+  }
+
+  // 현재 비밀번호 재확인 — 세션만 쥔 사람이 비밀번호를 바꾸지 못하게 막는다 (exec-plan D2).
+  // 로그인 엔드포인트를 타므로 Supabase 기본 rate limit이 함께 걸린다.
+  const { error: verifyError } = await supabase.auth.signInWithPassword({
+    email,
+    password: currentPassword
+  });
+  if (verifyError) {
+    return { success: false, message: '현재 비밀번호가 일치하지 않습니다.' };
+  }
+
+  const { error } = await supabase.auth.updateUser({ password: newPassword });
+  if (error) {
+    return { success: false, message: generateErrorMessage(error) };
+  }
+
+  return { success: true, message: '비밀번호가 변경되었습니다.' };
+}
+
 export async function signUpAction({
   email,
   password,

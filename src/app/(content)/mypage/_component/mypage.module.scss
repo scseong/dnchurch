@@ -1,0 +1,107 @@
+// ══════════════════════════════════════════
+// 마이 페이지 — Claude Design 시안(마이 페이지.dc.html)의 프로필 영역 기준.
+// 성경읽기 트래커 카드는 후속 task에서 추가 예정.
+// ══════════════════════════════════════════
+
+$avatar-size: 6.4rem;
+$page-max-width: 60rem; // 계정 메뉴가 PC 폭 전체로 퍼지지 않게 좁은 단일 컬럼로 고정
+
+.page {
+  display: flex;
+  flex-direction: column;
+  gap: $content-gap-l;
+  max-width: $page-max-width;
+  margin: 0 auto;
+}
+
+// ── 프로필 헤더 ──
+.profile {
+  display: flex;
+  align-items: center;
+  gap: $content-gap-m;
+  padding: $padding-card;
+  background-color: $bg-card;
+  border: 1px solid $border-card;
+  border-radius: $radius-s;
+}
+
+.avatar {
+  position: relative;
+  overflow: hidden;
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  width: $avatar-size;
+  height: $avatar-size;
+  border-radius: $radius-l;
+  background-color: $primary;
+  color: $txt-inverse;
+  font-size: $font-size-24;
+  font-weight: $font-weight-bold;
+}
+
+.identity {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-4;
+  flex: 1;
+  min-width: 0;
+}
+
+.name {
+  @include text-card-title;
+  @include ellipsis-multi(1);
+}
+
+.email {
+  @include text-caption;
+  @include ellipsis-multi(1);
+}
+
+// ── 메뉴 그룹 ──
+.menu_section {
+  display: flex;
+  flex-direction: column;
+  gap: $content-gap-xs;
+}
+
+.menu_title {
+  @include text-label-emphasis;
+  padding: 0 $spacing-4;
+}
+
+.menu_group {
+  background-color: $bg-card;
+  border: 1px solid $border-card;
+  border-radius: $radius-s;
+  overflow: hidden;
+
+  > * + * {
+    border-top: 1px solid $border-subtle;
+  }
+}
+
+.logout {
+  color: $status-negative;
+}
+
+// ── 프로필 편집 모달 ──
+.edit_avatar {
+  display: flex;
+  align-items: center;
+  gap: $content-gap-s;
+  margin-bottom: $content-gap-m;
+}
+
+.file_name {
+  @include text-caption-small;
+  @include ellipsis-multi(1);
+  min-width: 0;
+}
+
+// ── 비밀번호 변경 모달 ──
+.password_fields {
+  display: flex;
+  flex-direction: column;
+  gap: $content-gap-m;
+}
