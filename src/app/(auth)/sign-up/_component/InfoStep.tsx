@@ -1,9 +1,8 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { IoEyeOffOutline, IoEyeOutline } from 'react-icons/io5';
-import clsx from 'clsx';
 import { signUpAction } from '@/actions/auth.action';
 import { FormAlertMessage } from '@/components/form';
 import { Button, TextField } from '@/components/ui';
@@ -20,18 +19,12 @@ type Inputs = {
   confirmPassword: string;
 };
 
-const CODE_SECONDS = 180;
-
-function formatTime(seconds: number) {
-  const mm = String(Math.floor(seconds / 60)).padStart(2, '0');
-  const ss = String(seconds % 60).padStart(2, '0');
-  return `${mm}:${ss}`;
-}
-
 export default function InfoStep({
-  onComplete
+  onComplete,
+  redirect
 }: {
   onComplete: (data: { name: string; email: string }) => void;
+  redirect: string;
 }) {
   const [signUpError, setSignUpError] = useState('');
   const [showPassword, setShowPassword] = useState(false);
@@ -44,29 +37,22 @@ export default function InfoStep({
   } = useForm<Inputs>({ mode: 'onChange' });
   const { password, confirmPassword } = watch();
 
-  // 휴대폰 인증 — 동작하는 UI 목업 (실제 SMS 전송 없음)
+  // 휴대폰은 인증 없이 선택 연락처로만 저장한다
   const [phone, setPhone] = useState('');
-  const [codeSent, setCodeSent] = useState(false);
-  const [secondsLeft, setSecondsLeft] = useState(0);
-
-  useEffect(() => {
-    if (secondsLeft <= 0) return;
-    const timer = setInterval(() => setSecondsLeft((prev) => prev - 1), 1000);
-    return () => clearInterval(timer);
-  }, [secondsLeft]);
-
-  const sendCode = () => {
-    if (!phone.trim()) return;
-    setCodeSent(true);
-    setSecondsLeft(CODE_SECONDS);
-  };
 
   const passwordsMatch = Boolean(confirmPassword) && password === confirmPassword;
 
   const onSubmit: SubmitHandler<Inputs> = async ({ name, username, email, password: pw }) => {
     setSignUpError('');
     try {
-      const result = await signUpAction({ email, password: pw, name, username });
+      const result = await signUpAction({
+        email,
+        password: pw,
+        name,
+        username,
+        phone,
+        redirectTo: redirect
+      });
       if (!result.success) {
         setSignUpError(result.message);
         return;
@@ -151,38 +137,15 @@ export default function InfoStep({
           })}
         />
 
-        <div>
-          <span className={styles.field_label}>휴대폰 번호</span>
-          <div className={styles.phone_row}>
-            <TextField
-              id="phone"
-              label="휴대폰 번호"
-              hideLabel
-              type="tel"
-              className={styles.phone_input}
-              placeholder="010-0000-0000"
-              value={phone}
-              onChange={(event) => setPhone(event.target.value)}
-            />
-            <button type="button" className={styles.verify_btn} onClick={sendCode}>
-              {codeSent ? '재전송' : '인증받기'}
-            </button>
-          </div>
-        </div>
-
-        {codeSent && (
-          <TextField
-            id="verify-code"
-            label="인증번호"
-            type="tel"
-            placeholder="문자로 받은 6자리"
-            trailingSlot={
-              <span className={clsx(styles.timer, secondsLeft <= 0 && styles.expired)}>
-                {formatTime(Math.max(secondsLeft, 0))}
-              </span>
-            }
-          />
-        )}
+        <TextField
+          id="phone"
+          label="휴대폰 번호 (선택)"
+          type="tel"
+          placeholder="010-0000-0000"
+          helper="교회 연락용으로만 쓰여요"
+          value={phone}
+          onChange={(event) => setPhone(event.target.value)}
+        />
       </div>
 
       <div className={styles.footer}>

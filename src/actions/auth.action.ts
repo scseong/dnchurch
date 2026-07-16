@@ -12,6 +12,10 @@ type SignUpInput = {
   password: string;
   name: string;
   username: string;
+  /** 선택 연락처. 인증하지 않고 profiles.phone에 저장 (handle_new_user 트리거 경유). */
+  phone?: string;
+  /** 이메일 인증 링크 클릭 후 착지할 사이트 내 경로. */
+  redirectTo?: string;
 };
 
 type SignUpData = {
@@ -75,7 +79,9 @@ export async function signUpAction({
   email,
   password,
   name,
-  username
+  username,
+  phone,
+  redirectTo = '/'
 }: SignUpInput): Promise<ActionResult<SignUpData>> {
   // 클라이언트 폼 검증은 UX 보조 — 서버에서 항상 다시 검증한다 (ADR 0016)
   if (!EMAIL_REGEX.test(email)) {
@@ -91,12 +97,23 @@ export async function signUpAction({
     return { success: false, message: '프로필 이름은 10자 이내로 입력해주세요.' };
   }
 
+  // env가 비면 확인 메일 링크가 'undefined/auth/...'로 나간다 — 보내기 전에 막는다
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL;
+  if (!siteUrl) {
+    return { success: false, message: '서버 설정 오류로 가입을 완료할 수 없습니다. 잠시 후 다시 시도해주세요.' };
+  }
+
+  const trimmedPhone = phone?.trim();
+
   const supabase = await createServerSideClient();
   const { data, error } = await supabase.auth.signUp({
     email,
     password,
     options: {
-      data: { name }
+      // token_hash 검증 라우트로 보낸다 — code 교환은 가입 브라우저에만 있는 code_verifier가 필요해 다른 기기에서 확인이 깨진다
+      emailRedirectTo: `${siteUrl}/auth/confirm?next=${encodeURIComponent(redirectTo)}`,
+      // phone_number는 handle_new_user 트리거가 profiles.phone에 저장한다. 빈 값은 넣지 않는다
+      data: trimmedPhone ? { name, phone_number: trimmedPhone } : { name }
     }
   });
 
@@ -106,7 +123,7 @@ export async function signUpAction({
 
   return {
     success: true,
-    message: '가입이 완료되었습니다.',
+    message: '인증 메일을 보냈습니다.',
     data: { hasSession: Boolean(data.session) }
   };
 }

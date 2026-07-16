@@ -4,7 +4,9 @@ import { createServerSideClient } from '@/lib/supabase/server';
 export async function GET(request: Request) {
   const { searchParams, origin } = new URL(request.url);
   const code = searchParams.get('code');
-  const next = searchParams.get('next') ?? '/';
+  // open redirect 방지 — 사이트 내 상대 경로만 허용
+  const nextParam = searchParams.get('next') ?? '/';
+  const next = nextParam.startsWith('/') && !nextParam.startsWith('//') ? nextParam : '/';
 
   if (code) {
     const supabase = await createServerSideClient();
