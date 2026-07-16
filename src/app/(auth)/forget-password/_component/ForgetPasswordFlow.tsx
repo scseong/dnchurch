@@ -9,7 +9,10 @@ import useTimer from '@/hooks/useTimer';
 import AuthHeader from '@/app/_component/auth/AuthHeader';
 import { FormAlertMessage } from '@/components/form';
 import { Button, TextField } from '@/components/ui';
-import { requestPasswordResetEmailAction } from '@/actions/auth.action';
+import {
+  requestPasswordResetEmailAction,
+  verifyPasswordResetOtpAction
+} from '@/actions/auth.action';
 import { FORM_VALIDATIONS } from '@/constants/validation';
 import { generateErrorMessage } from '@/utils/error';
 import authStyles from '@/app/_component/auth/authForm.module.scss';
@@ -24,6 +27,7 @@ export default function ForgetPasswordFlow() {
   const [step, setStep] = useState(1);
   const [sentEmail, setSentEmail] = useState('');
   const [code, setCode] = useState('');
+  const [isVerifying, setIsVerifying] = useState(false);
   const [alertMessage, setAlertMessage] = useState('');
   const {
     register,
@@ -62,12 +66,25 @@ export default function ForgetPasswordFlow() {
     }
   };
 
-  const goReset = () => {
+  const goReset = async () => {
     if (!code.trim()) {
       setAlertMessage('인증 코드를 입력해 주세요.');
       return;
     }
-    router.push('/reset-password');
+    setAlertMessage('');
+    setIsVerifying(true);
+    try {
+      const result = await verifyPasswordResetOtpAction(sentEmail, code);
+      if (!result.success) {
+        setAlertMessage(result.message);
+        return;
+      }
+      router.push('/reset-password');
+    } catch (error) {
+      setAlertMessage(generateErrorMessage(error));
+    } finally {
+      setIsVerifying(false);
+    }
   };
 
   const handleBack = () => {
@@ -160,6 +177,8 @@ export default function ForgetPasswordFlow() {
               size="md"
               className={authStyles.cta}
               onClick={goReset}
+              loading={isVerifying}
+              disabled={isVerifying}
             >
               다음
             </Button>

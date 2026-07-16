@@ -58,5 +58,10 @@ export async function updatePasswordAndSignOut(newPassword: string) {
     return { error: generateErrorMessage(updateError) };
   }
 
-  return { error: null, redirectTo: '/' };
+  try {
+    await supabase.auth.signOut();
+  } catch {
+    // 로그아웃이 실패해도 비밀번호는 이미 변경됨 — 로그인 화면으로 진행한다
+  }
+  return { error: null, redirectTo: '/login' };
 }

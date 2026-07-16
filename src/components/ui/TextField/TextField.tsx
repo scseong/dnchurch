@@ -23,7 +23,7 @@ type TextFieldProps = Omit<InputHTMLAttributes<HTMLInputElement>, 'id'> & {
 /**
  * 텍스트 입력 필드 (Codeit 디자인 시스템 준거).
  *
- * - 폰트 16px 고정 — 모바일 iOS auto-zoom 방지
+ * - 폰트 14px — 앱 전역 기본과 통일 (16px 미만이라 iOS Safari 포커스 시 자동확대 가능)
  * - 메시지 우선순위: `error` > `success` > `helper` (한 번에 하나만 표시)
  * - 다중 input 화면에서는 `label` 권장 (Codeit 가이드)
  * - 에러는 색상만으로 전달 금지 — `error` 텍스트로 명시 (color-vision 접근성)

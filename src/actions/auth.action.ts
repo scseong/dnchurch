@@ -1,8 +1,10 @@
 'use server';
 
+import { cookies } from 'next/headers';
 import { createServerSideClient } from '@/lib/supabase/server';
 import { generateErrorMessage } from '@/utils/error';
 import { EMAIL_REGEX, PASSWORD_REGEX, NAME_REGEX } from '@/constants/regex';
+import { RESET_AUTH_CODE_KEY, RESET_USER_ID_KEY } from '@/constants/auth';
 import type { ActionResult } from './_types';
 
 type SignUpInput = {
@@ -39,6 +41,34 @@ export async function requestPasswordResetEmailAction(email: string): Promise<Ac
   }
 
   return { success: true, message: '인증 메일을 보냈습니다.' };
+}
+
+export async function verifyPasswordResetOtpAction(
+  email: string,
+  token: string
+): Promise<ActionResult> {
+  if (!EMAIL_REGEX.test(email)) {
+    return { success: false, message: '올바른 이메일 형식이 아닙니다.' };
+  }
+
+  const code = token.trim();
+  if (!/^\d{6}$/.test(code)) {
+    return { success: false, message: '6자리 인증 코드를 입력해주세요.' };
+  }
+
+  const supabase = await createServerSideClient();
+  const { error } = await supabase.auth.verifyOtp({ email, token: code, type: 'recovery' });
+
+  if (error) {
+    return { success: false, message: '인증 코드가 올바르지 않거나 만료되었습니다.' };
+  }
+
+  // 직전 매직링크 시도가 남긴 쿠키가 재설정 화면의 no-cookie 분기를 가로채지 않게 지운다
+  const cookieStore = await cookies();
+  cookieStore.delete(RESET_AUTH_CODE_KEY);
+  cookieStore.delete(RESET_USER_ID_KEY);
+
+  return { success: true, message: '인증되었습니다.' };
 }
 
 export async function signUpAction({
