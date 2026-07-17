@@ -100,7 +100,7 @@ enabled = true
 # in emails.
 site_url = "http://127.0.0.1:3000"
 # A list of *exact* URLs that auth providers are permitted to redirect to post authentication.
-additional_redirect_urls = ["https://127.0.0.1:3000"]
+additional_redirect_urls = ["https://127.0.0.1:3000", "http://127.0.0.1:3000/auth/callback", "http://localhost:3000/auth/callback", "http://127.0.0.1:3000/auth/confirm", "http://localhost:3000/auth/confirm"]
 # How long tokens are valid for, in seconds. Defaults to 3600 (1 hour), maximum 604,800 (1 week).
 jwt_expiry = 3600
 # If disabled, the refresh token will never expire.
@@ -127,7 +127,7 @@ enable_signup = true
 # addresses. If disabled, only the new email is required to confirm.
 double_confirm_changes = true
 # If enabled, users need to confirm their email address before signing in.
-enable_confirmations = false
+enable_confirmations = true
 # If enabled, users will need to reauthenticate or have logged in recently to change their password.
 secure_password_change = false
 # Controls the minimum amount of time that must pass before sending another signup confirmation or password reset email.
@@ -150,6 +150,11 @@ otp_expiry = 3600
 # [auth.email.template.invite]
 # subject = "You have been invited"
 # content_path = "./supabase/templates/invite.html"
+
+# 회원가입 확인 메일 템플릿 소스는 supabase/templates/confirmation.html이다 (token_hash 링크 → /auth/confirm).
+# 기본 {{ .ConfirmationURL }}(code 교환)을 쓰면 다른 기기에서 확인이 깨진다 — exec-plan signup-email-confirm D1 참조.
+# config로 적용하지 않는다: Supabase 브랜칭 Preview는 무료 티어 기본 메일 제공자라 템플릿 수정 API가 400으로 거부된다.
+# dev·prod는 커스텀 SMTP가 있으니, 이 파일 내용을 대시보드 Confirm signup 템플릿에 붙여 적용한다.
 
 [auth.sms]
 # Allow/disallow new user signups via SMS to your project.

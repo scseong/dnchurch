@@ -16,7 +16,8 @@ const layerPatterns = (layers) => layers.map((layer) => `@/${layer}/**`);
 
 export default defineConfig([
     {
-        ignores: ["docs/**"],
+        // .claude/worktrees/*: 에이전트 격리 워크트리(레포 복사본 + 빌드 산출물) — 린트 대상 아님
+        ignores: ["docs/**", ".claude/worktrees/**"],
     },
     ...nextCoreWebVitals,
     ...nextTypescript,

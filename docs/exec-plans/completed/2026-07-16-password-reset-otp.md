@@ -1,6 +1,6 @@
 # password-reset-otp
 
-- **상태**: 🟡 진행 중
+- **상태**: ✅ 완료 (2026-07-16)
 - **시작일**: 2026-07-16
 - **브랜치**: feat/password-reset-otp
 - **Open questions**: 이메일 템플릿에 `{{ .Token }}` 추가는 Supabase 대시보드 수동 작업 (dev·prod 각각). 배포 전 사용자 확인 필요
@@ -117,6 +117,23 @@
   - 이유: 이번 작업 전부터 있던 동작이라 외과적 범위 밖. OTP 흐름은 이 상태에서도 동작한다
   - 다음 기준: 쿠키 관련 인증 버그가 실제로 재현되면 착수
   - 기록 위치: `docs/tech-debt/active.md`
+
+## 회고
+
+**잘된 것**
+
+- Codex 계획 검증이 구현 전에 stale 쿠키 분기 버그를 잡았다. "OTP 세션은 항상 no-cookie 분기로 간다"는 내 전제가 틀렸고, `reset_auth_code`·`reset_user_id` 쿠키가 남아 있으면 OTP 세션이 있어도 쿠키 분기가 먼저 실행돼 "링크 만료" 오류가 났을 것이다. 검증 성공 시 두 쿠키를 지우는 처리를 코딩 전에 넣었다.
+- 브라우저 E2E를 실제 계정·실제 메일로 돌려, 코드가 8자리로 오는 것을 발견했다. 코드 리뷰만 했으면 `/^\d{6}$/`가 정상 코드를 막는 걸 못 봤다.
+
+**다음에 할 것**
+
+- OTP 길이·발신자 같은 Supabase Auth 설정 의존성은 코드에 안 드러난다. 인증 흐름을 바꿀 땐 실메일 수신을 초반에 확인한다.
+- dev·prod 설정 드리프트(템플릿 `{{ .Token }}`·OTP Length·커스텀 SMTP)를 릴리스 체크리스트로 고정한다. 지금은 dev만 됐고 prod는 후속 항목으로만 추적된다.
+
+**부채**
+
+- `createServerSideClient().setAll`이 cookie options를 버리고 예외를 삼킨다 (`src/lib/supabase/server.ts:22-25`). `docs/tech-debt/active.md`에 등록했다.
+- `knip.json` 엔트리 패턴이 옛 경로 `src/app/reset-password/actions.ts`를 가리켜 (PR #149 `(auth)` 이동 잔재), Knip 경고 1건이 여기서 났다.
 
 ---
 

@@ -4,6 +4,17 @@
 
 ---
 
+### 🟢 `setAll`이 cookie options를 버리고 예외를 삼킴 — SSR 클라이언트 쿠키 쓰기 실패를 감춤 (password-reset-otp PR #150)
+
+- **무엇**: `createServerSideClient()`의 `setAll`이 `cookies().set(name, value)`만 호출해 Supabase가 넘긴 cookie options(maxAge·httpOnly·sameSite 등)를 버리고, try-catch로 예외를 삼킨다 (`src/lib/supabase/server.ts:22-25`). 세션 쿠키 쓰기가 실패해도 조용히 지나간다.
+- **왜 지금 안 하나**: password-reset-otp 작업 전부터 있던 동작이라 외과적 범위 밖. OTP 흐름은 이 상태에서도 E2E 통과했다.
+- **다음 기준**: 쿠키 관련 인증 버그(세션 유실·옵션 누락)가 실제로 재현되면 착수.
+- **마이그레이션 경로**: `setAll`에서 각 쿠키에 options를 함께 전달하고, 실패 시 최소 로깅하도록 고친다.
+- **확인**: `src/lib/supabase/server.ts`의 `setAll`이 options 인자를 `cookies().set`에 전달하는지.
+- **발견일**: 2026-07-16 (password-reset-otp PR #150 — Codex 계획 검증 지적)
+
+---
+
 ### 🟢 package-lock.json에 @tanstack/react-table 항목이 남음 — lockfile 이중 관리 (bulletins-redesign PR #143)
 
 - **무엇**: bulletins-redesign에서 유일 소비처(`BulletinTable`)를 지우고 `yarn remove @tanstack/react-table`로 `package.json`·`yarn.lock`에서 뺐으나 `package-lock.json`에는 항목이 남았다. 이 저장소는 yarn을 쓰는데 `package-lock.json`과 `yarn.lock`이 둘 다 커밋돼 있다(기존 상태).
