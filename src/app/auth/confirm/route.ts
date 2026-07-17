@@ -16,7 +16,10 @@ export async function GET(request: Request) {
     const { error } = await supabase.auth.verifyOtp({ type, token_hash: tokenHash });
 
     if (!error) {
-      return NextResponse.redirect(new URL(next, origin));
+      // 곧바로 next로 보내면 피드백 없이 홈에 도착한다 — 완료 화면을 거쳐 원래 목적지로 이어준다
+      const completeUrl = new URL('/sign-up/complete', origin);
+      completeUrl.searchParams.set('next', next);
+      return NextResponse.redirect(completeUrl);
     }
   }
 

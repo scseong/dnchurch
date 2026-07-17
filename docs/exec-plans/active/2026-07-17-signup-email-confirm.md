@@ -35,6 +35,9 @@
 - `src/app/auth/callback/route.ts` — `next` open-redirect 최소 가드 추가 (기존 활성 부채 해소, OAuth 콜백에도 적용 — Codex 지적)
 - `supabase/config.toml` — `enable_confirmations = true`, redirect allowlist에 `/auth/callback`·`/auth/confirm` 추가
 - (수동) dev Supabase 대시보드 — Confirm email on + Redirect URLs에 `/auth/confirm` + Confirm signup 템플릿을 `{{ .RedirectTo }}&token_hash={{ .TokenHash }}&type=signup`(token_hash 링크)로 교체
+- `src/app/(auth)/sign-up/complete/page.tsx` (신규, D2) — 인증 성공 후 완료 화면. `next` 재검증(`safeInternalPath`) + 세션에서 이름 조회
+- `src/app/(auth)/sign-up/_component/ConfirmedWelcome.tsx` (신규, D2) — 완료 화면 UI. 스텝 3 배지·애니메이션 재사용, 시작하기 버튼이 `next`로 이동
+- `src/services/auth/index.ts` (신규, D2) — `getSessionUser()` 연결부(seam). app이 apis를 직접 못 부르는 레이어 규칙 때문에 두 층을 잇는다
 
 ## 의사결정 로그
 
@@ -42,6 +45,11 @@
   - 문제: 처음엔 `/auth/callback` + `exchangeCodeForSession(code)`(PKCE)로 설계했다. E2E에서 확인 링크가 `/auth/auth-code-error`로 떨어졌다. PKCE code 교환은 **가입을 시작한 브라우저에만 저장된 `code_verifier`**가 있어야 하는데, 확인 메일은 가입 때와 다른 브라우저나 기기에서 열릴 때가 많다. 테스트도 headless로 가입한 뒤 다른 브라우저에서 링크를 눌렀다. Supabase 로그: `user_confirmation_requested` 200이지만 앱 세션 생성 실패. 첫 devseong2는 `email_confirmed_at`이 채워졌는데도(서버 확인됨) 앱은 에러 화면을 보였다.
   - 해결: Supabase가 SSR 이메일 확인용으로 권장하는 **token_hash 방식**으로 바꿨다. `/auth/confirm` 라우트가 `verifyOtp({ token_hash, type })`로 서버에서 직접 검증해 세션까지 만든다. 브라우저에 묶인 값이 없어 **어느 기기에서도** 확인된다. Codex 계획 검증이 이 갈림길(question a)을 미리 짚었다.
   - 결과: 재테스트에서 링크 클릭 → 홈 로그인 착지 + `email_confirmed_at` 채워짐 확인. 템플릿의 `{{ .Type }}`는 표준 변수가 아니라 빈 값으로 나와 한 번 더 실패했고, 라우트 type 기본값을 'signup'으로 둬 방어했다.
+
+- **D2 — 이메일 인증 뒤 홈으로 곧장 보내는 대신 완료 페이지를 거친다**
+  - 문제: 인증 도입 전에는 위저드 스텝 3이 "가입 완료" 화면이었다. 인증을 넣으며 스텝 3은 "메일을 확인하세요" 안내로 바뀌었고, `/auth/confirm`은 검증 뒤 곧바로 `next`(기본 홈)로 리다이렉트했다. 사용자가 링크를 눌러도 아무 피드백 없이 홈에 도착해 가입이 됐는지 알 수 없었다(사용자가 직접 확인).
+  - 해결: `/auth/confirm`이 검증 성공 시 `next`로 바로 보내지 않고 `/sign-up/complete`(완료 화면)를 거치게 했다. `verifyOtp`가 세션까지 만들어 이미 로그인된 상태이므로, "가입이 완료됐어요 · {이름}님 환영합니다 · 시작하기" 화면을 한 번 보여주고 시작하기 버튼으로 원래 `next`로 이어준다. 이름은 세션에서 읽는다 — URL로 넘기면 개인정보가 쿼리에 노출된다.
+  - 결과: 인증 직후 "가입이 완료됐어요" 화면이 떠 가입 성공을 바로 확인한다. 완료 화면은 `(auth)/sign-up/complete`에 둬 `(auth)` 가운데 정렬 레이아웃을 상속한다(`src/app/auth/`는 레이아웃이 없다). 스텝 3과 배지·애니메이션 스타일을 그대로 재사용해 중복이 없다.
 
 ## Non-goals
 
@@ -110,6 +118,10 @@
 
 </details>
 -->
+
+## ADR 판단
+
+- **불필요**. `src/services/auth/index.ts`는 새 경로지만 기존 레이어 규칙(app → services → apis)을 따르는 얇은 seam일 뿐이다. 새 라이브러리·패턴·레이어 경계 변경이 없다. `getSessionUser()`는 `apis/auth-server`의 `getUserSession()`을 그대로 전달한다.
 
 ## 후속 작업
 
