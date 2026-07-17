@@ -151,11 +151,10 @@ otp_expiry = 3600
 # subject = "You have been invited"
 # content_path = "./supabase/templates/invite.html"
 
-# 회원가입 확인 메일 — token_hash 링크(/auth/confirm)를 쓴다. 기본 {{ .ConfirmationURL }}(code 교환)을
-# 쓰면 다른 기기에서 확인이 깨진다. 자세한 사유는 exec-plan signup-email-confirm D1 참조.
-[auth.email.template.confirmation]
-subject = "대구동남교회 회원가입 인증"
-content_path = "./supabase/templates/confirmation.html"
+# 회원가입 확인 메일 템플릿 소스는 supabase/templates/confirmation.html이다 (token_hash 링크 → /auth/confirm).
+# 기본 {{ .ConfirmationURL }}(code 교환)을 쓰면 다른 기기에서 확인이 깨진다 — exec-plan signup-email-confirm D1 참조.
+# config로 적용하지 않는다: Supabase 브랜칭 Preview는 무료 티어 기본 메일 제공자라 템플릿 수정 API가 400으로 거부된다.
+# dev·prod는 커스텀 SMTP가 있으니, 이 파일 내용을 대시보드 Confirm signup 템플릿에 붙여 적용한다.
 
 [auth.sms]
 # Allow/disallow new user signups via SMS to your project.
