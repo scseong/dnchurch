@@ -1,6 +1,6 @@
 # signup-email-confirm
 
-- **상태**: 🟡 진행 중
+- **상태**: ✅ 완료 (2026-07-17)
 - **시작일**: 2026-07-17
 - **브랜치**: feat/signup-email-confirm
 - **Open questions**: 이메일 링크 클릭 후 착지점 — 기본은 로그인된 채 `redirect`(홈)로. 아래 D2에서 채택 이유 기록
@@ -122,6 +122,26 @@
 ## ADR 판단
 
 - **불필요**. `src/services/auth/index.ts`는 새 경로지만 기존 레이어 규칙(app → services → apis)을 따르는 얇은 seam일 뿐이다. 새 라이브러리·패턴·레이어 경계 변경이 없다. `getSessionUser()`는 `apis/auth-server`의 `getUserSession()`을 그대로 전달한다.
+
+## 회고
+
+**잘된 것**
+
+- PKCE code 교환이 확인 링크에서 깨지는 원인을 Supabase 로그에서 찾아냈다 — `user_confirmation_requested` 200인데 앱 세션이 없고, 서버는 `email_confirmed_at`을 채웠는데 앱은 에러 화면을 보였다. 이 단서로 code_verifier가 가입 브라우저에만 있다는 걸 확인해 token_hash로 전환했다. Codex 계획 검증이 이 갈림길(기기 간 확인 실패)을 구현 전에 미리 잡아준 덕이 컸다.
+- open-redirect 역슬래시 우회를 추측으로 넘기지 않고 `new URL('/\evil.com', origin)`이 외부 origin으로 정규화되는 걸 node로 재현한 뒤, `safeInternalPath`의 origin 동일성 검증으로 confirm·callback을 함께 닫았다.
+- 인증 직후 아무 피드백 없이 홈에 도착하던 문제를 완료 화면을 추가해 해결했다. 스텝 3의 배지·애니메이션을 그대로 재사용해 스타일 중복이 없었다.
+
+**다음에 할 것**
+
+- prod 대시보드 설정(Confirm email on, `/auth/confirm` redirect URL, token_hash 템플릿, 커스텀 SMTP)은 배포 의존성으로 남았다 — 릴리스 시 맞추지 않으면 prod 가입자가 확인을 못 한다.
+- config에 템플릿을 안 넣었기 때문에, 로컬 `supabase start`나 기본 `{{ .ConfirmationURL }}` 템플릿을 쓰는 환경에서는 확인이 깨진다. 템플릿을 config에 넣으면 Supabase Preview가 400으로 실패하는 맞교환이다. Preview에 커스텀 SMTP를 붙이면 config 템플릿을 되살릴 수 있다.
+- 미확인 로그인 시 "인증 메일 재전송" 버튼은 후속이다 (`error.ts:9`에 안내 메시지만 있다).
+- 완료 화면 커밋(`7177894`)은 dev 가동 중이라 verify-task를 못 돌렸다 — dev 정지 후 verify-task를 다시 돌려 확인한다.
+
+**발견된 부채**
+
+- 테스트 중 확인 메일이 Supabase 기본 SMTP 시간당 한도에 걸려 늦게 오거나 일부는 아예 도착하지 않았다. 커스텀 SMTP를 붙이면 풀리고, 이미 릴리스 의존성으로 잡혀 있다. Admin `generateLink`로 링크를 직접 뽑아 우회했다.
+- 가입 닉네임(`username`) 미저장은 이번 작업 전부터 있던 별개 이슈로 이미 `docs/tech-debt/active.md`에 등록돼 있다.
 
 ## 후속 작업
 
