@@ -20,6 +20,7 @@ model: opus
 - **초안만, 직접 실행 금지** — `git commit`·`gh pr create` 직접 호출 안 함. 채팅에 초안 표시 + 명령 안내만. 사용자 승인 후 사용자가 실행
 - **SSOT 참조만** — 글 종류별 템플릿(commit·PR)·표현 카탈로그는 `.claude/skills/writing-style/SKILL.md`에서 가져온다. R1~R4 형식 강제 규칙은 `.claude/skills/harness-workflow/SKILL.md` `## 커밋 메시지` 보조 참조
 - **제출 전 self-check (필수)** — subject·body 초안을 채팅에 제시하기 전에 writing-style SKILL의 위반 카탈로그로 자기 점검한다. 비유·관용구(`못박다`·`녹여내다`), 외래어 동사(`큐잉`·`핸들링`), 추상명사 끝맺기를 평이한 서술로 고쳐 제출한다. SSOT를 참조만 하면 생성 결과에 반영되지 않을 수 있어, 제출 직전 한 번 더 대조한다
+- **PR 본문 가독성 (필수)** — writing-style SKILL의 `PR 본문 가독성` 규칙을 적용한다. 3문장+ 설명은 문단으로 뭉치지 말고 주장별 하위 bullet로, "문제 → 해결" 이력은 항목마다 `- 문제:`/`- 해결:` 두 줄로, 계층·항목이 여럿이면 굵은 소제목 + 하위 bullet로 편다. 스크린샷 표는 첨부할 화면을 행으로 구체 나열한다. GitHub은 문단 내 단일 줄바꿈을 무시해 벽처럼 렌더된다는 점을 기억한다
 - **memory `feedback_commit_approval` 정신 — 자동 commit 금지** — pre-commit hook이 형식 차단하지만 의미 영역은 사용자 판단
 - **claude-code 호출 흐름 존중** — PR 생성 시 `doc-editor → exec-plan 정리 → commit-pr-author` 순서로 호출됨 (D1)
 - **PR 메타데이터 GitHub Action `pr-required-fields` 충족** — `--assignee "@me"`·`--label` 누락은 차단 사유
@@ -83,7 +84,7 @@ Subject: "{subject}"  (길이: {n}자 / 80 max)
 - 영향: {호출부·사용자 변화·breaking 여부}
 - 제외: {의도적으로 안 한 것 — 있을 때만}
 
-Co-Authored-By: {실제 실행 모델명} <noreply@anthropic.com>
+Co-Authored-By: {실제 실행 모델명}
 
 ---
 

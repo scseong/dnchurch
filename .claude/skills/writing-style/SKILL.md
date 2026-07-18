@@ -157,7 +157,7 @@ Codex stdout은 verbatim 인용 + 그 아래 평이 한국어 풀이 1줄. 영�
 - 영향: 호출부·사용자 변화, breaking 여부
 - 제외: 의도적으로 안 한 것 (있을 때만)
 
-Co-Authored-By: {실제 실행 모델명} <noreply@anthropic.com>
+Co-Authored-By: {실제 실행 모델명}
 ```
 
 Subject 규칙:
@@ -200,6 +200,15 @@ PR 메타데이터:
 - 본문 template 매핑 (`.github/PULL_REQUEST_TEMPLATE/README.md` SSOT) — Fix→bugfix.md / Feat→feature.md / Refactor→refactor.md / Chore·Docs·Style→maintenance.md / 릴리스→release.md
 - `--assignee "@me"`·`--label` 필수 — GitHub Action `pr-required-fields`가 차단
 - base는 `develop`
+
+PR 본문 가독성 (GitHub 렌더 기준 — 문장 구분이 되게 쓴다):
+- **긴 설명은 문단으로 뭉치지 말고 주장별 하위 bullet로 쪼갠다.** GitHub은 문단 안의 단일 줄바꿈을 무시해 3문장+ 문단이 벽처럼 렌더된다. 한 줄 = 한 주장.
+- **"문제 → 해결" 이력은 항목마다 `- 문제:` / `- 해결:` 두 줄로 분리한다.** 한 항목을 한 문단에 `—`로 이어붙이지 않는다.
+- **항목이 여럿인 설명(보안 계층·검증 이력 등)은 각 항목을 굵은 소제목 + 하위 bullet로 편다.** 예: `**1. RLS (DB 계층)**` 아래에 근거 bullet 3~4개.
+- **스크린샷 섹션은 표 행을 비워두지 말고 첨부할 화면을 구체적으로 나열한다.** 각 행 = 화면 하나(예: `(a) 마이 페이지 전체`), 열은 데스크톱·모바일, 이미지 셀에는 "여기에 드래그&드롭" 안내. 개인 데이터 화면은 작성자가 캡처하지 않고 사용자가 붙인다.
+
+  ❌ 나쁨: 보안 설명 4문장을 한 문단에, 문제 해결 9건을 각 항목 한 문단(`문제 …, 해결 …`)에 뭉침
+  ✅ 좋음: 계층별 소제목 + 주장 bullet, 항목별 `- 문제:`/`- 해결:` 두 줄 (예시 PR #152)
 
 ### 출처 표기
 
