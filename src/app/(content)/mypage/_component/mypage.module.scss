@@ -14,15 +14,12 @@ $page-max-width: 60rem; // 계정 메뉴가 PC 폭 전체로 퍼지지 않게 �
   margin: 0 auto;
 }
 
-// ── 프로필 헤더 ──
+// ── 프로필 헤더 — 카드 없이 페이지 배경 위에 (시안) ──
 .profile {
   display: flex;
   align-items: center;
   gap: $content-gap-m;
-  padding: $padding-card;
-  background-color: $bg-card;
-  border: 1px solid $border-card;
-  border-radius: $radius-s;
+  padding: $spacing-4 0;
 }
 
 .avatar {
@@ -34,7 +31,8 @@ $page-max-width: 60rem; // 계정 메뉴가 PC 폭 전체로 퍼지지 않게 �
   width: $avatar-size;
   height: $avatar-size;
   border-radius: $radius-l;
-  background-color: $primary;
+  // 시안의 gold 그라디언트 아바타 (styles SKILL 그라디언트 예외)
+  background: linear-gradient(140deg, $accent-hover, $accent);
   color: $txt-inverse;
   font-size: $font-size-24;
   font-weight: $font-weight-bold;

@@ -44,7 +44,7 @@ export default function AccountMenu({ hasPasswordAuth }: { hasPasswordAuth: bool
         </div>
       </section>
 
-      <section className={styles.menu_section} aria-label="계정">
+      <section id="mypage-account" className={styles.menu_section} aria-label="계정">
         <h3 className={styles.menu_title}>계정</h3>
         <div className={styles.menu_group}>
           {hasPasswordAuth && (

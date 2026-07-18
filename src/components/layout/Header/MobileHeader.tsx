@@ -3,7 +3,7 @@
 import { useRef, useState } from 'react';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
-import { IoChevronBack, IoShareSocialOutline } from 'react-icons/io5';
+import { IoChevronBack, IoShareSocialOutline, IoSettingsOutline } from 'react-icons/io5';
 import { LuMenu } from 'react-icons/lu';
 import clsx from 'clsx';
 import { resolveHeaderAction, resolveMobileHeader, resolveSiblingTabs } from '@/config/navigation';
@@ -74,6 +74,19 @@ export default function MobileHeader() {
                 aria-expanded={shareOpen}
               >
                 <IoShareSocialOutline />
+              </button>
+            ) : headerAction === 'settings' ? (
+              <button
+                type="button"
+                className={styles.mobile_menu}
+                onClick={() =>
+                  document
+                    .getElementById('mypage-account')
+                    ?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+                }
+                aria-label="설정"
+              >
+                <IoSettingsOutline />
               </button>
             ) : (
               <button
