@@ -83,6 +83,18 @@ $page-max-width: 60rem; // 계정 메뉴가 PC 폭 전체로 퍼지지 않게 �
   color: $status-negative;
 }
 
+// ── 설정 시트 (톱니가 여는 BottomSheet) ──
+.settings {
+  display: flex;
+  flex-direction: column;
+  gap: $content-gap-m;
+}
+
+.settings_version {
+  @include text-caption;
+  text-align: center;
+}
+
 // ── 프로필 편집 모달 ──
 .edit_avatar {
   display: flex;
