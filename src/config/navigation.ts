@@ -103,38 +103,6 @@ export function isPcLayoutRoute(pathname: string): boolean {
   return PC_LAYOUT_ROUTES.some((route) => isRouteMatch(pathname, route));
 }
 
-// ── Label 해석 (Hero · MobileHeader) ──
-
-function buildLabelMap(): Map<string, string> {
-  const map = new Map<string, string>();
-  for (const item of GNB_ITEMS) {
-    map.set(item.href, item.label);
-    if (item.children) {
-      for (const child of item.children) {
-        map.set(child.href, child.label);
-      }
-    }
-  }
-  return map;
-}
-
-const labelMap = buildLabelMap();
-
-/** pathname → 표시 라벨 (Hero 타이틀 등) */
-export function resolveNavLabel(pathname: string): string {
-  const exact = labelMap.get(pathname);
-  if (exact) return exact;
-
-  const segments = pathname.split('/');
-  for (let i = segments.length - 1; i > 0; i--) {
-    const parentPath = segments.slice(0, i).join('/') || '/';
-    const parentLabel = labelMap.get(parentPath);
-    if (parentLabel) return parentLabel;
-  }
-
-  return '';
-}
-
 // ── MobileHeader ──
 
 const SPECIAL_PAGES: Record<string, string> = {

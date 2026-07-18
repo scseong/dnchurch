@@ -1,7 +1,7 @@
 import { type PhotoSwipeOptions } from 'photoswipe';
 import { type FallbackSize, type ImageState } from '@/types/photoswipe';
 
-export const BACKGROUND_CLASS_NAMES = new Set(['pswp__item', 'pswp__zoom-wrap', 'pswp__container']);
+const BACKGROUND_CLASS_NAMES = new Set(['pswp__item', 'pswp__zoom-wrap', 'pswp__container']);
 
 export const BASE_PHOTOSWIPE_OPTIONS: PhotoSwipeOptions = {
   loop: false,
