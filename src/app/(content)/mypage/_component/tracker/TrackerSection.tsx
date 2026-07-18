@@ -269,10 +269,13 @@ export default function TrackerSection({ initialRecords, initialSettings, today 
         open={shareOpen}
         onClose={() => setShareOpen(false)}
         todayChapters={todayChapters}
+        todayRanges={todayEntries.map((entry) => entry.ranges)}
         weekChapters={week.chapters}
         weekDoneCount={week.doneCount}
+        weekDays={week.days}
         monthChapters={month.chapters}
         monthReadDays={month.readDays}
+        monthCells={month.cells}
       />
     </section>
   );

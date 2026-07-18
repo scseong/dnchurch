@@ -103,7 +103,7 @@ export default function RecordTabs({
             leadingIcon={<LuPlus aria-hidden="true" />}
             onClick={() => onOpenRecorder(null)}
           >
-            오늘 읽은 곳 기록하기
+            읽은 곳 기록하기
           </Button>
         </div>
       )}
