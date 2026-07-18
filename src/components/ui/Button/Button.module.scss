@@ -19,7 +19,9 @@
 }
 
 // ── Sizes ──
+// min-height로 높이를 고정해 아이콘 유무·줄바꿈에 상관없이 일정한 버튼 높이를 보장한다.
 .sm {
+  min-height: 3.6rem;
   padding: $spacing-8 $spacing-12;
   border-radius: $radius-xs;
   font-size: $font-size-12;
@@ -27,6 +29,7 @@
 }
 
 .md {
+  min-height: 4.2rem;
   padding: $spacing-12 $spacing-16;
   border-radius: $radius-xs;
   font-size: $font-size-13;
@@ -34,6 +37,7 @@
 }
 
 .lg {
+  min-height: 4.8rem;
   padding: $spacing-16 $spacing-24;
   border-radius: $radius-s;
   font-size: $font-size-14;

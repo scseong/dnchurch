@@ -1,9 +1,11 @@
 import type { Metadata } from 'next';
 import { redirect } from 'next/navigation';
 import { getMySessionProfile } from '@/services/user';
+import { getBibleTrackerData } from '@/services/bible-reading';
 import MainContainer from '@/components/layout/container/MainContainer';
 import ProfileSection from './_component/ProfileSection';
 import AccountMenu from './_component/AccountMenu';
+import TrackerSection from './_component/tracker/TrackerSection';
 import styles from './_component/mypage.module.scss';
 
 export const metadata: Metadata = {
@@ -22,10 +24,17 @@ export default async function Mypage() {
   const providers = (user.app_metadata?.providers as string[] | undefined) ?? [];
   const hasPasswordAuth = providers.includes('email') || user.app_metadata?.provider === 'email';
 
+  const tracker = await getBibleTrackerData(user.id);
+
   return (
     <MainContainer title="마이 페이지">
       <div className={styles.page}>
         <ProfileSection profile={profile} />
+        <TrackerSection
+          initialRecords={tracker.records}
+          initialSettings={tracker.settings}
+          today={tracker.today}
+        />
         <AccountMenu hasPasswordAuth={hasPasswordAuth} />
       </div>
     </MainContainer>

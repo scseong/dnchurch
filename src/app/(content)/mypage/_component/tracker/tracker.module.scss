@@ -1,0 +1,942 @@
+// 성경읽기 트래커 — Claude Design 시안(한빛교회 마이페이지.html) 기준.
+// 시안의 대표색 #93702E는 앱 semantic $accent(gold-600)와 같다. 데이터 시각화·상태 표시는
+// $accent 계열(gold)로, 텍스트 위계·면은 warm neutral 토큰으로 맞춘다. primitive 직접 사용 금지.
+
+.tracker {
+  display: flex;
+  flex-direction: column;
+  gap: $content-gap-l;
+}
+
+// ── 공통 진행 바 ──
+.bar {
+  display: block;
+  overflow: hidden;
+  width: 100%;
+  height: 1rem;
+  border-radius: $radius-circle;
+  background-color: $bg-secondary-deep;
+}
+
+.bar_fill {
+  display: block;
+  height: 100%;
+  border-radius: $radius-circle;
+  // 시안의 밝은 gold → gold 진행 그라디언트 (styles SKILL 그라디언트 예외)
+  background: linear-gradient(90deg, $accent-hover, $accent);
+}
+
+.caption {
+  @include text-caption;
+}
+
+// ── 연속 기록 카드 (히어로) ──
+.streak {
+  display: flex;
+  flex-direction: column;
+  gap: $content-gap-m;
+  padding: $padding-card-lg;
+  border-radius: $radius-l;
+  // 시안 #93702E → 어두운 warm. gold($accent) → brown($primary) (styles SKILL 예외)
+  background: linear-gradient(135deg, $accent, $primary);
+  color: $txt-inverse;
+}
+
+.streak_top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: $content-gap-m;
+}
+
+.streak_flame {
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  width: 7rem;
+  height: 7rem;
+  border-radius: $radius-circle;
+  // 다크 카드 위 장식 배지 — 반투명 면 + gold 불꽃 (styles SKILL rgba 예외)
+  background-color: rgba($txt-inverse, 0.16);
+  border: 1.5px solid rgba($txt-inverse, 0.35);
+  color: $accent-subtle;
+
+  svg {
+    width: 3.4rem;
+    height: 3.4rem;
+  }
+}
+
+.streak_eyebrow {
+  font-size: $font-size-12;
+  font-weight: $font-weight-semibold;
+  letter-spacing: 0.02em;
+  color: $accent-subtle;
+}
+
+.streak_count {
+  margin-top: $spacing-8;
+  font-size: $font-size-16;
+  color: $txt-inverse;
+
+  strong {
+    font-size: $font-size-42;
+    font-weight: $font-weight-bold;
+    line-height: 1;
+  }
+}
+
+.streak_sub {
+  margin-top: $spacing-8;
+  font-size: $font-size-13;
+  color: $txt-dark-muted;
+
+  b {
+    font-weight: $font-weight-bold;
+    color: $txt-inverse;
+  }
+}
+
+// ── 기록 탭 영역 ──
+.records {
+  display: flex;
+  flex-direction: column;
+  gap: $content-gap-s;
+}
+
+.records_head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: $content-gap-s;
+  flex-wrap: wrap;
+}
+
+.records_title {
+  @include text-card-title;
+}
+
+.card {
+  display: flex;
+  flex-direction: column;
+  gap: $content-gap-m;
+  padding: $padding-card;
+  background-color: $bg-card;
+  border: 1px solid $border-card;
+  border-radius: $radius-l;
+}
+
+// ── 일 뷰 ──
+.day_head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+}
+
+.day_title {
+  margin-top: $spacing-4;
+  font-size: $font-size-16;
+  font-weight: $font-weight-bold;
+  color: $txt-primary;
+}
+
+.day_count {
+  font-size: $font-size-14;
+  color: $accent;
+
+  strong {
+    font-size: $font-size-24;
+    font-weight: $font-weight-bold;
+  }
+}
+
+.entry_list {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-8;
+}
+
+.entry {
+  display: flex;
+  align-items: center;
+  gap: $spacing-10;
+  width: 100%;
+  padding: $padding-card-compact;
+  text-align: left;
+  background-color: $bg-accent-subtle;
+  border: 1px solid $border-warm;
+  border-radius: $radius-s;
+  cursor: pointer;
+
+  @include hover-bg-shift($primary-subtle);
+}
+
+.entry_icon {
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  width: 3rem;
+  height: 3rem;
+  border-radius: $radius-xs;
+  background-color: $accent-subtle;
+  color: $accent;
+
+  svg {
+    width: 1.7rem;
+    height: 1.7rem;
+  }
+}
+
+.entry_range {
+  flex: 1;
+  min-width: 0;
+  font-size: $font-size-14;
+  font-weight: $font-weight-semibold;
+  color: $accent;
+}
+
+.entry_count {
+  font-size: $font-size-12;
+  font-weight: $font-weight-semibold;
+  color: $accent-hover;
+}
+
+.empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: $spacing-4;
+  padding: $spacing-24 $spacing-16;
+  text-align: center;
+  background-color: $bg-beige-subtle;
+  border: 1px dashed $border-warm;
+  border-radius: $radius-s;
+}
+
+.empty_icon {
+  display: grid;
+  place-items: center;
+  width: 4.4rem;
+  height: 4.4rem;
+  margin-bottom: $spacing-8;
+  border-radius: $radius-s;
+  background-color: $accent-subtle;
+  color: $accent;
+
+  svg {
+    width: 2.2rem;
+    height: 2.2rem;
+  }
+}
+
+.empty_title {
+  font-size: $font-size-14;
+  font-weight: $font-weight-semibold;
+  color: $txt-secondary;
+}
+
+.empty_sub {
+  @include text-caption;
+}
+
+// ── 주 뷰 ──
+.week_head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  font-size: $font-size-13;
+  color: $txt-secondary;
+}
+
+.week_done {
+  font-weight: $font-weight-bold;
+  color: $accent;
+
+  strong {
+    font-size: $font-size-14;
+  }
+}
+
+.week_strip {
+  display: flex;
+  justify-content: space-between;
+  gap: $spacing-4;
+}
+
+.week_day {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  align-items: center;
+  gap: $spacing-8;
+}
+
+.week_label {
+  font-size: $font-size-11;
+  font-weight: $font-weight-semibold;
+  color: $txt-tertiary;
+}
+
+.week_label_today {
+  color: $accent;
+}
+
+.week_box {
+  display: grid;
+  place-items: center;
+  width: 100%;
+  max-width: 3.8rem;
+  aspect-ratio: 1;
+  border-radius: $radius-xs;
+  background-color: $bg-secondary;
+  font-size: $font-size-13;
+  font-weight: $font-weight-bold;
+  color: $txt-tertiary;
+}
+
+.week_box_done {
+  background-color: $accent;
+  color: $txt-inverse;
+}
+
+.week_box_today {
+  background-color: $accent-subtle;
+  color: $accent;
+  box-shadow: inset 0 0 0 2px $accent;
+}
+
+// ── 주간 목표 ──
+.goal {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-10;
+  padding: $padding-card-compact;
+  background-color: $bg-beige-subtle;
+  border: 1px solid $border-card;
+  border-radius: $radius-s;
+}
+
+.goal_head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.goal_edit {
+  display: inline-flex;
+  align-items: center;
+  gap: $spacing-4;
+  font-size: $font-size-12;
+  font-weight: $font-weight-semibold;
+  color: $accent;
+  cursor: pointer;
+
+  @include hover-color-shift($accent-hover);
+}
+
+.goal_meta {
+  display: flex;
+  align-items: baseline;
+  gap: $spacing-6;
+  font-size: $font-size-13;
+  color: $txt-secondary;
+
+  strong {
+    font-size: $font-size-20;
+    font-weight: $font-weight-bold;
+    color: $txt-primary;
+  }
+}
+
+.goal_pct {
+  margin-left: auto;
+  font-weight: $font-weight-bold;
+  color: $accent;
+}
+
+// ── 월 뷰 ──
+.month_head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+}
+
+.month_label {
+  font-size: $font-size-15;
+  font-weight: $font-weight-bold;
+  color: $txt-primary;
+}
+
+.month_grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: $spacing-4;
+}
+
+.month_weekday {
+  padding-bottom: $spacing-4;
+  text-align: center;
+  font-size: $font-size-11;
+  font-weight: $font-weight-semibold;
+  color: $txt-tertiary;
+}
+
+.month_cell {
+  display: grid;
+  place-items: center;
+  aspect-ratio: 1;
+  border-radius: $radius-xxs;
+  font-size: $font-size-12;
+  font-weight: $font-weight-semibold;
+  color: $txt-tertiary;
+}
+
+.month_cell_today {
+  box-shadow: inset 0 0 0 2px $txt-primary;
+}
+
+// 히트맵 4단계 — beige → 옅은 gold → 중간 gold → gold
+.level_0 {
+  background-color: $bg-secondary;
+}
+
+.level_1 {
+  background-color: $accent-subtle;
+  color: $accent;
+}
+
+.level_2 {
+  background-color: $accent-hover;
+  color: $txt-inverse;
+}
+
+.level_3 {
+  background-color: $accent;
+  color: $txt-inverse;
+}
+
+.legend {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: $spacing-8;
+  font-size: $font-size-11;
+  color: $txt-tertiary;
+
+  span[class*='level_'] {
+    width: 1.4rem;
+    height: 1.4rem;
+    border-radius: $radius-xxs;
+  }
+}
+
+// ── 통독 카드 ──
+.plan {
+  display: flex;
+  flex-direction: column;
+  gap: $content-gap-s;
+  padding: $padding-card;
+  background-color: $bg-card;
+  border: 1px solid $border-card;
+  border-radius: $radius-l;
+}
+
+.plan_head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.plan_title {
+  display: inline-flex;
+  align-items: center;
+  gap: $spacing-8;
+  font-size: $font-size-15;
+  font-weight: $font-weight-bold;
+  color: $accent;
+}
+
+.plan_cycle {
+  padding: $spacing-2 $spacing-8;
+  border-radius: $radius-circle;
+  background-color: $accent;
+  font-size: $font-size-11;
+  font-weight: $font-weight-bold;
+  color: $txt-inverse;
+}
+
+.plan_pct {
+  font-size: $font-size-15;
+  font-weight: $font-weight-bold;
+  color: $accent;
+}
+
+.plan_meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: $spacing-8;
+  font-size: $font-size-12;
+  color: $txt-secondary;
+}
+
+.plan_done {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-8;
+  padding: $padding-card-compact;
+  text-align: center;
+  background-color: $bg-accent-subtle;
+  border: 1px solid $border-warm;
+  border-radius: $radius-s;
+}
+
+.plan_done_title {
+  font-size: $font-size-15;
+  font-weight: $font-weight-bold;
+  color: $accent;
+}
+
+.plan_done_sub {
+  font-size: $font-size-13;
+  line-height: $line-height-normal;
+  color: $txt-secondary;
+}
+
+// ── 주간 목표 모달 ──
+.goal_desc {
+  text-align: center;
+  @include text-sub;
+}
+
+.stepper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: $spacing-24;
+  margin: $spacing-24 0;
+}
+
+.stepper_btn {
+  display: grid;
+  place-items: center;
+  width: 5.2rem;
+  height: 5.2rem;
+  border: 1.5px solid $border-primary;
+  border-radius: $radius-circle;
+  background-color: $bg-card;
+  color: $accent;
+  cursor: pointer;
+
+  @include hover-bg-shift($bg-hover);
+
+  svg {
+    width: 2.2rem;
+    height: 2.2rem;
+  }
+}
+
+.stepper_value {
+  display: inline-flex;
+  align-items: baseline;
+  gap: $spacing-4;
+  min-width: 10rem;
+  justify-content: center;
+  font-size: $font-size-16;
+  color: $txt-secondary;
+}
+
+// 목표 장 수 직접 입력 — spinner 제거, 큰 숫자 표시
+.stepper_input {
+  width: 6rem;
+  border: none;
+  background: transparent;
+  text-align: right;
+  font-family: inherit;
+  font-size: $font-size-42;
+  font-weight: $font-weight-bold;
+  color: $txt-primary;
+  outline: none;
+
+  &::-webkit-outer-spin-button,
+  &::-webkit-inner-spin-button {
+    margin: 0;
+    appearance: none;
+  }
+}
+
+// ── 기록기 오버레이 ──
+.rec_head {
+  display: flex;
+  align-items: center;
+  gap: $spacing-8;
+  width: 100%;
+}
+
+.rec_title {
+  flex: 1;
+  min-width: 0;
+  text-align: center;
+  font-size: $font-size-16;
+  font-weight: $font-weight-bold;
+  color: $txt-primary;
+}
+
+.rec_icon {
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  width: $icon-button-size;
+  height: $icon-button-size;
+  border-radius: $radius-xs;
+  color: $txt-primary;
+  cursor: pointer;
+
+  @include hover-bg-shift($bg-hover);
+
+  svg {
+    width: 2.2rem;
+    height: 2.2rem;
+  }
+}
+
+.rec_datebar {
+  display: flex;
+  align-items: center;
+  gap: $spacing-10;
+  padding: $spacing-12 $spacing-20;
+  background-color: $bg-accent-subtle;
+  border-bottom: 1px solid $border-warm;
+}
+
+// 날짜 이동 화살표 — 흰 배경 라운드 버튼 (시안)
+.rec_date_nav {
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  width: 3.8rem;
+  height: 3.8rem;
+  border: 1px solid $border-warm;
+  border-radius: $radius-xs;
+  background-color: $bg-card;
+  color: $accent;
+  cursor: pointer;
+
+  @include hover-bg-shift($bg-hover);
+
+  svg {
+    width: 2rem;
+    height: 2rem;
+  }
+}
+
+.rec_date_nav_off {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+
+.rec_date {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  align-items: center;
+  gap: $spacing-2;
+}
+
+.rec_date_caption {
+  font-size: $font-size-11;
+  font-weight: $font-weight-semibold;
+  letter-spacing: 0.04em;
+  color: $accent;
+}
+
+.rec_date_label {
+  display: inline-flex;
+  align-items: center;
+  gap: $spacing-6;
+  font-size: $font-size-15;
+  font-weight: $font-weight-bold;
+  color: $txt-primary;
+}
+
+.rec_today {
+  padding: $spacing-2 $spacing-8;
+  border-radius: $radius-circle;
+  background-color: $bg-card;
+  font-size: $font-size-11;
+  font-weight: $font-weight-bold;
+  color: $accent;
+}
+
+.rec_body {
+  display: flex;
+  flex-direction: column;
+  gap: $content-gap-s;
+  padding: $spacing-16 $spacing-20;
+}
+
+.rec_testament,
+.rec_modes {
+  display: inline-flex;
+  gap: $spacing-4;
+  padding: $spacing-4;
+  border-radius: $radius-circle;
+  background-color: $bg-secondary-deep;
+}
+
+.rec_testament {
+  display: flex;
+}
+
+.rec_seg {
+  flex: 1;
+  padding: $spacing-8 $spacing-16;
+  border-radius: $radius-circle;
+  font-size: $font-size-13;
+  font-weight: $font-weight-semibold;
+  color: $txt-secondary;
+  cursor: pointer;
+
+  @include hover-color-shift($txt-primary);
+}
+
+.rec_seg_on {
+  background-color: $accent;
+  color: $txt-inverse;
+
+  &:hover {
+    color: $txt-inverse;
+  }
+}
+
+.rec_controls {
+  display: flex;
+  align-items: center;
+  gap: $spacing-10;
+  flex-wrap: wrap;
+}
+
+.rec_actions {
+  display: inline-flex;
+  gap: $spacing-8;
+  margin-left: auto;
+}
+
+.rec_text_btn {
+  padding: $spacing-6 $spacing-12;
+  border: 1px solid $border-primary;
+  border-radius: $radius-circle;
+  background-color: $bg-card;
+  font-size: $font-size-12;
+  font-weight: $font-weight-semibold;
+  color: $accent;
+  cursor: pointer;
+
+  @include hover-bg-shift($bg-hover);
+}
+
+.rec_hint {
+  font-size: $font-size-13;
+  color: $accent;
+}
+
+// 책 그리드
+.book_grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: $spacing-10;
+}
+
+.book {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-8;
+  width: 100%;
+  padding: $padding-card-compact;
+  text-align: left;
+  background-color: $bg-card;
+  border: 1px solid $border-card;
+  border-radius: $radius-s;
+  cursor: pointer;
+
+  @include hover-bg-shift($bg-hover);
+}
+
+.book_full {
+  background-color: $bg-accent-subtle;
+  border-color: $border-warm;
+}
+
+// 제목 + 읽은 수를 한 줄에 (예: 창세기        0/50)
+.book_row {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: $spacing-8;
+}
+
+.book_name {
+  min-width: 0;
+  font-size: $font-size-14;
+  font-weight: $font-weight-semibold;
+  color: $txt-primary;
+}
+
+.book_sub {
+  flex-shrink: 0;
+  font-size: $font-size-11;
+  font-weight: $font-weight-semibold;
+  color: $txt-tertiary;
+}
+
+// 장 그리드
+.chapter_grid {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: $spacing-8;
+
+  @include respond-up($breakpoint-tablet-sm) {
+    grid-template-columns: repeat(8, 1fr);
+  }
+}
+
+.chapter {
+  display: grid;
+  place-items: center;
+  width: 100%;
+  aspect-ratio: 1;
+  border: 1px solid $border-card;
+  border-radius: $radius-xs;
+  background-color: $bg-secondary;
+  font-size: $font-size-13;
+  font-weight: $font-weight-semibold;
+  color: $txt-tertiary;
+  cursor: pointer;
+
+  @include hover-bg-shift($bg-hover);
+}
+
+.chapter_before {
+  background-color: $accent-subtle;
+  border-color: $border-warm;
+  color: $accent;
+}
+
+.chapter_today {
+  background-color: $accent;
+  border-color: transparent;
+  color: $txt-inverse;
+
+  &:hover {
+    color: $txt-inverse;
+  }
+}
+
+.chapter_start {
+  border-color: $accent;
+  box-shadow: inset 0 0 0 1px $accent;
+}
+
+// ── 기록 공유 시트 ──
+.share {
+  display: flex;
+  flex-direction: column;
+  gap: $content-gap-m;
+}
+
+.share_card {
+  display: flex;
+  flex-direction: column;
+  padding: $padding-card-lg;
+  border-radius: $radius-l;
+  // 시안의 dark warm 공유 카드 (styles SKILL 그라디언트 예외)
+  background: linear-gradient(150deg, $primary, $accent);
+  color: $txt-inverse;
+}
+
+.share_brand {
+  font-family: $font-family-secondary;
+  font-size: $font-size-15;
+  font-weight: $font-weight-bold;
+}
+
+.share_eyebrow {
+  margin-top: $spacing-16;
+  font-size: $font-size-12;
+  font-weight: $font-weight-semibold;
+  letter-spacing: 0.08em;
+  color: $accent-subtle;
+}
+
+.share_stat {
+  margin-top: $spacing-8;
+  font-size: $font-size-15;
+
+  strong {
+    font-size: $font-size-42;
+    font-weight: $font-weight-bold;
+    line-height: 1;
+  }
+}
+
+.share_sub {
+  margin-top: $spacing-8;
+  font-size: $font-size-13;
+  color: $txt-dark-muted;
+}
+
+.share_verse {
+  margin-top: $spacing-16;
+  padding-top: $spacing-16;
+  border-top: 1px solid rgba($txt-inverse, 0.2);
+  font-family: $font-family-secondary;
+  font-size: $font-size-14;
+  line-height: $line-height-loose;
+  color: $accent-subtle;
+}
+
+.share_verse_ref {
+  display: block;
+  margin-top: $spacing-4;
+  font-family: $font-family-base;
+  font-size: $font-size-11;
+  color: $txt-dark-muted;
+}
+
+.share_actions {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: $spacing-10;
+}
+
+.share_action {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: $spacing-8;
+  padding: $spacing-16 $spacing-8;
+  background-color: $bg-card;
+  border: 1px solid $border-card;
+  border-radius: $radius-m;
+  font-size: $font-size-12;
+  font-weight: $font-weight-semibold;
+  color: $txt-secondary;
+  cursor: pointer;
+
+  @include hover-bg-shift($bg-hover);
+}
+
+.share_action_icon {
+  display: grid;
+  place-items: center;
+  width: 4.2rem;
+  height: 4.2rem;
+  border-radius: $radius-circle;
+  background-color: $accent-subtle;
+  color: $accent;
+
+  svg {
+    width: 2.1rem;
+    height: 2.1rem;
+  }
+}
