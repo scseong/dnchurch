@@ -1,6 +1,6 @@
 # bible-reading-tracker
 
-- **상태**: 🟡 진행 중
+- **상태**: ✅ 완료 (2026-07-18)
 - **시작일**: 2026-07-17
 - **브랜치**: feat/my-page
 - **Open questions**: none (settings RLS·같은 날 통독 리셋은 D1·D5로 해소)
@@ -238,3 +238,17 @@ gemini 봇이 인라인 3건을 남겨 코드로 직접 확인하고, Codex 교�
   - 이유: 외부 SDK·이미지 생성 연동이 필요해 트래커 코어와 분리.
   - 다음 기준: 트래커 머지 후.
   - 기록 위치: 없음 (후속 task)
+
+## 회고
+
+- **잘된 것**
+  - 이 앱의 첫 사용자 소유 CRUD 테이블에 owner-RLS(`USING` + `WITH CHECK` = `auth.uid() = user_id`)를 두고, 뮤테이션을 사용자 세션 Server Action으로 처리해 아키텍처 규칙과 사용자 격리를 함께 지켰다. 결정은 ADR 0022로 남겼다.
+  - 원자 행 하나(user_id·book_order·chapter·read_date·cycle)만 저장하고 연속·일/주/월·통독·목표를 파생해, 집계 컬럼 동기화 버그를 원천 차단했다.
+  - Codex 계획 검증 CR 6건을 반영했다 — 레이어 충돌·WITH CHECK 누락·같은 날 통독 리셋·off-by-one·장 검증·streak 기준.
+  - Codex 1차 FIX 3건을 반영했다 — 롤백 cycle 보존·조회 페이지네이션·통독 판정 페이지네이션.
+  - PR 리뷰(gemini) 3건을 코드로 직접 확인하고 Codex 교차검증까지 거쳐, streak 아침 0 표시와 Firefox 스피너는 고치고 `.pill` 타원 지적은 오탐으로 근거를 회신했다.
+- **다음에 할 것**
+  - 위 낱장 토글 부채를 300~500ms 디바운스 배치로 해소한다.
+  - 기록 공유(카카오톡·이미지 저장·링크 복사)를 실기능으로 붙인다 — 현재 "준비 중" 토스트.
+- **발견된 부채**
+  - 낱장 토글이 탭마다 Server Action을 호출한다 — `docs/tech-debt/active.md`에 등록 완료(신규 아님).
