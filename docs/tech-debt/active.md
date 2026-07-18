@@ -38,15 +38,6 @@
 - **확인**: `mcp__claude_ai_Supabase__get_advisors` (performance·security) 재실행
 - **발견일**: 2026-07-02 (리팩토링 감사 — advisor 실 DB 점검), 2026-07-02 4카테고리 해소(PR #139)
 
-### 🟢 죽은 RPC 마이그레이션 `get_sermon_year_counts` — src 참조 0·dev 미적용 (2026-07-02 감사 P3)
-
-- **무엇**: 마이그레이션 `20260430000000_add_sermon_year_counts_rpc.sql`이 만드는 RPC. 이를 호출하려던 `sermonService.yearCounts`는 커밋 `266e693 숨은 year 필터 제거`로 소비 UI가 사라져 죽었고, P3(refactor/p3-dead-code-cleanup)에서 JS 쪽 `yearCounts`·`YearCount`를 삭제했다. 남은 것은 마이그레이션 파일이다 — fresh replay(Preview·미래 prod 구축)가 아무도 안 부르는 함수를 만든다.
-- **2026-07-02 실측**: dev `pg_proc`에 이 함수가 없고, dev 적용 목록(`supabase_migrations.schema_migrations`)에도 이 파일이 없다. dev는 마이그레이션 추적 시작 전에 손으로 만들어져 이 RPC가 적용된 적이 없다 — 실 DB에서 DROP할 대상이 없다.
-- **왜 지금 안 하나**: 마이그레이션 정리는 코드만 바꾸는 P3에 안 섞었다(사용자 결정). advisor INFO 수준이라 급하지 않다.
-- **마이그레이션 경로**: 파일 `20260430000000_add_sermon_year_counts_rpc.sql`을 삭제한다. 적용된 실 DB가 없어(위 실측) 삭제 마이그레이션 없이 파일만 지워도 dev·prod와 어긋나지 않는다.
-- **확인**: `rg "get_sermon_year_counts" src` 0건 + dev `pg_proc` 조회 0건
-- **발견일**: 2026-07-02 (리팩토링 감사 P3)
-
 ### 🟢 섬기는 사람들 — legacy public/ 프로필 이미지를 Cloudinary로 아직 안 옮김 (감사 P4)
 
 - **무엇**: `serving-people/page.tsx:57`이 `staff.image_url`이 `/`로 시작하는 legacy `public/` 자산이면 raw `<img>` 분기를 탄다(eslint-disable로 의도 표시). Cloudinary 자산은 이미 `<CloudinaryImage>`를 쓰므로, 남은 것은 코드가 아니라 데이터다.

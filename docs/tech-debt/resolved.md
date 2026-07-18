@@ -4,6 +4,14 @@
 
 ---
 
+### ✅ 죽은 RPC 마이그레이션 `get_sermon_year_counts` 삭제 (2026-07-18 해소)
+
+- **부채**: 마이그레이션 `20260430000000_add_sermon_year_counts_rpc.sql`이 만드는 RPC. 소비 UI가 사라진 뒤 JS 쪽 `yearCounts`·`YearCount`는 P3(선행 리팩터링 3단계)에서 지웠는데 마이그레이션 파일만 남아, 마이그레이션을 처음부터 다시 적용하면(fresh replay) 아무도 안 부르는 함수가 생긴다.
+- **해소**: 파일을 지웠다. dev `pg_proc`와 적용 목록에 이 함수가 없어(2026-07-02 실측) DROP 마이그레이션 없이 파일만 지워도 dev·prod와 어긋나지 않는다.
+- **확인**:
+  - `rg "get_sermon_year_counts" src` → 0건
+  - `ls supabase/migrations/*sermon_year_counts*` → 파일 없음
+
 ### ✅ FeedContent `.badge_category` mixin 미적용 (2026-06-29 해소 — 대상 소멸)
 
 - **부채**: `src/app/_component/home/FeedContent.module.scss`의 카테고리 뱃지가 caption mixin 없이 직접 토큰을 조합했다. 뱃지의 `line-height: 1` 의도와 `text-caption-strong`의 1.45가 충돌해 mixin을 얹지 못했다 (2026-05-04 design-system-v3 Step 3 발견)
