@@ -218,6 +218,20 @@ create policy "update_own" on public.bible_reading_settings for update to authen
 
 </details>
 
+## PR 리뷰 대응 (PR #152)
+
+gemini 봇이 인라인 3건을 남겨 코드로 직접 확인하고, Codex 교차검증(3건 모두 내 판정에 동의)을 거쳐 처리했다.
+
+- **연속 일수가 아침마다 0으로 보임 (봇 HIGH) — 반영**
+  - 문제: `computeStreak`이 `cursor=today`에서 시작해 오늘 기록이 없으면 루프가 0회 돌아 0을 반환했다. 어제까지 이어온 연속이 오늘 아침(아직 안 읽음)엔 0일째로 표시된다.
+  - 해결: 오늘 기록이 없으면 커서를 어제로 옮겨 세기 시작한다. 오늘 읽으면 오늘부터 세어 하루 늘어난다. JSDoc도 갱신. 호출부는 `TrackerSection.tsx:46` 한 곳이고 표시 전용이라 무회귀.
+- **number input 스피너가 Firefox에 남음 (봇 MEDIUM) — 반영**
+  - 문제: `.stepper_input`에 `-webkit-` 스피너 제거만 있어 Firefox는 화살표를 계속 노출한다.
+  - 해결: `.stepper_input`에 표준 `appearance: textfield`를 넣었다. Codex 지적대로 수기 `-moz-` 프리픽스는 넣지 않는다 — 저장소 관례가 unprefixed이고 autoprefixer가 빌드 때 붙인다.
+- **Tabs `.pill` border-radius가 타원으로 찌그러진다 (봇 MEDIUM) — 반영 안 함(오탐)**
+  - 봇 주장: `border-radius: $radius-circle`이 사각형을 타원으로 만든다, `99rem` 하드코딩 권장.
+  - 확인: `$radius-circle` = `var(--radius-999)` = `9999px`(globals.scss:47). 큰 고정 px는 border-radius 클램핑으로 stadium(알약)이 된다 — 타원은 백분율(`50%`)일 때만 생긴다. 봇 전제가 오류. 게다가 하드코딩 제안은 토큰 규칙 위반이라 반영하지 않고 봇에 근거를 회신했다.
+
 ## 후속 작업
 
 - 기록 공유(카카오톡·이미지·링크)

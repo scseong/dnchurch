@@ -94,11 +94,16 @@ export function cycleUnionByBook(records: ReadingRecord[], cycle: number): Map<n
   return map;
 }
 
-/** 오늘부터 거꾸로 연속으로 읽은 일수. 길이 제한 없음. */
+/**
+ * 연속으로 읽은 일수. 길이 제한 없음.
+ * 오늘 아직 안 읽었으면 어제부터 세어, 그날이 다 가기 전까지 연속을 유지한다
+ * (아침마다 0으로 깜빡이지 않게). 오늘 읽으면 오늘부터 세어 하루 늘어난다.
+ */
 export function computeStreak(records: ReadingRecord[], today: string): number {
   const counts = countByDate(records);
-  let streak = 0;
   let cursor = today;
+  if ((counts.get(cursor) ?? 0) === 0) cursor = shiftDate(cursor, -1);
+  let streak = 0;
   while ((counts.get(cursor) ?? 0) > 0) {
     streak += 1;
     cursor = shiftDate(cursor, -1);

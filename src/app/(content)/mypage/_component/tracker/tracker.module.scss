@@ -557,6 +557,7 @@
   font-weight: $font-weight-bold;
   color: $txt-primary;
   outline: none;
+  appearance: textfield; // Firefox 스피너 제거 (webkit은 아래 의사요소로)
 
   &::-webkit-outer-spin-button,
   &::-webkit-inner-spin-button {
