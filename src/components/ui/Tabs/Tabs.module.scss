@@ -86,8 +86,12 @@
 
 // ── Pill variant ──
 
+// 배경 면 위에서 활성 탭이 채워지는 세그먼트 컨트롤. 활성색은 warm gold($accent).
 .pill {
   gap: $spacing-4;
+  padding: $spacing-4;
+  background-color: $bg-secondary-deep;
+  border-radius: $radius-circle;
 
   .tab {
     font-weight: $font-weight-semibold;
@@ -103,7 +107,7 @@
 
     &.active {
       color: $txt-inverse;
-      background-color: $primary;
+      background-color: $accent;
     }
   }
 }

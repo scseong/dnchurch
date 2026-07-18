@@ -51,5 +51,6 @@
 | [0019](0019-public-anonymous-write-rls.md) | 익명 공개 쓰기를 서버 액션과 anon 전용 RLS로 처리한다 | Accepted | 2026-06-29 |
 | [0020](0020-brown-primary-migration.md) | 공개 primary 색을 navy에서 warm brown으로 이행 | Accepted | 2026-06-30 |
 | [0021](0021-hero-breadcrumb-removal.md) | 공유 Hero·Breadcrumb 제거, 콘텐츠 페이지 헤더를 MobileHeader + sr-only h1로 통일 | Accepted | 2026-07-03 |
+| [0022](0022-user-owned-data-rls.md) | 사용자 소유 데이터는 owner-RLS + 사용자 세션 Server Action | Proposed | 2026-07-17 |
 
 <!-- last-audit: 2026-05-01 -->

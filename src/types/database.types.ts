@@ -14,6 +14,57 @@ export type Database = {
   }
   public: {
     Tables: {
+      bible_reading_records: {
+        Row: {
+          book_order: number
+          chapter: number
+          created_at: string
+          cycle: number
+          id: string
+          read_date: string
+          user_id: string
+        }
+        Insert: {
+          book_order: number
+          chapter: number
+          created_at?: string
+          cycle?: number
+          id?: string
+          read_date: string
+          user_id: string
+        }
+        Update: {
+          book_order?: number
+          chapter?: number
+          created_at?: string
+          cycle?: number
+          id?: string
+          read_date?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      bible_reading_settings: {
+        Row: {
+          current_cycle: number
+          updated_at: string
+          user_id: string
+          weekly_goal: number
+        }
+        Insert: {
+          current_cycle?: number
+          updated_at?: string
+          user_id: string
+          weekly_goal?: number
+        }
+        Update: {
+          current_cycle?: number
+          updated_at?: string
+          user_id?: string
+          weekly_goal?: number
+        }
+        Relationships: []
+      }
       bulletin_images: {
         Row: {
           bulletin_id: number

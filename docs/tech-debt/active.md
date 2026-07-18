@@ -445,3 +445,23 @@
 - **확인**: `rg "server-only" src/lib/supabase/admin.ts src/apis/auth-server.ts` → 0 hits.
 - **발견일**: 2026-07-16 (인증 A-to-Z 감사 10절 — `docs/research/2026-07-16-auth-a-to-z.md`)
 
+
+### 🟢 `uploadImage()`가 public_id에 폴더를 두 번 넣음 (2026-07-17 my-page 실측)
+
+- **상태**: 등록만 (낮은 우선순위 — 렌더·삭제는 정상 동작)
+- **무엇**: `uploadImage()`가 Cloudinary upload 옵션에 `folder`와, 같은 folder를 앞에 붙인 `public_id`를 동시에 넘긴다. Cloudinary는 folder를 public_id 앞에 다시 붙여 최종 public_id가 `<folder>/<ROOT>/<folder>/<file>`처럼 폴더가 중복된 경로로 저장된다. 주보(`bulletin_images.cloudinary_id`)와 마이페이지 아바타(`profiles.avatar_url`) 모두 이 패턴이다.
+- **왜**: DB에는 업로드 응답의 실제 public_id가 저장되므로 URL 합성·렌더·삭제는 전부 맞는 경로를 쓴다. 결함이 아니라 Cloudinary 콘솔에서 자산 경로가 길고 중복돼 보이는 관리 문제다.
+- **마이그레이션 경로**: `uploadImage()`에서 `folder` 옵션을 빼고 `public_id`만 넘기거나, `public_id`를 filename만 남긴다. 기존 자산은 경로 그대로 두고 신규 업로드부터 적용한다.
+- **영향 범위**: `src/apis/cloudinary.ts`, (선택) 기존 Cloudinary 자산 정리
+- **확인**: dev DB `SELECT cloudinary_id FROM bulletin_images ORDER BY created_at DESC LIMIT 1` → `uploads/bulletins/2026/07/05/dnchurch-dev/uploads/bulletins/2026/07/05/...` 중복 경로 확인.
+- **발견일**: 2026-07-17 (my-page 아바타 업로드 브라우저 실측 — `docs/exec-plans/active/2026-07-17-my-page.md` 후속 작업)
+
+### 🟡 성경읽기 기록기 낱장 토글이 탭마다 Server Action을 호출 (2026-07-17 bible-reading-tracker)
+
+- **상태**: 등록만 (다음 PR에서 개선 — medium)
+- **무엇**: `TrackerSection.toggleChapter`가 낱장 모드에서 장 하나를 누를 때마다 `recordChaptersAction`/`unrecordChaptersAction`을 한 번씩 호출한다. 낱장으로 10장을 하나씩 누르면 서버 왕복이 10번 일어난다(각 호출이 서버에서 `getUser` + settings 조회 + upsert/delete). 범위·모두읽음·해제는 이미 한 번에 묶어 보낸다.
+- **왜**: 낙관적 UI로 화면은 즉시 반영되지만 네트워크·DB 요청이 잦다. 또한 같은 장을 아주 빠르게 켰다 껐다 하면 record/unrecord 요청이 순서 보장 없이 각각 날아가 드물게 최종 상태가 어긋날 여지가 있다(rapid-toggle race).
+- **마이그레이션 경로**: 탭은 로컬 state에만 반영하고, 300~500ms 디바운스 후(또는 기록기 닫힘·날짜/책 전환 시) 그 책·날짜의 변경분을 모아 `record`/`unrecord`로 한 번에 flush한다. 호출 수가 줄고 rapid-toggle race도 사라진다.
+- **영향 범위**: `src/app/(content)/mypage/_component/tracker/TrackerSection.tsx`
+- **확인**: 낱장 모드로 여러 장을 연속 탭하며 네트워크 탭에서 Server Action POST가 탭 수만큼 발생하는지 확인.
+- **발견일**: 2026-07-17 (bible-reading-tracker 구현 중 사용자 지적)

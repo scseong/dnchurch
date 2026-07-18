@@ -214,6 +214,9 @@ export function resolveMobileHeader(pathname: string): { title: string; showBack
   // 주보 상세·create·update(/news/bulletins/...)는 '주보' 타이틀 + 뒤로가기(목록은 위 '교회 소식'이 처리).
   if (isBulletinPath(pathname)) return { title: '주보', showBack: true };
 
+  // 마이 페이지 — 시안 헤더(뒤로가기 + '마이 페이지' + 설정). GNB 라벨('마이페이지')과 달리 공백 포함 표기.
+  if (pathname === '/mypage') return { title: '마이 페이지', showBack: true };
+
   const special = SPECIAL_PAGES[pathname];
   if (special) return { title: special, showBack: false };
 
@@ -269,14 +272,16 @@ export function resolveSiblingTabs(pathname: string): NavItem[] | null {
 // ── MobileHeader action (우측 아이콘 슬롯) ──
 
 /** 헤더 우측 액션 종류. 기본은 전체 메뉴(drawer), 특정 화면은 다른 액션으로 교체 가능. */
-export type HeaderAction = 'menu' | 'share';
+export type HeaderAction = 'menu' | 'share' | 'settings';
 
-/** pathname → 헤더 우측 액션. 설교 상세·공지 상세·주보 상세는 공유, 그 외는 전체 메뉴. */
+/** pathname → 헤더 우측 액션. 설교 상세·공지 상세·주보 상세는 공유, 마이 페이지는 설정, 그 외는 전체 메뉴. */
 export function resolveHeaderAction(pathname: string): HeaderAction {
   if (isSermonDetailPath(pathname)) return 'share';
   // 공지 상세(/news/notices/[id])만 공유 — 목록(/news/notices)은 전체 메뉴 유지.
   if (/^\/news\/notices\/[^/]+$/.test(pathname)) return 'share';
   // 주보 상세(/news/bulletins/[숫자id])만 공유 — 목록·create·update는 전체 메뉴 유지.
   if (isBulletinDetailPath(pathname)) return 'share';
+  // 마이 페이지는 설정 아이콘 — 페이지의 계정 설정으로 이동.
+  if (pathname === '/mypage') return 'settings';
   return 'menu';
 }
