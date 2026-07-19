@@ -152,11 +152,26 @@ export default function ProfileEditModal({ profile, departments, districts, open
       </div>
       <div className={styles.edit_field}>
         <span className={styles.edit_label}>구역</span>
-        <Select value={districtId} onChange={setDistrictId} options={toOptions(districts)} aria-label="구역" />
+        <Select
+          value={districtId}
+          onChange={(value) => {
+            setDistrictId(value);
+            // 구역을 비우면 역할은 '일반'만 유효 — 서버 강등(profile.action)과 맞춰 state/화면 괴리를 없앤다
+            if (!value) setDistrictRole('일반');
+          }}
+          options={toOptions(districts)}
+          aria-label="구역"
+        />
       </div>
       <div className={styles.edit_field}>
         <span className={styles.edit_label}>구역 역할</span>
-        <Select value={districtRole} onChange={setDistrictRole} options={ROLE_OPTIONS} aria-label="구역 역할" />
+        <Select
+          value={districtId ? districtRole : '일반'}
+          onChange={setDistrictRole}
+          options={ROLE_OPTIONS}
+          disabled={!districtId}
+          aria-label="구역 역할"
+        />
       </div>
     </Modal>
   );
