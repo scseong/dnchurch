@@ -4,6 +4,14 @@
 
 ---
 
+### ✅ Hover Border 위반 admin 5파일 해소 (2026-07-18 해소)
+
+- **부채**: admin 5파일 14곳이 `&:hover`에서 `border-color`를 바꿔 styles skill Hover 3원칙 #3(hover에 border 코드 금지)을 어겼다. sermons/news를 v4로 정리할 때 admin은 토큰 통합(ADR 0012) 뒤로 미뤄 남아 있었다.
+- **해소**: 각 hover의 `border-color`를 지웠다. 버튼·탭은 hover에서 색·배경만 바꾸고, 클릭 카드(`table`의 `.mobile_card`)는 `@include hover-lift`로 바꿨다. `.on`·`.primary`·`:focus-visible`의 정적·포커스 border는 그대로 뒀다. hover 밖에서 border가 안 바뀌는 곳은 `transition`에서도 `border-color`를 뺐다.
+- **확인**:
+  - `SermonForm/index`·`table`·`dropdown`·`AdminHeader`·`PageHeader`의 hover 블록 안 `border-color` → 0곳
+  - `yarn build` 통과, `yarn lint:styles` 새 경고 0
+
 ### ✅ 죽은 RPC 마이그레이션 `get_sermon_year_counts` 삭제 (2026-07-18 해소)
 
 - **부채**: 마이그레이션 `20260430000000_add_sermon_year_counts_rpc.sql`이 만드는 RPC. 소비 UI가 사라진 뒤 JS 쪽 `yearCounts`·`YearCount`는 P3(선행 리팩터링 3단계)에서 지웠는데 마이그레이션 파일만 남아, 마이그레이션을 처음부터 다시 적용하면(fresh replay) 아무도 안 부르는 함수가 생긴다.

@@ -231,17 +231,6 @@
 - **마이그레이션 경로**: `eslint-plugin-import`의 `no-relative-parent-imports` 또는 `eslint-plugin-boundaries` 도입 검토 (별도 EXEC_PLAN)
 - **발견일**: 2026-05-01 (Codex 리뷰)
 
-### 🟢 Hover Border 위반 — admin 영역 남은 분 (5파일·13곳)
-
-- **무엇**: hover 시 `border-color`/`border` 변경 — `.claude/skills/styles/SKILL.md` Hover 3원칙 #3 위반. admin 5파일만 남음
-- **왜**: v4 마이그레이션이 sermons/news 영역에 한정됐다. home은 2026-05-07 home cleanup에서 해소(resolved.md), admin은 admin 토큰 ADR 결정 후로 분리
-- **마이그레이션 경로**: admin 5건은 admin 토큰 통합(ADR 0012)이 끝났으니 hover border를 제거하고 `hover-lift`/shadow로 대체
-- **영향 범위** (admin 5건):
-  - `src/components/admin/sermons/SermonListPage/{dropdown,table}.module.scss`, `src/components/admin/sermons/SermonForm/index.module.scss`, `src/components/admin/layout/{PageHeader,AdminHeader}/index.module.scss`
-- **2026-06-02 갱신**: home 5건은 2026-05-07 home cleanup에서 이미 해소 확인(FeedContent transition은 탭 상태 전환이라 위반 아님). 10건 → admin 5건으로 축소
-- **2026-07-02 재측정**: 같은 5파일에서 13곳 (`SermonForm/index` 5·`table` 4·`dropdown` 2·`AdminHeader` 1·`PageHeader` 1) — admin 화면 개편으로 hover border가 늘었다.
-- **발견일**: 2026-05-07 (Codex 디자인 시스템 audit)
-
 ### 🟢 토큰 부채 — 디자인 시스템 v4 미완 남은 부분 (hex/rgba 직접 사용)
 
 - **무엇**: 시맨틱 토큰을 거치지 않은 hex/rgb 값 직접 사용

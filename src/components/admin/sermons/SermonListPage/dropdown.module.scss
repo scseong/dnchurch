@@ -25,7 +25,6 @@
     box-shadow 0.15s $transition-easing-default;
 
   &:hover {
-    border-color: $border-primary;
     color: $txt-primary;
   }
 
@@ -43,7 +42,6 @@
   font-weight: 600;
 
   &:hover {
-    border-color: $primary-soft;
     color: $primary-soft;
   }
 }

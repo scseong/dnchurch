@@ -90,7 +90,6 @@
   cursor: pointer;
   transition:
     background 0.15s,
-    border-color 0.15s,
     color 0.15s;
 
   &.outline {
@@ -99,7 +98,6 @@
     color: $txt-secondary;
 
     &:hover {
-      border-color: $txt-admin-tertiary;
       color: $txt-primary;
     }
 
