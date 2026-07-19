@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import clsx from 'clsx';
-import { LuChevronLeft, LuChevronRight, LuX } from 'react-icons/lu';
+import { LuChevronLeft, LuChevronRight, LuX, LuCheck } from 'react-icons/lu';
 import { BottomSheet } from '@/components/ui';
 import { BIBLE_BOOKS, getBookByOrder, type Testament } from '@/constants/bible';
 import {
@@ -51,6 +51,14 @@ export default function Recorder({
   const cycleUnion = cycleUnionByBook(records, currentCycle);
   const isChapters = book !== null;
   const canGoNext = date < today;
+
+  // 선택한 날짜에 책별로 기록한 장 수 — 권 목록의 배지용(상단 날짜바가 어느 날인지 알려준다).
+  const dateCountByBook = new Map<number, number>();
+  for (const rec of records) {
+    if (rec.read_date === date) {
+      dateCountByBook.set(rec.book_order, (dateCountByBook.get(rec.book_order) ?? 0) + 1);
+    }
+  }
 
   function goToBook(order: number) {
     setBook(order);
@@ -166,6 +174,7 @@ export default function Recorder({
               const read = cycleUnion.get(item.order)?.size ?? 0;
               const pct = Math.round((read / item.chapters) * 100);
               const full = read === item.chapters;
+              const dateCount = dateCountByBook.get(item.order) ?? 0;
               return (
                 <li key={item.order}>
                   <button
@@ -174,7 +183,15 @@ export default function Recorder({
                     onClick={() => goToBook(item.order)}
                   >
                     <span className={styles.book_row}>
-                      <span className={styles.book_name}>{item.name}</span>
+                      <span className={styles.book_head}>
+                        <span className={styles.book_name}>{item.name}</span>
+                        {dateCount > 0 && (
+                          <span className={styles.book_badge}>
+                            <LuCheck aria-hidden="true" />
+                            {dateCount}
+                          </span>
+                        )}
+                      </span>
                       <span className={styles.book_sub}>
                         {read}/{item.chapters}
                       </span>
@@ -235,7 +252,19 @@ export default function Recorder({
               </button>
             </div>
           </div>
-          <p className={styles.rec_hint}>{rangeHint}</p>
+          <div className={styles.rec_meta}>
+            <p className={styles.rec_hint}>{rangeHint}</p>
+            <ul className={styles.chapter_legend}>
+              <li>
+                <span className={clsx(styles.chapter_swatch, styles.chapter_today)} />
+                오늘 읽음
+              </li>
+              <li>
+                <span className={clsx(styles.chapter_swatch, styles.chapter_before)} />
+                이미 읽음
+              </li>
+            </ul>
+          </div>
           <ul className={styles.chapter_grid}>
             {Array.from({ length: selectedBook.chapters }, (_, i) => i + 1).map((chapter) => {
               const readToday = dateChapters.has(chapter);

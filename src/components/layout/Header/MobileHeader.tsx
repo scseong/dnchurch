@@ -9,6 +9,7 @@ import clsx from 'clsx';
 import { resolveHeaderAction, resolveMobileHeader, resolveSiblingTabs } from '@/config/navigation';
 import useDrawerHistory from '@/hooks/useDrawerHistory';
 import SectionTabNav from '@/components/layout/SectionTabNav/SectionTabNav';
+import { useSettingsSheetStore } from '@/store/settingsSheet.store';
 import Drawer from './Drawer';
 import ShareSheet from './ShareSheet';
 import styles from './Header.module.scss';
@@ -27,6 +28,8 @@ export default function MobileHeader() {
     pathname.startsWith('/news/bulletins');
   const { drawerOpen, openDrawer, closeDrawer } = useDrawerHistory();
   const [shareOpen, setShareOpen] = useState(false);
+  const settingsOpen = useSettingsSheetStore((s) => s.open);
+  const setSettingsOpen = useSettingsSheetStore((s) => s.setOpen);
   const overlayRef = useRef<HTMLDivElement>(null);
 
   return (
@@ -79,12 +82,10 @@ export default function MobileHeader() {
               <button
                 type="button"
                 className={styles.mobile_menu}
-                onClick={() =>
-                  document
-                    .getElementById('mypage-account')
-                    ?.scrollIntoView({ behavior: 'smooth', block: 'start' })
-                }
+                onClick={() => setSettingsOpen(true)}
                 aria-label="설정"
+                aria-haspopup="dialog"
+                aria-expanded={settingsOpen}
               >
                 <IoSettingsOutline />
               </button>

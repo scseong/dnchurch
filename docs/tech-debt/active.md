@@ -465,3 +465,33 @@
 - **영향 범위**: `src/app/(content)/mypage/_component/tracker/TrackerSection.tsx`
 - **확인**: 낱장 모드로 여러 장을 연속 탭하며 네트워크 탭에서 Server Action POST가 탭 수만큼 발생하는지 확인.
 - **발견일**: 2026-07-17 (bible-reading-tracker 구현 중 사용자 지적)
+
+### 🟡 성경읽기 공유 OG(링크 미리보기) 이미지 라우트가 로그인 없이 열리고 파라미터도 제한하지 않아 렌더 비용이 커질 수 있음 (my-page PR #153)
+
+- **상태**: 등록만 (다음 PR에서 개선)
+- **무엇**: `/share/reading/image`가 로그인 없이 열리고 `robots.ts`도 `/share`를 허용한다(`src/app/share/reading/image/route.tsx`). 통계를 `p`·`c`·`s` 파라미터로 받아 요청 시 Satori+resvg로 PNG를 그리는데, `Cache-Control: immutable`은 같은 URL만 캐시한다. 파라미터 조합이 사실상 무제한(`p` 3 × `c` 0~9999 × `s` 0~366 ≈ 1,100만)이라, 값을 바꿔가며 호출하면 매번 캐시 미스로 새 렌더가 Node 서버리스에서 돈다. 누구나 파라미터 루프로 Vercel 함수 호출·CPU 과금을 늘릴 수 있는 구조다.
+- **왜 지금 안 하나**: 소규모 교회 사이트라 실제 트래픽 노출은 낮고, `parseCount`가 값을 상한(`CHAPTERS_MAX` 9999·`SECONDARY_MAX` 366)으로 이미 자른다. 구조적 취약점이지 즉시 장애는 아니다.
+- **마이그레이션 경로**: `c`·`s` 값을 버킷(예: 10장 단위)으로 반올림해 캐시 가능한 조합 수를 줄이거나, 라우트 앞단에 가벼운 rate-limit을 둔다. 또는 Vercel 기본 방어에 맡기고 수용한다(사용자 판단).
+- **영향 범위**: `src/app/share/reading/image/route.tsx`, `src/utils/bible-share.ts`(파라미터 파싱)
+- **확인**: `curl`로 `?c=` 값을 바꿔가며 연속 호출 시 매번 `x-vercel-cache: MISS`로 새 렌더가 도는지 확인.
+- **발견일**: 2026-07-19 (my-page PR #153 머지 전 위험 점검 — 사용자 지시로 기록)
+
+### 🟡 마이페이지를 열 때마다 부서·구역 참조 데이터를 캐시 없이 다시 조회 (my-page PR #153)
+
+- **상태**: 등록만 (다음 PR에서 개선)
+- **무엇**: `getDeptDistrictOptions`가 `createServerSideClient()`(무캐시)로 `departments`·`districts`를 읽는다(`src/apis/reference.ts:11`). 두 테이블은 거의 바뀌지 않는 정적 참조 데이터인데, 마이페이지를 열 때마다 프로필 편집 드롭다운용으로 2쿼리를 새로 친다.
+- **왜 지금 안 하나**: 인증된 개인 페이지 컨텍스트라 큰 병목은 아니고, 이번 PR 범위는 기능 구현이었다. 캐시 도입은 별도 판단.
+- **마이그레이션 경로**: 두 조회를 `createStaticClient()` + 태그 캐시로 옮기고, 부서·구역 관리 화면에서 값이 바뀔 때 `updateTag`로 무효화한다. RLS는 authenticated 읽기라 정적 클라이언트로도 읽힌다(공개 SELECT 정책 확인 필요).
+- **영향 범위**: `src/apis/reference.ts`, (선택) 부서·구역 관리 액션의 캐시 무효화
+- **확인**: 마이페이지를 연속 새로고침하며 `departments`·`districts` 쿼리가 매번 DB로 나가는지(캐시 히트 없는지) 확인.
+- **발견일**: 2026-07-19 (my-page PR #153 머지 전 위험 점검 — 사용자 지시로 기록)
+
+### 🟡 이미지 저장에만 쓰는 html-to-image가 마이페이지 첫 로드 JS에 늘 포함됨 (my-page PR #153)
+
+- **상태**: 등록만 (다음 PR에서 개선)
+- **무엇**: `ShareSheet`가 `import { toPng } from 'html-to-image'`로 정적 import하고(`ShareSheet.tsx:5`), `TrackerSection`이 이 시트를 열림 여부와 상관없이 늘 마운트한다(`TrackerSection.tsx:268`). "이미지 저장" 버튼을 한 번도 누르지 않는 사용자도 이 라이브러리를 마이페이지 첫 진입 JS로 받는다. html-to-image는 이번 PR에서 새로 추가한 의존성이다(`package.json`).
+- **왜 지금 안 하나**: 라이브러리가 아주 크지 않고(수십 KB) 기능은 정상 동작한다. 첫 번들에서 빼는 건 동작과 무관한 최적화라 분리했다.
+- **마이그레이션 경로**: `handleSaveImage` 안에서 `const { toPng } = await import('html-to-image')`로 동적 import하면 마이페이지 첫 로드 JS에서 빠지고, 버튼을 누른 사용자만 내려받는다.
+- **영향 범위** (1건): `src/app/(content)/mypage/_component/tracker/ShareSheet.tsx`
+- **확인**: `rg "from 'html-to-image'" src` → 정적 import면 1건(현 상태), 동적 import로 바꾸면 `await import('html-to-image')` 형태만 남고 이 grep은 0건.
+- **발견일**: 2026-07-19 (my-page PR #153 머지 전 위험 점검 — 사용자 지시로 기록)

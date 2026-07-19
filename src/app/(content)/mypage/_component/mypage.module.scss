@@ -83,6 +83,18 @@ $page-max-width: 60rem; // 계정 메뉴가 PC 폭 전체로 퍼지지 않게 �
   color: $status-negative;
 }
 
+// ── 설정 시트 (톱니가 여는 BottomSheet) ──
+.settings {
+  display: flex;
+  flex-direction: column;
+  gap: $content-gap-m;
+}
+
+.settings_version {
+  @include text-caption;
+  text-align: center;
+}
+
 // ── 프로필 편집 모달 ──
 .edit_avatar {
   display: flex;
@@ -95,6 +107,18 @@ $page-max-width: 60rem; // 계정 메뉴가 PC 폭 전체로 퍼지지 않게 �
   @include text-caption-small;
   @include ellipsis-multi(1);
   min-width: 0;
+}
+
+// 프로필 편집 — 부서·구역·역할 Select 필드
+.edit_field {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-6;
+  margin-top: $content-gap-m;
+}
+
+.edit_label {
+  @include text-label-emphasis;
 }
 
 // ── 비밀번호 변경 모달 ──
