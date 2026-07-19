@@ -84,5 +84,6 @@ emitContext(
   "[hook:check-pr-before-create]\n" +
     "gh pr create 실행 감지. commit-pr-author 호출로 PR 본문·label·assignee·template draft 먼저 검토 권장.\n" +
     "본문 SSOT: `.claude/skills/writing-style/SKILL.md`. 메타데이터 정책: `--assignee \"@me\"`·`--label` 필수, base는 develop.\n" +
+    "본문 가독성: 긴 설명은 주장별 bullet로 쪼개고, '문제→해결'은 `- 문제:`/`- 해결:` 두 줄로, 스크린샷 표는 첨부할 화면을 행으로 나열 (SKILL `PR 본문 가독성`).\n" +
     "claude-code 워크플로우: doc-editor → exec-plan 정리 → commit-pr-author → gh pr create.",
 );

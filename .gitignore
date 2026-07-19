@@ -47,6 +47,7 @@ next-env.d.ts
 !/supabase/migrations/
 !/supabase/config.toml
 !/supabase/seed.sql
+!/supabase/templates/
 
 # Claude Code local settings (machine-specific permissions)
 .claude/settings.local.json

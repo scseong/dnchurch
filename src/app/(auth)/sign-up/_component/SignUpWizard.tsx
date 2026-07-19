@@ -52,15 +52,14 @@ export default function SignUpWizard() {
       {step === 1 && <TermsStep onNext={() => setStep(2)} />}
       {step === 2 && (
         <InfoStep
+          redirect={redirect}
           onComplete={(data) => {
             setSummary(data);
             setStep(3);
           }}
         />
       )}
-      {step === 3 && summary && (
-        <CompleteStep name={summary.name} email={summary.email} redirect={redirect} />
-      )}
+      {step === 3 && summary && <CompleteStep email={summary.email} />}
     </>
   );
 }
