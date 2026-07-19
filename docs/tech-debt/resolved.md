@@ -4,6 +4,19 @@
 
 ---
 
+### ✅ SCSS primitive 토큰 직접 사용 20건 해소 (2026-07-19 해소)
+
+- **부채**: `.module.scss`가 primitive 토큰(`$gray-*`·`$black`·`$beige-*` 등)을 color·background·border에 직접 써 semantic 층을 건너뛰었다(`declaration-property-value-disallowed-list` warning 20건). ADR 0003이 정한 primitive↔semantic 분리를 안 지킨 자리들이다.
+- **해소**: 값이 같은 곳은 semantic으로 바꿨다(dropdown `$white`→`$bg-card` 등). 값 동일 semantic이 없는 곳은 가까운 semantic으로 바꾸거나(MobileNav `$black`→`$txt-primary`, Header 베이지→`$border-card`·`$bg-secondary`, 미세한 시각 변화를 감수하고) 사유 주석을 달았다(영상 레터박스·스켈레톤 `$gray`). 신규 토큰은 안 만들었다. exec-plan `2026-07-19-style-token-debt-cleanup`.
+- **확인**: `yarn lint:styles` primitive 경고 0건
+- **다음**: primitive·hex가 모두 0이 됐으니 `declaration-property-value-disallowed-list`·`color-no-hex` severity를 `warning`에서 `error`로 올려 새 위반이 다시 들어오지 못하게 막을 수 있다(별도 판단).
+
+### ✅ SCSS 하드코딩 hex 색상 해소 (2026-07-19 해소)
+
+- **부채**: `.module.scss`가 hex(`#fff`·`#ef4444`·`#ccc` 등)를 토큰 대신 직접 썼다(`color-no-hex` warning). 2026-07-02 기준 컴포넌트 33건이었고 `_home.scss`(토큰 정의 파일)까지 세면 49건이었다.
+- **해소**: 값이 같은 hex는 semantic으로 바꿨다(`#fff`→`$txt-inverse`, `#ef4444`→`$status-negative`, `#ccc`→`$border-primary`, `color.mix(#fff,…)`→`$txt-inverse`). 풍경 그라디언트는 사유 주석(블록 disable)으로 뒀다. `_home.scss` 같은 토큰 정의 파일은 hex가 값의 출처라 `color-no-hex` 예외를 `_color.scss`에서 `src/styles/tokens/**`로 넓혔다. exec-plan `2026-07-19-style-token-debt-cleanup`.
+- **확인**: `yarn lint:styles` hex 경고 0건
+
 ### ✅ Hover Border 위반 admin 5파일 해소 (2026-07-18 해소)
 
 - **부채**: admin 5파일 14곳이 `&:hover`에서 `border-color`를 바꿔 styles skill Hover 3원칙 #3(hover에 border 코드 금지)을 어겼다. sermons/news를 v4로 정리할 때 admin은 토큰 통합(ADR 0012) 뒤로 미뤄 남아 있었다.

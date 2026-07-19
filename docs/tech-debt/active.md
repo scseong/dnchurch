@@ -137,34 +137,6 @@
 - **2026-05-21**: `about/location/page.tsx` 해소 (`services/about/getLocationPageData` 경유) — 9건 → 8건
 - **2026-07-02 재측정**: 8건 → 5건. `Banner`는 홈 리디자인으로 `getSiteSettings` 호출이 빠졌고, `SignUpForm`·`EmailVerificationRequestForm`은 Server Action 전환으로 `apis/` 직접 import가 사라졌다.
 
-### 🟡 SCSS primitive 토큰 직접 사용 (20건)
-
-- **무엇**: `.module.scss`에서 primitive 토큰(`$gray-*`/`$navy-*`/`$gold-*`/`$beige-*`/`$cream-*`/`$black`/`$white`)을 color/border/background 등에 직접 사용. semantic 토큰(`$txt-*`/`$bg-*`/`$border-*`/`$primary`/`$accent`)을 거치지 않음
-- **왜**: ADR 0003(design-system-v3)이 primitive↔semantic 분리를 결정했지만 도구 가시화가 부재했음. 2026-05-10 stylelint guardrail PR에서 `declaration-property-value-disallowed-list` warning 룰 도입으로 가시화됨
-- **마이그레이션 경로**: 영역별 분리 PR(home / about / sermons / news / admin)로 점진 치환. `.claude/skills/styles/SKILL.md`의 "Primitive → Semantic 치트시트" 표 참조. 모두 정리한 뒤 별도 PR에서 룰 severity를 `warning` → `error`로 올림
-- **영향 범위**: `src/app/**/*.module.scss`, `src/components/**/*.module.scss` 다수
-- **확인**: `yarn lint:styles | grep "primitive 토큰 직접 사용"` (현재 20건)
-- **발견일**: 2026-05-10 (stylelint-primitive-guardrail PR 도입 시 정확 카운트)
-- **2026-06-15 갱신(영역별 토큰 정리 — PR #123)**: primitive→semantic 영역별 점진 치환을 home·about·news·공유 컴포넌트 4영역에 적용해 값 동일 별칭 104곳을 semantic으로 바꿨다. 값이 같은 별칭이 있는 곳만 바꿔 화면을 그대로 뒀다. 값이 같은 별칭이 없는 곳은 예외로 두고 아래에 분류했다. 영역별 결과:
-  - home: 45 → 3 (값 동일 별칭 42 치환, 예외 3). exec-plan `2026-06-15-home-tokens`.
-  - about: 36 → 4 (값 동일 별칭 32 치환, 예외 4). exec-plan `2026-06-15-about-tokens`.
-  - news: 11 → 0. `$gray-200` divider를 `$border-subtle`로, hover를 `$bg-hover`로, `$white`를 `$txt-inverse`로 바꿔 디자인 시스템 방향에 맞췄다(시각 미세 변경, 결정 B). exec-plan `2026-06-15-news-tokens`.
-  - 공유 컴포넌트: 37 → 18 (값 동일 별칭 19 치환, 예외 18). exec-plan `2026-06-15-components-tokens`.
-- **2026-07-02 재측정**: 25건 → 20건 (10파일). 홈·교회 소개 리디자인으로 옛 예외 자리(SermonCard·FormSubmitButton·FeedContent·beige 배경)가 컴포넌트째 사라졌고, 새 화면(SermonVideoPlayer·login 등)에서 새 직접 사용이 생겼다. 옛 잔여분은 값이 같은 semantic 토큰이 없는 디자인 시스템 공백이라, 사용자 결정(시각 변경 또는 신규 토큰) 전까지 둔다. 신규분(SermonVideoPlayer·login·admin dropdown)은 값 동일 별칭 존재 여부를 아직 대조하지 않았다. 파일별:
-  - `MobileNavigation` 5 · `SermonVideoPlayer` 3 · `Header` 2 · `PhotoSwipe` 2 · `BoardFooter` 2 · admin `SermonListPage/dropdown` 2
-  - `Hero` 1 · `BoardHeader` 1 · `BoardBody` 1 · `login/page` 1
-
-### 🟡 SCSS 하드코딩 색상 (33건)
-
-- **무엇**: `.module.scss` 파일 곳곳에서 hex 색상(`#xxxxxx`) 직접 사용. 토큰 변수가 아님
-- **왜**: stylelint 도입 전에 작성된 코드. 신규 작성은 stylelint warn으로 차단됨 (CLAUDE.md "하드코딩 절대 금지" 규칙)
-- **마이그레이션 경로**: 각 hex 값을 `src/styles/tokens/_color.scss`의 의미 단위 변수로 매핑 → 모두 해결 시 `.stylelintrc.json`의 `color-no-hex` 룰을 `warning` → 기본(error)로 올림
-- **영향 범위**: 33건 (17 파일), 주요 발생 위치는 `sermons/_component/`·`admin/`·홈·회원 컴포넌트
-- **확인**: `rg "#[0-9a-fA-F]{3,8}" -g "*.module.scss" src` → 33 hits
-- **발견일**: 2026-05-01 (stylelint 도입 시)
-- **2026-06-01 재확인**: #102 admin 토큰 통합 작업으로 admin hex가 토큰에 흡수돼 49건에서 23건(14 파일)으로 줄었다. tech-debt-pre-release plan의 5월 26일 재측정값과 일치한다.
-- **2026-07-02 재측정**: 23건 → 33건 (17파일). 홈·설교·회원 새 컴포넌트에서 hex가 늘었다 (`HeroCarousel` 3·`GridCard` 3·`AdvancedFilterSheet` 3·`UserProfileModal` 3 등). `color-no-hex`가 warning 수준이라 신규 유입을 커밋에서 막지 못한다.
-
 ### 🟢 ESLint `react-hooks/set-state-in-effect` (3건, 9건 정리됨)
 
 - **무엇**: useEffect 내 setState 직접 호출 (cascading rerender 가능성)
@@ -200,6 +172,10 @@
 - **확인**: `yarn knip`
 - **발견일**: 2026-05-01
 - **2026-07-02 재측정**: ~50건 → 86건. 미사용 타입 14 → 44 — `src/components/ui/index.ts` barrel이 타입까지 재export해 원본·barrel 양쪽이 같이 잡힌다. 미사용 파일 12에는 회원(`UserProfile`·`UserProfileModal`)·`about/worship` 옛 컴포넌트가 남아 있다.
+- **2026-07-19 부분 해소(knip-dead-code-cleanup)**:
+  - 지운 것: 미사용 파일 10 → 0(참조 0으로 검증한 파일 13개 + 연쇄로 죽은 `IconWrap`), 죽은 export 6개. 내부에서만 쓰는 3개는 `export`만 뗐다.
+  - 유지: 남은 미사용 export 8 + 타입 43. `Footer`(복원 예정)·`Carousel`·`useCarousel`·`CarouselArrows`와 타입 43개는 `components/ui` 재사용 킷의 공개 API이자 barrel이 자동으로 만든 재export라 둔다. `prettier`·`kakao.maps.d.ts`는 config가 쓰는 오탐이다.
+  - 다음: UI 킷 공개 API 정리 작업에서 barrel 재export 정책과 함께 판단한다.
 
 ### 🟢 exec-plan 형식 grep 가드 2종 (ADR 0011 D2 후속)
 
