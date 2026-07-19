@@ -95,9 +95,9 @@ Codex 지적 요지:
 
 ## Codex 1차 검증
 
-- **결론**: PASS_WITH_NITS (confidence high)
+- **결론**: PASS (confidence high) — nit 2건 중 unmount 반영, 타이밍은 주석 후속
 - **현재 판단**: 차단 없음. 레이어 위반·타입·외과적 변경 문제 없음, SCSS 토큰 정상. nit 2건 중 unmount 잔존은 반영, 타이밍 계약은 주석으로 남김.
-- **다음 행동**: verify-task 후 `## Claude 2차 검증` 기록, 사용자 승인 후 커밋
+- **다음 행동**: verify-task 후 Claude 2차 검증에 기록, 사용자 승인 후 커밋
 
 Codex 지적 요지:
 - nit1 — `SettingsSheet.tsx`의 `SHEET_CLOSE_MS=240`은 `BottomSheet` 전환 0.22s(`BottomSheet.module.scss:10,33`)에 맞춘 우회. `useScrollLock` cleanup이 `open=false`에서 즉시 `scrollTo`(`useScrollLock.tsx:36`)라 지금은 동작하나, 전환 시간·reduced-motion·effect 지연에는 계약이 없음 → `BottomSheet`에 `onAfterClose` 콜백이 더 견고.
@@ -109,7 +109,7 @@ Codex 지적 요지:
 
 ## Claude 2차 검증
 
-- **최종 판단**: 통과 — 필수 4단계 중 3개 통과, Knip 경고는 기존 부채
+- **최종 판단**: PASS — 필수 4단계 중 3개 통과, Knip 경고는 기존 부채
 - **현재 판단**: `verify-task` 결과 ESLint·stylelint·Build 통과. Knip 경고는 전부 기존 부채로, 신규 파일(settingsSheet.store·useSignOut·SettingsSheet) 언급 0건 — `grep`으로 확인. 라이브에서 톱니→시트·disabled·계정 관리 스크롤도 확인.
 - **다음 행동**: doc-editor 점검 후 사용자 승인 받아 커밋
 

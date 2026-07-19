@@ -108,7 +108,7 @@ Codex 지적 + 조치:
 
 ## Codex 1차 검증
 
-- **결론**: material 0건, nit 4건 (confidence high) — 직접 수정할 국소 버그 없음.
+- **결론**: PASS — material 0건, nit 4건 (confidence high), 직접 수정할 국소 버그 없음.
 - **현재 판단**: 레이어·외과적 변경 위반 없음. 설계·구현 견고. 로컬에서 가능한 축은 모두 통과.
 - **다음 행동**: nit 1(D2 fail-loud 기록) 반영 완료 → Claude 2차 검증 + prod 스모크 테스트를 후속으로.
 
@@ -123,7 +123,7 @@ Codex 답변 + 조치:
 
 ## Claude 2차 검증
 
-- **최종 판단**: 정적 검증(eslint·tsc·knip 0) + 라이브 이미지 3기간 육안 확인을 통과했다. 카카오 실카드·prod 이미지 실호출만 배포 후 몫이다.
+- **최종 판단**: PASS — 정적 검증(eslint·tsc·knip 0) + 라이브 이미지 3기간 육안 확인을 통과했다. 카카오 실카드·prod 이미지 실호출만 배포 후 몫이다.
 - **현재 판단**: dev 서버가 이 워크트리에서 돌아 `verify-task`(빌드 포함)는 dev 청크 손상 위험으로 보류했다(memory `feedback_no_build_during_dev`). `.next` 미접근 명령으로 대체했다.
 - **다음 행동**: 사용자 승인 후 커밋 → prod 배포 시 `GET /share/reading/image?...` 200·카카오 실카드 스모크 테스트.
 

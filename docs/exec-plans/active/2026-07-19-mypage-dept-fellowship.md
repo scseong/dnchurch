@@ -146,7 +146,7 @@ Codex 지적 요지 + 조치:
 
 - **결론**: CHANGE_REQUEST (confidence high) → 2건 조치 완료
 - **현재 판단**: 레이어·마이그레이션·join cast·외과적 변경은 clean. material 2건(역할/구역 불일치, 조용한 삭제)을 수정하고 라이브 재확인.
-- **다음 행동**: verify-task 후 `## Claude 2차 검증` 기록, 사용자 승인 후 커밋
+- **다음 행동**: verify-task 후 Claude 2차 검증에 기록, 사용자 승인 후 커밋
 
 Codex 지적 요지 + 조치:
 - F1 material — 구역이 없어도(`district_id` null) 역할을 구역장/리더로 저장 가능해, 부제에 "구역장"만 뜨는 프로필이 생김. → 액션에서 `district_id`가 null이면 역할을 '일반'으로 강제(`profile.action.ts`), 표시에서도 구역 있을 때만 역할 노출(`ProfileSection`), DB에 `check (district_id is not null or district_role = '일반')` 추가(마이그레이션 + dev 적용). 라이브 확인: 구역 없애자 부제가 "청년부"로 정리.
@@ -157,7 +157,7 @@ Codex 지적 요지 + 조치:
 
 ## Claude 2차 검증
 
-- **최종 판단**: 통과 — 필수 4단계 중 3개 통과, Knip 경고는 기존 부채
+- **최종 판단**: PASS — 필수 4단계 중 3개 통과, Knip 경고는 기존 부채
 - **현재 판단**: `verify-task` 결과 ESLint·stylelint·Build 통과. Knip 경고는 전부 기존 부채로, 신규 파일(reference·services/reference·ProfileWithOrg 등) 언급 0건 — `grep` 확인. 라이브에서 편집·저장·표시·F1 강제(구역 없애자 "청년부")까지 확인.
 - **다음 행동**: doc-editor 점검 후 사용자 승인 받아 커밋
 

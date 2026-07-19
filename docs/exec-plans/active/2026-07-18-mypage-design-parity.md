@@ -86,11 +86,11 @@ Codex 지적 요지:
 
 - **결론**: PASS (confidence high)
 - **현재 판단**: 구현 diff 5파일 검토 — 직접 수정 대상·반려 대상 모두 0건. 버그·타입·누락 guard·레이어 위반·외과적 변경 위반·토큰 하드코딩 없음.
-- **다음 행동**: 전체 verify-task 실행 후 `## Claude 2차 검증`에 기록, 사용자 승인 후 커밋
+- **다음 행동**: 전체 verify-task 실행 후 Claude 2차 검증에 기록, 사용자 승인 후 커밋
 
 ## Claude 2차 검증
 
-- **최종 판단**: 통과 — 필수 4단계 중 3개 통과, Knip 경고는 기존 부채
+- **최종 판단**: PASS — 필수 4단계 중 3개 통과, Knip 경고는 기존 부채
 - **현재 판단**: `verify-task` 실행 결과 ESLint·stylelint·Build 통과. Knip 경고 항목(useDebounce·sermon utils·UI barrel 등)은 전부 기존 부채로, 내 변경 파일(ShareSheet·Recorder·RecordTabs·TrackerSection·tracker.module.scss)과 무관 — `grep`으로 내 파일 언급 0건 확인.
 - **다음 행동**: doc-editor 점검 후 사용자 승인 받아 커밋
 

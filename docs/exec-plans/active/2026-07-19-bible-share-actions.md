@@ -114,7 +114,7 @@ Codex 지적 요지 + 조치:
 
 ## Codex 1차 검증
 
-- **결론**: 차단 없음 — 버그·레이어 위반·외과적 위반이 0건이다. nit 2건이 남았고, SC 7은 아직 실증하지 못했다.
+- **결론**: PASS — 버그·레이어 위반·외과적 위반이 0건이다. nit 2건이 남았고, SC 7은 아직 실증하지 못했다.
 - **현재 판단**: D1~D3 구현이 SC 1~6을 코드 수준에서 충족. Codex가 직접 수정한 항목 없음(수정 대상 버그 없음).
 - **다음 행동**: nit 1 반영 완료 → Claude 2차 검증 + 라이브 PNG 실증(SC 7).
 
@@ -127,7 +127,7 @@ Codex 지적 + 조치:
 
 ## Claude 2차 검증
 
-- **최종 판단**: SC 1~7을 모두 충족했다. 정적 검증(eslint·stylelint·tsc 0) + 공유 페이지 curl + 3버튼 사용자 실측이 통과했다. 카카오 카드 이미지 실표시만 prod 몫이다(dev는 localhost라 카카오가 이미지를 못 가져온다 — D4).
+- **최종 판단**: PASS — SC 1~7을 모두 충족했다. 정적 검증(eslint·stylelint·tsc 0) + 공유 페이지 curl + 3버튼 사용자 실측이 통과했다. 카카오 카드 이미지 실표시만 prod 몫이다(dev는 localhost라 카카오가 이미지를 못 가져온다 — D4).
 - **현재 판단**: dev 서버가 이 워크트리에서 실행 중이라 `yarn build`·`verify-task`는 dev 청크 손상 위험으로 보류했다(memory `feedback_no_build_during_dev`). `.next` 미접근 명령(eslint·stylelint·tsc)으로 대체했다.
 - **다음 행동**: 사용자 승인 후 baseline 커밋 → 카카오 카드 이미지를 통계 시각 카드로 만드는 E-full(next/og)은 별도 task로.
 
