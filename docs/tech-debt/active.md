@@ -172,7 +172,7 @@
 - **마이그레이션 경로**:
   - `ConfirmModal/index.tsx:47` — portal transition 중 prop 동기화. `useDialog` 통합 작업 시 재검토
   - `useDrawerHistory.ts:52` — pathname 변경에 따른 외부 상태 동기화. 외부 router 이벤트로 옮길 수 있는지 검토
-  - `ClientPortal.tsx:23` — disable 주석에 사유가 없다. 정당한 패턴인지 확인해 사유를 적거나 고친다
+  - `ClientPortal.tsx:23` — hydration mismatch 방지용 client-only mount 게이트여서 유지가 정당하다. 2026-07-19 인라인 `-- 사유` 주석을 붙여 셋 다 형식을 맞췄다
 - **영향 범위** (3건):
   - `src/components/admin/common/ConfirmModal/index.tsx:47`
   - `src/hooks/useDrawerHistory.ts:52`
@@ -181,6 +181,7 @@
 - **발견일**: 2026-05-01
 - **재확인일**: 2026-05-21 (1건 → 2건, useDrawerHistory 추가됨)
 - **2026-07-02 재확인**: 2건 → 3건 (ClientPortal 추가 — 셋 중 유일하게 disable 사유 주석이 없음)
+- **2026-07-19**: ClientPortal에 인라인 사유 주석을 붙여 셋 다 line-disable 주석에 사유를 함께 달았다. 셋 다 외부 동기화가 정당한 패턴이라 유지한다(제거 대상 아님).
 
 ### 🟡 ESLint warnings (18건)
 

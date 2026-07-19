@@ -20,7 +20,7 @@ export function ClientPortal({ children }: PropsWithChildren) {
   useEffect(() => {
     // 서버·hydration 첫 렌더를 null로 맞춘 뒤 mount 후 1회만 portal을 켠다.
     // 이 client-only 게이트는 set-state-in-effect가 본질이라 의도적 (queueMicrotask 금지 규칙 준수).
-    // eslint-disable-next-line react-hooks/set-state-in-effect
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- client-only mount 게이트: hydration 후 1회만 portal 활성 (위 주석 참조)
     setMounted(true);
   }, []);
 
