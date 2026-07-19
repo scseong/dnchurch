@@ -6,12 +6,6 @@ import type {
   SermonSortKey
 } from '@/types/sermon';
 
-export function hasVideo<T extends Pick<Sermon, 'video_id'>>(
-  sermon: T,
-): sermon is T & { video_id: string } {
-  return typeof sermon.video_id === 'string' && sermon.video_id.length > 0;
-}
-
 export function getSermonThumbnail(
   sermon: Pick<Sermon, 'thumbnail_url' | 'video_id' | 'video_provider'>,
 ): string | null {
@@ -68,7 +62,7 @@ export function resolvePreacherName(
  * `preacher.title` DB 원문(예: "담임목사", "부목사", "전임전도사")을 직분 토큰(목사/전도사/강도사 등)으로 정규화.
  * 매핑 안 되는 값은 원문 그대로 (확장성 — 새 직분 도입 시 명시적 enum 추가 전까지 fallback).
  */
-export function formatPreacherTitle(title: string | null | undefined): string {
+function formatPreacherTitle(title: string | null | undefined): string {
   if (!title) return '';
   if (title.endsWith('전도사')) return '전도사';
   if (title.endsWith('목사')) return '목사';

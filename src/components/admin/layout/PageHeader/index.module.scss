@@ -90,7 +90,6 @@
   cursor: pointer;
   transition:
     background 0.15s,
-    border-color 0.15s,
     color 0.15s;
 
   &.outline {
@@ -99,7 +98,6 @@
     color: $txt-secondary;
 
     &:hover {
-      border-color: $txt-admin-tertiary;
       color: $txt-primary;
     }
 
@@ -113,10 +111,10 @@
   &.pri {
     border: 0;
     background: $primary;
-    color: #fff;
+    color: $txt-inverse;
 
     &:hover {
-      background: color.mix(#fff, $primary, 8%);
+      background: color.mix($txt-inverse, $primary, 8%);
     }
   }
 }

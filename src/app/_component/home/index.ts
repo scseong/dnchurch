@@ -6,6 +6,4 @@ export { default as RecentSermons } from './RecentSermons';
 export { default as NewHere } from './NewHere';
 export { default as PhotoGallery } from './PhotoGallery';
 export { default as LoginPrompt } from './LoginPrompt';
-export { default as AboutOurChurch } from './AboutOurChurch';
-export { default as ChurchVision } from './ChurchVision';
 export { default as ChurchJsonLd } from './ChurchJsonLd';

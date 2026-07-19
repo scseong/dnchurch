@@ -31,10 +31,3 @@ export async function signInWithKakao(redirect = '/') {
   if (error) throw error;
   return data;
 }
-
-export async function signOut() {
-  const supabase = getSupabaseBrowserClient();
-  const { error } = await supabase.auth.signOut();
-
-  if (error) throw error;
-}

@@ -18,7 +18,7 @@ export type AdminNavSection = {
   items: AdminNavItem[];
 };
 
-export const ADMIN_ROOT = '/admin';
+const ADMIN_ROOT = '/admin';
 
 export const ADMIN_NAV_SECTIONS: AdminNavSection[] = [
   {

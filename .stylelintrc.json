@@ -87,7 +87,7 @@
   },
   "overrides": [
     {
-      "files": ["src/styles/tokens/_color.scss"],
+      "files": ["src/styles/tokens/**"],
       "rules": {
         "color-no-hex": null
       }

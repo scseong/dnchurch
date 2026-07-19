@@ -139,12 +139,9 @@ $action-bar-height: 64px;
   font-family: inherit;
   text-align: center;
   cursor: pointer;
-  transition:
-    border-color 0.15s,
-    background 0.15s;
+  transition: background 0.15s;
 
   &:hover {
-    border-color: $primary-soft;
     background: $primary-soft-subtle;
   }
 }
@@ -199,7 +196,7 @@ $action-bar-height: 64px;
   padding: 3px 8px;
   border-radius: 100px;
   background: rgba(15, 20, 30, 0.72);
-  color: #fff;
+  color: $txt-inverse;
   font-size: 10px;
   font-weight: 600;
 }
@@ -336,12 +333,9 @@ $action-bar-height: 64px;
   font-size: 12px;
   font-weight: 500;
   cursor: pointer;
-  transition:
-    border-color 0.15s,
-    color 0.15s;
+  transition: color 0.15s;
 
   &:hover {
-    border-color: $primary-soft;
     color: $primary-soft;
   }
 }
@@ -368,7 +362,6 @@ $action-bar-height: 64px;
     color 0.15s;
 
   &:hover {
-    border-color: $txt-admin-tertiary;
     color: $txt-primary;
   }
 
@@ -516,12 +509,9 @@ $action-bar-height: 64px;
   color: $txt-secondary;
   font-size: 18px;
   cursor: pointer;
-  transition:
-    border-color 0.15s,
-    color 0.15s;
+  transition: color 0.15s;
 
   &:hover {
-    border-color: $txt-admin-tertiary;
     color: $txt-primary;
   }
 
@@ -551,12 +541,9 @@ $action-bar-height: 64px;
   font-size: 13px;
   font-weight: 600;
   cursor: pointer;
-  transition:
-    border-color 0.15s,
-    color 0.15s;
+  transition: color 0.15s;
 
   &:hover {
-    border-color: $txt-admin-tertiary;
     color: $txt-primary;
   }
 
@@ -575,7 +562,7 @@ $action-bar-height: 64px;
   border: 0;
   border-radius: 6px;
   background: $primary;
-  color: #fff;
+  color: $txt-inverse;
   font-family: inherit;
   font-size: 13px;
   font-weight: 600;
@@ -583,7 +570,7 @@ $action-bar-height: 64px;
   transition: background 0.15s;
 
   &:hover {
-    background: color.mix(#fff, $primary, 8%);
+    background: color.mix($txt-inverse, $primary, 8%);
   }
 
   &:disabled {

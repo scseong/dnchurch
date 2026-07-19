@@ -25,7 +25,6 @@
     box-shadow 0.15s $transition-easing-default;
 
   &:hover {
-    border-color: $border-primary;
     color: $txt-primary;
   }
 
@@ -43,7 +42,6 @@
   font-weight: 600;
 
   &:hover {
-    border-color: $primary-soft;
     color: $primary-soft;
   }
 }
@@ -55,7 +53,7 @@
   padding: 1px 6px;
   background: $primary-soft;
   border-radius: 100px;
-  color: #fff;
+  color: $txt-inverse;
   font-size: 10px;
   font-weight: 700;
 }
@@ -73,7 +71,7 @@
   min-width: 240px;
   max-width: 300px;
   padding: 12px;
-  background: $white;
+  background: $bg-card;
   border: 1px solid $border-primary;
   border-radius: $radius-xs;
   box-shadow: $shadow-md;
@@ -236,7 +234,7 @@
   padding: 11px 12px;
   border: 1px solid $border-primary;
   border-radius: 6px;
-  background: $white;
+  background: $bg-card;
   color: $txt-primary;
   font-size: $font-size-14;
   transition:

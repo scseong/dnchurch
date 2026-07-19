@@ -4,6 +4,35 @@
 
 ---
 
+### ✅ SCSS primitive 토큰 직접 사용 20건 해소 (2026-07-19 해소)
+
+- **부채**: `.module.scss`가 primitive 토큰(`$gray-*`·`$black`·`$beige-*` 등)을 color·background·border에 직접 써 semantic 층을 건너뛰었다(`declaration-property-value-disallowed-list` warning 20건). ADR 0003이 정한 primitive↔semantic 분리를 안 지킨 자리들이다.
+- **해소**: 값이 같은 곳은 semantic으로 바꿨다(dropdown `$white`→`$bg-card` 등). 값 동일 semantic이 없는 곳은 가까운 semantic으로 바꾸거나(MobileNav `$black`→`$txt-primary`, Header 베이지→`$border-card`·`$bg-secondary`, 미세한 시각 변화를 감수하고) 사유 주석을 달았다(영상 레터박스·스켈레톤 `$gray`). 신규 토큰은 안 만들었다. exec-plan `2026-07-19-style-token-debt-cleanup`.
+- **확인**: `yarn lint:styles` primitive 경고 0건
+- **다음**: primitive·hex가 모두 0이 됐으니 `declaration-property-value-disallowed-list`·`color-no-hex` severity를 `warning`에서 `error`로 올려 새 위반이 다시 들어오지 못하게 막을 수 있다(별도 판단).
+
+### ✅ SCSS 하드코딩 hex 색상 해소 (2026-07-19 해소)
+
+- **부채**: `.module.scss`가 hex(`#fff`·`#ef4444`·`#ccc` 등)를 토큰 대신 직접 썼다(`color-no-hex` warning). 2026-07-02 기준 컴포넌트 33건이었고 `_home.scss`(토큰 정의 파일)까지 세면 49건이었다.
+- **해소**: 값이 같은 hex는 semantic으로 바꿨다(`#fff`→`$txt-inverse`, `#ef4444`→`$status-negative`, `#ccc`→`$border-primary`, `color.mix(#fff,…)`→`$txt-inverse`). 풍경 그라디언트는 사유 주석(블록 disable)으로 뒀다. `_home.scss` 같은 토큰 정의 파일은 hex가 값의 출처라 `color-no-hex` 예외를 `_color.scss`에서 `src/styles/tokens/**`로 넓혔다. exec-plan `2026-07-19-style-token-debt-cleanup`.
+- **확인**: `yarn lint:styles` hex 경고 0건
+
+### ✅ Hover Border 위반 admin 5파일 해소 (2026-07-18 해소)
+
+- **부채**: admin 5파일 14곳이 `&:hover`에서 `border-color`를 바꿔 styles skill Hover 3원칙 #3(hover에 border 코드 금지)을 어겼다. sermons/news를 v4로 정리할 때 admin은 토큰 통합(ADR 0012) 뒤로 미뤄 남아 있었다.
+- **해소**: 각 hover의 `border-color`를 지웠다. 버튼·탭은 hover에서 색·배경만 바꾸고, 클릭 카드(`table`의 `.mobile_card`)는 `@include hover-lift`로 바꿨다. `.on`·`.primary`·`:focus-visible`의 정적·포커스 border는 그대로 뒀다. hover 밖에서 border가 안 바뀌는 곳은 `transition`에서도 `border-color`를 뺐다.
+- **확인**:
+  - `SermonForm/index`·`table`·`dropdown`·`AdminHeader`·`PageHeader`의 hover 블록 안 `border-color` → 0곳
+  - `yarn build` 통과, `yarn lint:styles` 새 경고 0
+
+### ✅ 죽은 RPC 마이그레이션 `get_sermon_year_counts` 삭제 (2026-07-18 해소)
+
+- **부채**: 마이그레이션 `20260430000000_add_sermon_year_counts_rpc.sql`이 만드는 RPC. 소비 UI가 사라진 뒤 JS 쪽 `yearCounts`·`YearCount`는 P3(선행 리팩터링 3단계)에서 지웠는데 마이그레이션 파일만 남아, 마이그레이션을 처음부터 다시 적용하면(fresh replay) 아무도 안 부르는 함수가 생긴다.
+- **해소**: 파일을 지웠다. dev `pg_proc`와 적용 목록에 이 함수가 없어(2026-07-02 실측) DROP 마이그레이션 없이 파일만 지워도 dev·prod와 어긋나지 않는다.
+- **확인**:
+  - `rg "get_sermon_year_counts" src` → 0건
+  - `ls supabase/migrations/*sermon_year_counts*` → 파일 없음
+
 ### ✅ 마이페이지가 미완성 — 인증 확인·본문 없음 (2026-07-19 해소, my-page PR #153)
 
 - **부채**: BottomNav 5번째 탭 `/mypage`가 `Mypage` 텍스트만 렌더하고, 인증 확인·로그인 리다이렉트가 없어 상시 노출 탭이 미완성 화면으로 이어졌다 (2026-06-26 PR #132 codex 재리뷰 #C에서 등록).

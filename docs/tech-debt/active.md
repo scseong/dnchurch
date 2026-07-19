@@ -38,15 +38,6 @@
 - **확인**: `mcp__claude_ai_Supabase__get_advisors` (performance·security) 재실행
 - **발견일**: 2026-07-02 (리팩토링 감사 — advisor 실 DB 점검), 2026-07-02 4카테고리 해소(PR #139)
 
-### 🟢 죽은 RPC 마이그레이션 `get_sermon_year_counts` — src 참조 0·dev 미적용 (2026-07-02 감사 P3)
-
-- **무엇**: 마이그레이션 `20260430000000_add_sermon_year_counts_rpc.sql`이 만드는 RPC. 이를 호출하려던 `sermonService.yearCounts`는 커밋 `266e693 숨은 year 필터 제거`로 소비 UI가 사라져 죽었고, P3(refactor/p3-dead-code-cleanup)에서 JS 쪽 `yearCounts`·`YearCount`를 삭제했다. 남은 것은 마이그레이션 파일이다 — fresh replay(Preview·미래 prod 구축)가 아무도 안 부르는 함수를 만든다.
-- **2026-07-02 실측**: dev `pg_proc`에 이 함수가 없고, dev 적용 목록(`supabase_migrations.schema_migrations`)에도 이 파일이 없다. dev는 마이그레이션 추적 시작 전에 손으로 만들어져 이 RPC가 적용된 적이 없다 — 실 DB에서 DROP할 대상이 없다.
-- **왜 지금 안 하나**: 마이그레이션 정리는 코드만 바꾸는 P3에 안 섞었다(사용자 결정). advisor INFO 수준이라 급하지 않다.
-- **마이그레이션 경로**: 파일 `20260430000000_add_sermon_year_counts_rpc.sql`을 삭제한다. 적용된 실 DB가 없어(위 실측) 삭제 마이그레이션 없이 파일만 지워도 dev·prod와 어긋나지 않는다.
-- **확인**: `rg "get_sermon_year_counts" src` 0건 + dev `pg_proc` 조회 0건
-- **발견일**: 2026-07-02 (리팩토링 감사 P3)
-
 ### 🟢 섬기는 사람들 — legacy public/ 프로필 이미지를 Cloudinary로 아직 안 옮김 (감사 P4)
 
 - **무엇**: `serving-people/page.tsx:57`이 `staff.image_url`이 `/`로 시작하는 legacy `public/` 자산이면 raw `<img>` 분기를 탄다(eslint-disable로 의도 표시). Cloudinary 자산은 이미 `<CloudinaryImage>`를 쓰므로, 남은 것은 코드가 아니라 데이터다.
@@ -137,34 +128,6 @@
 - **2026-05-21**: `about/location/page.tsx` 해소 (`services/about/getLocationPageData` 경유) — 9건 → 8건
 - **2026-07-02 재측정**: 8건 → 5건. `Banner`는 홈 리디자인으로 `getSiteSettings` 호출이 빠졌고, `SignUpForm`·`EmailVerificationRequestForm`은 Server Action 전환으로 `apis/` 직접 import가 사라졌다.
 
-### 🟡 SCSS primitive 토큰 직접 사용 (20건)
-
-- **무엇**: `.module.scss`에서 primitive 토큰(`$gray-*`/`$navy-*`/`$gold-*`/`$beige-*`/`$cream-*`/`$black`/`$white`)을 color/border/background 등에 직접 사용. semantic 토큰(`$txt-*`/`$bg-*`/`$border-*`/`$primary`/`$accent`)을 거치지 않음
-- **왜**: ADR 0003(design-system-v3)이 primitive↔semantic 분리를 결정했지만 도구 가시화가 부재했음. 2026-05-10 stylelint guardrail PR에서 `declaration-property-value-disallowed-list` warning 룰 도입으로 가시화됨
-- **마이그레이션 경로**: 영역별 분리 PR(home / about / sermons / news / admin)로 점진 치환. `.claude/skills/styles/SKILL.md`의 "Primitive → Semantic 치트시트" 표 참조. 모두 정리한 뒤 별도 PR에서 룰 severity를 `warning` → `error`로 올림
-- **영향 범위**: `src/app/**/*.module.scss`, `src/components/**/*.module.scss` 다수
-- **확인**: `yarn lint:styles | grep "primitive 토큰 직접 사용"` (현재 20건)
-- **발견일**: 2026-05-10 (stylelint-primitive-guardrail PR 도입 시 정확 카운트)
-- **2026-06-15 갱신(영역별 토큰 정리 — PR #123)**: primitive→semantic 영역별 점진 치환을 home·about·news·공유 컴포넌트 4영역에 적용해 값 동일 별칭 104곳을 semantic으로 바꿨다. 값이 같은 별칭이 있는 곳만 바꿔 화면을 그대로 뒀다. 값이 같은 별칭이 없는 곳은 예외로 두고 아래에 분류했다. 영역별 결과:
-  - home: 45 → 3 (값 동일 별칭 42 치환, 예외 3). exec-plan `2026-06-15-home-tokens`.
-  - about: 36 → 4 (값 동일 별칭 32 치환, 예외 4). exec-plan `2026-06-15-about-tokens`.
-  - news: 11 → 0. `$gray-200` divider를 `$border-subtle`로, hover를 `$bg-hover`로, `$white`를 `$txt-inverse`로 바꿔 디자인 시스템 방향에 맞췄다(시각 미세 변경, 결정 B). exec-plan `2026-06-15-news-tokens`.
-  - 공유 컴포넌트: 37 → 18 (값 동일 별칭 19 치환, 예외 18). exec-plan `2026-06-15-components-tokens`.
-- **2026-07-02 재측정**: 25건 → 20건 (10파일). 홈·교회 소개 리디자인으로 옛 예외 자리(SermonCard·FormSubmitButton·FeedContent·beige 배경)가 컴포넌트째 사라졌고, 새 화면(SermonVideoPlayer·login 등)에서 새 직접 사용이 생겼다. 옛 잔여분은 값이 같은 semantic 토큰이 없는 디자인 시스템 공백이라, 사용자 결정(시각 변경 또는 신규 토큰) 전까지 둔다. 신규분(SermonVideoPlayer·login·admin dropdown)은 값 동일 별칭 존재 여부를 아직 대조하지 않았다. 파일별:
-  - `MobileNavigation` 5 · `SermonVideoPlayer` 3 · `Header` 2 · `PhotoSwipe` 2 · `BoardFooter` 2 · admin `SermonListPage/dropdown` 2
-  - `Hero` 1 · `BoardHeader` 1 · `BoardBody` 1 · `login/page` 1
-
-### 🟡 SCSS 하드코딩 색상 (33건)
-
-- **무엇**: `.module.scss` 파일 곳곳에서 hex 색상(`#xxxxxx`) 직접 사용. 토큰 변수가 아님
-- **왜**: stylelint 도입 전에 작성된 코드. 신규 작성은 stylelint warn으로 차단됨 (CLAUDE.md "하드코딩 절대 금지" 규칙)
-- **마이그레이션 경로**: 각 hex 값을 `src/styles/tokens/_color.scss`의 의미 단위 변수로 매핑 → 모두 해결 시 `.stylelintrc.json`의 `color-no-hex` 룰을 `warning` → 기본(error)로 올림
-- **영향 범위**: 33건 (17 파일), 주요 발생 위치는 `sermons/_component/`·`admin/`·홈·회원 컴포넌트
-- **확인**: `rg "#[0-9a-fA-F]{3,8}" -g "*.module.scss" src` → 33 hits
-- **발견일**: 2026-05-01 (stylelint 도입 시)
-- **2026-06-01 재확인**: #102 admin 토큰 통합 작업으로 admin hex가 토큰에 흡수돼 49건에서 23건(14 파일)으로 줄었다. tech-debt-pre-release plan의 5월 26일 재측정값과 일치한다.
-- **2026-07-02 재측정**: 23건 → 33건 (17파일). 홈·설교·회원 새 컴포넌트에서 hex가 늘었다 (`HeroCarousel` 3·`GridCard` 3·`AdvancedFilterSheet` 3·`UserProfileModal` 3 등). `color-no-hex`가 warning 수준이라 신규 유입을 커밋에서 막지 못한다.
-
 ### 🟢 ESLint `react-hooks/set-state-in-effect` (3건, 9건 정리됨)
 
 - **무엇**: useEffect 내 setState 직접 호출 (cascading rerender 가능성)
@@ -172,7 +135,7 @@
 - **마이그레이션 경로**:
   - `ConfirmModal/index.tsx:47` — portal transition 중 prop 동기화. `useDialog` 통합 작업 시 재검토
   - `useDrawerHistory.ts:52` — pathname 변경에 따른 외부 상태 동기화. 외부 router 이벤트로 옮길 수 있는지 검토
-  - `ClientPortal.tsx:23` — disable 주석에 사유가 없다. 정당한 패턴인지 확인해 사유를 적거나 고친다
+  - `ClientPortal.tsx:23` — hydration mismatch 방지용 client-only mount 게이트여서 유지가 정당하다. 2026-07-19 인라인 `-- 사유` 주석을 붙여 셋 다 형식을 맞췄다
 - **영향 범위** (3건):
   - `src/components/admin/common/ConfirmModal/index.tsx:47`
   - `src/hooks/useDrawerHistory.ts:52`
@@ -181,6 +144,7 @@
 - **발견일**: 2026-05-01
 - **재확인일**: 2026-05-21 (1건 → 2건, useDrawerHistory 추가됨)
 - **2026-07-02 재확인**: 2건 → 3건 (ClientPortal 추가 — 셋 중 유일하게 disable 사유 주석이 없음)
+- **2026-07-19**: ClientPortal에 인라인 사유 주석을 붙여 셋 다 line-disable 주석에 사유를 함께 달았다. 셋 다 외부 동기화가 정당한 패턴이라 유지한다(제거 대상 아님).
 
 ### 🟡 ESLint warnings (18건)
 
@@ -199,6 +163,10 @@
 - **확인**: `yarn knip`
 - **발견일**: 2026-05-01
 - **2026-07-02 재측정**: ~50건 → 86건. 미사용 타입 14 → 44 — `src/components/ui/index.ts` barrel이 타입까지 재export해 원본·barrel 양쪽이 같이 잡힌다. 미사용 파일 12에는 회원(`UserProfile`·`UserProfileModal`)·`about/worship` 옛 컴포넌트가 남아 있다.
+- **2026-07-19 부분 해소(knip-dead-code-cleanup)**:
+  - 지운 것: 미사용 파일 10 → 0(참조 0으로 검증한 파일 13개 + 연쇄로 죽은 `IconWrap`), 죽은 export 6개. 내부에서만 쓰는 3개는 `export`만 뗐다.
+  - 유지: 남은 미사용 export 8 + 타입 43. `Footer`(복원 예정)·`Carousel`·`useCarousel`·`CarouselArrows`와 타입 43개는 `components/ui` 재사용 킷의 공개 API이자 barrel이 자동으로 만든 재export라 둔다. `prettier`·`kakao.maps.d.ts`는 config가 쓰는 오탐이다.
+  - 다음: UI 킷 공개 API 정리 작업에서 barrel 재export 정책과 함께 판단한다.
 
 ### 🟢 exec-plan 형식 grep 가드 2종 (ADR 0011 D2 후속)
 
@@ -230,17 +198,6 @@
 - **현재 상태**: 코드베이스에 상대 경로 layer crossing은 0건. 위험은 미래 방지용
 - **마이그레이션 경로**: `eslint-plugin-import`의 `no-relative-parent-imports` 또는 `eslint-plugin-boundaries` 도입 검토 (별도 EXEC_PLAN)
 - **발견일**: 2026-05-01 (Codex 리뷰)
-
-### 🟢 Hover Border 위반 — admin 영역 남은 분 (5파일·13곳)
-
-- **무엇**: hover 시 `border-color`/`border` 변경 — `.claude/skills/styles/SKILL.md` Hover 3원칙 #3 위반. admin 5파일만 남음
-- **왜**: v4 마이그레이션이 sermons/news 영역에 한정됐다. home은 2026-05-07 home cleanup에서 해소(resolved.md), admin은 admin 토큰 ADR 결정 후로 분리
-- **마이그레이션 경로**: admin 5건은 admin 토큰 통합(ADR 0012)이 끝났으니 hover border를 제거하고 `hover-lift`/shadow로 대체
-- **영향 범위** (admin 5건):
-  - `src/components/admin/sermons/SermonListPage/{dropdown,table}.module.scss`, `src/components/admin/sermons/SermonForm/index.module.scss`, `src/components/admin/layout/{PageHeader,AdminHeader}/index.module.scss`
-- **2026-06-02 갱신**: home 5건은 2026-05-07 home cleanup에서 이미 해소 확인(FeedContent transition은 탭 상태 전환이라 위반 아님). 10건 → admin 5건으로 축소
-- **2026-07-02 재측정**: 같은 5파일에서 13곳 (`SermonForm/index` 5·`table` 4·`dropdown` 2·`AdminHeader` 1·`PageHeader` 1) — admin 화면 개편으로 hover border가 늘었다.
-- **발견일**: 2026-05-07 (Codex 디자인 시스템 audit)
 
 ### 🟢 토큰 부채 — 디자인 시스템 v4 미완 남은 부분 (hex/rgba 직접 사용)
 

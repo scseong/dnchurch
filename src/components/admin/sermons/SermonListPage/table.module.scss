@@ -143,7 +143,7 @@
   padding: 0 3px;
   background: rgba(15, 20, 30, 0.78);
   border-radius: 2px;
-  color: #fff;
+  color: $txt-inverse;
   font-size: 9px;
   font-weight: 600;
   line-height: 1.4;
@@ -276,19 +276,17 @@
   font-weight: 600;
   cursor: pointer;
   transition:
-    border-color 0.15s $transition-easing-default,
     background 0.15s $transition-easing-default,
     color 0.15s $transition-easing-default;
 
   &:hover {
-    border-color: $border-primary;
     background: $bg-admin-subtle;
   }
 
   &.primary {
     border-color: $primary-soft;
     background: $primary-soft;
-    color: #fff;
+    color: $txt-inverse;
 
     &:hover {
       filter: brightness(0.95);
@@ -328,18 +326,15 @@
   cursor: pointer;
   transition:
     background 0.15s $transition-easing-default,
-    border-color 0.15s $transition-easing-default,
     color 0.15s $transition-easing-default;
 
   &:hover {
     background: $bg-admin-subtle;
-    border-color: $border-primary;
     color: $txt-primary;
   }
 
   &.danger:hover {
     background: rgba($status-negative-soft, 0.06);
-    border-color: $status-negative-soft;
     color: $status-negative-soft;
   }
 }
@@ -380,12 +375,10 @@
   cursor: pointer;
   transition:
     background 0.15s $transition-easing-default,
-    border-color 0.15s $transition-easing-default,
     color 0.15s $transition-easing-default;
 
   &:hover:not(:disabled) {
     background: $bg-admin-subtle;
-    border-color: $border-primary;
     color: $txt-primary;
   }
 
@@ -397,7 +390,7 @@
   &.on {
     background: $primary;
     border-color: $primary;
-    color: #fff;
+    color: $txt-inverse;
     font-weight: 600;
   }
 }
@@ -453,11 +446,8 @@
   border: 1px solid $border-admin;
   border-radius: 8px;
   cursor: pointer;
-  transition: border-color 0.15s $transition-easing-default;
 
-  &:hover {
-    border-color: $border-primary;
-  }
+  @include hover-lift;
 }
 
 .mobile_card_top {

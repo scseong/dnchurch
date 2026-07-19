@@ -25,14 +25,6 @@ export const stripRootPrefix = (publicId: string): string => {
   return cleaned.startsWith(prefix) ? cleaned.slice(prefix.length) : cleaned;
 };
 
-// 정적 자산(코드에서 직접 참조하는 사이트 이미지)의 public_id 합성: <CloudinaryImage src={siteAsset('home/sketch')} />
-export const siteAsset = (relativePath: string): string => {
-  const cleaned = relativePath.replace(/^\/+|\/+$/g, '');
-  if (!cleaned) throw new Error('siteAsset: relativePath cannot be empty');
-  if (cleaned.includes('//')) throw new Error('siteAsset: relativePath cannot contain "//"');
-  return ROOT_FOLDER ? `${ROOT_FOLDER}/site/${cleaned}` : `site/${cleaned}`;
-};
-
 // 동적 업로드(주보·설교 등 DB 첨부 자산)의 업로드 folder path 합성: uploadFolder('bulletins', '2026', '03', '28')
 export const uploadFolder = (domain: string, ...parts: string[]): string => {
   assertSegment(domain, 'uploadFolder');
