@@ -1,6 +1,6 @@
 # bible-share-actions
 
-- **상태**: 🟡 진행 중
+- **상태**: ✅ 완료 (2026-07-19)
 - **시작일**: 2026-07-19
 - **브랜치**: feat/my-page
 - **Open questions**: none
@@ -163,6 +163,20 @@ Codex 지적 + 조치:
   - 이유: <왜 이번에 안 하나>
   - 다음 기준: <언제 다시 하나>
   - 기록 위치: `docs/tech-debt/active.md` 또는 없음 -->
+
+## 회고
+
+**잘된 것**
+- 저장소 0으로 공유 3버튼을 실기능으로 바꿨다 — 공개 페이지 `/share/reading`가 통계를 URL 파라미터로 받고, 카카오는 `sendDefault`로 제목·통계를 직접 넘긴다. Cloudinary 업로드(B)를 스토리지 부담으로 기각한 사용자 결정을 지켰다.
+- dev 실측에서 `sendScrap`이 빈 카드로 뜨는 것을 발견해(카카오 서버가 localhost에 못 닿음) `sendDefault`로 바꿨다(D4). 덕분에 dev에서도 카드 텍스트가 뜨고 훅이 원상 복구됐다. `robots: { index: false }`로 통계 담긴 얇은 중복 URL의 색인을 막았다(D3).
+
+**다음에 할 것**
+- 카카오 카드 이미지 실표시는 prod 몫이다 — localhost는 카카오가 이미지를 가져오지 못한다. Kakao Developers 콘솔 도메인 등록도 필요하다(기존 tech-debt).
+- 카카오 카드 이미지를 통계 시각 카드로 바꾸는 E-full은 후속 bible-share-og-image plan에서 이어 구현·머지했다.
+
+**발견된 부채**
+- `html-to-image`가 `ShareSheet`에 정적 import돼 이미지 저장을 안 쓰는 사용자도 마이페이지 첫 로드 JS로 받는다 — 이번 머지 전 점검에서 tech-debt로 등록(다음 PR에서 동적 import).
+- `NEXT_PUBLIC_SITE_URL`에 trailing slash가 있으면 `//share` 이중 슬래시가 된다(Codex nit, 기존 `shareUrl`과 같은 패턴이라 이번 회귀는 아님).
 
 ---
 

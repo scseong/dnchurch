@@ -4,6 +4,12 @@
 
 ---
 
+### ✅ 마이페이지가 미완성 — 인증 확인·본문 없음 (2026-07-19 해소, my-page PR #153)
+
+- **부채**: BottomNav 5번째 탭 `/mypage`가 `Mypage` 텍스트만 렌더하고, 인증 확인·로그인 리다이렉트가 없어 상시 노출 탭이 미완성 화면으로 이어졌다 (2026-06-26 PR #132 codex 재리뷰 #C에서 등록).
+- **해소**: my-page PR #153에서 실제 회원 페이지를 만들었다. `page.tsx`가 `getMySessionProfile()`로 세션을 확인하고 없으면 `redirect('/login?redirect=/mypage')`로 보낸다(`src/app/(content)/mypage/page.tsx:18-21`). 본문은 프로필 편집·비밀번호 변경·로그아웃, 성경읽기 기록기·기록 공유, 설정 시트, 부서·구역 표시로 채웠다. exec-plan 5개(mypage-design-parity·mypage-settings-sheet·bible-share-actions·bible-share-og-image·mypage-dept-fellowship)로 나눠 진행했다.
+- **확인**: `docs/exec-plans/completed/2026-07-18-mypage-design-parity.md` 외 4건 + `src/app/(content)/mypage/page.tsx`의 세션 확인·리다이렉트.
+
 ### ✅ FeedContent `.badge_category` mixin 미적용 (2026-06-29 해소 — 대상 소멸)
 
 - **부채**: `src/app/_component/home/FeedContent.module.scss`의 카테고리 뱃지가 caption mixin 없이 직접 토큰을 조합했다. 뱃지의 `line-height: 1` 의도와 `text-caption-strong`의 1.45가 충돌해 mixin을 얹지 못했다 (2026-05-04 design-system-v3 Step 3 발견)

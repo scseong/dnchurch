@@ -1,6 +1,6 @@
 # mypage-settings-sheet
 
-- **상태**: 🟡 진행 중
+- **상태**: ✅ 완료 (2026-07-19)
 - **시작일**: 2026-07-18
 - **브랜치**: feat/my-page
 - **Open questions**: none
@@ -140,6 +140,19 @@ Codex 지적 요지:
   - 이유: <왜 이번에 안 하나>
   - 다음 기준: <언제 다시 하나>
   - 기록 위치: `docs/tech-debt/active.md` 또는 없음 -->
+
+## 회고
+
+**잘된 것**
+- 전역 톱니(⚙)와 마이페이지 전용 시트를 `settingsSheet.store`(zustand)로 이어(D1) 시트를 `mypage/_component/`에 두면서도 헤더 톱니는 전역 위치를 유지했다. 시트를 `Header/`에 두면 모든 `(content)` 페이지에 얹히는 file-structure 위반을 피했다.
+- 로그아웃을 `useSignOut` 훅 하나로 모아(D2) AccountMenu와 시트가 같은 경로를 쓴다. 비기능 5항목(리마인더·알림·번역본)은 `disabled`+"준비 중"으로 눌리지 않게 해, 눌러도 아무 일이 없어 오작동으로 오해하던 문제를 없앴다. Codex 계획 검증 CR 3건(배치 위반·로그아웃 분기·disabled 기준)을 모두 반영했다.
+
+**다음에 할 것**
+- `SettingsSheet`의 `SHEET_CLOSE_MS=240`은 `BottomSheet` 전환 0.22s에 맞춘 우회다. 공유 `BottomSheet`가 전환 시간·reduced-motion 완료 시점을 알려주지 않아서, `onAfterClose` 콜백을 더하는 게 정석이다(Codex nit1, 주석으로 남김).
+- 알림·리마인더·번역본 실기능은 푸시 인프라·저장 컬럼 결정 후 착수한다.
+
+**발견된 부채**
+- 없음. `onAfterClose` 콜백은 공유 컴포넌트 개선이라 이 plan 주석과 후속 판단으로 남겼다.
 
 ---
 

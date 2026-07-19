@@ -1,6 +1,6 @@
 # mypage-design-parity
 
-- **상태**: 🟡 진행 중
+- **상태**: ✅ 완료 (2026-07-19)
 - **시작일**: 2026-07-18
 - **브랜치**: feat/my-page
 - **Open questions**: 부서/속회 표시의 참조 데이터 방식 (Phase 3, 아래 후속 작업 참조)
@@ -128,6 +128,19 @@ Codex 지적 요지:
   - 이유: `bible_reading_records.read_date`가 NOT NULL·unique key라 날짜 없는 통독 반영을 표현할 수 없음. nullable read_date 또는 별도 컬럼/테이블 + action·타입 변경 필요.
   - 다음 기준: Phase 1 머지 후, prior-read 데이터 모델 결정 시.
   - 기록 위치: 이 exec-plan (Codex 계획 검증 material 지적)
+
+## 회고
+
+**잘된 것**
+- Phase 1을 화면 표현 계층만으로 좁혀(D1) DB 없이 기록기 배지·범례, 공유 카드 월 히트맵·오늘 범위, 골드 톤을 완성했다. 설정 저장·부서·prior-read를 각각 별 plan(settings-sheet·dept-fellowship·Phase 4)으로 분리해 이번 범위가 프론트 전용으로 유지됐다.
+- "이전에 읽은 기록 불러오기" 라벨은 prior-read(날짜 없는 통독 반영)를 함의한다. 그런데 `read_date`가 NOT NULL·unique key라 이 라벨을 프론트 전용으로 구현할 수 없었고, Codex 계획 검증이 이를 WORK 전에 짚었다. 라벨을 현행 동작과 일치하는 것만 남겨 CR을 해소했다.
+
+**다음에 할 것**
+- prior-read 컨텍스트(Phase 4) — `bible_reading_records.read_date`를 nullable로 바꾸거나 별도 컬럼·테이블을 두는 데이터 모델을 먼저 정해야 한다.
+- 부서·구역 표시(Phase 3)는 dept-fellowship plan에서 이미 구현·머지됐다.
+
+**발견된 부채**
+- 없음. Knip 경고는 전부 기존 부채이고 내 변경 파일(ShareSheet·Recorder·RecordTabs·TrackerSection·tracker.module.scss)과 무관함을 grep으로 확인했다.
 
 ---
 

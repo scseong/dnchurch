@@ -1,6 +1,6 @@
 # bible-share-og-image
 
-- **상태**: 🟡 진행 중
+- **상태**: ✅ 완료 (2026-07-19)
 - **시작일**: 2026-07-19
 - **브랜치**: feat/my-page
 - **Open questions**: none
@@ -161,6 +161,19 @@ Codex 답변 + 조치:
   - 이유: <왜 이번에 안 하나>
   - 다음 기준: <언제 다시 하나>
   - 기록 위치: `docs/tech-debt/active.md` 또는 없음 -->
+
+## 회고
+
+**잘된 것**
+- 동적 OG 카드(E-full)를 완성했다 — `/share/reading/image` Route Handler(D1)가 통계 파라미터마다 "42장 읽음"·기간 라벨·구절을 담은 PNG를 즉석 생성하고, CDN이 URL 단위로 캐시한다. Vercel 프리뷰 실배포에서 200·image/png·두부(□) 0을 확인했다.
+- 폰트를 런타임 Google Fonts fetch에서 서브셋 ttf 번들로 바꿔(D2) 외부 fetch 실패 모드를 없앴다. 카드 어휘가 한정돼 코드 상수 합집합으로 서브셋을 만들어 두부를 막았다. 파싱 헬퍼를 `bible-share.ts`로 추출해(material-1) page와 route가 같은 상한·문구를 쓰게 했다. 폰트 읽기 실패는 폴백 없이 500으로 곧장 실패하게 해(D4) 두부 무증상 배포를 막았다.
+
+**다음에 할 것**
+- prod 배포 후 `GET /share/reading/image?...` 실호출 200과 카카오 실카드 스모크 테스트가 남았다.
+- `Cache-Control: immutable`이라 렌더 상수·폰트를 바꾸면 같은 URL이 최대 1년 stale이다 — 상수·폰트 변경 시 URL 무효화(파라미터·경로 변경)를 함께 고려한다.
+
+**발견된 부채**
+- OG 이미지 라우트가 로그인 없이 열리고 파라미터를 제한하지 않아 조합마다 새 렌더가 돌 수 있다 — 이번 머지 전 점검에서 tech-debt로 등록(다음 PR에서 버킷팅·rate-limit).
 
 ---
 

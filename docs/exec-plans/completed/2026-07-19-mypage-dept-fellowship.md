@@ -1,6 +1,6 @@
 # mypage-dept-fellowship
 
-- **상태**: 🟡 진행 중
+- **상태**: ✅ 완료 (2026-07-19)
 - **시작일**: 2026-07-19
 - **브랜치**: feat/my-page
 - **Open questions**: none
@@ -198,6 +198,20 @@ PR #153 Gemini Code Assist(봇) COMMENTED 리뷰 3건. 코드 직접 대조 + Co
   - 이유: <왜 이번에 안 하나>
   - 다음 기준: <언제 다시 하나>
   - 기록 위치: `docs/tech-debt/active.md` 또는 없음 -->
+
+## 회고
+
+**잘된 것**
+- 부서와 구역을 각각 독립 테이블로 나눠 구조를 단순하게 했다(D1). 사용자가 준 구역이 믿음·소망·사랑·화평·희락 위계 없이 나란한 5개라 부서 종속 구조를 기각했고, 이 결정으로 Codex가 지적한 복합 FK 무결성 문제도 함께 사라졌다. 구역장·리더는 `profiles.district_role`로 두어(D2) 프로필 편집만으로 역할이 정해진다.
+- Codex 계획 검증의 필수 수정 3건을 반영했다 — orphan `dept_id`를 null로 비운 뒤 FK 추가(F1), `page.tsx`가 `services/reference` 경유(F2), `authenticated` 읽기 RLS(F3). Codex 1차의 필수 수정 2건도 막았다 — 구역 없이 역할만 저장되는 불일치는 액션 강등·DB CHECK·표시 가드 세 겹으로 막았고, invalid id의 조용한 삭제는 `parseOptionalId` 반환을 `{ok, value}`로 바꿔 에러를 반환하게 했다.
+
+**다음에 할 것**
+- 부서·구역 admin 관리 UI가 없다 — 지금은 시드·SQL로만 채운다. 관리 화면은 후속으로 분리했다.
+- PR #153 봇 리뷰 3건에 대응했다(②구역 역할 비활성화 반영, ①SRP·③key 기각). 상세는 이 plan `## PR 리뷰 대응`.
+
+**발견된 부채**
+- `getDeptDistrictOptions`가 부서·구역을 `createServerSideClient`(무캐시)로 읽어 마이페이지 로드마다 2쿼리를 친다 — 이번 머지 전 점검에서 tech-debt로 등록(다음 PR에서 정적 캐시).
+- `profiles.dept_id`·`district_id` FK 인덱스가 없다 — 현 규모에선 영향이 없어 사용자 결정으로 보류(미등록).
 
 ---
 

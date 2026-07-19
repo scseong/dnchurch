@@ -91,15 +91,6 @@
 - **영향 범위**: `src/app/_component/home/HeroCarousel.tsx`
 - **발견일**: 2026-06-26 (PR #132 codex 재리뷰 #D)
 
-### 🟡 마이페이지가 미완성 — 인증 확인·본문 없음 (BottomNav 상시 탭)
-
-- **상태**: 등록만 (home-gold-redesign PR #132에서 분리)
-- **무엇**: BottomNav 5번째 탭 `/mypage`가 `src/app/(content)/mypage/page.tsx`에서 `Mypage` 텍스트만 렌더한다. 인증 확인·로그인 리다이렉트가 없어 상시 노출 탭이 미완성 화면으로 이어진다. (헤더·하단바 없이 갇히던 문제는 `(content)`로 옮겨 해소했다.)
-- **왜 지금 안 하나**: 홈 리디자인 범위는 레이아웃·탭 구성까지였다. 회원 페이지 본문·인증 흐름은 별도 작업이다.
-- **마이그레이션 경로**: 실제 회원 페이지를 만들고 `/login?redirect=/mypage` 인증 흐름을 붙인다. 인증 진입점 노출은 가입 동의 UI 런칭 게이트와 함께 판단한다.
-- **영향 범위**: `src/app/(content)/mypage/`, 인증 흐름
-- **발견일**: 2026-06-26 (PR #132 codex 재리뷰 #C)
-
 ### 🟢 홈 리디자인으로 생긴 미사용 코드 정리
 
 - **상태**: 등록만 (home-gold-redesign PR #132에서 분리)
