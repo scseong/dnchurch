@@ -1,6 +1,6 @@
 # style-token-debt-cleanup
 
-- **상태**: 🟡 진행 중
+- **상태**: ✅ 완료 (2026-07-19)
 - **시작일**: 2026-07-19
 - **브랜치**: chore/knip-dead-code-cleanup
 - **Open questions**: none
@@ -93,6 +93,27 @@ stylelint의 primitive 토큰 직접 사용 경고 14건과 하드코딩 hex 경
 -->
 
 ## 후속 작업
+
+- primitive·hex가 0이 됐으니, `declaration-property-value-disallowed-list`·`color-no-hex` severity를 `warning`에서 `error`로 올려 새 위반을 커밋에서 막는다.
+  - 이유: 지금은 warning이라 새 하드코딩·primitive가 들어와도 커밋을 안 막는다.
+  - 다음 기준: 이 PR 머지 후 별도로 판단.
+  - 기록 위치: `docs/tech-debt/resolved.md`의 primitive·hex 해소 항목에 "다음"으로 적어 뒀다.
+
+## 회고
+
+**잘된 것**
+
+- 값 동일 치환은 추측 대신 `_color.scss`·`_semantic.scss`에서 실제 토큰 값을 대조해 바꿨다. `$overlay-scrim`(rgba(0,0,0,0.5))·`$status-negative`(#ef4444)는 값이 정확히 같아 화면이 안 바뀐다.
+- `_home.scss`의 hex는 코드 문제가 아니라 lint 예외 누락이었다. `color-no-hex` 예외를 `_color.scss` 한 파일에서 토큰 폴더 전체로 넓혀 22건을 코드 변경 없이 없앴다.
+- 신규 토큰을 안 만들고(단순화 선호) 값 없는 곳은 가까운 semantic이나 사유 주석으로 처리해 색 경고 63을 0으로 내렸다.
+
+**다음에 할 것**
+
+- 위 후속 작업대로 stylelint severity를 `warning`에서 `error`로 올려, 새 위반이 다시 들어오는 걸 막는다.
+
+**발견된 부채**
+
+- 없음.
 
 <!-- 이번 범위 밖 일. Non-goals·체크리스트에 중복 기술 금지 — 여기에만.
 - <후속 항목>

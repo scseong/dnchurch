@@ -1,6 +1,6 @@
 # knip-dead-code-cleanup
 
-- **상태**: 🟡 진행 중
+- **상태**: ✅ 완료 (2026-07-19)
 - **시작일**: 2026-07-18
 - **브랜치**: chore/knip-dead-code-cleanup
 - **Open questions**: none
@@ -95,6 +95,21 @@ Knip이 잡은 미사용 코드 중 **참조 0으로 검증된 것만** 지운�
   - 다음 기준: UI 킷 공개 API를 정리하는 별도 작업에서 barrel 재export 정책과 함께 판단.
   - 기록 위치: 없음 (knip 리포트에 계속 남음)
 - `PAGE_SIZE_OPTIONS`·`SERMON_URL_KEYS`·`DEFAULT_PAGE_SIZE`는 내부 사용 또는 1참조라 완전 죽음이 아니어서 제외했다. `prettier`·`kakao.maps.d.ts`는 config가 쓰는 knip 오탐이라 유지한다.
+
+## 회고
+
+**잘된 것**
+
+- Knip 목록을 그대로 지우지 않고 `grep`으로 참조 0을 직접 확인한 파일·export만 지웠다. "미사용 export"로 잡혔지만 같은 파일 안에서 쓰이는 3개(`formatPreacherTitle`·`ADMIN_ROOT`·`BACKGROUND_CLASS_NAMES`)는 삭제 대신 `export`만 떼 빌드가 깨지는 걸 막았다.
+- 파일 삭제가 부른 연쇄(`SettingsText`를 지우니 `IconWrap`이 고아가 됨)를 knip 재실행으로 잡아 미사용 파일을 10에서 0으로 내렸다.
+
+**다음에 할 것**
+
+- 남은 미사용 export 8건과 타입 43건은 `Footer`(복원 예정)·`Carousel`류와 `components/ui` 공개 타입이고 barrel이 자동으로 만든 재export까지 얽혀 있다. UI 킷 공개 API를 정리하는 별도 작업에서 barrel 재export 정책과 함께 판단한다.
+
+**발견된 부채**
+
+- 없음. Knip에 남은 미사용 항목은 `docs/tech-debt/active.md`의 Knip 항목에 일부만 해소한 것으로 적어 뒀다.
 
 <!-- 이번 범위 밖 일. Non-goals·체크리스트에 중복 기술 금지 — 여기에만.
 - <후속 항목>
