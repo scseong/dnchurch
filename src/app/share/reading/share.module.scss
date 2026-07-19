@@ -1,0 +1,88 @@
+// 공유 페이지 카드 — 트래커 공유 시트의 dark warm 카드와 같은 톤(그라디언트 예외).
+// (content) 밖 루트 레이아웃이라 트래커 CSS 모듈을 재사용할 수 없어 카드 토큰을 여기 다시 둔다.
+
+.page {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: $content-gap-l;
+  min-height: 100vh;
+  padding: $container-padding;
+  background-color: $bg-primary;
+}
+
+.card {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: 400px;
+  padding: $padding-card-lg;
+  border-radius: $radius-l;
+  // 트래커 시안의 dark warm 카드 (styles SKILL 그라디언트 예외)
+  background: linear-gradient(150deg, $primary, $accent);
+  color: $txt-inverse;
+  box-shadow: $shadow-md;
+}
+
+.brand {
+  font-family: $font-family-secondary;
+  font-size: $font-size-15;
+  font-weight: $font-weight-bold;
+}
+
+.eyebrow {
+  margin-top: $spacing-16;
+  font-size: $font-size-12;
+  font-weight: $font-weight-semibold;
+  letter-spacing: 0.08em;
+  color: $accent-subtle;
+}
+
+.stat {
+  margin-top: $spacing-8;
+  font-size: $font-size-15;
+
+  strong {
+    font-size: $font-size-42;
+    font-weight: $font-weight-bold;
+    line-height: 1;
+  }
+}
+
+.sub {
+  margin-top: $spacing-8;
+  font-size: $font-size-13;
+  color: $txt-dark-muted;
+}
+
+.verse {
+  margin-top: $spacing-16;
+  padding-top: $spacing-16;
+  border-top: 1px solid rgba($txt-inverse, 0.2);
+  font-family: $font-family-secondary;
+  font-size: $font-size-14;
+  line-height: $line-height-loose;
+}
+
+.verse_ref {
+  display: block;
+  margin-top: $spacing-4;
+  font-family: $font-family-base;
+  font-size: $font-size-11;
+  color: $txt-dark-muted;
+}
+
+.cta {
+  padding: $padding-control-wide;
+  border-radius: $radius-xs;
+  background-color: $primary;
+  color: $txt-inverse;
+
+  @include text-label-emphasis($color: $txt-inverse);
+  @include hover-bg-shift($primary-hover);
+
+  &:active {
+    background-color: $primary-active;
+  }
+}

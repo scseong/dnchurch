@@ -1,31 +1,20 @@
 'use client';
 
-import { useState, useTransition } from 'react';
+import { useState } from 'react';
 import { LuChevronRight } from 'react-icons/lu';
 import { Label, ListItem } from '@/components/ui';
 import { useToastStore } from '@/store/toast.store';
-import { signOutAction } from '@/actions/auth.action';
 import PasswordChangeModal from './PasswordChangeModal';
+import SettingsSheet from './SettingsSheet';
+import { useSignOut } from './useSignOut';
 import styles from './mypage.module.scss';
 
 const PLANNED_MENUS = ['저장한 설교', '나의 기도제목', '출석 현황'];
 
 export default function AccountMenu({ hasPasswordAuth }: { hasPasswordAuth: boolean }) {
-  const { info, error } = useToastStore();
+  const { info } = useToastStore();
   const [passwordOpen, setPasswordOpen] = useState(false);
-  const [isSigningOut, startSignOut] = useTransition();
-
-  const handleSignOut = () => {
-    startSignOut(async () => {
-      const result = await signOutAction();
-      if (result.success) {
-        // 전체 리로드로 SessionContextProvider 등 클라이언트 인증 상태까지 초기화한다
-        window.location.replace('/');
-      } else {
-        error(result.message);
-      }
-    });
-  };
+  const { signOut, isSigningOut } = useSignOut();
 
   return (
     <>
@@ -55,13 +44,14 @@ export default function AccountMenu({ hasPasswordAuth }: { hasPasswordAuth: bool
               비밀번호 변경
             </ListItem>
           )}
-          <ListItem className={styles.logout} onClick={handleSignOut} disabled={isSigningOut}>
+          <ListItem className={styles.logout} onClick={signOut} disabled={isSigningOut}>
             로그아웃
           </ListItem>
         </div>
       </section>
 
       <PasswordChangeModal open={passwordOpen} onClose={() => setPasswordOpen(false)} />
+      <SettingsSheet />
     </>
   );
 }
