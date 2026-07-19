@@ -111,10 +111,10 @@
   &.pri {
     border: 0;
     background: $primary;
-    color: #fff;
+    color: $txt-inverse;
 
     &:hover {
-      background: color.mix(#fff, $primary, 8%);
+      background: color.mix($txt-inverse, $primary, 8%);
     }
   }
 }

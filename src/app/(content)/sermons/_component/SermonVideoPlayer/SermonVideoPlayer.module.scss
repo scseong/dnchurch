@@ -53,6 +53,7 @@ $overlay-duration-bg: rgba(0, 0, 0, 0.7);
   position: relative;
   width: 100%;
   aspect-ratio: 16 / 9;
+  /* stylelint-disable-next-line declaration-property-value-disallowed-list -- 영상 레터박스는 순수 검정, 시맨틱 면 토큰 없음 */
   background: $black;
   overflow: hidden;
 
@@ -77,6 +78,7 @@ $overlay-duration-bg: rgba(0, 0, 0, 0.7);
   height: 100%;
   padding: 0;
   border: none;
+  /* stylelint-disable-next-line declaration-property-value-disallowed-list -- 영상 포스터 레터박스는 순수 검정, 시맨틱 면 토큰 없음 */
   background: $black;
   cursor: pointer;
 }
@@ -96,7 +98,7 @@ $overlay-duration-bg: rgba(0, 0, 0, 0.7);
   height: $spacing-64;
   font-size: $font-size-28;
   color: $txt-inverse;
-  background-color: rgba($black, 0.5);
+  background-color: $overlay-scrim;
   border-radius: $radius-circle;
 
   @include respond-up($breakpoint-tablet) {

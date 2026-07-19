@@ -15,9 +15,9 @@
   input {
     padding: $spacing-8 1rem;
     width: 100%;
-    border: 1px solid #ccc;
+    border: 1px solid $border-primary;
     border-radius: 0.4rem;
-    outline-color: #aaa;
+    outline-color: $border-strong;
     font-size: 1.4rem;
   }
 

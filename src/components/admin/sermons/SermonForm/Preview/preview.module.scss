@@ -60,7 +60,7 @@
   padding: 3px 8px;
   border-radius: 100px;
   background: rgba(15, 20, 30, 0.72);
-  color: #fff;
+  color: $txt-inverse;
   font-size: 10px;
   font-weight: 600;
 }
@@ -176,5 +176,5 @@
 
 .checklist_required {
   margin-left: 2px;
-  color: #ef4444;
+  color: $status-negative;
 }

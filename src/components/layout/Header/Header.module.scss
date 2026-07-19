@@ -248,7 +248,7 @@ $indicator-height: 0.2rem;
   top: 0;
   z-index: $z-header;
   background-color: $bg-card;
-  border-bottom: 0.1rem solid $beige-150;
+  border-bottom: 0.1rem solid $border-card;
   transition: border-bottom-color $transition-duration-normal $transition-easing-default;
 }
 
@@ -345,7 +345,7 @@ $indicator-height: 0.2rem;
 }
 
 .gnb_link_active {
-  background-color: $beige-200;
+  background-color: $bg-secondary;
   color: $primary;
   font-weight: $font-weight-semibold;
 

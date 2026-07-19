@@ -196,7 +196,7 @@ $action-bar-height: 64px;
   padding: 3px 8px;
   border-radius: 100px;
   background: rgba(15, 20, 30, 0.72);
-  color: #fff;
+  color: $txt-inverse;
   font-size: 10px;
   font-weight: 600;
 }
@@ -562,7 +562,7 @@ $action-bar-height: 64px;
   border: 0;
   border-radius: 6px;
   background: $primary;
-  color: #fff;
+  color: $txt-inverse;
   font-family: inherit;
   font-size: 13px;
   font-weight: 600;
@@ -570,7 +570,7 @@ $action-bar-height: 64px;
   transition: background 0.15s;
 
   &:hover {
-    background: color.mix(#fff, $primary, 8%);
+    background: color.mix($txt-inverse, $primary, 8%);
   }
 
   &:disabled {
