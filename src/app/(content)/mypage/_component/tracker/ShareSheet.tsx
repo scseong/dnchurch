@@ -7,7 +7,6 @@ import { LuMessageCircle, LuDownload, LuLink } from 'react-icons/lu';
 import { BottomSheet, Button, Tabs } from '@/components/ui';
 import { useToastStore } from '@/store/toast.store';
 import useKakaoShare from '@/hooks/useKakaoShare';
-import { OG_FALLBACK_IMAGE } from '@/config/seo';
 import type { WeekDay, MonthCell } from '@/utils/bible-tracker';
 import styles from './tracker.module.scss';
 
@@ -56,18 +55,20 @@ export default function ShareSheet({
         ? { title: '이번 주', value: weekChapters, sub: `${weekDoneCount}일 함께한 한 주` }
         : { title: '이번 달', value: monthChapters, sub: `${monthReadDays}일 읽은 이번 달` };
 
-  // 공유 페이지 URL — 기간과 통계를 파라미터로 넘긴다(이름·개인정보 없음).
+  // 기간과 통계를 파라미터로 넘긴다(이름·개인정보 없음). 링크는 통계 페이지, 이미지는 통계 카드 라우트.
   // s(보조 수치)는 기간별로 다르다: 주간=함께한 일수, 월간=읽은 날수, 일간=없음(0).
   const secondary = period === 'week' ? weekDoneCount : period === 'month' ? monthReadDays : 0;
-  const shareUrl = `${process.env.NEXT_PUBLIC_SITE_URL}/share/reading?p=${period}&c=${stat.value}&s=${secondary}`;
+  const shareParams = `p=${period}&c=${stat.value}&s=${secondary}`;
+  const shareUrl = `${process.env.NEXT_PUBLIC_SITE_URL}/share/reading?${shareParams}`;
+  const shareImageUrl = `${process.env.NEXT_PUBLIC_SITE_URL}/share/reading/image?${shareParams}`;
 
   const handleKakao = () => {
     // 제목·통계를 카카오에 직접 넘긴다(sendDefault) — 스크랩과 달리 dev에서도 텍스트가 뜬다.
-    // 이미지(교회 배너)는 공개 절대 URL, 링크는 수신자가 통계를 볼 공유 페이지.
+    // 이미지는 통계를 그린 동적 카드(/share/reading/image), 링크는 수신자가 통계를 볼 공유 페이지.
     share({
       title: `${stat.title} 성경 ${stat.value}장을 읽었어요`,
       description: stat.sub,
-      imageUrl: `${process.env.NEXT_PUBLIC_SITE_URL}${OG_FALLBACK_IMAGE}`,
+      imageUrl: shareImageUrl,
       link: shareUrl,
       buttonTitle: '기록 보기'
     });
