@@ -165,6 +165,16 @@ Codex 지적 요지 + 조치:
 | --- | --- | --- | --- | --- | --- | --- |
 | 2차 | 20260719-020524 | ✅ | ✅ | ✅ | 0 | 없음 (라이브 저장 왕복·F1 확인) |
 
+## PR 리뷰 대응
+
+PR #153 Gemini Code Assist(봇) COMMENTED 리뷰 3건. 코드 직접 대조 + Codex 교차검증(confidence high)으로 판정. CI 전부 통과 + Vercel 프리뷰 OG 이미지 스모크(200·image/png·두부 0) 확인.
+
+| 지적 | 출처 | 코드 대조 | 판정 |
+| --- | --- | --- | --- |
+| updateProfileAction SRP 위반(파싱·검증·IO·DB 혼재) | profile.action.ts:26 (봇 HIGH) | `.gemini/styleguide.md`가 Java/Python 예시 범용 템플릿이라 repo 실 컨벤션 아님. `parseOptionalId`는 이미 분리, 남은 흐름은 롤백(104~114행)으로 묶여 분리 시 에러 처리가 흩어짐. CLAUDE.md 단순함 우선이 봇 가이드보다 우선 | 기각 |
+| 구역 미선택 시 구역 역할 Select 비활성화 | ProfileEditModal.tsx:159 (봇 MEDIUM) | 구역 없이 구역장 저장 → 서버가 '일반' 강등(profile.action:44) → 성공 토스트 → ProfileSection은 역할 미표시. WYSIWYG 위반 확인 | 반영 — 783546c (`disabled`+value 게이트, 구역 비우면 역할 '일반' 초기화). 라이브 확인 |
+| `key={editOpen}`로 상태 초기화 | ProfileSection.tsx / ProfileEditModal:44-55 (봇 MEDIUM) | key는 열림·닫힘 양쪽 리마운트 → Modal exit 애니메이션 끊길 위험. `prevOpen`은 GalleryComposeSheet·NoticeControlBar와 동일 확립 패턴 | 기각 |
+
 ## 검증 이력
 
 <!--
