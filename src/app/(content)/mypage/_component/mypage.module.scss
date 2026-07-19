@@ -109,6 +109,18 @@ $page-max-width: 60rem; // 계정 메뉴가 PC 폭 전체로 퍼지지 않게 �
   min-width: 0;
 }
 
+// 프로필 편집 — 부서·구역·역할 Select 필드
+.edit_field {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-6;
+  margin-top: $content-gap-m;
+}
+
+.edit_label {
+  @include text-label-emphasis;
+}
+
 // ── 비밀번호 변경 모달 ──
 .password_fields {
   display: flex;

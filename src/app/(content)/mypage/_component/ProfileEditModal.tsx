@@ -2,22 +2,33 @@
 
 import { useRef, useState, useTransition } from 'react';
 import { useRouter } from 'next/navigation';
-import { Button, Modal, TextField } from '@/components/ui';
+import { Button, Modal, Select, TextField } from '@/components/ui';
 import { useToastStore } from '@/store/toast.store';
 import { updateProfileAction } from '@/actions/profile.action';
-import type { ProfileType } from '@/types/common';
+import type { ProfileType, OrgOption } from '@/types/common';
 import styles from './mypage.module.scss';
 
 const DISPLAY_NAME_MAX_LENGTH = 10;
 const AVATAR_MAX_SIZE = 5 * 1024 * 1024;
+const ROLE_OPTIONS = [
+  { value: '일반', label: '일반' },
+  { value: '구역리더', label: '구역리더' },
+  { value: '구역장', label: '구역장' }
+];
 
 type Props = {
   profile: ProfileType;
+  departments: OrgOption[];
+  districts: OrgOption[];
   open: boolean;
   onClose: () => void;
 };
 
-export default function ProfileEditModal({ profile, open, onClose }: Props) {
+function toOptions(items: OrgOption[]) {
+  return [{ value: '', label: '선택 안 함' }, ...items.map((item) => ({ value: String(item.id), label: item.name }))];
+}
+
+export default function ProfileEditModal({ profile, departments, districts, open, onClose }: Props) {
   const router = useRouter();
   const { success, error } = useToastStore();
   const [isPending, startTransition] = useTransition();
@@ -25,6 +36,9 @@ export default function ProfileEditModal({ profile, open, onClose }: Props) {
   const [displayName, setDisplayName] = useState(profile.display_name ?? profile.name);
   const [avatarFile, setAvatarFile] = useState<File | null>(null);
   const [fieldError, setFieldError] = useState('');
+  const [deptId, setDeptId] = useState(profile.dept_id ? String(profile.dept_id) : '');
+  const [districtId, setDistrictId] = useState(profile.district_id ? String(profile.district_id) : '');
+  const [districtRole, setDistrictRole] = useState(profile.district_role ?? '일반');
 
   // 열림 전환 시 초기화 — effect 대신 렌더 중 prev 비교 (GalleryComposeSheet와 동일 패턴)
   const [prevOpen, setPrevOpen] = useState(open);
@@ -34,6 +48,9 @@ export default function ProfileEditModal({ profile, open, onClose }: Props) {
       setDisplayName(profile.display_name ?? profile.name);
       setAvatarFile(null);
       setFieldError('');
+      setDeptId(profile.dept_id ? String(profile.dept_id) : '');
+      setDistrictId(profile.district_id ? String(profile.district_id) : '');
+      setDistrictRole(profile.district_role ?? '일반');
     }
   }
 
@@ -60,6 +77,9 @@ export default function ProfileEditModal({ profile, open, onClose }: Props) {
 
     const formData = new FormData();
     formData.set('displayName', trimmed);
+    formData.set('deptId', deptId);
+    formData.set('districtId', districtId);
+    formData.set('districtRole', districtRole);
     if (avatarFile) {
       formData.set('avatar', avatarFile);
     }
@@ -126,6 +146,18 @@ export default function ProfileEditModal({ profile, open, onClose }: Props) {
         error={fieldError || undefined}
         helper={`커뮤니티에서 보이는 이름이에요 (${DISPLAY_NAME_MAX_LENGTH}자 이내)`}
       />
+      <div className={styles.edit_field}>
+        <span className={styles.edit_label}>부서</span>
+        <Select value={deptId} onChange={setDeptId} options={toOptions(departments)} aria-label="부서" />
+      </div>
+      <div className={styles.edit_field}>
+        <span className={styles.edit_label}>구역</span>
+        <Select value={districtId} onChange={setDistrictId} options={toOptions(districts)} aria-label="구역" />
+      </div>
+      <div className={styles.edit_field}>
+        <span className={styles.edit_label}>구역 역할</span>
+        <Select value={districtRole} onChange={setDistrictRole} options={ROLE_OPTIONS} aria-label="구역 역할" />
+      </div>
     </Modal>
   );
 }

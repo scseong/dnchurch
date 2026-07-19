@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import { redirect } from 'next/navigation';
 import { getMySessionProfile } from '@/services/user';
 import { getBibleTrackerData } from '@/services/bible-reading';
+import { getProfileOrgOptions } from '@/services/reference';
 import MainContainer from '@/components/layout/container/MainContainer';
 import ProfileSection from './_component/ProfileSection';
 import AccountMenu from './_component/AccountMenu';
@@ -24,12 +25,19 @@ export default async function Mypage() {
   const providers = (user.app_metadata?.providers as string[] | undefined) ?? [];
   const hasPasswordAuth = providers.includes('email') || user.app_metadata?.provider === 'email';
 
-  const tracker = await getBibleTrackerData(user.id);
+  const [tracker, orgOptions] = await Promise.all([
+    getBibleTrackerData(user.id),
+    getProfileOrgOptions()
+  ]);
 
   return (
     <MainContainer title="마이 페이지">
       <div className={styles.page}>
-        <ProfileSection profile={profile} />
+        <ProfileSection
+          profile={profile}
+          departments={orgOptions.departments}
+          districts={orgOptions.districts}
+        />
         <TrackerSection
           initialRecords={tracker.records}
           initialSettings={tracker.settings}

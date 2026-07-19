@@ -133,6 +133,48 @@ export type Database = {
         }
         Relationships: []
       }
+      departments: {
+        Row: {
+          created_at: string
+          id: number
+          name: string
+          sort_order: number
+        }
+        Insert: {
+          created_at?: string
+          id?: never
+          name: string
+          sort_order?: number
+        }
+        Update: {
+          created_at?: string
+          id?: never
+          name?: string
+          sort_order?: number
+        }
+        Relationships: []
+      }
+      districts: {
+        Row: {
+          created_at: string
+          id: number
+          name: string
+          sort_order: number
+        }
+        Insert: {
+          created_at?: string
+          id?: never
+          name: string
+          sort_order?: number
+        }
+        Update: {
+          created_at?: string
+          id?: never
+          name?: string
+          sort_order?: number
+        }
+        Relationships: []
+      }
       new_family_registrations: {
         Row: {
           birth_date: string | null
@@ -263,6 +305,8 @@ export type Database = {
           deleted_at: string | null
           dept_id: number | null
           display_name: string | null
+          district_id: number | null
+          district_role: string
           email: string
           id: string
           name: string
@@ -277,6 +321,8 @@ export type Database = {
           deleted_at?: string | null
           dept_id?: number | null
           display_name?: string | null
+          district_id?: number | null
+          district_role?: string
           email: string
           id: string
           name: string
@@ -291,6 +337,8 @@ export type Database = {
           deleted_at?: string | null
           dept_id?: number | null
           display_name?: string | null
+          district_id?: number | null
+          district_role?: string
           email?: string
           id?: string
           name?: string
@@ -299,7 +347,22 @@ export type Database = {
           status?: Database["public"]["Enums"]["profile_status_enum"]
           updated_at?: string
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "profiles_dept_id_fkey"
+            columns: ["dept_id"]
+            isOneToOne: false
+            referencedRelation: "departments"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "profiles_district_id_fkey"
+            columns: ["district_id"]
+            isOneToOne: false
+            referencedRelation: "districts"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       sermon_resources: {
         Row: {
