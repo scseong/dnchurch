@@ -1,10 +1,13 @@
 'use client';
 
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import clsx from 'clsx';
+import { toPng } from 'html-to-image';
 import { LuMessageCircle, LuDownload, LuLink } from 'react-icons/lu';
 import { BottomSheet, Button, Tabs } from '@/components/ui';
 import { useToastStore } from '@/store/toast.store';
+import useKakaoShare from '@/hooks/useKakaoShare';
+import { OG_FALLBACK_IMAGE } from '@/config/seo';
 import type { WeekDay, MonthCell } from '@/utils/bible-tracker';
 import styles from './tracker.module.scss';
 
@@ -42,7 +45,9 @@ export default function ShareSheet({
   monthCells
 }: Props) {
   const { info } = useToastStore();
+  const { share } = useKakaoShare();
   const [period, setPeriod] = useState<Period>('week');
+  const cardRef = useRef<HTMLDivElement>(null);
 
   const stat =
     period === 'day'
@@ -50,6 +55,48 @@ export default function ShareSheet({
       : period === 'week'
         ? { title: '이번 주', value: weekChapters, sub: `${weekDoneCount}일 함께한 한 주` }
         : { title: '이번 달', value: monthChapters, sub: `${monthReadDays}일 읽은 이번 달` };
+
+  // 공유 페이지 URL — 기간과 통계를 파라미터로 넘긴다(이름·개인정보 없음).
+  // s(보조 수치)는 기간별로 다르다: 주간=함께한 일수, 월간=읽은 날수, 일간=없음(0).
+  const secondary = period === 'week' ? weekDoneCount : period === 'month' ? monthReadDays : 0;
+  const shareUrl = `${process.env.NEXT_PUBLIC_SITE_URL}/share/reading?p=${period}&c=${stat.value}&s=${secondary}`;
+
+  const handleKakao = () => {
+    // 제목·통계를 카카오에 직접 넘긴다(sendDefault) — 스크랩과 달리 dev에서도 텍스트가 뜬다.
+    // 이미지(교회 배너)는 공개 절대 URL, 링크는 수신자가 통계를 볼 공유 페이지.
+    share({
+      title: `${stat.title} 성경 ${stat.value}장을 읽었어요`,
+      description: stat.sub,
+      imageUrl: `${process.env.NEXT_PUBLIC_SITE_URL}${OG_FALLBACK_IMAGE}`,
+      link: shareUrl,
+      buttonTitle: '기록 보기'
+    });
+  };
+
+  const handleCopyLink = async () => {
+    try {
+      await navigator.clipboard.writeText(shareUrl);
+      info('공유 링크를 복사했어요.');
+    } catch {
+      info('링크 복사에 실패했어요. 잠시 후 다시 시도해주세요.');
+    }
+  };
+
+  const handleSaveImage = async () => {
+    const node = cardRef.current;
+    if (!node) return;
+    try {
+      // 구절 폰트(Noto Serif KR, display:swap)가 fallback으로 찍히지 않게 준비 후 캡처.
+      await document.fonts.ready;
+      const dataUrl = await toPng(node, { pixelRatio: 2, cacheBust: true });
+      const link = document.createElement('a');
+      link.download = `대구동남교회-성경읽기-${period}.png`;
+      link.href = dataUrl;
+      link.click();
+    } catch {
+      info('이미지 저장에 실패했어요. 잠시 후 다시 시도해주세요.');
+    }
+  };
 
   return (
     <BottomSheet open={open} onClose={onClose} title="기록 공유하기">
@@ -63,7 +110,7 @@ export default function ShareSheet({
           onChange={(id) => setPeriod(id as Period)}
         />
 
-        <div className={styles.share_card}>
+        <div className={styles.share_card} ref={cardRef}>
           <span className={styles.share_brand}>대구동남교회</span>
           <span className={styles.share_eyebrow}>{stat.title} 성경읽기</span>
           <p className={styles.share_stat}>
@@ -129,31 +176,19 @@ export default function ShareSheet({
         </div>
 
         <div className={styles.share_actions}>
-          <button
-            type="button"
-            className={styles.share_action}
-            onClick={() => info('카카오톡 공유는 준비 중이에요.')}
-          >
+          <button type="button" className={styles.share_action} onClick={handleKakao}>
             <span className={styles.share_action_icon}>
               <LuMessageCircle aria-hidden="true" />
             </span>
             카카오톡
           </button>
-          <button
-            type="button"
-            className={styles.share_action}
-            onClick={() => info('이미지 저장은 준비 중이에요.')}
-          >
+          <button type="button" className={styles.share_action} onClick={handleSaveImage}>
             <span className={styles.share_action_icon}>
               <LuDownload aria-hidden="true" />
             </span>
             이미지 저장
           </button>
-          <button
-            type="button"
-            className={styles.share_action}
-            onClick={() => info('링크 복사는 준비 중이에요.')}
-          >
+          <button type="button" className={styles.share_action} onClick={handleCopyLink}>
             <span className={styles.share_action_icon}>
               <LuLink aria-hidden="true" />
             </span>
