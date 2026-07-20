@@ -100,7 +100,38 @@ export default function ShareSheet({
   };
 
   return (
-    <BottomSheet open={open} onClose={onClose} title="기록 공유하기">
+    <BottomSheet
+      open={open}
+      onClose={onClose}
+      title="기록 공유하기"
+      footer={
+        <div className={styles.share_footer}>
+          <div className={styles.share_actions}>
+            <button type="button" className={styles.share_action} onClick={handleKakao}>
+              <span className={styles.share_action_icon}>
+                <LuMessageCircle aria-hidden="true" />
+              </span>
+              카카오톡
+            </button>
+            <button type="button" className={styles.share_action} onClick={handleSaveImage}>
+              <span className={styles.share_action_icon}>
+                <LuDownload aria-hidden="true" />
+              </span>
+              이미지 저장
+            </button>
+            <button type="button" className={styles.share_action} onClick={handleCopyLink}>
+              <span className={styles.share_action_icon}>
+                <LuLink aria-hidden="true" />
+              </span>
+              링크 복사
+            </button>
+          </div>
+          <Button variant="secondary" fullWidth onClick={onClose}>
+            닫기
+          </Button>
+        </div>
+      }
+    >
       <div className={styles.share}>
         <Tabs
           variant="pill"
@@ -176,30 +207,6 @@ export default function ShareSheet({
           </p>
         </div>
 
-        <div className={styles.share_actions}>
-          <button type="button" className={styles.share_action} onClick={handleKakao}>
-            <span className={styles.share_action_icon}>
-              <LuMessageCircle aria-hidden="true" />
-            </span>
-            카카오톡
-          </button>
-          <button type="button" className={styles.share_action} onClick={handleSaveImage}>
-            <span className={styles.share_action_icon}>
-              <LuDownload aria-hidden="true" />
-            </span>
-            이미지 저장
-          </button>
-          <button type="button" className={styles.share_action} onClick={handleCopyLink}>
-            <span className={styles.share_action_icon}>
-              <LuLink aria-hidden="true" />
-            </span>
-            링크 복사
-          </button>
-        </div>
-
-        <Button variant="secondary" fullWidth onClick={onClose}>
-          닫기
-        </Button>
       </div>
     </BottomSheet>
   );

@@ -24,7 +24,8 @@
   display: flex;
   flex-direction: column;
   width: 100%;
-  max-height: 80vh;
+  // 높이는 내용에 맞춰 커진다(height auto). 화면 한도까지만 늘고 그 이상이면 body가 스크롤
+  max-height: 94dvh;
   background: $bg-primary;
   border-radius: $radius-l $radius-l 0 0;
   box-shadow: $shadow-lg;
@@ -40,7 +41,7 @@
     width: auto;
     min-width: 40rem;
     max-width: 56rem;
-    max-height: 70vh;
+    max-height: 85vh;
     border-radius: $radius-l;
     padding-bottom: 0;
     transform: translateY(1.6rem);
