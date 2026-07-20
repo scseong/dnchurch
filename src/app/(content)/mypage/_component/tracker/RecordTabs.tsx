@@ -22,6 +22,15 @@ function shortDate(date: string): string {
   return `${m}월 ${d}일`;
 }
 
+// 주 범위 — 시작·끝이 같은 달이면 끝 날짜의 '월'을 생략 (예: 7월 13일 – 19일)
+function weekRange(start: string, end: string): string {
+  const startMonth = start.split('-')[1];
+  const endDay = Number(end.split('-')[2]);
+  return startMonth === end.split('-')[1]
+    ? `${shortDate(start)} – ${endDay}일`
+    : `${shortDate(start)} – ${shortDate(end)}`;
+}
+
 type Props = {
   today: string;
   todayEntries: TodayEntry[];
@@ -69,24 +78,27 @@ export default function RecordTabs({
           </div>
 
           {todayEntries.length > 0 ? (
-            <ul className={styles.entry_list}>
-              {todayEntries.map((entry) => (
-                <li key={entry.bookOrder}>
-                  <button
-                    type="button"
-                    className={styles.entry}
-                    onClick={() => onOpenRecorder(entry.bookOrder)}
-                  >
-                    <span className={styles.entry_icon} aria-hidden="true">
-                      <LuBookOpen />
-                    </span>
-                    <span className={styles.entry_range}>{entry.ranges}</span>
-                    <span className={styles.entry_count}>{entry.count}장</span>
-                    <LuChevronRight aria-hidden="true" />
-                  </button>
-                </li>
-              ))}
-            </ul>
+            <>
+              <ul className={styles.entry_list}>
+                {todayEntries.map((entry) => (
+                  <li key={entry.bookOrder}>
+                    <button
+                      type="button"
+                      className={styles.entry}
+                      onClick={() => onOpenRecorder(entry.bookOrder)}
+                    >
+                      <span className={styles.entry_icon} aria-hidden="true">
+                        <LuBookOpen />
+                      </span>
+                      <span className={styles.entry_range}>{entry.ranges}</span>
+                      <span className={styles.entry_count}>{entry.count}장</span>
+                      <LuChevronRight aria-hidden="true" />
+                    </button>
+                  </li>
+                ))}
+              </ul>
+              <p className={styles.entry_hint}>항목을 누르면 장을 수정하거나 해제할 수 있어요</p>
+            </>
           ) : (
             <div className={styles.empty}>
               <span className={styles.empty_icon} aria-hidden="true">
@@ -111,9 +123,7 @@ export default function RecordTabs({
       {tab === 'week' && (
         <div className={styles.card}>
           <div className={styles.week_head}>
-            <span>
-              {shortDate(week.days[0].date)} – {shortDate(week.days[6].date)}
-            </span>
+            <span>{weekRange(week.days[0].date, week.days[6].date)}</span>
             <span className={styles.week_done}>
               <strong>{week.doneCount}</strong> / 7일
             </span>

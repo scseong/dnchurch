@@ -51,6 +51,14 @@ $page-max-width: 60rem; // 계정 메뉴가 PC 폭 전체로 퍼지지 않게 �
   @include ellipsis-multi(1);
 }
 
+// 이름 뒤 존칭 — 이름보다 작고 옅게 (시안)
+.name_suffix {
+  margin-left: $spacing-4;
+  font-size: $font-size-14;
+  font-weight: $font-weight-regular;
+  color: $txt-tertiary;
+}
+
 .email {
   @include text-caption;
   @include ellipsis-multi(1);

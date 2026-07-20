@@ -43,7 +43,10 @@ export default function ProfileSection({ profile, departments, districts }: Prop
         )}
       </span>
       <div className={styles.identity}>
-        <strong className={styles.name}>{displayName}</strong>
+        <strong className={styles.name}>
+          {displayName}
+          <span className={styles.name_suffix}>님</span>
+        </strong>
         <span className={styles.email}>{subLine}</span>
       </div>
       <Button variant="secondary" size="sm" onClick={() => setEditOpen(true)}>

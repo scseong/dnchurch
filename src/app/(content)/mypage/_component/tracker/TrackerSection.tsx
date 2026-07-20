@@ -1,7 +1,7 @@
 'use client';
 
 import { useMemo, useState } from 'react';
-import { LuFlame, LuShare2, LuBookOpen } from 'react-icons/lu';
+import { LuFlame, LuShare2, LuHistory, LuChevronRight } from 'react-icons/lu';
 import { Button } from '@/components/ui';
 import { useToastStore } from '@/store/toast.store';
 import {
@@ -233,14 +233,15 @@ export default function TrackerSection({ initialRecords, initialSettings, today 
             </Button>
           </div>
         )}
-        <Button
-          variant="accent"
-          fullWidth
-          leadingIcon={<LuBookOpen aria-hidden="true" />}
+        <button
+          type="button"
+          className={styles.plan_recall}
           onClick={() => openRecorder(today, null)}
         >
-          지난 날짜·권별로 기록하기
-        </Button>
+          <LuHistory aria-hidden="true" />
+          이전에 읽은 기록 불러오기
+          <LuChevronRight aria-hidden="true" />
+        </button>
       </div>
 
       {recorderDate !== null && (
