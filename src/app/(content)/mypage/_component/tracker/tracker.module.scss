@@ -631,6 +631,29 @@
   }
 }
 
+// 기록기 상단 모드 토글 (오늘 읽음 / 이전에 읽은 기록)
+.rec_modebar {
+  padding: $spacing-12 $spacing-20 0;
+}
+
+// prior 모드 안내 — 날짜바 자리에 통독 반영 설명
+.rec_prior_note {
+  display: flex;
+  align-items: center;
+  gap: $spacing-8;
+  padding: $spacing-12 $spacing-20;
+  background-color: $bg-accent-subtle;
+  border-bottom: 1px solid $border-warm;
+  font-size: $font-size-13;
+  color: $accent;
+
+  svg {
+    flex-shrink: 0;
+    width: 1.8rem;
+    height: 1.8rem;
+  }
+}
+
 .rec_datebar {
   display: flex;
   align-items: center;

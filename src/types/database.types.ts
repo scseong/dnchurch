@@ -21,7 +21,7 @@ export type Database = {
           created_at: string
           cycle: number
           id: string
-          read_date: string
+          read_date: string | null
           user_id: string
         }
         Insert: {
@@ -30,7 +30,7 @@ export type Database = {
           created_at?: string
           cycle?: number
           id?: string
-          read_date: string
+          read_date?: string | null
           user_id: string
         }
         Update: {
@@ -39,7 +39,7 @@ export type Database = {
           created_at?: string
           cycle?: number
           id?: string
-          read_date?: string
+          read_date?: string | null
           user_id?: string
         }
         Relationships: []
@@ -751,6 +751,10 @@ export type Database = {
       }
       increment_sermon_views: {
         Args: { sermon_id: number }
+        Returns: undefined
+      }
+      record_prior_chapters: {
+        Args: { p_book_order: number; p_chapters: number[]; p_cycle: number }
         Returns: undefined
       }
       update_bulletin: {
