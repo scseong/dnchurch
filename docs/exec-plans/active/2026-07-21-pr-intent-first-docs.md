@@ -127,7 +127,8 @@ Codex CR 반영:
 - [x] 4. 게이트 재설계 구현 — (A) Claude 2차 제거 · (B) tier 판정 · (C) CODEX_UNAVAILABLE + fixture 3개. sectionBody 버그도 수정(D12). fixture 6경로 + 실제 게이트 tier 판정 실측
 - [x] 5. 참조 sweep — 하네스 전체(skill·hook·agent·root·tests) 약 17파일. 삭제 템플릿 매핑 0건, Claude 2차 유효 언급 0건 확인. 두 hook의 sectionBody도 anchor 수정(D12 확대). caveat 2건 반영. fixture 8경로 재검증
 - [x] 6. ADR 0023 작성(PR 통합 + tier 재편) + 0008·0010 역참조(개정 명시) + ADR 인덱스 갱신 + memory `feedback_pr_templates` 갱신
-- [x] 7. doc-editor 점검(medium 3건 반영) → verify-task PASS → harness-gate 통과 → 커밋 분리 후 사용자 승인
+- [x] 7. doc-editor 점검(medium 3건 반영) → verify-task PASS → harness-gate 통과 → 커밋 분리 후 사용자 승인 → PR #155
+- [x] 8. 가독성 게이트 신설 — `scripts/check-readability.mjs`(warn-only), pre-commit 배선, fixture 3검사, writing-style SKILL 규칙+예시, ADR 0023 반영, PR #155 본문 재작성(linter 통과). frontmatter 오탐 1건 수정. SKILL·exec-plan 기존 밀도 경고는 warn-only 부채로 남김
 
 ## Verification
 
@@ -172,6 +173,8 @@ Codex가 반환한 것 (Claude 처리):
 
 - 문서 모순 — PR 템플릿 comment·본 plan의 `## Claude 2차 검증` 잔존 → 제거. Verification 섹션의 `git diff HEAD` 표기를 merge-base로 정정.
 - CODEX_UNAVAILABLE 3필드 정규식은 위조 억제책이지 암호적 차단이 아니다 — 사람·리뷰어가 plan에서 보고 판단하는 deterrent로 수용.
+
+8단계 가독성 게이트(D14)는 별도 Codex 라운드 없이 dogfooding으로 검증했다. warn-only라 버그가 나도 경고가 잘못 뜰 뿐 게이트를 깨지 않아 위험이 낮다. 검증: fixture 3검사(문장 가운뎃점·셀 길이·셀 구분자) 각 발화, 재작성한 PR 본문이 자기 게이트 통과, frontmatter 오탐 1건을 실측으로 찾아 수정.
 
 ## 검증 이력
 
@@ -270,6 +273,11 @@ Codex가 반환한 것 (Claude 처리):
   - 문제: 게이트 구현을 실측하다, 이 계획서의 `## 게이트 재설계`에 "Codex 검토는 `## Codex 계획 검증`"이라고 섹션 이름을 인용한 곳에서 게이트가 계획 검증을 못 읽고 "verdict 없음"으로 차단했다. `sectionBody`가 `markdown.indexOf("## " + heading)`로 첫 등장을 찾는데, 본문 인라인 인용이 실제 헤딩보다 앞서 잡혔다.
   - 해결: `harness-gate.mjs`와 `complete-task.mjs`의 `sectionBody`를 `new RegExp('^## ' + escaped + '\\s*$', 'm')`로 바꿔 줄 시작에 정확히 놓인 헤딩만 찾게 했다. 인라인 인용(`` `## …` ``)이나 문장 중간 언급은 이제 헤딩으로 오인되지 않는다. 수정 후 실제 게이트가 계획 검증을 제대로 읽고 Codex 1차 placeholder에서만 막혔다.
   - 결과: 이번 재설계와 무관하게 존재하던 신뢰성 결함을 닫았다 — 누가 계획서에 섹션 이름을 인용해도 게이트가 엉뚱한 본문을 읽어 잘못 통과·차단하지 않는다. fixture 6경로 재검증에서 회귀 0.
+
+- **D14 — 가독성은 규칙이 아니라 기계 게이트로 강제한다 (warn-only 시작)**
+  - 문제: 사용자가 모든 문서에서 같은 표현 문제가 반복된다고 지적했다. `·` 나열, 키워드 명사 더미, 영어 토큰 혼입, 문장 구분 없음. writing-style SKILL이 이미 이걸 금지하는데도 안 고쳐진다. Codex 교차 검증 결과: 규칙은 있으나 생성 경로와 게이트에 안 붙어 있다 — doc-editor는 PR 본문을 안 보고 exec-plan도 일부 섹션만 본다. SKILL 자신도 규칙 본문에서 영어 토큰을 쓰고, `·` 금지를 "3개 이상"으로 느슨히 두며 PR 제목에선 `·`를 허용해 스스로 모순된다.
+  - 해결: advisory(문서 가이드)가 아니라 deterministic 기계 검사를 둔다. `scripts/check-readability.mjs`가 코드 span 밖 산문에서 문장당 `·` 개수·표 셀 길이·표 셀 사실-구분자 개수를 잰다. 병목을 피하려고 세 가지를 지킨다 — 느슨한 임계값(최악만), 한 지점만 hard-block(PR 본문), 나머지는 경고. 처음엔 전부 warn-only로 내고 오탐을 재본 뒤 PR 본문만 승격한다. SKILL의 자기모순(영어 토큰·느슨한 `·` 규칙·좋은 예의 `·` 나열)도 정정하고 키워드더미→산문 나쁜/좋은 예를 더한다.
+  - 결과: 문장 품질을 보는 게이트가 처음 생긴다. 지금은 prefix·길이·label만 검사했다. warn-only라 아무도 안 막히니 되돌리기 위험이 없고, 오탐이 적으면 PR 본문 한 지점만 조인다.
 
 ## ADR 판단
 

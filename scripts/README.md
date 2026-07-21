@@ -12,6 +12,7 @@ CLAUDE.md의 EXPLORE → PLAN → CODEX_PLAN_REVIEW → WORK → CODEX_FIRST_PAS
 | `harness-gate.mjs <task-id>` | 머지/릴리스 전 | 검증 증적 + exec-plan 협업 기록 + ADR 판단을 강제 확인 |
 | `prevent-main-src-commit.mjs` | COMMIT 전 | `main` 브랜치에서 staged `src/` 변경 커밋 차단 |
 | `enforce-verification.mjs` | COMMIT 전 | 최신 검증 기록과 현재 diff 일치 여부 확인 (`VERIFY_ENFORCE=1`이면 차단) |
+| `check-readability.mjs <file.md>` | COMMIT 전 | 산출 문서의 문장당 가운뎃점 수·표 셀 길이·셀 구분자 수를 검사. 기본은 경고만, `READABILITY_ENFORCE=1`이면 차단 |
 | `start-adr.mjs <slug>` | 큰 결정 시 | 다음 ADR 번호 계산 → `docs/decisions/NNNN-<slug>.md` 생성 |
 | `update-adr-index.mjs` | ADR 추가/상태 변경 후 | `docs/decisions/README.md` 인덱스 재생성 |
 
