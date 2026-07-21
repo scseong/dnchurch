@@ -49,6 +49,6 @@
 - **결론**: PASS
 - **풀이**: 변경 1줄·영향 파일 1건. 인접 정리 0건, 외과적 변경 위반 없음.
 
-## Claude 2차 검증
+## Verification
 
-- **최종 판단**: PASS — verify-task.mjs 통과 (lint·stylelint·build·knip 0 warning). GNB와 검색 칩 라벨이 브라우저에서 동일 문자열로 표시됨을 수동 확인.
+- `node scripts/verify-task.mjs <task-id>` — PASS (lint·stylelint·build·knip 0 신규). GNB와 검색 칩 라벨이 브라우저에서 동일 문자열로 표시됨을 수동 확인.

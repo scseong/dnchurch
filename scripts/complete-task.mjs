@@ -117,9 +117,12 @@ if (
 }
 
 function sectionBody(markdown, heading) {
-  const marker = `## ${heading}`;
-  const start = markdown.indexOf(marker);
-  if (start === -1) return "";
+  // 헤딩은 줄 시작에 고정해서 찾는다(harness-gate.mjs와 동일). 본문에 인라인으로 적힌
+  // 섹션 이름을 헤딩으로 오인하지 않도록.
+  const escaped = heading.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+  const headingMatch = new RegExp(`^## ${escaped}\\s*$`, "m").exec(markdown);
+  if (!headingMatch) return "";
+  const start = headingMatch.index;
 
   const bodyStart = markdown.indexOf("\n", start);
   if (bodyStart === -1) return "";
@@ -129,27 +132,18 @@ function sectionBody(markdown, heading) {
   return markdown.slice(bodyStart + 1, bodyEnd).trim();
 }
 
+// tier 재편 후(harness-gate): 요구 verdict 섹션은 tier에 따라 다르고, Claude 2차 검증 섹션은 없어졌다.
+// 여기서는 섹션이 있는데 placeholder로 남은 경우만 경고한다 — 섹션 부재는 tier 0/1의 정상 상태라 강제하지 않는다.
 const planReview = sectionBody(content, "Codex 계획 검증");
 const firstPassReview = sectionBody(content, "Codex 1차 검증");
-const secondPassReview = sectionBody(content, "Claude 2차 검증");
 const adrReview = sectionBody(content, "ADR 판단");
 
-if (!planReview) {
-  warnOrFail(`⚠ Codex 계획 검증 섹션이 없습니다: ${filename}\n  새 템플릿 기준으로 ## Codex 계획 검증 섹션을 추가하세요.`);
-} else if (/결론\*\*: 미요청|상태\*\*: 미요청/.test(planReview)) {
+if (planReview && /결론\*\*: 미요청|상태\*\*: 미요청/.test(planReview)) {
   warnOrFail(`⚠ Codex 계획 검증 결과가 미작성 상태입니다: ${filename}`);
 }
 
-if (!firstPassReview) {
-  warnOrFail(`⚠ Codex 1차 검증 섹션이 없습니다: ${filename}\n  새 템플릿 기준으로 ## Codex 1차 검증 섹션을 추가하세요.`);
-} else if (/결론\*\*: 미요청|상태\*\*: 미요청/.test(firstPassReview)) {
+if (firstPassReview && /결론\*\*: 미요청|상태\*\*: 미요청/.test(firstPassReview)) {
   warnOrFail(`⚠ Codex 1차 검증 결과가 미작성 상태입니다: ${filename}`);
-}
-
-if (!secondPassReview) {
-  warnOrFail(`⚠ Claude 2차 검증 섹션이 없습니다: ${filename}\n  새 템플릿 기준으로 ## Claude 2차 검증 섹션을 추가하세요.`);
-} else if (/검토 내용\*\*:\s*$|실행한 검증\*\*:\s*$|최종 판단\*\*:\s*$/m.test(secondPassReview)) {
-  warnOrFail(`⚠ Claude 2차 검증 결과가 미작성 상태입니다: ${filename}`);
 }
 
 const changedFiles = [
