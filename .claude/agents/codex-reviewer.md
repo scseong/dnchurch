@@ -58,7 +58,7 @@ model: opus
 
 ### 출력
 - **계획 검증** — verdict 토큰 1개 + 5체크 결과 + Findings 분류(material / expression-only) + confidence(low/medium/high)
-- **1차 검증** — Files changed + Findings + Fixes applied + Remaining risks
+- **1차 검증** (Tier 2) — Files changed + Findings + Fixes applied + Remaining risks. verdict: `PASS·FIX_APPLIED·CHANGE_REQUEST·BLOCK`. hang·실패로 Codex가 못 돌면 claude-code가 `CODEX_UNAVAILABLE`(오류·시도·Claude 직접 확인 3필드)로 기록
 - **언어** — 응답 한국어("Respond in Korean."를 프롬프트 말미에 명시). `codex:rescue`는 stdout을 verbatim 출력하므로 한국어 응답이 곧 사용자 보고가 됨
 
 ## 호출 프롬프트 템플릿 (계획 검증)

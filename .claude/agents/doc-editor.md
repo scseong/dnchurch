@@ -27,8 +27,8 @@ tools: Read, Grep, Glob
 
 | 대상 | 점검 여부 |
 | --- | --- |
-| `docs/exec-plans/active/*.md` | ✅ 검증 기록(`## Codex 계획 검증`·`## Codex 1차 검증`·`## Claude 2차 검증`)·`## 의사결정 로그`·`## Codex 인용 verbatim` 섹션 |
-| `docs/exec-plans/completed/*.md` | ✅ `## 회고` 섹션 + 검증 기록 갱신(active와 동일 섹션) — `.claude/hooks/check-doc-style.mjs` `PLAN_HASH_SECTIONS`(6개 + "회고") 변경 감지 시 호출 대상 |
+| `docs/exec-plans/active/*.md` | ✅ 검증 기록(`## Codex 계획 검증`·`## Codex 1차 검증`)·`## 의사결정 로그`·`## Codex 인용 verbatim` 섹션 |
+| `docs/exec-plans/completed/*.md` | ✅ `## 회고` 섹션 + 검증 기록 갱신(active와 동일 섹션) — `.claude/hooks/check-doc-style.mjs` `PLAN_HASH_SECTIONS`(계획 검증·Codex 1차·의사결정 로그·검증 이력·회고) 변경 감지 시 호출 대상 |
 | `docs/decisions/*.md` (ADR) | ✅ 전체 |
 | `docs/tech-debt/active.md` | ✅ 전체 |
 | Codex 결과 verbatim 인용 (어디든) | ✅ verbatim 보존 + 평이 풀이 1줄 점검 |

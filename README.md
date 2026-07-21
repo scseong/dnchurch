@@ -313,7 +313,7 @@ CLAUDE.md "핵심 규칙"의 요약. 자세한 배경은 ADR과 메모리 참조
 - 사용자 승인 후 커밋
 - PR base는 항상 **`develop`** (feature → develop → main 전략)
 - PR 생성 시 `--assignee "@me"`와 `--label <name>` 필수 (없으면 GitHub Action이 차단)
-- prefix별 PR 템플릿: Fix→bugfix.md, Feat→feature.md, Refactor→refactor.md, Chore→maintenance.md
+- PR 템플릿: 일반 PR은 단일 `.github/PULL_REQUEST_TEMPLATE.md`(5섹션 자동 적용), develop→main 릴리스만 `?template=release.md`
 
 ### Next 16 변경
 

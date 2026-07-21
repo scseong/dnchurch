@@ -37,6 +37,20 @@ description: 기능 추가, 버그 수정, 리팩터링, 설계/정책 변경, P
 - 없으면 짧은 영문 kebab-case task-id를 제안한다.
 - slug 규칙: `^[a-z0-9][a-z0-9-]*$`
 
+## 검증 tier
+
+파이프라인은 전체 경로를 유지하되, 검증 단계는 변경 위험도(tier)에 따라 적용된다. `harness-gate`가 변경 파일·LOC로 tier를 자동 판정하고 tier별 요구 verdict 섹션을 강제한다.
+
+| tier | 조건 | 요구 검증 |
+| --- | --- | --- |
+| 0 (사소) | ADR-trigger 미적중 · `src/` 경로 없음 · 파일 ≤2 · LOC ≤20 | 없음 (verify 기록만) |
+| 1 (보통) | ADR-trigger 미적중 · 위 초과 · 파일 ≤5 · LOC ≤100 | CODEX_PLAN_REVIEW |
+| 2 (고위험) | `ADR_TRIGGER_PARTS` 적중 · 또는 파일 >5 · LOC >100 · binary | CODEX_PLAN_REVIEW + CODEX_FIRST_PASS |
+
+- LOC·파일 수는 `harness-gate`가 `git diff <merge-base> --numstat`로 센다. binary·untracked src/trigger는 fail-closed로 Tier 2.
+- 전체 파이프라인 `EXPLORE → PLAN → CODEX_PLAN_REVIEW → WORK → CODEX_FIRST_PASS → VERIFY → COMMIT`은 tier 2 기준이다. Tier 0은 `EXPLORE·WORK·VERIFY·COMMIT`, Tier 1은 여기에 `CODEX_PLAN_REVIEW`가 붙는다.
+- 별도 `## Claude 2차 검증` verdict 섹션은 없앴다 — VERIFY 결과는 `## Verification`에 기록한다. tier·CODEX_UNAVAILABLE 근거: `docs/decisions/`의 PR-intent-first ADR.
+
 ## 절차
 
 ### 1. EXPLORE
@@ -71,9 +85,9 @@ node scripts/start-task.mjs <task-id>
 
 생성된 `docs/exec-plans/active/<date>-<task-id>.md`에 목표, 접근법, 영향 파일, 체크리스트, DoD를 채운다.
 
-### 3. CODEX_PLAN_REVIEW
+### 3. CODEX_PLAN_REVIEW (Tier 1+)
 
-구현 전 Codex 계획 검증을 요청한다. 질문은 영어로 작성하고 마지막에 `Respond in Korean.`을 붙인다.
+구현 전 Codex 계획 검증을 요청한다 — **Tier 1 이상**. Tier 0(사소한 비-src 변경)은 건너뛴다. 질문은 영어로 작성하고 마지막에 `Respond in Korean.`을 붙인다.
 
 Codex가 결론을 내기 전에 다음 5체크를 수행하도록 프롬프트에 포함한다.
 
@@ -141,9 +155,11 @@ Respond in Korean.
 - exec-plan 체크리스트를 진행하면서 갱신한다.
 - 계획 밖 변경이 필요하면 먼저 exec-plan과 ADR 판단을 갱신한다.
 
-### 5. CODEX_FIRST_PASS
+### 5. CODEX_FIRST_PASS (Tier 2만)
 
-구현 diff가 생기면 Codex 1차 검증을 요청한다.
+구현 diff가 생기면 Codex 1차 검증을 요청한다 — **Tier 2 변경에서만**. Tier 0·1은 이 단계를 건너뛴다 (tier 기준은 `## 검증 tier` 참조). 자동 도구(ESLint 레이어 규칙 + build tsc)가 타입·레이어 위반을 이미 잡으므로, Codex 1차의 고유 가치인 외과적 변경 점검이 필요한 고위험 변경에만 부른다.
+
+Codex가 hang·실패로 안 돌면 위조 PASS 대신 `CODEX_UNAVAILABLE` verdict를 쓴다 — `오류: … / 시도: … / Claude 확인: …` 3필드로 무엇이 실패했고 Claude가 무엇을 직접 확인했는지 남긴다. harness-gate가 이 형식을 강제한다. 계획 검증(§3)은 CODEX_UNAVAILABLE을 허용하지 않는다 — plan-first의 핵심이라 건너뛸 수 없다.
 
 Codex가 우선 확인할 항목:
 
@@ -171,17 +187,17 @@ Codex가 직접 수정하지 않고 Claude Code에 반환해야 하는 범위:
 
 ### 6. VERIFY
 
-Claude Code가 2차 검증을 수행한다. 수행 항목: ESLint, stylelint, build, knip.
+Claude Code가 검증을 수행한다. 수행 항목: ESLint, stylelint, build, knip.
 
 ```bash
 node scripts/verify-task.mjs <task-id>
 ```
 
-결과는 `logs/<task-id>/<run-id>/`에 저장된다 (커밋 X — 로컬 증적).
+결과는 `logs/<task-id>/<run-id>/`에 저장된다 (커밋 X — 로컬 증적). exec-plan의 `## Verification` 섹션에 결과를 기록한다 — 별도 `## Claude 2차 검증` 섹션은 없앴다(게이트 재편). lint·build 실측이 곧 이 단계의 증적이다.
 
 실패 시 신규 회귀인지 기존 부채인지 `docs/tech-debt/active.md`와 대조한다. 원인 불명·반복 실패 시 Codex 분석 검토.
 
-Codex가 1차 수정한 경우 Claude Code는 diff를 다시 읽고 의도·범위·검증 결과를 교차 확인한다. 결과는 exec-plan의 `## Claude 2차 검증`에 기록.
+Codex가 1차 수정한 경우(Tier 2) Claude Code는 diff를 다시 읽고 의도·범위·검증 결과를 교차 확인한다. 그 교차 확인 결과는 `## Codex 1차 검증` 섹션 본문에 함께 남긴다.
 
 ### 7. COMMIT / GATE
 
@@ -276,9 +292,9 @@ $tmp  = [System.IO.Path]::GetTempFileName()
 
 ## 검증 결과 기록 규칙
 
-`## Codex 계획 검증`, `## Codex 1차 검증`, `## Claude 2차 검증`의 결과를 exec-plan에 기록할 때 작성용 SSOT는 `.claude/skills/writing-style/SKILL.md`다. 본 SKILL은 검증 워크플로우 메타 정보만 담고, 표현 규칙(추상 표현 금지·구체화 4원소·Codex 결과 인용·나쁜/좋은 예·의사결정 로그 형식·한글 문장 규칙·검증 섹션 구조·검증 결과 표)은 모두 그쪽에 통합되어 있다.
+`## Codex 계획 검증`, `## Codex 1차 검증`의 결과를 exec-plan에 기록할 때 작성용 SSOT는 `.claude/skills/writing-style/SKILL.md`다. 본 SKILL은 검증 워크플로우 메타 정보만 담고, 표현 규칙(추상 표현 금지·구체화 4원소·Codex 결과 인용·나쁜/좋은 예·의사결정 로그 형식·한글 문장 규칙·검증 섹션 구조·검증 결과 표)은 모두 그쪽에 통합되어 있다. VERIFY 결과는 `## Verification`에 남긴다 — 별도 Claude 2차 검증 섹션은 없앴다.
 
-본 규칙은 ADR 0008 메커니즘 2(Detection) 운영화의 일부다. memory `feedback_concrete_records`·`feedback_doc_decision_log_style`와 sync 유지. 규칙 위반은 Codex 1차 검증·Claude 2차 검증에서 차단 대상.
+본 규칙은 ADR 0008 메커니즘 2(Detection) 운영화의 일부다. memory `feedback_concrete_records`·`feedback_doc_decision_log_style`와 sync 유지. 규칙 위반은 Codex 계획·1차 검증에서 차단 대상.
 
 `## 검증 이력`은 별도 top-level 섹션이라 `sectionBody()`가 다음 `##`에서 끊긴다. 게이트 코드 변경 없이 동작한다.
 

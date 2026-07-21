@@ -38,11 +38,13 @@ Claude Code와 Codex CLI 협업 타이밍을 제안하는 Hook 모음이다. Hoo
 
 ```text
 Claude Code 초기 계획
--> Codex 계획 검증
+-> Codex 계획 검증 (Tier 1+)
 -> Claude Code 코드 작성
--> Codex 1차 검증 + 제한적 수정
--> Claude Code 2차 검증과 최종 책임
+-> Codex 1차 검증 + 제한적 수정 (Tier 2만)
+-> Claude Code VERIFY(verify-task) + 최종 책임
 ```
+
+검증 단계는 변경 위험도(tier)에 따라 적용된다 — tier 표는 `.claude/skills/harness-workflow/SKILL.md` `## 검증 tier`.
 
 ## Codex 계획 리뷰 표준 프롬프트
 

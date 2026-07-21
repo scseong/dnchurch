@@ -1,9 +1,11 @@
 # 0008 — 코드 품질 강제: 에이전트 리뷰 + 사전 지침 채택 (Tier 1·2 도입 유보)
 
-- **Status**: Accepted
+- **Status**: Accepted (부분 개정 — ADR 0023)
 - **Date**: 2026-05-13
 - **Deciders**: 프로젝트 오너
 - **Tags**: harness-engineering, code-quality, agent-review, prompt-engineering
+
+> ⚠️ **2026-07-21 ADR 0023이 개정**: 본 ADR이 명시한 "PR마다 Codex 1차 + `Claude 2차 검증`"(아래 § Decision)은 위험도 tier 모델로 대체됐다. `Claude 2차 검증` 섹션은 폐지(verify-task 기록으로 병합)되고, Codex 1차는 Tier 2에서만 요구된다. 14축 점검 대상 정의는 유효하다.
 
 ## Context
 

@@ -46,15 +46,16 @@ description: exec-plan·ADR·tech-debt·검증 기록·커밋 메시지·PR 본�
 
 폐기 시 원항목 끝에 `⚠️ 정정(PR #xx): 폐기 → D{n} 참조` 1줄.
 
-### 검증 기록 (`## Codex 계획 검증`·`## Codex 1차 검증`·`## Claude 2차 검증`)
+### 검증 기록 (`## Codex 계획 검증`·`## Codex 1차 검증`)
 
-현재 판정만. 3줄 고정.
+현재 판정만. 한 줄 고정 — verdict 토큰 + `— ` + 근거 30자 이상. 별도 `## Claude 2차 검증` 섹션은 없앴다(게이트 tier 재편). VERIFY 결과는 `## Verification`에 적는다.
 
 ```markdown
-- **결론**: {verdict 토큰 + 짧은 처리 결과}  (2차는 `- **최종 판단**:`)
-- **현재 판단**: {5체크/구현 검토의 핵심 요지}
-- **다음 행동**: {다음 단계}
+- **결론**: {verdict 토큰} — {근거 30자 이상: 무엇을 확인했나 / 핵심 지적}
 ```
+
+- 계획 검증 토큰: `PASS·PASS_WITH_DECISION_LOG·CHANGE_REQUEST·BLOCK`. Codex 1차 토큰: `PASS·FIX_APPLIED·CHANGE_REQUEST·BLOCK·CODEX_UNAVAILABLE`.
+- Codex 1차가 `CODEX_UNAVAILABLE`이면 `오류: … / 시도: … / Claude 확인: …` 3필드로 쓴다(위조 PASS 금지, harness-gate 강제).
 
 세부 규칙:
 - 이전 판정·재검증 원문·CR 해소 내역은 본 섹션에 쓰지 않는다.
@@ -197,9 +198,9 @@ PR 제목 규칙:
   ```
 
 PR 메타데이터:
-- 본문 template 매핑 (`.github/PULL_REQUEST_TEMPLATE/README.md` SSOT) — Fix→bugfix.md / Feat→feature.md / Refactor→refactor.md / Chore·Docs·Style→maintenance.md / 릴리스→release.md
+- 본문은 단일 템플릿 `.github/PULL_REQUEST_TEMPLATE.md`(문제·접근·변경 범위·검증·남은 위험 5섹션)가 자동 적용된다. develop→main 릴리스만 `?template=release.md`.
 - `--assignee "@me"`·`--label` 필수 — GitHub Action `pr-required-fields`가 차단
-- base는 `develop`
+- base는 `develop` (develop→main 릴리스만 `main`)
 
 PR 본문 가독성 (GitHub 렌더 기준 — 문장 구분이 되게 쓴다):
 - **긴 설명은 문단으로 뭉치지 말고 주장별 하위 bullet로 쪼갠다.** GitHub은 문단 안의 단일 줄바꿈을 무시해 3문장+ 문단이 벽처럼 렌더된다. 한 줄 = 한 주장.
