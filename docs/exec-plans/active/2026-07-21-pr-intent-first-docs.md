@@ -279,6 +279,19 @@ Codex가 반환한 것 (Claude 처리):
   - 해결: advisory(문서 가이드)가 아니라 deterministic 기계 검사를 둔다. `scripts/check-readability.mjs`가 코드 span 밖 산문에서 문장당 `·` 개수·표 셀 길이·표 셀 사실-구분자 개수를 잰다. 병목을 피하려고 세 가지를 지킨다 — 느슨한 임계값(최악만), 한 지점만 hard-block(PR 본문), 나머지는 경고. 처음엔 전부 warn-only로 내고 오탐을 재본 뒤 PR 본문만 승격한다. SKILL의 자기모순(영어 토큰·느슨한 `·` 규칙·좋은 예의 `·` 나열)도 정정하고 키워드더미→산문 나쁜/좋은 예를 더한다.
   - 결과: 문장 품질을 보는 게이트가 처음 생긴다. 지금은 prefix·길이·label만 검사했다. warn-only라 아무도 안 막히니 되돌리기 위험이 없고, 오탐이 적으면 PR 본문 한 지점만 조인다.
 
+## PR 리뷰 대응
+
+PR #155에 봇 2종(gemini·codex)이 인라인 4건을 달았다. §8대로 중계하지 않고 각 지적을 코드로 직접 확인했다. 4건 다 실제 결함이었다(오탐 0). Codex 재검증도 4건 CONFIRMED(confidence high)로 확증했다.
+
+| 지적 | 출처 | 코드 확인 | 판정 | 조치 |
+| --- | --- | --- | --- | --- |
+| F1 frontmatter ADR 미인식 | gemini | `complete-task.mjs:139,161` 섹션만 봄 | 실제 | `adrReview`가 frontmatter `ADR needed`도 인정 |
+| F2 rename 경로·LOC 오판 | gemini | `{docs => src}/x.md` LOC 0 실측 | 실제 | `git diff`에 `--no-renames` |
+| F3 릴리스 base 빈 diff | codex | `merge-base(develop,origin/develop)`=HEAD | 실제 | merge-base=HEAD ref 건너뜀, 다 같으면 fail-closed |
+| F4 ADR 검사 branch diff 미사용 | codex | `assertAdrDecision`이 uncommitted diff만 봄 | 실제 | `stats.files`(branch diff) 전달 |
+
+F4는 이 PR의 마지막 게이트 통과가 ADR 검사를 건너뛴 것이었으나, `docs/decisions/` 변경이 있어 고친 게이트로도 통과한다(누락 ADR을 숨긴 사례 아님). 고친 게이트로 재실행하니 ADR을 branch diff로 실제 검사하고 통과했다.
+
 ## ADR 판단
 
 - **필요 여부**: 필요. PR 문서 정책을 바꾸는 영구 결정이고, `.github/PULL_REQUEST_TEMPLATE*`·`CLAUDE.md`·`scripts/`가 ADR 후보 파일이다.

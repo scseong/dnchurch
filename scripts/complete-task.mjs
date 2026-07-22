@@ -136,7 +136,10 @@ function sectionBody(markdown, heading) {
 // 여기서는 섹션이 있는데 placeholder로 남은 경우만 경고한다 — 섹션 부재는 tier 0/1의 정상 상태라 강제하지 않는다.
 const planReview = sectionBody(content, "Codex 계획 검증");
 const firstPassReview = sectionBody(content, "Codex 1차 검증");
-const adrReview = sectionBody(content, "ADR 판단");
+// ADR 판단은 frontmatter `- **ADR needed**: no|yes` 또는 `## ADR 판단` 섹션 둘 다 인정한다.
+// harness-gate.mjs assertAdrDecision과 같은 형식 — 새 템플릿은 frontmatter만 쓰므로 섹션만 찾으면 오탐.
+const adrFrontmatter = /^\s*-\s*\*\*ADR needed\*\*:\s*(no|yes)\b/im.test(content);
+const adrReview = sectionBody(content, "ADR 판단") || (adrFrontmatter ? "frontmatter" : "");
 
 if (planReview && /결론\*\*: 미요청|상태\*\*: 미요청/.test(planReview)) {
   warnOrFail(`⚠ Codex 계획 검증 결과가 미작성 상태입니다: ${filename}`);

@@ -45,17 +45,6 @@ function git(args) {
   }).trim();
 }
 
-function gitLines(args) {
-  try {
-    return git(args)
-      .split(/\r?\n/)
-      .map((line) => line.trim().replaceAll("\\", "/"))
-      .filter(Boolean);
-  } catch {
-    return [];
-  }
-}
-
 function sectionBody(markdown, heading) {
   // 헤딩은 줄 시작에 고정해서 찾는다. 예전엔 indexOf라 본문에 인라인으로 적힌
   // 섹션 이름(예: "검토는 `## Codex 계획 검증`")을 헤딩으로 오인해 엉뚱한 본문을 반환했다.
@@ -167,13 +156,9 @@ function assertReviewSections(content, filename, requiredSections) {
   }
 }
 
-function assertAdrDecision(content, filename) {
-  const changedFiles = [
-    ...new Set([
-      ...gitLines(["diff", "--name-only"]),
-      ...gitLines(["diff", "--cached", "--name-only"]),
-    ]),
-  ];
+// changedFiles는 tier 계산과 같은 branch diff(computeChangeStats().files)를 받는다.
+// 예전엔 uncommitted diff만 봐서, 커밋 후 clean 트리에서는 ADR-trigger 변경이 있어도 검사를 건너뛰었다.
+function assertAdrDecision(content, filename, changedFiles) {
   const adrRiskFiles = changedFiles.filter((file) =>
     ADR_TRIGGER_PARTS.some((part) => file.includes(part))
   );
@@ -223,18 +208,32 @@ function assertVerification(taskId) {
 }
 
 // 변경 규모를 계산할 기준 ref. 브랜치 delta(base…HEAD)를 봐야 커밋된 변경까지 잡힌다.
-// origin/develop → develop → origin/main → main 순으로 시도하고, 기준 ref가 없으면 fail-closed.
+// origin/develop → develop → origin/main → main 순으로 시도한다.
+// merge-base가 HEAD와 같은 ref는 건너뛴다 — 그 base로는 branch delta가 비어(예: develop→main 릴리스를
+// develop 위에서 돌릴 때 origin/develop) Tier 0로 오판된다. 다음 ref(main 계열)로 넘어간다.
+// 어느 ref도 유효한 delta를 못 주면 규모를 알 수 없으므로 fail-closed로 차단한다(검토 생략 금지).
 function resolveBaseRef() {
+  const headResult = spawnSync("git", ["rev-parse", "HEAD"], {
+    encoding: "utf8",
+    stdio: ["ignore", "pipe", "ignore"],
+  });
+  const headSha = headResult.status === 0 ? headResult.stdout.trim() : "";
+
   for (const ref of ["origin/develop", "develop", "origin/main", "main"]) {
     const result = spawnSync("git", ["merge-base", "HEAD", ref], {
       encoding: "utf8",
       stdio: ["ignore", "pipe", "ignore"],
     });
-    if (result.status === 0 && result.stdout.trim()) return result.stdout.trim();
+    if (result.status !== 0) continue;
+    const base = result.stdout.trim();
+    if (!base) continue;
+    if (base === headSha) continue; // HEAD와 같은 base → 빈 delta → 다음 ref로.
+    return base;
   }
   fail(
     "변경 규모를 계산할 기준 브랜치를 찾지 못했습니다. " +
-      "origin/develop, develop, origin/main, main 중 하나를 fetch/checkout한 뒤 다시 실행하세요.",
+      "origin/develop, develop, origin/main, main이 모두 HEAD와 같거나(빈 delta) 존재하지 않습니다. " +
+      "브랜치 상태를 확인하고 다시 실행하세요.",
   );
 }
 
@@ -247,7 +246,9 @@ function computeChangeStats() {
   let loc = 0;
   let hasBinary = false;
 
-  const numstat = spawnSync("git", ["diff", base, "--numstat"], { encoding: "utf8" });
+  // --no-renames: rename을 삭제+추가로 쪼갠다. rename 감지가 켜지면 `{old => new}` 경로 문자열이라
+  // src/·ADR-trigger 매칭이 깨지고, 큰 파일 이동이 0줄로 잡혀 Tier 0로 오판된다.
+  const numstat = spawnSync("git", ["diff", base, "--numstat", "--no-renames"], { encoding: "utf8" });
   if (numstat.status !== 0) {
     fail(`git diff --numstat 실패: base=${base}. 변경 규모를 알 수 없어 gate를 차단합니다.`);
   }
@@ -363,7 +364,7 @@ if (tier >= 1) {
   const content = readFileSync(planPath, "utf8");
 
   assertReviewSections(content, filename, required);
-  assertAdrDecision(content, filename);
+  assertAdrDecision(content, filename, stats.files);
 }
 
 assertVerification(effectiveTask);
