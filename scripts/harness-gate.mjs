@@ -348,10 +348,19 @@ if (/[^a-zA-Z0-9_.-]/.test(effectiveTask)) {
 const repoRoot = git(["rev-parse", "--show-toplevel"]);
 process.chdir(repoRoot);
 
+// `--tier`는 `--plan-file` dry-run 전용이다. 실제 게이트에서 허용하면 고위험 변경도
+// `--tier 0`으로 verdict·ADR 검사를 전부 건너뛰고 통과할 수 있다 — 게이트를 우회하는 구멍이라 거부한다.
+if (tierOverride !== null) {
+  fail(
+    "--tier는 --plan-file dry-run 전용입니다. " +
+      "실제 게이트는 변경 규모로 tier를 계산합니다 — override를 지우고 다시 실행하세요.",
+  );
+}
+
 // tier를 plan 탐색보다 먼저 계산한다(CR2). Tier 0은 verdict 섹션을 요구하지 않으므로
 // active plan이 없어도(PLAN 생략) 통과하되, verify 기록은 어느 tier에서도 확인한다.
 const stats = computeChangeStats();
-const tier = tierOverride ?? computeTier(stats);
+const tier = computeTier(stats);
 const required = REQUIRED_SECTIONS_BY_TIER[tier];
 console.log(
   `변경 규모: 파일 ${stats.files.length} · LOC ${stats.loc}${stats.hasBinary ? " · binary" : ""} → Tier ${tier} ` +

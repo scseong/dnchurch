@@ -141,12 +141,15 @@ const firstPassReview = sectionBody(content, "Codex 1차 검증");
 const adrFrontmatter = /^\s*-\s*\*\*ADR needed\*\*:\s*(no|yes)\b/im.test(content);
 const adrReview = sectionBody(content, "ADR 판단") || (adrFrontmatter ? "frontmatter" : "");
 
+// 미요청 상태는 경고만 한다(warnOrFail 아님). Tier 0/1은 계획 검증·Codex 1차를 정당하게 건너뛰므로
+// 그 섹션이 미요청으로 남는 게 정상이다. tier별 요구 검증은 harness-gate가 pre-merge에서 강제한다.
+// complete-task는 머지 후 이동 단계라 branch diff로 tier를 다시 못 재므로, 여기서 차단하지 않는다.
 if (planReview && /결론\*\*: 미요청|상태\*\*: 미요청/.test(planReview)) {
-  warnOrFail(`⚠ Codex 계획 검증 결과가 미작성 상태입니다: ${filename}`);
+  console.warn(`⚠ Codex 계획 검증이 미요청 상태입니다(Tier 0이면 정상): ${filename}`);
 }
 
 if (firstPassReview && /결론\*\*: 미요청|상태\*\*: 미요청/.test(firstPassReview)) {
-  warnOrFail(`⚠ Codex 1차 검증 결과가 미작성 상태입니다: ${filename}`);
+  console.warn(`⚠ Codex 1차 검증이 미요청 상태입니다(Tier 0·1이면 정상): ${filename}`);
 }
 
 const changedFiles = [

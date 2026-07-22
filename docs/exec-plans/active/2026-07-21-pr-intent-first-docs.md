@@ -292,6 +292,15 @@ PR #155에 봇 2종(gemini·codex)이 인라인 4건을 달았다. §8대로 중
 
 F4는 이 PR의 마지막 게이트 통과가 ADR 검사를 건너뛴 것이었으나, `docs/decisions/` 변경이 있어 고친 게이트로도 통과한다(누락 ADR을 숨긴 사례 아님). 고친 게이트로 재실행하니 ADR을 branch diff로 실제 검사하고 통과했다.
 
+2차 리뷰(codex가 수정 커밋 `0adf965` 재검토): 인라인 2건 추가. 코드로 확인하니 둘 다 실제 결함.
+
+| 지적 | 출처 | 코드 확인 | 판정 | 조치 |
+| --- | --- | --- | --- | --- |
+| New1 `--tier` 우회 | codex | 실측: 38파일 Tier 2가 `--tier 0`으로 verdict 0개 통과 | 실제 | 실제 task 경로에서 `--tier` 거부(dry-run 전용) |
+| New2 Tier 0·1 완료 차단 | codex | `complete-task.mjs:148` 미요청에 warnOrFail | 실제 | 미요청 검사를 경고로 낮춤(강제는 harness-gate가 pre-merge) |
+
+New1이 심각했다 — dry-run용 `--tier`가 실제 게이트에서도 먹혀 고위험 변경이 verdict·ADR 검사를 전부 건너뛰는 백도어였다.
+
 ## ADR 판단
 
 - **필요 여부**: 필요. PR 문서 정책을 바꾸는 영구 결정이고, `.github/PULL_REQUEST_TEMPLATE*`·`CLAUDE.md`·`scripts/`가 ADR 후보 파일이다.
