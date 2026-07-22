@@ -59,8 +59,7 @@
 | `lint:styles` | PASS / FAIL |
 | `knip` | clean / warning-only |
 | Codex 계획 검증 | PASS / CHANGE_REQUEST 반영 완료 / BLOCK이면 머지 불가 |
-| Codex 1차 검증 | PASS / FIX_APPLIED / N/A |
-| Claude 2차 검증 | 완료 / N/A |
+| Codex 1차 검증 | PASS / FIX_APPLIED / CODEX_UNAVAILABLE / N/A |
 
 ---
 

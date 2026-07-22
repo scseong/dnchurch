@@ -12,6 +12,7 @@ CLAUDE.md의 EXPLORE → PLAN → CODEX_PLAN_REVIEW → WORK → CODEX_FIRST_PAS
 | `harness-gate.mjs <task-id>` | 머지/릴리스 전 | 검증 증적 + exec-plan 협업 기록 + ADR 판단을 강제 확인 |
 | `prevent-main-src-commit.mjs` | COMMIT 전 | `main` 브랜치에서 staged `src/` 변경 커밋 차단 |
 | `enforce-verification.mjs` | COMMIT 전 | 최신 검증 기록과 현재 diff 일치 여부 확인 (`VERIFY_ENFORCE=1`이면 차단) |
+| `check-readability.mjs <file.md>` | COMMIT 전 | 산출 문서의 문장당 가운뎃점 수·표 셀 길이·셀 구분자 수를 검사. 기본은 경고만, `READABILITY_ENFORCE=1`이면 차단 |
 | `start-adr.mjs <slug>` | 큰 결정 시 | 다음 ADR 번호 계산 → `docs/decisions/NNNN-<slug>.md` 생성 |
 | `update-adr-index.mjs` | ADR 추가/상태 변경 후 | `docs/decisions/README.md` 인덱스 재생성 |
 
@@ -62,9 +63,8 @@ pre-commit의 `enforce-verification.mjs`는 기본 경고 모드다. `VERIFY_ENF
 - `## ADR 판단`
 - `## Codex 계획 검증`
 - `## Codex 1차 검증`
-- `## Claude 2차 검증`
 
-기본은 경고 모드다. `HARNESS_ENFORCE=1`을 설정하면 섹션 누락, `미요청`, `미검토` 상태가 남아 있을 때 완료 처리를 차단한다.
+기본은 경고 모드다. `HARNESS_ENFORCE=1`을 설정하면 섹션이 있는데 `미요청`·`미작성` 상태로 남아 있을 때 완료 처리를 차단한다. 섹션 부재 자체는 강제하지 않는다 — tier 0·1은 일부 검증 섹션이 없는 게 정상이다. `## Claude 2차 검증`은 게이트 tier 재편으로 없앴다.
 
 ADR 후보 파일(`package.json`, `src/apis/`, `src/services/`, `src/actions/`, `.claude/`, `.codex/`, `scripts/` 등)을 변경했는데 `docs/decisions/` 변경이 없으면 `ADR 판단` 섹션을 확인한다.
 
@@ -79,7 +79,7 @@ node scripts/harness-gate.mjs <task-id>
 이 명령은 다음을 모두 통과해야 성공한다.
 
 - 현재 diff와 일치하는 `verify-task.mjs` PASS 증적
-- active exec-plan의 `Codex 계획 검증`, `Codex 1차 검증`, `Claude 2차 검증` 작성 상태
+- 변경 규모로 판정한 tier별 요구 verdict 섹션 (Tier 0 없음 / Tier 1 계획 검증 / Tier 2 계획 검증 + Codex 1차)
 - ADR 후보 변경이 있을 때 `ADR 판단` 작성 또는 실제 ADR 변경
 
 ## 슬러그 규칙

@@ -19,9 +19,9 @@
 - **외과적 변경**: 변경된 모든 줄은 현재 작업으로 추적되어야 한다. 인접 코드·주석·포맷 "개선" 금지. 로컬 스타일을 따른다. 내 변경이 만든 unused import/변수만 제거하고, 기존 dead code는 발견 시 보고만 한다.
 - **검증 가능한 목표**: 구현 전 성공 기준을 정의하고, 가장 좁은 신뢰 명령으로 먼저 검증한 뒤 `verify-task.mjs`로 마무리한다. "동작하게 만들어" 같은 약한 기준은 시작 전에 구체화한다.
 
-## Workflow (필수 순서: EXPLORE → PLAN → CODEX_PLAN_REVIEW → WORK → CODEX_FIRST_PASS → VERIFY → COMMIT)
+## Workflow (전체 경로: EXPLORE → PLAN → CODEX_PLAN_REVIEW → WORK → CODEX_FIRST_PASS → VERIFY → COMMIT)
 
-어느 단계도 건너뛰지 않는다. 단순 변경(typo, 한 줄 수정, rename)은 PLAN을 생략할 수 있으나 **EXPLORE/VERIFY/COMMIT은 항상 필수**.
+위 문자열은 Tier 2(고위험) 기준의 전체 경로다. 검증 단계는 변경 위험도(tier)에 따라 적용된다 — Tier 0은 `EXPLORE·WORK·VERIFY·COMMIT`, Tier 1은 여기에 `CODEX_PLAN_REVIEW`, Tier 2는 `CODEX_FIRST_PASS`까지. tier 판정·요구 검증 표는 `.claude/skills/harness-workflow/SKILL.md` `## 검증 tier`. **EXPLORE/VERIFY/COMMIT은 어느 tier에서도 필수**.
 
 ### EXPLORE — 컨텍스트 수집
 
@@ -35,10 +35,10 @@
 상세 절차·5체크·외과적 변경 체크는 `.claude/skills/harness-workflow/SKILL.md`. 항상 알아야 할 트리거·명령:
 
 - **PLAN**: `node scripts/start-task.mjs <slug>` → `docs/exec-plans/active/<YYYY-MM-DD>-<slug>.md`. 다단계 작업 필수
-- **CODEX_PLAN_REVIEW** 트리거: 다단계 / 구조 변경 / `scripts/_shared-config.mjs`의 `ADR_TRIGGER_PARTS` 해당 파일. 결론 `PASS` / `CHANGE_REQUEST` / `BLOCK`. 재요청도 BLOCK이면 사용자 에스컬레이션
+- **CODEX_PLAN_REVIEW** (Tier 1+): 다단계 / 구조 변경 / `scripts/_shared-config.mjs`의 `ADR_TRIGGER_PARTS` 해당 파일. 결론 `PASS` / `CHANGE_REQUEST` / `BLOCK`. 재요청도 BLOCK이면 사용자 에스컬레이션
 - **WORK**: 한 번에 한 관심사. 계획 벗어나면 plan부터 갱신
-- **CODEX_FIRST_PASS**: 구현 diff 생성 시 Codex에 1차 검증 요청. 결과는 exec-plan `## Codex 1차 검증`에 기록
-- **VERIFY**: `node scripts/verify-task.mjs <slug>` → `logs/<task-id>/<run-id>/` (커밋 X). 실패 시 `docs/tech-debt/active.md` 대조. Codex가 1차 수정했으면 diff 교차 확인 후 `## Claude 2차 검증`에 기록
+- **CODEX_FIRST_PASS** (Tier 2만): 구현 diff 생성 시 Codex에 1차 검증 요청. 결과는 exec-plan `## Codex 1차 검증`에 기록. Codex 미가동 시 `CODEX_UNAVAILABLE`(오류·시도·Claude 확인 3필드)
+- **VERIFY**: `node scripts/verify-task.mjs <slug>` → `logs/<task-id>/<run-id>/` (커밋 X). 실패 시 `docs/tech-debt/active.md` 대조. 결과는 exec-plan `## Verification`에 기록 (별도 Claude 2차 검증 섹션은 없앰). Codex가 1차 수정했으면 diff 교차 확인 후 `## Codex 1차 검증` 본문에 남김
 
 ### COMMIT — 승인 후 커밋
 - 커밋 전 pre-commit 훅이 변경 파일 lint와 최신 검증 기록을 확인한다.
@@ -61,7 +61,7 @@
 
 | 에이전트 | 정의 파일 | 책임 |
 | --- | --- | --- |
-| **claude-code** (이 에이전트) | `.claude/agents/claude-code.md` | 오케스트레이터, 초기 계획, 메인 구현, Codex 결과 통합, 2차 검증, 기록·커밋 책임 |
+| **claude-code** (이 에이전트) | `.claude/agents/claude-code.md` | 오케스트레이터, 초기 계획, 메인 구현, Codex 결과 통합, VERIFY(verify-task), 기록·커밋 책임 |
 | **codex-reviewer** (`codex:rescue` 스킬) | `.claude/agents/codex-reviewer.md` | 계획 검증, 깊은 추론, 설계 판단, 트레이드오프 분석, 막힌 디버깅, 구현 후 1차 검증, 제한적 수정 |
 | **explorer** (`Agent subagent_type: explorer`) | `.claude/agents/explorer.md` | 광역 코드 탐색 위임 래퍼 (3회 이상 검색 예상 / 대용량 결과 / 메인 컨텍스트 보호) |
 | **doc-editor** (`Agent subagent_type: doc-editor`) | `.claude/agents/doc-editor.md` | exec-plan·ADR·검증 기록·tech-debt·Codex 인용 표현 점검 (직접 수정 X, file:line + 수정 초안 제안만) |
@@ -88,6 +88,7 @@
 | 2026-06-15 | PR 리뷰 대응을 표준 절차로 명문화 (`### 8. PR_REVIEW` 조건부 단계) | harness-workflow SKILL (§ 8 + `## PR 리뷰 명령`), CLAUDE.md (Workflow 포인터 + 본 표) | PR #118·#119 수동 대응에서 봇 오탐 2건을 코드 미확인 중계로 놓칠 뻔함 — 코드 확인 근거·중계 금지 hard rule로 검증 규율 고정 (hook·스크립트·ADR 없이 문서만) |
 | 2026-06-18 | 레이어 설명을 import 서열 + `services` 읽기·쓰기 공존으로 정정, `revalidateTag`→`updateTag` 드리프트 정정, 스킬 표에 `complete-task` 반영, audit 마커 갱신 | CLAUDE.md, docs/ARCHITECTURE.md, .claude/skills/supabase/SKILL.md, README.md | 포트폴리오 점검 중 `services`를 읽기 전용처럼 읽히게 한 표현·코드와 안 맞는 API 이름·표 누락 발견 (Codex 계획 검증 PASS_WITH_DECISION_LOG) |
 | 2026-06-29 | commit-msg hook에 R5(이메일 주소 금지) 추가, Co-Authored-By trailer에서 이메일을 빼고 이름만 남김 | scripts/check-commit-msg.mjs, docs/decisions/0009, harness-workflow SKILL | Co-Authored-By trailer에 사용자 이메일이 들어가던 것을 차단 — 사용자 지시 |
+| 2026-07-21 | PR 템플릿 5종→단일 5섹션 통합(의도 우선), 검증 게이트를 위험도 tier로 재편(Claude 2차 제거·Codex 1차는 tier 2만·CODEX_UNAVAILABLE fallback), sectionBody 헤딩 오인 버그 수정 | .github/PULL_REQUEST_TEMPLATE*, scripts/harness-gate.mjs·complete-task.mjs, docs/exec-plans/_template.md, harness-workflow·writing-style·complete-task SKILL, .claude/hooks·agents, tests/harness | 문서 작성 병목 축소 + 사소한 변경에 Codex 3회 강제 해소 + Codex hang 시 신뢰성 구멍 차단 — 사용자 지시 (PR-intent-first ADR) |
 
 ## HOW (검증 루프)
 

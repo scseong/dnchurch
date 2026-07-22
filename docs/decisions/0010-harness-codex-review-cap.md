@@ -1,9 +1,11 @@
 # 0010 — Harness CODEX_PLAN_REVIEW 범위 한정 + plan 압축 + EXPLORE 직접 검증
 
-- **Status**: Accepted
+- **Status**: Accepted (확장 개정 — ADR 0023)
 - **Date**: 2026-05-14
 - **Deciders**: scseong, Claude Opus 4.7, Codex
 - **Tags**: harness, agent-collaboration, workflow
+
+> ⚠️ **2026-07-21 ADR 0023이 확장·개정**: 본 ADR이 정한 "compact exec-plan = 6섹션 + verdict 3섹션"(아래 § Decision)에서 verdict 3섹션은 위험도 tier 모델로 대체됐다. `Claude 2차 검증`은 폐지(verify-task 기록으로 병합), Codex 1차는 Tier 2에서만 요구. 본 ADR의 CODEX_PLAN_REVIEW material-only cap과 `PASS_WITH_DECISION_LOG`는 계획 검증에서 그대로 유효하다.
 
 ## Context
 

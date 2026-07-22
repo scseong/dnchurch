@@ -2,3 +2,9 @@
 npx lint-staged
 node scripts/prevent-main-src-commit.mjs
 node scripts/enforce-verification.mjs
+
+# 가독성 검사 — staged 마크다운 대상, 경고만(차단 안 함). 조이려면 READABILITY_ENFORCE=1.
+staged_md=$(git diff --cached --name-only --diff-filter=ACM -- '*.md')
+if [ -n "$staged_md" ]; then
+  echo "$staged_md" | tr '\n' '\0' | xargs -0 node scripts/check-readability.mjs || true
+fi

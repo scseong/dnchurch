@@ -52,5 +52,6 @@
 | [0020](0020-brown-primary-migration.md) | 공개 primary 색을 navy에서 warm brown으로 이행 | Accepted | 2026-06-30 |
 | [0021](0021-hero-breadcrumb-removal.md) | 공유 Hero·Breadcrumb 제거, 콘텐츠 페이지 헤더를 MobileHeader + sr-only h1로 통일 | Accepted | 2026-07-03 |
 | [0022](0022-user-owned-data-rls.md) | 사용자 소유 데이터는 owner-RLS + 사용자 세션 Server Action | Proposed | 2026-07-17 |
+| [0023](0023-pr-intent-first-and-tier-gate.md) | PR 본문을 의도부터 읽게 + 검증 게이트를 위험도 tier로 | Accepted | 2026-07-21 |
 
 <!-- last-audit: 2026-05-01 -->

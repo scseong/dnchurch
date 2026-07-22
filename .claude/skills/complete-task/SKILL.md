@@ -53,7 +53,7 @@ git pull
 
 다음 컨텍스트를 읽고 세 항목의 초안을 작성한다.
 
-- exec-plan의 `## 의사결정 로그`, `## Codex 계획 검증`, `## Codex 1차 검증`, `## Claude 2차 검증`
+- exec-plan의 `## 의사결정 로그`, `## Codex 계획 검증`, `## Codex 1차 검증`, `## Verification`
 - 머지된 PR 본문 — `gh pr view <num> --json body,commits`
 - 해당 브랜치의 commit log
 - `logs/<slug>/<run-id>/`의 verify-task 출력 (경고/실패 분류용)
@@ -106,7 +106,7 @@ gh pr create --base develop --assignee "@me" --label "📝 문서" \
 ```
 
 - 메시지 prefix는 `Docs:` 사용 (회고/이동은 문서 변경).
-- PR 본문은 `.github/PULL_REQUEST_TEMPLATE/maintenance.md` 형식 — Task ID, Exec Plan 경로, 머지된 원 PR 번호를 반드시 명시한다.
+- PR 본문은 단일 템플릿 `.github/PULL_REQUEST_TEMPLATE.md`(5섹션) 형식 — Task ID, Exec Plan 경로, 머지된 원 PR 번호를 반드시 명시한다.
 - 사용자 승인 없이 commit/push/PR 생성 금지.
 
 ## 중단 조건

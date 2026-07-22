@@ -108,8 +108,8 @@ if (files.length >= 8 || critical.length >= 2) {
 
   emitContext(
     "[hook:post-implementation-review]\n" +
-      `변경 ${files.length}개·고위험 ${critical.length}개. Codex 1차 검증 권장.\n` +
+      `변경 ${files.length}개·고위험 ${critical.length}개. Tier 2(고위험)면 Codex 1차 검증 권장.\n` +
       "확인: 버그·타입·레이어·외과적 변경. 직접 수정은 국소 버그/타입/guard.\n" +
-      "기록: active exec-plan `## Codex 1차 검증` / `## Claude 2차 검증`.",
+      "기록: active exec-plan `## Codex 1차 검증`(Tier 2). VERIFY 결과는 `## Verification`.",
   );
 }
