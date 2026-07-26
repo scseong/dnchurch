@@ -4,6 +4,15 @@
 
 ---
 
+### 🟢 /mypage 성경읽기 기록 응답 전송량이 기록 행 수에 비례해 계속 커짐 (perf-audit-fixes)
+
+- **무엇**: `getBibleReadingRecords`(`src/apis/bible-reading.ts`)는 사용자의 전 회차 기록 행을 전부 내려받는다. perf-audit-fixes에서 페이지 요청을 병렬로 바꿔 왕복 지연은 고정했지만, 응답 전송량은 여전히 행 수에 비례한다(회독당 1,189행 이상, 연 2,000~3,000행 증가 추정).
+- **왜 지금 안 하나**: 범위를 줄이려면 임의 날짜의 book/chapter 상세를 lazy fetch해야 하는데(기록기 날짜 탐색이 과거 무제한), 클라이언트 캐시·로딩 상태·낙관적 병합이 필요해 현재 규모 대비 복잡도가 과하다 (exec-plan D2, Codex 계획 검증 CR 반영).
+- **다음 기준**: `bible_reading_records`에 행 1만 초과 사용자가 나올 때.
+- **마이그레이션 경로**: 초기 로드는 현재 회차 행 + 날짜별 count 집계 RPC로 줄이고, 기록기에서 과거 날짜 선택 시 그 날짜의 행을 lazy fetch해 병합한다.
+- **확인**: `select user_id, count(*) from bible_reading_records group by user_id order by 2 desc limit 1` — 최대 행 수 관찰
+- **발견일**: 2026-07-24 (perf-audit-fixes — 성능 감사)
+
 ### 🟢 `setAll`이 cookie options를 버리고 예외를 삼킴 — SSR 클라이언트 쿠키 쓰기 실패를 감춤 (password-reset-otp PR #150)
 
 - **무엇**: `createServerSideClient()`의 `setAll`이 `cookies().set(name, value)`만 호출해 Supabase가 넘긴 cookie options(maxAge·httpOnly·sameSite 등)를 버리고, try-catch로 예외를 삼킨다 (`src/lib/supabase/server.ts:22-25`). 세션 쿠키 쓰기가 실패해도 조용히 지나간다.
