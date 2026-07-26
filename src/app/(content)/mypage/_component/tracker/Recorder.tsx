@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import clsx from 'clsx';
 import { LuChevronLeft, LuChevronRight, LuX, LuCheck, LuHistory } from 'react-icons/lu';
 import { BottomSheet } from '@/components/ui';
@@ -56,26 +56,30 @@ export default function Recorder({
 
   // prior 모드는 날짜 없이 저장한다 — 저장 대상 날짜는 null.
   const recDate = readingMode === 'prior' ? null : date;
-  const cycleUnion = cycleUnionByBook(records, currentCycle);
+  const cycleUnion = useMemo(() => cycleUnionByBook(records, currentCycle), [records, currentCycle]);
   const isChapters = book !== null;
   const canGoNext = date < today;
 
   // 권 목록 배지용 — dated는 선택 날짜의 책별 장 수, prior는 read_date null·현재 회차의 책별 장 집합.
-  const dateCountByBook = new Map<number, number>();
-  const priorByBook = new Map<number, Set<number>>();
-  for (const rec of records) {
-    if (rec.read_date === date) {
-      dateCountByBook.set(rec.book_order, (dateCountByBook.get(rec.book_order) ?? 0) + 1);
-    }
-    if (rec.read_date === null && rec.cycle === currentCycle) {
-      let set = priorByBook.get(rec.book_order);
-      if (!set) {
-        set = new Set<number>();
-        priorByBook.set(rec.book_order, set);
+  // 전체 기록 순회라 장 탭마다 다시 돌지 않게 memo한다.
+  const { dateCountByBook, priorByBook } = useMemo(() => {
+    const dateCountByBook = new Map<number, number>();
+    const priorByBook = new Map<number, Set<number>>();
+    for (const rec of records) {
+      if (rec.read_date === date) {
+        dateCountByBook.set(rec.book_order, (dateCountByBook.get(rec.book_order) ?? 0) + 1);
       }
-      set.add(rec.chapter);
+      if (rec.read_date === null && rec.cycle === currentCycle) {
+        let set = priorByBook.get(rec.book_order);
+        if (!set) {
+          set = new Set<number>();
+          priorByBook.set(rec.book_order, set);
+        }
+        set.add(rec.chapter);
+      }
     }
-  }
+    return { dateCountByBook, priorByBook };
+  }, [records, date, currentCycle]);
 
   function goToBook(order: number) {
     setBook(order);
@@ -134,7 +138,10 @@ export default function Recorder({
   );
 
   const selectedBook = book !== null ? getBookByOrder(book) : undefined;
-  const dateChapters = book !== null ? chaptersOnDate(records, date, book) : new Set<number>();
+  const dateChapters = useMemo(
+    () => (book !== null ? chaptersOnDate(records, date, book) : new Set<number>()),
+    [records, date, book]
+  );
   const priorChapters = book !== null ? priorByBook.get(book) ?? new Set<number>() : new Set<number>();
   const markedSet = readingMode === 'prior' ? priorChapters : dateChapters;
   const bookUnion = book !== null ? cycleUnion.get(book) ?? new Set<number>() : new Set<number>();
