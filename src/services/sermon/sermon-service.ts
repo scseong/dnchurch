@@ -322,17 +322,22 @@ export const sermonService = (supabase: SupabaseClient<Database>) => ({
     return (handled.data as unknown as SermonWithRelations | null) ?? null;
   },
 
-  /** [어드민] 발행 상태별 카운트 — is_published projection만 가져와 JS 집계 */
+  /** [어드민] 발행 상태별 카운트 — 행을 내려받지 않고 head 카운트 2개로 집계 */
   adminStatusCounts: async (): Promise<Record<SermonStatusTab, number>> => {
-    const res = await supabase.from('sermons').select('is_published').is('deleted_at', null);
-    const handled = handleResponse(res);
-    const rows = (handled.data ?? []) as Array<{ is_published: boolean }>;
-    let published = 0;
-    let draft = 0;
-    for (const row of rows) {
-      if (row.is_published) published += 1;
-      else draft += 1;
-    }
+    const [publishedRes, draftRes] = await Promise.all([
+      supabase
+        .from('sermons')
+        .select('id', { count: 'exact', head: true })
+        .is('deleted_at', null)
+        .eq('is_published', true),
+      supabase
+        .from('sermons')
+        .select('id', { count: 'exact', head: true })
+        .is('deleted_at', null)
+        .eq('is_published', false)
+    ]);
+    const published = handleResponse(publishedRes).count ?? 0;
+    const draft = handleResponse(draftRes).count ?? 0;
     return { all: published + draft, published, draft };
   },
 
