@@ -30,7 +30,8 @@ function toOptions(items: OrgOption[]) {
 
 export default function ProfileEditModal({ profile, departments, districts, open, onClose }: Props) {
   const router = useRouter();
-  const { success, error } = useToastStore();
+  const success = useToastStore((state) => state.success);
+  const error = useToastStore((state) => state.error);
   const [isPending, startTransition] = useTransition();
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [displayName, setDisplayName] = useState(profile.display_name ?? profile.name);

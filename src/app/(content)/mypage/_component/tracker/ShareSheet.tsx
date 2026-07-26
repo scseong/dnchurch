@@ -43,7 +43,7 @@ export default function ShareSheet({
   monthReadDays,
   monthCells
 }: Props) {
-  const { info } = useToastStore();
+  const info = useToastStore((state) => state.info);
   const { share } = useKakaoShare();
   const [period, setPeriod] = useState<Period>('week');
   const cardRef = useRef<HTMLDivElement>(null);

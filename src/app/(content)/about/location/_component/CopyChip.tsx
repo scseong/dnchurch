@@ -10,7 +10,8 @@ type Props = {
 };
 
 export default function CopyChip({ value, toast, children }: Props) {
-  const { success, error } = useToastStore();
+  const success = useToastStore((state) => state.success);
+  const error = useToastStore((state) => state.error);
 
   const handleCopy = async () => {
     try {

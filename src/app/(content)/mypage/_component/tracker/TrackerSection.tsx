@@ -47,7 +47,8 @@ type Props = {
 };
 
 export default function TrackerSection({ initialRecords, initialSettings, today }: Props) {
-  const { success, error } = useToastStore();
+  const success = useToastStore((state) => state.success);
+  const error = useToastStore((state) => state.error);
   const [records, setRecords] = useState<ReadingRecord[]>(initialRecords);
   const [settings, setSettings] = useState<BibleReadingSettings>(initialSettings);
   const [recorderDate, setRecorderDate] = useState<string | null>(null);

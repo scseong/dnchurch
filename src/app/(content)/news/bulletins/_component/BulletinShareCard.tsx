@@ -16,7 +16,8 @@ const SHARE_DESCRIPTION = '이번 주 교회 주보에서 예배 일정과 소�
 
 /** 상세 본문의 '이 주보 공유하기' 카드 — 카카오톡·링크 복사·이미지 저장. 헤더 공유 버튼과 별개(목업 일치). */
 export default function BulletinShareCard({ title, imageUrl, files }: Props) {
-  const { info, error } = useToastStore();
+  const info = useToastStore((state) => state.info);
+  const error = useToastStore((state) => state.error);
   const { share: shareToKakao } = useKakaoShare();
 
   const handleKakao = useCallback(() => {
