@@ -8,7 +8,6 @@ import type { ActionResult } from './_types';
 const DATE_RE = /^\d{4}-\d{2}-\d{2}$/;
 const WEEKLY_GOAL_MIN = 5;
 const WEEKLY_GOAL_MAX = 150;
-const PAGE_SIZE = 1000;
 
 // 기록/해제 공통 입력 검증 — 날짜 형식·미래 금지·유효 장만 남긴다.
 function validateRecordInput(
@@ -39,26 +38,13 @@ export async function recordChaptersAction(
   const user = data.user;
   if (!user) return { success: false, message: '로그인이 필요합니다.' };
 
-  // 현재 회차를 기록에 박는다 (없으면 1). 통독 진행은 이 cycle로 구분한다 (D5).
-  const { data: settings } = await supabase
-    .from('bible_reading_settings')
-    .select('current_cycle')
-    .eq('user_id', user.id)
-    .maybeSingle();
-  const cycle = settings?.current_cycle ?? 1;
-
-  // user_id는 세션에서만 채운다 — 클라이언트가 남의 id를 넣을 수 없다.
-  const rows = validated.chapters.map((chapter) => ({
-    user_id: user.id,
-    book_order: bookOrder,
-    chapter,
-    read_date: readDate,
-    cycle
-  }));
-
-  const { error } = await supabase
-    .from('bible_reading_records')
-    .upsert(rows, { onConflict: 'user_id,book_order,chapter,read_date', ignoreDuplicates: true });
+  // 현재 회차(없으면 1)는 RPC 안에서 조회해 기록에 박는다 (D5) — settings select 왕복을 줄인다.
+  // user_id는 RPC 안 auth.uid()로 채운다 — 클라이언트가 남의 id를 넣을 수 없다.
+  const { error } = await supabase.rpc('record_chapters', {
+    p_book_order: bookOrder,
+    p_chapters: validated.chapters,
+    p_read_date: readDate
+  });
 
   if (error) return { success: false, message: '기록에 실패했습니다.' };
   return { success: true, message: '기록했습니다.' };
@@ -201,24 +187,13 @@ export async function startNextCycleAction(): Promise<ActionResult> {
   const currentCycle = settings?.current_cycle ?? 1;
 
   // 현재 회차를 다 읽었을 때만 다음 회독을 연다 — 실수로 진행이 리셋되지 않게.
-  const rows: Array<{ book_order: number; chapter: number }> = [];
-  for (let from = 0; ; from += PAGE_SIZE) {
-    const { data, error: readError } = await supabase
-      .from('bible_reading_records')
-      .select('book_order, chapter')
-      .eq('user_id', user.id)
-      .eq('cycle', currentCycle)
-      .order('book_order', { ascending: true })
-      .order('chapter', { ascending: true })
-      .range(from, from + PAGE_SIZE - 1);
-    if (readError) return { success: false, message: '통독 진행을 확인하지 못했습니다.' };
+  // distinct(book, chapter) 카운트는 서버에서 센다 — 전 행을 내려받아 JS로 세지 않는다.
+  const { data: readCount, error: countError } = await supabase.rpc('count_cycle_chapters', {
+    p_cycle: currentCycle
+  });
+  if (countError) return { success: false, message: '통독 진행을 확인하지 못했습니다.' };
 
-    rows.push(...(data ?? []));
-    if ((data?.length ?? 0) < PAGE_SIZE) break;
-  }
-
-  const distinct = new Set(rows.map((row) => `${row.book_order}:${row.chapter}`));
-  if (distinct.size < BIBLE_TOTAL_CHAPTERS) {
+  if ((readCount ?? 0) < BIBLE_TOTAL_CHAPTERS) {
     return { success: false, message: '아직 통독을 마치지 않았습니다.' };
   }
 
