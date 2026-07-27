@@ -46,15 +46,16 @@ description: exec-plan·ADR·tech-debt·검증 기록·커밋 메시지·PR 본�
 
 폐기 시 원항목 끝에 `⚠️ 정정(PR #xx): 폐기 → D{n} 참조` 1줄.
 
-### 검증 기록 (`## Codex 계획 검증`·`## Codex 1차 검증`·`## Claude 2차 검증`)
+### 검증 기록 (`## Codex 계획 검증`·`## Codex 1차 검증`)
 
-현재 판정만. 3줄 고정.
+현재 판정만. 한 줄 고정 — verdict 토큰 + `— ` + 근거 30자 이상. 별도 `## Claude 2차 검증` 섹션은 없앴다(게이트 tier 재편). VERIFY 결과는 `## Verification`에 적는다.
 
 ```markdown
-- **결론**: {verdict 토큰 + 짧은 처리 결과}  (2차는 `- **최종 판단**:`)
-- **현재 판단**: {5체크/구현 검토의 핵심 요지}
-- **다음 행동**: {다음 단계}
+- **결론**: {verdict 토큰} — {근거 30자 이상: 무엇을 확인했나 / 핵심 지적}
 ```
+
+- 계획 검증 토큰: `PASS·PASS_WITH_DECISION_LOG·CHANGE_REQUEST·BLOCK`. Codex 1차 토큰: `PASS·FIX_APPLIED·CHANGE_REQUEST·BLOCK·CODEX_UNAVAILABLE`.
+- Codex 1차가 `CODEX_UNAVAILABLE`이면 `오류: … / 시도: … / Claude 확인: …` 3필드로 쓴다(위조 PASS 금지, harness-gate 강제).
 
 세부 규칙:
 - 이전 판정·재검증 원문·CR 해소 내역은 본 섹션에 쓰지 않는다.
@@ -197,9 +198,9 @@ PR 제목 규칙:
   ```
 
 PR 메타데이터:
-- 본문 template 매핑 (`.github/PULL_REQUEST_TEMPLATE/README.md` SSOT) — Fix→bugfix.md / Feat→feature.md / Refactor→refactor.md / Chore·Docs·Style→maintenance.md / 릴리스→release.md
+- 본문은 단일 템플릿 `.github/PULL_REQUEST_TEMPLATE.md`(문제·접근·변경 범위·검증·남은 위험 5섹션)가 자동 적용된다. develop→main 릴리스만 `?template=release.md`.
 - `--assignee "@me"`·`--label` 필수 — GitHub Action `pr-required-fields`가 차단
-- base는 `develop`
+- base는 `develop` (develop→main 릴리스만 `main`)
 
 PR 본문 가독성 (GitHub 렌더 기준 — 문장 구분이 되게 쓴다):
 - **긴 설명은 문단으로 뭉치지 말고 주장별 하위 bullet로 쪼갠다.** GitHub은 문단 안의 단일 줄바꿈을 무시해 3문장+ 문단이 벽처럼 렌더된다. 한 줄 = 한 주장.
@@ -275,7 +276,10 @@ Local `commit-msg` hook이 R1~R4 4개 deterministic 룰을 자동 강제 — `sc
 | 무생물 주어 + 사람 동사 ("안내가 …말했다") | 사람·대상을 주어로 ("안내 문구에 …적힘") | medium |
 | 한 문장 비교 2개+ | bullet으로 쪼갬 | medium |
 | 약어·내부 기호 (`SSOT`·`D6`·`R4`) | 첫 등장 한 번 풀기 (이후 약어 OK) | medium |
-| `·`·`→`·`+` 적층 (3개+) | bullet으로 쪼갬 또는 풀어쓰기 | medium |
+| 한 문장에 가운뎃점 4개 이상 | 동사 문장으로 나눔 — `scripts/check-readability.mjs`가 기계로 경고 | high |
+| 표 셀에 여러 사실을 가운뎃점·슬래시로 나열 | 셀 밖 bullet로 풀어씀 (한 셀 한 사실) — 같은 스크립트가 셀 길이·구분자 수로 경고 | high |
+| 명사 더미로 변경 나열 (`판정·추가·대응·수정`) | 무엇을 왜 했는지 서술어 문장으로 (아래 '키워드 더미 → 산문' 예 참조) | high |
+| `→`·`+` 적층 (3개+) | bullet으로 쪼갬 또는 풀어쓰기 | medium |
 | `→` 인과 짧은 표현 | 보존 가능 (자연스러우면) — 두 문장이 되면 풀어쓰기 | low |
 | AI 상투 표현 (`결론적으로`·`살펴보겠습니다`·`~라고 할 수 있습니다`·`~에 대해 알아보았습니다`·`~하는 것이 중요합니다`) | 직접 결론 서술 | high |
 | 비유·관용구 (`못박아 두다`·`녹여내다`·`짚고 넘어가다`) | 가리키는 동작을 직접 서술 (`file:line으로 기록`·`한 파일에 합침`·`이번에 결정함`) | high |
@@ -383,6 +387,26 @@ Refactor: ui/ 12 컴포넌트 export 패턴 통일 (3 outlier 정리)
 ```
 
 한 항목이면 bullet 없이 그대로 둔다 — `| 선택 이유 | 리뷰가 비동기로 와 결정적 타이밍이 없다 |`.
+
+### 키워드 더미 → 산문 (좋은 예 / 나쁜 예)
+
+여러 변경을 명사와 가운뎃점으로 한 줄에 쌓으면 색인이지 글이 아니다. 읽는 사람은 키워드만 받고 무엇을 왜 했는지는 못 받는다.
+
+❌ 나쁨 (변경 5개를 명사 더미로 압축 — 한 번에 안 읽힘):
+```
+Claude 2차 요구 제거, tier 판정(numstat·merge-base·binary·untracked)·CODEX_UNAVAILABLE·fail-closed 추가, 세 섹션 파싱 대응, sectionBody 헤딩 오인 버그 수정
+```
+
+✅ 좋음 (한 변경 한 문장, 서술어로 끝냄):
+```
+- 게이트가 변경 규모를 재서 검증 등급을 스스로 정하도록 새 로직을 넣었다.
+- 규모는 커밋 diff의 파일 수와 바뀐 줄 수로 계산한다.
+- Codex가 멈췄을 때를 위한 대체 판정도 더했다.
+- 대신 `Claude 2차 검증` 항목은 더 이상 요구하지 않는다.
+- 문서에서 섹션 제목을 잘못 찾던 버그도 함께 고쳤다.
+```
+
+길이는 늘지만 한 번에 읽힌다. 압축과 가독성은 맞바꿈이고, 산출 문서는 가독성을 택한다. 이 패턴은 `scripts/check-readability.mjs`가 문장당 가운뎃점 수·표 셀 길이·셀 구분자 수로 기계 검사한다(경고 우선).
 
 ## 적용 범위와 범위 밖
 

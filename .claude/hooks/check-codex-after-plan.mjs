@@ -34,9 +34,11 @@ function emitContext(message) {
 }
 
 function sectionBody(markdown, heading) {
-  const marker = `## ${heading}`;
-  const start = markdown.indexOf(marker);
-  if (start === -1) return "";
+  // 헤딩은 줄 시작에 고정(harness-gate.mjs와 동일) — 인라인 섹션 이름 언급 오인 방지.
+  const escaped = heading.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+  const headingMatch = new RegExp(`^## ${escaped}\\s*$`, "m").exec(markdown);
+  if (!headingMatch) return "";
+  const start = headingMatch.index;
   const bodyStart = markdown.indexOf("\n", start);
   if (bodyStart === -1) return "";
   const nextHeading = markdown.slice(bodyStart + 1).search(/^##\s/m);

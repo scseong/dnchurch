@@ -44,6 +44,6 @@ SermonFeatured.module.scss의 rgba 하드코딩 3건을 local var로 교체한�
 - **결론**: PASS
 - **풀이**: rgba 리터럴 0건 확인. 변경 외과적, 인접 정리 0건.
 
-## Claude 2차 검증
+## Verification
 
-- **최종 판단**: PASS — verify-task.mjs 통과 (lint 0 warning + stylelint 0 + build success + knip 0). visual regression 수동 확인 완료.
+- `node scripts/verify-task.mjs sermon-featured-token-clean` — PASS (lint·stylelint·build 통과, knip 0 신규)

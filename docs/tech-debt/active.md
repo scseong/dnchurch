@@ -13,6 +13,19 @@
 - **확인**: `select user_id, count(*) from bible_reading_records group by user_id order by 2 desc limit 1` — 최대 행 수 관찰
 - **발견일**: 2026-07-24 (perf-audit-fixes — 성능 감사)
 
+---
+
+### 🟢 `complete-task`의 ADR-trigger 감지가 branch diff가 아닌 uncommitted diff를 봄 — tier 게이트와 어긋남 (pr-intent-first-docs PR #155)
+
+- **무엇**: `complete-task.mjs`가 ADR 후보 변경을 `git diff --name-only`(uncommitted)로만 잡는다(`scripts/complete-task.mjs:155-160`). 반면 `harness-gate.mjs`는 PR #155에서 이미 `git diff <merge-base> --name-only`(branch delta)로 tier·ADR을 판정하도록 고쳤다(F4 수정). 완료 이관 시점에는 변경이 전부 커밋된 상태라 uncommitted diff가 비어, ADR 후보 변경이 있어도 감지하지 못하고 넘어간다.
+- **왜 지금 안 하나**: `complete-task`는 머지 후 이관 단계라 강제가 아니라 경고만 한다(`warnOrFail`, `HARNESS_ENFORCE=1`에서만 fail). 실제 게이트는 `harness-gate`가 pre-merge에서 branch diff로 이미 막는다. 이번 PR 범위(문서 개편)에서 이 스크립트의 diff 소스 교체는 F4와 별개 관심사라 미뤘다.
+- **다음 기준**: `harness-gate`처럼 `complete-task`도 branch diff 기반 ADR 감지가 필요해지면(예: 이관 단계 경고를 신뢰 신호로 쓰기 시작할 때) 착수.
+- **마이그레이션 경로**: `harness-gate.mjs`의 `resolveBaseRef`·branch-diff 파일 목록 계산을 공용 함수로 빼서 `complete-task.mjs`가 같은 소스를 쓰게 한다.
+- **확인**: `complete-task.mjs`의 `changedFiles`가 `git diff --name-only`가 아니라 merge-base 기준 branch diff를 참조하는지.
+- **발견일**: 2026-07-22 (pr-intent-first-docs PR #155 회고 — F4 수정 후 남은 비대칭)
+
+---
+
 ### 🟢 `setAll`이 cookie options를 버리고 예외를 삼킴 — SSR 클라이언트 쿠키 쓰기 실패를 감춤 (password-reset-otp PR #150)
 
 - **무엇**: `createServerSideClient()`의 `setAll`이 `cookies().set(name, value)`만 호출해 Supabase가 넘긴 cookie options(maxAge·httpOnly·sameSite 등)를 버리고, try-catch로 예외를 삼킨다 (`src/lib/supabase/server.ts:22-25`). 세션 쿠키 쓰기가 실패해도 조용히 지나간다.

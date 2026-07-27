@@ -13,7 +13,7 @@ const PATH_RE = /(docs[\\/]+exec-plans[\\/]+(?:active|completed)[\\/]+.+\.md|doc
 const PLAN_PATH_RE = /docs[\\/]+exec-plans[\\/]+(?:active|completed)[\\/]+.+\.md$/i;
 const CWD_KEY = createHash("sha1").update(process.cwd()).digest("hex").slice(0, 8);
 const STATE_FILE = path.join(os.tmpdir(), `dnchurch-check-doc-style.${CWD_KEY}.state.json`);
-const PLAN_HASH_SECTIONS = ["Codex 계획 검증", "Codex 1차 검증", "Claude 2차 검증", "의사결정 로그", "검증 이력", "회고"];
+const PLAN_HASH_SECTIONS = ["Codex 계획 검증", "Codex 1차 검증", "의사결정 로그", "검증 이력", "회고"];
 const SECTION_DELIM = "||";
 
 async function readInput() {
@@ -39,9 +39,11 @@ function emitContext(message) {
 }
 
 function sectionBody(markdown, heading) {
-  const marker = `## ${heading}`;
-  const start = markdown.indexOf(marker);
-  if (start === -1) return "";
+  // 헤딩은 줄 시작에 고정(harness-gate.mjs와 동일) — 인라인 섹션 이름 언급 오인 방지.
+  const escaped = heading.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+  const headingMatch = new RegExp(`^## ${escaped}\\s*$`, "m").exec(markdown);
+  if (!headingMatch) return "";
+  const start = headingMatch.index;
   const bodyStart = markdown.indexOf("\n", start);
   if (bodyStart === -1) return "";
   const nextHeading = markdown.slice(bodyStart + 1).search(/^##\s/m);
