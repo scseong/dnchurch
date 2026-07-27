@@ -763,7 +763,7 @@ export type Database = {
         Returns: undefined
       }
       record_prior_chapters: {
-        Args: { p_book_order: number; p_chapters: number[]; p_cycle: number }
+        Args: { p_book_order: number; p_chapters: number[] }
         Returns: undefined
       }
       update_bulletin: {

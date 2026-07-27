@@ -151,6 +151,13 @@ Codex 확인 요지:
 | 2차 | DB 실측 (`read_date is null`) | ✅ 레위기 1–27장·cycle 1·null 27행 |
 | 2차 | 라이브 prior 해제 | ✅ 통독 102→75 복구, null 행 0 |
 | 후속 | prod 마이그레이션·prod 실호출 | ⏳ 배포/승인 후 |
+| 리뷰 대응 | `verify-task` (`20260727-133059`) | ✅ ESLint·stylelint·Build 통과, Knip 경고는 기존 부채 |
+
+## PR 리뷰 대응 (PR #156)
+
+- 지적(Codex 봇, P2): prior 저장·해제 액션이 settings의 `current_cycle`을 select해 넘기는데 그 오류를 확인하지 않는다. 조회가 일시 실패하면 회차가 1로 대체돼 2회차 사용자의 이전 기록이 1회차로 저장되고, 조회와 실행 사이에 다음 회독이 시작되면 낡은 회차가 들어간다.
+- 확인: `bible-reading.action.ts:103-108`·`:135-140`을 직접 읽어 사실로 판정했다. `record_chapters`(perf-audit-fixes)는 회차를 RPC 안에서 읽어 이 문제가 없는데 prior 쪽만 옛 구조로 남아 있었다.
+- 조치: 마이그레이션 `20260727000000_prior_rpc_cycle_inside.sql`로 `record_prior_chapters`가 회차를 함수 안에서 읽게 바꾸고(`p_cycle` 파라미터 제거), 저장 액션의 settings 조회를 지웠다(왕복 3→2회). 해제 액션은 settings 조회에 오류 확인을 넣어 실패 시 즉시 반환한다. dev 적용 완료, 타입 재생성 완료.
 
 ## 검증 이력
 

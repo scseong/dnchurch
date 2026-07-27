@@ -100,19 +100,12 @@ export async function recordPriorChaptersAction(
   const user = data.user;
   if (!user) return { success: false, message: '로그인이 필요합니다.' };
 
-  const { data: settings } = await supabase
-    .from('bible_reading_settings')
-    .select('current_cycle')
-    .eq('user_id', user.id)
-    .maybeSingle();
-  const cycle = settings?.current_cycle ?? 1;
-
   // 부분 유니크(read_date is null 전용)는 PostgREST onConflict로 못 겨냥 →
-  // RPC가 on conflict do nothing으로 원자 insert. user_id는 RPC 안 auth.uid()로 채운다.
+  // RPC가 on conflict do nothing으로 원자 insert. user_id는 RPC 안 auth.uid()로 채우고,
+  // 회차도 RPC 안에서 읽는다 — 액션에서 조회해 넘기면 조회 실패·회차 전환 경합 시 낡은 값이 들어간다.
   const { error } = await supabase.rpc('record_prior_chapters', {
     p_book_order: bookOrder,
-    p_chapters: validated.chapters,
-    p_cycle: cycle
+    p_chapters: validated.chapters
   });
 
   if (error) return { success: false, message: '기록에 실패했습니다.' };
@@ -132,11 +125,13 @@ export async function unrecordPriorChaptersAction(
   const user = data.user;
   if (!user) return { success: false, message: '로그인이 필요합니다.' };
 
-  const { data: settings } = await supabase
+  // 조회 실패를 확인하지 않으면 회차가 1로 대체돼 엉뚱한 회차를 겨냥한다.
+  const { data: settings, error: settingsError } = await supabase
     .from('bible_reading_settings')
     .select('current_cycle')
     .eq('user_id', user.id)
     .maybeSingle();
+  if (settingsError) return { success: false, message: '기록 해제에 실패했습니다.' };
   const cycle = settings?.current_cycle ?? 1;
 
   const { error } = await supabase
