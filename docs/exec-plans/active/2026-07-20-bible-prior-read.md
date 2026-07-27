@@ -137,12 +137,13 @@ Codex 확인 요지:
 
 ## Claude 2차 검증
 
-- **최종 판단**: PASS — 정적 검증(tsc·eslint·stylelint 0) + 라이브 E2E(prior 저장·해제 왕복, 통독 반영·일간 제외, DB 실측) + Codex 1차 PASS(material 0)를 교차 확인했다. `yarn build`/verify-task는 dev 서버 실행 중이라 보류(`.next` 경합, memory `feedback_no_build_during_dev`).
+- **최종 판단**: PASS — `verify-task`(run-id `20260721-190444`) 필수 4단계 중 ESLint·stylelint·Build 통과, Knip 63줄은 기존 부채(내 변경 파일 언급 0건). 라이브 E2E(prior 저장·해제 왕복, 통독 반영·일간 제외, DB 실측)와 Codex 1차 PASS(심각 지적 0)를 교차 확인했다.
 - **현재 판단**: dev(홍길동 세션)에서 레위기 27장을 prior로 표시하니 통독이 75→102(+27)로 오르고 연속·이번 달·오늘은 불변. 해제하니 75로 복구. DB는 prior 행이 read_date=null·cycle=1로 저장됐다가 해제 후 0행.
 - **다음 행동**: Codex 1차 결과 반영 → 사용자 승인 후 커밋 → prod 마이그레이션(별도 승인)
 
 | 시점 | 방법 | 결과 |
 | --- | --- | --- |
+| 2차 | `verify-task` (`20260721-190444`) | ✅ ESLint·stylelint·Build 통과, Knip 경고는 기존 부채(내 파일 0건) |
 | 2차 | `tsc --noEmit` | ✅ 0 |
 | 2차 | `eslint`(action·util·TrackerSection·Recorder) | ✅ 0 |
 | 2차 | `stylelint`(tracker.module.scss) | ✅ 0 |
