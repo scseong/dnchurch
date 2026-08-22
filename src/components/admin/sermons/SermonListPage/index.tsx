@@ -49,7 +49,8 @@ export default function SermonListPage({
 }: SermonListPageProps) {
   const router = useRouter();
   const filters = useListFilters(initialParams);
-  const toast = useToastStore();
+  const toastSuccess = useToastStore((state) => state.success);
+  const toastError = useToastStore((state) => state.error);
   const isDesktop = useMediaQuery('(min-width: 1024px)');
   const [openDropdown, setOpenDropdown] = useState<DropdownKey | null>(null);
   const [deleteTarget, setDeleteTarget] = useState<AdminSermon | null>(null);
@@ -77,14 +78,14 @@ export default function SermonListPage({
       try {
         const result = await deleteSermonAction(target.id);
         if (result.success) {
-          toast.success(result.message);
+          toastSuccess(result.message);
           setDeleteTarget(null);
         } else {
-          toast.error(result.message);
+          toastError(result.message);
         }
       } catch (error) {
         console.error('[delete sermon]', error);
-        toast.error('삭제 중 오류가 발생했습니다');
+        toastError('삭제 중 오류가 발생했습니다');
       }
     });
   };

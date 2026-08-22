@@ -36,7 +36,7 @@ const DEFAULT_VALUES: FormValues = {
 };
 
 export default function NewFamilyRegister() {
-  const { success } = useToastStore();
+  const success = useToastStore((state) => state.success);
   const [isOpen, setIsOpen] = useState(false);
 
   const {

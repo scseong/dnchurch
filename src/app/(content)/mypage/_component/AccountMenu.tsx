@@ -12,7 +12,7 @@ import styles from './mypage.module.scss';
 const PLANNED_MENUS = ['저장한 설교', '나의 기도제목', '출석 현황'];
 
 export default function AccountMenu({ hasPasswordAuth }: { hasPasswordAuth: boolean }) {
-  const { info } = useToastStore();
+  const info = useToastStore((state) => state.info);
   const [passwordOpen, setPasswordOpen] = useState(false);
   const { signOut, isSigningOut } = useSignOut();
 

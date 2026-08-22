@@ -19,7 +19,8 @@ function readMeta(selector: string): string | undefined {
 
 /** 헤더 공유 버튼이 여는 공유 시트 — 링크 복사·카카오·페이스북·이메일. */
 export default function ShareSheet({ open, onClose }: Props) {
-  const { info, error } = useToastStore();
+  const info = useToastStore((state) => state.info);
+  const error = useToastStore((state) => state.error);
   const { share: shareToKakao } = useKakaoShare();
 
   const handleCopyLink = async () => {

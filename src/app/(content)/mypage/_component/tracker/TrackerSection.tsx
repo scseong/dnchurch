@@ -1,12 +1,14 @@
 'use client';
 
 import { useMemo, useState } from 'react';
-import { LuFlame, LuShare2, LuBookOpen } from 'react-icons/lu';
+import { LuFlame, LuShare2, LuHistory, LuChevronRight } from 'react-icons/lu';
 import { Button } from '@/components/ui';
 import { useToastStore } from '@/store/toast.store';
 import {
   recordChaptersAction,
   unrecordChaptersAction,
+  recordPriorChaptersAction,
+  unrecordPriorChaptersAction,
   setWeeklyGoalAction,
   startNextCycleAction
 } from '@/actions/bible-reading.action';
@@ -17,16 +19,26 @@ import {
   computeWeek,
   computeMonth,
   computePlan,
-  chaptersOnDate,
   type ReadingRecord,
   type BibleReadingSettings
 } from '@/utils/bible-tracker';
 import { getBookByOrder } from '@/constants/bible';
 import RecordTabs from './RecordTabs';
 import GoalModal from './GoalModal';
-import Recorder from './Recorder';
+import Recorder, { type RecorderMode } from './Recorder';
 import ShareSheet from './ShareSheet';
 import styles from './tracker.module.scss';
+
+// 같은 슬롯 판정. prior(read_date=null)는 회차별로 구분해 cycle을 포함하고, dated는 (책·날짜)로 유일하다.
+function matchesSlot(
+  record: ReadingRecord,
+  bookOrder: number,
+  date: string | null,
+  cycle: number
+): boolean {
+  if (record.book_order !== bookOrder || record.read_date !== date) return false;
+  return date !== null || record.cycle === cycle;
+}
 
 type Props = {
   initialRecords: ReadingRecord[];
@@ -35,11 +47,13 @@ type Props = {
 };
 
 export default function TrackerSection({ initialRecords, initialSettings, today }: Props) {
-  const { success, error } = useToastStore();
+  const success = useToastStore((state) => state.success);
+  const error = useToastStore((state) => state.error);
   const [records, setRecords] = useState<ReadingRecord[]>(initialRecords);
   const [settings, setSettings] = useState<BibleReadingSettings>(initialSettings);
   const [recorderDate, setRecorderDate] = useState<string | null>(null);
   const [recorderBook, setRecorderBook] = useState<number | null>(null);
+  const [recorderMode, setRecorderMode] = useState<RecorderMode>('dated');
   const [goalOpen, setGoalOpen] = useState(false);
   const [shareOpen, setShareOpen] = useState(false);
 
@@ -65,13 +79,11 @@ export default function TrackerSection({ initialRecords, initialSettings, today 
     }
   }
 
-  function addRecords(bookOrder: number, chapters: number[], date: string) {
+  function addRecords(bookOrder: number, chapters: number[], date: string | null) {
     const cycle = settings.current_cycle;
     setRecords((prev) => {
       const existing = new Set(
-        prev
-          .filter((r) => r.read_date === date && r.book_order === bookOrder)
-          .map((r) => r.chapter)
+        prev.filter((r) => matchesSlot(r, bookOrder, date, cycle)).map((r) => r.chapter)
       );
       const additions = chapters
         .filter((chapter) => !existing.has(chapter))
@@ -80,12 +92,11 @@ export default function TrackerSection({ initialRecords, initialSettings, today 
     });
   }
 
-  function removeRecords(bookOrder: number, chapters: number[], date: string) {
+  function removeRecords(bookOrder: number, chapters: number[], date: string | null) {
+    const cycle = settings.current_cycle;
     const remove = new Set(chapters);
     setRecords((prev) =>
-      prev.filter(
-        (r) => !(r.read_date === date && r.book_order === bookOrder && remove.has(r.chapter))
-      )
+      prev.filter((r) => !(matchesSlot(r, bookOrder, date, cycle) && remove.has(r.chapter)))
     );
   }
 
@@ -102,44 +113,64 @@ export default function TrackerSection({ initialRecords, initialSettings, today 
     });
   }
 
-  function toggleChapter(bookOrder: number, chapter: number, date: string) {
-    const isRecorded = chaptersOnDate(records, date, bookOrder).has(chapter);
+  // date가 null이면 prior-read(이전에 읽은 기록) 액션을 쓴다 — 그 외엔 날짜 기록 액션.
+  function toggleChapter(bookOrder: number, chapter: number, date: string | null) {
+    const cycle = settings.current_cycle;
+    const isRecorded = records.some(
+      (r) => matchesSlot(r, bookOrder, date, cycle) && r.chapter === chapter
+    );
     if (isRecorded) {
       const removed = records.filter(
-        (r) => r.read_date === date && r.book_order === bookOrder && r.chapter === chapter
+        (r) => matchesSlot(r, bookOrder, date, cycle) && r.chapter === chapter
       );
       removeRecords(bookOrder, [chapter], date);
       void persist(
-        () => unrecordChaptersAction(bookOrder, [chapter], date),
+        () =>
+          date === null
+            ? unrecordPriorChaptersAction(bookOrder, [chapter])
+            : unrecordChaptersAction(bookOrder, [chapter], date),
         () => restoreRecords(removed)
       );
     } else {
       addRecords(bookOrder, [chapter], date);
       void persist(
-        () => recordChaptersAction(bookOrder, [chapter], date),
+        () =>
+          date === null
+            ? recordPriorChaptersAction(bookOrder, [chapter])
+            : recordChaptersAction(bookOrder, [chapter], date),
         () => removeRecords(bookOrder, [chapter], date)
       );
     }
   }
 
-  function recordChapters(bookOrder: number, chapters: number[], date: string) {
-    const before = chaptersOnDate(records, date, bookOrder);
+  function recordChapters(bookOrder: number, chapters: number[], date: string | null) {
+    const cycle = settings.current_cycle;
+    const before = new Set(
+      records.filter((r) => matchesSlot(r, bookOrder, date, cycle)).map((r) => r.chapter)
+    );
     const fresh = chapters.filter((chapter) => !before.has(chapter));
     if (fresh.length === 0) return;
     addRecords(bookOrder, fresh, date);
     void persist(
-      () => recordChaptersAction(bookOrder, fresh, date),
+      () =>
+        date === null
+          ? recordPriorChaptersAction(bookOrder, fresh)
+          : recordChaptersAction(bookOrder, fresh, date),
       () => removeRecords(bookOrder, fresh, date)
     );
   }
 
-  function clearBook(bookOrder: number, date: string) {
-    const removed = records.filter((r) => r.read_date === date && r.book_order === bookOrder);
+  function clearBook(bookOrder: number, date: string | null) {
+    const cycle = settings.current_cycle;
+    const removed = records.filter((r) => matchesSlot(r, bookOrder, date, cycle));
     const chapters = removed.map((r) => r.chapter);
     if (chapters.length === 0) return;
     removeRecords(bookOrder, chapters, date);
     void persist(
-      () => unrecordChaptersAction(bookOrder, chapters, date),
+      () =>
+        date === null
+          ? unrecordPriorChaptersAction(bookOrder, chapters)
+          : unrecordChaptersAction(bookOrder, chapters, date),
       () => restoreRecords(removed)
     );
   }
@@ -164,9 +195,10 @@ export default function TrackerSection({ initialRecords, initialSettings, today 
     }
   }
 
-  function openRecorder(date: string, bookOrder: number | null) {
+  function openRecorder(date: string, bookOrder: number | null, mode: RecorderMode = 'dated') {
     setRecorderDate(date);
     setRecorderBook(bookOrder);
+    setRecorderMode(mode);
   }
 
   const cyclePastLabel = plan.cyclesDone > 0 ? `지난 ${plan.cyclesDone}회독 완료` : '첫 통독';
@@ -233,14 +265,15 @@ export default function TrackerSection({ initialRecords, initialSettings, today 
             </Button>
           </div>
         )}
-        <Button
-          variant="accent"
-          fullWidth
-          leadingIcon={<LuBookOpen aria-hidden="true" />}
-          onClick={() => openRecorder(today, null)}
+        <button
+          type="button"
+          className={styles.plan_recall}
+          onClick={() => openRecorder(today, null, 'prior')}
         >
-          지난 날짜·권별로 기록하기
-        </Button>
+          <LuHistory aria-hidden="true" />
+          이전에 읽은 기록 불러오기
+          <LuChevronRight aria-hidden="true" />
+        </button>
       </div>
 
       {recorderDate !== null && (
@@ -250,6 +283,7 @@ export default function TrackerSection({ initialRecords, initialSettings, today 
           currentCycle={settings.current_cycle}
           initialDate={recorderDate}
           initialBook={recorderBook}
+          initialMode={recorderMode}
           onToggleChapter={toggleChapter}
           onRecordChapters={recordChapters}
           onClearBook={clearBook}

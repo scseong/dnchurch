@@ -7,7 +7,8 @@ import { BIBLE_TOTAL_CHAPTERS, getBookByOrder } from '@/constants/bible';
 export type ReadingRecord = {
   book_order: number;
   chapter: number;
-  read_date: string;
+  // prior-read(이전에 읽은 기록)는 날짜 없이 통독에만 반영 — read_date가 null이다.
+  read_date: string | null;
   cycle: number;
 };
 
@@ -63,10 +64,13 @@ function compressChapters(chapters: number[]): string {
   return parts.join(', ');
 }
 
-/** 날짜별 읽은 장 수 합계. */
+/** 날짜별 읽은 장 수 합계. prior-read(read_date null)는 날짜 통계 대상이 아니라 제외한다. */
 function countByDate(records: ReadingRecord[]): Map<string, number> {
   const map = new Map<string, number>();
-  for (const rec of records) map.set(rec.read_date, (map.get(rec.read_date) ?? 0) + 1);
+  for (const rec of records) {
+    if (rec.read_date === null) continue;
+    map.set(rec.read_date, (map.get(rec.read_date) ?? 0) + 1);
+  }
   return map;
 }
 

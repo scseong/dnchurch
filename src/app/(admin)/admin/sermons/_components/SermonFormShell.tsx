@@ -38,7 +38,7 @@ export default function SermonFormShell({
   const [formData, setData] = useState<SermonFormData>(initialData ?? INITIAL_SERMON_FORM_DATA);
   const [isPending, startTransition] = useTransition();
   const [isDirty, setIsDirty] = useState(false);
-  const toast = useToastStore();
+  const toastError = useToastStore((state) => state.error);
   const setDynamicCrumb = useAdminBreadcrumbStore((s) => s.setDynamicLabel);
 
   useUnsavedChanges(isDirty);
@@ -66,14 +66,14 @@ export default function SermonFormShell({
     startTransition(async () => {
       if (mode === 'new') {
         const result = await createSermonAction(formData);
-        if (result && !result.success) toast.error(result.message);
+        if (result && !result.success) toastError(result.message);
       } else if (sermonId) {
         const result = await updateSermonAction(sermonId, formData);
         if (result.success) {
           setIsDirty(false);
           router.push('/admin/sermons');
         } else {
-          toast.error(result.message);
+          toastError(result.message);
         }
       }
     });

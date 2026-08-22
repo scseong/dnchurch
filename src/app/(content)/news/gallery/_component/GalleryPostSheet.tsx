@@ -35,7 +35,7 @@ type Props = {
 // 게시글 상세 모달 — 목업의 풀스크린 상세. 사진 라이트박스·댓글 목록을 보여준다.
 // 읽기 전용/UI 단계라 댓글 전송·반응 토글은 없다(안내 토스트).
 export default function GalleryPostSheet({ post, onClose }: Props) {
-  const { info } = useToastStore();
+  const info = useToastStore((state) => state.info);
   const [comment, setComment] = useState('');
 
   // 닫힘 애니메이션 동안 콘텐츠가 즉시 사라지지 않게 마지막 post를 유지한다(open은 post로, 렌더는 activePost로).

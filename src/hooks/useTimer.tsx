@@ -30,12 +30,14 @@ export default function useTimer(onEnd?: () => void) {
 
   const start = useCallback(
     (durationSec: number) => {
+      // 재시작(재전송) 시 기존 interval을 먼저 정리한다 — 덮어쓰면 이전 interval이 남아 계속 돈다.
+      stop();
       expireAtRef.current = dayjs().add(durationSec, 'second').toISOString();
       setFinished(false);
       tick();
       intervalRef.current = setInterval(tick, 1000);
     },
-    [tick]
+    [tick, stop]
   );
 
   useEffect(() => stop, [stop]);

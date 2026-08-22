@@ -24,7 +24,7 @@ type Props = {
 // 나눔글 작성 모달 — 목업의 3단계 위저드(사진 → 이야기 → 카테고리·공개 범위).
 // 읽기 전용/UI 단계라 실제 업로드·저장은 없다(올리기는 안내 토스트 후 닫기).
 export default function GalleryComposeSheet({ open, onClose }: Props) {
-  const { info } = useToastStore();
+  const info = useToastStore((state) => state.info);
   const [step, setStep] = useState(0);
   const [text, setText] = useState('');
   const [category, setCategory] = useState<GalleryCategory | null>(null);

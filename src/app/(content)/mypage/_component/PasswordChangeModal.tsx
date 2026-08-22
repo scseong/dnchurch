@@ -13,7 +13,8 @@ type Props = {
 };
 
 export default function PasswordChangeModal({ open, onClose }: Props) {
-  const { success, error } = useToastStore();
+  const success = useToastStore((state) => state.success);
+  const error = useToastStore((state) => state.error);
   const [isPending, startTransition] = useTransition();
   const [currentPassword, setCurrentPassword] = useState('');
   const [newPassword, setNewPassword] = useState('');
